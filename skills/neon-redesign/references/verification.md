@@ -12,7 +12,7 @@ Use this checklist for creation, restyling and composition changes. Check the af
 
 ## Creation additions
 
-Confirm requested content and actions exist beyond the scaffold. Use existing service contracts; demos identify mock behavior visibly. Test routes and shared navigation where the feature connects to the existing app. Check relevant state handling rather than adding every possible state to every component.
+Confirm requested content and actions exist beyond the scaffold. Use existing service contracts; label mock behavior visibly only when the user explicitly requested a demo or mock-labeled build, otherwise disclose it in the delivery report instead of the shipped UI. Test routes and shared navigation where the feature connects to the existing app. Check relevant state handling rather than adding every possible state to every component.
 
 ## Restyling additions
 

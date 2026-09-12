@@ -55,7 +55,7 @@ Use `templates/vitejs-cds/src/layout/Logo.tsx` and its SVG assets when the start
 
 ## Feature states and narrow screens
 
-Implement the states relevant to the task: loading, empty, error with recovery, validation, disabled/pending, success and selection. Preserve entered data after recoverable failures. Reuse real service contracts; identify mock behavior visibly in demos. Do not invent authentication or persistence.
+Implement the states relevant to the task: loading, empty, error with recovery, validation, disabled/pending, success and selection, driven by real conditions — never a manual state-switcher shipped in the UI. Preserve entered data after recoverable failures. Reuse real service contracts. Needing mock data before a real backend exists does not by itself make an app "a demo": default to a production-grade UI with no visible demo/mock disclaimer banner or tag. Add one only when the user's own request explicitly asks for a demo, prototype or mock-labeled build; otherwise disclose mocked or missing-integration status in the delivery report, not the shipped UI. Do not invent authentication or persistence.
 
 On narrow screens, retain the main task and a way to reach navigation/details. Stack or progressively reveal panels; do not simply hide essential actions. Allow long Thai/English labels to wrap. Check keyboard focus, control names, dialog focus return and reduced motion when applicable.
 

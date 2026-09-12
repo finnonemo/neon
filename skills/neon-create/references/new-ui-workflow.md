@@ -12,7 +12,7 @@ Use real CDS components where available; inspect installed exports/types rather 
 
 Build populated content and real interactions. For lists, handle loading, empty/no-match and error/retry where relevant; for submissions, handle validation, pending/duplicate prevention, failure and completion. Retain entered data after recoverable errors. Use the existing data service and validation contract; do not invent a password rule or backend endpoint because it seems customary.
 
-Mock data is appropriate for a requested demo. Make its status visible in the demo and report missing integration. A code comment alone does not prevent the user believing a simulated approval/login persisted. Do not fabricate authentication or server persistence.
+Mock data is often necessary before a real backend exists — that alone does not make the app "a demo" or license a visible DEMO/MOCK banner, tag, or manual state-simulator control in the shipped UI. Add visible demo/mock labeling only when the user's own request explicitly asks for a demo, prototype or mock-labeled build. Otherwise keep the UI production-grade: a code comment alone does not prevent the user believing a simulated approval/login persisted, so route confirmations and success states through real service contracts wherever possible, and report any remaining mocked behavior or missing integration in the delivery summary rather than surfacing it in-app. Do not fabricate authentication or server persistence.
 
 ## Responsive task access
 

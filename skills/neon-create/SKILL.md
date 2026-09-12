@@ -22,7 +22,7 @@ If the app already has a working Finnomena CDS theme, start with the requested c
 1. Identify the target, main task and relevant states. Inspect only missing app evidence. Use the [shared contract](../neon-audit/references/workflow-contract.md) if scope/routing is unresolved; conflicting preserve/change instructions require clarification. Resolve Neon resources two levels above this skill's real directory.
 2. Read the relevant [design guidance](../INSTRUCTION.md#composition) for visual choices. Select functional or immersive independently of framework. In existing UI preserve composition unless change is requested.
 3. Build with existing services and verified CDS exports/prop types. Use semantic color, spacing and radius keys; configure component-specific treatment through supported configuration or scoped wrappers. Do not invent imports, tokens or backend behavior.
-4. Implement task-relevant loading, empty, validation, pending, error/recovery and success states. Label mock behavior visibly in demos. A starter alone is not a feature.
+4. Implement task-relevant loading, empty, validation, pending, error/recovery and success states, driven by real conditions — never a manual state-switcher shipped in the UI. Only add a visible mock/demo disclaimer when the user's request explicitly asks for a demo or mock-labeled build; otherwise ship a production-grade UI and report mocked or missing integration in the Done summary instead. A starter alone is not a feature.
 5. Run the [shared verification](../neon-redesign/references/verification.md), applying only relevant additions. Inspect actual output; report unavailable checks rather than claiming them.
 
 ## Conditional references
