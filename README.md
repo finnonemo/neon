@@ -26,7 +26,7 @@ Open the **app you want to work on** in your assistant. For a new app, specify a
 Run these commands inside Claude Code:
 
 ```text
-/plugin marketplace add pawisssh/neon
+/plugin marketplace add finnonemo/neon
 /plugin install neon@finnomena-plugins
 ```
 
@@ -37,7 +37,7 @@ Open `/plugin` and confirm that `neon` is installed and enabled. If the current 
 Run these commands:
 
 ```sh
-codex plugin marketplace add pawisssh/neon
+codex plugin marketplace add finnonemo/neon
 codex plugin add neon@finnomena-plugins
 ```
 
@@ -50,7 +50,7 @@ To remove it later: `codex plugin remove neon@finnomena-plugins`.
 Keep a complete checkout of this repository available:
 
 ```sh
-git clone https://github.com/pawisssh/neon.git
+git clone https://github.com/finnonemo/neon.git
 ```
 
 Register the four folders under `skills/` using your assistant's supported skill-loading mechanism. Keep the checkout intact: these skills also need sibling `theme/`, `templates/` and `scripts/` resources. Copying a `SKILL.md` alone is insufficient.
