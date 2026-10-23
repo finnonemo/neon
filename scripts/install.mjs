@@ -93,7 +93,7 @@ const LOCKFILE_NAMES = ["package-lock.json", "npm-shrinkwrap.json", "pnpm-lock.y
 /**
  * Builds the spawnSync options for a given platform, kept as a small pure
  * function — with no dependency on parsed CLI state — so the win32-vs-other
- * branch is independently unit-testable (see tests/install.test.mjs) by
+ * branch is independently unit-testable by
  * importing this module and calling it directly, without actually running
  * on Windows or triggering the CLI logic below (guarded by isMainModule).
  * This is unit-level verification of the branch logic only — it does not
