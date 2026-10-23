@@ -50,6 +50,40 @@ bucket:
   palette, or left as-is since they're not brand colors?") rather than
   silently touching them.
 
+## Tailwind mapping rules
+
+Applies to Tailwind v3 and v4 alike, including apps that use the stock
+palette (`bg-slate-900`, `text-blue-600`) with no brand tokens yet.
+
+- **Map by the utility's role, not the nearest value.** `text-*` and
+  `placeholder-*` take `fg*` tokens. `bg-*` takes `bg*` surface or wash
+  tokens. `border-*`, `divide-*`, `ring-*` and `outline-*` take `bgLine*`
+  tokens, and focus indicators take `bgLinePrimary`. Never put a `bg*` or
+  `bgLine*` token on text, or an `fg*` token on a surface, even when the
+  value looks right: `text-slate-900` is primary text (`fg` or
+  `fgPrimary`), not `bgPrimary`.
+- **Swap utilities at the call site.** Do not redefine stock palette
+  names (`--color-slate-900`, `--color-blue-600`, `--color-white`) in
+  `@theme` or `:root`. A global alias makes class names lie
+  (`bg-slate-900` renders navy), recolors chart and category uses, and
+  forces one name to serve text, surface and border roles at once.
+  Reference the adapter variable directly (`text-[var(--color-fgMuted)]`,
+  or `text-(--color-fgMuted)` in v4), or register a *new* semantic name
+  (`--color-fg-muted: var(--color-fgMuted)` in v4 `@theme inline`, or a
+  `theme.extend.colors` entry in v3), then use that name.
+- **Keep pale shades pale.** `-50` to `-200` borders and washes
+  (`border-green-200`, `bg-red-50`) map to a wash or `accentSubtle*` token
+  whose lightness matches the original shade. With no pale-enough token,
+  keep the stock utility and report the gap; never substitute the
+  saturated status token (`bgPositive`) for a pale border.
+- **Keep shade hierarchy.** The adapter has only `fg` and `fgMuted` for
+  text. If `slate-400`, `slate-500` and `slate-600` carry distinct jobs
+  (placeholder, caption, secondary text), decide per call site and report
+  the steps that collapse. Do not invent extra tokens; the mapping is
+  provisional.
+- **Leave non-brand colors.** Category dots, chart series and
+  illustrative accents follow **Chart and status colors** above.
+
 ## Format-specific guidance
 
 Before writing any token update, **inspect the target project's actual
@@ -88,23 +122,33 @@ config file (e.g. `colors: { primary: '#01172b', ... }`), then replace
 component-level utility classes (`bg-blue-600` → `bg-primary`) and any
 arbitrary-value usages (`bg-[#2563eb]` → `bg-primary`) that map to a
 branded role from semantic mapping. Config values are typically full hex —
-no wrapper-function conversion needed here.
+no wrapper-function conversion needed here. Follow
+[Tailwind mapping rules](#tailwind-mapping-rules); never override stock
+palette names under `theme.colors`.
 
 ### 3. Tailwind v4
 
-**Detect:** an `@theme { --color-primary: ...; }` block inside a CSS file
-(often `globals.css` or `app.css`) instead of (or alongside a minimal)
-`tailwind.config.js`; Tailwind imported via `@import "tailwindcss";`
-rather than the old `@tailwind base/components/utilities` directives.
+**Detect:** Tailwind imported via `@import "tailwindcss";` rather than
+the old `@tailwind base/components/utilities` directives, usually with
+no `tailwind.config.js`. An `@theme { --color-primary: ...; }` block
+(often in `globals.css` or `app.css`) may hold the app's own tokens; an
+app with only the import and stock utilities (`bg-slate-900`) has none.
 
-**Update:** Edit the `--color-*` (and `--font-*`, `--spacing-*`,
-`--radius-*` for visual-system scope) variables inside the `@theme`
-block directly — Tailwind v4 generates utility classes from these
-automatically, so `--color-primary: #01172b;` inside `@theme` makes
-`bg-primary`/`text-primary`/etc. available without touching a JS config
-file. Component markup then updates the same way as Tailwind v3 (utility
-class swap), but the token source of truth is the CSS file, not
-`tailwind.config.js`.
+**Update:** Follow [Tailwind mapping rules](#tailwind-mapping-rules).
+When `@theme` already holds the app's own semantic names
+(`--color-primary`, `--color-brand`), edit their values there for a
+global change; Tailwind v4 regenerates `bg-primary`/`text-primary`
+from them. With stock utilities only, make the adapter's color variables
+available per [CSS setup](css-integration.md#css-setup) and swap
+utilities at the call site (`text-slate-500` →
+`text-[var(--color-fgMuted)]`); do not add `@theme` entries for stock
+names. For visual-system scope, `--font-*`, `--spacing-*` and
+`--radius-*` follow the same rule: own names only.
+
+`@theme inline` copies the variable's value into each utility, so a
+selector-scoped override such as `input:focus { --color-blue-600: ...; }`
+never reaches `border-blue-600`. Express state at the call site with a
+variant instead: `focus:border-[var(--color-bgLinePrimary)]`.
 
 ### 4. shadcn-style (CSS vars + Tailwind indirection)
 
