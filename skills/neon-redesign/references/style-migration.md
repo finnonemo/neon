@@ -37,8 +37,10 @@ bucket:
 - **Semantic status colors** (success/warning/error, often already named
   `success`/`danger`/`warn` in the target's config or chart library) have
   real Finnomena equivalents — Positive `#009646`, Negative `#d60808`,
-  Warning `#f26414` (the raw palette, including the pastel container
-  pairs, is in `theme/tokens/colors.json`). Map these directly: a chart's "success" series color
+  Warning `#f26414` (the pastel container pairs are the
+  `Notifications.notification-*-background` tokens in
+  `theme/tokens/theme.json`, which resolve to `theme/tokens/colors.json`
+  steps). Map these directly: a chart's "success" series color
   becomes Finnomena Positive, not a guess.
 - **Arbitrary data-series colors** (the 5 different hues distinguishing
   categories A–E in a bar chart, with no semantic meaning individually)
