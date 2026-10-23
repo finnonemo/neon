@@ -15,7 +15,7 @@ This repository distributes skills, theme assets and a CDS starter. It is not an
 
 ### Issue tracker
 
-GitHub Issues on `pawisssh/neon` via the `gh` CLI. See `docs/agents/issue-tracker.md`.
+GitHub Issues on `finnonemo/neon` via the `gh` CLI. See `docs/agents/issue-tracker.md`.
 
 ### Triage labels
 
