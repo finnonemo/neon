@@ -3,6 +3,7 @@
 This repository distributes skills, theme assets and a CDS starter. It is not an employee application.
 
 - Read `skills/INSTRUCTION.md` for current visual policy. Use CDS for implementation; functional layouts favor restrained, task-led composition; immersive layouts may be colorful. Preserve the provisional status of token mappings.
+- Use the terms in `GLOSSARY.md` and check `docs/adr/` before changing paths, Brand Intensity or readiness rules. Neither ships in the plugin, so skills define terms inline rather than linking them.
 - Read the relevant skill and its callers before editing. Keep entrypoints concise with fast paths and read conditions; move setup details into reachable conditional references. Audit is optional for unclear integration, not a mandatory gateway.
 - Preserve scope: existing apps reuse providers/routes/services; colors-only stays colors-only; composition defaults to preserve and adapts only on explicit request, separately from styling tier; review-only stays read-only. Reuse explicit or established brand intent.
 - Treat `theme/tokens/` as raw exports. Generated files are produced by `theme/scripts/`; `color-overrides.ts` and `theme/css/theme.css` are maintained separately. Do not claim they regenerate together.

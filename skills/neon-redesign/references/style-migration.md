@@ -37,8 +37,10 @@ bucket:
 - **Semantic status colors** (success/warning/error, often already named
   `success`/`danger`/`warn` in the target's config or chart library) have
   real Finnomena equivalents — Positive `#009646`, Negative `#d60808`,
-  Warning `#f26414` (see DESIGN.md's Colors section for the full pastel
-  container pairs). Map these directly: a chart's "success" series color
+  Warning `#f26414` (see the `--color-bg*Wash` declarations in
+  `${CLAUDE_PLUGIN_ROOT}/theme/css/theme.css` for the pastel container
+  pairs; an outside reference DESIGN.md is never the source of Finnomena
+  values). Map these directly: a chart's "success" series color
   becomes Finnomena Positive, not a guess.
 - **Arbitrary data-series colors** (the 5 different hues distinguishing
   categories A–E in a bar chart, with no semantic meaning individually)
@@ -53,7 +55,7 @@ bucket:
 ## Format-specific guidance
 
 Before writing any token update, **inspect the target project's actual
-existing files** to determine which of these four families it uses — do
+existing files** to determine which of these five families it uses — do
 not assume it matches this repo's own `theme.css` convention (full
 `rgb()`/hex values held directly in the variable, consumed as
 `var(--color-fg)`). Record the detected format so the scoped update
@@ -106,7 +108,7 @@ file. Component markup then updates the same way as Tailwind v3 (utility
 class swap), but the token source of truth is the CSS file, not
 `tailwind.config.js`.
 
-### 4. shadcn-style (CSS vars + Tailwind indirection)
+### 4. shadcn-style on Tailwind v3 (CSS vars + Tailwind indirection)
 
 **Detect:** a `globals.css` (or similar) with `:root { --primary: ...; }`
 declarations where the *values* are bare components, not a full color
@@ -124,7 +126,8 @@ paste a hex or `rgb()` value into a variable this project consumes as
 `hsl(var(--primary))` — the variable must hold exactly what the wrapper
 expects. Before writing anything, read the wrapper function in
 `tailwind.config.js` (or wherever the var is consumed) to know the target
-format, then convert Finnomena's DESIGN.md value into it:
+format, then convert the canonical Finnomena value from
+`${CLAUDE_PLUGIN_ROOT}/theme/css/theme.css` into it:
 
 - **Example:** Finnomena's Navy Ink primary is `#01172b`. If the target's
   `tailwind.config.js` has `primary: 'hsl(var(--primary))'`, decompose
@@ -141,6 +144,33 @@ format, then convert Finnomena's DESIGN.md value into it:
   Tailwind config mapping. Usually only the CSS variable value changes —
   the config's `primary: 'hsl(var(--primary))'` line stays untouched
   since it's already pointing at the right variable name.
+
+### 5. shadcn-style on Tailwind v4
+
+**Detect:** current shadcn/ui output on Tailwind v4: `:root` and `.dark`
+declare complete colors such as `--primary: oklch(0.205 0 0);`, and an
+`@theme inline { --color-primary: var(--primary); }` block maps them to
+utilities. There is usually no `tailwind.config.*` color mapping.
+
+**Update:** edit the values in `:root` and `.dark`, keeping the file's
+existing color function (convert Finnomena values to `oklch(...)` when the
+file uses it). Leave the `@theme inline` mapping alone unless a new
+semantic name is needed, such as a separate focus or negative role; add it
+in both places. Markup that already uses `bg-primary` or `ring-ring`
+then follows automatically. Map shadcn's own roles by meaning:
+`--primary` is the primary action (Navy Ink), `--ring` is focus
+(Indigo Interactive), `--destructive` is Negative, and `--accent` in
+shadcn is a hover surface, not a brand accent.
+
+Each role is a pair: change `--primary` and `--primary-foreground`
+together, and likewise `--secondary`, `--muted`, `--accent`, `--card`,
+`--popover` and `--background`, in both `:root` and `.dark`. shadcn's
+default `.dark` uses a light primary with dark text, so swapping only the
+background yields unreadable buttons; take both values of each pair from
+the same mode of `theme.css` and check contrast. The `--sidebar-*` set
+mirrors the same roles and changes with them. `--chart-1` to `--chart-5`
+are category colors; leave them under **Chart and status colors**.
+`--radius` is geometry and changes only for `visual-system` scope.
 
 ## Worked examples
 
