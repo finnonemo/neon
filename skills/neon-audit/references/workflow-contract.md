@@ -25,7 +25,11 @@ For existing UI, omitted `composition` means `preserve`. Set `adapt` for explici
 | Existing non-React app | `neon-redesign` for styling; preserve framework |
 | Explicit non-React new app | Use the framework's normal scaffold, then the CSS styling path; the Neon starter is React-only |
 | Explicit CDS adoption in React | `neon-create`; integration path |
+| Explicit rebuild of an existing project on the Neon starter | `neon-create`; [rebuild](../../neon-create/references/scaffold.md#rebuild-an-existing-project) into a new empty destination; the original stays read-only |
+| Campaign or landing page with a supplied reference design | `neon-create` for a new page, `neon-redesign` for an existing one; both apply the [reference design](reference-design.md) procedure |
 | Target or integration choice remains unclear | `neon-audit`; inspect only missing evidence |
+
+An existing vibe-coded project defaults to restyling in place. Rebuild only when the employee asks to move it onto the starter; CDS adoption in place is a different operation.
 
 Direct calls perform only the preparation needed for their task. Existing theme files are reuse evidence, not an invitation to upgrade. Selecting an implementation skill does not require replacing already working theme/provider wiring. For non-React feature functionality, use the app's normal framework workflow and apply Neon through its CSS path.
 
@@ -50,8 +54,15 @@ type NeonContext = {
   verificationCommands: string[];
   surface?: 'functional' | 'immersive';
   composition?: 'preserve' | 'adapt';
+  rebuildSource?: string;
+  referenceDesign?: string;
+  brandIntensity?: 'finnomena-led' | 'blended' | 'reference-led';
+  workType?: 'campaign' | 'back-office' | 'product-feature';
+  readiness?: 'ship-ready' | 'brand-ready';
 };
 ```
+
+A rebuild uses `operation: 'new-project'` with `rebuildSource` set to the original project; the new destination is `projectRoot`. `referenceDesign` and `brandIntensity` apply to campaign pages only. Decide `readiness` with [readiness and handoff](readiness.md) before reporting.
 
 `tier`: `colors` uses CSS colors only; `visual-system` also uses brand typography, spacing and radius; `cds` uses real CDS components and the Finnomena theme. Tier does not grant composition changes. Omit `surface` until known; do not guess it to fill a record. Unknown framework/rendering stays `unknown`; missing package manager stays `null`. Other unavailable evidence can remain empty with its uncertainty noted. Only investigate unknowns that affect the next action.
 

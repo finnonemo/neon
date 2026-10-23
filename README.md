@@ -53,7 +53,7 @@ Keep a complete checkout of this repository available:
 git clone https://github.com/pawisssh/neon.git
 ```
 
-Register the four folders under `skills/` using your assistant's supported skill-loading mechanism. Keep the checkout intact: these skills also need sibling `theme/`, `templates/`, `design/` and `scripts/` resources. Copying a `SKILL.md` alone is insufficient.
+Register the four folders under `skills/` using your assistant's supported skill-loading mechanism. Keep the checkout intact: these skills also need sibling `theme/`, `templates/` and `scripts/` resources. Copying a `SKILL.md` alone is insufficient.
 
 If your assistant supports reading a skill directly, give it the absolute path to the relevant `SKILL.md` and your app's target directory. Automatic discovery varies by host; the repository checks do not verify host installation.
 
@@ -103,6 +103,15 @@ Use the content provided below and mark any missing registration integration.
 
 Immersive pages can be expressive. Functional controls and status feedback should remain clear and accessible.
 
+### Start a landing page from a reference design
+
+```text
+ทำ landing page Finnomena สำหรับงานสัมมนาพนักงาน โดยใช้ DESIGN.md นี้เป็น
+reference (แนบไฟล์) มีหัวข้อ กำหนดการ และปุ่มลงทะเบียนไปที่ลิงก์ที่ให้ไว้
+```
+
+Bring any outside DESIGN.md, for example from [Refero Styles](https://styles.refero.design). Neon starts at **Blended**: the reference's layout, spacing, radius and motion, with Finnomena colors, typeface and logo. Ask "ให้ดู finnomena มากขึ้น" or "make it closer to the reference" to move one step at a time between **Finnomena-led**, **Blended** and **Reference-led**. At every level the Finnomena logo, typeface, action colors and readable contrast stay, and nothing from the source brand (logo, imagery, copy, product names) is carried over. Brand Intensity applies to campaign and landing pages; back office screens and product features keep the standard Finnomena look.
+
 ### Restyle an existing screen without adopting CDS
 
 ```text
@@ -148,6 +157,8 @@ Start with the task: create a feature, redesign existing UI, or review the resul
 - New feature in an already themed CDS app → `neon-create`, reusing the current setup.
 - Existing app with unclear theming needs → `neon-audit` → `neon-create` or `neon-redesign`.
 - Colors-only change → `neon-redesign`.
+- Landing page from a reference DESIGN.md → `neon-create` for a new page, `neon-redesign` for an existing one.
+- Move an existing vibe-coded project onto the starter → `neon-create` rebuild into a new folder.
 - UI quality check → `neon-review`.
 
 ## Choose how much to change
@@ -171,6 +182,8 @@ and service contracts. Do not adopt CDS or add new product behavior.
 Your explicit request takes priority. “Change only the colors” stays colors-only even if the app already has CDS installed. Vue, Svelte and other non-React apps use the CSS path; Neon does not silently convert them to React.
 
 New apps default to the included Vite + React + TypeScript starter unless you explicitly request another framework. The starter itself does not scaffold other frameworks.
+
+To move an existing project onto the starter instead of restyling it, ask for a **rebuild** and name a new folder. Neon treats the original as a spec for content, flow and data, recomposes each screen the Finnomena way, and leaves the original untouched.
 
 ## Help Neon understand your feature
 
@@ -197,6 +210,7 @@ Neon guides the assistant to:
 - Include relevant loading, empty, validation, error and success states.
 - Check build/typecheck, narrow and wide layouts, Thai/English text and primary interactions when the environment supports them.
 - Explain mock behavior, incomplete integrations and checks that could not be performed.
+- Say whether the result is **Ship-ready** or **Brand-ready**. Only a campaign or landing page with no investment content, and no personal-data form outside an approved company form service, can be Ship-ready; you get a static build and a pre-launch checklist. Back office screens, product features and pages that mention investment products or returns are Brand-ready: they match the brand and come with a `NEON-HANDOFF.md` for engineering and compliance review.
 
 Skills guide an AI assistant; they are not a runtime enforcement layer. Review the resulting app before relying on it. The current CDS color mapping is provisional, and some exported or inherited values still need design review. See the [design contract](skills/INSTRUCTION.md) for visual policy and mapping boundaries.
 

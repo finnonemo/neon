@@ -4,7 +4,7 @@
 
 Describe the employee request that fails today and the expected behavior. Reproduce it before changing guidance. For skills, test retrieval and decisions with realistic prompts; for installer/packager code, use executable regression tests. Keep the same prompt and evidence for the before/after comparison.
 
-Edit the owning source: visual decisions in `skills/INSTRUCTION.md`, mechanics in skill references, token data in `theme/tokens/`, CDS mapping in `theme/cds/color-overrides.ts`, and starter wiring in `templates/vitejs-cds/`. The legacy campaign overlay is opt-in and must not override ordinary product feature guidance.
+Edit the owning source: visual decisions in `skills/INSTRUCTION.md`, mechanics in skill references, token data in `theme/tokens/`, CDS mapping in `theme/cds/color-overrides.ts`, and starter wiring in `templates/vitejs-cds/`. Reference-design and Brand Intensity rules apply to campaign and landing pages only and must not override functional product guidance. Use the terms in [GLOSSARY.md](GLOSSARY.md) and record hard-to-reverse decisions in [docs/adr/](docs/adr/).
 
 Use a branch such as `codex/describe-the-change` and a focused pull request. Do not change release versions or publish as a side effect of a documentation refactor.
 
