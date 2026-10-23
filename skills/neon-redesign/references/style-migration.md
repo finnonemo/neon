@@ -289,27 +289,35 @@ button while the request is in flight. `tier: 'colors'`.
   (`bg-brand`, `focus:border-brand`, `text-red-600`,
   `disabled:opacity-50`), no other file references `--color-brand`.
 - **Map:** the submit button's `bg-brand` is the primary-action role →
-  Navy Ink (`#01172b`). The inputs' `focus:border-brand` is a *different*
-  role — interactive-highlight/focus — even though the original app
-  reused the same `--color-brand` token for both; use semantic mapping: don't
-  collapse these back onto one Finnomena color just because the source
-  used one token. Focus rings map to Indigo Interactive (`#1817e7`), not
-  Navy Ink. The validation error text (`text-red-600`) is a status color,
-  not a brand color → Finnomena Negative (`#d60808`), per **Chart and
+  Navy Ink (`--color-bgPrimary`). The inputs' `focus:border-brand` is a
+  *different* role — interactive-highlight/focus — even though the
+  original app reused the same `--color-brand` token for both; use
+  semantic mapping: don't collapse these back onto one Finnomena color
+  just because the source used one token. Focus rings take the indigo
+  interaction signal (`--color-bgLinePrimary`), not Navy Ink. The
+  validation error text (`text-red-600`) is a status color, not a brand
+  color → Finnomena Negative (`--color-fgNegative`), per **Chart and
   status colors** above (the same status-vs-brand distinction applies
   outside charts).
-- **Update shared tokens:** `app.css`'s `@theme` block changes
-  `--color-brand: #2563eb;` to `--color-brand: #01172b;` and adds two new
-  tokens the app didn't previously separate: `--color-interactive:
-  #1817e7;` and `--color-negative: #d60808;`.
+- **Update shared tokens:** with the adapter variables available per
+  [CSS setup](css-integration.md#css-setup), `app.css` moves
+  `--color-brand` into `@theme inline` as
+  `--color-brand: var(--color-bgPrimary);` and adds two names the app
+  didn't previously separate: `--color-interactive:
+  var(--color-bgLinePrimary);` and `--color-negative:
+  var(--color-fgNegative);`. Reference the adapter variables; do not copy
+  hex values from `theme/tokens/colors.json`. The raw palette and the
+  adapter can differ (`bgLinePrimary` is not the raw `#1817e7` indigo
+  step), and only the variables follow mode selectors and future mapping
+  changes.
 - **Update remaining:** `LoginForm.tsx`'s submit button keeps `bg-brand`
   (now resolves to Navy Ink automatically). Inputs' `focus:border-brand`
   becomes `focus:border-interactive`. Error text's `text-red-600` becomes
   `text-negative`. `disabled:opacity-50 disabled:cursor-not-allowed` is
   untouched — it's a state-opacity utility, not a color/theme value.
 - **Verify — form behavior explicitly, not just appearance:** confirm the
-  submit button renders Navy Ink and the input focus ring renders Indigo
-  Interactive. Then exercise the form, not just its colors: submit empty
+  submit button renders Navy Ink and the input focus ring renders the
+  `bgLinePrimary` indigo. Then exercise the form, not just its colors: submit empty
   and confirm the same inline validation errors still appear, now in the
   new negative-red; confirm the submit button is still disabled until
   both fields pass validation; fill in valid values and confirm submit
