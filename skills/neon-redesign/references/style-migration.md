@@ -37,8 +37,8 @@ bucket:
 - **Semantic status colors** (success/warning/error, often already named
   `success`/`danger`/`warn` in the target's config or chart library) have
   real Finnomena equivalents — Positive `#009646`, Negative `#d60808`,
-  Warning `#f26414` (see DESIGN.md's Colors section for the full pastel
-  container pairs). Map these directly: a chart's "success" series color
+  Warning `#f26414` (the raw palette, including the pastel container
+  pairs, is in `theme/tokens/colors.json`). Map these directly: a chart's "success" series color
   becomes Finnomena Positive, not a guess.
 - **Arbitrary data-series colors** (the 5 different hues distinguishing
   categories A–E in a bar chart, with no semantic meaning individually)
@@ -124,7 +124,7 @@ paste a hex or `rgb()` value into a variable this project consumes as
 `hsl(var(--primary))` — the variable must hold exactly what the wrapper
 expects. Before writing anything, read the wrapper function in
 `tailwind.config.js` (or wherever the var is consumed) to know the target
-format, then convert Finnomena's DESIGN.md value into it:
+format, then convert the Finnomena token value into it:
 
 - **Example:** Finnomena's Navy Ink primary is `#01172b`. If the target's
   `tailwind.config.js` has `primary: 'hsl(var(--primary))'`, decompose

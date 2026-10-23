@@ -19,10 +19,7 @@ notes/
 tests/
 
 # Local research, working notes, and generated/run evaluator output — see
-# docs/architecture/repository-structure.md. Maintained evaluator source
-# under evals/design-md/ (outside .local/) is tracked normally; its own
-# node_modules/, playwright-report/, and test-results/ are covered by
-# evals/design-md/.gitignore.
+# docs/architecture/repository-structure.md.
 .local/
 
 # Subagent-driven-development scratch workspace

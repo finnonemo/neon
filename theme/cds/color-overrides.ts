@@ -3,7 +3,7 @@
  * ThemeConfig color fields (lightSpectrum/darkSpectrum, lightColor/
  * darkColor). Hand-written, NOT generated — this is a real design decision
  * (which Finnomena role plays which CDS semantic slot), not a mechanical
- * data transform. See ../../design-md/finnomena/DESIGN.md's "Colors" section
+ * data transform. See ../../skills/INSTRUCTION.md's "Color roles" section
  * for the named brand roles this draws from, and ./color-mapping.todo.md (generated) for
  * the full reference dump of what every Finnomena semantic token resolves
  * to, which this file's assignments were built from.
@@ -21,7 +21,7 @@
  *
  * Key judgment calls made here, stated explicitly:
  * - Navy Ink fills CDS's "primary" concept (fgPrimary/bgPrimary) — per
- *   DESIGN.md's own framing, Navy is Finnomena's structural "ink" color
+ *   Finnomena's brand framing, Navy is Finnomena's structural "ink" color
  *   that plays the role black/primary plays in most systems, not a
  *   generic accent.
  * - Indigo Interactive (links/focus) fills bgLinePrimary instead, since
@@ -29,10 +29,10 @@
  *   Indigo for links/focus) that don't cleanly collapse onto CDS's smaller
  *   slug set.
  * - CDS's "gray" spectrum hue and accentSubtleGray/accentBoldGray are
- *   filled from Navy, not Finnomena's separate Grey family — DESIGN.md
- *   states Navy plays the neutral/structural role a gray scale normally
- *   would in this system ("every neutral step... is a tint of that same
- *   navy hue rather than a separate gray family").
+ *   filled from Navy, not Finnomena's separate Grey family — Navy plays
+ *   the neutral/structural role a gray scale normally would in this
+ *   system, so every neutral step is treated as a tint of the navy hue
+ *   rather than a separate gray family.
  * - Finnomena's primitive palette (tokens/colors.json) is NOT mode-branched
  *   — the same hex value exists regardless of light/dark. Where a slug has
  *   no distinct light vs. dark Finnomena semantic role, the same value is
@@ -47,7 +47,7 @@
  * - bgSecondaryWash, bgLineHeavy, bgLinePrimarySubtle — no Finnomena role
  *   names a value for these specific concepts.
  * - darkColor.bgNegativeWash / bgPositiveWash / bgWarningWash — Finnomena's
- *   own export has a known, DESIGN.md-documented data gap here: all
+ *   own export has a known data gap here: all
  *   dark-mode Notifications and Status tokens resolve to flat white. Rather
  *   than propagate that broken value, these are left at CDS's default.
  * - lightSpectrum/darkSpectrum's gray, pink, chartreuse hues — no
@@ -126,7 +126,7 @@ export const darkColor = {
   bgTertiary: "rgb(38,38,38)", // Background.background-tertiary (dark)
   bgNegative: "rgb(243,9,9)", // Text.text-negative family (dark, Red.115)
   // bgNegativeWash: omitted — dark-mode Notifications.* is a known Finnomena
-  // export data gap (see DESIGN.md), all resolve to flat white; falls to
+  // export data gap (see header comment), all resolve to flat white; falls to
   // CDS default rather than propagating that.
   bgPositive: "rgb(0,173,80)", // Support.support-success (same both modes)
   // bgPositiveWash: omitted, same dark-mode data gap as bgNegativeWash.
