@@ -39,6 +39,9 @@ Pass requires all of:
 - Pale borders and washes stay pale (wash/`accentSubtle*` token or the original utility); no saturated status token replaces a `-50`–`-200` shade.
 - Focus color, if changed, uses a `focus:` variant at the call site.
 - Category dots keep distinct meanings or are reported; geometry, fonts and handlers are unchanged and the build passes.
+- Text lighter than `fgMuted` (disabled, inactive icons) stays light; a selected state keeps an indigo signal.
+
+Revised skill, Codex, same prompt and fixture, one sample per revision. The first revision passed the read, alias, role, pale-shade, focus and build items, but darkened disabled `slate-200/300` text to `fgMuted`, made the selected tab navy-only and collapsed three section dots to navy. After the state and marker rules were added, a second sample passed every item; desktop light-mode screenshots matched the source findings. Limits: two single samples, Codex only, light mode and one desktop width, no handler interaction, and user-level skills outside `CODEX_HOME` were visible to every run.
 
 ## Flow refactor evaluation
 
