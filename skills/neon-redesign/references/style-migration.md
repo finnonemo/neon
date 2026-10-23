@@ -79,10 +79,17 @@ palette (`bg-slate-900`, `text-blue-600`) with no brand tokens yet.
 - **Keep shade hierarchy.** The adapter has only `fg` and `fgMuted` for
   text. If `slate-400`, `slate-500` and `slate-600` carry distinct jobs
   (placeholder, caption, secondary text), decide per call site and report
-  the steps that collapse. Do not invent extra tokens; the mapping is
-  provisional.
+  the steps that collapse. Text lighter than `fgMuted` (disabled,
+  placeholder, inactive icons) keeps its stock utility; never darken it.
+  Do not invent extra tokens; the mapping is provisional.
+- **Map state, not just shade.** A selected tab or chip takes the indigo
+  interaction signal (`bgLinePrimary` border or indicator), not navy text
+  alone. One shade-threshold table applied across a file is value
+  mapping; check each call site's state.
 - **Leave non-brand colors.** Category dots, chart series and
-  illustrative accents follow **Chart and status colors** above.
+  illustrative accents follow **Chart and status colors** above. Markers
+  that distinguish sections from each other keep that distinction or are
+  reported; do not collapse them onto one token.
 
 ## Format-specific guidance
 
