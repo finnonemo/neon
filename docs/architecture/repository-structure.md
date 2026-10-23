@@ -60,6 +60,5 @@ node scripts/package-plugin.mjs <destination-dir>
 Run the skill and packaging checks:
 
 ```sh
-node --test evals/skills/*.test.mjs
-node scripts/check-repository.mjs
+node scripts/validate.mjs
 ```

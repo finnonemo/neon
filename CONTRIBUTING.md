@@ -13,8 +13,7 @@ Use a branch such as `codex/describe-the-change` and a focused pull request. Do 
 Run from the repository root:
 
 ```sh
-node --test evals/skills/*.test.mjs
-node scripts/check-repository.mjs
+node scripts/validate.mjs
 git diff --check
 ```
 
@@ -30,7 +29,7 @@ node theme/scripts/generate-breakpoints-config.mjs
 
 Review the resulting diff and unresolved-token report. Color mapping is hand-maintained; the CSS adapter must be updated separately using the method in its header. Do not automatically replace missing mappings with guesses.
 
-For template, theme or component changes, assemble a fresh disposable app, install dependencies with its package manager, build it and inspect the affected UI. Check relevant light/dark modes, narrow/wide layouts, Thai/English labels, keyboard interactions and task states. Record actual evidence, including blocked checks.
+For template, theme or component changes, run `node scripts/smoke-new-app.mjs` to assemble, install and build a fresh disposable app outside the repository, then inspect the affected UI. Check relevant light/dark modes, narrow/wide layouts, Thai/English labels, keyboard interactions and task states. Record actual evidence, including blocked checks.
 
 For skill changes, compare baseline/revised decisions and representative app behavior; word count alone is not a quality metric. Read only task-relevant references during evaluation and record actual questions, setup actions and files read. Use [evals/skills/README.md](evals/skills/README.md). A read-through can verify retrieval/routing; only implemented and rendered apps support claims about visual output improvement.
 
