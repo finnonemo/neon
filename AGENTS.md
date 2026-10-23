@@ -10,3 +10,17 @@ This repository distributes skills, theme assets and a CDS starter. It is not an
 - App/template/theme changes also need an assembled disposable app build and relevant visual/interaction checks. Static reference checks cannot establish UI quality.
 - Keep generated apps, screenshots, dependencies and local evaluation artifacts out of the tracked source. Use `.local/` or a temporary directory.
 - See `CONTRIBUTING.md` for validation and release preparation. Do not publish merely because packaging succeeded.
+
+## Agent skills
+
+### Issue tracker
+
+GitHub Issues on `finnonemo/neon` via the `gh` CLI. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Default five-role vocabulary (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`). See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: root `GLOSSARY.md` + `docs/adr/`, both created lazily. See `docs/agents/domain.md`.
