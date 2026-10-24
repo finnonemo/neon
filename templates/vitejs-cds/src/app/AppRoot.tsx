@@ -29,6 +29,19 @@ import { createNeonTheme } from "../theme/createTheme";
 // object every render and defeat that.
 const appTheme = createNeonTheme();
 
+// CDS's <Text> defaults to font="inherit" and CDS sets no document font, so
+// text without a `font` prop would fall back to the browser serif. Give
+// <body> the theme's body typography before the first render; CDS portals
+// (modals, toasts, tooltips) mount on <body>, outside this provider tree.
+if (typeof document !== "undefined") {
+  Object.assign(document.body.style, {
+    fontFamily: appTheme.fontFamily.body,
+    fontSize: appTheme.fontSize.body,
+    fontWeight: appTheme.fontWeight.body,
+    lineHeight: appTheme.lineHeight.body,
+  });
+}
+
 export function AppRoot({
   children,
   colorScheme = "light",

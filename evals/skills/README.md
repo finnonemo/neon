@@ -90,6 +90,10 @@ October 2026, Codex, one sample per case:
   It surfaced two starter gaps:
   - Nothing sets a root font, so bare `<Text>` renders in the browser serif. That covers at least 11 uses in the rebuild plus the starter's own `SidebarNav` labels. The earlier samples had set the font on `body` or `.phc-app`.
   - `BottomNav` links keep the browser's link underline.
+  The starter now applies the theme's body typography to `<body>` from `AppRoot`, which also covers CDS portals, and `BottomNav` clears the underline. `starter-typography.test.mjs` guards both statically. A disposable assembled app confirmed the fix in light mode, with the IBM Plex Sans Thai face loaded:
+  - A bare `Text`, a `Text` inside a CDS `Modal`, and the sidebar labels resolve to IBM Plex Sans Thai.
+  - `BottomNav` links have no underline at 375px.
+  - Desktop geometry matches the previous starter.
   At 375px the KPI pill buttons wrap to two lines. The run also upgraded Vite 5→8 and plugin-react 4→6 to add Vitest, and reported it.
 - Controls kept their stacks. The health-check colors run bridged Carbon `--cds-*` variables with hex values; the status-filter run changed only `App.jsx` and `App.scss`, and its filter UI was not browser-checked. The batch-sell colors run skipped neon-redesign and aliased stock palette names with hex. After neon-create's entrypoint sent colors-only React restyles to neon-redesign, two more samples read style migration and passed the alias, role, focus and build items above. Each mapped the selected tab border to indigo. On the pale and marker items, one sample passed. The other failed: it turned a `bg-slate-400` hairline into the near-white `bgPrimaryWash`. On adapter variables, that second sample passed by importing the adapter. The first is borderline: it copied the adapter's `rgb()` declarations into `:root`. Neither sample was browser-checked.
 - Limits:
