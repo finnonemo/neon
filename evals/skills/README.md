@@ -45,7 +45,7 @@ Pass requires all of:
 
 Revised skill, Codex, same prompt and fixture, one sample per revision. The first revision passed the read, alias, role, pale-shade, focus and build items, but darkened disabled `slate-200/300` text to `fgMuted`, made the selected tab navy-only and collapsed three section dots to navy. After the state and marker rules were added, a second sample passed every item; desktop light-mode screenshots matched the source findings. Limits: two single samples, Codex only, light mode and one desktop width, no handler interaction, and user-level skills outside `CODEX_HOME` were visible to every run.
 
-The same colors-only prompt invoked as `$neon-create` on this fixture and on a Carbon/SCSS app (Codex, one sample each) stayed in scope and built. Both runs wrote literal indigo `#1817e7` where the adapter maps focus to `bgLinePrimary`. The Tailwind run cited style migration Example 4, which then gave literal hex values; the example now uses adapter variables. That revision has not been re-run.
+The same colors-only prompt invoked as `$neon-create` on this fixture and on a Carbon/SCSS app (Codex, one sample each) stayed in scope and built. Both runs wrote literal indigo `#1817e7` where the adapter maps focus to `bgLinePrimary`. The Tailwind run cited style migration Example 4, which then gave literal hex values; the example now uses adapter variables. Two later samples (see [CDS rebuild](#cds-rebuild)) used `var(--color-*)` utilities without `#1817e7`; one imported the adapter, the other copied its `rgb()` declarations into `:root`.
 
 ## CDS rebuild
 
@@ -63,6 +63,21 @@ Pass requires all of:
 - The build passes; the light scheme is checked and dark mode is reported as unverified unless wired.
 
 Control requests on the same fixtures must keep the existing stack: `$neon-create Colors only: switch this app's colors to Finnomena colors. Keep the layout, components, spacing and behaviour exactly as they are.` on both, and on health-check the status-filter task from the [flow refactor protocol](flow-refactor-protocol.md) adapted to its statuses: `$neon-create Add a Finnomena status filter to this existing customer list. Offer All, New, In Progress, Ready to Report, Completed; combine it with the existing search, show an empty message when nothing matches, preserve services, providers, theme, routes and detail behavior. Keep Thai/English text usable on mobile and desktop.`
+
+October 2026, Codex, one sample per case:
+
+- Both rebuilds read the rebuild reference, wrote a parity inventory with source locations, assembled `<app>-cds` with the installer and left the source unchanged. Mock data and the calculator logic were copied unchanged. Neither source had tests, so each run added its own (batch-sell 7, health-check 16); all pass, as do strict TypeScript and the build. No Carbon or Tailwind remains. Batch-sell reported the retained `@vercel/analytics`. Health-check reported a search control it added and the source's inert navigation and mock actions.
+- Browser checks were done by the evaluator, in light mode at desktop and 375px, because Codex could not launch Chromium in its sandbox. The batch-sell content, quick-select calculation and narrow stacking matched the source. On health-check, the dashboard counts, drilldowns and search list matched. Two defects were found:
+  - Its stylesheet's unlayered `button { color: inherit }` beat CDS's `cds` cascade layer and turned primary button text dark on navy.
+  - The search panel extends 32px under the sidebar.
+  The cascade-layer rule now lives in CDS integration and is linked from the rebuild reference. That revision has not been re-run.
+- Controls kept their stacks. The health-check colors run bridged Carbon `--cds-*` variables with hex values; the status-filter run changed only `App.jsx` and `App.scss`, and its filter UI was not browser-checked. The batch-sell colors run skipped neon-redesign and aliased stock palette names with hex. After neon-create's entrypoint sent colors-only React restyles to neon-redesign, two more samples read style migration and passed the alias, role, focus and build items above. Each mapped the selected tab border to indigo. One sample turned a `bg-slate-400` hairline into the near-white `bgPrimaryWash`.
+- Limits:
+  - Single samples, Codex only.
+  - The user-level `ponytail` skill leaked into every run.
+  - Four first-round runs could list their `CODEX_HOME` through `--add-dir`.
+  - Dark mode is unverified, because the starter fixes light.
+  - Dialogs, timers and keyboard focus in the rebuilds were checked only through the runs' DOM tests.
 
 ## Flow refactor evaluation
 
