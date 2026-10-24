@@ -81,6 +81,16 @@ October 2026, Codex, one sample per case:
   - The column starts 27px under the 72px rail.
   - `.phc-nav-items button { font-size: 0 }` leaves CDS labels at 17px, so they overflow the rail.
   The source and the first sample both lay out correctly at that width.
+  CDS integration now also says to style CDS components through props. A third health-check sample (one sample) passed:
+  - Every rule sits on app classes. The only element selectors (`table`, `th`) sit under an app-owned raw table; no rule reaches into CDS.
+  - The primary "Create Portfolio" button renders white on navy at 375px. No dialog was opened.
+  - 375px and desktop show no horizontal overflow; 375px uses the starter's bottom nav.
+  - Search filters inline in its column.
+  - 7 tests and the build pass; the mock data matches in value.
+  It surfaced two starter gaps:
+  - Nothing sets a root font, so bare `<Text>` renders in the browser serif. That covers at least 11 uses in the rebuild plus the starter's own `SidebarNav` labels. The earlier samples had set the font on `body` or `.phc-app`.
+  - `BottomNav` links keep the browser's link underline.
+  At 375px the KPI pill buttons wrap to two lines. The run also upgraded Vite 5→8 and plugin-react 4→6 to add Vitest, and reported it.
 - Controls kept their stacks. The health-check colors run bridged Carbon `--cds-*` variables with hex values; the status-filter run changed only `App.jsx` and `App.scss`, and its filter UI was not browser-checked. The batch-sell colors run skipped neon-redesign and aliased stock palette names with hex. After neon-create's entrypoint sent colors-only React restyles to neon-redesign, two more samples read style migration and passed the alias, role, focus and build items above. Each mapped the selected tab border to indigo. On the pale and marker items, one sample passed. The other failed: it turned a `bg-slate-400` hairline into the near-white `bgPrimaryWash`. On adapter variables, that second sample passed by importing the adapter. The first is borderline: it copied the adapter's `rgb()` declarations into `:root`. Neither sample was browser-checked.
 - Limits:
   - Single samples, Codex only.
