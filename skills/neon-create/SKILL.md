@@ -11,7 +11,7 @@ Deliver the requested content and interactions with real `@coinbase/cds-web` com
 
 ## When to use
 
-Use for React/CDS implementation. Preserve an explicitly requested non-React framework and use its normal feature workflow plus Neon's CSS styling path. A request to review does not authorize implementation.
+Use for React/CDS implementation. A colors-only or CSS-only restyle, React apps included, follows [neon-redesign](../neon-redesign/SKILL.md) instead, with its mapping references. Preserve an explicitly requested non-React framework and use its normal feature workflow plus Neon's CSS styling path. A request to review does not authorize implementation.
 
 ## Fast path
 
