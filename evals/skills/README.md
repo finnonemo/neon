@@ -71,7 +71,16 @@ October 2026, Codex, one sample per case:
 - Browser checks were done by the evaluator, in light mode at desktop and 375px, because Codex could not launch Chromium in its sandbox. The batch-sell content, quick-select calculation and narrow stacking matched the source. On health-check, the dashboard counts, drilldowns and search list matched. Two defects were found:
   - Its stylesheet's unlayered `button { color: inherit }` beat CDS's `cds` cascade layer and turned primary button text dark on navy.
   - The search panel extends 32px under the sidebar.
-  CDS integration now says to scope app styles to app classes, and the rebuild reference links to that rule. That revision has not been re-run.
+  CDS integration now says to scope app styles to app classes, and the rebuild reference links to that rule. A health-check re-run on that revision (one sample) passed:
+  - Every rule sits under `.phc-app`.
+  - Primary buttons in the page and the Add Asset dialog render white on navy.
+  - Search is inline in the dashboard column, clear of the rail.
+  - The 17 tests and the build pass.
+  - The mock data matches the source in value.
+  At 375px it regressed where the first sample had not:
+  - The column starts 27px under the 72px rail.
+  - `.phc-nav-items button { font-size: 0 }` leaves CDS labels at 17px, so they overflow the rail.
+  The source and the first sample both lay out correctly at that width.
 - Controls kept their stacks. The health-check colors run bridged Carbon `--cds-*` variables with hex values; the status-filter run changed only `App.jsx` and `App.scss`, and its filter UI was not browser-checked. The batch-sell colors run skipped neon-redesign and aliased stock palette names with hex. After neon-create's entrypoint sent colors-only React restyles to neon-redesign, two more samples read style migration and passed the alias, role, focus and build items above. Each mapped the selected tab border to indigo. On the pale and marker items, one sample passed. The other failed: it turned a `bg-slate-400` hairline into the near-white `bgPrimaryWash`. On adapter variables, that second sample passed by importing the adapter. The first is borderline: it copied the adapter's `rgb()` declarations into `:root`. Neither sample was browser-checked.
 - Limits:
   - Single samples, Codex only.
