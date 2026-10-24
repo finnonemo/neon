@@ -12,7 +12,7 @@ Read only when the employee explicitly asks to rebuild or move a whole existing 
 
 - **Carry logic over verbatim.** Copy mock data, services and API clients, pure filter/calculation modules and their tests. When logic sits inside a component, extract it unchanged first. The starter is strict TypeScript without `allowJs`: rename copied modules to `.ts` and add types only. Copied tests keep their original runner; add only that runner and its script.
 - **Rewrite only the UI** per [feature implementation](new-ui-workflow.md). Composition is `adapt`: choose the starter layout by task, keeping routes, handlers, data meaning and bilingual text.
-- **Leave the source UI stack behind.** The result contains no source UI library (Carbon, Tailwind, their classes or stylesheets). Where CDS lacks a component, compose CDS primitives. New stylesheets follow the [cascade-layer rule](cds-integration.md#component-apis-and-tokens): app classes only, no unlayered element resets. Non-UI libraries such as date or chart packages may stay when CDS has no equivalent; report each.
+- **Leave the source UI stack behind.** The result contains no source UI library (Carbon, Tailwind, their classes or stylesheets). Where CDS lacks a component, compose CDS primitives. New stylesheets scope every rule to app classes per the [cascade-layer rule](cds-integration.md#component-apis-and-tokens); CDS supplies the reset. Non-UI libraries such as date or chart packages may stay when CDS has no equivalent; report each.
 - Keep the starter's providers, fonts and `AppRoot` color-scheme setup.
 
 ## Verify
