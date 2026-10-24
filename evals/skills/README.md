@@ -96,6 +96,18 @@ October 2026, Codex, one sample per case:
   - Desktop geometry matches the previous starter.
   The starter now also paints `<body>` with the active scheme's theme `bg`/`fg` and declares `color-scheme`. Before this, a dark OS preference showed a dark canvas behind black text. With dark-preference emulation, the disposable app rendered a white body with `fg` text at 375px and desktop, including inside the modal; light mode was unchanged. The starter's dark scheme itself stays unwired and unverified.
   At 375px the KPI pill buttons wrap to two lines. The run also upgraded Vite 5→8 and plugin-react 4→6 to add Vitest, and reported it.
+  A fourth health-check sample, on the props rule plus both starter fixes (one sample), failed the stylesheet item:
+  - `app.css` has bare element rules (`body`, `h1`, `h2`, `h5`, and `h2, h3, h4, h5, p`), and `.password-field > div` sizes the CDS `TextInput` root.
+  - It passed the other checked items:
+    - It read the rebuild, scaffold and CDS integration references, and the source was unchanged.
+    - 13 tests, `tsc` and the build pass.
+    - It kept Vite 5, and no Carbon or Tailwind remains.
+    - The mock data matches in value.
+    - Body text resolves to IBM Plex Sans Thai on a white body.
+    - The two primary-styled buttons checked (the Home nav item and the add-column icon button) render white on navy. No labelled primary action or dialog was checked.
+    - Search filters inline and shows its empty message.
+    - Desktop has no overflow.
+  - At 375px the page has no horizontal overflow. The app mounts its own `app-navigation` (`src/ui.tsx`) and no starter layout, so no bottom nav renders, and that nav scrolls horizontally. Its column container also scrolls sideways: a 320px-minimum column plus an add-column zone loaded scrolled 52px, which clipped the heading's left edge. The source was not compared at that width.
 - Controls kept their stacks. The health-check colors run bridged Carbon `--cds-*` variables with hex values; the status-filter run changed only `App.jsx` and `App.scss`, and its filter UI was not browser-checked. The batch-sell colors run skipped neon-redesign and aliased stock palette names with hex. After neon-create's entrypoint sent colors-only React restyles to neon-redesign, two more samples read style migration and passed the alias, role, focus and build items above. Each mapped the selected tab border to indigo. On the pale and marker items, one sample passed. The other failed: it turned a `bg-slate-400` hairline into the near-white `bgPrimaryWash`. On adapter variables, that second sample passed by importing the adapter. The first is borderline: it copied the adapter's `rgb()` declarations into `:root`. Neither sample was browser-checked.
 - Limits:
   - Single samples, Codex only.
