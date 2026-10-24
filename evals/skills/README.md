@@ -12,6 +12,7 @@ Run each request with the named context, first against the baseline and then the
 | Make the buttons clearer after Finnomena was established | Retains brand intent without repeated onboarding |
 | Build a CDS settings screen with no Finnomena context | Does not infer Finnomena branding from CDS alone |
 | Colors-only restyle of a Tailwind v4 app that uses stock utilities only | See [Tailwind colors-only regression](#tailwind-colors-only-regression) |
+| Rebuild an existing React prototype on CDS; colors-only and feature requests on the same apps | See [CDS rebuild](#cds-rebuild) |
 
 Verdicts are pass, fail or unverified for routing, scope, resource retrieval, component correctness, color roles, feature completion, responsive behavior and evidence honesty. Link actual artifacts. Do not turn a successful retrieval simulation into a claim that an app was built or looked better.
 
@@ -45,6 +46,23 @@ Pass requires all of:
 Revised skill, Codex, same prompt and fixture, one sample per revision. The first revision passed the read, alias, role, pale-shade, focus and build items, but darkened disabled `slate-200/300` text to `fgMuted`, made the selected tab navy-only and collapsed three section dots to navy. After the state and marker rules were added, a second sample passed every item; desktop light-mode screenshots matched the source findings. Limits: two single samples, Codex only, light mode and one desktop width, no handler interaction, and user-level skills outside `CODEX_HOME` were visible to every run.
 
 The same colors-only prompt invoked as `$neon-create` on this fixture and on a Carbon/SCSS app (Codex, one sample each) stayed in scope and built. Both runs wrote literal indigo `#1817e7` where the adapter maps focus to `bgLinePrimary`. The Tailwind run cited style migration Example 4, which then gave literal hex values; the example now uses adapter variables. That revision has not been re-run.
+
+## CDS rebuild
+
+Fixtures: the batch-sell calculator above and a health-check management prototype (React, `@carbon/react`, SCSS, mock data with a timed demo transition). Rebuild request, verbatim, run in each source app:
+
+> $neon-create Rebuild this app on CDS with the Finnomena starter. Keep every screen, feature, filter and the Thai/English text working.
+
+Pass requires all of:
+
+- The run reads the rebuild reference and writes a parity inventory before building.
+- The starter is assembled into a new empty directory; the source app has no changes.
+- Mock data, services and pure logic are copied with unchanged behavior; copied tests pass.
+- The rebuild has no source UI library import, package or class; each retained non-UI library is reported.
+- Every inventory item is observed in the rebuild at 375px and desktop, or reported as not ported.
+- The build passes; the light scheme is checked and dark mode is reported as unverified unless wired.
+
+Control requests on the same fixtures must keep the existing stack: `$neon-create Colors only: switch this app's colors to Finnomena colors. Keep the layout, components, spacing and behaviour exactly as they are.` on both, and on health-check the status-filter task from the [flow refactor protocol](flow-refactor-protocol.md) adapted to its statuses: `$neon-create Add a Finnomena status filter to this existing customer list. Offer All, New, In Progress, Ready to Report, Completed; combine it with the existing search, show an empty message when nothing matches, preserve services, providers, theme, routes and detail behavior. Keep Thai/English text usable on mobile and desktop.`
 
 ## Flow refactor evaluation
 
