@@ -52,3 +52,10 @@ test('AppRoot gives <body> the theme body font, so bare Text and portals inherit
     assert.match(source, new RegExp(`${property}: appTheme\\.${property}\\.body`));
   }
 });
+
+test('AppRoot paints <body> with the active scheme colors and declares the scheme', async () => {
+  const source = await readFile(join(starterSrc, 'app/AppRoot.tsx'), 'utf8');
+  assert.match(source, /appTheme\.darkColor : appTheme\.lightColor/);
+  assert.match(source, /document\.documentElement\.style\.colorScheme = colorScheme/);
+  assert.match(source, /backgroundColor: color\.bg, color: color\.fg/);
+});

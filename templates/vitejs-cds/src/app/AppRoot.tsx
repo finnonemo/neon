@@ -18,7 +18,7 @@
  * — wire this to real light/dark state before shipping if the app needs
  * dark mode.
  */
-import type { ReactNode } from "react";
+import { useLayoutEffect, type ReactNode } from "react";
 import { MediaQueryProvider, ThemeProvider } from "@coinbase/cds-web/system";
 import { PortalProvider } from "@coinbase/cds-web/overlays";
 
@@ -49,6 +49,16 @@ export function AppRoot({
   children: ReactNode;
   colorScheme?: "light" | "dark";
 }) {
+  // Paint <body> with the active scheme's theme colors and declare that
+  // scheme to the browser before first paint, so an OS dark preference
+  // never shows its default canvas behind light-theme text.
+  useLayoutEffect(() => {
+    const color = colorScheme === "dark" ? appTheme.darkColor : appTheme.lightColor;
+    if (!color) return; // ThemeProvider throws for a scheme without colors.
+    document.documentElement.style.colorScheme = colorScheme;
+    Object.assign(document.body.style, { backgroundColor: color.bg, color: color.fg });
+  }, [colorScheme]);
+
   return (
     <MediaQueryProvider>
       <ThemeProvider theme={appTheme} activeColorScheme={colorScheme}>
