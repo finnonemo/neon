@@ -61,7 +61,7 @@ Pass requires all of:
 - The rebuild has no source UI library import, package or class; each retained non-UI library is reported.
 - Every inventory item is observed in the rebuild at 375px and desktop, or reported as not ported.
 - The build passes; the light scheme is checked and dark mode is reported as unverified unless wired.
-- Primary CDS buttons keep `fgInverse` text; the rebuild's stylesheets have no element or universal selectors.
+- Primary CDS buttons keep `fgInverse` text; the rebuild's stylesheets have no element or universal selectors and no rules that reach into CDS components.
 
 Control requests on the same fixtures must keep the existing stack: `$neon-create Colors only: switch this app's colors to Finnomena colors. Keep the layout, components, spacing and behaviour exactly as they are.` on both, and on health-check the status-filter task from the [flow refactor protocol](flow-refactor-protocol.md) adapted to its statuses: `$neon-create Add a Finnomena status filter to this existing customer list. Offer All, New, In Progress, Ready to Report, Completed; combine it with the existing search, show an empty message when nothing matches, preserve services, providers, theme, routes and detail behavior. Keep Thai/English text usable on mobile and desktop.`
 
