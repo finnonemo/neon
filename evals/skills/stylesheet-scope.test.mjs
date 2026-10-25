@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { selectorsNotLedByClass } from './stylesheet-scope.mjs';
+import { unscopedSelectors } from './stylesheet-scope.mjs';
 
 // Rules taken from the health-check rebuild samples recorded in README "CDS rebuild".
 test('flags the bare element rules the fourth rebuild sample wrote', () => {
@@ -11,7 +11,16 @@ test('flags the bare element rules the fourth rebuild sample wrote', () => {
     * { box-sizing: border-box; }
     button { color: inherit; }
   `;
-  assert.deepEqual(selectorsNotLedByClass(css), ['body', 'h2', 'h3', 'h4', 'h5', 'p', 'h1', '*', 'button']);
+  assert.deepEqual(unscopedSelectors(css), ['body', 'h2', 'h3', 'h4', 'h5', 'p', 'h1', '*', 'button']);
+});
+
+test('flags class-led selectors that end on anonymous component markup', () => {
+  const css = `
+    .password-field > div { flex: 1; min-width: 0; }
+    .phc-toolbar span:first-child { margin: 0; }
+    .phc-row div { gap: 4px; }
+  `;
+  assert.deepEqual(unscopedSelectors(css), ['.password-field > div', '.phc-toolbar span:first-child', '.phc-row div']);
 });
 
 test('accepts class-led rules, including element selectors under an app class', () => {
@@ -25,5 +34,5 @@ test('accepts class-led rules, including element selectors under an app class', 
     @font-face { font-family: X; src: url(x.woff2); }
     .phc-card { padding: 4px; &:hover { opacity: 0.9; } }
   `;
-  assert.deepEqual(selectorsNotLedByClass(css), []);
+  assert.deepEqual(unscopedSelectors(css), []);
 });

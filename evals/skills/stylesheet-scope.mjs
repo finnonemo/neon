@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 // Grades a CDS rebuild's stylesheets against the cds-integration rule that
-// every selector starts with an app class. Whether a class-led selector still
-// reaches into a CDS component (`.field > div`) needs the rendered DOM.
+// every selector starts with an app class and names app elements by their own
+// class. A selector ending on an anonymous `div` or `span` (`.field > div`)
+// reaches into component markup; other reaches need the rendered DOM.
 //
 //   node evals/skills/stylesheet-scope.mjs <file.css>...
 import { readFile } from 'node:fs/promises';
@@ -26,7 +27,10 @@ function splitTopLevel(prelude) {
   return parts.filter(Boolean);
 }
 
-export function selectorsNotLedByClass(css) {
+// Last compound is a plain `div`/`span`, at most with pseudo-classes.
+const anonymousWrapper = /(^|[\s>+~])(div|span)(:[\w-]+(\([^)]*\))?)*$/;
+
+export function unscopedSelectors(css) {
   const source = css.replace(/\/\*[\s\S]*?\*\//g, '');
   const offenders = [];
   // Each open block is 'group', 'rule' or 'skip' (keyframes, font-face, declarations).
@@ -43,7 +47,7 @@ export function selectorsNotLedByClass(css) {
         for (const selector of splitTopLevel(text)) {
           // Nested rules inside a style rule may lead with `&`.
           const ledByClass = /^\.[A-Za-z_-]/.test(selector) || (parent === 'rule' && selector.startsWith('&'));
-          if (!ledByClass) offenders.push(selector);
+          if (!ledByClass || anonymousWrapper.test(selector)) offenders.push(selector);
         }
         stack.push('rule');
       }
@@ -59,7 +63,7 @@ export function selectorsNotLedByClass(css) {
 if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
   let failed = false;
   for (const file of process.argv.slice(2)) {
-    for (const selector of selectorsNotLedByClass(await readFile(file, 'utf8'))) {
+    for (const selector of unscopedSelectors(await readFile(file, 'utf8'))) {
       console.log(`${file}: ${selector}`);
       failed = true;
     }
