@@ -5,8 +5,8 @@
   "author": {
     "name": "Finnomena"
   },
-  "homepage": "https://github.com/pawisssh/neon",
-  "repository": "https://github.com/pawisssh/neon",
+  "homepage": "https://github.com/finnonemo/neon",
+  "repository": "https://github.com/finnonemo/neon",
   "license": "MIT",
   "keywords": ["design-system", "branding", "theme", "coinbase-design-system", "finnomena"],
   "skills": "./skills/"
