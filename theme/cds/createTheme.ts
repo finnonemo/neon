@@ -18,29 +18,51 @@
  */
 import { defaultTheme } from "@coinbase/cds-web/themes/defaultTheme";
 import type { ThemeConfig } from "@coinbase/cds-web";
+import type { CSSProperties } from "react";
 import type { ComponentConfigProviderProps } from "@coinbase/cds-web/system";
 
 import { neonTheme } from "./theme.config";
-import { colorOverrides, onColorButtonLabel } from "./color-overrides";
+import { colorOverrides, onColorLabel } from "./color-overrides";
 
 type ComponentConfig = NonNullable<ComponentConfigProviderProps["value"]>;
-type ColorScheme = keyof typeof onColorButtonLabel;
+type ColorScheme = keyof typeof onColorLabel;
 
 const ON_COLOR_VARIANTS = new Set(["primary", "positive", "negative"]);
 
-/** Sets the label color on filled colored variants; a `color` prop on the instance still wins. */
-function onColorLabel(scheme: ColorScheme, defaultVariant: string) {
+/** Sets the label color on filled colored button variants. */
+function onColorButton(color: (typeof onColorLabel)[ColorScheme], defaultVariant: string) {
   return (props: { variant?: string; transparent?: boolean }) =>
-    !props.transparent && ON_COLOR_VARIANTS.has(props.variant ?? defaultVariant)
-      ? { color: onColorButtonLabel[scheme] }
-      : {};
+    !props.transparent && ON_COLOR_VARIANTS.has(props.variant ?? defaultVariant) ? { color } : {};
 }
 
+/**
+ * Where CDS uses fgInverse for on-color text and the scheme needs a different
+ * token, point the components at it. Calendar's selected day and Avatar's
+ * initial hardcode fgInverse, so they get the CSS variable redefined on the
+ * element around that text instead of a color prop.
+ *
+ * Instance props still win, and the merge is shallow: a Calendar given its own
+ * `styles`, or an Avatar given its own `style`, drops this override and must
+ * include the variable itself.
+ */
 function createComponentConfig(scheme: ColorScheme): ComponentConfig {
-  return {
-    Button: onColorLabel(scheme, "primary"),
-    IconButton: onColorLabel(scheme, "secondary"),
+  const color = onColorLabel[scheme];
+  if (color === "fgInverse") return {};
+  const fgInverse = { "--color-fgInverse": `var(--color-${color})` } as CSSProperties;
+  // CDS types each entry as the component's BaseProps, which omit style props
+  // such as DotCount's color, Calendar's styles and Avatar's style.
+  // useComponentConfig merges every prop at runtime (verified against
+  // @coinbase/cds-web@9.26.1), and the template browser suite checks the result.
+  const config: Record<string, unknown> = {
+    Button: onColorButton(color, "primary"),
+    IconButton: onColorButton(color, "secondary"),
+    Checkbox: { controlColor: color },
+    DotCount: { color },
+    DotSymbol: { color },
+    Calendar: { styles: { day: fgInverse } },
+    Avatar: { style: fgInverse },
   };
+  return config as ComponentConfig;
 }
 
 /**

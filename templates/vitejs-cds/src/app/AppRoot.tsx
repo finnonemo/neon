@@ -14,8 +14,9 @@
  * ThemeProvider requires a full ThemeConfig, not a partial one, and
  * @coinbase/cds-web has no first-party merge helper).
  *
- * `neonComponentConfig` gives filled colored buttons Finnomena's on-color
- * label in dark mode (see ../theme/color-overrides.ts's onColorButtonLabel).
+ * `neonComponentConfig` gives on-color text (filled buttons, checkmarks,
+ * badges) Finnomena's text-on-color in dark mode (see
+ * ../theme/color-overrides.ts's onColorLabel).
  *
  * colorScheme defaults to light; pass the app's existing mode state when needed.
  */

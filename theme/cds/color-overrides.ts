@@ -186,17 +186,18 @@ export const lightSpectrum = spectrumColor(spectrum);
 export const darkSpectrum = spectrumColor(spectrum);
 
 /**
- * Label color for CDS's filled colored buttons (primary, positive, negative).
- * theme.json pairs every filled button with Text.text-on-color, White.100 in
- * both modes. CDS draws these labels with fgInverse, which suits its own light
- * dark-mode bgPrimary but not Finnomena's dark Navy.75. fgInverse cannot carry
+ * Text.text-on-color (White.100 in both modes) for foregrounds CDS draws on a
+ * colored fill: filled primary/positive/negative buttons, the Checkbox
+ * checkmark, the selected Calendar day, DotCount, DotSymbol and the Avatar
+ * initial. CDS uses fgInverse there, which suits its own light dark-mode
+ * bgPrimary but not Finnomena's dark Navy.75. fgInverse cannot carry
  * text-on-color in dark: it must stay Text.text-inverse (black) for text on
  * bgInverse, which is white in dark (SegmentedTabs, the inverse Button). Dark
  * therefore uses fg, whose value (Text.text-primary, White.100) equals
  * text-on-color only by coincidence; re-check this if either token changes.
  * Applied through createTheme.ts's neonComponentConfig.
  */
-export const onColorButtonLabel = { light: "fgInverse", dark: "fg" } as const;
+export const onColorLabel = { light: "fgInverse", dark: "fg" } as const;
 
 export const colorOverrides = {
   lightColor,

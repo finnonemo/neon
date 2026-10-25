@@ -15,8 +15,9 @@
  * ThemeProvider requires a full ThemeConfig, not a partial one, and
  * @coinbase/cds-web has no first-party merge helper).
  *
- * `neonComponentConfig` gives filled colored buttons Finnomena's on-color
- * label in dark mode (see ../theme/color-overrides.ts's onColorButtonLabel).
+ * `neonComponentConfig` gives on-color text (filled buttons, checkmarks,
+ * badges) Finnomena's text-on-color in dark mode (see
+ * ../theme/color-overrides.ts's onColorLabel).
  *
  * Font: Finnomena uses IBM Plex Sans Thai company-wide. It is NOT part of
  * the Figma token export, so it's loaded here directly rather than through

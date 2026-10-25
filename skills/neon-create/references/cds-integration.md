@@ -24,7 +24,7 @@ Use a stable module-scope `createNeonTheme()` result, not unmodified CDS `defaul
 MediaQueryProvider → ThemeProvider → ComponentConfigProvider → PortalProvider
 ```
 
-Pass `neonComponentConfig[activeColorScheme]` from `createTheme.ts` to `ComponentConfigProvider`; without it, filled primary, positive and negative button labels are near-black on dark Navy in dark mode. If the app already has a `ComponentConfigProvider`, merge Neon's `Button` and `IconButton` entries into its value instead of nesting a second provider.
+Pass `neonComponentConfig[activeColorScheme]` from `createTheme.ts` to `ComponentConfigProvider`; without it, text on colored fills (filled buttons, Checkbox checkmarks, the selected Calendar day, DotCount, DotSymbol, Avatar initials) is near-black in dark mode. If the app already has a `ComponentConfigProvider`, merge Neon's entries into its value instead of nesting a second provider. A Calendar given its own `styles` or an Avatar given its own `style` replaces Neon's override, so carry the `--color-fgInverse` entry over.
 
 Use [app-entry.tsx](../../../theme/examples/app-entry.tsx) as the concrete integration example. For server-rendered apps read [SSR boundaries](../../neon-audit/references/project-inspection.md#server-rendered-react). For mode changes read [theme-mode ownership](../../neon-audit/references/theme-integration.md#theme-mode-ownership). Avoid a duplicate theme or font-loading mechanism.
 

@@ -3,6 +3,10 @@ import { Box } from "@coinbase/cds-web/layout";
 import { Button, IconButton } from "@coinbase/cds-web/buttons";
 import { Icon } from "@coinbase/cds-web/icons";
 import { Text } from "@coinbase/cds-web/typography";
+import { Checkbox } from "@coinbase/cds-web/controls";
+import { Calendar } from "@coinbase/cds-web/dates";
+import { DotCount, DotSymbol } from "@coinbase/cds-web/dots";
+import { Avatar } from "@coinbase/cds-web/media";
 import { AppRoot } from "./AppRoot";
 import { AppRoot as IntegrationRoot } from "./IntegrationRoot";
 import { AppShell } from "../layout/AppShell";
@@ -44,8 +48,9 @@ function Details({ selected }: { selected: number | null }) {
   </Box>;
 }
 
-// Every filled variant, plus the cases the on-color label override must leave alone.
-function ButtonSamples() {
+// Every on-color foreground, plus the cases the override must leave alone.
+const calendarDate = new Date(2026, 9, 15);
+function OnColorSamples() {
   return <Box padding={2} display="flex" flexWrap="wrap" gap={2} background="bg">
     {(["primary", "positive", "negative", "inverse", "secondary"] as const).map((variant) =>
       <Button key={variant} variant={variant}>{variant}</Button>)}
@@ -53,6 +58,11 @@ function ButtonSamples() {
     <Button color="fgMuted">local color</Button>
     <IconButton name="home" variant="primary" accessibilityLabel="icon primary" />
     <IconButton name="home" accessibilityLabel="icon secondary" />
+    <Checkbox checked onChange={() => {}}>Agree</Checkbox>
+    <DotCount count={7} />
+    <span data-testid="dot-symbol"><DotSymbol iconName="home" /></span>
+    <Avatar name="Finn" testID="avatar" />
+    <Calendar selectedDate={calendarDate} seedDate={calendarDate} />
   </Box>;
 }
 
@@ -76,7 +86,7 @@ export function App() {
       <Logo /><Logo tone="light" />
       <button onClick={() => setDark(!dark)}>Toggle theme</button>
       {clicked && <Text role="status">Completed</Text>}
-    </Box> : layout === "buttons" ? <ButtonSamples />
+    </Box> : layout === "on-color" ? <OnColorSamples />
       : layout === "app" ? <AppShell {...props} />
       : layout === "content" ? <ContentLayout {...props} />
       : layout === "simple" ? <SimpleLayout {...props} />
