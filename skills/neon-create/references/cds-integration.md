@@ -16,6 +16,19 @@ This copies four canonical CDS theme files and installs CDS if absent; it does n
 
 Customized destination files are protected. Use [conflict handling](../../neon-audit/references/theme-integration.md#installer-conflicts), not deletion or a fabricated force flag. After an I/O failure, inspect partial writes before retrying.
 
+## Required styles and icons
+
+Inspect the existing global CSS/entry imports before adding these. Load each missing import once, in the framework's permitted global-style entrypoint:
+
+```ts
+import "@coinbase/cds-web/globalStyles";
+import "@coinbase/cds-web/defaultFontStyles";
+// When using CDS Icon glyphs; ensure @coinbase/cds-icons is installed.
+import "@coinbase/cds-icons/fonts/web/icon-font.css";
+```
+
+Provider wiring alone does not load these styles. `globalStyles` supplies the CDS reset, `defaultFontStyles` supplies default font variables, and the icon stylesheet registers the glyph font. Preserve existing framework boundaries and font loading; avoid duplicating working imports. Verify that a real CDS button and icon render and that their font resources load, not merely that the build passes.
+
 ## Theme and providers
 
 Use a stable module-scope `createNeonTheme()` result, not unmodified CDS `defaultTheme` or a new theme object on every render. Derive `activeColorScheme` from the app's existing owner. Reuse its provider tree and preserve the documented order:
