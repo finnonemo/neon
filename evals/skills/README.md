@@ -108,6 +108,14 @@ October 2026, Codex, one sample per case:
     - Search filters inline and shows its empty message.
     - Desktop has no overflow.
   - At 375px the page has no horizontal overflow. The app mounts its own `app-navigation` (`src/ui.tsx`) and no starter layout, so no bottom nav renders, and that nav scrolls horizontally. Its column container also scrolls sideways: a 320px-minimum column plus an add-column zone loaded scrolled 52px, which clipped the heading's left edge. The source was not compared at that width.
+  CDS integration now says every selector starts with an app class, typography goes through `Text`/`Box` props, and a selector stops at elements the app renders itself. `stylesheet-scope.mjs` grades that shape and flags r4's rules. A fifth health-check sample (one sample) passed:
+  - It read the rebuild, CDS integration and scaffold references, wrote a parity inventory, and left the source unchanged.
+  - Its one stylesheet, `health.css` (97 lines), passes the grader: every selector is an app class, with no element selectors.
+  - 10 tests, `tsc` and the build pass. It kept the starter's Vite 5, and no Carbon remains. The mock data matches in every export.
+  - Desktop and 375px show no horizontal overflow and no sideways-scrolling container. All text resolves to IBM Plex Sans Thai on a white body.
+  - Search filters the customer list ("James" → 1 customer) at desktop, and its input fits at 375px.
+  - The labelled primary "+ Add Column" and the Set Password dialog's "Confirm Access" render white on navy. The dialog fits 375px.
+  The browser check covered the dashboard, search and one dialog, not every parity inventory item. Like r4, the app renders its own header navigation, and no bottom nav appears at 375px.
 - Controls kept their stacks. The health-check colors run bridged Carbon `--cds-*` variables with hex values; the status-filter run changed only `App.jsx` and `App.scss`, and its filter UI was not browser-checked. The batch-sell colors run skipped neon-redesign and aliased stock palette names with hex. After neon-create's entrypoint sent colors-only React restyles to neon-redesign, two more samples read style migration and passed the alias, role, focus and build items above. Each mapped the selected tab border to indigo. On the pale and marker items, one sample passed. The other failed: it turned a `bg-slate-400` hairline into the near-white `bgPrimaryWash`. On adapter variables, that second sample passed by importing the adapter. The first is borderline: it copied the adapter's `rgb()` declarations into `:root`. Neither sample was browser-checked.
 - Limits:
   - Single samples, Codex only.
