@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Box } from "@coinbase/cds-web/layout";
-import { Button } from "@coinbase/cds-web/buttons";
+import { Button, IconButton } from "@coinbase/cds-web/buttons";
 import { Icon } from "@coinbase/cds-web/icons";
 import { Text } from "@coinbase/cds-web/typography";
 import { AppRoot } from "./AppRoot";
@@ -44,6 +44,18 @@ function Details({ selected }: { selected: number | null }) {
   </Box>;
 }
 
+// Every filled variant, plus the cases the on-color label override must leave alone.
+function ButtonSamples() {
+  return <Box padding={2} display="flex" flexWrap="wrap" gap={2} background="bg">
+    {(["primary", "positive", "negative", "inverse", "secondary"] as const).map((variant) =>
+      <Button key={variant} variant={variant}>{variant}</Button>)}
+    <Button transparent>transparent</Button>
+    <Button color="fgMuted">local color</Button>
+    <IconButton name="home" variant="primary" accessibilityLabel="icon primary" />
+    <IconButton name="home" accessibilityLabel="icon secondary" />
+  </Box>;
+}
+
 export function App() {
   const [activePane, setActivePane] = useState<ActivePane>("content");
   const [selected, setSelected] = useState<number | null>(null);
@@ -55,7 +67,7 @@ export function App() {
     ...(params.has("uncontrolled") ? {} : { activePane, onActivePaneChange: setActivePane }),
     paneLabels: { content: "Content", inspector: "Details", viewDetails: "ดูรายละเอียด", backToContent: "กลับไปที่รายการ" },
   };
-  const Provider = layout === "integration" ? IntegrationRoot : AppRoot;
+  const Provider = layout === "integration" || params.get("root") === "integration" ? IntegrationRoot : AppRoot;
   return <Provider colorScheme={dark ? "dark" : "light"}>
     {layout === "integration" ? <Box padding={2} background="bg" color="fg">
       <Text as="h1" font="title2">Integration — ภาษาไทย / English</Text>
@@ -64,7 +76,8 @@ export function App() {
       <Logo /><Logo tone="light" />
       <button onClick={() => setDark(!dark)}>Toggle theme</button>
       {clicked && <Text role="status">Completed</Text>}
-    </Box> : layout === "app" ? <AppShell {...props} />
+    </Box> : layout === "buttons" ? <ButtonSamples />
+      : layout === "app" ? <AppShell {...props} />
       : layout === "content" ? <ContentLayout {...props} />
       : layout === "simple" ? <SimpleLayout {...props} />
       : layout === "board" ? <MultiColumnLayout {...props} columns={[content]} />

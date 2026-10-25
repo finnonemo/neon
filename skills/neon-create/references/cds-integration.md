@@ -21,8 +21,10 @@ Customized destination files are protected. Use [conflict handling](../../neon-a
 Use a stable module-scope `createNeonTheme()` result, not unmodified CDS `defaultTheme` or a new theme object on every render. Derive `activeColorScheme` from the app's existing owner. Reuse its provider tree and preserve the documented order:
 
 ```text
-MediaQueryProvider → ThemeProvider → PortalProvider
+MediaQueryProvider → ThemeProvider → ComponentConfigProvider → PortalProvider
 ```
+
+Pass `neonComponentConfig[activeColorScheme]` from `createTheme.ts` to `ComponentConfigProvider`; without it, filled primary, positive and negative button labels are near-black on dark Navy in dark mode. If the app already has a `ComponentConfigProvider`, merge Neon's `Button` and `IconButton` entries into its value instead of nesting a second provider.
 
 Use [app-entry.tsx](../../../theme/examples/app-entry.tsx) as the concrete integration example. For server-rendered apps read [SSR boundaries](../../neon-audit/references/project-inspection.md#server-rendered-react). For mode changes read [theme-mode ownership](../../neon-audit/references/theme-integration.md#theme-mode-ownership). Avoid a duplicate theme or font-loading mechanism.
 

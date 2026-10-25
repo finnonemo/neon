@@ -18,9 +18,40 @@
  */
 import { defaultTheme } from "@coinbase/cds-web/themes/defaultTheme";
 import type { ThemeConfig } from "@coinbase/cds-web";
+import type { ComponentConfigProviderProps } from "@coinbase/cds-web/system";
 
 import { neonTheme } from "./theme.config";
-import { colorOverrides } from "./color-overrides";
+import { colorOverrides, onColorButtonLabel } from "./color-overrides";
+
+type ComponentConfig = NonNullable<ComponentConfigProviderProps["value"]>;
+type ColorScheme = keyof typeof onColorButtonLabel;
+
+const ON_COLOR_VARIANTS = new Set(["primary", "positive", "negative"]);
+
+/** Sets the label color on filled colored variants; a `color` prop on the instance still wins. */
+function onColorLabel(scheme: ColorScheme, defaultVariant: string) {
+  return (props: { variant?: string; transparent?: boolean }) =>
+    !props.transparent && ON_COLOR_VARIANTS.has(props.variant ?? defaultVariant)
+      ? { color: onColorButtonLabel[scheme] }
+      : {};
+}
+
+function createComponentConfig(scheme: ColorScheme): ComponentConfig {
+  return {
+    Button: onColorLabel(scheme, "primary"),
+    IconButton: onColorLabel(scheme, "secondary"),
+  };
+}
+
+/**
+ * Pass `neonComponentConfig[activeColorScheme]` to CDS's
+ * ComponentConfigProvider, inside ThemeProvider. Both entries are created
+ * once here, so the provider value keeps a stable identity per scheme.
+ */
+export const neonComponentConfig: Record<ColorScheme, ComponentConfig> = {
+  light: createComponentConfig("light"),
+  dark: createComponentConfig("dark"),
+};
 
 /** One-level-deep field merge — sufficient since every ThemeConfig field is a flat map. */
 function mergeFields(base: Record<string, unknown>, overrides: Record<string, unknown>): Record<string, unknown> {

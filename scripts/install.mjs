@@ -143,6 +143,6 @@ if (mode === "css-only") {
   }
   const installedNote = result.dependenciesInstalled ? "" : " Dependencies not installed (--skip-install).";
   console.log(
-    `\nDone. Theme files copied into ${result.themeDir}. Wire up MediaQueryProvider -> ThemeProvider -> PortalProvider next.${installedNote}`
+    `\nDone. Theme files copied into ${result.themeDir}. Wire up MediaQueryProvider -> ThemeProvider -> ComponentConfigProvider -> PortalProvider next.${installedNote}`
   );
 }
