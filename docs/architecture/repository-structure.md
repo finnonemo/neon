@@ -12,6 +12,7 @@
 | `scripts/` | maintainer | Stable, public commands: the installer (`install.mjs`), the maintainer assembly CLI (`assemble-starter.mjs` + `scripts/lib/`), and the plugin packager (`package-plugin.mjs`). |
 | `docs/` | maintainer | This directory — curated, tracked documentation about the repository itself (architecture). Not shipped in the distributed plugin. |
 | `evals/skills/` | maintainer | Skill scenarios and packaging regression checks, run with `node --test evals/skills/*.test.mjs`. |
+| `evals/templates/` | maintainer | Browser suite for the starter: assembles a disposable app, builds it and runs Playwright layout and integration checks. Reports go to `.local/evals/templates/`. |
 | `.local/` | (nobody — local only) | Everything that isn't maintained source: local research, working notes, generated eval apps, and run history. Fully ignored; never packaged, never expected to exist in a fresh clone. |
 | `notes/`, `.superpowers/`, `.claude/` | (nobody — local only) | Other local-only working state, unrelated to this migration. Stay ignored as before. |
 
@@ -62,4 +63,12 @@ Run the skill and packaging checks:
 ```sh
 node --test evals/skills/*.test.mjs
 node scripts/check-repository.mjs
+```
+
+Run the starter browser suite after template or theme changes:
+
+```sh
+npm ci --prefix evals/templates
+npx --prefix evals/templates playwright install chromium
+npm test --prefix evals/templates
 ```

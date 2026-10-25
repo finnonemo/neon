@@ -6,6 +6,7 @@ on:
       - evals/templates/**
       - theme/**
       - scripts/lib/assemble-starter.mjs
+      - scripts/lib/assets.mjs
       - .github/workflows/template-browser.yml
   push:
     branches: [main]
@@ -14,6 +15,7 @@ on:
       - evals/templates/**
       - theme/**
       - scripts/lib/assemble-starter.mjs
+      - scripts/lib/assets.mjs
       - .github/workflows/template-browser.yml
 permissions:
   contents: read

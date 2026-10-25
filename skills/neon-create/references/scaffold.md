@@ -24,7 +24,7 @@ Choose based on the task, not the default `App.tsx`:
 | `ContentLayout` | Content-dominant workspace with supporting detail |
 | `SimpleLayout` | Navigation and content without an inspector |
 | `MultiColumnLayout` | Explicit board/kanban task |
-| `ImmersiveLayout` | Focused, full-bleed content or landing page |
+| `ImmersiveLayout` | Focused content or landing page; full-bleed except at the widest tier, where content caps at 1440px |
 
 These are starter exports, not guaranteed imports in other apps. Inspect `src/layout/layoutPanes.ts` for corroborated versus extrapolated geometry. Supply navigation for actual destinations; ecosystem links are opt-in. Use the shipped `Logo` and SVG marks appropriate to the surface, not a recreated text wordmark.
 
