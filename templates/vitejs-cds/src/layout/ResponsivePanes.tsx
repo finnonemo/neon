@@ -73,12 +73,12 @@ export function ResponsivePanes({
   }, [compact, current]);
 
   const contentToolbar = compact ? (
-    <Button type="button" size="s" onClick={() => changePane("inspector")}>
+    <Button type="button" variant="secondary" compact onClick={() => changePane("inspector")}>
       {labels.viewDetails}
     </Button>
   ) : undefined;
   const inspectorToolbar = compact ? (
-    <Button type="button" size="s" onClick={() => changePane("content")}>
+    <Button type="button" variant="secondary" transparent compact flush="start" startIcon="backArrow" onClick={() => changePane("content")}>
       {labels.backToContent}
     </Button>
   ) : undefined;

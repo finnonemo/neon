@@ -170,3 +170,16 @@ for (const layout of ['app', 'content', 'simple', 'board', 'immersive']) {
     });
   }
 }
+
+// Figma confirms the 1440px cap at 1920px only; 2560 checks that the starter keeps it, not a Figma frame.
+for (const width of [1919, 1920, 2560]) {
+  test(`immersive ${width}px: content is full-bleed below max and capped at max`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('/?layout=immersive');
+    const box = await page.locator('.neon-immersive-content').boundingBox();
+    const expected = width >= 1920 ? 1440 : width;
+    expect(box.width).toBe(expected);
+    expect(box.x).toBe((width - expected) / 2);
+    await page.screenshot({ path: test.info().outputPath(`immersive-${width}.png`) });
+  });
+}

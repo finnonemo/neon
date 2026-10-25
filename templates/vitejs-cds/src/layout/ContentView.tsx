@@ -6,7 +6,7 @@ export function ContentView({ width, children, toolbar, capAt }: {
 }) {
   return (
     <div style={{ width, maxWidth: capAt, marginInline: capAt ? "auto" : undefined, flexShrink: 0, display: "flex", flexDirection: "column", height: "100%", minHeight: 0 }}>
-      <div data-pane-control style={{ minHeight: 64, flexShrink: 0, display: "flex", alignItems: "center" }}>
+      <div data-pane-control style={{ minHeight: 64, flexShrink: 0, display: "flex", alignItems: "center", paddingInline: 16 }}>
         {toolbar}
       </div>
       <div style={{ flex: 1, minHeight: 0, overflowY: "auto" }}>{children}</div>

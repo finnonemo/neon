@@ -53,7 +53,7 @@ export function ImmersiveLayout({
       </Box>
       <div style={{ flex: 1, minHeight: 0, display: "flex", justifyContent: "center" }}>
         {/* InspectorView is the generic "fill" pane component (Toolbar + scrollable body) — reused here since Immersive Layout is a single full-width pane with no fixed-width sibling. Capped/centered at `max` per the Figma frame; full-bleed at every other tier. */}
-        <div style={{ width: "100%", maxWidth: tier === "max" ? MAX_CONTENT_WIDTH : undefined, display: "flex" }}>
+        <div className="neon-immersive-content" style={{ width: "100%", maxWidth: tier === "max" ? MAX_CONTENT_WIDTH : undefined, display: "flex" }}>
           <InspectorView pane={{}}>{content}</InspectorView>
         </div>
       </div>
