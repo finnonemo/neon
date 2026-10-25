@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 // Grades a CDS rebuild's stylesheets against the cds-integration rule that
 // every selector starts with an app class and names app elements by their own
-// class. A selector ending on an anonymous `div` or `span` (`.field > div`)
-// reaches into component markup; other reaches need the rendered DOM.
+// class. A selector ending on an anonymous `div`, `span`, `button`, `input` or
+// `*` (`.field > div`, `.nav button`) reaches into component markup; other
+// reaches need the rendered DOM.
 //
 //   node evals/skills/stylesheet-scope.mjs <file.css>...
 import { readFile } from 'node:fs/promises';
@@ -27,8 +28,9 @@ function splitTopLevel(prelude) {
   return parts.filter(Boolean);
 }
 
-// Last compound is a plain `div`/`span`, at most with pseudo-classes.
-const anonymousWrapper = /(^|[\s>+~])(div|span)(:[\w-]+(\([^)]*\))?)*$/;
+// Last compound is a plain element CDS components render, or `*`, at most
+// with pseudo-classes.
+const anonymousWrapper = /(^|[\s>+~])(div|span|button|input|\*)(:[\w-]+(\([^)]*\))?)*$/;
 
 export function unscopedSelectors(css) {
   const source = css.replace(/\/\*[\s\S]*?\*\//g, '');

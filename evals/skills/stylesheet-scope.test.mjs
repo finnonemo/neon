@@ -19,8 +19,18 @@ test('flags class-led selectors that end on anonymous component markup', () => {
     .password-field > div { flex: 1; min-width: 0; }
     .phc-toolbar span:first-child { margin: 0; }
     .phc-row div { gap: 4px; }
+    .phc-nav-items button { font-size: 0; }
+    .phc-form input:focus { outline: none; }
+    .phc-app * { box-sizing: border-box; }
   `;
-  assert.deepEqual(unscopedSelectors(css), ['.password-field > div', '.phc-toolbar span:first-child', '.phc-row div']);
+  assert.deepEqual(unscopedSelectors(css), [
+    '.password-field > div',
+    '.phc-toolbar span:first-child',
+    '.phc-row div',
+    '.phc-nav-items button',
+    '.phc-form input:focus',
+    '.phc-app *',
+  ]);
 });
 
 test('accepts class-led rules, including element selectors under an app class', () => {
