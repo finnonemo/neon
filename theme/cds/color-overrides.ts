@@ -172,11 +172,17 @@ const spectrum = {
   teal: { 0: "255,255,255", 5: "246,252,250", 10: "237,249,246", 15: "227,246,241", 20: "218,243,237", 30: "200,237,228", 40: "181,231,219", 50: "163,225,210", 60: "144,219,200", 70: "126,213,191", 80: "107,207,182", 90: "89,201,173", 100: "70,195,164" },
 } as const;
 
+/**
+ * Flattens to CDS's spectrum keys. Values stay bare "r,g,b" triplets, as in
+ * CDS's defaultTheme: CDS wraps them itself (Avatar's `rgb(var(--blue60))`,
+ * Tag's `rgb(${theme.spectrum[...]})`), so a full `rgb(...)` here would be
+ * invalid there.
+ */
 function spectrumColor(entries: typeof spectrum): Record<string, string> {
   const out: Record<string, string> = {};
   for (const [hue, shades] of Object.entries(entries)) {
     for (const [step, rgb] of Object.entries(shades)) {
-      out[`${hue}${step}`] = `rgb(${rgb})`;
+      out[`${hue}${step}`] = rgb;
     }
   }
   return out;
