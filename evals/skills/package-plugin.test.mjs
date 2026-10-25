@@ -9,6 +9,8 @@ test('distribution contains the shared design contract and conditional CDS guide
   const destination = await mkdtemp(join(tmpdir(), 'neon-package-test-'));
   await packagePlugin({ destination });
   await access(join(destination, 'skills/INSTRUCTION.md'));
+  await access(join(destination, 'templates/vitejs-cds/src/layout/ResponsivePanes.tsx'));
+  await access(join(destination, 'templates/vitejs-cds/src/layout/layout.css'));
   await access(join(destination, 'skills/neon-create/references/cds-integration.md'));
   await assert.rejects(access(join(destination, 'evals')));
 });

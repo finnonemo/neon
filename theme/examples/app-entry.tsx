@@ -10,8 +10,8 @@
  * PortalProvider under "./overlays".
  *
  * `createNeonTheme()` merges neonTheme's overrides onto CDS's own
- * `defaultTheme` and returns a real, complete ThemeConfig — no unsafe cast
- * needed (see ../theme/createTheme.ts for why that merge is necessary:
+ * `defaultTheme` and returns a complete ThemeConfig (see
+ * ../theme/createTheme.ts for why that merge is necessary:
  * ThemeProvider requires a full ThemeConfig, not a partial one, and
  * @coinbase/cds-web has no first-party merge helper).
  *
@@ -31,11 +31,17 @@
  * §1 for the full inspect-and-verify procedure — "loaded" by family name is
  * not sufficient; verify with real Thai sample text too.
  *
- * activeColorScheme below is hardcoded "light" for this minimal example.
+ * colorScheme defaults to "light" for this minimal example.
  * In a real app, derive it from whatever already controls dark/light there
  * (an existing toggle/hook/stored preference) rather than hardcoding it or
  * defaulting to prefers-color-scheme — see theme-integration.md §2.
  */
+// Load once in the framework's global-style entrypoint; move these there if
+// global CSS imports are not permitted in this provider module.
+import "@coinbase/cds-web/globalStyles";
+import "@coinbase/cds-web/defaultFontStyles";
+import "@coinbase/cds-icons/fonts/web/icon-font.css";
+
 import type { ReactNode } from "react";
 import { MediaQueryProvider, ThemeProvider } from "@coinbase/cds-web/system";
 import { PortalProvider } from "@coinbase/cds-web/overlays";

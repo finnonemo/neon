@@ -32,6 +32,8 @@ Review the resulting diff and unresolved-token report. Color mapping is hand-mai
 
 For template, theme or component changes, assemble a fresh disposable app, install dependencies with its package manager, build it and inspect the affected UI. Check relevant light/dark modes, narrow/wide layouts, Thai/English labels, keyboard interactions and task states. Record actual evidence, including blocked checks.
 
+For starter changes, also run the [assembled build and browser suite](evals/templates/README.md). It builds the shipped app before adding disposable fixtures and leaves reports under `.local/evals/templates/`; CI uploads those reports separately from the plugin.
+
 For skill changes, compare baseline/revised decisions and representative app behavior; word count alone is not a quality metric. Read only task-relevant references during evaluation and record actual questions, setup actions and files read. Use [evals/skills/README.md](evals/skills/README.md). A read-through can verify retrieval/routing; only implemented and rendered apps support claims about visual output improvement.
 
 ## Review and release

@@ -38,7 +38,7 @@ export interface InspectorPane {
 }
 
 export interface DetailedPaneSpec {
-  /** Content pane is always either a fixed width or hidden — Inspector is the one that fills. */
+  /** Desktop Content width; "hidden" marks compact mode, where ResponsivePanes switches views. */
   content: number | "hidden";
   inspector: InspectorPane;
 }
