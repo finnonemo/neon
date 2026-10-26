@@ -52,11 +52,12 @@ test('browser-changes writes the job output the workflow reads', t => {
   assert.equal(readFileSync(output, 'utf8'), 'browser=false\n');
 });
 
-test('browser paths cover the starter, theme, browser suite, assembler and probe', () => {
+test('browser paths cover the starter, theme, browser suite, assembler, probe and restyle tooling', () => {
   for (const path of [
     'templates/vitejs-cds/src/main.tsx', 'evals/templates/layouts.spec.mjs', 'theme/css/theme.css',
     'scripts/lib/assemble-starter.mjs', 'scripts/lib/assets.mjs', 'evals/skills/browser-probe.js',
-    'evals/skills/probe-fixture.html', 'evals/skills/run-probe.mjs', '.github/workflows/template-browser.yml',
+    'evals/skills/probe-fixture.html', 'evals/skills/run-probe.mjs', 'evals/skills/grade-restyle.mjs',
+    'evals/skills/grade-rebuild.mjs', 'evals/skills/fixtures/shadcn-v4-app/src/index.css', '.github/workflows/template-browser.yml',
     '.github/scripts/browser-changes.mjs',
   ]) assert.match(path, BROWSER_PATHS, `${path} runs the browser job`);
   for (const path of ['README.md', 'docs/agents/domain.md', 'skills/neon-create/SKILL.md', 'evals/skills/README.md', 'scripts/lib/install.mjs', 'mytheme/x.css', '.github/workflows/validate.yml']) {

@@ -7,7 +7,8 @@
 // --scheme sets prefers-color-scheme; --dark-class adds `dark` to <html> after
 // load, for apps that switch on a class (shadcn's `.dark`).
 // --fixture loads probe-fixture.html at 375px and fails unless the ids the
-// probe reports per category equal the fixture's expected ids, then again with
+// probe reports per category equal the fixture's expected ids (and contrast,
+// where the fixture gives one), then again with
 // the dark scheme and class against its dark expected ids. Otherwise each
 // build under the shots directory (grade-rebuild.mjs --shots), or each named
 // one, is served over HTTP and probed at every width, one summary line each.
@@ -59,9 +60,16 @@ async function checkFixture(browser) {
     const result = await probeAt(browser, pathToFileURL(path).href, 375, options);
     const reported = { ...result, scrolledOnLoad: result.scrolledOnLoad.elements };
     if (result.viewportWidth !== 375) failures.push(`${name} viewportWidth ${result.viewportWidth}, expected 375`);
-    for (const [category, ids] of Object.entries(expected)) {
+    // A category lists ids, or maps each id to the contrast it must report.
+    for (const [category, want] of Object.entries(expected)) {
+      const ids = Array.isArray(want) ? want : Object.keys(want);
       const actual = idsOf(reported[category]);
       if (actual.join() !== [...ids].sort().join()) failures.push(`${name} ${category}: reported [${actual}], expected [${[...ids].sort()}]`);
+      if (Array.isArray(want)) continue;
+      for (const entry of reported[category]) {
+        const [id] = idsOf([entry]);
+        if (id in want && entry.contrast !== want[id]) failures.push(`${name} ${category} ${id}: contrast ${entry.contrast}, expected ${want[id]}`);
+      }
     }
   }
   for (const line of failures) console.log(`FAIL ${line}`);
