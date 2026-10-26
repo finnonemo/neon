@@ -1,0 +1,31 @@
+.neon-layout {
+  --neon-safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+@media (max-width: 499px) {
+  .neon-layout[data-bottom-nav="true"] {
+    padding-bottom: calc(56px + var(--neon-safe-area-bottom));
+  }
+}
+
+.neon-bottom-nav {
+  height: calc(56px + var(--neon-safe-area-bottom));
+  padding-bottom: var(--neon-safe-area-bottom);
+  box-sizing: border-box;
+}
+
+.neon-bottom-nav a {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.neon-bottom-nav a:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -2px;
+}

@@ -1,33 +1,18 @@
-/**
- * Content Layout — responsive 3-pane shell (Sidebar / Content / Inspector),
- * structurally the mirror of AppShell/Detailed Layout: here Content is the
- * "fill" pane and Inspector is the fixed-width one (opposite of Detailed,
- * where Content is fixed and Inspector fills). See ./layoutPanes.ts's
- * `contentLayoutPanes` header for the Figma provenance and why this reuses
- * Detailed Layout's own confirmed per-tier widths in the swapped role.
- *
- * Reuses ContentView/InspectorView by ROLE, not by name: ContentView (the
- * fixed-width, toolbar-plus-body pane component) renders the `inspector`
- * prop here, and InspectorView (the fill pane component) renders `content`
- * — both components are generic pane shapes, not content-specific in
- * implementation, only in their usual name from AppShell.
- */
+/** ContentLayout: desktop panes retain their geometry; below lg, content opens details as a separate view. */
 import type { ReactNode } from "react";
+import { Box } from "@coinbase/cds-web/layout";
 import { useBreakpointTier } from "./useBreakpointTier";
 import { contentLayoutPanes } from "./layoutPanes";
 import { breakpoints } from "../theme/breakpoints.config";
 import { Sidebar } from "./Sidebar";
 import { BottomNav } from "./BottomNav";
-import { ContentView } from "./ContentView";
-import { InspectorView } from "./InspectorView";
+import { ResponsivePanes, type PaneNavigationProps } from "./ResponsivePanes";
 import type { NavItem } from "./navItems";
+import "./layout.css";
 
 export function ContentLayout({
-  sidebar,
-  navigation = [],
-  content,
-  inspector,
-}: {
+  sidebar, navigation = [], content, inspector, ...paneNavigation
+}: PaneNavigationProps & {
   sidebar: ReactNode;
   navigation?: NavItem[];
   content: ReactNode;
@@ -38,13 +23,15 @@ export function ContentLayout({
   const pane = contentLayoutPanes[tier];
 
   return (
-    <div style={{ display: "flex", height: "100vh", width: "100%" }}>
-      <Sidebar width={sidebarWidth} navigation={navigation}>
-        {sidebar}
-      </Sidebar>
-      {pane.inspector !== "hidden" && <ContentView width={pane.inspector}>{inspector}</ContentView>}
-      <InspectorView pane={pane.content}>{content}</InspectorView>
+    <Box background="bg" color="fg" font="body" className="neon-layout" data-bottom-nav={navigation.length > 0}>
+      <Sidebar width={sidebarWidth} navigation={navigation}>{sidebar}</Sidebar>
+      <ResponsivePanes
+        {...paneNavigation} content={content} inspector={inspector}
+        compact={tier === "sm" || tier === "md"}
+        inspectorWidth={pane.inspector === "hidden" ? undefined : pane.inspector}
+        contentCapAt={pane.content.capAt}
+      />
       <BottomNav navigation={navigation} />
-    </div>
+    </Box>
   );
 }
