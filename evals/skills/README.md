@@ -195,6 +195,7 @@ Every run finished on its first attempt and left no `auth.json`. Every sample pa
   - Dark mode is unverified, because the starter fixes light.
   - The `/tmp` cleanup between pairs is a method change from the re-sample.
   - Every run read CDS integration, so the re-run cannot show whether the rebuild reference's `Box` clause matters on its own.
+  - The runs predate the starter layout and CDS integration changes merged from PRs #20 and #22.
 
 ## Flow refactor evaluation
 
