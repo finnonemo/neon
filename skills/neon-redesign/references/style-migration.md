@@ -172,8 +172,8 @@ declarations where the *values* are bare components, not a full color
 that points back at those same variables wrapped in a color function,
 e.g. `primary: 'hsl(var(--primary))'` (or `oklch(var(--primary))`).
 Variables holding complete `oklch(...)` colors, mapped by `@theme inline`,
-are [shadcn-style on Tailwind v4](#5-shadcn-style-on-tailwind-v4). This two-layer indirection — CSS var holds bare
-components, Tailwind config wraps it in the color function — is the
+are [shadcn-style on Tailwind v4](#5-shadcn-style-on-tailwind-v4).
+This two-layer indirection — CSS var holds bare components, Tailwind config wraps it in the color function — is the
 distinguishing feature versus plain Tailwind v3, where config values are
 themselves complete colors.
 
