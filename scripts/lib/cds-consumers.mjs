@@ -1,5 +1,6 @@
 import { readdir, readFile } from 'node:fs/promises';
-import { join, relative } from 'node:path';
+import { createRequire } from 'node:module';
+import { dirname, join, relative, resolve } from 'node:path';
 
 const escape = token => token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
@@ -35,4 +36,19 @@ export async function findConsumers(packageDirs, tokens, { context = 70 } = {}) 
     }
   }
   return matches;
+}
+
+/**
+ * cds-web and cds-common from the first app that resolves both, as
+ * `{ app, packageDirs }`, or undefined when none does.
+ */
+export function cdsPackageDirs(apps) {
+  for (const app of apps) {
+    const require = createRequire(resolve(app, 'package.json'));
+    try {
+      return { app, packageDirs: ['@coinbase/cds-web', '@coinbase/cds-common'].map(name => dirname(require.resolve(`${name}/package.json`))) };
+    } catch {
+      // Not installed here; try the next app.
+    }
+  }
 }

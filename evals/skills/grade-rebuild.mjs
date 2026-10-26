@@ -135,7 +135,7 @@ async function grade({ source, rebuild }) {
   return checks;
 }
 
-function buildShots(rebuild, name) {
+export function buildShots(rebuild, name) {
   const outDir = join(repositoryRoot, '.local/shots', name);
   mkdirSync(outDir, { recursive: true });
   const result = run('npx', ['--no-install', 'vite', 'build', '--base', './', '--outDir', outDir, '--emptyOutDir'], rebuild);

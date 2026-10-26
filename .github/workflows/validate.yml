@@ -1,6 +1,8 @@
 name: Validate Neon
 on:
   pull_request:
+  # A merge queue waits for required checks on its merge group.
+  merge_group:
   push:
     branches: [main]
 permissions:
@@ -10,6 +12,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      # A workflow error otherwise shows only when GitHub runs that workflow.
+      - name: Lint workflows
+        env:
+          ACTIONLINT_VERSION: 1.7.12
+        run: |
+          release=https://github.com/rhysd/actionlint/releases/download/v$ACTIONLINT_VERSION
+          archive=actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz
+          checksums=actionlint_${ACTIONLINT_VERSION}_checksums.txt
+          curl -fsSL -o "$RUNNER_TEMP/$archive" "$release/$archive" -o "$RUNNER_TEMP/$checksums" "$release/$checksums"
+          (cd "$RUNNER_TEMP" && grep " $archive\$" "$checksums" | sha256sum -c - && tar -xzf "$archive" actionlint)
+          "$RUNNER_TEMP/actionlint" -color
       - uses: actions/setup-node@v4
         with:
           node-version: 22

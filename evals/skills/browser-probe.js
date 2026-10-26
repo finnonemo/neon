@@ -17,7 +17,6 @@
   };
   const all = [...document.body.querySelectorAll('*')].filter(visible);
 
-  const rgb = value => (value.match(/[\d.]+/g) || []).slice(0, 4).map(Number);
   const luminance = ([r, g, b]) => {
     const channel = value => {
       const c = value / 255;
@@ -29,13 +28,26 @@
     const [high, low] = [luminance(a), luminance(b)].sort((x, y) => y - x);
     return Math.round(((high + 0.05) / (low + 0.05)) * 100) / 100;
   };
-  const backgroundOf = element => {
-    for (let node = element; node; node = node.parentElement) {
-      const color = rgb(getComputedStyle(node).backgroundColor);
-      if (color.length === 3 || color[3] > 0) return color.slice(0, 3);
+  // A 1px canvas composites alpha and any CSS color syntax (oklch, lab) as drawn.
+  const canvas = document.createElement('canvas');
+  canvas.width = canvas.height = 1;
+  const context = canvas.getContext('2d', { willReadFrequently: true });
+  const composite = colors => {
+    context.fillStyle = '#fff';
+    context.fillRect(0, 0, 1, 1);
+    for (const color of colors) {
+      context.fillStyle = color;
+      context.fillRect(0, 0, 1, 1);
     }
-    return [255, 255, 255];
+    return [...context.getImageData(0, 0, 1, 1).data.slice(0, 3)];
   };
+  const fillsUnder = element => {
+    const colors = [];
+    for (let node = element; node; node = node.parentElement) colors.unshift(getComputedStyle(node).backgroundColor);
+    return colors;
+  };
+  const backgroundOf = element => composite(fillsUnder(element));
+  const colorOf = element => composite([...fillsUnder(element), getComputedStyle(element).color]);
 
   const overflowing = all
     .filter(element => getComputedStyle(element).position !== 'fixed')
@@ -67,7 +79,7 @@
   const darkButtons = [...document.querySelectorAll('button, [role="button"], a[href]')]
     .filter(visible)
     .filter(drawsForeground)
-    .map(element => ({ element, fg: rgb(getComputedStyle(element).color).slice(0, 3), bg: backgroundOf(element) }))
+    .map(element => ({ element, fg: colorOf(element), bg: backgroundOf(element) }))
     .filter(({ bg }) => luminance(bg) < 0.2)
     .map(({ element, fg, bg }) => ({ element: label(element), fg: `rgb(${fg})`, bg: `rgb(${bg})`, contrast: contrast(fg, bg) }));
 
@@ -81,6 +93,22 @@
     const box = element.getBoundingClientRect();
     return { element: label(element), left: Math.round(box.left), right: Math.round(box.right), width: Math.round(box.width), fits: box.left >= 0 && box.right <= width };
   });
+
+  // A fill within 1.1:1 of what sits behind it, with no visible border or
+  // shadow, draws no shape: a badge or secondary button the color of its card.
+  // Only rounded elements count, so wrappers repeating the page background and
+  // square nav buttons sharing their bar's fill do not.
+  const transparent = color => color === 'transparent' || /^rgba\(.*,\s*0\)$/.test(color) || /\/\s*0\)$/.test(color);
+  const drawsEdge = (style, fill) => ['Top', 'Right', 'Bottom', 'Left'].some(side => parseFloat(style[`border${side}Width`]) > 0
+      && !['none', 'hidden'].includes(style[`border${side}Style`])
+      && contrast(composite([`rgb(${fill})`, style[`border${side}Color`]]), fill) >= 1.1)
+    || [...style.boxShadow.matchAll(/(?:rgba?|oklch|oklab|lab|lch|color)\([^)]*\)/g)].some(([color]) => !transparent(color));
+  const sameFill = all
+    .filter(element => parseFloat(getComputedStyle(element).borderTopLeftRadius) > 0)
+    .filter(element => !transparent(getComputedStyle(element).backgroundColor) && getComputedStyle(element).backgroundImage === 'none')
+    .map(element => ({ element, fill: backgroundOf(element), behind: backgroundOf(element.parentElement) }))
+    .filter(({ element, fill, behind }) => contrast(fill, behind) < 1.1 && !drawsEdge(getComputedStyle(element), fill))
+    .map(({ element, fill, behind }) => ({ element: label(element), fill: `rgb(${fill})`, behind: `rgb(${behind})`, contrast: contrast(fill, behind) }));
 
   const body = getComputedStyle(document.body);
   return {
@@ -105,6 +133,7 @@
     serifTextCount: serif.length,
     serifSamples: serif.slice(0, 5).map(label),
     darkBackgroundControls: darkButtons.slice(0, 15),
+    sameAsParentFill: sameFill.slice(0, 15),
     underlinedNavLinks: underlinedNav,
     dialogs,
   };

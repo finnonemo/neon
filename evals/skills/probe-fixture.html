@@ -1,9 +1,11 @@
 <!doctype html>
 <!--
   Known cases for browser-probe.js at 375px. run-probe.mjs --fixture compares
-  the ids the probe reports per category with #probe-expected, so a filter
-  that drops a real case or a new false positive both fail. Scroller content
-  is bare text so clipped children do not count as page overflow.
+  the ids the probe reports per category with #probe-expected, and contrast
+  where a category maps ids to values, then with the dark scheme and `.dark`
+  on <html> against #probe-expected-dark, so a filter that drops a real case,
+  a new false positive or a misread color all fail. Scroller content is bare
+  text so clipped children do not count as page overflow.
 -->
 <html lang="en">
 <head>
@@ -15,6 +17,11 @@
   .navy { background: #01172b; padding: 8px; display: flex; gap: 8px; }
   .navy button { border: 0; padding: 6px; }
   .scroller { width: 200px; overflow-x: auto; white-space: nowrap; margin: 8px 0 8px 100px; }
+  .card { background: #fff; border: 1px solid #ddd; padding: 8px; display: flex; gap: 8px; }
+  .pill { border-radius: 6px; padding: 2px 6px; background: #f2f2f2; }
+  .dark .card { background: #1a1a1a; }
+  .dark #class-pill { background: #1a1a1a; }
+  @media (prefers-color-scheme: dark) { #scheme-pill { background: oklch(0.2 0 0 / 0.5); } }
 </style>
 </head>
 <body>
@@ -30,17 +37,36 @@
     <!-- r3-style icon link in default link blue. -->
     <button id="icon-button" aria-label="Search" style="color:#0000ee;background:#01172b"><svg width="16" height="16"><rect width="16" height="16" fill="currentColor"/></svg></button>
   </div>
+  <!-- shadcn v4 colors: oklch() channels are not rgb() channels. -->
+  <button id="oklch-light" style="border:0;color:oklch(0.205 0 0);background:oklch(0.97 0 0)">Cancel</button>
+  <button id="oklch-dark" style="border:0;color:oklch(0.985 0 0);background:oklch(0.205 0 0)">Save</button>
   <div id="scrolled" class="scroller">Columns scrolled to the end on load hide the first column from view at this width.</div>
   <div id="scroller-idle" class="scroller">A sideways scroller left at its start still scrolls sideways at this width.</div>
   <div id="too-wide" style="width:500px">Fixed width past the viewport.</div>
+  <div class="card">
+    <!-- A badge the card's color, as shadcn's dark secondary badge on a card. -->
+    <span id="same-pill" class="pill" style="background:#fff">Open</span>
+    <span id="outlined-pill" class="pill" style="background:#fff;border:1px solid #888">Closed</span>
+    <span id="class-pill" class="pill">Open</span>
+    <!-- Translucent oklch over the card: #1a1a1a in dark, a separate fill in light. -->
+    <span id="scheme-pill" class="pill">Open</span>
+  </div>
+  <!-- Opaque colors with blue 0 serialize as rgb(r, g, 0), not rgba. -->
+  <div style="background:#000;padding:4px"><span id="black-pill" class="pill" style="background:#000;color:#fff">Open</span></div>
   <script>document.getElementById('scrolled').scrollLeft = 40;</script>
   <script type="application/json" id="probe-expected">
     {
-      "darkBackgroundControls": ["black-on-navy", "icon-button"],
+      "darkBackgroundControls": { "black-on-navy": 1.16, "icon-button": 1.93, "oklch-dark": 17.18 },
       "underlinedNavLinks": ["nav-text"],
       "scrolledOnLoad": ["scrolled"],
       "sidewaysScrollers": ["scrolled", "scroller-idle"],
-      "overflowingElements": ["too-wide"]
+      "overflowingElements": ["too-wide"],
+      "sameAsParentFill": { "same-pill": 1, "black-pill": 1 }
+    }
+  </script>
+  <script type="application/json" id="probe-expected-dark">
+    {
+      "sameAsParentFill": { "class-pill": 1, "scheme-pill": 1.02, "black-pill": 1 }
     }
   </script>
 </body>
