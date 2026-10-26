@@ -28,11 +28,15 @@
  *   Finnomena has two distinct "primary-ish" roles (Navy for buttons,
  *   Indigo for links/focus) that don't cleanly collapse onto CDS's smaller
  *   slug set.
- * - CDS's "gray" spectrum hue and accentSubtleGray/accentBoldGray are
- *   filled from Navy, not Finnomena's separate Grey family — Navy plays
- *   the neutral/structural role a gray scale normally would in this
- *   system, so every neutral step is treated as a tint of the navy hue
- *   rather than a separate gray family.
+ * - accentSubtleGray/accentBoldGray are filled from Navy, not Finnomena's
+ *   separate Grey family — Navy plays the neutral/structural role a gray
+ *   scale normally would in this system. CDS's "gray" spectrum hue itself
+ *   is not overridden (see "Explicitly left unassigned" below).
+ * - Spectrum steps 60–100 are not same-numbered copies: they start at each
+ *   hue's lightest Finnomena shade with ≥4.5:1 against white, so text CDS
+ *   draws on or in them stays readable. Yellow 60–100 come out olive to
+ *   black, and steps 50→60 jump from tint to shade — flag these to the
+ *   design owner. Details in the Spectrum block below.
  * - Finnomena's primitive palette (tokens/colors.json) is NOT mode-branched
  *   — the same hex value exists regardless of light/dark. Where a slug has
  *   no distinct light vs. dark Finnomena semantic role, the same value is
@@ -160,10 +164,11 @@ export const darkColor = {
  * tint. Steps 60–100 start at the lightest Finnomena shade with ≥4.5:1
  * against white, then go 10 Finnomena steps darker per CDS step (source
  * steps cited per hue). CDS draws text on or in these steps — Tag pairs
- * 60/70/80 with step 0, yellow 70 with yellow 30, and Avatar puts its
- * initial on step 60 — so the same-number tints (as pale as 1.1:1) left that
- * text unreadable. The ≥4.5:1 rule is a contrast floor, not a design
- * sign-off; evals/skills/theme-spectrum.test.mjs checks it.
+ * step 0 with blue/green/red 60, purple 80 and yellow 70 (yellow 30 when
+ * high emphasis), and Avatar puts its initial on step 60 — so the
+ * same-number tints (as pale as 1.1:1) left that text unreadable. The ≥4.5:1
+ * rule is a contrast floor, not a design sign-off;
+ * evals/skills/theme-spectrum.test.mjs checks it.
  *
  * Light and dark are identical: Finnomena's primitive palette is not
  * mode-branched (unlike CDS's own spectrum, which inverts per mode) — using

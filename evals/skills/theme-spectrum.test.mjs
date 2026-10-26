@@ -21,9 +21,11 @@ const contrast = (a, b) => {
   return (hi + 0.05) / (lo + 0.05);
 };
 
-// Pairs CDS draws as text in @coinbase/cds-web@9.26.1: Tag's low/high
-// emphasis puts 60/70/80 against step 0 (yellow high: 70 on 30), and Avatar
-// draws its white initial on step 60.
+// Pairs CDS draws as text in @coinbase/cds-web@9.26.1: Tag puts blue/green/red
+// 60, purple 80 and yellow 70 against step 0 (yellow high emphasis: 70 on 30).
+// Avatar draws its initial on step 60 — white with Neon's on-color override,
+// otherwise CDS's fgInverse. This checks 60/70/80 against 0 for every hue, so
+// a hue CDS starts using at another of those steps is already covered.
 test('spectrum steps CDS draws text with reach 4.5:1', () => {
   for (const field of ['lightSpectrum', 'darkSpectrum']) {
     const spectrum = colorOverrides[field];
