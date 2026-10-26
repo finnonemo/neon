@@ -15,13 +15,15 @@ test('distribution contains the shared design contract and conditional CDS guide
   await assert.rejects(access(join(destination, 'evals')));
 });
 
-test('distribution ships the reference design procedure both implementation skills link to', async () => {
+test('distribution ships the reference design and readiness procedures both implementation skills link to', async () => {
   const destination = await mkdtemp(join(tmpdir(), 'neon-package-test-'));
   await packagePlugin({ destination });
-  await access(join(destination, 'skills/neon-audit/references/reference-design.md'));
-  for (const skill of ['neon-create', 'neon-redesign']) {
-    const entrypoint = await readFile(join(destination, 'skills', skill, 'SKILL.md'), 'utf8');
-    assert.ok(entrypoint.includes('../neon-audit/references/reference-design.md'), `${skill} must link reference-design.md`);
+  for (const reference of ['reference-design.md', 'readiness.md']) {
+    await access(join(destination, 'skills/neon-audit/references', reference));
+    for (const skill of ['neon-create', 'neon-redesign']) {
+      const entrypoint = await readFile(join(destination, 'skills', skill, 'SKILL.md'), 'utf8');
+      assert.ok(entrypoint.includes(`../neon-audit/references/${reference}`), `${skill} must link ${reference}`);
+    }
   }
 });
 
