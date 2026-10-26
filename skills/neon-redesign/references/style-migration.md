@@ -96,7 +96,7 @@ palette (`bg-slate-900`, `text-blue-600`) with no brand tokens yet.
 ## Format-specific guidance
 
 Before writing any token update, **inspect the target project's actual
-existing files** to determine which of these four families it uses — do
+existing files** to determine which of these five families it uses — do
 not assume it matches this repo's own `theme.css` convention (full
 `rgb()`/hex values held directly in the variable, consumed as
 `var(--color-fg)`). Record the detected format so the scoped update
@@ -118,7 +118,7 @@ color (`#01172b` or `rgb(1, 23, 43)`) referenced directly as
 `${CLAUDE_PLUGIN_ROOT}/theme/css/theme.css` itself uses, so its
 values can often be used close to verbatim. **Still check** — some
 plain-CSS projects also use the bare-component convention from
-**shadcn-style** below without using shadcn itself.
+**shadcn-style on Tailwind v3** below without using shadcn itself.
 
 ### 2. Tailwind v3
 
@@ -142,6 +142,10 @@ the old `@tailwind base/components/utilities` directives, usually with
 no `tailwind.config.js`. An `@theme { --color-primary: ...; }` block
 (often in `globals.css` or `app.css`) may hold the app's own tokens; an
 app with only the import and stock utilities (`bg-slate-900`) has none.
+When `@theme inline` maps names to variables that `:root` and `.dark`
+declare (`--color-primary: var(--primary);`), the app is
+[shadcn-style on Tailwind v4](#5-shadcn-style-on-tailwind-v4); use that
+section instead.
 
 **Update:** Follow [Tailwind mapping rules](#tailwind-mapping-rules).
 When `@theme` already holds the app's own semantic names
@@ -159,16 +163,17 @@ selector-scoped override such as `input:focus { --color-blue-600: ...; }`
 never reaches `border-blue-600`. Express state at the call site with a
 variant instead: `focus:border-[var(--color-bgLinePrimary)]`.
 
-### 4. shadcn-style (CSS vars + Tailwind indirection)
+### 4. shadcn-style on Tailwind v3 (CSS vars + Tailwind indirection)
 
 **Detect:** a `globals.css` (or similar) with `:root { --primary: ...; }`
 declarations where the *values* are bare components, not a full color
 (e.g. `--primary: 222.2 47.4% 11.2%;` — three space-separated numbers, no
 `hsl(...)` wrapper) **and** a `tailwind.config.js` `theme.extend.colors`
 that points back at those same variables wrapped in a color function,
-e.g. `primary: 'hsl(var(--primary))'` (or `oklch(var(--primary))` in
-newer shadcn setups). This two-layer indirection — CSS var holds bare
-components, Tailwind config wraps it in the color function — is the
+e.g. `primary: 'hsl(var(--primary))'` (or `oklch(var(--primary))`).
+Variables holding complete `oklch(...)` colors, mapped by `@theme inline`,
+are [shadcn-style on Tailwind v4](#5-shadcn-style-on-tailwind-v4).
+This two-layer indirection — CSS var holds bare components, Tailwind config wraps it in the color function — is the
 distinguishing feature versus plain Tailwind v3, where config values are
 themselves complete colors.
 
@@ -194,6 +199,81 @@ format, then convert the Finnomena token value into it:
   Tailwind config mapping. Usually only the CSS variable value changes —
   the config's `primary: 'hsl(var(--primary))'` line stays untouched
   since it's already pointing at the right variable name.
+
+### 5. shadcn-style on Tailwind v4
+
+Current shadcn/ui output, including v0 and Lovable projects.
+
+**Detect:** `@import "tailwindcss";`, `:root` and `.dark` blocks that
+declare complete colors (`--primary: oklch(0.205 0 0);`), and an
+`@theme inline` block that maps each one to a utility name
+(`--color-primary: var(--primary);`). Usually there is also
+`@custom-variant dark (&:is(.dark *));` and a `components.json`, and no
+`tailwind.config.*` color mapping. Some v4 files hold `hsl(...)` values
+instead; keep whichever color function the file uses.
+
+**Update:** edit the values in `:root` and `.dark` only. Markup using
+`bg-primary` or `ring-ring` then follows, so component files keep their
+shadcn utilities. Leave `@theme inline` unchanged unless a role needs a
+new semantic name; then declare the variable in both `:root` and `.dark`
+and map it in `@theme inline`, as shadcn does for its own tokens.
+
+Take each value from the same mode of
+`${CLAUDE_PLUGIN_ROOT}/theme/css/theme.css`: `:root` from its `:root`,
+`.dark` from its dark block. A role the dark block does not redeclare,
+such as `bgLinePrimary`, keeps its `:root` value. Convert to the file's
+color function and keep alpha: Navy Ink `rgb(1, 23, 43)` becomes
+`oklch(0.199 0.050 247.2)`, and `fg`'s `rgba(0, 0, 0, 0.851)` becomes
+`oklch(0 0 0 / 0.851)`. Do not import the adapter and reference its
+variables from `.dark`: it switches mode on `prefers-color-scheme` and
+`[data-theme]`, not on `.dark`, so those references can resolve to the
+light value. See [Mode-specific values](#mode-specific-values).
+
+Map shadcn's roles by their meaning in shadcn:
+
+| Variable pair | Job in shadcn | Adapter role |
+| --- | --- | --- |
+| `--background` / `--foreground` | Page | `bg` / `fg` |
+| `--card`, `--popover` / their `-foreground` | Raised surfaces | `bgElevation1`, `bgElevation2` / `fg` |
+| `--primary` / `--primary-foreground` | Primary action | `bgPrimary` (Navy Ink) / `fgInverse` in light, `fg` in dark |
+| `--secondary` / `--secondary-foreground` | Secondary button | `bgSecondary` in light, `bgTertiary` in dark / `fg` |
+| `--muted` / `--muted-foreground` | Quiet surface and secondary text | `bgAlternate` in light, `bgTertiary` in dark / `fgMuted` |
+| `--accent` / `--accent-foreground` | Hover, focus and selected surfaces (ghost buttons, menu items, rows) | A quiet neutral surface, `bgSecondary` in light and `bgTertiary` in dark / `fg`; not an `accent*` token or indigo |
+| `--destructive` | Destructive fill and error text | `bgNegative` (Negative) |
+| `--border`, `--input` | Dividers and control outlines | `bgLine`; check that input outlines stay visible |
+| `--ring` | Focus | `bgLinePrimary` (Indigo Interactive) |
+
+`--secondary`, `--muted` and `--accent` sit on cards, so each must differ
+from `--card` in the same mode. In the dark block `bgSecondary`,
+`bgAlternate` and `bgElevation1` share one value, which would hide
+secondary badges and ghost hovers on a card.
+
+Change each role together with its `-foreground`, in both `:root` and
+`.dark`. shadcn's default `.dark` has a light `--primary` with dark text,
+so replacing only the background leaves dark text on a dark button. Do
+not copy the dark `fgInverse` for that label: it is black, for text on
+the white dark-mode `bgInverse`, and measures 2.4:1 on dark `bgPrimary`.
+Text on a colored fill is `fgInverse` in light and `fg` in dark, per
+`onColorLabel` in `${CLAUDE_PLUGIN_ROOT}/theme/cds/color-overrides.ts`.
+
+Current shadcn has no `--destructive-foreground`: its destructive button
+and badge use `text-white`, over `dark:bg-destructive/60` in dark. At
+`colors` tier, do not add a variable or edit those components. Measure
+the rendered destructive button and `text-destructive` text in both modes
+and report a failure. A file that declares `--destructive-foreground`
+changes it with `--destructive`.
+
+The `--sidebar-*` set mirrors the same roles (`--sidebar-primary`,
+`--sidebar-accent`, `--sidebar-border`, `--sidebar-ring`) and changes
+with them, even though shadcn's default dark `--sidebar-primary` is blue.
+`--sidebar-accent` must differ from `--sidebar` in each mode.
+`--chart-1` to `--chart-5` are category colors: leave them and ask, per
+[Chart and status colors](#chart-and-status-colors). `--radius` is
+geometry and changes only at `visual-system` scope.
+
+Verify by toggling `.dark`: primary and destructive labels, the focus
+ring, input outlines, and secondary fills and hovers against their card
+in both modes.
 
 ## Mode-specific values
 

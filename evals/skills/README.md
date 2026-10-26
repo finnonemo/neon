@@ -17,6 +17,7 @@ Run each request with the named context, first against the baseline and then the
 | Follow-up: "use the reference's own colors and font" at Reference-led | Stays at Reference-led and explains the Brand Floor; no source font or accent color |
 | Attach a reference design to a back office screen request | Functional contract; takes at most section structure; does not offer the dial |
 | Colors-only restyle of a Tailwind v4 app that uses stock utilities only | See [Tailwind colors-only regression](#tailwind-colors-only-regression) |
+| Restyle a v0/Lovable React + Tailwind v4 + shadcn project to Finnomena | Detects shadcn on v4; edits `:root`/`.dark` by role and pair; leaves `@theme inline`; installs no CDS. See [shadcn on Tailwind v4 restyle](#shadcn-on-tailwind-v4-restyle) |
 | Rebuild an existing React prototype on CDS; colors-only and feature requests on the same apps | See [CDS rebuild](#cds-rebuild) |
 
 Verdicts are pass, fail or unverified for routing, scope, resource retrieval, component correctness, color roles, feature completion, responsive behavior and evidence honesty. Link actual artifacts. Do not turn a successful retrieval simulation into a claim that an app was built or looked better.
@@ -51,6 +52,37 @@ Pass requires all of:
 Revised skill, Codex, same prompt and fixture, one sample per revision. The first revision passed the read, alias, role, pale-shade, focus and build items, but darkened disabled `slate-200/300` text to `fgMuted`, made the selected tab navy-only and collapsed three section dots to navy. After the state and marker rules were added, a second sample passed every item; desktop light-mode screenshots matched the source findings. Limits: two single samples, Codex only, light mode and one desktop width, no handler interaction, and user-level skills outside `CODEX_HOME` were visible to every run.
 
 The same colors-only prompt invoked as `$neon-create` on this fixture and on a Carbon/SCSS app (Codex, one sample each) stayed in scope and built. Both runs wrote literal indigo `#1817e7` where the adapter maps focus to `bgLinePrimary`. The Tailwind run cited style migration Example 4, which then gave literal hex values; the example now uses adapter variables. Two later samples (see [CDS rebuild](#cds-rebuild)) used `var(--color-*)` utilities without `#1817e7`; one imported the adapter, the other copied its `rgb()` declarations into `:root`.
+
+## shadcn on Tailwind v4 restyle
+
+Fixture: a Vite/React app in current shadcn/ui v4 form: `@import "tailwindcss"`, `@custom-variant dark`, the default neutral `:root`/`.dark` values and `@theme inline` mapping (its radius lines use the older `calc(var(--radius) - 4px)` form), a `components.json`, and the registry's `button`, `input`, `card` and `badge` with `asChild` removed. The page has primary, outline, ghost and destructive buttons, an input, secondary and outline badges on cards, `text-destructive` text, `chart-1`–`chart-5` dots and a toggle that sets `.dark` on `<html>`. Request, verbatim:
+
+> $neon-redesign I built this app with v0. Switch it to Finnomena colors, in light and dark mode. Colors only: keep the layout, components, spacing and behaviour exactly as they are.
+
+Pass requires all of:
+
+- `@theme inline` is byte-identical; no `tailwind.config.*`, CDS package or component edit is added.
+- Each changed role changes with its `-foreground`, in `:root` and `.dark`.
+- The primary label is at least 4.5:1 in both modes, measured with `.dark` toggled.
+- `--ring` resolves to the indigo `bgLinePrimary` in both modes; `--accent` is a neutral surface.
+- Secondary badge fills and ghost hovers differ from the card they sit on, in both modes.
+- `--chart-*` and `--radius` are unchanged; the build passes.
+
+October 2026, Codex 0.162.1, one sample per revision, run through `run-codex-case.mjs`. Every run read SKILL.md, style migration, verification and INSTRUCTION.md. The evaluator built each result and measured it in headless Chromium, light and `.dark`, at 1024px. The first revision used the adapter's `bgSecondary` for `--secondary`, `--muted` and `--accent` in both modes; the second maps them to `bgTertiary` in dark.
+
+| Item | Before (main at `e1c1d1c`) | First revision | Second revision |
+| --- | --- | --- | --- |
+| Files changed | `index.css` values plus a new `finnomena-colors.css`: the adapter's color declarations copied under `:root` and `.dark`, referenced as `var(--color-*)` | `index.css` values only, converted to `oklch(...)` with alpha kept | Same as first |
+| `@theme inline`, components, `--chart-*`, `--radius` | Unchanged | Unchanged | Unchanged |
+| Primary, light / dark | Navy, white label 18.12:1 / `#415160`, white label 8.17:1 | Same | Same |
+| Destructive button, light / dark | 5.39:1 / 8.44:1 | Same | Same |
+| Focus border, both modes | `rgb(105, 104, 239)` | Same, as `oklch` | Same, as `oklch` |
+| Dark secondary badge on its `#1a1a1a` card | `#1a1a1a`, no visible pill | `#1a1a1a`, no visible pill | `#262626` |
+| Dark ghost hover | `bgSecondaryWash` at 50%, barely darker than the card | Same value as the card, no visible hover | `bgTertiary` at 50% |
+| Reported gaps | None | Input outlines have low contrast | Dark `text-destructive` at 4.02:1 |
+| Verdict | Fail: card surfaces | Fail: card surfaces | Pass |
+
+On the original items main already passed: its format sections and the adapter were enough for pairs, the dark primary label, focus, charts and radius on this fixture. The difference is the card-surface item, which both earlier runs failed and the second revision passed, and the value format, which follows the file. Unreported by any run: input outlines measure 1.12:1 (light) and 1.62:1 (dark) against the card, against the stock fixture's 1.26:1 and 1.60:1. Limits: one sample per revision, Codex only, one desktop width, a synthetic fixture rather than a real v0 or Lovable export, no sidebar or chart component rendered, and Codex's own browser checks were unavailable. The second revision's run predates only a rewrap of the format 4 paragraph.
 
 ## Mock labeling
 
