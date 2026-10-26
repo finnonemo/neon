@@ -134,14 +134,14 @@ Same request and fixtures. Three samples per fixture through `run-codex-case.mjs
 
 | Sample | Read CDS integration | Grader | 375px | 1440px | Primary-styled buttons |
 | --- | --- | --- | --- | --- | --- |
-| hc-s1 | no | FAIL stylesheet: `.phc-card > div` | Column container scrolls sideways (423/375), loads at `scrollLeft` 48 | Clean | None on the landing screen |
+| hc-s1 | yes | FAIL stylesheet: `.phc-card > div` | Column container scrolls sideways (423/375), loads at `scrollLeft` 48 | Clean | None on the landing screen |
 | hc-s2 | yes | pass | Column container 441/375, `scrollLeft` 66 | Clean | Home pill and `+` add column, white on navy (18.12:1) |
-| hc-s3 | no | pass | Column container 387/375, `scrollLeft` 12 | Clean | None on the landing screen |
-| bs-s1 | no | pass | Page 1882px wide | Page 2527px wide | `Current W.` and `Add Fund` white on navy at 375px (15.46–18.12:1) |
+| hc-s3 | yes | pass | Column container 387/375, `scrollLeft` 12 | Clean | None on the landing screen |
+| bs-s1 | yes | pass | Page 1882px wide | Page 2527px wide | `Current W.` and `Add Fund` white on navy at 375px (15.46–18.12:1) |
 | bs-s2 | yes | FAIL tests: no test script | Clean | Clean | `Current W.` and `Add Fund` white on navy at 375px (15.46–18.12:1) |
 | bs-s3 | yes | pass | Clean | Clean | `Current W.` and `Add Fund` white on navy at 375px (15.46–18.12:1) |
 
-"Clean" means no page overflow, no sideways-scrolling container, no serif text and no underlined nav link. "Read CDS integration" counts only commands a run executed. All six read SKILL.md, the rebuild reference and verification, and wrote a parity inventory to the rebuild's README (hc-s2 also wrote a separate parity file). The three that skipped CDS integration also skipped scaffold. hc-s2 read both and still has the 375px defect, so skipping them is not shown to be the cause.
+"Clean" means no page overflow, no sideways-scrolling container, no serif text and no underlined nav link. "Read CDS integration" counts only commands a run executed. All six read SKILL.md, the rebuild reference, CDS integration, scaffold and verification, and wrote a parity inventory to the rebuild's README (hc-s2 also wrote a separate parity file). The first count of this table marked hc-s1, hc-s3 and bs-s1 "no": it missed their single `cat` of a brace path (`references/{rebuild,cds-integration,scaffold}.md`), whose output includes CDS integration. Reading CDS integration and scaffold did not prevent either defect.
 
 - **Health-check at 375px.** r5's result did not reproduce: none of the three columns fits the viewport.
   - The source has no overflow and no sideways scroller at 375px. It hides `.phc-add-column-zone` below its mobile breakpoint (`App.scss:254`) and sizes the column at `100vw`.
@@ -160,9 +160,42 @@ Same request and fixtures. Three samples per fixture through `run-codex-case.mjs
   - All six rebuild READMEs say the starter's light scheme is kept. Only hc-s3 says dark mode is unverified.
   - All three batch-sell samples report the retained `@vercel/analytics` in their README.
   - Every run reported that Chromium could not launch in its sandbox and substituted DOM tests.
-- **Candidate skill fixes, not made here:**
-  - The rebuild inventory does not ask for the source's responsive rules, such as elements hidden on mobile.
-  - CDS integration does not say that `Box` defaults to a flex row.
+- **Skill fixes, landed after this re-sample in [PR #24](https://github.com/finnonemo/neon/pull/24):**
+  - The rebuild reference's parity inventory now records the source's responsive rules (elements hidden, resized or rearranged at a breakpoint), and Build says to carry each one over and recheck layout-dependent copied effects such as scroll-to-end.
+  - CDS integration now says `Box` computes to `display: flex` in a row, so stacked content needs `flexDirection="column"` or `VStack`. A follow-up repeats it in the rebuild reference's Build step, where rebuild runs lay out their panels.
+
+### Re-run after PR #24, 26 October 2026
+
+Same request and fixtures, with three new samples per fixture (hc-s4–s6, bs-s4–s6). Codex 0.162.1, skills as of `189263c`: the re-sample's skills plus the PR #24 rules and the `Box` clause in the rebuild reference's Build step. The fixture copies match the re-sample's starting commits, with the same source `node_modules`. The fixtures ran concurrently in pairs (hc-sN with bs-sN), one pair after another. Unlike the re-sample, the evaluator deleted the regular files each pair wrote to `/tmp` before starting the next pair. `/tmp/phc-browsers`, a directory, was left. No run's commands name the other fixture's `/tmp` files.
+
+Every run finished on its first attempt and left no `auth.json`. Every sample passed source unchanged, no source UI library, typecheck and build, and kept Vite 5. Health-check also passed mock data. All six printed the rebuild reference, CDS integration, scaffold and verification, and their output includes both new rules. The evaluator ran the probe on each landing screen in light mode, with `viewportWidth` 375 and 1440 in every result. Inventory items, interactions and dialogs were not checked, so no sample is a full pass.
+
+| Sample | Grader | 375px | 1440px | Rule under test | Primary-styled buttons |
+| --- | --- | --- | --- | --- | --- |
+| hc-s4 | pass | Clean | Clean¹ | Add-column zone hidden below 500px (`workspace.css:472`, `:505`); scroll-to-end guarded (`portfolio/App.tsx:835`) | None on the landing screen |
+| hc-s5 | FAIL stylesheet (12 selectors); FAIL tests: no test script | `.phc-nav-items` scrolls sideways (755/374) | Clean¹ | Zone hidden (`health.css:94–96`, `:1593`); guarded (`health/App.tsx:640`) | `Home` nav pill, white on navy (18.12:1) |
+| hc-s6 | pass | Clean | Clean | Zone hidden (`health/app.css:169`, `:205`); guarded (`app/App.tsx:342`) | Icon-only `Home` nav button, white on navy (18.12:1) |
+| bs-s4 | FAIL tests: no test script | Clean | Clean | Panels are raw `<section>`s; `Box` only wraps rows of buttons (`app/App.tsx:698–776`) | `Current W.`, `Add Fund`, `Set Current Port`, white on navy (15.46–18.12:1) |
+| bs-s5 | FAIL tests: no test script | Clean² | Clean² | Stacked panel and fund `Box`es set `flexDirection="column"` (`app/App.tsx:719`, `:737`, `:758`, `:774`, `:790`, `:813`) | `Current W.`, white on navy (18.12:1) |
+| bs-s6 | FAIL tests: no test script | Clean | Clean | Raw `<section>` panels; no `Box` in app code | `Current W.`, `Add Fund`, six `Model`, `Set Current Port`, white on navy (15.46–18.12:1) |
+
+¹ The probe flags the starter sidebar's logo link (`Logo.tsx`, byte-identical to the starter) as an underlined nav link. It is a 32px image link with no text. Whether an underline is visible was not checked.
+² See the gauge dots below.
+
+- **Health-check at 375px.** The re-sample's overflow did not recur. All three hide the add-column zone below 500px, as the source does. Each lists that rule in its inventory: hc-s4 and hc-s5 in a separate parity file (lines 52 and 20), hc-s6 in its README (line 19). All three copied the scroll-to-end effect, but each added a `columns.length > 1` guard that the source lacks (`App.jsx:651`), so a single column loads at `scrollLeft` 0. Every run read the new rules, so this matches the fix. With three samples it does not show that the fix caused the change.
+- **hc-s5's navigation.** Below 500px its own `.phc-nav-items` becomes a row with `overflow: auto` (`health.css:1593`). `Insights` and `Notifications` sit past the right edge (to 645px) and are reachable only by scrolling the nav. The re-sample found no sideways scroller in the source at 375px.
+- **hc-s5's stylesheet.** Its `ui.tsx` reimplements the Carbon component API over CDS. `Typography` wraps a CDS `Text` in an app `<span>`, so descendant selectors such as `.phc-pvd-mf-header span` (`PortfolioVersionDetail.tsx:39`) match the CDS `Text` root as well as the wrapper. The FAIL stands. `Action` drops its `className`, so `.phc-pill-btn--labeled span` matches nothing. Its own `npm run verify` prints PASS.
+- **Batch-sell width.** bs-s1's overflow did not recur: none of the three overflows at either width. Only bs-s5 used `Box` for stacked content, and it set `flexDirection="column"` each time. bs-s4 and bs-s6 built their panels from raw `<section>`s with app classes, so they did not exercise the rule.
+- **bs-s5 gauge dots.** The probe reports its six 14px `batch-gauge-dot` buttons, which have no text, at 1:1. They take `var(--color-fg)` (`calculator.css:13`). The source dot is green when the fund is aligned and red otherwise (`App.tsx:1128`). bs-s5 keeps that signal on the gauge fill and drift label (`app/App.tsx:823`, `:826`), but not on the dot. bs-s6 keeps it on the dot (`app/App.tsx:828`).
+- **Tests.** hc-s4 and hc-s6 have test scripts that pass. The grader fails the other four for having no test script. bs-s5's `check:parity` and bs-s6's `test:parity` pass, comparing calculation and state against the source. bs-s4 has neither.
+- **Starter edits.** Same compared files as the re-sample. hc-s4 and hc-s6 changed only `MultiColumnLayout.tsx`, and the other four left them byte-identical.
+- **Limits.**
+  - Three samples per fixture, Codex only.
+  - Landing screens only. Inventory items, interactions, dialogs and the 499/500px boundary were not checked.
+  - Dark mode is unverified, because the starter fixes light.
+  - The `/tmp` cleanup between pairs is a method change from the re-sample.
+  - Every run read CDS integration, so the re-run cannot show whether the rebuild reference's `Box` clause matters on its own.
+  - The runs predate the starter layout and CDS integration changes merged from PRs #20 and #22.
 
 ## Flow refactor evaluation
 

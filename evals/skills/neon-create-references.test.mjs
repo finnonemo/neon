@@ -24,3 +24,12 @@ test('CDS integration warns that Box lays children out in a flex row', async () 
   assert.match(source, /flexDirection="column"/);
   assert.match(source, /`VStack`/);
 });
+
+test('the rebuild reference carries the Box flex-row rule', async () => {
+  const source = await readFile(`${references}rebuild.md`, 'utf8');
+  const build = source.match(/## Build\n([\s\S]*?)\n## /)?.[1] ?? '';
+  // bs-s1's <Box as="section"> panels overflowed; state the rule where rebuilds lay out panels.
+  assert.match(build, /`Box` is a flex row/);
+  assert.match(build, /flexDirection="column"/);
+  assert.match(build, /`VStack`/);
+});
