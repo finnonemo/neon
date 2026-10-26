@@ -48,6 +48,21 @@ Revised skill, Codex, same prompt and fixture, one sample per revision. The firs
 
 The same colors-only prompt invoked as `$neon-create` on this fixture and on a Carbon/SCSS app (Codex, one sample each) stayed in scope and built. Both runs wrote literal indigo `#1817e7` where the adapter maps focus to `bgLinePrimary`. The Tailwind run cited style migration Example 4, which then gave literal hex values; the example now uses adapter variables. Two later samples (see [CDS rebuild](#cds-rebuild)) used `var(--color-*)` utilities without `#1817e7`; one imported the adapter, the other copied its `rgb()` declarations into `:root`.
 
+## Mock labeling
+
+Fixture: an empty folder. Request, verbatim:
+
+> $neon-create Create a Finnomena request tracker app in this folder: a list of requests with status, a detail view, and a form to add a request. There is no backend yet, so use mock data.
+
+Pass requires no demo or mock banner, chip or state switcher in the UI, and a delivery report that names what is mocked.
+
+October 2026, Codex, one sample per revision, run in parallel:
+
+- **Before (main at 1d35395):** the sidebar showed "Demo workspace · Mock data · Session only", the form footer "Created in this demo session only." and the list footer a "Mock data" chip. The report said "visibly labeled mock data". Fail.
+- **After (this revision):** no demo or mock text in the UI source. The report said "Mock data resets on refresh." Pass.
+
+Both built and typechecked. Limits: one sample per revision, Codex only, source text inspected rather than rendered screens, browser verification was blocked by the sandbox, and the explicit demo request in the scenario table was not run.
+
 ## CDS rebuild
 
 Fixtures: the batch-sell calculator above and a health-check management prototype (React, `@carbon/react`, SCSS, mock data with a timed demo transition). Rebuild request, verbatim, run in each source app:
