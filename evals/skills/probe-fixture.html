@@ -1,0 +1,47 @@
+<!doctype html>
+<!--
+  Known cases for browser-probe.js at 375px. run-probe.mjs --fixture compares
+  the ids the probe reports per category with #probe-expected, so a filter
+  that drops a real case or a new false positive both fail. Scroller content
+  is bare text so clipped children do not count as page overflow.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Probe fixture</title>
+<style>
+  body { margin: 0; font-family: Arial, sans-serif; background: #fff; color: #111; }
+  .navy { background: #01172b; padding: 8px; display: flex; gap: 8px; }
+  .navy button { border: 0; padding: 6px; }
+  .scroller { width: 200px; overflow-x: auto; white-space: nowrap; margin: 8px 0 8px 100px; }
+</style>
+</head>
+<body>
+  <nav>
+    <a id="nav-logo" href="#"><img alt="Logo" width="32" height="32" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Crect width='32' height='32' fill='%2301172b'/%3E%3C/svg%3E"></a>
+    <a id="nav-text" href="#">Home</a>
+  </nav>
+  <div class="navy">
+    <!-- bs-s5's gauge dot: no text or icon, so nothing to contrast. -->
+    <button id="dot" aria-label="Adjust allocation" style="width:14px;height:14px;background:#01172b"></button>
+    <!-- r1's black label on navy. -->
+    <button id="black-on-navy" style="color:#000;background:#01172b">Home</button>
+    <!-- r3-style icon link in default link blue. -->
+    <button id="icon-button" aria-label="Search" style="color:#0000ee;background:#01172b"><svg width="16" height="16"><rect width="16" height="16" fill="currentColor"/></svg></button>
+  </div>
+  <div id="scrolled" class="scroller">Columns scrolled to the end on load hide the first column from view at this width.</div>
+  <div id="scroller-idle" class="scroller">A sideways scroller left at its start still scrolls sideways at this width.</div>
+  <div id="too-wide" style="width:500px">Fixed width past the viewport.</div>
+  <script>document.getElementById('scrolled').scrollLeft = 40;</script>
+  <script type="application/json" id="probe-expected">
+    {
+      "darkBackgroundControls": ["black-on-navy", "icon-button"],
+      "underlinedNavLinks": ["nav-text"],
+      "scrolledOnLoad": ["scrolled"],
+      "sidewaysScrollers": ["scrolled", "scroller-idle"],
+      "overflowingElements": ["too-wide"]
+    }
+  </script>
+</body>
+</html>
