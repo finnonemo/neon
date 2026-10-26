@@ -24,6 +24,7 @@ For existing UI, omitted `composition` means `preserve`. Set `adapt` for explici
 | Explicit CSS-only restyle | `neon-redesign`, even if CDS is a dependency |
 | Existing non-React app | `neon-redesign` for styling; preserve framework |
 | Explicit non-React new app | Use the framework's normal scaffold, then the CSS styling path; the Neon starter is React-only |
+| Explicit rebuild of an existing React app on CDS | `neon-create`; rebuild path into a new directory |
 | Explicit CDS adoption in React | `neon-create`; integration path |
 | Target or integration choice remains unclear | `neon-audit`; inspect only missing evidence |
 

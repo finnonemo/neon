@@ -65,6 +65,7 @@ export function BottomNav({ navigation = [] }: { navigation?: NavItem[] }) {
           rel={item.external ? "noopener noreferrer" : undefined}
           aria-label={item.label}
           aria-current={item.active ? "page" : undefined}
+          textDecoration="none"
           display="flex"
           alignItems="center"
           justifyContent="center"
