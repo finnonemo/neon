@@ -18,20 +18,12 @@ jobs:
         with:
           fetch-depth: 0
       - id: filter
+        # The browser path list and the run-on-doubt rule live in the script
+        # (evals/skills/browser-changes.test.mjs covers both).
         env:
           BASE: ${{ github.event.pull_request.base.sha || github.event.merge_group.base_sha || github.event.before }}
           HEAD: ${{ github.event.pull_request.head.sha || github.event.merge_group.head_sha || github.sha }}
-          BROWSER_PATHS: '^(templates/|evals/templates/|theme/|scripts/lib/assemble-starter\.mjs$|scripts/lib/assets\.mjs$|evals/skills/browser-probe\.js$|evals/skills/probe-fixture\.html$|evals/skills/run-probe\.mjs$|\.github/workflows/template-browser\.yml$)'
-        run: |
-          # Run the browser job unless the diff proves no browser path changed:
-          # a skipped job passes a required check, so any doubt means run.
-          browser=true
-          if changed=$(git diff --name-only "$BASE...$HEAD" 2>/dev/null) && [ -n "$changed" ]; then
-            matched=$(printf '%s\n' "$changed" | grep -E "$BROWSER_PATHS" || true)
-            [ -z "$matched" ] && browser=false
-            printf 'Browser paths changed:\n%s\n' "${matched:-none}"
-          fi
-          echo "browser=$browser" >> "$GITHUB_OUTPUT"
+        run: node .github/scripts/browser-changes.mjs "$BASE" "$HEAD"
   template-browser:
     needs: changes
     # A job skipped here reports success to a required check.

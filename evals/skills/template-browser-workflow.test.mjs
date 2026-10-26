@@ -20,18 +20,17 @@ test('template-browser runs on every pull request and filters browser paths in t
   assert.match(triggers, /^  merge_group:$/m);
   assert.match(workflow, /needs: changes\n[\s\S]*?if: needs\.changes\.outputs\.browser == 'true'/);
   assert.match(workflow, /run: node evals\/skills\/run-probe\.mjs --fixture/);
-  const browserPaths = new RegExp(workflow.match(/BROWSER_PATHS: '([^']+)'/)[1]);
-  for (const path of [
-    'templates/vitejs-cds/src/main.tsx', 'evals/templates/layouts.spec.mjs', 'theme/css/theme.css',
-    'scripts/lib/assemble-starter.mjs', 'scripts/lib/assets.mjs', 'evals/skills/browser-probe.js',
-    'evals/skills/probe-fixture.html', 'evals/skills/run-probe.mjs', '.github/workflows/template-browser.yml',
-  ]) assert.match(path, browserPaths, `${path} runs the browser job`);
-  for (const path of ['README.md', 'docs/agents/domain.md', 'skills/neon-create/SKILL.md', 'evals/skills/README.md', 'scripts/lib/install.mjs', 'mytheme/x.css']) {
-    assert.doesNotMatch(path, browserPaths, `${path} skips the browser job`);
-  }
+  assert.match(workflow, /run: node \.github\/scripts\/browser-changes\.mjs "\$BASE" "\$HEAD"/);
 });
 
 test('validate runs on merge groups for a merge queue', async () => {
   const workflow = await readFile(new URL('../../.github/workflows/validate.yml', import.meta.url), 'utf8');
   assert.match(workflow.slice(0, workflow.indexOf('permissions:')), /^  merge_group:$/m);
+});
+
+test('validate lints every workflow with a pinned actionlint', async () => {
+  const workflow = await readFile(new URL('../../.github/workflows/validate.yml', import.meta.url), 'utf8');
+  assert.match(workflow, /ACTIONLINT_VERSION: \d+\.\d+\.\d+\n/);
+  assert.match(workflow, /sha256sum -c -/);
+  assert.match(workflow, /"\$RUNNER_TEMP\/actionlint" -color\n/);
 });
