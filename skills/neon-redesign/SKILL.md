@@ -21,13 +21,13 @@ When target, scope and theme variables are known, begin with the affected styles
 
 1. Establish scope from the request and existing context. `colors` changes only colors; `visual-system` also covers brand typography, spacing and radius. Existing composition defaults to `preserve`; set `adapt` only for an explicit layout/hierarchy request. Conflicting instructions require clarification. Read the [shared contract](../neon-audit/references/workflow-contract.md) only if these decisions remain unresolved.
 2. Inventory the affected styles and shared consumers. Record existing behavior and a before view. Resolve Neon resources two levels above this skill's real directory; use the [design contract](../INSTRUCTION.md) for the relevant visual roles.
-3. Map by meaning: primary action, selection, status and chart category are different jobs even if they share a hex value. Reuse matching tokens; preserve domain color meaning. Do not use a global replacement for a local request.
+3. Map by meaning: primary action, selection, status and chart category are different jobs even if they share a hex value. Reuse matching tokens; preserve domain color meaning. Do not use a global replacement for a local request. Tailwind target (config, `@theme` or stock utilities such as `bg-slate-900`): read the [Tailwind mapping rules](references/style-migration.md#tailwind-mapping-rules) and the matching format section before mapping, including on the fast path.
 4. Update scoped tokens, then remaining component styles. For `adapt`, reorganize presentation within the named scope while retaining routes, handlers, service contracts, data meaning and access to essential actions. Do not adopt a new framework or component library to rearrange a page.
 5. Verify with the [shared checklist](references/verification.md), including before/after appearance, preserved behavior and unrelated consumers for partial changes.
 
 ## Conditional references
 
-- CSS/Tailwind formats or mapping examples: relevant sections of [style migration](references/style-migration.md).
+- Plain CSS/shadcn formats or mapping examples: relevant sections of [style migration](references/style-migration.md).
 - Missing CSS asset: [CSS setup](references/css-integration.md#css-setup); whole-app installation differs from a local override.
 - Typography expansion: [fonts](../neon-audit/references/theme-integration.md#font-loading). Reusing the asset still requires font loading and layout checks.
 - Mode selectors, CSS-to-CDS upgrade or customized-file conflict: relevant sections of [theme integration](../neon-audit/references/theme-integration.md).
