@@ -4,15 +4,18 @@
 // are byte-identical, `--chart-*` and `--radius` keep their values, and the
 // result builds. Contrast and surfaces stay with the browser probe.
 //
-//   node evals/skills/grade-restyle.mjs --source <app> --result <app> [--json]
+//   node evals/skills/grade-restyle.mjs --source <app> --result <app> [--shots <name>] [--json]
 //
 // <source> is the untouched fixture; <result> is the restyled copy with its
-// dependencies installed.
+// dependencies installed. `--shots <name>` also builds the result into
+// .local/shots/<name>, as grade-rebuild.mjs does, for
+// `run-probe.mjs <name> --dark-class`.
 import { readdirSync, readFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { join, relative, resolve } from 'node:path';
 import { parseArgs } from 'node:util';
 import { pathToFileURL } from 'node:url';
+import { buildShots } from './grade-rebuild.mjs';
 
 // Installed or built output, not the app's source.
 const ignored = /(^|\/)(node_modules|\.git|dist)(\/|$)|\.tsbuildinfo$/;
@@ -98,11 +101,13 @@ function main() {
     options: {
       source: { type: 'string' },
       result: { type: 'string' },
+      shots: { type: 'string' },
       json: { type: 'boolean', default: false },
     },
   });
-  if (!values.source || !values.result) throw new Error('Usage: grade-restyle.mjs --source <app> --result <app> [--json]');
+  if (!values.source || !values.result) throw new Error('Usage: grade-restyle.mjs --source <app> --result <app> [--shots <name>] [--json]');
   const checks = grade({ source: resolve(values.source), result: resolve(values.result) });
+  if (values.shots) checks.push(buildShots(resolve(values.result), values.shots));
   if (values.json) console.log(JSON.stringify(checks, null, 2));
   else {
     for (const { name, pass, detail } of checks) {

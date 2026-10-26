@@ -1,10 +1,11 @@
 <!doctype html>
 <!--
   Known cases for browser-probe.js at 375px. run-probe.mjs --fixture compares
-  the ids the probe reports per category with #probe-expected, then with the
-  dark scheme and `.dark` on <html> against #probe-expected-dark, so a filter
-  that drops a real case or a new false positive both fail. Scroller content
-  is bare text so clipped children do not count as page overflow.
+  the ids the probe reports per category with #probe-expected, and contrast
+  where a category maps ids to values, then with the dark scheme and `.dark`
+  on <html> against #probe-expected-dark, so a filter that drops a real case,
+  a new false positive or a misread color all fail. Scroller content is bare
+  text so clipped children do not count as page overflow.
 -->
 <html lang="en">
 <head>
@@ -55,17 +56,17 @@
   <script>document.getElementById('scrolled').scrollLeft = 40;</script>
   <script type="application/json" id="probe-expected">
     {
-      "darkBackgroundControls": ["black-on-navy", "icon-button", "oklch-dark"],
+      "darkBackgroundControls": { "black-on-navy": 1.16, "icon-button": 1.93, "oklch-dark": 17.18 },
       "underlinedNavLinks": ["nav-text"],
       "scrolledOnLoad": ["scrolled"],
       "sidewaysScrollers": ["scrolled", "scroller-idle"],
       "overflowingElements": ["too-wide"],
-      "sameAsParentFill": ["same-pill", "black-pill"]
+      "sameAsParentFill": { "same-pill": 1, "black-pill": 1 }
     }
   </script>
   <script type="application/json" id="probe-expected-dark">
     {
-      "sameAsParentFill": ["class-pill", "scheme-pill", "black-pill"]
+      "sameAsParentFill": { "class-pill": 1, "scheme-pill": 1.02, "black-pill": 1 }
     }
   </script>
 </body>
