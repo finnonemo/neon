@@ -148,6 +148,38 @@ test('integration reference supplies styles, icons, theme switching and logo ove
   await page.screenshot({ path: test.info().outputPath('integration-dark.png') });
 });
 
+// Text on a colored fill takes Text.text-on-color (white) in both modes; inverse keeps text-inverse for its white dark background.
+const white = 'rgb(255, 255, 255)';
+const buttonLabels = {
+  light: { primary: white, positive: white, negative: white, inverse: white, secondary: 'rgba(0, 0, 0, 0.85)',
+    transparent: 'rgb(1, 23, 43)', 'local color': 'rgba(0, 0, 0, 0.65)', 'icon primary': white },
+  dark: { primary: white, positive: white, negative: white, inverse: 'rgba(0, 0, 0, 0.85)', secondary: white,
+    transparent: 'rgb(65, 81, 96)', 'local color': 'rgba(255, 255, 255, 0.65)', 'icon primary': white },
+};
+const onColorParts = {
+  'checkbox checkmark': page => page.getByTestId('checkbox-icon'),
+  'calendar selected day': page => page.locator('[aria-pressed="true"]').getByText('15', { exact: true }),
+  'dot count': page => page.getByTestId('dotcount-container'),
+  'dot symbol icon': page => page.getByTestId('dotsymbol-inner-container'),
+  'avatar initial': page => page.getByTestId('avatar-fallback'),
+};
+// Icons nest their glyph, so read the innermost element's color.
+const glyphColor = el => { while (el.lastElementChild) el = el.lastElementChild; return getComputedStyle(el).color; };
+for (const root of ['starter', 'integration']) {
+  for (const mode of ['light', 'dark']) {
+    test(`${root} ${mode}: text on colored fills follows text-on-color`, async ({ page }) => {
+      await page.goto(`/?layout=on-color&root=${root}&mode=${mode}`);
+      for (const [name, color] of Object.entries(buttonLabels[mode])) {
+        await expect(page.getByRole('button', { name, exact: true })).toHaveCSS('color', color);
+      }
+      for (const [name, locate] of Object.entries(onColorParts)) {
+        await expect.poll(() => locate(page).evaluate(glyphColor), { message: name }).toBe(white);
+      }
+      await page.screenshot({ path: test.info().outputPath(`on-color-${root}-${mode}.png`), fullPage: true });
+    });
+  }
+}
+
 for (const layout of ['app', 'content', 'simple', 'board', 'immersive']) {
   for (const width of [375, 1440]) {
     test(`${layout} ${width}px: dark surface and logo`, async ({ page }) => {

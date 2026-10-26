@@ -16,7 +16,7 @@ CDS is the React implementation path. For non-React targets, keep the existing f
 
 Inspect the active entry/theme imports and provider tree, not just filenames. Record relevant paths, theme directory, styling syntax and theme-mode owner. A working Finnomena installation should be reused. A `theme.css` file neither proves it is imported nor requires an upgrade.
 
-For CDS, locate `MediaQueryProvider`, `ThemeProvider`, `PortalProvider` and the theme passed to them. Hand off existing locations so implementation updates that wiring only if needed, never adds duplicate providers. For CSS, inspect variable scope and the app's selectors. Preserve customized declarations and existing font loader. Examine source types in the installed package when API support is uncertain.
+For CDS, locate `MediaQueryProvider`, `ThemeProvider`, `ComponentConfigProvider`, `PortalProvider` and the theme passed to them. Hand off existing locations so implementation updates that wiring only if needed, never adds duplicate providers. For CSS, inspect variable scope and the app's selectors. Preserve customized declarations and existing font loader. Examine source types in the installed package when API support is uncertain.
 
 ## Server-rendered React
 

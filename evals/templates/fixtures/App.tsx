@@ -1,8 +1,12 @@
 import { useState } from "react";
 import { Box } from "@coinbase/cds-web/layout";
-import { Button } from "@coinbase/cds-web/buttons";
+import { Button, IconButton } from "@coinbase/cds-web/buttons";
 import { Icon } from "@coinbase/cds-web/icons";
 import { Text } from "@coinbase/cds-web/typography";
+import { Checkbox } from "@coinbase/cds-web/controls";
+import { Calendar } from "@coinbase/cds-web/dates";
+import { DotCount, DotSymbol } from "@coinbase/cds-web/dots";
+import { Avatar } from "@coinbase/cds-web/media";
 import { AppRoot } from "./AppRoot";
 import { AppRoot as IntegrationRoot } from "./IntegrationRoot";
 import { AppShell } from "../layout/AppShell";
@@ -44,6 +48,25 @@ function Details({ selected }: { selected: number | null }) {
   </Box>;
 }
 
+const calendarDate = new Date(2026, 9, 15);
+// Each on-color foreground neonComponentConfig overrides, plus the cases it
+// must leave alone (inverse, secondary, transparent, an explicit color).
+function OnColorSamples() {
+  return <Box padding={2} display="flex" flexWrap="wrap" gap={2} background="bg">
+    {(["primary", "positive", "negative", "inverse", "secondary"] as const).map((variant) =>
+      <Button key={variant} variant={variant}>{variant}</Button>)}
+    <Button transparent>transparent</Button>
+    <Button color="fgMuted">local color</Button>
+    <IconButton name="home" variant="primary" accessibilityLabel="icon primary" />
+    <IconButton name="home" accessibilityLabel="icon secondary" />
+    <Checkbox checked onChange={() => {}}>Agree</Checkbox>
+    <DotCount count={7} />
+    <span data-testid="dot-symbol"><DotSymbol iconName="home" /></span>
+    <Avatar name="Finn" testID="avatar" />
+    <Calendar selectedDate={calendarDate} seedDate={calendarDate} />
+  </Box>;
+}
+
 export function App() {
   const [activePane, setActivePane] = useState<ActivePane>("content");
   const [selected, setSelected] = useState<number | null>(null);
@@ -55,7 +78,7 @@ export function App() {
     ...(params.has("uncontrolled") ? {} : { activePane, onActivePaneChange: setActivePane }),
     paneLabels: { content: "Content", inspector: "Details", viewDetails: "ดูรายละเอียด", backToContent: "กลับไปที่รายการ" },
   };
-  const Provider = layout === "integration" ? IntegrationRoot : AppRoot;
+  const Provider = layout === "integration" || params.get("root") === "integration" ? IntegrationRoot : AppRoot;
   return <Provider colorScheme={dark ? "dark" : "light"}>
     {layout === "integration" ? <Box padding={2} background="bg" color="fg">
       <Text as="h1" font="title2">Integration — ภาษาไทย / English</Text>
@@ -64,7 +87,8 @@ export function App() {
       <Logo /><Logo tone="light" />
       <button onClick={() => setDark(!dark)}>Toggle theme</button>
       {clicked && <Text role="status">Completed</Text>}
-    </Box> : layout === "app" ? <AppShell {...props} />
+    </Box> : layout === "on-color" ? <OnColorSamples />
+      : layout === "app" ? <AppShell {...props} />
       : layout === "content" ? <ContentLayout {...props} />
       : layout === "simple" ? <SimpleLayout {...props} />
       : layout === "board" ? <MultiColumnLayout {...props} columns={[content]} />
