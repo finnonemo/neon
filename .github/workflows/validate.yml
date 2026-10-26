@@ -1,6 +1,8 @@
 name: Validate Neon
 on:
   pull_request:
+  # A merge queue waits for required checks on its merge group.
+  merge_group:
   push:
     branches: [main]
 permissions:
