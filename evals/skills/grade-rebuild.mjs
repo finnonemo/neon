@@ -6,10 +6,12 @@
 //   node evals/skills/grade-rebuild.mjs --source <app> --rebuild <app>-cds [--shots <name>] [--json]
 //
 // `--shots <name>` also builds the rebuild into .local/shots/<name> with a
-// relative base and adds an `eval-shots` server for .local/shots to
-// .claude/launch.json, so the preview opens http://localhost:4793/<name>/.
+// relative base, copies browser-probe.js beside it and adds an `eval-shots`
+// server for .local/shots to .claude/launch.json. The preview opens
+// http://localhost:4793/<name>/ and runs the probe with
+// `eval(await (await fetch('/browser-probe.js')).text())`.
 import { execFileSync, spawnSync } from 'node:child_process';
-import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { basename, extname, join, resolve } from 'node:path';
 import { parseArgs } from 'node:util';
@@ -75,9 +77,14 @@ function run(command, args, cwd) {
   return { pass: result.status === 0, detail: result.status === 0 ? '' : output };
 }
 
+// Bundles with the app's esbuild when it has one. Otherwise copies the file
+// alone and lets Node strip its types, which covers mock files whose only
+// imports are `import type`.
 async function loadMock(file, esbuild, workDirectory) {
-  const outfile = join(workDirectory, `${basename(file)}-${Math.random().toString(36).slice(2)}.mjs`);
-  execFileSync(esbuild, [file, '--bundle', '--format=esm', '--platform=node', '--log-level=error', `--outfile=${outfile}`]);
+  const typed = /\.(m?ts|tsx)$/.test(file);
+  const outfile = join(workDirectory, `${basename(file)}-${Math.random().toString(36).slice(2)}.${esbuild || !typed ? 'mjs' : 'mts'}`);
+  if (esbuild) execFileSync(esbuild, [file, '--bundle', '--format=esm', '--platform=node', '--log-level=error', `--outfile=${outfile}`]);
+  else copyFileSync(file, outfile);
   return import(pathToFileURL(outfile).href);
 }
 
@@ -103,11 +110,11 @@ async function grade({ source, rebuild }) {
   if (existsSync(join(rebuild, 'tsconfig.json'))) checks.push({ name: 'typecheck', ...run('npx', ['--no-install', 'tsc', '--noEmit'], rebuild) });
   checks.push({ name: 'build', ...run('npm', ['run', 'build', '--silent'], rebuild) });
 
-  const esbuild = join(rebuild, 'node_modules/.bin/esbuild');
+  // Vite 8 ships no esbuild, so try the source app's copy before Node.
+  const esbuild = [rebuild, source].map(app => join(app, 'node_modules/.bin/esbuild')).find(existsSync);
   const mocks = /mock/i;
   const pairs = pairMockFiles(sourceFiles(join(source, 'src'), mocks), sourceFiles(join(rebuild, 'src'), mocks));
   if (!pairs.length) add('mock data', true, 'source has no mock files');
-  else if (!existsSync(esbuild)) add('mock data', false, `missing ${esbuild}`);
   else {
     const workDirectory = mkdtempSync(join(tmpdir(), 'neon-mocks-'));
     try {
@@ -132,6 +139,7 @@ function buildShots(rebuild, name) {
   const outDir = join(repositoryRoot, '.local/shots', name);
   mkdirSync(outDir, { recursive: true });
   const result = run('npx', ['--no-install', 'vite', 'build', '--base', './', '--outDir', outDir, '--emptyOutDir'], rebuild);
+  copyFileSync(join(import.meta.dirname, 'browser-probe.js'), join(repositoryRoot, '.local/shots/browser-probe.js'));
   const launchPath = join(repositoryRoot, '.claude/launch.json');
   const launch = existsSync(launchPath) ? JSON.parse(readFileSync(launchPath, 'utf8')) : undefined;
   mkdirSync(join(repositoryRoot, '.claude'), { recursive: true });
