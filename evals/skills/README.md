@@ -6,7 +6,8 @@ Run each request with the named context, first against the baseline and then the
 | --- | --- |
 | Add Finnomena approvals to an existing themed React/CDS app; retain providers/routes/services | Reuses installation and shell; builds actual list/detail/actions; navy foundation, indigo selection, labeled statuses |
 | Build a colorful Finnomena product landing page | Immersive composition permits prominent brand color/illustration; does not force navy/white dominance; actions remain accessible |
-| Create a Finnomena request tracker with mock data | Scaffolds in an empty destination and builds the feature; demo behavior is visible; relevant states exist |
+| Create a Finnomena request tracker with mock data | Scaffolds in an empty destination and builds the feature; no demo/mock banner or state switcher in the UI; the report names what is mocked; relevant states exist |
+| Build a Finnomena request tracker demo with mock data, labeled as a demo | Demo/mock labeling appears in the UI |
 | Change only a Vue header to Finnomena colors | No React/CDS installation, font/layout changes or global theme side effects |
 | Review this Finnomena screenshot; do not edit | Visible findings only; keyboard, other viewports and measured contrast remain unverified |
 | Make the buttons clearer after Finnomena was established | Retains brand intent without repeated onboarding |
@@ -46,6 +47,21 @@ Pass requires all of:
 Revised skill, Codex, same prompt and fixture, one sample per revision. The first revision passed the read, alias, role, pale-shade, focus and build items, but darkened disabled `slate-200/300` text to `fgMuted`, made the selected tab navy-only and collapsed three section dots to navy. After the state and marker rules were added, a second sample passed every item; desktop light-mode screenshots matched the source findings. Limits: two single samples, Codex only, light mode and one desktop width, no handler interaction, and user-level skills outside `CODEX_HOME` were visible to every run.
 
 The same colors-only prompt invoked as `$neon-create` on this fixture and on a Carbon/SCSS app (Codex, one sample each) stayed in scope and built. Both runs wrote literal indigo `#1817e7` where the adapter maps focus to `bgLinePrimary`. The Tailwind run cited style migration Example 4, which then gave literal hex values; the example now uses adapter variables. Two later samples (see [CDS rebuild](#cds-rebuild)) used `var(--color-*)` utilities without `#1817e7`; one imported the adapter, the other copied its `rgb()` declarations into `:root`.
+
+## Mock labeling
+
+Fixture: an empty folder. Request, verbatim:
+
+> $neon-create Create a Finnomena request tracker app in this folder: a list of requests with status, a detail view, and a form to add a request. There is no backend yet, so use mock data.
+
+Pass requires no demo or mock banner, chip or state switcher in the UI, and a delivery report that names what is mocked.
+
+October 2026, Codex, one sample per revision, run in parallel:
+
+- **Before (main at 1d35395):** the sidebar showed "Demo workspace · Mock data · Session only", the form footer "Created in this demo session only." and the list footer a "Mock data" chip. The report said "visibly labeled mock data". Fail.
+- **After (this revision):** no demo or mock text in the UI source. The report said "Mock data resets on refresh." Pass.
+
+Both built and typechecked. Limits: one sample per revision, Codex only, source text inspected rather than rendered screens, browser verification was blocked by the sandbox, and the explicit demo request in the scenario table was not run.
 
 ## CDS rebuild
 
