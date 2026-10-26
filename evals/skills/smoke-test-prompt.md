@@ -9,8 +9,8 @@ theme wiring, multi-page build with real states, and a verified run.
 
 ```text
 Build a new Finnomena investment app from scratch in this empty folder, using React and the
-Coinbase Design System (CDS) through Finnomena's theme. This is a demo app with mock data —
-label it clearly as a demo.
+Coinbase Design System (CDS) through Finnomena's theme. There's no backend yet, so use mock
+data/services.
 
 Build these pages, each reachable via navigation:
 1. Dashboard — portfolio total value, today's change (gain/loss with color), a breakdown of
@@ -26,7 +26,7 @@ Requirements:
 - Use Finnomena's navy/white functional theme with indigo highlights, per the shared brand
   tokens — do not invent your own colors.
 - Every page needs loading, empty and error states in addition to the populated state, using
-  mock data/services clearly labeled as mocked.
+  mock data/services. Tell me what's mocked when done.
 - Make it responsive: usable on both mobile and desktop widths.
 - After building, start the dev server and confirm each of the 4 pages actually renders
   without errors before reporting done.
@@ -55,4 +55,4 @@ the app runs (command used, what you observed).
 - Do colors match Finnomena's navy/white/indigo functional palette, not invented hex values?
 - Were all 4 pages built, each with loading/empty/error/populated states?
 - Was the dev server actually started and each page confirmed rendering (vs. just claimed)?
-- Is mocked data/behavior clearly labeled as such in the UI or report?
+- Is mocked data/behavior kept out of the shipped UI (no demo/mock banner, tag, or state-simulator control) and disclosed in the report instead?
