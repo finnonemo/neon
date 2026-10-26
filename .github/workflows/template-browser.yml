@@ -44,8 +44,14 @@ jobs:
           cache-dependency-path: |
             evals/templates/package-lock.json
             templates/vitejs-cds/package-lock.json
+            evals/skills/fixtures/shadcn-v4-app/package-lock.json
       - run: npm ci --prefix evals/templates
       - run: node evals/skills/run-probe.mjs --fixture
+      # The restyle grader and dark probe run end to end on the unmodified
+      # shadcn v4 fixture: it grades as its own result, builds, and probes.
+      - run: npm ci --prefix evals/skills/fixtures/shadcn-v4-app
+      - run: node evals/skills/grade-restyle.mjs --source evals/skills/fixtures/shadcn-v4-app --result evals/skills/fixtures/shadcn-v4-app --shots shadcn-v4
+      - run: node evals/skills/run-probe.mjs shadcn-v4 --widths 1024 --dark-class
       - run: npm test --prefix evals/templates
       - uses: actions/upload-artifact@v4
         if: always()

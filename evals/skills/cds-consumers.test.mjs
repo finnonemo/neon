@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, mkdir, writeFile, rm } from 'node:fs/promises';
+import { mkdtemp, mkdir, realpath, writeFile, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
-import { findConsumers } from '../../scripts/lib/cds-consumers.mjs';
+import { cdsPackageDirs, findConsumers } from '../../scripts/lib/cds-consumers.mjs';
 
 async function fakeCds(t, files) {
   const root = await mkdtemp(join(tmpdir(), 'neon-cds-consumers-'));
@@ -36,4 +36,18 @@ test('skips longer tokens that contain it and theme definition files', async t =
     'cds-common/esm/index.js': '',
   });
   assert.deepEqual(await findConsumers(dirs, ['blue60']), []);
+});
+
+test('cdsPackageDirs takes the first app with both CDS packages installed', async t => {
+  const root = await realpath(await mkdtemp(join(tmpdir(), 'neon-cds-apps-')));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  for (const app of ['bare', 'starter']) await mkdir(join(root, app), { recursive: true });
+  for (const name of ['cds-web', 'cds-common']) {
+    await mkdir(join(root, 'starter/node_modules/@coinbase', name), { recursive: true });
+    await writeFile(join(root, 'starter/node_modules/@coinbase', name, 'package.json'), `{"name":"@coinbase/${name}"}`);
+  }
+  const found = cdsPackageDirs([join(root, 'bare'), join(root, 'starter')]);
+  assert.equal(found.app, join(root, 'starter'));
+  assert.deepEqual(found.packageDirs, ['cds-web', 'cds-common'].map(name => join(root, 'starter/node_modules/@coinbase', name)));
+  assert.equal(cdsPackageDirs([join(root, 'bare')]), undefined);
 });

@@ -20,6 +20,8 @@ test('template-browser runs on every pull request and filters browser paths in t
   assert.match(triggers, /^  merge_group:$/m);
   assert.match(workflow, /needs: changes\n[\s\S]*?if: needs\.changes\.outputs\.browser == 'true'/);
   assert.match(workflow, /run: node evals\/skills\/run-probe\.mjs --fixture/);
+  assert.match(workflow, /run: node evals\/skills\/grade-restyle\.mjs --source evals\/skills\/fixtures\/shadcn-v4-app .*--shots shadcn-v4\n/);
+  assert.match(workflow, /run: node evals\/skills\/run-probe\.mjs shadcn-v4 .*--dark-class\n/);
   assert.match(workflow, /run: node \.github\/scripts\/browser-changes\.mjs "\$BASE" "\$HEAD"/);
 });
 
