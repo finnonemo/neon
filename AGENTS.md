@@ -23,4 +23,4 @@ Default five-role vocabulary (`needs-triage`, `needs-info`, `ready-for-agent`, `
 
 ### Domain docs
 
-Single-context: root `GLOSSARY.md` + `docs/adr/`, both created lazily. See `docs/agents/domain.md`.
+Single-context: root `GLOSSARY.md` plus ADRs in docs/adr, created when the first decision is recorded. See `docs/agents/domain.md`.
