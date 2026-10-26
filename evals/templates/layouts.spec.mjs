@@ -180,6 +180,52 @@ for (const root of ['starter', 'integration']) {
   }
 }
 
+// A value in a format CDS doesn't expect (rgb(...) where CDS wraps a bare
+// r,g,b triplet itself) is invalid CSS, and the component silently falls back.
+test('merged theme keeps each CDS key and its value format', async ({ page }) => {
+  await page.goto('/?layout=spectrum');
+  const { neon, base } = await page.evaluate(() => window.neonThemeFormats);
+  const kind = v => typeof v !== 'string' ? typeof v
+    : /^\d{1,3},\d{1,3},\d{1,3}$/.test(v) ? 'triplet' : /^(#|rgba?\(|hsla?\()/.test(v) ? 'color' : 'string';
+  const mismatches = [];
+  for (const [field, values] of Object.entries(neon)) {
+    if (!values || typeof values !== 'object') continue;
+    for (const [key, value] of Object.entries(values)) {
+      if (!base[field] || !(key in base[field])) mismatches.push(`${field}.${key}: not a CDS key`);
+      else if (kind(value) !== kind(base[field][key])) mismatches.push(`${field}.${key}: ${value} vs CDS ${base[field][key]}`);
+    }
+  }
+  expect(mismatches).toEqual([]);
+});
+
+const contrastOf = el => {
+  const parse = color => color.match(/[\d.]+/g).map(Number);
+  const lum = c => c.slice(0, 3).map(v => v / 255).map(v => v <= .04045 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4)
+    .reduce((sum, v, i) => sum + v * [.2126, .7152, .0722][i], 0);
+  const [fill, text] = [el.fill, el.text].map(parse);
+  return (Math.max(lum(fill), lum(text)) + .05) / (Math.min(lum(fill), lum(text)) + .05);
+};
+for (const mode of ['light', 'dark']) {
+  test(`${mode}: Tag and Avatar text on spectrum fills reaches 4.5:1`, async ({ page }) => {
+    await page.goto(`/?layout=spectrum&mode=${mode}`);
+    const samples = await page.evaluate(() => {
+      const glyph = el => { while (el.lastElementChild) el = el.lastElementChild; return getComputedStyle(el).color; };
+      const tags = [...document.querySelectorAll('[data-testid^="tag-"]:not([data-testid$="--text"])')].map(el =>
+        ({ name: el.dataset.testid, fill: getComputedStyle(el).backgroundColor, text: getComputedStyle(el).color }));
+      // Avatar paints its circle with currentColor from the colorscheme wrapper.
+      const avatars = [...document.querySelectorAll('[data-sample^="avatar-"]')].map(el =>
+        ({ name: el.dataset.sample, fill: getComputedStyle(el.querySelector('[data-colorscheme]')).color,
+          text: glyph(el.querySelector('[data-testid$="-fallback"]')) }));
+      return [...tags, ...avatars];
+    });
+    expect(samples).toHaveLength(6 * 2 + 8);
+    for (const sample of samples) {
+      expect(contrastOf(sample), `${sample.name}: ${sample.text} on ${sample.fill}`).toBeGreaterThanOrEqual(4.5);
+    }
+    await page.screenshot({ path: test.info().outputPath(`spectrum-${mode}.png`), fullPage: true });
+  });
+}
+
 for (const layout of ['app', 'content', 'simple', 'board', 'immersive']) {
   for (const width of [375, 1440]) {
     test(`${layout} ${width}px: dark surface and logo`, async ({ page }) => {

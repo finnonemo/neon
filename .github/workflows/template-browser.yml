@@ -22,6 +22,12 @@ permissions:
 jobs:
   template-browser:
     runs-on: ubuntu-latest
+    # Ships Chromium and its system libraries, so no apt install per run. The
+    # tag matches @playwright/test in evals/templates/package.json
+    # (evals/skills/template-browser-workflow.test.mjs checks it).
+    container:
+      image: mcr.microsoft.com/playwright:v1.61.1-noble
+      options: --user 1001
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -32,7 +38,6 @@ jobs:
             evals/templates/package-lock.json
             templates/vitejs-cds/package-lock.json
       - run: npm ci --prefix evals/templates
-      - run: npx --prefix evals/templates playwright install --with-deps chromium
       - run: npm test --prefix evals/templates
       - uses: actions/upload-artifact@v4
         if: always()
