@@ -66,5 +66,7 @@ export async function checkPlainTextReferences(root, files, { ignored = [] } = {
       }
     });
   }
-  if (missing.length) throw new Error(`Missing plain-text references:\n${missing.join('\n')}`);
+  if (missing.length) {
+    throw new Error(`Missing plain-text references:\n${missing.join('\n')}\nPoint at an existing file, write an app-relative path with a leading ./, or describe the artifact instead of naming a file.`);
+  }
 }
