@@ -25,6 +25,7 @@ For existing UI, omitted `composition` means `preserve`. Set `adapt` for explici
 | Existing non-React app | `neon-redesign` for styling; preserve framework |
 | Explicit non-React new app | Use the framework's normal scaffold, then the CSS styling path; the Neon starter is React-only |
 | Explicit rebuild of an existing React app on CDS | `neon-create`; rebuild path into a new directory |
+| Campaign or landing page with a supplied reference design | `neon-create` for a new page, `neon-redesign` for an existing one; both apply the [reference design](reference-design.md) procedure |
 | Explicit CDS adoption in React | `neon-create`; integration path |
 | Target or integration choice remains unclear | `neon-audit`; inspect only missing evidence |
 
@@ -51,8 +52,12 @@ type NeonContext = {
   verificationCommands: string[];
   surface?: 'functional' | 'immersive';
   composition?: 'preserve' | 'adapt';
+  referenceDesign?: string;
+  brandIntensity?: 'finnomena-led' | 'blended' | 'reference-led';
 };
 ```
+
+`referenceDesign` and `brandIntensity` apply to campaign pages only.
 
 `tier`: `colors` uses CSS colors only; `visual-system` also uses brand typography, spacing and radius; `cds` uses real CDS components and the Finnomena theme. Tier does not grant composition changes. Omit `surface` until known; do not guess it to fill a record. Unknown framework/rendering stays `unknown`; missing package manager stays `null`. Other unavailable evidence can remain empty with its uncertainty noted. Only investigate unknowns that affect the next action.
 
