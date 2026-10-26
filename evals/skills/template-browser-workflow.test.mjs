@@ -10,3 +10,12 @@ test('template-browser container matches the pinned Playwright version', async (
   const image = workflow.match(/mcr\.microsoft\.com\/playwright:v([\d.]+)-/)?.[1];
   assert.equal(image, devDependencies['@playwright/test']);
 });
+
+// The probe fixture runs only in this workflow, so a probe edit must trigger it.
+test('template-browser runs the probe fixture whenever the probe changes', async () => {
+  const workflow = await readFile(new URL('../../.github/workflows/template-browser.yml', import.meta.url), 'utf8');
+  assert.match(workflow, /run: node evals\/skills\/run-probe\.mjs --fixture/);
+  for (const path of ['evals/skills/browser-probe.js', 'evals/skills/probe-fixture.html', 'evals/skills/run-probe.mjs']) {
+    assert.equal(workflow.split(`- ${path}\n`).length - 1, 2, `${path} in both pull_request and push paths`);
+  }
+});

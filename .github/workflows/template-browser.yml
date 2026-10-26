@@ -7,6 +7,9 @@ on:
       - theme/**
       - scripts/lib/assemble-starter.mjs
       - scripts/lib/assets.mjs
+      - evals/skills/browser-probe.js
+      - evals/skills/probe-fixture.html
+      - evals/skills/run-probe.mjs
       - .github/workflows/template-browser.yml
   push:
     branches: [main]
@@ -16,6 +19,9 @@ on:
       - theme/**
       - scripts/lib/assemble-starter.mjs
       - scripts/lib/assets.mjs
+      - evals/skills/browser-probe.js
+      - evals/skills/probe-fixture.html
+      - evals/skills/run-probe.mjs
       - .github/workflows/template-browser.yml
 permissions:
   contents: read
@@ -38,6 +44,7 @@ jobs:
             evals/templates/package-lock.json
             templates/vitejs-cds/package-lock.json
       - run: npm ci --prefix evals/templates
+      - run: node evals/skills/run-probe.mjs --fixture
       - run: npm test --prefix evals/templates
       - uses: actions/upload-artifact@v4
         if: always()
