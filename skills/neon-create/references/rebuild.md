@@ -6,13 +6,14 @@ Read only when the employee explicitly asks to rebuild or move a whole existing 
 
 1. **Check the source.** Mock data and simulated services proceed. A real backend, authentication or shared service contract gets one question: rebuild, or migrate incrementally per [CSS-to-CDS migration](../../neon-audit/references/theme-integration.md#css-to-cds-migration).
 2. **Choose a new destination.** Use an empty sibling directory such as `<app>-cds` and assemble it per [scaffold](scaffold.md). The source app stays read-only: no edits, deletions or dependency changes.
-3. **Write the parity inventory** in the conversation: every route and screen, feature and action, filter and search, list/form state (loading, empty, no-match, error, success), user-facing text in each language, displayed data and status meanings, and timed or simulated demo behavior. Done when every source route has been opened (in a browser when available) and each item names its source location.
+3. **Write the parity inventory** in the conversation: every route and screen, feature and action, filter and search, list/form state (loading, empty, no-match, error, success), user-facing text in each language, displayed data and status meanings, responsive rules (each element the source hides, resizes or rearranges at a breakpoint, such as `.phc-add-column-zone { display: none }` under the mobile media query or columns sized at `100vw`), and timed or simulated demo behavior. Done when every source route has been opened (in a browser when available) and each item names its source location.
 
 ## Build
 
 - **Carry logic over verbatim.** Copy mock data, services and API clients, pure filter/calculation modules and their tests. When logic sits inside a component, extract it unchanged first. The starter is strict TypeScript without `allowJs`: rename copied modules to `.ts` and add types only. Copied tests keep their original runner; add only that runner and its script.
 - **Rewrite only the UI** per [feature implementation](new-ui-workflow.md). Composition is `adapt`: choose the starter layout by task, keeping routes, handlers, data meaning and bilingual text.
 - **Leave the source UI stack behind.** The result contains no source UI library (Carbon, Tailwind, their classes or stylesheets). Where CDS lacks a component, compose CDS primitives. Style CDS components through their props; new stylesheets cover only app-owned elements per the [styling rule](cds-integration.md#component-apis-and-tokens). CDS supplies the reset. Non-UI libraries such as date or chart packages may stay when CDS has no equivalent; report each.
+- **Carry each responsive rule into the rebuild.** Recheck copied effects that depend on layout at each width: a scroll-to-end effect on a container that now overflows loads it scrolled sideways and clips its left edge.
 - Keep the starter's providers, fonts and `AppRoot` color-scheme setup.
 
 ## Verify
