@@ -1,6 +1,6 @@
 ---
 name: neon-redesign
-description: Use when restyling existing Finnomena or neon UI through CSS tokens without adopting CDS, including non-React apps, partial changes and explicitly requested layout or hierarchy redesign. Applies to established Finnomena intent. Use neon-create for CDS adoption.
+description: Use when restyling existing Finnomena or neon UI through CSS tokens without adopting CDS, including non-React apps, partial changes, pages restyled from a supplied reference design and explicitly requested layout or hierarchy redesign. Applies to established Finnomena intent. Use neon-create for CDS adoption.
 ---
 
 # Restyle Finnomena UI
@@ -28,6 +28,7 @@ When target, scope and theme variables are known, begin with the affected styles
 ## Conditional references
 
 - Plain CSS/shadcn formats or mapping examples: relevant sections of [style migration](references/style-migration.md).
+- Any supplied reference design or outside style file: [reference design](../neon-audit/references/reference-design.md).
 - Missing CSS asset: [CSS setup](references/css-integration.md#css-setup); whole-app installation differs from a local override.
 - Typography expansion: [fonts](../neon-audit/references/theme-integration.md#font-loading). Reusing the asset still requires font loading and layout checks.
 - Mode selectors, CSS-to-CDS upgrade or customized-file conflict: relevant sections of [theme integration](../neon-audit/references/theme-integration.md).

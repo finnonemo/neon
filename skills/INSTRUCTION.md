@@ -31,7 +31,19 @@ Start from the employee's main task and the information needed to complete it. U
 
 **Functional screens:** prioritize scanning, comparison and action. Forms use clear labels, nearby help and validation. Tables suit dense comparisons; lists suit short summaries. A detail pane earns its space when users need to inspect and act on a selected record. Reuse the existing shell. In the starter, `AppShell` supplies list/detail emphasis, `ContentLayout` emphasizes the main content, `SimpleLayout` omits the inspector, and `MultiColumnLayout` is for explicit board workflows. These names are not guaranteed exports in an existing app.
 
-**Immersive screens:** colorful Finnomena surfaces, expressive illustrations and palette-based gradients are allowed when they support the story. Navy/white need not dominate every section. Use a focused reading sequence, clear proposition, relevant imagery and an identifiable next action. Choose accessible action colors for each surface; indigo is not a mandatory hero or CTA color. Keep status colors semantic when communicating system feedback. `ImmersiveLayout` is a starter option, not a mandatory landing-page recipe. User-supplied reference designs can inform composition when selected and available; their source-brand colors do not supersede this contract.
+**Immersive screens:** colorful Finnomena surfaces, expressive illustrations and palette-based gradients are allowed when they support the story. Navy/white need not dominate every section. Use a focused reading sequence, clear proposition, relevant imagery and an identifiable next action. Choose accessible action colors for each surface; indigo is not a mandatory hero or CTA color. Keep status colors semantic when communicating system feedback. `ImmersiveLayout` is a starter option, not a mandatory landing-page recipe. A user-supplied reference design contributes only what its [Brand Intensity](#reference-designs-and-brand-intensity) allows; it never supersedes the Brand Floor.
+
+## Reference designs and Brand Intensity
+
+A reference design is an outside style description (for example from Refero Styles) that the employee supplies for a campaign or landing page. Brand Intensity decides how much of it survives. It applies to campaign and landing pages only; functional screens use this contract and take at most section structure from a reference.
+
+| Brand Intensity | Reference design keeps | Finnomena supplies |
+| --- | --- | --- |
+| Finnomena-led | Section structure and reading sequence | Everything else in this contract |
+| Blended (default) | Also geometry (radius, spacing rhythm, shadow, type scale and weight) and motion | Palette, typeface, logo |
+| Reference-led | Also neutral and surface colors, such as a dark canvas | Accent and action colors, typeface, logo |
+
+**Brand Floor**, kept at every level: the Finnomena logo, IBM Plex Sans Thai, Finnomena accent and action colors, accessible contrast for text and actions on every surface, and no source-brand logo, imagery, illustration, copy, product name or font file. Status colors stay semantic. A reference's accent color becomes the matching Finnomena role, never a new brand value.
 
 ## Task-based choices
 

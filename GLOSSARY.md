@@ -2,6 +2,8 @@
 
 Neon distributes Finnomena's brand theme, a CDS starter and the skills that apply them to employees' apps.
 
+The package and installing terms describe Neon itself. The employee work terms describe what employees bring and ask for.
+
 ## Language
 
 ### Package
@@ -35,3 +37,51 @@ _Avoid_: validation, dry run
 **Package-manager evidence**:
 The lockfiles and declared `packageManager` field found in the target or its parent directories, up to the repository root. The installer uses it to choose npm, pnpm, yarn or bun.
 _Avoid_: project config
+
+### Employee work
+
+**Campaign Page**:
+A public, story-led page such as a campaign, landing, event or recruiting page, built with an immersive layout.
+_Avoid_: microsite, marketing page
+
+**Back Office**:
+An internal management screen built with a functional layout for scanning, comparing and acting on records.
+_Avoid_: admin, dashboard (alone), internal tool
+
+**Product Feature**:
+New functionality added to a Finnomena product, built with a functional layout.
+_Avoid_: new feature (alone), module
+
+**Restyle**:
+Bringing an existing app to Finnomena branding while keeping its framework, components and behavior.
+_Avoid_: theming (alone), reskin
+
+**Rebuild**:
+Recreating an existing React app on CDS from the Neon starter in a new directory, treating the original as the spec rather than as code to port.
+_Avoid_: migration, port, CDS adoption (which installs CDS into the existing app instead)
+
+**Tier**:
+How far a skill's styling reaches: colors only, visual system (adds typography, spacing and radius) or CDS (the Finnomena theme plus real CDS components).
+_Avoid_: level, mode, install mode
+
+**Composition**:
+The arrangement and hierarchy of a screen, chosen independently of tier; preserved unless the employee explicitly asks to adapt it.
+_Avoid_: layout change, redesign (alone)
+
+### Reference designs
+
+**Reference Design**:
+An outside style description of another product, brought by the employee (for example from Refero Styles), that shapes a Campaign Page's look while Finnomena keeps ownership of its brand.
+_Avoid_: template, theme, inspiration
+
+**Brand Contract**:
+Finnomena's visual language and semantic color rules; wins over any Reference Design on every property it owns.
+_Avoid_: design guide, style guide
+
+**Brand Intensity**:
+How much of a Reference Design survives on a Campaign Page: Finnomena-led (only its section structure), Blended (also its geometry and motion) or Reference-led (also its neutral surfaces).
+_Avoid_: strength, mix, Finnomena level
+
+**Brand Floor**:
+The Finnomena properties no Brand Intensity may remove: the Finnomena logo, Finnomena typeface, Finnomena accent and action colors, accessible contrast, and the absence of any source brand's logo, imagery, copy or product names.
+_Avoid_: minimum branding, baseline

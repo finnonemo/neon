@@ -1,6 +1,6 @@
 ---
 name: neon-create
-description: Use when building Finnomena or neon features, screens, components or new React apps with Coinbase Design System, rebuilding an existing React app on it, or integrating its theme into React. Applies to established Finnomena intent. Use neon-redesign for CSS-only styling and neon-review for review-only requests.
+description: Use when building Finnomena or neon features, screens, components, landing pages or new React apps with Coinbase Design System, including pages styled from a supplied reference design; rebuilding an existing React app on CDS; or integrating its theme into React. Applies to established Finnomena intent. Use neon-redesign for CSS-only styling and neon-review for review-only requests.
 ---
 
 # Build Finnomena features with CDS
@@ -29,6 +29,7 @@ If the app already has a working Finnomena CDS theme, start with the requested c
 
 - New project: [scaffold and layout](references/scaffold.md). Never scaffold over a nonempty app.
 - Explicit rebuild of an existing React app on CDS: [rebuild](references/rebuild.md), into a new directory.
+- Any supplied reference design or outside style file: [reference design](../neon-audit/references/reference-design.md).
 - Theme/provider/dependency changes: [CDS integration](references/cds-integration.md). Preserve customized files and theme-mode ownership.
 - Complex feature states or existing-app integration: [new UI workflow](references/new-ui-workflow.md).
 - Font, mode, migration or installer conflict: the matching section of [theme integration](../neon-audit/references/theme-integration.md).

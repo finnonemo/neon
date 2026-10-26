@@ -12,6 +12,10 @@ Run each request with the named context, first against the baseline and then the
 | Review this Finnomena screenshot; do not edit | Visible findings only; keyboard, other viewports and measured contrast remain unverified |
 | Make the buttons clearer after Finnomena was established | Retains brand intent without repeated onboarding |
 | Build a CDS settings screen with no Finnomena context | Does not infer Finnomena branding from CDS alone |
+| Build a Finnomena event landing page from an attached Refero reference design | Starts at Blended without asking; keeps reference geometry; Finnomena palette, IBM Plex Sans Thai and logo; no source-brand name, copy or imagery; offers the dial |
+| Follow-up: "ให้ดู finnomena มากขึ้น" | Moves exactly one level toward Finnomena-led; content, flow and composition unchanged |
+| Follow-up: "use the reference's own colors and font" at Reference-led | Stays at Reference-led and explains the Brand Floor; no source font or accent color |
+| Attach a reference design to a back office screen request | Functional contract; takes at most section structure; does not offer the dial |
 | Colors-only restyle of a Tailwind v4 app that uses stock utilities only | See [Tailwind colors-only regression](#tailwind-colors-only-regression) |
 | Rebuild an existing React prototype on CDS; colors-only and feature requests on the same apps | See [CDS rebuild](#cds-rebuild) |
 
@@ -214,6 +218,17 @@ Every run finished on its first attempt and left no `auth.json`. Every sample pa
   - The `/tmp` cleanup between pairs is a method change from the re-sample.
   - Every run read CDS integration, so the re-run cannot show whether the rebuild reference's `Box` clause matters on its own.
   - The runs predate the starter layout and CDS integration changes merged from PRs #20 and #22.
+
+## Reference design evaluation
+
+See [the reference design protocol](reference-design-protocol.md) for the Brand Intensity matrix. Third-party reference designs and generated pages stay under `.local/`.
+
+October 2026, Codex, one sample per revision. The fixture holds `./DESIGN.md`, a synthetic dark style for an invented brand, Lumora: lime `#C6FF3D` actions, ultraviolet accent, Space Grotesk "installed from Google Fonts", 2px radius, fade-up motion and the line "See further.". Any of those brand strings in the output is a Brand Floor leak.
+
+- **Landing page** ("using ./DESIGN.md as the reference design"). Before (main): did not read a reference procedure; `#c6ff3d` appears 18 times, plus `#7a5cff` and Space Grotesk, and the report says "the reference's dark styling". Fail. After: read the reference design procedure; no Lumora strings; kept the reference's timeline and fade-up motion (24px, 400ms, 80ms stagger); the report names what came from the reference and offers a more Finnomena-led or reference-led look. Pass on the Brand Floor and the dial offer.
+- **Back office screen** with the same file "as a reference". Before and after: no Lumora strings and no dial offered. After also read the reference design procedure. Pass both; no measurable difference.
+
+Limits: one sample each, Codex only, source text inspected rather than rendered screens (browser checks were blocked by the sandbox), the 2px radius did not visibly carry over so Blended geometry is only partly shown, follow-up dial moves and Reference-led were not run, and the reference is synthetic rather than a Refero style.
 
 ## Flow refactor evaluation
 

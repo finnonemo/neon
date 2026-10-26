@@ -103,6 +103,15 @@ Use the content provided below and mark any missing registration integration.
 
 Immersive pages can be expressive. Functional controls and status feedback should remain clear and accessible.
 
+### Start a landing page from a reference design
+
+```text
+ทำ landing page Finnomena สำหรับงานสัมมนาพนักงาน โดยใช้ DESIGN.md นี้เป็น
+reference (แนบไฟล์) มีหัวข้อ กำหนดการ และปุ่มลงทะเบียนไปที่ลิงก์ที่ให้ไว้
+```
+
+Bring an outside reference design, for example from [Refero Styles](https://styles.refero.design). Neon starts at **Blended**: the reference's layout, spacing, radius and motion, with Finnomena colors, typeface and logo. Ask "ให้ดู finnomena มากขึ้น" or "make it closer to the reference" to move one step at a time between **Finnomena-led**, **Blended** and **Reference-led**. At every level the Finnomena logo, typeface, action colors and readable contrast stay, and nothing from the source brand (logo, imagery, copy, product names) is carried over. Brand Intensity applies to campaign and landing pages; back office screens and product features keep the standard Finnomena look.
+
 ### Restyle an existing screen without adopting CDS
 
 ```text
@@ -148,6 +157,7 @@ Start with the task: create a feature, redesign existing UI, or review the resul
 - New feature in an already themed CDS app → `neon-create`, reusing the current setup.
 - Existing app with unclear theming needs → `neon-audit` → `neon-create` or `neon-redesign`.
 - Colors-only change → `neon-redesign`.
+- Landing page from a reference design → `neon-create` for a new page, `neon-redesign` for an existing one.
 - UI quality check → `neon-review`.
 
 ## Choose how much to change

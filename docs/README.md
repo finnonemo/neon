@@ -2,6 +2,7 @@
 
 Maintained, tracked documentation about this repository itself — not the distributed plugin's own docs (those are `README.md` at the repo root, `skills/INSTRUCTION.md`, and each skill's `SKILL.md`).
 
+- [adr](adr/) — recorded product and architecture decisions. Terms they use are defined in the root [GLOSSARY.md](../GLOSSARY.md).
 - [agents/](agents/) — configuration read by the engineering agent skills: issue tracker (GitHub), triage label vocabulary, and how to consume domain docs.
 - [`architecture/repository-structure.md`](architecture/repository-structure.md) — the full directory map: what's here, who owns it, what's actually packaged into the distributed plugin, and where local/generated material (research, notes, evaluator runs) lives instead.
 
