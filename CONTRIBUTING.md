@@ -36,7 +36,7 @@ For skill changes, compare baseline/revised decisions and representative app beh
 
 ## Review and release
 
-A pull request should state the original problem, resulting employee behavior, validation performed, and material limitations. Include before/after evidence for a visual change. A design owner should review mapping changes; do not label a provisional mapping approved without that review.
+A pull request should state the original problem, resulting employee behavior, validation performed, and material limitations. Reviewers apply [CODING_STANDARDS.md](CODING_STANDARDS.md), including its rule for evidence claims in pull requests and eval records. Include before/after evidence for a visual change. A design owner should review mapping changes; do not label a provisional mapping approved without that review.
 
 Before a release, package into an empty destination and repeat resource checks, verify an installed-host smoke scenario, and review relevant generated UI. Keep host installation, browser checks and design approval marked unverified until actually performed. The CI workflow validates pull requests; it neither publishes a plugin nor changes branch protection. Maintainers can make the `validate` job required in repository settings.
 

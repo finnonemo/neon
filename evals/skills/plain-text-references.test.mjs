@@ -18,7 +18,7 @@ async function fixture(t, files) {
 
 test('rejects a bare Markdown filename that no longer exists anywhere in the root', async t => {
   const root = await fixture(t, { 'skills/demo/SKILL.md': 'See DESIGN.md for the palette.\n' });
-  await assert.rejects(checkPlainTextReferences(root, ['skills/demo/SKILL.md']), /skills\/demo\/SKILL.md:1.*DESIGN.md/);
+  await assert.rejects(checkPlainTextReferences(root, ['skills/demo/SKILL.md']), /skills\/demo\/SKILL.md:1.*DESIGN.md[\s\S]*leading \.\//);
 });
 
 test('rejects a removed top-level directory named in inline code', async t => {
