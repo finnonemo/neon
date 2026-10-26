@@ -5,8 +5,19 @@ import { fileURLToPath } from 'node:url';
 import { tmpdir } from 'node:os';
 import { packagePlugin } from './package-plugin.mjs';
 import { checkMarkdownLinks } from './lib/markdown-links.mjs';
+import { checkPlainTextReferences, listFiles } from './lib/plain-text-references.mjs';
 
 const sourceRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+// Ignored paths are local or generated, so naming them in prose is expected.
+const ignored = (await readFile(join(sourceRoot, '.gitignore'), 'utf8'))
+  .split('\n').map(line => line.trim()).filter(line => line && !line.startsWith('#'));
+// Starter and example code resolve their relative paths inside an assembled app, not this tree.
+const APP_CODE = ['templates/', 'theme/examples/'];
+async function referenceFiles(root) {
+  return (await listFiles(root)).filter(file => !ignored.some(pattern => file.startsWith(pattern.replace(/^\//, '')))
+    && !APP_CODE.some(prefix => file.startsWith(prefix))
+    && (file.endsWith('.md') || (/^(theme|scripts)\//.test(file) && /\.(ts|tsx|mjs|css)$/.test(file))));
+}
 async function markdownFiles(directory) {
   const entries = await readdir(directory, { withFileTypes: true });
   const nested = await Promise.all(entries.map(entry => entry.isDirectory()
@@ -44,6 +55,7 @@ async function check(root, { includeReadme = false } = {}) {
       await access(join(root, match[1])).catch(() => { throw new Error(`Missing plugin resource in ${file}: ${match[1]}`); });
     }
   }
+  await checkPlainTextReferences(root, await referenceFiles(root), { ignored });
 }
 await check(sourceRoot, { includeReadme: true });
 const destination = await mkdtemp(join(tmpdir(), 'neon-check-'));

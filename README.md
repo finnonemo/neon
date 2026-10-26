@@ -26,7 +26,7 @@ Open the **app you want to work on** in your assistant. For a new app, specify a
 Run these commands inside Claude Code:
 
 ```text
-/plugin marketplace add pawisssh/neon
+/plugin marketplace add finnonemo/neon
 /plugin install neon@finnomena-plugins
 ```
 
@@ -37,23 +37,23 @@ Open `/plugin` and confirm that `neon` is installed and enabled. If the current 
 Run these commands:
 
 ```sh
-codex plugin marketplace add pawisssh/neon
+codex plugin marketplace add finnonemo/neon
 codex plugin add neon@finnomena-plugins
 ```
 
-Start a new thread and confirm the four `neon-*` skills are available. Invoke one directly with `@neon-create`, `@neon-audit`, `@neon-redesign`, or `@neon-review`, or just describe your request naturally (mention Finnomena) and Codex will pick the matching skill.
+Start a new thread and confirm the four `neon-*` skills are available. Invoke one directly with `$neon-create`, `$neon-audit`, `$neon-redesign`, or `$neon-review`, or just describe your request naturally (mention Finnomena) and Codex will pick the matching skill.
 
-To remove it later: `codex plugin remove neon`.
+To remove it later: `codex plugin remove neon@finnomena-plugins`.
 
 **Other skill-capable assistants**
 
 Keep a complete checkout of this repository available:
 
 ```sh
-git clone https://github.com/pawisssh/neon.git
+git clone https://github.com/finnonemo/neon.git
 ```
 
-Register the four folders under `skills/` using your assistant's supported skill-loading mechanism. Keep the checkout intact: these skills also need sibling `theme/`, `templates/`, `design/` and `scripts/` resources. Copying a `SKILL.md` alone is insufficient.
+Register the four folders under `skills/` using your assistant's supported skill-loading mechanism. Keep the checkout intact: these skills also need sibling `theme/`, `templates/` and `scripts/` resources. Copying a `SKILL.md` alone is insufficient.
 
 If your assistant supports reading a skill directly, give it the absolute path to the relevant `SKILL.md` and your app's target directory. Automatic discovery varies by host; the repository checks do not verify host installation.
 
@@ -257,7 +257,7 @@ Packaging does not publish a release. Full contribution, token update and releas
 | [`templates/vitejs-cds/`](templates/vitejs-cds/) | React starter source, layouts and Finnomena logo assets |
 | [`scripts/`](scripts/) | Theme installation, starter assembly, packaging and resource checks |
 | [`evals/skills/`](evals/skills/) | Skill scenarios and packaging regression checks |
-| [`docs/`](docs/) | Maintainer documentation and historical plans |
+| [`docs/`](docs/) | Maintainer documentation |
 
 
 

@@ -3,7 +3,7 @@
  * ThemeConfig color fields (lightSpectrum/darkSpectrum, lightColor/
  * darkColor). Hand-written, NOT generated — this is a real design decision
  * (which Finnomena role plays which CDS semantic slot), not a mechanical
- * data transform. See ../../design-md/finnomena/DESIGN.md's "Colors" section
+ * data transform. See ../../skills/INSTRUCTION.md's "Color roles" section
  * for the named brand roles this draws from, and ./color-mapping.todo.md (generated) for
  * the full reference dump of what every Finnomena semantic token resolves
  * to, which this file's assignments were built from.
@@ -21,18 +21,22 @@
  *
  * Key judgment calls made here, stated explicitly:
  * - Navy Ink fills CDS's "primary" concept (fgPrimary/bgPrimary) — per
- *   DESIGN.md's own framing, Navy is Finnomena's structural "ink" color
+ *   Finnomena's brand framing, Navy is Finnomena's structural "ink" color
  *   that plays the role black/primary plays in most systems, not a
  *   generic accent.
  * - Indigo Interactive (links/focus) fills bgLinePrimary instead, since
  *   Finnomena has two distinct "primary-ish" roles (Navy for buttons,
  *   Indigo for links/focus) that don't cleanly collapse onto CDS's smaller
  *   slug set.
- * - CDS's "gray" spectrum hue and accentSubtleGray/accentBoldGray are
- *   filled from Navy, not Finnomena's separate Grey family — DESIGN.md
- *   states Navy plays the neutral/structural role a gray scale normally
- *   would in this system ("every neutral step... is a tint of that same
- *   navy hue rather than a separate gray family").
+ * - accentSubtleGray/accentBoldGray are filled from Navy, not Finnomena's
+ *   separate Grey family — Navy plays the neutral/structural role a gray
+ *   scale normally would in this system. CDS's "gray" spectrum hue itself
+ *   is not overridden (see "Explicitly left unassigned" below).
+ * - Spectrum steps 60–100 are not same-numbered copies: they start at each
+ *   hue's lightest Finnomena shade with ≥4.5:1 against white, so text CDS
+ *   draws on or in them stays readable. Yellow 60–100 come out olive to
+ *   black, and steps 50→60 jump from tint to shade — flag these to the
+ *   design owner. Details in the Spectrum block below.
  * - Finnomena's primitive palette (tokens/colors.json) is NOT mode-branched
  *   — the same hex value exists regardless of light/dark. Where a slug has
  *   no distinct light vs. dark Finnomena semantic role, the same value is
@@ -47,7 +51,7 @@
  * - bgSecondaryWash, bgLineHeavy, bgLinePrimarySubtle — no Finnomena role
  *   names a value for these specific concepts.
  * - darkColor.bgNegativeWash / bgPositiveWash / bgWarningWash — Finnomena's
- *   own export has a known, DESIGN.md-documented data gap here: all
+ *   own export has a known data gap here: all
  *   dark-mode Notifications and Status tokens resolve to flat white. Rather
  *   than propagate that broken value, these are left at CDS's default.
  * - lightSpectrum/darkSpectrum's gray, pink, chartreuse hues — no
@@ -126,7 +130,7 @@ export const darkColor = {
   bgTertiary: "rgb(38,38,38)", // Background.background-tertiary (dark)
   bgNegative: "rgb(243,9,9)", // Text.text-negative family (dark, Red.115)
   // bgNegativeWash: omitted — dark-mode Notifications.* is a known Finnomena
-  // export data gap (see DESIGN.md), all resolve to flat white; falls to
+  // export data gap (see header comment), all resolve to flat white; falls to
   // CDS default rather than propagating that.
   bgPositive: "rgb(0,173,80)", // Support.support-success (same both modes)
   // bgPositiveWash: omitted, same dark-mode data gap as bgNegativeWash.
@@ -151,32 +155,56 @@ export const darkColor = {
 } as const;
 
 /**
- * Spectrum — populated only for the 8 CDS hues with an exact same-numbered
- * Finnomena family (confirmed: every one of CDS's 13 steps — 0,5,10,15,20,
- * 30,40,50,60,70,80,90,100 — exists as a literal shade key in each of these
- * Finnomena families, e.g. Blue.60). "gray", "pink", "chartreuse" have no
- * Finnomena source family and are left out — CDS's own defaults apply.
+ * Spectrum — populated only for the 8 CDS hues with a same-named Finnomena
+ * family. "gray", "pink", "chartreuse" have no Finnomena source family and
+ * are left out — CDS's own defaults apply.
+ *
+ * Finnomena families run 0 (white) → 100 (pure hue) → 200 (black); CDS's
+ * run 0 → 100 from wash to deep. Steps 0–50 copy the same-numbered Finnomena
+ * tint. Steps 60–100 start at the lightest Finnomena shade with ≥4.5:1
+ * against white, then go 10 Finnomena steps darker per CDS step (source
+ * steps cited per hue). CDS draws text on or in these steps — Tag pairs
+ * step 0 with blue/green/red 60, purple 80 and yellow 70 (yellow 30 when
+ * high emphasis), and Avatar puts its initial on step 60 — so the
+ * same-number tints (as pale as 1.1:1) left that text unreadable. The ≥4.5:1
+ * rule is a contrast floor, not a design sign-off;
+ * evals/skills/theme-spectrum.test.mjs checks it.
+ *
  * Light and dark are identical: Finnomena's primitive palette is not
  * mode-branched (unlike CDS's own spectrum, which inverts per mode) — using
  * the same absolute values for both is the honest reflection of the source
  * data, not a shortcut.
  */
 const spectrum = {
-  blue: { 0: "255,255,255", 5: "246,253,255", 10: "238,250,255", 15: "229,248,255", 20: "220,245,255", 30: "203,241,255", 40: "185,236,255", 50: "168,231,255", 60: "150,226,255", 70: "133,221,255", 80: "115,217,255", 90: "98,212,255", 100: "80,207,255" },
-  green: { 0: "255,255,255", 5: "242,254,248", 10: "230,253,240", 15: "217,251,233", 20: "204,250,225", 30: "179,248,211", 40: "153,245,196", 50: "128,243,181", 60: "102,241,166", 70: "77,238,151", 80: "51,236,137", 90: "25,233,122", 100: "0,231,107" },
-  orange: { 0: "255,255,255", 5: "254,247,243", 10: "254,240,232", 15: "253,232,220", 20: "252,224,208", 30: "251,209,185", 40: "250,193,161", 50: "249,178,138", 60: "247,162,114", 70: "246,147,91", 80: "245,131,67", 90: "243,116,43", 100: "242,100,20" },
-  yellow: { 0: "255,255,255", 5: "254,255,245", 10: "254,254,236", 15: "253,254,226", 20: "252,254,216", 30: "251,253,197", 40: "250,253,177", 50: "249,252,158", 60: "247,251,138", 70: "246,251,119", 80: "245,250,99", 90: "243,250,80", 100: "242,249,60" },
-  indigo: { 0: "255,255,255", 5: "243,243,254", 10: "232,232,253", 15: "220,220,251", 20: "209,209,250", 30: "186,185,248", 40: "163,162,245", 50: "140,139,243", 60: "116,116,241", 70: "93,93,238", 80: "70,69,236", 90: "47,46,233", 100: "24,23,231" },
-  purple: { 0: "255,255,255", 5: "251,246,252", 10: "247,237,249", 15: "242,227,246", 20: "238,218,243", 30: "230,200,237", 40: "221,181,231", 50: "213,163,225", 60: "204,144,219", 70: "196,126,213", 80: "187,107,207", 90: "179,89,201", 100: "170,70,195" },
-  red: { 0: "255,255,255", 5: "255,245,245", 10: "254,235,235", 15: "254,224,224", 20: "253,214,214", 30: "253,194,194", 40: "252,173,173", 50: "251,153,153", 60: "250,132,132", 70: "249,112,112", 80: "249,91,91", 90: "248,71,71", 100: "247,50,50" },
-  teal: { 0: "255,255,255", 5: "246,252,250", 10: "237,249,246", 15: "227,246,241", 20: "218,243,237", 30: "200,237,228", 40: "181,231,219", 50: "163,225,210", 60: "144,219,200", 70: "126,213,191", 80: "107,207,182", 90: "89,201,173", 100: "70,195,164" },
+  // 60–100 ← Blue.150–190
+  blue: { 0: "255,255,255", 5: "246,253,255", 10: "238,250,255", 15: "229,248,255", 20: "220,245,255", 30: "203,241,255", 40: "185,236,255", 50: "168,231,255", 60: "0,122,168", 70: "0,97,134", 80: "0,73,101", 90: "0,49,67", 100: "0,24,33" },
+  // 60–100 ← Green.145–185
+  green: { 0: "255,255,255", 5: "242,254,248", 10: "230,253,240", 15: "217,251,233", 20: "204,250,225", 30: "179,248,211", 40: "153,245,196", 50: "128,243,181", 60: "0,127,59", 70: "0,104,48", 80: "0,81,37", 90: "0,58,27", 100: "0,35,16" },
+  // 60–100 ← Orange.120–160
+  orange: { 0: "255,255,255", 5: "254,247,243", 10: "254,240,232", 15: "253,232,220", 20: "252,224,208", 30: "251,209,185", 40: "250,193,161", 50: "249,178,138", 60: "199,79,11", 70: "174,69,10", 80: "149,59,8", 90: "124,49,7", 100: "99,39,5" },
+  // 60–100 ← Yellow.160–200
+  yellow: { 0: "255,255,255", 5: "254,255,245", 10: "254,254,236", 15: "253,254,226", 20: "252,254,216", 30: "251,253,197", 40: "250,253,177", 50: "249,252,158", 60: "116,120,4", 70: "87,90,3", 80: "58,60,2", 90: "29,30,1", 100: "0,0,0" },
+  // 60–100 ← Indigo.70–110
+  indigo: { 0: "255,255,255", 5: "243,243,254", 10: "232,232,253", 15: "220,220,251", 20: "209,209,250", 30: "186,185,248", 40: "163,162,245", 50: "140,139,243", 60: "93,93,238", 70: "70,69,236", 80: "47,46,233", 90: "24,23,231", 100: "22,21,208" },
+  // 60–100 ← Purple.100–140
+  purple: { 0: "255,255,255", 5: "251,246,252", 10: "247,237,249", 15: "242,227,246", 20: "238,218,243", 30: "230,200,237", 40: "221,181,231", 50: "213,163,225", 60: "170,70,195", 70: "156,58,180", 80: "138,52,160", 90: "121,45,140", 100: "104,39,120" },
+  // 60–100 ← Red.120–160
+  red: { 0: "255,255,255", 5: "255,245,245", 10: "254,235,235", 15: "254,224,224", 20: "253,214,214", 30: "253,194,194", 40: "252,173,173", 50: "251,153,153", 60: "229,9,9", 70: "200,8,8", 80: "172,7,7", 90: "143,6,6", 100: "114,4,4" },
+  // 60–100 ← Teal.135–175
+  teal: { 0: "255,255,255", 5: "246,252,250", 10: "237,249,246", 15: "227,246,241", 20: "218,243,237", 30: "200,237,228", 40: "181,231,219", 50: "163,225,210", 60: "42,130,108", 70: "36,110,92", 80: "29,90,75", 90: "23,70,58", 100: "16,50,42" },
 } as const;
 
+/**
+ * Flattens to CDS's spectrum keys. Values stay bare "r,g,b" triplets, as in
+ * CDS's defaultTheme: CDS wraps them itself (Avatar's `rgb(var(--blue60))`,
+ * Tag's `rgb(${theme.spectrum[...]})`), so a full `rgb(...)` here would be
+ * invalid there.
+ */
 function spectrumColor(entries: typeof spectrum): Record<string, string> {
   const out: Record<string, string> = {};
   for (const [hue, shades] of Object.entries(entries)) {
     for (const [step, rgb] of Object.entries(shades)) {
-      out[`${hue}${step}`] = `rgb(${rgb})`;
+      out[`${hue}${step}`] = rgb;
     }
   }
   return out;
@@ -184,6 +212,20 @@ function spectrumColor(entries: typeof spectrum): Record<string, string> {
 
 export const lightSpectrum = spectrumColor(spectrum);
 export const darkSpectrum = spectrumColor(spectrum);
+
+/**
+ * Text.text-on-color (White.100 in both modes) for foregrounds CDS draws on a
+ * colored fill: filled primary/positive/negative buttons, the Checkbox
+ * checkmark, the selected Calendar day, DotCount, DotSymbol and the Avatar
+ * initial. CDS uses fgInverse there, which suits its own light dark-mode
+ * bgPrimary but not Finnomena's dark Navy.75. fgInverse cannot carry
+ * text-on-color in dark: it must stay Text.text-inverse (black) for text on
+ * bgInverse, which is white in dark (SegmentedTabs, the inverse Button). Dark
+ * therefore uses fg, whose value (Text.text-primary, White.100) equals
+ * text-on-color only by coincidence; re-check this if either token changes.
+ * Applied through createTheme.ts's neonComponentConfig.
+ */
+export const onColorLabel = { light: "fgInverse", dark: "fg" } as const;
 
 export const colorOverrides = {
   lightColor,

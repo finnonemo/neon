@@ -3,7 +3,7 @@ import { dirname, join, resolve } from 'node:path';
 
 // This is a focused checker for the repository's inline links and ATX headings,
 // not a general Markdown renderer. Preserve newlines when hiding fenced examples.
-function withoutFences(markdown) {
+export function withoutFences(markdown) {
   let fence;
   return markdown.split('\n').map(line => {
     const marker = line.match(/^ {0,3}(`{3,}|~{3,})(.*)$/);

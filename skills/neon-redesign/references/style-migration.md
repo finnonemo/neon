@@ -37,8 +37,10 @@ bucket:
 - **Semantic status colors** (success/warning/error, often already named
   `success`/`danger`/`warn` in the target's config or chart library) have
   real Finnomena equivalents — Positive `#009646`, Negative `#d60808`,
-  Warning `#f26414` (see DESIGN.md's Colors section for the full pastel
-  container pairs). Map these directly: a chart's "success" series color
+  Warning `#f26414` (the pastel container pairs are the
+  `Notifications.notification-*-background` tokens in
+  `theme/tokens/theme.json`, which resolve to `theme/tokens/colors.json`
+  steps). Map these directly: a chart's "success" series color
   becomes Finnomena Positive, not a guess.
 - **Arbitrary data-series colors** (the 5 different hues distinguishing
   categories A–E in a bar chart, with no semantic meaning individually)
@@ -49,6 +51,47 @@ bucket:
   has 5 arbitrary series colors — want these restyled to fit the new
   palette, or left as-is since they're not brand colors?") rather than
   silently touching them.
+
+## Tailwind mapping rules
+
+Applies to Tailwind v3 and v4 alike, including apps that use the stock
+palette (`bg-slate-900`, `text-blue-600`) with no brand tokens yet.
+
+- **Map by the utility's role, not the nearest value.** `text-*` and
+  `placeholder-*` take `fg*` tokens. `bg-*` takes `bg*` surface or wash
+  tokens. `border-*`, `divide-*`, `ring-*` and `outline-*` take `bgLine*`
+  tokens, and focus indicators take `bgLinePrimary`. Never put a `bg*` or
+  `bgLine*` token on text, or an `fg*` token on a surface, even when the
+  value looks right: `text-slate-900` is primary text (`fg` or
+  `fgPrimary`), not `bgPrimary`.
+- **Swap utilities at the call site.** Do not redefine stock palette
+  names (`--color-slate-900`, `--color-blue-600`, `--color-white`) in
+  `@theme` or `:root`. A global alias makes class names lie
+  (`bg-slate-900` renders navy), recolors chart and category uses, and
+  forces one name to serve text, surface and border roles at once.
+  Reference the adapter variable directly (`text-[var(--color-fgMuted)]`,
+  or `text-(--color-fgMuted)` in v4), or register a *new* semantic name
+  (`--color-fg-muted: var(--color-fgMuted)` in v4 `@theme inline`, or a
+  `theme.extend.colors` entry in v3), then use that name.
+- **Keep pale shades pale.** `-50` to `-200` borders and washes
+  (`border-green-200`, `bg-red-50`) map to a wash or `accentSubtle*` token
+  whose lightness matches the original shade. With no pale-enough token,
+  keep the stock utility and report the gap; never substitute the
+  saturated status token (`bgPositive`) for a pale border.
+- **Keep shade hierarchy.** The adapter has only `fg` and `fgMuted` for
+  text. If `slate-400`, `slate-500` and `slate-600` carry distinct jobs
+  (placeholder, caption, secondary text), decide per call site and report
+  the steps that collapse. Text lighter than `fgMuted` (disabled,
+  placeholder, inactive icons) keeps its stock utility; never darken it.
+  Do not invent extra tokens; the mapping is provisional.
+- **Map state, not just shade.** A selected tab or chip takes the indigo
+  interaction signal (`bgLinePrimary` border or indicator), not navy text
+  alone. One shade-threshold table applied across a file is value
+  mapping; check each call site's state.
+- **Leave non-brand colors.** Category dots, chart series and
+  illustrative accents follow **Chart and status colors** above. Markers
+  that distinguish sections from each other keep that distinction or are
+  reported; do not collapse them onto one token.
 
 ## Format-specific guidance
 
@@ -88,23 +131,33 @@ config file (e.g. `colors: { primary: '#01172b', ... }`), then replace
 component-level utility classes (`bg-blue-600` → `bg-primary`) and any
 arbitrary-value usages (`bg-[#2563eb]` → `bg-primary`) that map to a
 branded role from semantic mapping. Config values are typically full hex —
-no wrapper-function conversion needed here.
+no wrapper-function conversion needed here. Follow
+[Tailwind mapping rules](#tailwind-mapping-rules); never override stock
+palette names under `theme.colors`.
 
 ### 3. Tailwind v4
 
-**Detect:** an `@theme { --color-primary: ...; }` block inside a CSS file
-(often `globals.css` or `app.css`) instead of (or alongside a minimal)
-`tailwind.config.js`; Tailwind imported via `@import "tailwindcss";`
-rather than the old `@tailwind base/components/utilities` directives.
+**Detect:** Tailwind imported via `@import "tailwindcss";` rather than
+the old `@tailwind base/components/utilities` directives, usually with
+no `tailwind.config.js`. An `@theme { --color-primary: ...; }` block
+(often in `globals.css` or `app.css`) may hold the app's own tokens; an
+app with only the import and stock utilities (`bg-slate-900`) has none.
 
-**Update:** Edit the `--color-*` (and `--font-*`, `--spacing-*`,
-`--radius-*` for visual-system scope) variables inside the `@theme`
-block directly — Tailwind v4 generates utility classes from these
-automatically, so `--color-primary: #01172b;` inside `@theme` makes
-`bg-primary`/`text-primary`/etc. available without touching a JS config
-file. Component markup then updates the same way as Tailwind v3 (utility
-class swap), but the token source of truth is the CSS file, not
-`tailwind.config.js`.
+**Update:** Follow [Tailwind mapping rules](#tailwind-mapping-rules).
+When `@theme` already holds the app's own semantic names
+(`--color-primary`, `--color-brand`), edit their values there for a
+global change; Tailwind v4 regenerates `bg-primary`/`text-primary`
+from them. With stock utilities only, make the adapter's color variables
+available per [CSS setup](css-integration.md#css-setup) and swap
+utilities at the call site (`text-slate-500` →
+`text-[var(--color-fgMuted)]`); do not add `@theme` entries for stock
+names. For visual-system scope, `--font-*`, `--spacing-*` and
+`--radius-*` follow the same rule: own names only.
+
+`@theme inline` copies the variable's value into each utility, so a
+selector-scoped override such as `input:focus { --color-blue-600: ...; }`
+never reaches `border-blue-600`. Express state at the call site with a
+variant instead: `focus:border-[var(--color-bgLinePrimary)]`.
 
 ### 4. shadcn-style (CSS vars + Tailwind indirection)
 
@@ -124,7 +177,7 @@ paste a hex or `rgb()` value into a variable this project consumes as
 `hsl(var(--primary))` — the variable must hold exactly what the wrapper
 expects. Before writing anything, read the wrapper function in
 `tailwind.config.js` (or wherever the var is consumed) to know the target
-format, then convert Finnomena's DESIGN.md value into it:
+format, then convert the Finnomena token value into it:
 
 - **Example:** Finnomena's Navy Ink primary is `#01172b`. If the target's
   `tailwind.config.js` has `primary: 'hsl(var(--primary))'`, decompose
@@ -142,6 +195,10 @@ format, then convert Finnomena's DESIGN.md value into it:
   the config's `primary: 'hsl(var(--primary))'` line stays untouched
   since it's already pointing at the right variable name.
 
+## Mode-specific values
+
+The literal values below illustrate light-mode conversions, not a complete theme for both schemes. Take actual declarations and applicable dark variants from the [canonical CSS adapter](../../../theme/css/theme.css), using the [design contract](../../INSTRUCTION.md#color-roles) for semantic roles. Preserve the app's existing mode selectors. Do not reuse a light-mode value for a dark surface without checking the actual pair. Hover values must come from established app behavior or a verified canonical role, not an invented ramp.
+
 ## Worked examples
 
 These are calibration fixtures, not an automated test suite — read them
@@ -158,9 +215,12 @@ Tailwind's stock palette, used directly. `tier: 'colors'`.
 - **Inventory:** one shared component, one hardcoded color pair
   (`bg-blue-600`/`hover:bg-blue-700`), no existing brand token.
 - **Map:** this is the primary call-to-action button role → Finnomena
-  Navy Ink (`#01172b`, hover `#1a2e40`).
+  Navy Ink (light-mode `#01172b`). Preserve a verified existing hover
+  treatment, or inspect the canonical roles and contrast before selecting one.
 - **Update shared tokens:** add to `tailwind.config.js`:
-  `theme.extend.colors: { primary: '#01172b', 'primary-hover': '#1a2e40' }`.
+  `theme.extend.colors: { primary: 'var(--button-primary)', 'primary-hover': 'var(--button-primary-hover)' }`.
+  Define both variables in the affected scope and existing mode selectors,
+  using canonical values and the verified hover treatment above.
 - **Update remaining:** `Button.tsx` becomes
   `className="bg-primary hover:bg-primary-hover text-white rounded-md px-4 py-2"`.
   `rounded-md`/`px-4 py-2` are untouched — `tier: 'colors'` means spacing
@@ -238,27 +298,35 @@ button while the request is in flight. `tier: 'colors'`.
   (`bg-brand`, `focus:border-brand`, `text-red-600`,
   `disabled:opacity-50`), no other file references `--color-brand`.
 - **Map:** the submit button's `bg-brand` is the primary-action role →
-  Navy Ink (`#01172b`). The inputs' `focus:border-brand` is a *different*
-  role — interactive-highlight/focus — even though the original app
-  reused the same `--color-brand` token for both; use semantic mapping: don't
-  collapse these back onto one Finnomena color just because the source
-  used one token. Focus rings map to Indigo Interactive (`#1817e7`), not
-  Navy Ink. The validation error text (`text-red-600`) is a status color,
-  not a brand color → Finnomena Negative (`#d60808`), per **Chart and
+  Navy Ink (`--color-bgPrimary`). The inputs' `focus:border-brand` is a
+  *different* role — interactive-highlight/focus — even though the
+  original app reused the same `--color-brand` token for both; use
+  semantic mapping: don't collapse these back onto one Finnomena color
+  just because the source used one token. Focus rings take the indigo
+  interaction signal (`--color-bgLinePrimary`), not Navy Ink. The
+  validation error text (`text-red-600`) is a status color, not a brand
+  color → Finnomena Negative (`--color-fgNegative`), per **Chart and
   status colors** above (the same status-vs-brand distinction applies
   outside charts).
-- **Update shared tokens:** `app.css`'s `@theme` block changes
-  `--color-brand: #2563eb;` to `--color-brand: #01172b;` and adds two new
-  tokens the app didn't previously separate: `--color-interactive:
-  #1817e7;` and `--color-negative: #d60808;`.
+- **Update shared tokens:** with the adapter variables available per
+  [CSS setup](css-integration.md#css-setup), `app.css` moves
+  `--color-brand` into `@theme inline` as
+  `--color-brand: var(--color-bgPrimary);` and adds two names the app
+  didn't previously separate: `--color-interactive:
+  var(--color-bgLinePrimary);` and `--color-negative:
+  var(--color-fgNegative);`. Reference the adapter variables; do not copy
+  hex values from `theme/tokens/colors.json`. The raw palette and the
+  adapter can differ (`bgLinePrimary` is not the raw `#1817e7` indigo
+  step), and only the variables follow mode selectors and future mapping
+  changes.
 - **Update remaining:** `LoginForm.tsx`'s submit button keeps `bg-brand`
   (now resolves to Navy Ink automatically). Inputs' `focus:border-brand`
   becomes `focus:border-interactive`. Error text's `text-red-600` becomes
   `text-negative`. `disabled:opacity-50 disabled:cursor-not-allowed` is
   untouched — it's a state-opacity utility, not a color/theme value.
 - **Verify — form behavior explicitly, not just appearance:** confirm the
-  submit button renders Navy Ink and the input focus ring renders Indigo
-  Interactive. Then exercise the form, not just its colors: submit empty
+  submit button renders Navy Ink and the input focus ring renders the
+  `bgLinePrimary` indigo. Then exercise the form, not just its colors: submit empty
   and confirm the same inline validation errors still appear, now in the
   new negative-red; confirm the submit button is still disabled until
   both fields pass validation; fill in valid values and confirm submit
