@@ -236,12 +236,17 @@ Map shadcn's roles by their meaning in shadcn:
 | `--background` / `--foreground` | Page | `bg` / `fg` |
 | `--card`, `--popover` / their `-foreground` | Raised surfaces | `bgElevation1`, `bgElevation2` / `fg` |
 | `--primary` / `--primary-foreground` | Primary action | `bgPrimary` (Navy Ink) / `fgInverse` in light, `fg` in dark |
-| `--secondary` / `--secondary-foreground` | Secondary button | `bgSecondary` / `fg` |
-| `--muted` / `--muted-foreground` | Quiet surface and secondary text | `bgAlternate` / `fgMuted` |
-| `--accent` / `--accent-foreground` | Hover, focus and selected surfaces (ghost buttons, menu items, rows) | A quiet neutral surface such as `bgSecondary` / `fg`; not an `accent*` token or indigo |
+| `--secondary` / `--secondary-foreground` | Secondary button | `bgSecondary` in light, `bgTertiary` in dark / `fg` |
+| `--muted` / `--muted-foreground` | Quiet surface and secondary text | `bgAlternate` in light, `bgTertiary` in dark / `fgMuted` |
+| `--accent` / `--accent-foreground` | Hover, focus and selected surfaces (ghost buttons, menu items, rows) | A quiet neutral surface, `bgSecondary` in light and `bgTertiary` in dark / `fg`; not an `accent*` token or indigo |
 | `--destructive` | Destructive fill and error text | `bgNegative` (Negative) |
 | `--border`, `--input` | Dividers and control outlines | `bgLine`; check that input outlines stay visible |
 | `--ring` | Focus | `bgLinePrimary` (Indigo Interactive) |
+
+`--secondary`, `--muted` and `--accent` sit on cards, so each must differ
+from `--card` in the same mode. In the dark block `bgSecondary`,
+`bgAlternate` and `bgElevation1` share one value, which would hide
+secondary badges and ghost hovers on a card.
 
 Change each role together with its `-foreground`, in both `:root` and
 `.dark`. shadcn's default `.dark` has a light `--primary` with dark text,
@@ -255,19 +260,20 @@ Current shadcn has no `--destructive-foreground`: its destructive button
 and badge use `text-white`, over `dark:bg-destructive/60` in dark. At
 `colors` tier, do not add a variable or edit those components. Measure
 the rendered destructive button and `text-destructive` text in both modes
-and report a failure. A
-file that declares `--destructive-foreground` changes it with
-`--destructive`.
+and report a failure. A file that declares `--destructive-foreground`
+changes it with `--destructive`.
 
 The `--sidebar-*` set mirrors the same roles (`--sidebar-primary`,
 `--sidebar-accent`, `--sidebar-border`, `--sidebar-ring`) and changes
 with them, even though shadcn's default dark `--sidebar-primary` is blue.
+`--sidebar-accent` must differ from `--sidebar` in each mode.
 `--chart-1` to `--chart-5` are category colors: leave them and ask, per
 [Chart and status colors](#chart-and-status-colors). `--radius` is
 geometry and changes only at `visual-system` scope.
 
 Verify by toggling `.dark`: primary and destructive labels, the focus
-ring and input outlines in both modes.
+ring, input outlines, and secondary fills and hovers against their card
+in both modes.
 
 ## Mode-specific values
 
