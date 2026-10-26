@@ -1,32 +1,41 @@
 name: Template browser
 on:
+  # Every pull request gets a template-browser result, so the check can be
+  # required; the changes job skips the browser job when no browser path changed.
   pull_request:
-    paths:
-      - templates/**
-      - evals/templates/**
-      - theme/**
-      - scripts/lib/assemble-starter.mjs
-      - scripts/lib/assets.mjs
-      - evals/skills/browser-probe.js
-      - evals/skills/probe-fixture.html
-      - evals/skills/run-probe.mjs
-      - .github/workflows/template-browser.yml
+  merge_group:
   push:
     branches: [main]
-    paths:
-      - templates/**
-      - evals/templates/**
-      - theme/**
-      - scripts/lib/assemble-starter.mjs
-      - scripts/lib/assets.mjs
-      - evals/skills/browser-probe.js
-      - evals/skills/probe-fixture.html
-      - evals/skills/run-probe.mjs
-      - .github/workflows/template-browser.yml
 permissions:
   contents: read
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      browser: ${{ steps.filter.outputs.browser }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: filter
+        env:
+          BASE: ${{ github.event.pull_request.base.sha || github.event.merge_group.base_sha || github.event.before }}
+          HEAD: ${{ github.event.pull_request.head.sha || github.event.merge_group.head_sha || github.sha }}
+          BROWSER_PATHS: '^(templates/|evals/templates/|theme/|scripts/lib/assemble-starter\.mjs$|scripts/lib/assets\.mjs$|evals/skills/browser-probe\.js$|evals/skills/probe-fixture\.html$|evals/skills/run-probe\.mjs$|\.github/workflows/template-browser\.yml$)'
+        run: |
+          # Run the browser job unless the diff proves no browser path changed:
+          # a skipped job passes a required check, so any doubt means run.
+          browser=true
+          if changed=$(git diff --name-only "$BASE...$HEAD" 2>/dev/null) && [ -n "$changed" ]; then
+            matched=$(printf '%s\n' "$changed" | grep -E "$BROWSER_PATHS" || true)
+            [ -z "$matched" ] && browser=false
+            printf 'Browser paths changed:\n%s\n' "${matched:-none}"
+          fi
+          echo "browser=$browser" >> "$GITHUB_OUTPUT"
   template-browser:
+    needs: changes
+    # A job skipped here reports success to a required check.
+    if: needs.changes.outputs.browser == 'true'
     runs-on: ubuntu-latest
     # Ships Chromium and its system libraries, so no apt install per run. The
     # tag matches @playwright/test in evals/templates/package.json
