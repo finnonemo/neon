@@ -85,25 +85,3 @@ _Avoid_: strength, mix, Finnomena level
 **Brand Floor**:
 The Finnomena properties no Brand Intensity may remove: the Finnomena logo, Finnomena typeface, Finnomena accent and action colors, accessible contrast, and the absence of any source brand's logo, imagery, copy or product names.
 _Avoid_: minimum branding, baseline
-
-### Readiness
-
-**Brand-ready**:
-Output whose UI matches the Brand Contract but still needs an engineer's review before real users rely on it.
-_Avoid_: done, production-ready
-
-**Ship-ready**:
-Output an employee may deploy to real users without engineering review. Only a Campaign Page with no Investment Content, whose personal data goes only to an Approved Form Service, can be Ship-ready.
-_Avoid_: production-ready, live
-
-**Investment Content**:
-Anything on a page that mentions an investment product or its returns; it makes the page subject to compliance review before it can be shipped.
-_Avoid_: financial content, product page
-
-**Approved Form Service**:
-A company service already cleared to receive personal data from public pages; the only place a Ship-ready page may send a form.
-_Avoid_: backend, form endpoint
-
-**Handoff Summary**:
-The record that accompanies Brand-ready output to engineering, stating what is mocked, what needs wiring and what was not verified.
-_Avoid_: notes, report

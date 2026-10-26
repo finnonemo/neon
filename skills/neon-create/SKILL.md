@@ -36,4 +36,4 @@ If the app already has a working Finnomena CDS theme, start with the requested c
 
 ## Done
 
-Deliver working requested UI, its location/preview, checks performed and material limitations. State Ship-ready or Brand-ready per [readiness and handoff](../neon-audit/references/readiness.md), with a Handoff Summary for Brand-ready work. Keep provisional mapping, mocked services and unverified runtime behavior distinct from confirmed results.
+Deliver working requested UI, its location/preview, checks performed and material limitations. Keep provisional mapping, mocked services and unverified runtime behavior distinct from confirmed results.

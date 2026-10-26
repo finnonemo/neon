@@ -54,12 +54,10 @@ type NeonContext = {
   composition?: 'preserve' | 'adapt';
   referenceDesign?: string;
   brandIntensity?: 'finnomena-led' | 'blended' | 'reference-led';
-  workType?: 'campaign' | 'back-office' | 'product-feature';
-  readiness?: 'ship-ready' | 'brand-ready';
 };
 ```
 
-`referenceDesign` and `brandIntensity` apply to campaign pages only. Decide `readiness` with [readiness and handoff](readiness.md) before reporting.
+`referenceDesign` and `brandIntensity` apply to campaign pages only.
 
 `tier`: `colors` uses CSS colors only; `visual-system` also uses brand typography, spacing and radius; `cds` uses real CDS components and the Finnomena theme. Tier does not grant composition changes. Omit `surface` until known; do not guess it to fill a record. Unknown framework/rendering stays `unknown`; missing package manager stays `null`. Other unavailable evidence can remain empty with its uncertainty noted. Only investigate unknowns that affect the next action.
 
