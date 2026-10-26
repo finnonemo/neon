@@ -45,6 +45,7 @@ test('accepts existing references, prose slashes, URLs, packages and app-relativ
       'Reuse existing theme/providers wiring and theme/notification preferences.',
       'Install @coinbase/cds-web from https://github.com/coinbase/cds/blob/main/README.md.',
       'Import `./theme/theme.css` in the target app.',
+      'The rebuild writes ./PARITY.md beside its README.',
       '```md',
       'Fenced example: see MISSING.md',
       '```',
