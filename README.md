@@ -229,8 +229,7 @@ Employees using an installed plugin do not need these commands for normal featur
 Validate repository resources and packaging:
 
 ```sh
-node --test evals/skills/*.test.mjs
-node scripts/check-repository.mjs
+node scripts/validate.mjs
 ```
 
 The [CI workflow](.github/workflows/validate.yml) runs these checks on pull requests and pushes to `main`. They verify packaging behavior, skill metadata and resource links in source and a fresh bundle; they do not certify rendered UI quality.

@@ -13,8 +13,7 @@ Use a branch such as `codex/describe-the-change` and a focused pull request. Do 
 Run from the repository root:
 
 ```sh
-node --test evals/skills/*.test.mjs
-node scripts/check-repository.mjs
+node scripts/validate.mjs
 git diff --check
 ```
 
@@ -30,7 +29,7 @@ node theme/scripts/generate-breakpoints-config.mjs
 
 Review the resulting diff and unresolved-token report. Color mapping is hand-maintained; the CSS adapter must be updated separately using the method in its header. Do not automatically replace missing mappings with guesses.
 
-For template, theme or component changes, assemble a fresh disposable app, install dependencies with its package manager, build it and inspect the affected UI. Check relevant light/dark modes, narrow/wide layouts, Thai/English labels, keyboard interactions and task states. Record actual evidence, including blocked checks.
+For template, theme or component changes, run `node scripts/smoke-new-app.mjs` to assemble, install and build a fresh disposable app outside the repository, then inspect the affected UI. Check relevant light/dark modes, narrow/wide layouts, Thai/English labels, keyboard interactions and task states. Record actual evidence, including blocked checks.
 
 For starter changes, also run the [assembled build and browser suite](evals/templates/README.md). It builds the shipped app before adding disposable fixtures and leaves reports under `.local/evals/templates/`; CI uploads those reports separately from the plugin.
 
@@ -40,6 +39,6 @@ For skill changes, compare baseline/revised decisions and representative app beh
 
 A pull request should state the original problem, resulting employee behavior, validation performed, and material limitations. Reviewers apply [CODING_STANDARDS.md](CODING_STANDARDS.md), including its rule for evidence claims in pull requests and eval records. Include before/after evidence for a visual change. A design owner should review mapping changes; do not label a provisional mapping approved without that review.
 
-Before a release, package into an empty destination and repeat resource checks, verify an installed-host smoke scenario, and review relevant generated UI. Keep host installation, browser checks and design approval marked unverified until actually performed. CI validates pull requests with two workflows: `validate.yml` runs on every pull request, and `template-browser.yml` runs only when the starter, theme, browser suite or assembler changes. Neither publishes a plugin or changes branch protection. Maintainers can make the `validate` job required in repository settings; do not make `template-browser` required, because path-filtered pull requests would wait for it indefinitely.
+Before a release, package into an empty destination and repeat resource checks, verify an installed-host smoke scenario, and review relevant generated UI. Keep host installation, browser checks and design approval marked unverified until actually performed. CI validates pull requests with two workflows: `validate.yml` runs on every pull request, and `template-browser.yml` runs only when the starter, theme, browser suite, assembler or browser probe changes. Neither publishes a plugin or changes branch protection. Branch protection on `main` requires `validate` and an up-to-date branch, so merge `main` into a pull request branch that falls behind before merging it. Do not make `template-browser` required, because path-filtered pull requests would wait for it indefinitely.
 
 For real visual references, use [the example-library workflow](docs/design/example-library.md). Keep illustrative examples, behavioral fixtures and explicitly reviewed design references distinct.

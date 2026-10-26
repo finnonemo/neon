@@ -315,6 +315,18 @@ test('CLI new with --skip-install never claims an unqualified Done', async t => 
   assert.doesNotMatch(result.stdout, /^Done\./m);
 });
 
+test('deprecated theme/finnomena entry point forwards to the installer and its exit status', async t => {
+  const app = await existingApp(await sandbox(t));
+  const shim = args => spawnSync(process.execPath, [join(repoRoot, 'theme/finnomena/scripts/install.mjs'), ...args], { encoding: 'utf8' });
+  const ok = shim([app, '--css-only']);
+  assert.equal(ok.status, 0, ok.stderr);
+  assert.match(ok.stderr, /Deprecation notice/);
+  await access(join(app, 'src/theme/theme.css'));
+  const refused = shim([app, '--package-manager', 'deno']);
+  assert.equal(refused.status, 1);
+  assert.match(refused.stderr, /Unsupported --package-manager/);
+});
+
 test('CLI refusals print one clean message and exit 1', async t => {
   const app = await existingApp(await sandbox(t));
   await mkdir(join(app, 'src/theme'), { recursive: true });

@@ -16,7 +16,7 @@ import { assembleStarter } from "./lib/assemble-starter.mjs";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const defaultSourceRoot = resolve(__dirname, "..");
 
-// Same isMainModule guard install.mjs uses — safe to import this module
+// Run-as-script guard — safe to import this module
 // (e.g. from tests) without triggering the CLI against the importing
 // process's own argv.
 function isRunAsScript() {
