@@ -11,6 +11,8 @@ Run each request with the named context, first against the baseline and then the
 | Review this Finnomena screenshot; do not edit | Visible findings only; keyboard, other viewports and measured contrast remain unverified |
 | Make the buttons clearer after Finnomena was established | Retains brand intent without repeated onboarding |
 | Build a CDS settings screen with no Finnomena context | Does not infer Finnomena branding from CDS alone |
+| Colors-only restyle of a Tailwind v4 app that uses stock utilities only | See [Tailwind colors-only regression](#tailwind-colors-only-regression) |
+| Rebuild an existing React prototype on CDS; colors-only and feature requests on the same apps | See [CDS rebuild](#cds-rebuild) |
 
 Verdicts are pass, fail or unverified for routing, scope, resource retrieval, component correctness, color roles, feature completion, responsive behavior and evidence honesty. Link actual artifacts. Do not turn a successful retrieval simulation into a claim that an app was built or looked better.
 
@@ -21,6 +23,146 @@ Baseline retrieval evaluation found missing canonical guide links, an unconditio
 A packaging reproduction reported success while its promised functional guide was absent. Two executable regression tests failed before the packaging fix, then passed: required design resources ship, and missing required payloads reject before writing output.
 
 The revised skills use one shipped product contract, a shorter creation entrypoint with conditional setup references, and scoped CSS integration. Source and packaged resource checks run via `scripts/check-repository.mjs`. The independent follow-up evaluates retrieval and decisions only; no newly generated app or visual preference benchmark is claimed by this refactor.
+
+## Tailwind colors-only regression
+
+Fixture: a Vite/React app whose CSS is only `@import "tailwindcss";`, styled with stock utilities (`slate-*` text and surfaces, pale `-200` status borders, `focus:border-blue-*` inputs, colored category dots). The local batch-sell calculator reference matches. Request, verbatim:
+
+> $neon-redesign Colors only: switch this app's colors to Finnomena colors. Keep the layout, components, spacing and behaviour exactly as they are.
+
+October 2026 baseline (Codex, one sample) built but failed the other items below: it skipped the style migration reference, aliased `--color-slate-*`/`--color-blue-*` in `@theme inline`, mapped `text-slate-300` to `bgLineHeavy` and `border-green-200` to `bgPositive`, collapsed `slate-400/500/600` to `fgMuted`, recolored category dots and tried an `input:focus` palette override that never applies.
+
+Pass requires all of:
+
+- The run reads the Tailwind mapping rules in the style migration reference before editing.
+- No stock palette name (`--color-slate-*`, `--color-white`, …) is redefined in `@theme` or `:root`.
+- Every changed `text-*` utility resolves to an `fg*` token; `bg*` and `bgLine*` tokens appear only on surfaces and borders.
+- Pale borders and washes stay pale (wash/`accentSubtle*` token or the original utility); no saturated status token replaces a `-50`–`-200` shade.
+- Focus color, if changed, uses a `focus:` variant at the call site.
+- Category dots keep distinct meanings or are reported; geometry, fonts and handlers are unchanged and the build passes.
+- Text lighter than `fgMuted` (disabled, inactive icons) stays light; a selected state keeps an indigo signal.
+- Brand colors reference adapter variables (`var(--color-bgLinePrimary)`), not hex values copied from `theme/tokens/colors.json` or a worked example.
+
+Revised skill, Codex, same prompt and fixture, one sample per revision. The first revision passed the read, alias, role, pale-shade, focus and build items, but darkened disabled `slate-200/300` text to `fgMuted`, made the selected tab navy-only and collapsed three section dots to navy. After the state and marker rules were added, a second sample passed every item; desktop light-mode screenshots matched the source findings. Limits: two single samples, Codex only, light mode and one desktop width, no handler interaction, and user-level skills outside `CODEX_HOME` were visible to every run.
+
+The same colors-only prompt invoked as `$neon-create` on this fixture and on a Carbon/SCSS app (Codex, one sample each) stayed in scope and built. Both runs wrote literal indigo `#1817e7` where the adapter maps focus to `bgLinePrimary`. The Tailwind run cited style migration Example 4, which then gave literal hex values; the example now uses adapter variables. Two later samples (see [CDS rebuild](#cds-rebuild)) used `var(--color-*)` utilities without `#1817e7`; one imported the adapter, the other copied its `rgb()` declarations into `:root`.
+
+## CDS rebuild
+
+Fixtures: the batch-sell calculator above and a health-check management prototype (React, `@carbon/react`, SCSS, mock data with a timed demo transition). Rebuild request, verbatim, run in each source app:
+
+> $neon-create Rebuild this app on CDS with the Finnomena starter. Keep every screen, feature, filter and the Thai/English text working.
+
+Pass requires all of:
+
+- The run reads the rebuild reference and writes a parity inventory before building.
+- The starter is assembled into a new empty directory; the source app has no changes.
+- Mock data, services and pure logic are copied with unchanged behavior; copied tests pass.
+- The rebuild has no source UI library import, package or class; each retained non-UI library is reported.
+- Every inventory item is observed in the rebuild at 375px and desktop, or reported as not ported.
+- The build passes; the light scheme is checked and dark mode is reported as unverified unless wired.
+- Primary CDS buttons keep `fgInverse` text. Every stylesheet selector starts with an app class, and no rule reaches into CDS components (`stylesheet-scope.mjs --src <app>/src`).
+
+Run a case with `node evals/skills/run-codex-case.mjs --fixture <app> --case <name> --prompt "<request>"`. It installs the packaged plugin into a private Codex home and checks the installed copy against the package. It gives Codex its own `HOME` and `TMPDIR`; in a check run Codex listed only its built-in and `neon:` skills, with no user-level `ponytail`. Codex still writes to the real `/tmp`: by their logs, hc-s1, hc-s3 and bs-s2 of the re-sample left files there, the scripts named after the fixtures (`/tmp/rebuild-hc.py`, `/tmp/check-batch-parity.cjs`), so delete them before the next run. It retries capacity failures (that path is untested) and deletes the copied `auth.json` on exit. The `authRemoved` field in `summary.json` scans the whole root, so cases running at the same time report each other's live copy as leftover. After all cases finish, check with `find <root> -name auth.json`. Then run `node evals/skills/grade-rebuild.mjs --source <case>/<app> --rebuild <case>/<app>-cds --shots <name>`, which prints pass or FAIL for the source, stylesheet, test, typecheck, build and mock data items, and for source UI libraries in packages and imports (leftover library classes stay a manual check). The CDS-component half of the stylesheet check has flagged only synthetic cases so far; none of the recorded runs put a class on a non-layout CDS component.
+
+`--shots` builds into `.local/shots`, copies the probe there and adds the `eval-shots` preview server. In the browser, run `eval(await (await fetch('/browser-probe.js')).text())` at 375px and desktop. A hidden pane lays out at width 0. Viewport emulation (`resize_window` at 375×812 and 1440×900) measured true widths even with the pane hidden, so check `viewportWidth` either way. [browser-probe.js](browser-probe.js) reports page overflow, sideways-scrolling containers, text counts per font, contrast on dark-background controls, nav underlines and dialog fit, naming each element measured. On the recorded health-check samples at 375px it flagged the first sample's black "Home" label on navy (1.16:1), the sideways-scrolling columns of the second and fourth, and the third's underlined bottom nav; the fifth came back clean. Serif detection was checked only against an unstyled element injected into the third sample's page, whose `<body>` computes to `Times`. Content overflowing a fixed-width container, such as r2's nav labels past the rail, is not detected. Contrast is read from the control's own `color`. On the re-sample's hc-s1 and hc-s3, icon-only bottom nav links read 1.93:1 (default link blue on navy) while their glyphs render white. Inventory items, interactions and dialogs stay manual.
+
+Control requests on the same fixtures must keep the existing stack: `$neon-create Colors only: switch this app's colors to Finnomena colors. Keep the layout, components, spacing and behaviour exactly as they are.` on both, and on health-check the status-filter task from the [flow refactor protocol](flow-refactor-protocol.md) adapted to its statuses: `$neon-create Add a Finnomena status filter to this existing customer list. Offer All, New, In Progress, Ready to Report, Completed; combine it with the existing search, show an empty message when nothing matches, preserve services, providers, theme, routes and detail behavior. Keep Thai/English text usable on mobile and desktop.`
+
+October 2026, Codex, one sample per case:
+
+- Both rebuilds read the rebuild reference, wrote a parity inventory with source locations, assembled `<app>-cds` with the installer and left the source unchanged. Mock data (byte-identical once its type annotation is removed) and the calculator logic were copied unchanged. Neither source had tests, so each run added its own (batch-sell 7, health-check 16); all pass, as do strict TypeScript and the build. No Carbon or Tailwind remains. Batch-sell reported the retained `@vercel/analytics`. Health-check reported a search control it added and the source's inert navigation and mock actions.
+- Browser checks were done by the evaluator, in light mode at desktop and 375px, because Codex could not launch Chromium in its sandbox. The batch-sell content, quick-select calculation and narrow stacking matched the source. On health-check, the dashboard counts, drilldowns and search list matched. Two defects were found:
+  - Its stylesheet's unlayered `button { color: inherit }` beat CDS's `cds` cascade layer and turned primary button text dark on navy.
+  - The search panel extends 32px under the sidebar.
+  CDS integration now says to scope app styles to app classes, and the rebuild reference links to that rule. A health-check re-run on that revision (one sample) passed:
+  - Every rule sits under `.phc-app`.
+  - Primary buttons in the page and the Add Asset dialog render white on navy.
+  - Search is inline in the dashboard column, clear of the rail.
+  - The 17 tests and the build pass.
+  - The mock data matches the source in value.
+  At 375px it regressed where the first sample had not:
+  - The column starts 27px under the 72px rail.
+  - `.phc-nav-items button { font-size: 0 }` leaves CDS labels at 17px, so they overflow the rail.
+  The source and the first sample both lay out correctly at that width.
+  CDS integration now also says to style CDS components through props. A third health-check sample (one sample) passed:
+  - Every rule sits on app classes. The only element selectors (`table`, `th`) sit under an app-owned raw table; no rule reaches into CDS.
+  - The primary "Create Portfolio" button renders white on navy at 375px. No dialog was opened.
+  - 375px and desktop show no horizontal overflow; 375px uses the starter's bottom nav.
+  - Search filters inline in its column.
+  - 7 tests and the build pass; the mock data matches in value.
+  It surfaced two starter gaps:
+  - Nothing sets a root font, so bare `<Text>` renders in the browser serif. That covers at least 11 uses in the rebuild plus the starter's own `SidebarNav` labels. The earlier samples had set the font on `body` or `.phc-app`.
+  - `BottomNav` links keep the browser's link underline.
+  The starter now applies the theme's body typography to `<body>` from `AppRoot`, which also covers CDS portals, and `BottomNav` clears the underline. `starter-typography.test.mjs` guards both statically. A disposable assembled app confirmed the fix in light mode, with the IBM Plex Sans Thai face loaded:
+  - A bare `Text`, a `Text` inside a CDS `Modal`, and the sidebar labels resolve to IBM Plex Sans Thai.
+  - `BottomNav` links have no underline at 375px.
+  - Desktop geometry matches the previous starter.
+  The starter now also paints `<body>` with the active scheme's theme `bg`/`fg` and declares `color-scheme`. Before this, a dark OS preference showed a dark canvas behind black text. With dark-preference emulation, the disposable app rendered a white body with `fg` text at 375px and desktop, including inside the modal; light mode was unchanged. The starter's dark scheme itself stays unwired and unverified.
+  At 375px the KPI pill buttons wrap to two lines. The run also upgraded Vite 5→8 and plugin-react 4→6 to add Vitest, and reported it.
+  A fourth health-check sample, on the props rule plus both starter fixes (one sample), failed the stylesheet item:
+  - `app.css` has bare element rules (`body`, `h1`, `h2`, `h5`, and `h2, h3, h4, h5, p`), and `.password-field > div` sizes the CDS `TextInput` root.
+  - It passed the other checked items:
+    - It read the rebuild, scaffold and CDS integration references, and the source was unchanged.
+    - 13 tests, `tsc` and the build pass.
+    - It kept Vite 5, and no Carbon or Tailwind remains.
+    - The mock data matches in value.
+    - Body text resolves to IBM Plex Sans Thai on a white body.
+    - The two primary-styled buttons checked (the Home nav item and the add-column icon button) render white on navy. No labelled primary action or dialog was checked.
+    - Search filters inline and shows its empty message.
+    - Desktop has no overflow.
+  - At 375px the page has no horizontal overflow. The app mounts its own `app-navigation` (`src/ui.tsx`) and no starter layout, so no bottom nav renders, and that nav scrolls horizontally. Its column container also scrolls sideways: a 320px-minimum column plus an add-column zone loaded scrolled 52px, which clipped the heading's left edge. The source was not compared at that width.
+  CDS integration now says every selector starts with an app class, typography goes through `Text`/`Box` props, and a selector stops at elements the app renders itself. `stylesheet-scope.mjs` grades that shape and flags r4's rules. A fifth health-check sample (one sample) passed:
+  - It read the rebuild, CDS integration and scaffold references, wrote a parity inventory, and left the source unchanged.
+  - Its one stylesheet, `health.css` (97 lines), passes the grader: every selector is an app class, with no element selectors.
+  - 10 tests, `tsc` and the build pass. It kept the starter's Vite 5, and no Carbon remains. The mock data matches in every export.
+  - Desktop and 375px show no horizontal overflow and no sideways-scrolling container. All text resolves to IBM Plex Sans Thai on a white body.
+  - Search filters the customer list ("James" → 1 customer) at desktop, and its input fits at 375px.
+  - The labelled primary "+ Add Column" and the Set Password dialog's "Confirm Access" render white on navy. The dialog fits 375px.
+  The browser check covered the dashboard, search and one dialog, not every parity inventory item. It mounts the starter's `SimpleLayout` with an empty `navigation`, so no bottom nav renders at 375px. Home and Search sit in its header there, and per its inventory Menu reaches the other labels; Analytics, Insights and Notifications have no source screen and are reported as disabled. Menu was not opened.
+- Controls kept their stacks. The health-check colors run bridged Carbon `--cds-*` variables with hex values; the status-filter run changed only `App.jsx` and `App.scss`, and its filter UI was not browser-checked. The batch-sell colors run skipped neon-redesign and aliased stock palette names with hex. After neon-create's entrypoint sent colors-only React restyles to neon-redesign, two more samples read style migration and passed the alias, role, focus and build items above. Each mapped the selected tab border to indigo. On the pale and marker items, one sample passed. The other failed: it turned a `bg-slate-400` hairline into the near-white `bgPrimaryWash`. On adapter variables, that second sample passed by importing the adapter. The first is borderline: it copied the adapter's `rgb()` declarations into `:root`. Neither sample was browser-checked.
+- Limits:
+  - Single samples, Codex only. The re-sample below adds three per fixture, still Codex only.
+  - The user-level `ponytail` skill leaked into every run before the case runner existed. No re-sample run mentions it.
+  - Four first-round runs could list their `CODEX_HOME` through `--add-dir`.
+  - Dark mode is unverified, because the starter fixes light.
+  - Dialogs, timers and keyboard focus in the rebuilds were checked only through the runs' DOM tests.
+
+### Re-sample, 26 October 2026
+
+Same request and fixtures. Three samples per fixture through `run-codex-case.mjs` and `grade-rebuild.mjs`, Codex 0.162.1, skills as of `1d2e33a`. Since r5, neon-create and the starter are unchanged; the installer was refactored and runs now go through the case runner. The two fixtures ran concurrently, one sample after another. Every sample passed source unchanged, no source UI library, typecheck and build. Health-check passed mock data. Batch-sell has no mock files, and only the runs' own tests check its copied logic. No Carbon class (`cds--`, `bx--`) or Tailwind class string remains, and every sample kept the starter's Vite 5. The evaluator ran the probe on each landing screen in light mode at 375px and 1440px. Inventory items, interactions and dialogs were not checked, so no sample is a full pass.
+
+| Sample | Read CDS integration | Grader | 375px | 1440px | Primary-styled buttons |
+| --- | --- | --- | --- | --- | --- |
+| hc-s1 | no | FAIL stylesheet: `.phc-card > div` | Column container scrolls sideways (423/375), loads at `scrollLeft` 48 | Clean | None on the landing screen |
+| hc-s2 | yes | pass | Column container 441/375, `scrollLeft` 66 | Clean | Home pill and `+` add column, white on navy (18.12:1) |
+| hc-s3 | no | pass | Column container 387/375, `scrollLeft` 12 | Clean | None on the landing screen |
+| bs-s1 | no | pass | Page 1882px wide | Page 2527px wide | `Current W.` and `Add Fund` white on navy at 375px (15.46–18.12:1) |
+| bs-s2 | yes | FAIL tests: no test script | Clean | Clean | `Current W.` and `Add Fund` white on navy at 375px (15.46–18.12:1) |
+| bs-s3 | yes | pass | Clean | Clean | `Current W.` and `Add Fund` white on navy at 375px (15.46–18.12:1) |
+
+"Clean" means no page overflow, no sideways-scrolling container, no serif text and no underlined nav link. "Read CDS integration" counts only commands a run executed. All six read SKILL.md, the rebuild reference and verification, and wrote a parity inventory to the rebuild's README (hc-s2 also wrote a separate parity file). The three that skipped CDS integration also skipped scaffold. hc-s2 read both and still has the 375px defect, so skipping them is not shown to be the cause.
+
+- **Health-check at 375px.** r5's result did not reproduce: none of the three columns fits the viewport.
+  - The source has no overflow and no sideways scroller at 375px. It hides `.phc-add-column-zone` below its mobile breakpoint (`App.scss:254`) and sizes the column at `100vw`.
+  - Each rebuild keeps that 42–48px zone beside a 327–343px column. Each also copied the source's scroll-to-end effect (`App.tsx:897`, `:483`, `health/App.tsx:661`), so the page loads with the container scrolled by the overflow, clipping the column's left edge.
+  - Setting `scrollLeft` to 0 reveals the edge.
+  - hc-s2 also has two unlabelled buttons extending past the right edge, to 398px at 375 and 1463px at 1440, without page overflow.
+- **hc-s1's stylesheet.** The grader flags `.phc-card > div` (`workspace.css:288`). At `PortfolioManagement.tsx:146` and `:252` it matches raw JSX divs. It also matches the root of the CDS `ProgressBar` at `:282`, which renders an `HStack` div. That means the rule reaches into a CDS component, so the FAIL stands.
+- **bs-s1 overflow.** Each panel is a `<Box as="section">` with no `flexDirection` (`App.tsx:109`). CDS `Box` computes to `display: flex` in a row, so each panel lays out its fund cards side by side. Neither neon-create nor its references mention that default.
+- **bs-s2 tests.** It has no test script. Its `./scripts/check-source-parity.cjs` passes, comparing calculation and state against the source across 3 modes, 9 global strategies, editing, FIX/UNDO, save/load and apply. The source has no tests.
+- **Starter edits.** Compared files: the starter's `src/layout/*`, `AppRoot` and `vite.config.ts`.
+  - hc-s1 changed every starter layout file and `AppRoot`. The `Logo.tsx` diff is formatting only; the others were not diffed.
+  - hc-s3 rewrote `SimpleLayout`, `BottomNav`, `SidebarNav` and `navItems`.
+  - Per its report, bs-s2 switched `AppRoot` to deep CDS imports to get around a build error. The other two batch-sell samples did not report that error.
+  - hc-s2, bs-s1 and bs-s3 left the compared files byte-identical.
+- **Other observations.**
+  - All six rebuild READMEs say the starter's light scheme is kept. Only hc-s3 says dark mode is unverified.
+  - All three batch-sell samples report the retained `@vercel/analytics` in their README.
+  - Every run reported that Chromium could not launch in its sandbox and substituted DOM tests.
+- **Candidate skill fixes, not made here:**
+  - The rebuild inventory does not ask for the source's responsive rules, such as elements hidden on mobile.
+  - CDS integration does not say that `Box` defaults to a flex row.
 
 ## Flow refactor evaluation
 
