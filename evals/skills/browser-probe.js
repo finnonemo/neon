@@ -44,6 +44,10 @@
       return box.right > width + 1 || box.left < -1;
     })
     .map(element => ({ element: label(element), left: Math.round(element.getBoundingClientRect().left), right: Math.round(element.getBoundingClientRect().right) }));
+  // Content scrolled sideways at load hides its start, such as a board scrolled to its last column.
+  const scrolled = all
+    .filter(element => element.scrollLeft > 0)
+    .map(element => ({ element: label(element), scrollLeft: Math.round(element.scrollLeft), scrollWidth: element.scrollWidth, clientWidth: element.clientWidth }));
   const sideways = all
     .filter(element => /(auto|scroll)/.test(getComputedStyle(element).overflowX) && element.scrollWidth > element.clientWidth + 1)
     .map(element => ({ element: label(element), scrollWidth: element.scrollWidth, clientWidth: element.clientWidth }));
@@ -58,14 +62,18 @@
     leafFonts[family] = (leafFonts[family] || 0) + 1;
   }
 
+  // Text and SVG icons draw in the control's color; an empty dot or an image-only link has no foreground to contrast.
+  const drawsForeground = element => element.textContent.trim() || element.querySelector('svg');
   const darkButtons = [...document.querySelectorAll('button, [role="button"], a[href]')]
     .filter(visible)
+    .filter(drawsForeground)
     .map(element => ({ element, fg: rgb(getComputedStyle(element).color).slice(0, 3), bg: backgroundOf(element) }))
     .filter(({ bg }) => luminance(bg) < 0.2)
     .map(({ element, fg, bg }) => ({ element: label(element), fg: `rgb(${fg})`, bg: `rgb(${bg})`, contrast: contrast(fg, bg) }));
 
   const underlinedNav = [...document.querySelectorAll('nav a, [role="navigation"] a, [role="tablist"] a')]
     .filter(visible)
+    .filter(element => element.textContent.trim())
     .filter(element => getComputedStyle(element).textDecorationLine.includes('underline'))
     .map(label);
 
@@ -83,6 +91,7 @@
     documentScrollWidth: document.documentElement.scrollWidth,
     horizontalOverflow: document.documentElement.scrollWidth > width,
     overflowingElements: overflowing.slice(0, 10),
+    scrolledOnLoad: { page: Math.round(window.scrollX), elements: scrolled.slice(0, 10) },
     sidewaysScrollers: sideways.slice(0, 10),
     body: {
       fontFamily: body.fontFamily,
