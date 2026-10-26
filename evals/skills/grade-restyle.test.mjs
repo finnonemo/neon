@@ -79,3 +79,21 @@ test('restyle grader fails component, @theme inline and chart edits', () => {
     rmSync(root, { recursive: true, force: true });
   }
 });
+
+test('restyle grader inspects stylesheets the result adds', () => {
+  const { root, source, result } = apps(
+    { 'package.json': '{}', 'src/index.css': css() },
+    { 'package.json': '{}', 'src/index.css': css(), 'src/finnomena.css': ':root { --chart-1: oklch(0.5 0.1 250); }\n' },
+  );
+  try {
+    const checks = grade({ source, result, build: false });
+    assert.deepEqual(verdicts(checks), {
+      'only stylesheets changed': true,
+      '@theme inline unchanged': true,
+      '--chart-* and --radius unchanged': false,
+    });
+    assert.equal(checks[2].detail, 'src/finnomena.css: :root --chart-1 added as oklch(0.5 0.1 250)');
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});

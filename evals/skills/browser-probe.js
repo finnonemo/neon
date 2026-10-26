@@ -98,7 +98,7 @@
   // shadow, draws no shape: a badge or secondary button the color of its card.
   // Only rounded elements count, so wrappers repeating the page background and
   // square nav buttons sharing their bar's fill do not.
-  const transparent = color => color === 'transparent' || /(,\s*|\/\s*)0\)$/.test(color);
+  const transparent = color => color === 'transparent' || /^rgba\(.*,\s*0\)$/.test(color) || /\/\s*0\)$/.test(color);
   const drawsEdge = (style, fill) => ['Top', 'Right', 'Bottom', 'Left'].some(side => parseFloat(style[`border${side}Width`]) > 0
       && !['none', 'hidden'].includes(style[`border${side}Style`])
       && contrast(composite([`rgb(${fill})`, style[`border${side}Color`]]), fill) >= 1.1)

@@ -66,7 +66,8 @@ export function grade({ source, result, build = true }) {
   const outside = changes.filter(({ path }) => !path.endsWith('.css'));
   add('only stylesheets changed', outside.length === 0, outside.map(({ path, change }) => `${path} (${change})`).join('\n'));
 
-  const stylesheets = listFiles(source).filter(path => path.endsWith('.css'));
+  // A stylesheet the result adds can redeclare a token or a second @theme inline.
+  const stylesheets = [...new Set([...listFiles(source), ...listFiles(result)])].filter(path => path.endsWith('.css'));
   const read = (app, path) => {
     try {
       return readFileSync(join(app, path), 'utf8');
@@ -80,8 +81,9 @@ export function grade({ source, result, build = true }) {
     const [before, after] = [read(source, path), read(result, path)];
     if (themeInlineBlocks(before).join('\n') !== themeInlineBlocks(after).join('\n')) themeProblems.push(path);
     const [kept, now] = [preservedDeclarations(before), preservedDeclarations(after)];
-    for (const key of Object.keys(kept)) {
-      if (kept[key] !== now[key]) tokenProblems.push(`${path}: ${key} ${kept[key]} → ${now[key] ?? 'removed'}`);
+    for (const key of new Set([...Object.keys(kept), ...Object.keys(now)])) {
+      if (!(key in kept)) tokenProblems.push(`${path}: ${key} added as ${now[key]}`);
+      else if (kept[key] !== now[key]) tokenProblems.push(`${path}: ${key} ${kept[key]} → ${now[key] ?? 'removed'}`);
     }
   }
   add('@theme inline unchanged', themeProblems.length === 0, themeProblems.join('\n'));
