@@ -195,6 +195,10 @@ format, then convert the Finnomena token value into it:
   the config's `primary: 'hsl(var(--primary))'` line stays untouched
   since it's already pointing at the right variable name.
 
+## Mode-specific values
+
+The literal values below illustrate light-mode conversions, not a complete theme for both schemes. Take actual declarations and applicable dark variants from the [canonical CSS adapter](../../../theme/css/theme.css), using the [design contract](../../INSTRUCTION.md#color-roles) for semantic roles. Preserve the app's existing mode selectors. Do not reuse a light-mode value for a dark surface without checking the actual pair. Hover values must come from established app behavior or a verified canonical role, not an invented ramp.
+
 ## Worked examples
 
 These are calibration fixtures, not an automated test suite — read them
@@ -211,9 +215,12 @@ Tailwind's stock palette, used directly. `tier: 'colors'`.
 - **Inventory:** one shared component, one hardcoded color pair
   (`bg-blue-600`/`hover:bg-blue-700`), no existing brand token.
 - **Map:** this is the primary call-to-action button role → Finnomena
-  Navy Ink (`#01172b`, hover `#1a2e40`).
+  Navy Ink (light-mode `#01172b`). Preserve a verified existing hover
+  treatment, or inspect the canonical roles and contrast before selecting one.
 - **Update shared tokens:** add to `tailwind.config.js`:
-  `theme.extend.colors: { primary: '#01172b', 'primary-hover': '#1a2e40' }`.
+  `theme.extend.colors: { primary: 'var(--button-primary)', 'primary-hover': 'var(--button-primary-hover)' }`.
+  Define both variables in the affected scope and existing mode selectors,
+  using canonical values and the verified hover treatment above.
 - **Update remaining:** `Button.tsx` becomes
   `className="bg-primary hover:bg-primary-hover text-white rounded-md px-4 py-2"`.
   `rounded-md`/`px-4 py-2` are untouched — `tier: 'colors'` means spacing

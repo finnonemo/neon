@@ -3,17 +3,21 @@
  * @coinbase/cds-web with the neonTheme override.
  *
  * Provider order matters and must not be changed:
- *   MediaQueryProvider → ThemeProvider → PortalProvider
+ *   MediaQueryProvider → ThemeProvider → ComponentConfigProvider → PortalProvider
  *
  * Import paths verified against the real published @coinbase/cds-web@9.26.1
- * package: MediaQueryProvider/ThemeProvider live under "./system",
- * PortalProvider under "./overlays".
+ * package: MediaQueryProvider, ThemeProvider and ComponentConfigProvider live
+ * under "./system", PortalProvider under "./overlays".
  *
  * `createNeonTheme()` merges neonTheme's overrides onto CDS's own
- * `defaultTheme` and returns a real, complete ThemeConfig — no unsafe cast
- * needed (see ../theme/createTheme.ts for why that merge is necessary:
+ * `defaultTheme` and returns a complete ThemeConfig (see
+ * ../theme/createTheme.ts for why that merge is necessary:
  * ThemeProvider requires a full ThemeConfig, not a partial one, and
  * @coinbase/cds-web has no first-party merge helper).
+ *
+ * `neonComponentConfig` gives on-color text (filled buttons, checkmarks,
+ * badges) Finnomena's text-on-color in dark mode (see
+ * ../theme/color-overrides.ts's onColorLabel).
  *
  * Font: Finnomena uses IBM Plex Sans Thai company-wide. It is NOT part of
  * the Figma token export, so it's loaded here directly rather than through
@@ -31,16 +35,22 @@
  * §1 for the full inspect-and-verify procedure — "loaded" by family name is
  * not sufficient; verify with real Thai sample text too.
  *
- * activeColorScheme below is hardcoded "light" for this minimal example.
+ * colorScheme defaults to "light" for this minimal example.
  * In a real app, derive it from whatever already controls dark/light there
  * (an existing toggle/hook/stored preference) rather than hardcoding it or
  * defaulting to prefers-color-scheme — see theme-integration.md §2.
  */
+// Load once in the framework's global-style entrypoint; move these there if
+// global CSS imports are not permitted in this provider module.
+import "@coinbase/cds-web/globalStyles";
+import "@coinbase/cds-web/defaultFontStyles";
+import "@coinbase/cds-icons/fonts/web/icon-font.css";
+
 import type { ReactNode } from "react";
-import { MediaQueryProvider, ThemeProvider } from "@coinbase/cds-web/system";
+import { ComponentConfigProvider, MediaQueryProvider, ThemeProvider } from "@coinbase/cds-web/system";
 import { PortalProvider } from "@coinbase/cds-web/overlays";
 
-import { createNeonTheme } from "../theme/createTheme";
+import { createNeonTheme, neonComponentConfig } from "../theme/createTheme";
 
 // Created once, at module scope — ThemeProvider is memoized on theme
 // identity, so calling createNeonTheme() inline in JSX would create a new
@@ -74,7 +84,9 @@ export function AppRoot({
   return (
     <MediaQueryProvider>
       <ThemeProvider theme={appTheme} activeColorScheme={colorScheme}>
-        <PortalProvider>{children}</PortalProvider>
+        <ComponentConfigProvider value={neonComponentConfig[colorScheme]}>
+          <PortalProvider>{children}</PortalProvider>
+        </ComponentConfigProvider>
       </ThemeProvider>
     </MediaQueryProvider>
   );

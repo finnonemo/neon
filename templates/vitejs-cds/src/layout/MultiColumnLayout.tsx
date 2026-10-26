@@ -20,6 +20,8 @@
  * based on viewport width.
  */
 import type { ReactNode } from "react";
+import { Box } from "@coinbase/cds-web/layout";
+import "./layout.css";
 import { useBreakpointTier } from "./useBreakpointTier";
 import { breakpoints } from "../theme/breakpoints.config";
 import { Sidebar } from "./Sidebar";
@@ -42,7 +44,7 @@ export function MultiColumnLayout({
   const sidebarWidth = breakpoints.find((b) => b.name === tier)!.sidebarWidth;
 
   return (
-    <div style={{ display: "flex", height: "100vh", width: "100%" }}>
+    <Box background="bg" color="fg" font="body" className="neon-layout" data-bottom-nav={navigation.length > 0}>
       <Sidebar width={sidebarWidth} navigation={navigation}>
         {sidebar}
       </Sidebar>
@@ -54,6 +56,6 @@ export function MultiColumnLayout({
         ))}
       </div>
       <BottomNav navigation={navigation} />
-    </div>
+    </Box>
   );
 }

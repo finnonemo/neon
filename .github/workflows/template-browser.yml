@@ -1,0 +1,43 @@
+name: Template browser
+on:
+  pull_request:
+    paths:
+      - templates/**
+      - evals/templates/**
+      - theme/**
+      - scripts/lib/assemble-starter.mjs
+      - scripts/lib/assets.mjs
+      - .github/workflows/template-browser.yml
+  push:
+    branches: [main]
+    paths:
+      - templates/**
+      - evals/templates/**
+      - theme/**
+      - scripts/lib/assemble-starter.mjs
+      - scripts/lib/assets.mjs
+      - .github/workflows/template-browser.yml
+permissions:
+  contents: read
+jobs:
+  template-browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            evals/templates/package-lock.json
+            templates/vitejs-cds/package-lock.json
+      - run: npm ci --prefix evals/templates
+      - run: npx --prefix evals/templates playwright install --with-deps chromium
+      - run: npm test --prefix evals/templates
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: template-browser-results
+          path: .local/evals/templates/
+          if-no-files-found: ignore
+          include-hidden-files: true
