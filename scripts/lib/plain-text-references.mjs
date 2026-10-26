@@ -51,6 +51,7 @@ export async function checkPlainTextReferences(root, files, { ignored = [] } = {
         if (!isIgnored(name, ignored) && !existsSync(join(root, name))) fail(`${name}/`);
       }
       for (const [, token] of line.matchAll(PATH_TOKEN)) {
+        if (token.startsWith('./')) continue;
         if (token.startsWith('../')) {
           const target = relative(root, join(root, dirname(file), token));
           if (!isIgnored(target, ignored) && !existsSync(join(root, target))) fail(token);
