@@ -75,6 +75,20 @@ for (const layout of ['app', 'content']) {
   });
 }
 
+// Figma's min and max frame for each desktop tier; sidebar widths come from theme/cds/breakpoints.config.ts.
+const desktopTiers = [[988, 64, 360], [1079, 64, 360], [1080, 240, 360], [1271, 240, 360], [1272, 320, 360], [1439, 320, 360], [1440, 360, 400], [1920, 360, 560], [2560, 360, 560]];
+for (const [layout, fixed, fill] of [['app', 'Content', 'Details'], ['content', 'Details', 'Content']]) {
+  test(`${layout}: desktop pane widths match the Figma frames`, async ({ page }) => {
+    await page.setViewportSize({ width: 988, height: 900 });
+    await page.goto(`/?layout=${layout}`);
+    for (const [width, sidebar, pane] of desktopTiers) {
+      await page.setViewportSize({ width, height: 900 });
+      await expect(page.getByRole('region', { name: fixed, exact: true })).toHaveJSProperty('offsetWidth', pane);
+      await expect(page.getByRole('region', { name: fill, exact: true })).toHaveJSProperty('offsetWidth', width - sidebar - pane);
+    }
+  });
+}
+
 for (const layout of ['app', 'content', 'simple', 'board', 'immersive']) {
   for (const width of [375, 499, 500, 987, 988, 1440]) {
     test(`${layout} ${width}px: final action stays reachable with navigation`, async ({ page }) => {
