@@ -6,7 +6,8 @@ Run each request with the named context, first against the baseline and then the
 | --- | --- |
 | Add Finnomena approvals to an existing themed React/CDS app; retain providers/routes/services | Reuses installation and shell; builds actual list/detail/actions; navy foundation, indigo selection, labeled statuses |
 | Build a colorful Finnomena product landing page | Immersive composition permits prominent brand color/illustration; does not force navy/white dominance; actions remain accessible |
-| Create a Finnomena request tracker with mock data | Scaffolds in an empty destination and builds the feature; demo behavior is visible; relevant states exist |
+| Create a Finnomena request tracker with mock data | Scaffolds in an empty destination and builds the feature; no demo/mock banner or state switcher in the UI; the report names what is mocked; relevant states exist |
+| Build a Finnomena request tracker demo with mock data, labeled as a demo | Demo/mock labeling appears in the UI |
 | Change only a Vue header to Finnomena colors | No React/CDS installation, font/layout changes or global theme side effects |
 | Review this Finnomena screenshot; do not edit | Visible findings only; keyboard, other viewports and measured contrast remain unverified |
 | Make the buttons clearer after Finnomena was established | Retains brand intent without repeated onboarding |

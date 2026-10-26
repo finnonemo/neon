@@ -10,8 +10,7 @@ theme wiring, multi-page build with real states, and a verified run.
 ```text
 Build a new Finnomena investment app from scratch in this empty folder, using React and the
 Coinbase Design System (CDS) through Finnomena's theme. There's no backend yet, so use mock
-data/services under the hood — but build it to look and behave like a real production app: no
-"demo" banner, mock-data disclaimer, or other placeholder chrome in the UI.
+data/services.
 
 Build these pages, each reachable via navigation:
 1. Dashboard — portfolio total value, today's change (gain/loss with color), a breakdown of
@@ -27,7 +26,7 @@ Requirements:
 - Use Finnomena's navy/white functional theme with indigo highlights, per the shared brand
   tokens — do not invent your own colors.
 - Every page needs loading, empty and error states in addition to the populated state, using
-  mock data/services — no need to expose that in the UI, just tell me what's mocked when done.
+  mock data/services. Tell me what's mocked when done.
 - Make it responsive: usable on both mobile and desktop widths.
 - After building, start the dev server and confirm each of the 4 pages actually renders
   without errors before reporting done.
