@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { unscopedSelectors } from './stylesheet-scope.mjs';
+import { cdsHostedClasses, selectorsOnCdsHosts, unscopedSelectors } from './stylesheet-scope.mjs';
 
 // Rules taken from the health-check rebuild samples recorded in README "CDS rebuild".
 test('flags the bare element rules the fourth rebuild sample wrote', () => {
@@ -45,4 +45,21 @@ test('accepts class-led rules, including element selectors under an app class', 
     .phc-card { padding: 4px; &:hover { opacity: 0.9; } }
   `;
   assert.deepEqual(unscopedSelectors(css), []);
+});
+
+test('flags selectors naming a class the TSX puts on a CDS component', () => {
+  const source = `
+    import { Button as CdsButton } from "@coinbase/cds-web/buttons";
+    import { Box } from "@coinbase/cds-web/layout";
+    export const Row = ({ on }) => (
+      <Box className="phc-row">
+        <CdsButton onClick={() => on(1 > 0)} className={\`phc-save \${on ? 'is-on' : ''}\`}>Save</CdsButton>
+        <div className="phc-cell" />
+      </Box>
+    );
+  `;
+  const hosts = cdsHostedClasses([{ path: 'Row.tsx', source }]);
+  assert.deepEqual([...hosts.keys()].sort(), ['is-on', 'phc-save']);
+  const css = '.phc-row { gap: 4px; } .phc-cell { flex: 1; } .phc-row .phc-save:hover { opacity: 0.8; }';
+  assert.deepEqual(selectorsOnCdsHosts(css, hosts), ['.phc-row .phc-save:hover (on Row.tsx: CdsButton)']);
 });
