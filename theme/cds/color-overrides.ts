@@ -24,6 +24,11 @@
  *   Finnomena's brand framing, Navy is Finnomena's structural "ink" color
  *   that plays the role black/primary plays in most systems, not a
  *   generic accent.
+ * - Dark fgPrimary/bgPrimaryWash take Finnomena's navy text-on-surface pair,
+ *   Tag.Navy.Primary (Navy.10 on Navy.100), mirroring light's Navy ink on a
+ *   near-page wash. Dark Button.button-primary (Navy.75) stays the fill
+ *   only: as text it is 1.5–2.6:1 on dark surfaces, and Navy.5 kept as the
+ *   dark wash puts white text at 1.11:1.
  * - Indigo Interactive (links/focus) fills bgLinePrimary instead, since
  *   Finnomena has two distinct "primary-ish" roles (Navy for buttons,
  *   Indigo for links/focus) that don't cleanly collapse onto CDS's smaller
@@ -61,7 +66,8 @@
 
 const NAVY_100 = "rgb(1,23,43)"; // Navy Ink — Button.button-primary (light)
 const NAVY_100_DARK = "rgb(65,81,96)"; // Navy Ink — Button.button-primary (dark)
-const NAVY_5 = "rgb(242,243,244)"; // Navy Fog-adjacent wash — Navy.5 primitive (mode-independent)
+const NAVY_5 = "rgb(242,243,244)"; // Navy Fog-adjacent wash — Navy.5 primitive (light wash)
+const NAVY_10 = "rgb(230,232,234)"; // Tag.Navy.Primary.color — Navy.10 text on Navy.100
 const INDIGO_65 = "rgb(105,104,239)"; // Indigo Interactive — Focus.focus (same both modes)
 const YELLOW_100 = "rgb(242,249,60)"; // Yellow Signal — Background.background-brand / Button.button-highlight (same both modes)
 const ORANGE_100 = "rgb(242,100,20)"; // Support.support-warning (same both modes)
@@ -114,7 +120,7 @@ export const darkColor = {
   fg: "rgb(255,255,255)", // Text.text-primary (dark)
   fgMuted: "rgba(255,255,255,0.651)", // Text.text-secondary (dark)
   fgInverse: "rgba(0,0,0,0.851)", // Text.text-inverse (dark)
-  fgPrimary: NAVY_100_DARK,
+  fgPrimary: NAVY_10, // Tag.Navy.Primary.color: Navy.75 is a button fill, 1.5–2.6:1 as text
   fgWarning: ORANGE_100,
   fgPositive: "rgb(0,196,91)", // Text.text-positive (dark)
   fgNegative: "rgb(243,9,9)", // Text.text-negative (dark)
@@ -125,7 +131,7 @@ export const darkColor = {
   bgElevation1: "rgb(26,26,26)", // Layer.layer-01 (dark)
   bgElevation2: "rgb(51,51,51)", // Layer.layer-02 (dark)
   bgPrimary: NAVY_100_DARK,
-  bgPrimaryWash: NAVY_5, // Navy primitive is mode-independent — no distinct dark wash role exists
+  bgPrimaryWash: NAVY_100, // Tag.Navy.Primary.background: NAVY_5 is a light wash, 1.11:1 under white text
   bgSecondary: "rgb(26,26,26)", // Background.background-secondary (dark)
   bgTertiary: "rgb(38,38,38)", // Background.background-tertiary (dark)
   bgNegative: "rgb(243,9,9)", // Text.text-negative family (dark, Red.115)

@@ -206,7 +206,7 @@
     --color-fg: rgb(255, 255, 255);
     --color-fgMuted: rgba(255, 255, 255, 0.651);
     --color-fgInverse: rgba(0, 0, 0, 0.851);
-    --color-fgPrimary: rgb(65, 81, 96);
+    --color-fgPrimary: rgb(230, 232, 234);
     --color-fgNegative: rgb(243, 9, 9);
     --color-fgPositive: rgb(0, 196, 91);
 
@@ -217,6 +217,7 @@
     --color-bgElevation1: rgb(26, 26, 26);
     --color-bgElevation2: rgb(51, 51, 51);
     --color-bgPrimary: rgb(65, 81, 96);
+    --color-bgPrimaryWash: rgb(1, 23, 43);
     --color-bgSecondary: rgb(26, 26, 26);
     --color-bgTertiary: rgb(38, 38, 38);
     --color-bgSecondaryWash: rgb(20, 21, 25);
@@ -239,7 +240,7 @@
   --color-fg: rgb(255, 255, 255);
   --color-fgMuted: rgba(255, 255, 255, 0.651);
   --color-fgInverse: rgba(0, 0, 0, 0.851);
-  --color-fgPrimary: rgb(65, 81, 96);
+  --color-fgPrimary: rgb(230, 232, 234);
   --color-fgNegative: rgb(243, 9, 9);
   --color-fgPositive: rgb(0, 196, 91);
 
@@ -250,6 +251,7 @@
   --color-bgElevation1: rgb(26, 26, 26);
   --color-bgElevation2: rgb(51, 51, 51);
   --color-bgPrimary: rgb(65, 81, 96);
+  --color-bgPrimaryWash: rgb(1, 23, 43);
   --color-bgSecondary: rgb(26, 26, 26);
   --color-bgTertiary: rgb(38, 38, 38);
   --color-bgSecondaryWash: rgb(20, 21, 25);
