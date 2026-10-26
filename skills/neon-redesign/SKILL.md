@@ -37,4 +37,4 @@ When target, scope and theme variables are known, begin with the affected styles
 
 ## Done
 
-Report changed scope/tokens, observed visual and behavior checks, and exceptions or unavailable checks. Color mapping is provisional; identify relevant discrepancies without inventing replacement brand values. Read-only review is a separate task, not a mandatory extra gate.
+Report changed scope/tokens, observed visual and behavior checks, and exceptions or unavailable checks. State Ship-ready or Brand-ready per [readiness and handoff](../neon-audit/references/readiness.md), with a Handoff Summary for Brand-ready work. Color mapping is provisional; identify relevant discrepancies without inventing replacement brand values. Read-only review is a separate task, not a mandatory extra gate.
