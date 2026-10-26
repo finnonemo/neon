@@ -168,7 +168,7 @@ const buttonLabels = {
   light: { primary: white, positive: white, negative: white, inverse: white, secondary: 'rgba(0, 0, 0, 0.85)',
     transparent: 'rgb(1, 23, 43)', 'local color': 'rgba(0, 0, 0, 0.65)', 'icon primary': white },
   dark: { primary: white, positive: white, negative: white, inverse: 'rgba(0, 0, 0, 0.85)', secondary: white,
-    transparent: 'rgb(65, 81, 96)', 'local color': 'rgba(255, 255, 255, 0.65)', 'icon primary': white },
+    transparent: 'rgb(230, 232, 234)', 'local color': 'rgba(255, 255, 255, 0.65)', 'icon primary': white },
 };
 const onColorParts = {
   'checkbox checkmark': page => page.getByTestId('checkbox-icon'),
