@@ -7,6 +7,9 @@ import { Checkbox } from "@coinbase/cds-web/controls";
 import { Calendar } from "@coinbase/cds-web/dates";
 import { DotCount, DotSymbol } from "@coinbase/cds-web/dots";
 import { Avatar } from "@coinbase/cds-web/media";
+import { Tag } from "@coinbase/cds-web/tag";
+import { defaultTheme } from "@coinbase/cds-web/themes/defaultTheme";
+import { createNeonTheme } from "../theme/createTheme";
 import { AppRoot } from "./AppRoot";
 import { AppRoot as IntegrationRoot } from "./IntegrationRoot";
 import { AppShell } from "../layout/AppShell";
@@ -67,6 +70,24 @@ function OnColorSamples() {
   </Box>;
 }
 
+// Every Tag scheme × emphasis and every Avatar hue Neon overrides; CDS wraps
+// these spectrum steps in rgb() itself.
+const tagSchemes = ["blue", "green", "red", "yellow", "purple", "gray"] as const;
+const avatarHues = ["blue", "green", "orange", "yellow", "indigo", "purple", "red", "teal"] as const;
+function SpectrumSamples() {
+  return <Box padding={2} display="flex" flexWrap="wrap" gap={2} background="bg">
+    {tagSchemes.flatMap((scheme) => (["low", "high"] as const).map((emphasis) =>
+      <Tag key={`${scheme}-${emphasis}`} colorScheme={scheme} emphasis={emphasis} testID={`tag-${scheme}-${emphasis}`}>
+        {scheme} {emphasis}
+      </Tag>))}
+    {avatarHues.map((hue) =>
+      <span key={hue} data-sample={`avatar-${hue}`}><Avatar name={hue} colorScheme={hue} testID={`avatar-${hue}`} /></span>)}
+  </Box>;
+}
+
+// The spec compares the merged theme's value formats with CDS's own.
+Object.assign(window, { neonThemeFormats: { neon: createNeonTheme(), base: defaultTheme } });
+
 export function App() {
   const [activePane, setActivePane] = useState<ActivePane>("content");
   const [selected, setSelected] = useState<number | null>(null);
@@ -88,6 +109,7 @@ export function App() {
       <button onClick={() => setDark(!dark)}>Toggle theme</button>
       {clicked && <Text role="status">Completed</Text>}
     </Box> : layout === "on-color" ? <OnColorSamples />
+      : layout === "spectrum" ? <SpectrumSamples />
       : layout === "app" ? <AppShell {...props} />
       : layout === "content" ? <ContentLayout {...props} />
       : layout === "simple" ? <SimpleLayout {...props} />
