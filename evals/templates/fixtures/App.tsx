@@ -48,8 +48,9 @@ function Details({ selected }: { selected: number | null }) {
   </Box>;
 }
 
-// Every on-color foreground, plus the cases the override must leave alone.
 const calendarDate = new Date(2026, 9, 15);
+// Each on-color foreground neonComponentConfig overrides, plus the cases it
+// must leave alone (inverse, secondary, transparent, an explicit color).
 function OnColorSamples() {
   return <Box padding={2} display="flex" flexWrap="wrap" gap={2} background="bg">
     {(["primary", "positive", "negative", "inverse", "secondary"] as const).map((variant) =>

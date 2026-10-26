@@ -12,9 +12,13 @@
  * (`@coinbase/cds-web/themes/defaultTheme`) rather than one of its
  * documented named subpaths — verified against @coinbase/cds-web@9.26.1.
  *
- * Hand-written, not generated — this merge logic doesn't depend on
- * Finnomena's specific token values, only on neonTheme's/colorOverrides'
- * shape.
+ * Also exports `neonComponentConfig`, the per-scheme ComponentConfigProvider
+ * value that points CDS's on-color text at `onColorLabel` (see
+ * createComponentConfig below).
+ *
+ * Hand-written, not generated — neither part depends on Finnomena's specific
+ * token values, only on neonTheme's/colorOverrides' shape and the token
+ * `onColorLabel` names.
  */
 import { defaultTheme } from "@coinbase/cds-web/themes/defaultTheme";
 import type { ThemeConfig } from "@coinbase/cds-web";
