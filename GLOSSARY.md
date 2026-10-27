@@ -93,7 +93,7 @@ Output whose UI matches the Brand Contract but still needs an engineer's review 
 _Avoid_: done, production-ready
 
 **Ship-ready**:
-Output an employee may deploy to real users without engineering review. Only a Campaign Page with no Investment Content, whose personal data goes only to an Approved Form Service, can be Ship-ready.
+Output an employee may deploy to real users without engineering review, once they finish its pre-launch checklist. Only a Campaign Page with no Investment Content, whose personal data goes only to an Approved Form Service, can be Ship-ready; failed or unverified checklist items are the employee's pre-launch to-dos, not a reason for Brand-ready.
 _Avoid_: production-ready, live
 
 **Investment Content**:
