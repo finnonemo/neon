@@ -6,15 +6,16 @@ Read before reporting a finished implementation or restyle. It decides whether t
 
 | Work type | Examples | Readiness |
 | --- | --- | --- |
-| Campaign page | Campaign, landing, event, recruiting or education page | Ship-ready only when every condition below holds; otherwise Brand-ready |
+| Campaign page | Campaign, landing, event, recruiting or education page | Ship-ready when both conditions below hold; otherwise Brand-ready |
 | Back office | Internal management, approval or reporting screen | Brand-ready |
 | Product feature | New functionality in a Finnomena product | Brand-ready |
 
-A campaign page is **Ship-ready** only when it:
+A campaign page is **Ship-ready** when it:
 
 1. contains no investment content (see below);
-2. collects no personal data, or sends it only to a company form service the employee names as already approved for public pages;
-3. passes the ship-ready checklist.
+2. collects no personal data, or sends it only to a company form service the employee names as already approved for public pages.
+
+The ship-ready checklist never changes readiness: a Ship-ready page with failed or unverified items stays Ship-ready, and those items become the employee's pre-launch to-dos.
 
 Everything else is **Brand-ready**: the UI follows Finnomena branding, and an engineer reviews it before real users rely on it. Record the result in `NeonContext.workType` and `NeonContext.readiness`.
 
@@ -39,7 +40,7 @@ Report each item as passed, failed or unverified:
 - Brand Floor holds when a reference design was used ([reference design checks](reference-design.md#verify));
 - the page works at 375px and 1440px with no console errors.
 
-Stop at the build output and this checklist. Deployment uses the company's existing publishing channel; do not deploy or create hosting accounts.
+List every failed or unverified item as a pre-launch to-do with the action that closes it, such as "add a share image" or "open the page at 375px and check the console". The employee publishes after finishing the list. Stop at the build output and this checklist. Deployment uses the company's existing publishing channel; do not deploy or create hosting accounts.
 
 ## Handoff Summary
 

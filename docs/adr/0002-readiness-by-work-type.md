@@ -6,3 +6,4 @@ Neon promises Ship-ready output only for Campaign Pages that carry no Investment
 
 - **Everything Ship-ready**: rejected; back office and product work touch real records and auth, and product campaigns need compliance sign-off.
 - **Nothing Ship-ready**: rejected; low-risk public pages (events, recruiting, education) are the clearest case where non-developers can ship alone, and blocking them removes most of the value.
+- **Ship-ready only after every checklist item passes**: rejected; an unverified browser check or a missing share image is the employee's pre-launch work, not a reason for engineering review. Compliance confirmed that employees may self-publish such pages after the pre-launch checklist (#32), so failed or unverified items become the employee's to-dos and the page stays Ship-ready.
