@@ -7,11 +7,11 @@
 // --scheme sets prefers-color-scheme; --dark-class adds `dark` to <html> after
 // load, for apps that switch on a class (shadcn's `.dark`).
 // --fixture loads probe-fixture.html at 375px and fails unless the ids the
-// probe reports per category equal the fixture's expected ids (and contrast,
-// where the fixture gives one), then again with
-// the dark scheme and class against its dark expected ids. Otherwise each
-// build under the shots directory (grade-rebuild.mjs --shots), or each named
-// one, is served over HTTP and probed at every width, one summary line each.
+// probe reports per category equal the fixture's expected ids (and contrast to
+// two decimals, where the fixture gives one), then again with the dark scheme
+// and class against its dark expected ids. Otherwise each build under the
+// shots directory (grade-rebuild.mjs --shots), or each named one, is served
+// over HTTP and probed at every width, one summary line each.
 // Uses @playwright/test from evals/templates (npm ci --prefix evals/templates).
 import { createReadStream, existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { createServer } from 'node:http';

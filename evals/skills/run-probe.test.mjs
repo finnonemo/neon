@@ -19,14 +19,16 @@ test('fixture contrast that differs at the second decimal fails', () => {
 });
 
 test('a misread color with the same ids fails', () => {
-  // Reading oklch() channels as rgb() put every shadcn v4 control near 1:1.
+  // #44's mutation check: browser-probe.js reading oklch() as rgb() reported oklch-dark at 1.17.
   assert.deepEqual(fixtureFailures('light', expected, reported({ 'black-on-navy': 1.16, 'oklch-dark': 1.17 })), [
     'light darkBackgroundControls oklch-dark: contrast 1.17, expected 17.18',
   ]);
 });
 
 test('a missing contrast fails', () => {
-  assert.equal(fixtureFailures('light', expected, reported({ 'black-on-navy': undefined, 'oklch-dark': 17.18 })).length, 1);
+  assert.deepEqual(fixtureFailures('light', expected, reported({ 'black-on-navy': undefined, 'oklch-dark': 17.18 })), [
+    'light darkBackgroundControls black-on-navy: contrast undefined, expected 1.16',
+  ]);
 });
 
 test('a wrong id set fails', () => {
