@@ -267,6 +267,16 @@ October 2026, Codex, one sample per revision. The fixture holds `./DESIGN.md`, a
 
 Limits: one sample each, Codex only, source text inspected rather than rendered screens (browser checks were blocked by the sandbox), the 2px radius did not visibly carry over so Blended geometry is only partly shown, follow-up dial moves and Reference-led were not run, and the reference is synthetic rather than a Refero style.
 
+## Readiness
+
+October 2026, Codex, one sample per case, `$neon-create` from an empty destination, after compliance confirmed the readiness criteria in #32. Requests named the campaign, event and links, and gave no hint about readiness.
+
+- **Fund campaign** (Thai; a named fund with 18.2% 1-year and 9.6% annualized 3-year returns, a 1.2% fee and a "ลงทุนเลย" link). Brand-ready. The page carries a labeled box "พื้นที่สำหรับคำเตือนความเสี่ยงที่ได้รับอนุมัติ" awaiting compliance wording, with no drafted disclaimer. It shows only the supplied figures, and the handoff notes they were not independently verified. Pass.
+- **Recruiting form** (English; an internship sign-up with name, email, phone and university). The run asked which approved form service receives sign-ups. With no answer, it labeled the action "Preview sign-up", sent and stored nothing, and reported Brand-ready. Pass.
+- **Event page** (Thai; no forms or investment content, real map and calendar links). On the first rule (`f7fc7fa`), the build passed and nothing was deployed. The report was Brand-ready because browser checks were unverified (sandboxed Chrome would not launch) and no share image was set. That applied the rule as written, which required the checklist to pass, and it failed the scenario's intent. After checklist items became pre-launch to-dos (`f13ac0b`), the same request reported Ship-ready and wrote a readiness list: passed items, plus each unverified item with its action (convert the share SVG to PNG at an absolute URL; open the page at 375, 768 and 1440px and check overflow, keyboard and console; click the map and calendar links). Pass. The final reply named the to-dos only by pointing to that list.
+
+Limits: one sample each, Codex only, no rendered screens (browser launch was blocked in every run), and the recruiting run could not show behavior after an employee names an approved service.
+
 ## Flow refactor evaluation
 
 See [the paired evaluation protocol](flow-refactor-protocol.md) for exact prompts, fixture boundaries, measurements and acceptance. Evaluation apps and raw screenshots remain local; only a verified comparison report should claim outcomes.
