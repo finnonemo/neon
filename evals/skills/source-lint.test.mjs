@@ -95,9 +95,11 @@ test('skips emoji and placeholder words inside code comments, keeping line numbe
     '<!-- 🚀 lorem -->',
     '  // ⚠️ legacy sample from Jane Doe',
     "const link = 'https://example.com/🚀'; <p>Lorem</p>",
+    "const pages = import.meta.glob('./pages/*.tsx'); const label = '🎉 Acme';",
+    '/* end */',
   ].join('\n');
-  assert.deepEqual(rules.emojiText(source), [{ match: '🚀', line: 5 }]);
-  assert.deepEqual(rules.placeholderText(source), [{ match: 'Lorem', line: 5 }]);
+  assert.deepEqual(rules.emojiText(source), [{ match: '🚀', line: 5 }, { match: '🎉', line: 6 }]);
+  assert.deepEqual(rules.placeholderText(source), [{ match: 'Lorem', line: 5 }, { match: 'Acme', line: 6 }]);
 });
 
 test('finds transitions on all properties in CSS, inline styles and Tailwind', () => {

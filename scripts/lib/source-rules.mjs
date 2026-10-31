@@ -148,7 +148,7 @@ export function stockPaletteUtilities(source) {
 // numbers hold. Only what renders can be content; generated files such as the
 // starter's theme.config.ts mark statuses with emoji in comments.
 function withoutComments(source) {
-  return source.replace(/\/\*[\s\S]*?\*\/|<!--[\s\S]*?-->|^[ \t]*\/\/.*$/gm, comment => comment.replace(/[^\n]/g, ' '));
+  return source.replace(/(?<![\w*.])\/\*[\s\S]*?\*\/|<!--[\s\S]*?-->|^[ \t]*\/\/.*$/gm, comment => comment.replace(/[^\n]/g, ' '));
 }
 
 // Filler a screen should not ship (new-ui-workflow "Plausible samples").
