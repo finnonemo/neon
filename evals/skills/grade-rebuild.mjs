@@ -6,8 +6,8 @@
 //   node evals/skills/grade-rebuild.mjs --source <app> --rebuild <app>-cds [--shots <name>] [--json]
 //
 // `--shots <name>` also builds the rebuild into .local/shots/<name> with a
-// relative base, copies browser-probe.js beside it and adds an `eval-shots`
-// server for .local/shots to .claude/launch.json. The preview opens
+// relative base, copies the shipped browser-probe.js beside it and adds an
+// `eval-shots` server for .local/shots to .claude/launch.json. The preview opens
 // http://localhost:4793/<name>/ and runs the probe with
 // `eval(await (await fetch('/browser-probe.js')).text())`.
 import { execFileSync, spawnSync } from 'node:child_process';
@@ -139,7 +139,7 @@ export function buildShots(rebuild, name) {
   const outDir = join(repositoryRoot, '.local/shots', name);
   mkdirSync(outDir, { recursive: true });
   const result = run('npx', ['--no-install', 'vite', 'build', '--base', './', '--outDir', outDir, '--emptyOutDir'], rebuild);
-  copyFileSync(join(import.meta.dirname, 'browser-probe.js'), join(repositoryRoot, '.local/shots/browser-probe.js'));
+  copyFileSync(join(repositoryRoot, 'skills/neon-redesign/references/browser-probe.js'), join(repositoryRoot, '.local/shots/browser-probe.js'));
   const launchPath = join(repositoryRoot, '.claude/launch.json');
   const launch = existsSync(launchPath) ? JSON.parse(readFileSync(launchPath, 'utf8')) : undefined;
   mkdirSync(join(repositoryRoot, '.claude'), { recursive: true });

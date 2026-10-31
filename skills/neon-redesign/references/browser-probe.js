@@ -1,7 +1,9 @@
-// Paste into a browser JavaScript console or evaluator tool on a rebuilt app
-// page. Returns the CDS rebuild browser checks (README "CDS rebuild") as JSON,
-// naming each element and the viewport width it was measured at, so a claim
-// cites what was measured. It reads the page and changes nothing.
+// Evaluate this file's text in a browser JavaScript console or a browser
+// tool's evaluate action on the rendered page, once per viewport width. It
+// returns JSON naming each element it measured and the width it measured at,
+// so a verification claim cites what was measured. It reads the page, changes
+// nothing and needs no dependencies. Its lists are leads to inspect, not a
+// pass/fail verdict; see verification.md's shared checklist.
 (() => {
   const width = document.documentElement.clientWidth || window.innerWidth;
   const label = element => {
