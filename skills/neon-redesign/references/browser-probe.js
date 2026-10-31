@@ -3,13 +3,16 @@
 // returns JSON naming each element it measured and the width it measured at,
 // so a verification claim cites what was measured. It reads the page, changes
 // nothing and needs no dependencies. Its lists are leads to inspect, not a
-// pass/fail verdict; see verification.md's shared checklist.
+// pass/fail verdict; see verification.md's shared checklist. For a Reference
+// Design page, evaluate `window.neonProbeSourceBrands = ['Brand'];` as its own
+// call first, so the probe lists where the source brand appears. Without a
+// browser tool, the Neon root's scripts/probe-page.mjs runs this file in Chrome.
 (() => {
   const width = document.documentElement.clientWidth || window.innerWidth;
   const label = element => {
     const id = element.id ? `#${element.id}` : '';
     const classes = typeof element.className === 'string' && element.className.trim() ? `.${element.className.trim().split(/\s+/).slice(0, 2).join('.')}` : '';
-    const text = (element.innerText || element.getAttribute('aria-label') || '').trim().replace(/\s+/g, ' ').slice(0, 40);
+    const text = (element.innerText || element.getAttribute('aria-label') || element.getAttribute('alt') || '').trim().replace(/\s+/g, ' ').slice(0, 40);
     return `${element.tagName.toLowerCase()}${id}${classes}${text ? ` "${text}"` : ''}`;
   };
   const visible = element => {
@@ -112,6 +115,98 @@
     .filter(({ element, fill, behind }) => contrast(fill, behind) < 1.1 && !drawsEdge(getComputedStyle(element), fill))
     .map(({ element, fill, behind }) => ({ element: label(element), fill: `rgb(${fill})`, behind: `rgb(${behind})`, contrast: contrast(fill, behind) }));
 
+  // IBM Plex Sans Thai: document.fonts.check() is true when no face matches,
+  // so read the loaded faces and resolve each text element's family stack.
+  const plex = 'ibm plex sans thai';
+  const familyName = family => family.trim().replace(/^["']|["']$/g, '').toLowerCase();
+  const faces = [...document.fonts];
+  const plexFaces = faces.filter(face => familyName(face.family) === plex);
+  const covers = (face, code) => face.unicodeRange.split(',').some(range => {
+    const [low, high = low] = range.trim().replace(/^U\+/i, '').split('-');
+    return code >= parseInt(low.replace(/\?/g, '0'), 16) && code <= parseInt(high.replace(/\?/g, 'F'), 16);
+  });
+  // The first family in the element's stack with a loaded face covering the
+  // character draws it. A family with no @font-face is a system font or a
+  // generic, taken to cover it.
+  const drawingFamily = (element, code) => {
+    for (const family of getComputedStyle(element).fontFamily.split(',').map(familyName)) {
+      const declared = faces.filter(face => familyName(face.family) === family);
+      if (!declared.length || declared.some(face => face.status === 'loaded' && covers(face, code))) return family;
+    }
+    return 'browser fallback';
+  };
+  const ownText = element => [...element.childNodes].filter(node => node.nodeType === Node.TEXT_NODE).map(node => node.textContent).join('').trim();
+  const textElements = all.filter(ownText);
+  const inPlex = pattern => {
+    const yes = [];
+    const no = [];
+    for (const element of textElements) {
+      const match = ownText(element).match(pattern);
+      if (match) (drawingFamily(element, match[0].codePointAt(0)) === plex ? yes : no).push(label(element));
+    }
+    return { inPlexCount: yes.length, inPlex: yes.slice(0, 5), notInPlexCount: no.length, notInPlex: no.slice(0, 10) };
+  };
+  const loadedFaces = [...new Set(plexFaces.filter(face => face.status === 'loaded').map(face => {
+    const scripts = [covers(face, 0x0e01) && 'Thai', covers(face, 0x41) && 'Latin'].filter(Boolean).join('+') || 'other';
+    return `${face.weight} ${face.style} ${scripts}`;
+  }))];
+
+  // Vite inlines small assets as data: URIs, so the logo is known by its alt,
+  // aria-label or <title> (the brand name alone or as a logo, not an image that
+  // mentions it), its file name, or the shipped SVG's path data.
+  const logoShapes = ['M23.6 4V7.2H6V15.2H25.2V4H23.6Z', 'M11.64 10.12H2.96V15.2H10.24V18H2.96V26H0V7.29999H11.64V10.12Z'];
+  const finnomena = /finnomena|ฟินโนมีนา/i;
+  const logoLabel = /^\s*(?:(?:logo|โลโก้)\s*)?(?:finnomena|ฟินโนมีนา)(?:\s*(?:logo|โลโก้))?\s*$/i;
+  const decode = src => {
+    try {
+      const [, meta, body] = src.match(/^data:([^,]*),([\s\S]*)$/) ?? [];
+      if (meta === undefined) return '';
+      return /;base64$/i.test(meta) ? atob(body) : decodeURIComponent(body);
+    } catch {
+      return '';
+    }
+  };
+  const logoMatch = element => {
+    const by = [];
+    if (logoLabel.test(element.getAttribute('alt') ?? '')) by.push('alt');
+    if (logoLabel.test(element.getAttribute('aria-label') ?? '')) by.push('aria-label');
+    if (element.tagName.toLowerCase() === 'svg' && logoLabel.test(element.querySelector('title')?.textContent ?? '')) by.push('title');
+    const src = element.getAttribute('src') ?? '';
+    if (src && !src.startsWith('data:') && finnomena.test(src.split(/[?#]/)[0].split('/').pop())) by.push('file name');
+    const drawn = element.tagName.toLowerCase() === 'img' ? decode(src) : element.outerHTML;
+    if (logoShapes.some(shape => drawn.includes(shape))) by.push('asset shape');
+    return by;
+  };
+  const logos = [...new Set(document.querySelectorAll('img, svg, [role="img"]'))]
+    .map(element => ({ element, by: logoMatch(element) }))
+    .filter(({ by }) => by.length);
+
+  // Reference Design pages: evaluate `window.neonProbeSourceBrands = ['Brand'];`
+  // first, then this file, to list where a source brand name appears.
+  const brands = [].concat(window.neonProbeSourceBrands ?? []).filter(Boolean);
+  let sourceBrand = null;
+  if (brands.length) {
+    const named = text => brands.some(brand => text.toLowerCase().includes(String(brand).toLowerCase()));
+    const metas = [...document.querySelectorAll('meta[content]')];
+    const labelled = [...document.querySelectorAll('[alt], [aria-label]')];
+    const found = [];
+    if (named(document.title)) found.push({ element: 'title', text: document.title });
+    for (const meta of metas) {
+      const key = meta.getAttribute('name') ? `name="${meta.getAttribute('name')}"` : `property="${meta.getAttribute('property')}"`;
+      if (named(meta.content)) found.push({ element: `meta[${key}]`, text: meta.content.slice(0, 80) });
+    }
+    for (const element of labelled) {
+      for (const attribute of ['alt', 'aria-label']) {
+        const text = element.getAttribute(attribute);
+        if (text && named(text)) found.push({ element: `${label(element)} [${attribute}]`, text });
+      }
+    }
+    for (const element of textElements) {
+      if (named(ownText(element))) found.push({ element: label(element), text: ownText(element).slice(0, 80) });
+    }
+    sourceBrand = { brands, checked: { title: document.title, meta: metas.length, altOrLabel: labelled.length, textElements: textElements.length }, found: found.slice(0, 15) };
+  }
+
   const body = getComputedStyle(document.body);
   return {
     url: location.href,
@@ -130,7 +225,17 @@
       colorScheme: body.colorScheme,
       prefersDark: matchMedia('(prefers-color-scheme: dark)').matches,
     },
-    plexThaiLoaded: document.fonts.check('16px "IBM Plex Sans Thai"'),
+    plexThai: {
+      loadedFaces,
+      failedFaces: plexFaces.filter(face => face.status === 'error').length,
+      thai: inPlex(/[฀-๿]/),
+      latin: inPlex(/[A-Za-z]/),
+    },
+    finnomenaLogo: {
+      visible: logos.filter(({ element }) => visible(element)).map(({ element, by }) => ({ element: label(element), by })),
+      hidden: logos.filter(({ element }) => !visible(element)).map(({ element }) => label(element)),
+    },
+    sourceBrand,
     textCountByFont: leafFonts,
     serifTextCount: serif.length,
     serifSamples: serif.slice(0, 5).map(label),
