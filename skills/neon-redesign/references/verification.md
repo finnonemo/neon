@@ -12,6 +12,25 @@ Use this checklist for creation, restyling and composition changes. Check the af
 5. **Report evidence and limits.** List what changed, actual commands/results, inspected viewports/themes/states and remaining mock or unavailable behavior. Missing browser access means visual/runtime checks remain unverified; provide a concrete local recheck instead of pretending a source review passed them. Give the browser probe its own report line: `Browser probe: 375px <what it flagged, or clean>; 1440px <…>`, or `Browser probe: not run; recheck at 375px and 1440px`. The runner prints this line.
    - **Source lint.** From the resolved Neon root, run `node "${CLAUDE_PLUGIN_ROOT}/scripts/source-lint.mjs" <app-dir>` on the finished change, fix each warning or keep it with a reason, and report `Source lint: <each warning, fixed or kept and why>` or `Source lint: clean`.
 
+## Look and fix
+
+After items 1–4 and before reporting, look at your own screenshots and fix what a user would notice. A passing build or a clean probe is not this check.
+
+1. **Screenshot** the main task's screen at 375px and 1440px in its relevant states, such as loaded, selected, empty and error, in each existing or requested color scheme.
+2. **Critique** the screenshots in writing, in your messages, before editing. Write each problem as a finding in [neon-review's shape](../../neon-review/SKILL.md#done): severity, location, evidence (the screenshot's width and state), who is affected and how, fix and recheck. Ask:
+   - Is the main task's answer the most prominent, first-read element, per [one question, first screen](../../neon-create/references/new-ui-workflow.md#one-question-first-screen)?
+   - Do neighboring blocks share edges and gutters?
+   - Are color roles as the [design contract](../../INSTRUCTION.md#color-roles) assigns them?
+   - Does Thai text wrap without clipping or overlapping?
+   - At 375px, can the user still reach the main task and its details?
+   <!-- Functional screen habits table (#54): link it here when it exists. -->
+3. **Fix** the top three problems, ranked in this order: task hierarchy, composition and edges, typography and wrapping, color roles, states and focus, motion. Take new screenshots at the same widths and states and recheck. Stop after three rounds, or when a round finds nothing a user would notice.
+4. **Report** each round in the Done report on its own line, in this shape: `Look and fix, round 1 (375px, 1440px): <findings>; fixed <what changed>`, naming the widths that round's screenshots used. List the problems that remain plainly.
+
+Fix only within scope. Colors-only work fixes only color problems and reports the rest as observations. Under `composition: 'preserve'`, hierarchy and composition problems in existing UI are observations too; new UI you built is yours to fix. Do not score the screen: readiness follows work type, not visual quality.
+
+Without screenshots you can see, never critique from source. Report `Look and fix: not run; recheck at 375px and 1440px` and name the screen and states to check.
+
 ## Creation additions
 
 Confirm requested content and actions exist beyond the scaffold. Use existing service contracts; report mock behavior in the delivery report, or label it in the UI when the request asked for a demo. Test routes and shared navigation where the feature connects to the existing app. Check relevant state handling rather than adding every possible state to every component. For mock figures on a functional screen, check the [sample data rules](../../neon-create/references/new-ui-workflow.md#sample-data-and-figures): totals match their rows with no assertion error in the console, and the Handoff Summary lists the headline sample figures. For a new functional screen, check at 1440×900 that the list answering the main question shows its heading and three complete rows on load, no summary band repeats totals the list already carries unless the request asked for one, and the most frequent action is visible, per [one question, first screen](../../neon-create/references/new-ui-workflow.md#one-question-first-screen).
