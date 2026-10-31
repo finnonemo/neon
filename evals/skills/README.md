@@ -473,7 +473,9 @@ Limits:
 - The fixtures' Plex face is a stand-in drawn from a local system font.
 - The source-brand check includes body text, so a page that names the reference on purpose reports it as found.
 - The built starter shows no logo at 375px, where it has no header, so a starter-based page reports `no Finnomena logo` at that width.
-- Each Claude run had permission denials on compound read commands (`cd … &&`, variable assignments and a `( cd … )` subshell). Each run read the same files with Read or simpler commands, and no denial touched a browser or probe step.
+- The before Claude Fail is not caused by this change. The `6c0a1f6` checklist already asked for the `Browser probe:` line, and that run never read verification.md. This change did not touch that routing. What this change adds is shown only by the after Claude run, which measured, acted on leads and cited the results.
+- The `claude -p` runs inherited the user-level Claude setup: its hooks, the `swift-lsp` and built-in plugins, and probably the user-level instructions file. They still had no browser or MCP tools.
+- Both Claude runs had `dontAsk` denials on compound read commands (`cd … &&` and variable assignments). The baseline also had a denied `( cd … )` subshell and two commands blocked by a user `no-cd` hook. Each run then read the same files with Read or simpler commands. No denial or block touched a browser or probe step.
 - Both Codex runs list `/tmp/design-day-probe.js` as a new `/tmp` entry. Its origin is unclear, so it was left in place.
 
 ## Flow refactor evaluation
