@@ -94,7 +94,7 @@ Grading: `node evals/skills/grade-restyle.mjs --source <fixture> --result <case>
 
 ## Browser probe in verification
 
-The shared checklist's Measure step evaluates the shipped [browser-probe.js](../../skills/neon-redesign/references/browser-probe.js) at 375px and 1440px when a browser tool can run JavaScript. Without such a tool, the run says the probe was not run and marks those checks unverified. Fixture and request: the [shadcn on Tailwind v4 restyle](#shadcn-on-tailwind-v4-restyle) above, verbatim.
+The shared checklist's Measure step evaluates the shipped [browser-probe.js](../../skills/neon-redesign/references/browser-probe.js) at 375px and 1440px when a browser tool can run JavaScript. Without such a tool, the run says the probe was not run, marks those checks unverified and gives the probe at both widths as the recheck. Fixture and request: the [shadcn on Tailwind v4 restyle](#shadcn-on-tailwind-v4-restyle) above, verbatim.
 
 Pass requires the report to cite the probe's per-width results, or to state that the probe was not run and name both widths as the recheck.
 
@@ -111,6 +111,18 @@ November 2026, Codex 0.162.1, run through `run-codex-case.mjs`. Codex has no bro
 A third sample moved the reporting rule into item 5 ("Name the browser probe's results per width, or state that it was not run…") and opened the Measure bullet with "whether or not a browser is available". It read verification.md, passed the grader and reported "Browser checks remain unverified; recheck both modes at 375px and 1440px", without naming the probe: Partial again. In every revised run the case runner found the plugin Codex installed identical to the package, so the probe reaches an installed host.
 
 The evaluator then took the browser-available path with the shipped copy. `run-probe.mjs` evaluates the probe's text the way the Measure step asks. It ran on the Before build and the second After build at 375px and 1440px, light and `.dark`. `viewportWidth` matched each width, and both builds came back clean in every category. Limits: one sample of Before and three of After, each on a different wording, Codex only, the agent never ran the probe itself, and no sample named the probe in its report, so this case does not yet pass.
+
+Review then removed "whether or not a browser is available" from the Measure bullet, which contradicted its fallback, and made the fallback name the probe as not run with both widths as the recheck. Two samples ran that wording in Claude Code 2.1.316 with the package loaded through `--plugin-dir`, and an evaluator-written MCP browser tool (navigate, resize, evaluate, screenshot, console) backed by headless Chromium. Permissions allowed file tools and the browser tool; the shell was denied in the first sample and limited to build, typecheck and listing commands in the second.
+
+| Item | Claude, first sample (no app server) | Claude, second sample (dev server already running) |
+| --- | --- | --- |
+| Read verification.md | Yes | No: read style-migration.md, theme.css and readiness.md only |
+| Browser attempt | Navigated to `localhost:5173`; connection refused | Before/after screenshots, light and dark, its own contrast and add/remove scripts at the default 1440px viewport |
+| Probe evaluated | No | No; never resized to 375px |
+| Report | "The layout and contrast measuring script (the skill's browser probe) was not run. Run it at 375px and 1440px." | Browser checks listed; "Not checked: the 375px mobile width, the browser console and a production build." |
+| Verdict | Pass (fallback) | Fail: browser available, probe not evaluated or named |
+
+The first sample is the only run so far to name the probe, on the fallback path. The second shows the browser path failing upstream of the Measure wording: the run skipped the shared checklist that SKILL.md step 5 links. Limits: one sample per condition, the browser tool and its MCP server are the evaluator's and stayed local, and the permission settings shaped what each run could do. The browser path has still not passed in an agent run, so this case does not pass.
 
 ## Mock labeling
 
