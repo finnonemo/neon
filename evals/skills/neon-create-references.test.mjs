@@ -33,3 +33,23 @@ test('the rebuild reference carries the Box flex-row rule', async () => {
   assert.match(build, /flexDirection="column"/);
   assert.match(build, /`VStack`/);
 });
+
+test('neon-create links the Campaign Page content reference behind one condition', async () => {
+  const skill = await readFile(new URL('../../skills/neon-create/SKILL.md', import.meta.url), 'utf8');
+  const lines = skill.split('\n').filter(line => line.includes('references/campaign-content.md'));
+  assert.equal(lines.length, 1);
+  assert.match(lines[0], /new or rebuilt Campaign Page/);
+});
+
+test('the Campaign Page content reference keeps its four rules', async () => {
+  const source = await readFile(`${references}campaign-content.md`, 'utf8');
+  // README "Campaign Page content": claims first, first screen, rendered headline lines, no invented proof.
+  assert.match(source, /claim list.*Done report/);
+  assert.match(source, /map the claims onto its section order/);
+  assert.match(source, /date and place appear there/);
+  assert.match(source, /rendered line count at 375px and 1440px/);
+  assert.match(source, /report the headline check as unverified/);
+  assert.match(source, /Never invent testimonials/);
+  assert.match(source, /pre-launch to-do/);
+  assert.match(source, /Brand Intensity and the Brand Floor are unchanged/);
+});
