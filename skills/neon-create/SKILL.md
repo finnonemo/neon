@@ -31,7 +31,7 @@ If the app already has a working Finnomena CDS theme, start with the requested c
 - Explicit rebuild of an existing React app on CDS: [rebuild](references/rebuild.md), into a new directory.
 - Any supplied reference design or outside style file: [reference design](../neon-audit/references/reference-design.md).
 - Theme/provider/dependency changes: [CDS integration](references/cds-integration.md). Preserve customized files and theme-mode ownership.
-- Complex feature states or existing-app integration: [new UI workflow](references/new-ui-workflow.md).
+- Complex feature states, mock figures on a functional screen or existing-app integration: [new UI workflow](references/new-ui-workflow.md).
 - Font, mode, migration or installer conflict: the matching section of [theme integration](../neon-audit/references/theme-integration.md).
 
 ## Done
