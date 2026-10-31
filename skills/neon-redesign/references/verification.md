@@ -16,7 +16,7 @@ Use this checklist for creation, restyling and composition changes. Check the af
 After items 1–4 and before reporting, look at your own screenshots and fix what a user would notice. A passing build or a clean probe is not this check.
 
 1. **Screenshot** the main task's screen at 375px and 1440px in its relevant states, such as loaded, selected, empty and error, in each existing or requested color scheme.
-2. **Critique** the screenshots in writing. Write each problem as a finding in [neon-review's shape](../../neon-review/SKILL.md#done): severity, location, evidence (the screenshot's width and state), who is affected and how, fix and recheck. Ask:
+2. **Critique** the screenshots in writing, in your messages, before editing. Write each problem as a finding in [neon-review's shape](../../neon-review/SKILL.md#done): severity, location, evidence (the screenshot's width and state), who is affected and how, fix and recheck. Ask:
    - Is the main task's answer the most prominent, first-read element, per [one question, first screen](../../neon-create/references/new-ui-workflow.md#one-question-first-screen)?
    - Do neighboring blocks share edges and gutters?
    - Are color roles as the [design contract](../../INSTRUCTION.md#color-roles) assigns them?
@@ -24,7 +24,7 @@ After items 1–4 and before reporting, look at your own screenshots and fix wha
    - At 375px, can the user still reach the main task and its details?
    <!-- Functional screen habits table (#54): link it here when it exists. -->
 3. **Fix** the top three problems, ranked in this order: task hierarchy, composition and edges, typography and wrapping, color roles, states and focus, motion. Take new screenshots at the same widths and states and recheck. Stop after three rounds, or when a round finds nothing a user would notice.
-4. **Report** each round on its own line, `Look and fix, round 1 (375px, 1440px): <findings>; fixed <what changed>`, and list the problems that remain plainly.
+4. **Report** each round in the Done report on its own line, in this shape: `Look and fix, round 1 (375px, 1440px): <findings>; fixed <what changed>`, naming the widths that round's screenshots used. List the problems that remain plainly.
 
 Fix only within scope. Colors-only work fixes only color problems and reports the rest as observations. Under `composition: 'preserve'`, hierarchy and composition problems in existing UI are observations too; new UI you built is yours to fix. Do not score the screen: readiness follows work type, not visual quality.
 
