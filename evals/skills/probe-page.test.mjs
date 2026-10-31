@@ -1,7 +1,7 @@
-import test from 'node:test';
+import test, { after } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { chmodSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
+import { chmodSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -9,17 +9,25 @@ import { join } from 'node:path';
 const runner = join(import.meta.dirname, '../../scripts/probe-page.mjs');
 const notRun = /^Browser probe: not run; recheck at 375px and 1440px$/m;
 
+const temps = [];
+const tempDir = prefix => {
+  const dir = mkdtempSync(join(tmpdir(), prefix));
+  temps.push(dir);
+  return dir;
+};
+after(() => temps.forEach(dir => rmSync(dir, { recursive: true, force: true })));
+
 // Runs the runner with its own temp dir and an app dir as cwd, so leftovers in either show.
 function probe(args, { timeout = 30000 } = {}) {
-  const temp = mkdtempSync(join(tmpdir(), 'neon-probe-test-tmp-'));
-  const app = mkdtempSync(join(tmpdir(), 'neon-probe-test-app-'));
+  const temp = tempDir('neon-probe-test-tmp-');
+  const app = tempDir('neon-probe-test-app-');
   writeFileSync(join(app, 'package.json'), '{}');
   const result = spawnSync(process.execPath, [runner, ...args], { cwd: app, env: { ...process.env, TMPDIR: temp, CHROME_PATH: '' }, encoding: 'utf8', timeout });
   return { ...result, temp, app };
 }
 
 function fakeChrome(body) {
-  const dir = mkdtempSync(join(tmpdir(), 'neon-fake-chrome-'));
+  const dir = tempDir('neon-fake-chrome-');
   const path = join(dir, 'chrome');
   writeFileSync(path, `#!/bin/sh\necho $$ > "${dir}/pid"\n${body}\n`);
   chmodSync(path, 0o755);
@@ -108,7 +116,7 @@ test('with no Plex face, no logo and the brand absent, each is said, and absence
 });
 
 test('--serve measures a production build on its own port, falling back to index.html for app routes', t => {
-  const dist = mkdtempSync(join(tmpdir(), 'neon-probe-test-dist-'));
+  const dist = tempDir('neon-probe-test-dist-');
   writeFileSync(join(dist, 'index.html'), '<!doctype html><title>Built</title><link rel="stylesheet" href="/assets/app.css"><p id="built">Built page</p>');
   mkdirSync(join(dist, 'assets'));
   writeFileSync(join(dist, 'assets/app.css'), '#built { font-family: Georgia; }');
@@ -121,7 +129,7 @@ test('--serve measures a production build on its own port, falling back to index
 });
 
 test('screenshots are never written inside the app', () => {
-  const app = mkdtempSync(join(tmpdir(), 'neon-probe-test-app-'));
+  const app = tempDir('neon-probe-test-app-');
   const result = spawnSync(process.execPath, [runner, 'http://127.0.0.1:9/', '--out', 'shots', '--chrome', '/nonexistent/chrome'], { cwd: app, encoding: 'utf8' });
   assert.equal(result.status, 2);
   assert.match(result.stderr, /Refusing --out shots: it is inside the current directory/);
