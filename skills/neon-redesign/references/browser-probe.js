@@ -152,9 +152,11 @@
   }))];
 
   // Vite inlines small assets as data: URIs, so the logo is known by its alt,
-  // aria-label or <title>, its file name, or the shipped SVG's path data.
+  // aria-label or <title> (the brand name alone or as a logo, not an image that
+  // mentions it), its file name, or the shipped SVG's path data.
   const logoShapes = ['M23.6 4V7.2H6V15.2H25.2V4H23.6Z', 'M11.64 10.12H2.96V15.2H10.24V18H2.96V26H0V7.29999H11.64V10.12Z'];
   const finnomena = /finnomena|ฟินโนมีนา/i;
+  const logoLabel = /^\s*(?:(?:logo|โลโก้)\s*)?(?:finnomena|ฟินโนมีนา)(?:\s*(?:logo|โลโก้))?\s*$/i;
   const decode = src => {
     try {
       const [, meta, body] = src.match(/^data:([^,]*),([\s\S]*)$/) ?? [];
@@ -166,9 +168,9 @@
   };
   const logoMatch = element => {
     const by = [];
-    if (finnomena.test(element.getAttribute('alt') ?? '')) by.push('alt');
-    if (finnomena.test(element.getAttribute('aria-label') ?? '')) by.push('aria-label');
-    if (element.tagName.toLowerCase() === 'svg' && finnomena.test(element.querySelector('title')?.textContent ?? '')) by.push('title');
+    if (logoLabel.test(element.getAttribute('alt') ?? '')) by.push('alt');
+    if (logoLabel.test(element.getAttribute('aria-label') ?? '')) by.push('aria-label');
+    if (element.tagName.toLowerCase() === 'svg' && logoLabel.test(element.querySelector('title')?.textContent ?? '')) by.push('title');
     const src = element.getAttribute('src') ?? '';
     if (src && !src.startsWith('data:') && finnomena.test(src.split(/[?#]/)[0].split('/').pop())) by.push('file name');
     const drawn = element.tagName.toLowerCase() === 'img' ? decode(src) : element.outerHTML;
