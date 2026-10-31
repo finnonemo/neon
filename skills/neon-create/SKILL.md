@@ -15,7 +15,7 @@ Use for React/CDS implementation. A colors-only or CSS-only restyle, React apps 
 
 ## Fast path
 
-If the app already has a working Finnomena CDS theme, start with the requested component, service and interaction. Reuse its shell, providers, routes and customized theme; skip scaffold, installer and provider setup. Reuse established scope without another tier question.
+If the app already has a working Finnomena CDS theme, start with the requested component, service and interaction. Reuse its shell, providers, routes and customized theme; skip scaffold, installer and provider setup, not verification. Reuse established scope without another tier question.
 
 ## Workflow
 
@@ -23,7 +23,7 @@ If the app already has a working Finnomena CDS theme, start with the requested c
 2. Read the relevant [design guidance](../INSTRUCTION.md#composition) for visual choices. Select functional or immersive independently of framework. In existing UI preserve composition unless change is requested.
 3. Build with existing services and verified CDS exports/prop types. Use semantic color, spacing and radius keys; configure component-specific treatment through supported configuration or scoped wrappers. Do not invent imports, tokens or backend behavior.
 4. Implement task-relevant loading, empty, validation, pending, error/recovery and success states, reached through real conditions. Report mocked behavior in the Done summary; label it in the UI only when the request asks for a demo. A starter alone is not a feature.
-5. Run the [shared verification](../neon-redesign/references/verification.md), applying only relevant additions. Inspect actual output; report unavailable checks rather than claiming them.
+5. Before reporting, read the [shared checklist](../neon-redesign/references/verification.md) and apply it with its relevant additions, including on the fast path. Inspect actual output; report unavailable checks rather than claiming them.
 
 ## Conditional references
 
@@ -37,4 +37,4 @@ If the app already has a working Finnomena CDS theme, start with the requested c
 
 ## Done
 
-Deliver working requested UI, its location/preview, checks performed and material limitations. State Ship-ready or Brand-ready per [readiness and handoff](../neon-audit/references/readiness.md), with a Handoff Summary for Brand-ready work. Keep provisional mapping, mocked services and unverified runtime behavior distinct from confirmed results.
+Deliver working requested UI, its location/preview, checks performed and material limitations, as item 5 of the [shared checklist](../neon-redesign/references/verification.md#shared-checklist) asks. State Ship-ready or Brand-ready per [readiness and handoff](../neon-audit/references/readiness.md), with a Handoff Summary for Brand-ready work. Keep provisional mapping, mocked services and unverified runtime behavior distinct from confirmed results.
