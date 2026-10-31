@@ -2,7 +2,7 @@
 export type Status = "pending" | "approved" | "rejected";
 export const statusLabel: Record<Status, string> = { pending: "รออนุมัติ", approved: "อนุมัติแล้ว", rejected: "ปฏิเสธ" };
 const names = ["Somchai Jaidee", "Kanya Srisuk", "Anan Wongsa", "Pim Rattanakul", "Niran Chaiyo", "Malee Boonmee", "Tawan Siri", "Ploy Charoen"];
-const types = ["เบิกค่าเดินทาง", "ลาพักร้อน", "ซื้ออุปกรณ์", "อบรมภายนอก"];
+export const types = ["เบิกค่าเดินทาง", "ลาพักร้อน", "ซื้ออุปกรณ์", "อบรมภายนอก"];
 const statuses: Status[] = ["pending", "pending", "approved", "rejected"];
 export const requests = names.map((name, i) => ({
   id: i + 1,

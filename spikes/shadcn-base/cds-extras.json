@@ -1,0 +1,53 @@
+{
+ "axe main light": [],
+ "axe extras light": [],
+ "axe main &dark": [
+  "color-contrast(serious)x1: button[data-variant=\"negative\"] > .middleNodeCss-m1avpq52 > .currentColor-c1ul679q.headline-h15u0we0.headline-h1cz184y > span Element has insufficient color contrast of 4.32 (foreground color: #ffffff, background col"
+ ],
+ "axe extras &dark": [
+  "color-contrast(serious)x1: button[data-variant=\"negative\"] > .middleNodeCss-m1avpq52 > .center-cfz97j9.inline-i1d5xt2g.headline-h15u0we0 > span Element has insufficient color contrast of 4.32 (foreground color: #ffffff, background col"
+ ],
+ "table": {
+  "headerFont": "17px/22px 500",
+  "headerColor": "rgba(0, 0, 0, 0.65)",
+  "rowHeight": 72
+ },
+ "select keyboard": {
+  "optionRolesVisibleAfterEnter": 4,
+  "closedAfterPick": false,
+  "triggerShows": "ลาพักร้อน",
+  "focus": "ประเภท / Type, ลาพักร้อน",
+  "closedAfterEscape": true
+ },
+ "date picker": {
+  "opened": true,
+  "focusOnOpen": "1 Sunday November 2026",
+  "pickedValue": "11/15/2026",
+  "closedAfterPick": true,
+  "focusAfterPick": "Open calendar"
+ },
+ "row menu": {
+  "menuitemRoles": 2,
+  "itemsVisible": true,
+  "focusAfterArrow": "ปฏิเสธ",
+  "closedOnEscape": false,
+  "focusReturned": "ปฏิเสธ"
+ },
+ "dialog": {
+  "dialogRole": 1,
+  "ariaModal": "true",
+  "labelled": true,
+  "focusInside": true,
+  "focusTrapped": true,
+  "closedOnEscape": true,
+  "focusReturned": "ปฏิเสธคำขอ"
+ },
+ "toast": {
+  "visible": true,
+  "liveRegion": "alert"
+ },
+ "tooltip on focus": {
+  "visibleOnKeyboardFocus": true,
+  "ariaDescribedby": true
+ }
+}

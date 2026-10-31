@@ -1,0 +1,50 @@
+{
+ "axe main light": [
+  "aria-valid-attr-value(critical)x1: #radix-\\:r0\\:-trigger-all Invalid ARIA attribute value: aria-controls=\"radix-:r0:-content-all\"",
+  "color-contrast(serious)x9: #radix-\\:r0\\:-trigger-pending Element has insufficient color contrast of 4.05 (foreground color: #767676, background col ;; #radix-\\:r0\\:-trigger-approved Element has insufficient color contrast of 4.05 (foreground color: #767676, background col ;; .bg-accent > .text-warning.bg-warning\\/10.w-fit Element has insufficient color contrast of 2.55 (foreground color: #f26414, background col"
+ ],
+ "axe extras light": [],
+ "axe main &dark": [
+  "aria-valid-attr-value(critical)x1: #radix-\\:r0\\:-trigger-all Invalid ARIA attribute value: aria-controls=\"radix-:r0:-content-all\"",
+  "color-contrast(serious)x1: .bg-destructive Element has insufficient color contrast of 4.32 (foreground color: #ffffff, background col"
+ ],
+ "axe extras &dark": [
+  "color-contrast(serious)x1: .bg-destructive Element has insufficient color contrast of 4.32 (foreground color: #ffffff, background col"
+ ],
+ "table": {
+  "headerFont": "14px/20px 500",
+  "headerColor": "rgba(0, 0, 0, 0.85)",
+  "rowHeight": 53
+ },
+ "select keyboard": {
+  "optionRolesVisibleAfterEnter": 4,
+  "closedAfterPick": true,
+  "triggerShows": "ลาพักร้อน",
+  "focus": "ลาพักร้อน"
+ },
+ "date picker": "ERROR locator.click: Timeout 30000ms exceeded.",
+ "row menu": {
+  "menuitemRoles": 2,
+  "itemsVisible": true,
+  "focusAfterArrow": "ดูรายละเอียด",
+  "closedOnEscape": true,
+  "focusReturned": "Extrasประเภท / Typeเลือกประเภท"
+ },
+ "dialog": {
+  "dialogRole": 1,
+  "ariaModal": null,
+  "labelled": true,
+  "focusInside": true,
+  "focusTrapped": true,
+  "closedOnEscape": true,
+  "focusReturned": "Extrasประเภท / Typeเลือกประเภท"
+ },
+ "toast": {
+  "visible": true,
+  "liveRegion": "aria-live=polite"
+ },
+ "tooltip on focus": {
+  "visibleOnKeyboardFocus": true,
+  "ariaDescribedby": true
+ }
+}

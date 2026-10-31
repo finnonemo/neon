@@ -1,0 +1,14 @@
+import { createRequire } from 'node:module';
+const require = createRequire(process.argv[2] + '/');
+const { chromium } = require('@playwright/test');
+const b = await chromium.launch(); const url = process.argv[3];
+const act = (p) => p.evaluate(() => { const a = document.activeElement; return `${a.tagName}:${a.getAttribute('aria-label') || a.textContent.trim().slice(0, 20)}`; });
+const p = await b.newPage(); await p.goto(url); await p.waitForLoadState('networkidle');
+const trig = p.locator('button', { hasText: 'ปฏิเสธคำขอ' });
+await trig.focus(); await p.keyboard.press('Enter'); await p.waitForTimeout(500);
+console.log('while open:', await trig.evaluate(t => ({ inertAncestor: !!t.closest('[inert]'), ariaHiddenAncestor: !!t.closest('[aria-hidden=true]'), bodyPE: getComputedStyle(document.body).pointerEvents })));
+await p.keyboard.press('Escape'); await p.waitForTimeout(1200); console.log('keyboard open/close ->', await act(p));
+await p.evaluate(() => { window.__f = []; document.addEventListener('focusin', e => window.__f.push(e.target.tagName + ':' + (e.target.getAttribute('aria-label') || e.target.textContent.trim().slice(0, 12))), true); });
+await trig.click(); await p.waitForTimeout(500); await p.getByRole('button', { name: 'ยกเลิก' }).click(); await p.waitForTimeout(1200);
+console.log('mouse open, Cancel ->', await act(p), 'focusin log:', await p.evaluate(() => window.__f));
+await b.close();

@@ -1,0 +1,10 @@
+import { createRequire } from 'node:module';
+const require = createRequire(process.argv[2] + '/');
+const { chromium } = require('@playwright/test');
+const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
+await p.goto(process.argv[3]); await p.waitForLoadState('networkidle');
+const btn = p.getByRole('button', { name: /^(Open calendar|เลือกวันที่)/ }).first();
+await btn.click({ timeout: 5000 }).catch(e => console.log('click err:', e.message.split('\n').slice(0, 6).join(' | ')));
+await p.waitForTimeout(500);
+console.log(await p.evaluate(() => ({ grid: document.querySelectorAll('[role=grid]').length, dialog: document.querySelectorAll('[role=dialog]').length, tables: document.querySelectorAll('table').length, days: [...document.querySelectorAll('button')].filter(b => /^15$/.test(b.textContent.trim())).map(b => b.getAttribute('aria-label') || '').slice(0, 2) })));
+await b.close();
