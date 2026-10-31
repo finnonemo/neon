@@ -290,7 +290,7 @@ Fixture: an empty folder holding a `./DESIGN.md` for a fictional analytics brand
 
 Pass requires all of:
 
-- Under emulated `prefers-reduced-motion: reduce`, every section's text is visible at 375px and 1440px without scrolling.
+- Under emulated `prefers-reduced-motion: reduce`, every section's text is visible at 375px and 1440px as soon as it is scrolled into view, without waiting for an animation or a reveal script. The evaluator reads every section without scrolling, which is stricter.
 - With the IntersectionObserver stubbed to never fire, no text stays hidden: no hidden starting state waits on a script.
 - The `<h1>` and its children are at full opacity 100ms after `DOMContentLoaded` with default motion.
 - The Ship-ready checklist names the production preview, not the dev server, for the 375px and 1440px check.
