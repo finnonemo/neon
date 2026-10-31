@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, rmSync, unlinkSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readdirSync, rmSync, statSync, unlinkSync, writeFileSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -88,6 +88,18 @@ test('finds emoji used as UI but not digits, #, *, symbols such as © or Thai te
   ]);
 });
 
+test('skips emoji and placeholder words inside code comments, keeping line numbers', () => {
+  const source = [
+    '/* ✅ space: populated for the Acme export',
+    ' * ⛔ COLOR: not populated */',
+    '<!-- 🚀 lorem -->',
+    '  // ⚠️ legacy sample from Jane Doe',
+    "const link = 'https://example.com/🚀'; <p>Lorem</p>",
+  ].join('\n');
+  assert.deepEqual(rules.emojiText(source), [{ match: '🚀', line: 5 }]);
+  assert.deepEqual(rules.placeholderText(source), [{ match: 'Lorem', line: 5 }]);
+});
+
 test('finds transitions on all properties in CSS, inline styles and Tailwind', () => {
   const source = [
     '.card { transition: all 0.2s ease; }',
@@ -165,9 +177,11 @@ test('flags selectors reaching into CDS only in CDS apps, including classes on C
   ]);
 });
 
-test('every file in the CDS starter lints clean, so a new app warns only on what the agent wrote', t => {
-  const starter = join(repo, 'templates/vitejs-cds');
-  const files = spawnSync('git', ['-C', starter, 'ls-files'], { encoding: 'utf8' }).stdout.split('\n').filter(Boolean);
+test('every file of the assembled CDS starter lints clean, so a new app warns only on what the agent wrote', () => {
+  const starter = join(mkdtempSync(join(tmpdir(), 'neon-lint-starter-')), 'app');
+  const assembled = spawnSync(process.execPath, [join(repo, 'scripts/assemble-starter.mjs'), starter], { encoding: 'utf8' });
+  assert.equal(assembled.status, 0, assembled.stderr);
+  const files = readdirSync(starter, { recursive: true }).filter(path => statSync(join(starter, path)).isFile());
   const { lines } = lint(starter, ...files);
   assert.match(lines.at(-1), /^Source lint: clean \(\d+ changed files checked\)$/, lines.join('\n'));
 });

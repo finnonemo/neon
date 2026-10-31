@@ -144,16 +144,23 @@ export function stockPaletteUtilities(source) {
   return findAll(source, stockPalette);
 }
 
+// Blanks block, HTML and whole-line `//` comments, keeping newlines so line
+// numbers hold. Only what renders can be content; generated files such as the
+// starter's theme.config.ts mark statuses with emoji in comments.
+function withoutComments(source) {
+  return source.replace(/\/\*[\s\S]*?\*\/|<!--[\s\S]*?-->|^[ \t]*\/\/.*$/gm, comment => comment.replace(/[^\n]/g, ' '));
+}
+
 // Filler a screen should not ship (new-ui-workflow "Plausible samples").
 export function placeholderText(source) {
-  return findAll(source, /\b(?:lorem|acme|(?:john|jane) doe)\b/gi);
+  return findAll(withoutComments(source), /\b(?:lorem|acme|(?:john|jane) doe)\b/gi);
 }
 
 // Emoji drawn as pictures. `\p{Emoji}` alone also matches digits, `#` and
 // `*`, and `\p{Extended_Pictographic}` alone matches © ® ™, so a
 // pictographic counts only with the emoji variation selector (`⚠️`).
 export function emojiText(source) {
-  return findAll(source, /\p{Emoji_Presentation}|\p{Extended_Pictographic}️/gu);
+  return findAll(withoutComments(source), /\p{Emoji_Presentation}|\p{Extended_Pictographic}️/gu);
 }
 
 // `transition: all` (CSS or an inline style object) and Tailwind's `transition-all`.

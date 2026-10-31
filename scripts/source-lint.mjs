@@ -14,7 +14,7 @@
 // John Doe placeholders, emoji used as UI, and transitions on all properties.
 import { spawnSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync, realpathSync, statSync } from 'node:fs';
-import { join, relative, resolve } from 'node:path';
+import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import {
   cdsHostedClasses,
@@ -62,11 +62,13 @@ function read(path) {
   }
 }
 
-function scriptsUnder(dir) {
-  return readdirSync(dir, { recursive: true, withFileTypes: true })
-    .filter(entry => entry.isFile() && /\.[jt]sx$/.test(entry.name))
-    .map(entry => relative(dir, join(entry.parentPath, entry.name)))
-    .filter(path => !notUi.test(path));
+// Walks the app without descending into node_modules, build output or .git.
+function scriptsUnder(dir, sub = '') {
+  return readdirSync(join(dir, sub), { withFileTypes: true }).flatMap(entry => {
+    const path = sub ? `${sub}/${entry.name}` : entry.name;
+    if (entry.isDirectory()) return notUi.test(`${path}/`) ? [] : scriptsUnder(dir, path);
+    return entry.isFile() && /\.[jt]sx$/.test(entry.name) && !notUi.test(path) ? [path] : [];
+  });
 }
 
 export function lintChanged(dir, paths = []) {
