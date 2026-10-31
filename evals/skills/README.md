@@ -25,6 +25,7 @@ Run each request with the named context, first against the baseline and then the
 | Colors-only restyle of a Tailwind v4 app that uses stock utilities only | See [Tailwind colors-only regression](#tailwind-colors-only-regression) |
 | Restyle a v0/Lovable React + Tailwind v4 + shadcn project to Finnomena | Detects shadcn on v4; edits `:root`/`.dark` by role and pair; leaves `@theme inline`; installs no CDS. See [shadcn on Tailwind v4 restyle](#shadcn-on-tailwind-v4-restyle) |
 | Rebuild an existing React prototype on CDS; colors-only and feature requests on the same apps | See [CDS rebuild](#cds-rebuild) |
+| Build a Back Office fee-report screen with mock data | Totals equal the sum of rows; numbers right-aligned with tabular figures; a fall in fees takes the color of its declared good direction; a zero prints as `0`; sample values appear in the Handoff Summary. See [Sample figures](#sample-figures) |
 
 Verdicts are pass, fail or unverified for routing, scope, resource retrieval, component correctness, color roles, feature completion, responsive behavior and evidence honesty. Link actual artifacts. Do not turn a successful retrieval simulation into a claim that an app was built or looked better.
 
@@ -308,6 +309,27 @@ November 2026, Codex 0.162.1, one sample per revision, run through `run-codex-ca
 | Verdict | Fail: heading, dev-server evidence | Pass |
 
 Both runs built and typechecked, and neither could launch a browser, so each reported rendered checks unverified. After kept less of the reference's motion than Before: one date card floats under `no-preference`, with no hero rise, section reveals or marquee. The skill asks for safe motion, not less of it, so a second sample should show whether this is a pattern. Limits: one sample per revision, Codex only, the motion checks were measured by the evaluator rather than the runs, and both runs wrote working files to the real `/tmp`. The fixture and the evaluator's Playwright script stayed local, so the case is described here rather than rerunnable from the repository. After also wrote a new `./VERIFICATION.md` into the app beside its `./README.md`, which Before did not; this record does not attribute that to the change.
+
+## Sample figures
+
+Fixture: a folder holding only `.gitkeep`. The case runner `git init`s the app folder and the installer refuses a nonempty destination, so the request names a new subfolder. Request, verbatim:
+
+> $neon-create Build a Finnomena Back Office fee-report screen in a new fee-report folder here: fees collected this month per fund and fee type, with totals and the change from last month. There is no backend yet, so use mock data.
+
+Pass requires all of:
+
+- Totals and KPIs are computed from the rows of one data module, with relations asserted in development.
+- Numeric cells are right-aligned with tabular figures.
+- Each metric declares its good direction, and change color follows it; an unchanged value is unsigned and neutral.
+- A real zero prints as zero, not a dash.
+- No placeholder names; the Handoff Summary lists the headline sample figures and names the data module.
+
+November 2026, Codex, one sample per revision. Builds were rendered in headless Chromium at 1440×900; per-cell computed styles were read from the DOM.
+
+- **Before (`97ad7b4`):** totals came from the rows of `report.ts`; the 40 numeric cells sampled computed `text-align: right` and `tabular-nums`, from CSS; a zero fee printed `0.00`; the handoff gave the three monthly totals. Change color was "green means up" (`n>=p ? 'fee-up' : 'fee-down'`), so an unchanged value would show a green `+0.0%`. No good direction was declared, and the arithmetic checks ran from a script in `/tmp`, not in the app. Funds were named "Finnomena Thai Equity" and similar. Fail on direction and zero change.
+- **After (this revision):** `data.ts` declares `upIsGood: true` and says why (fees are Finnomena revenue); changes use `fgPositive`/`fgNegative` from it, and zero change is `fgMuted` and unsigned. `console.assert` checks run under `import.meta.env.DEV`. The 40 numeric cells sampled compute `text-align: right` and `tabular-nums`; changes use `Text tabularNumbers`. The footer total equals the 1,467,120.00 KPI, a real zero fee prints `0.00`, and funds are fictitious ("Nova Thai Equity"). The handoff lists six headline figures and names `src/features/fees/data.ts`. Pass.
+
+Limits: one sample per revision, Codex only, so the difference may be sampling. Both chose fees as revenue, so a fall rendered `fgNegative` in both; the eval cannot show a run choosing the cost direction. The dev assertions were read, not run: rendered builds are production builds. The development assertions only check each row against its own parts, not the KPIs. Fonts rendered in headless Chromium, not on employee machines. The Campaign Page exclusion was not exercised.
 
 ## Campaign Page content
 
