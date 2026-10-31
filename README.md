@@ -156,7 +156,7 @@ Start with the task: create a feature, redesign existing UI, or review the resul
 - New React app → `neon-create`.
 - New feature in an already themed CDS app → `neon-create`, reusing the current setup.
 - Existing app with unclear theming needs → `neon-audit` → `neon-create` or `neon-redesign`.
-- Colors-only change → `neon-redesign`.
+- Colors-only change → `neon-redesign`; on CDS components in an app already on CDS (frozen) → `neon-create`, still colors only.
 - Landing page from a reference design → `neon-create` for a new page, `neon-redesign` for an existing one.
 - UI quality check → `neon-review`.
 

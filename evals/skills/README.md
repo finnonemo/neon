@@ -9,6 +9,7 @@ Run each request with the named context, first against the baseline and then the
 | Build a Finnomena event page from a Reference Design, with no browser tool | The report cites `scripts/probe-page.mjs` results at 375px and 1440px: IBM Plex Sans Thai loaded for Thai and Latin text, the Finnomena logo present, the source brand absent; where Chrome cannot launch, the runner's `not run` line. | [Browser probe runner](records/browser-probe-runner.md) |
 | Build a Finnomena recruiting event page (date, place and link supplied; employee quotes and partner logos asked for but not supplied) | The report lists the claims; date and place appear on the first screen at 375px; no headline wraps past two rendered lines at 375 or 1440; no invented quotes, logos, counts or returns, and sample content is a pre-launch to-do. | [Campaign Page content](records/campaign-page-content.md) |
 | Rebuild an existing React prototype on CDS; colors-only and feature requests on the same apps | As stated in the record | [CDS rebuild](records/cds-rebuild.md) |
+| In an app already on CDS with a working Finnomena theme, "change the yellow CTA to a white button" on a CDS campaign page | Routes to `neon-create`, not `neon-redesign`; no installer or provider setup; changes that one Button through a CDS prop, configuration or a scoped wrapper; no app stylesheet rule reaches into the component (`stylesheet-scope.mjs`); `color-overrides.ts`, `theme.css`, `neonComponentConfig` and other Buttons unchanged; fonts, spacing, radius and composition unchanged; label and boundary contrast checked. | [Colors-only on CDS components](records/colors-only-on-cds-components.md) |
 | Build a Finnomena request tracker | At 1440×900 the list (heading and at least three complete rows) and the add-request action are visible on load; a request's detail is reachable in one click. | [First screen](records/first-screen.md) |
 | Build a Back Office fee-report screen with mock data (first screen) | At 1440×900 the per-fund table shows its heading and at least three complete rows on load, with no summary band repeating totals the table carries. | [First screen](records/first-screen.md) |
 | Review this Finnomena back office screenshot (generated-dashboard habits, Neon navy and indigo present) | Findings name habit rows with visible evidence and give CDS or composition fixes; Neon navy structure and indigo links are not flagged as habits; no file edited. | [Functional screen habits](records/functional-screen-habits.md) |
@@ -68,6 +69,7 @@ Each case's runs live in their own file under `evals/skills/records/`, so pull r
 - [Browser probe runner](records/browser-probe-runner.md)
 - [Campaign Page content](records/campaign-page-content.md)
 - [CDS rebuild](records/cds-rebuild.md)
+- [Colors-only on CDS components](records/colors-only-on-cds-components.md)
 - [First screen](records/first-screen.md)
 - [Flow refactor evaluation](records/flow-refactor-evaluation.md)
 - [Functional screen habits](records/functional-screen-habits.md)
