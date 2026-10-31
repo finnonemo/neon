@@ -12,8 +12,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Probe fixture</title>
+<meta name="description" content="A Lumora-style event page">
+<meta property="og:title" content="Design Day">
 <style>
-  body { margin: 0; font-family: Arial, sans-serif; background: #fff; color: #111; }
+  @font-face { font-family: "IBM Plex Sans Thai"; src: local("Arial"), local("Helvetica"), local("DejaVu Sans"); }
+  body { margin: 0; font-family: "IBM Plex Sans Thai", sans-serif; background: #fff; color: #111; }
   .navy { background: #01172b; padding: 8px; display: flex; gap: 8px; }
   .navy button { border: 0; padding: 6px; }
   .scroller { width: 200px; overflow-x: auto; white-space: nowrap; margin: 8px 0 8px 100px; }
@@ -53,6 +56,21 @@
   </div>
   <!-- Opaque colors with blue 0 serialize as rgb(r, g, 0), not rgba. -->
   <div style="background:#000;padding:4px"><span id="black-pill" class="pill" style="background:#000;color:#fff">Open</span></div>
+  <!-- Thai through the Plex face; Thai and Latin in families with no Plex face. Buttons above use the UA font, not the body's. -->
+  <p id="thai-plex" lang="th">งานออกแบบ</p>
+  <p id="thai-fallback" lang="th" style="font-family:'Noto Sans Thai Looped', sans-serif">สถานที่จัดงาน</p>
+  <p id="latin-arial" style="font-family:Arial, sans-serif">Venue</p>
+  <!-- Logos as Vite builds them: small SVGs inline as percent-encoded or base64 data: URIs, larger ones as hashed files. -->
+  <div>
+    <img id="logo-data" alt="Finnomena" width="32" height="32" src="data:image/svg+xml,%3csvg%20width='32'%20height='32'%20viewBox='0%200%2032%2032'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M23.6%204V7.2H6V15.2H25.2V4H23.6Z'%20fill='white'/%3e%3cpath%20d='M6%2016.8V28H7.6V24.8H15.6V16.8H6Z'%20fill='white'/%3e%3c/svg%3e">
+    <img id="logo-base64" alt="" width="32" height="32" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTIzLjYgNFY3LjJINlYxNS4ySDI1LjJWNEgyMy42WiIgZmlsbD0iIzAxMTcyQiIvPgo8cGF0aCBkPSJNNiAxNi44VjI4SDcuNlYyNC44SDE1LjZWMTYuOEg2WiIgZmlsbD0iIzAxMTcyQiIvPgo8L3N2Zz4K">
+    <img id="logo-file" alt="" width="32" height="32" src="assets/logo-finnomena-text-dark-Bq3x9a.svg">
+    <svg id="logo-svg" role="img" aria-label="Finnomena" width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" fill="#01172b"/></svg>
+    <img id="logo-hidden" alt="Finnomena" width="136" height="32" style="display:none" src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'/%3e">
+    <!-- A source-brand leak in alt text and page text. -->
+    <img id="brand-alt" alt="Lumora logo" width="32" height="32" src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'/%3e">
+  </div>
+  <p id="brand-text">Hosted with Lumora</p>
   <script>document.getElementById('scrolled').scrollLeft = 40;</script>
   <script type="application/json" id="probe-expected">
     {
@@ -61,9 +79,16 @@
       "scrolledOnLoad": ["scrolled"],
       "sidewaysScrollers": ["scrolled", "scroller-idle"],
       "overflowingElements": ["too-wide"],
-      "sameAsParentFill": { "same-pill": 1, "black-pill": 1 }
+      "sameAsParentFill": { "same-pill": 1, "black-pill": 1 },
+      "thaiTextInPlex": ["thai-plex"],
+      "thaiTextNotInPlex": ["thai-fallback"],
+      "latinTextNotInPlex": ["black-on-navy", "latin-arial", "oklch-dark", "oklch-light"],
+      "finnomenaLogo": { "logo-data": ["alt", "asset shape"], "logo-base64": ["asset shape"], "logo-file": ["file name"], "logo-svg": ["aria-label"] },
+      "finnomenaLogoHidden": ["logo-hidden"],
+      "sourceBrandFound": ["brand-alt", "brand-text", "meta[name=\"description\"]"]
     }
   </script>
+  <script type="application/json" id="probe-source-brands">["Lumora"]</script>
   <script type="application/json" id="probe-expected-dark">
     {
       "sameAsParentFill": { "class-pill": 1, "scheme-pill": 1.02, "black-pill": 1 }
