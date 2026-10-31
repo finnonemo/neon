@@ -17,7 +17,7 @@ node scripts/validate.mjs
 git diff --check
 ```
 
-The resource check follows local Markdown links and plugin-root paths in distributed skills, checks required skill metadata, and repeats against a newly packaged artifact. It also checks plain-text file references (bare Markdown filenames, backticked top-level directories, `../` paths and repository paths with an extension) in all Markdown and in code comments under `theme/` and `scripts/`, excluding `templates/`, `theme/examples/` and ignored paths. The packager rejects missing required top-level payloads. These checks do not validate every CDS API example or enforce design taste.
+The resource check follows local Markdown links and plugin-root paths in distributed skills, parses skill frontmatter strictly (an unquoted `: ` or ` #` in a plain `description` is rejected, and descriptions are limited to 1024 characters), rejects shipped Markdown that is not UTF-8 or contains double-encoded (mojibake) text, and repeats against a newly packaged artifact. It also checks plain-text file references (bare Markdown filenames, backticked top-level directories, `../` paths and repository paths with an extension) in all Markdown and in code comments under `theme/` and `scripts/`, excluding `templates/`, `theme/examples/` and ignored paths. The packager rejects missing required top-level payloads. These checks do not validate every CDS API example or enforce design taste.
 
 When raw tokens change, inspect generator headers and run in order:
 
