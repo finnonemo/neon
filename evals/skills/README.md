@@ -108,7 +108,9 @@ November 2026, Codex 0.162.1, run through `run-codex-case.mjs`. Codex has no bro
 | Grader | Pass | Build not run: `npm ci` was interrupted | Pass |
 | Verdict | Fail | Fail | Partial: unverified and both widths, probe not named |
 
-The evaluator then took the browser-available path with the shipped copy. `run-probe.mjs` evaluates the probe's text the way the Measure step asks. It ran on the Before build and the second After build at 375px and 1440px, light and `.dark`. `viewportWidth` matched each width, and both builds came back clean in every category. Limits: one or two samples per revision, Codex only, the agent never ran the probe itself, and no sample named the probe in its report, so this case does not yet pass.
+A third sample moved the reporting rule into item 5 ("Name the browser probe's results per width, or state that it was not run…") and opened the Measure bullet with "whether or not a browser is available". It read verification.md, passed the grader and reported "Browser checks remain unverified; recheck both modes at 375px and 1440px", without naming the probe: Partial again. In every revised run the case runner found the plugin Codex installed identical to the package, so the probe reaches an installed host.
+
+The evaluator then took the browser-available path with the shipped copy. `run-probe.mjs` evaluates the probe's text the way the Measure step asks. It ran on the Before build and the second After build at 375px and 1440px, light and `.dark`. `viewportWidth` matched each width, and both builds came back clean in every category. Limits: one sample of Before and three of After, each on a different wording, Codex only, the agent never ran the probe itself, and no sample named the probe in its report, so this case does not yet pass.
 
 ## Mock labeling
 
