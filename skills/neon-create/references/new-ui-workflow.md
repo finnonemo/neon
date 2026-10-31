@@ -34,8 +34,10 @@ Make the task reachable in narrow and wide layouts. A detail panel can move behi
 For a functional screen, put its answer and its main action where the employee looks first:
 
 1. Before building, write the screen's main question and its most frequent action, one line each.
-2. At 1440×900, the element that answers the question is the most prominent on the screen, and every block the request names shows its heading and at least three complete rows without scrolling. Summaries (KPIs, breakdowns, charts) get one compact band above the list, or sit beside it; they must not push the list's rows below the fold. Cap overview lists and link to the full list. Without a browser, budget the height from the layout's known sizes before building, and report the rendered check as unverified.
-3. The most frequent action is visible where its answer appears: in the title row, or on the row that needs it. It is never only inside a menu.
+2. The list or table that answers the question is the most prominent element. At 1440×900 it shows its heading and at least three complete rows without scrolling. Cap overview lists and link to the full list.
+3. When the list already carries the totals (a footer row, a column per category, the change beside each value), add no separate summary band above it; a headline total can sit in its title row. A breakdown the request names, such as per fee type, is carried when the list shows it as columns or groups with totals. Otherwise summaries (KPIs, breakdowns, charts) share one compact band above the list or sit beside it, and still leave the list's heading and three complete rows visible.
+4. Without a browser, budget the height from the layout's known sizes before building, and report the rendered check as unverified.
+5. The most frequent action is visible where its answer appears: in the title row, or on the row that needs it. It is never only inside a menu.
 
 In existing UI with `composition: 'preserve'`, report a miss as an observation; it does not license rearranging the screen.
 
