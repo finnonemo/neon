@@ -20,6 +20,7 @@ Run each request with the named context, first against the baseline and then the
 | Recruiting page with a sign-up form and no named form service | Asks for the approved service; without one, no invented endpoint; Brand-ready |
 | Event page with no forms or investment content | Ship-ready even with failed or unverified checklist items, which are listed as the employee's pre-launch to-dos; static build; does not deploy. See [Readiness](#readiness) |
 | Colors-only restyle of a Tailwind v4 app that uses stock utilities only | See [Tailwind colors-only regression](#tailwind-colors-only-regression) |
+| Restyle a v0 shadcn app to Finnomena, with and without a browser tool | The report cites the shipped browser probe's results at 375px and 1440px, or says the probe was not run and marks those checks unverified. See [Browser probe in verification](#browser-probe-in-verification) |
 | Restyle a v0/Lovable React + Tailwind v4 + shadcn project to Finnomena | Detects shadcn on v4; edits `:root`/`.dark` by role and pair; leaves `@theme inline`; installs no CDS. See [shadcn on Tailwind v4 restyle](#shadcn-on-tailwind-v4-restyle) |
 | Rebuild an existing React prototype on CDS; colors-only and feature requests on the same apps | See [CDS rebuild](#cds-rebuild) |
 
@@ -88,6 +89,24 @@ October 2026, Codex 0.162.1, one sample per revision, run through `run-codex-cas
 On the original items main already passed: its format sections and the adapter were enough for pairs, the dark primary label, focus, charts and radius on this fixture. The difference is the card-surface item, which both earlier runs failed and the second revision passed, and the value format, which follows the file. Unreported by any run: input outlines measure 1.12:1 (light) and 1.62:1 (dark) against the card, against the stock fixture's 1.26:1 and 1.60:1. Limits: one sample per revision, Codex only, one desktop width, a synthetic fixture rather than a real v0 or Lovable export, no sidebar or chart component rendered, and Codex's own browser checks were unavailable. The second revision's run predates only a rewrap of the format 4 paragraph.
 
 Grading: `node evals/skills/grade-restyle.mjs --source <fixture> --result <case>/shadcn-v4-app` checks the first and last pass items: only stylesheets changed, `@theme inline` byte-identical, `--chart-*` and `--radius` kept, build passes. Add `--shots <name>` to also build the result into `.local/shots/<name>`, then run `node evals/skills/run-probe.mjs <name> --widths 1024 --dark-class`. That run reports badges and other rounded fills that blend into their card as `sameFill`, and controls on dark fills under `lowContrast`. Run again without `--dark-class` for light. Pairs, `--ring`, `--accent` and ghost hovers stay manual. On the three runs above, the grader passed all four checks for each. The dark probe flagged both secondary badges at 1:1 for Before and the first revision, and nothing for the second; no run had low-contrast controls. The stock fixture's light secondary badge reads 1.09:1.
+
+## Browser probe in verification
+
+The shared checklist's Measure step evaluates the shipped [browser-probe.js](../../skills/neon-redesign/references/browser-probe.js) at 375px and 1440px when a browser tool can run JavaScript. Without such a tool, the run says the probe was not run and marks those checks unverified. Fixture and request: the [shadcn on Tailwind v4 restyle](#shadcn-on-tailwind-v4-restyle) above, verbatim.
+
+Pass requires the report to cite the probe's per-width results, or to state that the probe was not run and name both widths as the recheck.
+
+November 2026, Codex 0.162.1, run through `run-codex-case.mjs`. Codex has no browser tool, so these runs could exercise only the fallback. Every run read verification.md.
+
+| Item | Before (main at `97ad7b4`) | After, first sample | After, second sample (report wording added) |
+| --- | --- | --- | --- |
+| Browser attempt | Tried to launch Chromium through a cached `playwright-core`; it failed | None | None |
+| Report | "Browser checks were blocked by Chrome failing to launch." | "browser checks remain unverified"; an earlier message names 375px and 1440px | "Browser checks remain unverified"; "Recheck both modes at 375px and 1440px before release." |
+| Probe named | No | No | No |
+| Grader | Pass | Build not run: `npm ci` was interrupted | Pass |
+| Verdict | Fail | Fail | Partial: unverified and both widths, probe not named |
+
+The evaluator then took the browser-available path with the shipped copy. `run-probe.mjs` evaluates the probe's text the way the Measure step asks. It ran on the Before build and the second After build at 375px and 1440px, light and `.dark`. `viewportWidth` matched each width, and both builds came back clean in every category. Limits: one or two samples per revision, Codex only, the agent never ran the probe itself, and no sample named the probe in its report, so this case does not yet pass.
 
 ## Mock labeling
 
