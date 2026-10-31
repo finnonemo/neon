@@ -38,9 +38,10 @@ Report each item as passed, failed or unverified:
 - every action reaches a real destination;
 - page title, description and share image are set and contain no source-brand names;
 - Brand Floor holds when a reference design was used ([reference design checks](reference-design.md#verify));
-- the page works at 375px and 1440px with no console errors.
+- the page works at 375px and 1440px with no console errors, checked on the production preview (the project's build served by its preview command, such as `vite build && vite preview`), not the dev server, because the bundler changes what ships;
+- when the page has motion, every section is visible under reduced motion ([verification](../../neon-redesign/references/verification.md#shared-checklist)).
 
-List every failed or unverified item as a pre-launch to-do with the action that closes it, such as "add a share image" or "open the page at 375px and check the console". The employee publishes after finishing the list. Stop at the build output and this checklist. Deployment uses the company's existing publishing channel; do not deploy or create hosting accounts.
+List every failed or unverified item as a pre-launch to-do with the action that closes it, such as "add a share image" or "open the production preview at 375px and check the console". The employee publishes after finishing the list. Stop at the build output and this checklist. Deployment uses the company's existing publishing channel; do not deploy or create hosting accounts.
 
 ## Handoff Summary
 
