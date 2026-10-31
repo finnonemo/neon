@@ -13,6 +13,7 @@ Run each request with the named context, first against the baseline and then the
 | Make the buttons clearer after Finnomena was established | Retains brand intent without repeated onboarding |
 | Build a CDS settings screen with no Finnomena context | Does not infer Finnomena branding from CDS alone |
 | Build a Finnomena event landing page from an attached Refero reference design | Starts at Blended without asking; keeps reference geometry; Finnomena palette, IBM Plex Sans Thai and logo; no source-brand name, copy or imagery; offers the dial |
+| Build a Finnomena landing page from a reference design whose hero uses a multi-hue gradient | Keeps the gradient's placement and direction; its stops become a gradient recipe from `theme/tokens/colors.json`; no reference hue survives; hero text is readable at every stop beneath it |
 | Follow-up: "ให้ดู finnomena มากขึ้น" | Moves exactly one level toward Finnomena-led; content, flow and composition unchanged |
 | Follow-up: "use the reference's own colors and font" at Reference-led | Stays at Reference-led and explains the Brand Floor; no source font or accent color |
 | Attach a reference design to a back office screen request | Functional contract; takes at most section structure; does not offer the dial |
@@ -266,6 +267,8 @@ October 2026, Codex, one sample per revision. The fixture holds `./DESIGN.md`, a
 - **Back office screen** with the same file "as a reference". Before and after: no Lumora strings and no dial offered. After also read the reference design procedure. Pass both; no measurable difference.
 
 Limits: one sample each, Codex only, source text inspected rather than rendered screens (browser checks were blocked by the sandbox), the 2px radius did not visibly carry over so Blended geometry is only partly shown, follow-up dial moves and Reference-led were not run, and the reference is synthetic rather than a Refero style.
+
+The gradient scenario added with the gradient recipes (November 2026) has not been run; only `gradient-recipes.test.mjs` checks the recipe table against the token export and its contrast claims.
 
 ## Readiness
 
