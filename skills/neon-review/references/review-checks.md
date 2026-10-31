@@ -15,7 +15,7 @@ Describe evidence as supplied versus independently observed. If only source is a
 
 ## Brand consistency
 
-Use the current design reference, not remembered values. Inspect the semantic role, not just a matching hex string: error/positive states and chart categories are not interchangeable decorative colors. Respect explicit colors-only scope and existing intentional structural dimensions. When a campaign page declares a reference design and Brand Intensity, judge it against that level and the Brand Floor in the design contract; reference neutrals at Reference-led are intended, not off-brand. A CDS dependency or raw pixel value is not itself a review finding.
+Use the current design reference, not remembered values. Inspect the semantic role, not just a matching hex string: error/positive states and chart categories are not interchangeable decorative colors. Respect explicit colors-only scope and existing intentional structural dimensions. When a campaign page declares a reference design and Brand Intensity, judge it against that level and the Brand Floor in the design contract; reference colors at Reference-led are intended, not off-brand. On an immersive page, a white or other non-navy action with passing contrast, or a palette without navy or yellow, is not a finding. A CDS dependency or raw pixel value is not itself a review finding.
 
 For typography reviews, distinguish a declared font from a loaded font. Check computed styles and font resources when available; inspect Thai and Latin glyphs, long labels, numeric alignment, and wrapping. Do not label a missing font from screenshot appearance alone.
 

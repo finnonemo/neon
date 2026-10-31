@@ -79,11 +79,11 @@ Finnomena's visual language and semantic color rules; wins over any Reference De
 _Avoid_: design guide, style guide
 
 **Brand Intensity**:
-How much of a Reference Design survives on a Campaign Page: Finnomena-led (only its section structure), Blended (also its geometry and motion) or Reference-led (also its neutral surfaces).
+How much of a Reference Design survives on a Campaign Page: Finnomena-led (only its section structure), Blended (also its geometry and motion) or Reference-led (also its colors).
 _Avoid_: strength, mix, Finnomena level
 
 **Brand Floor**:
-The Finnomena properties no Brand Intensity may remove: the Finnomena logo, Finnomena typeface, Finnomena accent and action colors, accessible contrast, and the absence of any source brand's logo, imagery, copy or product names.
+The Finnomena properties no Brand Intensity may remove: the Finnomena logo, Finnomena typeface, at least one identifiable Finnomena color, accessible contrast, and the absence of any source brand's logo, imagery, copy or product names.
 _Avoid_: minimum branding, baseline
 
 ### Readiness

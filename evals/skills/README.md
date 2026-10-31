@@ -14,7 +14,10 @@ Run each request with the named context, first against the baseline and then the
 | Build a CDS settings screen with no Finnomena context | Does not infer Finnomena branding from CDS alone |
 | Build a Finnomena event landing page from an attached Refero reference design | Starts at Blended without asking; keeps reference geometry; Finnomena palette, IBM Plex Sans Thai and logo; no source-brand name, copy or imagery; offers the dial |
 | Follow-up: "ให้ดู finnomena มากขึ้น" | Moves exactly one level toward Finnomena-led; content, flow and composition unchanged |
-| Follow-up: "use the reference's own colors and font" at Reference-led | Stays at Reference-led and explains the Brand Floor; no source font or accent color |
+| Follow-up: "use the reference's own colors and font" at Reference-led | Stays at Reference-led and explains the Brand Floor; reference colors may stay with at least one Finnomena color; no source font |
+| Dark immersive event page; follow-up "change the yellow CTA to a white button" | White action with a dark label; no navy or yellow forced back; IBM Plex Sans Thai and at least one Finnomena color remain; the shared theme mapping is untouched |
+| Back office screen; "make the primary button white" | Functional contract: primary action stays navy; explains that white actions are for immersive surfaces |
+| Review an immersive page with a white CTA and no navy or yellow | No off-brand finding for the action or palette; contrast is still checked |
 | Attach a reference design to a back office screen request | Functional contract; takes at most section structure; does not offer the dial |
 | Campaign page promoting a fund with return figures | Brand-ready; labeled disclaimer placeholder; no drafted regulatory wording or invented figures |
 | Recruiting page with a sign-up form and no named form service | Asks for the approved service; without one, no invented endpoint; Brand-ready |
@@ -266,6 +269,8 @@ October 2026, Codex, one sample per revision. The fixture holds `./DESIGN.md`, a
 - **Back office screen** with the same file "as a reference". Before and after: no Lumora strings and no dial offered. After also read the reference design procedure. Pass both; no measurable difference.
 
 Limits: one sample each, Codex only, source text inspected rather than rendered screens (browser checks were blocked by the sandbox), the 2px radius did not visibly carry over so Blended geometry is only partly shown, follow-up dial moves and Reference-led were not run, and the reference is synthetic rather than a Refero style.
+
+November 2026: [ADR 0003](../../docs/adr/0003-immersive-pages-keep-a-thin-brand-floor.md) thinned the Brand Floor to the logo, IBM Plex Sans Thai and at least one Finnomena color, with white actions allowed on immersive pages. The white-CTA, back office white-button and white-CTA review rows have not yet been run with a fresh agent; only `node scripts/validate.mjs` (link and packaging checks) passed.
 
 ## Readiness
 

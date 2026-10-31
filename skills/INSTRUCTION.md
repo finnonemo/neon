@@ -18,7 +18,7 @@ For functional layouts, the style means restrained, task-led composition and str
 | Structure and primary actions | Navy ink, white, quiet neutral surfaces | `bg`, `bgAlternate`, `fg`, `fgMuted`, `bgPrimary`; primary action maps to navy |
 | Interaction highlight | Indigo for focus, selection and links | `bgLinePrimary` currently maps to focus indigo; inspect component types and contrast before reusing as text |
 | Status and support | Success, warning, error or information only where that meaning exists | `fgPositive`, `fgNegative`, `bgPositiveWash`, `bgNegativeWash`, `bgWarning` and related semantic roles |
-| Accent and illustration | Purposeful secondary color in supporting content | Existing `accent*` roles; yellow is optional; can be prominent on immersive pages, with no mandatory CTA color or per-screen quota |
+| Accent and illustration | Purposeful secondary color in supporting content | Existing `accent*` roles; yellow is optional; can be prominent on immersive pages, with no mandatory CTA color, palette pair or per-screen quota |
 | Charts and categories | Stable, labeled category assignments | Preserve domain meaning and legends; don't recolor every series to navy/indigo |
 
 Functional UI should read as navy/white with restrained indigo interaction signals. Do not make every card, heading, or action indigo, assign random colored dashboard tiles, or use status colors as generic decoration. Pair status color with text or an icon. Illustrations may use the supporting palette without determining the app chrome.
@@ -31,7 +31,7 @@ Start from the employee's main task and the information needed to complete it. U
 
 **Functional screens:** prioritize scanning, comparison and action. Forms use clear labels, nearby help and validation. Tables suit dense comparisons; lists suit short summaries. A detail pane earns its space when users need to inspect and act on a selected record. Reuse the existing shell. In the starter, `AppShell` supplies list/detail emphasis, `ContentLayout` emphasizes the main content, `SimpleLayout` omits the inspector, and `MultiColumnLayout` is for explicit board workflows. These names are not guaranteed exports in an existing app.
 
-**Immersive screens:** colorful Finnomena surfaces, expressive illustrations and palette-based gradients are allowed when they support the story. Navy/white need not dominate every section. Use a focused reading sequence, clear proposition, relevant imagery and an identifiable next action. Choose accessible action colors for each surface; indigo is not a mandatory hero or CTA color. Keep status colors semantic when communicating system feedback. `ImmersiveLayout` is a starter option, not a mandatory landing-page recipe. A user-supplied reference design contributes only what its [Brand Intensity](#reference-designs-and-brand-intensity) allows; it never supersedes the Brand Floor.
+**Immersive screens:** colorful Finnomena surfaces, expressive illustrations and palette-based gradients are allowed when they support the story. Finnomena is not only navy and yellow: an immersive page may keep just IBM Plex Sans Thai and a few Finnomena colors, and navy/white need not dominate any section. Use a focused reading sequence, clear proposition, relevant imagery and an identifiable next action. Choose accessible action colors for each surface; navy, yellow and indigo are not mandatory hero or CTA colors. A white action suits dark or saturated surfaces: give it a dark label, and on a light surface a visible boundary of at least 3:1. Scope such action colors to the page; the shared primary mapping stays navy for functional screens. Keep status colors semantic when communicating system feedback. `ImmersiveLayout` is a starter option, not a mandatory landing-page recipe. A user-supplied reference design contributes only what its [Brand Intensity](#reference-designs-and-brand-intensity) allows; it never supersedes the Brand Floor.
 
 ## Reference designs and Brand Intensity
 
@@ -41,9 +41,9 @@ A reference design is an outside style description (for example from Refero Styl
 | --- | --- | --- |
 | Finnomena-led | Section structure and reading sequence | Everything else in this contract |
 | Blended (default) | Also geometry (radius, spacing rhythm, shadow, type scale and weight) and motion | Palette, typeface, logo |
-| Reference-led | Also neutral and surface colors, such as a dark canvas | Accent and action colors, typeface, logo |
+| Reference-led | Also its colors, such as a dark canvas, accents and action colors | Typeface, logo, at least one identifiable Finnomena color |
 
-**Brand Floor**, kept at every level: the Finnomena logo, IBM Plex Sans Thai, Finnomena accent and action colors, accessible contrast for text and actions on every surface, and no source-brand logo, imagery, illustration, copy, product name or font file. Status colors stay semantic. A reference's accent color becomes the matching Finnomena role, never a new brand value.
+**Brand Floor**, kept at every level: the Finnomena logo, IBM Plex Sans Thai, at least one identifiable Finnomena color, accessible contrast for text and actions on every surface, and no source-brand logo, imagery, illustration, copy, product name or font file. Status colors stay semantic. Below Reference-led, a reference's accent color becomes the matching Finnomena role; an action may still be white or another accessible neutral. Colors kept from a reference stay page-scoped and never become new values in the shared theme.
 
 ## Task-based choices
 
@@ -77,7 +77,7 @@ Show a scannable pending list and selected request details. Use navy for the mai
 
 ## Illustrative example: immersive campaign
 
-A product landing page may use a substantial yellow or blue-grey hero field, colorful Finnomena illustrations and alternating light/navy sections. Choose a contrasting navy action on a light accent surface. Keep navigation, forms and status feedback legible and familiar. This expressive composition is appropriate for an immersive story; do not carry its decorative panels into a dense approvals workspace by default.
+A product landing page may use a substantial yellow or blue-grey hero field, colorful Finnomena illustrations and alternating light/navy sections. Choose a contrasting navy action on a light accent surface and a white action with a dark label on a navy, dark or saturated one. Keep navigation, forms and status feedback legible and familiar. This expressive composition is appropriate for an immersive story; do not carry its decorative panels into a dense approvals workspace by default.
 
 ## Illustrative example: responsive request form
 

@@ -17,9 +17,10 @@ Sort what the reference describes into the contract's property groups before wri
 | Structure | Section order, hero pattern, grid, content density |
 | Geometry and motion | Radius, spacing scale, shadows, type scale and weights, transitions |
 | Neutrals and surfaces | Background, canvas, border and muted text colors |
-| Brand | Accent and CTA colors, typefaces, logo, imagery, illustration style, copy voice, product names |
+| Accents and actions | Accent, highlight and CTA colors |
+| Brand | Typefaces, logo, imagery, illustration style, copy voice, product names |
 
-Brand properties never transfer. Map a reference accent or CTA color to the matching Finnomena role, and use IBM Plex Sans Thai at the reference's type scale where Blended or Reference-led allows it. Express geometry through Finnomena spacing and radius tokens when they fit, and through documented values otherwise. Scope reference geometry and surfaces to the page being built; never edit installed theme files, `color-overrides.ts` or shared theme variables for a reference, since other screens consume them. On the CDS path, confirm a page-scoped mechanism in the installed CDS types or docs before using it. Write new copy and use Finnomena or supplied imagery; do not reproduce the reference's text, screenshots or illustrations.
+Brand properties never transfer. Below Reference-led, map a reference accent or CTA color to the matching Finnomena role; at Reference-led keep the reference's accents and actions if at least one Finnomena color stays identifiable. At every level an action may be white or another accessible neutral rather than navy or yellow. Use IBM Plex Sans Thai at the reference's type scale where Blended or Reference-led allows it. Express geometry through Finnomena spacing and radius tokens when they fit, and through documented values otherwise. Scope reference geometry and surfaces to the page being built; never edit installed theme files, `color-overrides.ts` or shared theme variables for a reference, since other screens consume them. On the CDS path, confirm a page-scoped mechanism in the installed CDS types or docs before using it. Write new copy and use Finnomena or supplied imagery; do not reproduce the reference's text, screenshots or illustrations.
 
 ## Choose and change the level
 
@@ -31,4 +32,4 @@ Record the level and reference in `NeonContext` (`brandIntensity`, `referenceDes
 
 ## Verify
 
-Alongside the [shared checklist](../../neon-redesign/references/verification.md#shared-checklist), inspect the rendered page for each Brand Floor property: Finnomena logo on its correct surface, Thai and Latin text in IBM Plex Sans Thai, actions in Finnomena colors with readable contrast on their actual surface, and no source-brand name, logo, imagery or copy anywhere, including metadata and alt text. Report the level used and any property kept from the reference.
+Alongside the [shared checklist](../../neon-redesign/references/verification.md#shared-checklist), inspect the rendered page for each Brand Floor property: Finnomena logo on its correct surface, Thai and Latin text in IBM Plex Sans Thai, at least one identifiable Finnomena color, actions with readable contrast on their actual surface (a white action has a dark label, and a visible boundary on a light surface), and no source-brand name, logo, imagery or copy anywhere, including metadata and alt text. Report the level used and any property kept from the reference.

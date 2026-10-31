@@ -18,8 +18,8 @@ For Finnomena-led and Reference-led, append "Make it look as Finnomena as possib
 
 For every sample, at 375px and 1440px:
 
-- **Level fidelity:** properties the level allows are visibly taken from the reference (structure; then geometry and motion; then neutral surfaces), and nothing beyond them.
-- **Brand Floor:** Finnomena logo, IBM Plex Sans Thai for Thai and Latin text, Finnomena action colors, readable contrast for text and actions, no source-brand name, logo, imagery, copy or font file in the page, metadata or alt text.
+- **Level fidelity:** properties the level allows are visibly taken from the reference (structure; then geometry and motion; then colors), and nothing beyond them.
+- **Brand Floor:** Finnomena logo, IBM Plex Sans Thai for Thai and Latin text, at least one identifiable Finnomena color, readable contrast for text and actions, no source-brand name, logo, imagery, copy or font file in the page, metadata or alt text.
 - **Dial behavior:** Blended is used without asking; a follow-up moves one level; a request beyond Reference-led is declined with the Brand Floor explained; content and composition are unchanged across dial moves.
 - **Readiness:** the report states Ship-ready with the checklist, since the page has no investment content or forms.
 
