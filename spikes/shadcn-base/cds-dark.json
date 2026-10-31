@@ -1,0 +1,168 @@
+{
+ "h1": {
+  "w": 368,
+  "h": 28,
+  "font": "22px/28px 400",
+  "family": "\"IBM Plex Sans Thai\"",
+  "radius": "0px",
+  "pad": "0px 0px",
+  "bg": "rgba(0, 0, 0, 0)",
+  "color": "rgb(255, 255, 255)",
+  "border": "0px rgb(255, 255, 255)"
+ },
+ "h2": {
+  "w": 169,
+  "h": 25,
+  "font": "20px/25px 400",
+  "family": "\"IBM Plex Sans Thai\"",
+  "radius": "0px",
+  "pad": "0px 0px",
+  "bg": "rgba(0, 0, 0, 0)",
+  "color": "rgb(255, 255, 255)",
+  "border": "0px rgb(255, 255, 255)"
+ },
+ "approve": {
+  "w": 187,
+  "h": 54,
+  "font": "17px/22px 600",
+  "family": "\"IBM Plex Sans Thai\"",
+  "radius": "56px",
+  "pad": "16px 32px",
+  "bg": "rgb(49, 61, 72)",
+  "color": "rgb(255, 255, 255)",
+  "border": "0px rgb(49, 61, 72)"
+ },
+ "secondaryBtn": {
+  "w": 152,
+  "h": 54,
+  "font": "17px/22px 600",
+  "family": "\"IBM Plex Sans Thai\"",
+  "radius": "56px",
+  "pad": "16px 32px",
+  "bg": "rgb(26, 26, 26)",
+  "color": "rgb(255, 255, 255)",
+  "border": "0px rgb(26, 26, 26)"
+ },
+ "rejectBtn": {
+  "w": 111,
+  "h": 54,
+  "font": "17px/22px 600",
+  "family": "\"IBM Plex Sans Thai\"",
+  "radius": "56px",
+  "pad": "16px 32px",
+  "bg": "rgb(243, 9, 9)",
+  "color": "rgb(255, 255, 255)",
+  "border": "0px rgb(243, 9, 9)"
+ },
+ "input": {
+  "w": 366,
+  "h": 54,
+  "font": "17px/22px 400",
+  "family": "\"IBM Plex Sans Thai\"",
+  "radius": "0px",
+  "pad": "16px 16px",
+  "bg": "rgba(0, 0, 0, 0)",
+  "color": "rgb(255, 255, 255)",
+  "border": "0px rgba(0, 0, 0, 0)"
+ },
+ "inputLabel": {
+  "w": 368,
+  "h": 28,
+  "font": "14px/20px 400",
+  "family": "\"IBM Plex Sans Thai\"",
+  "radius": "0px",
+  "pad": "4px 0px",
+  "bg": "rgba(0, 0, 0, 0)",
+  "color": "rgba(255, 255, 255, 0.65)",
+  "border": "0px rgba(255, 255, 255, 0.65)"
+ },
+ "textarea": {
+  "w": 632,
+  "h": 98,
+  "font": "17px/22px 400",
+  "family": "\"IBM Plex Sans Thai\"",
+  "radius": "0px",
+  "pad": "16px 16px",
+  "bg": "rgba(0, 0, 0, 0)",
+  "color": "rgb(255, 255, 255)",
+  "border": "0px rgb(133, 133, 133)"
+ },
+ "listRow": {
+  "w": 149,
+  "h": 44,
+  "font": "17px/22px 400",
+  "family": "\"IBM Plex Sans Thai\"",
+  "radius": "0px",
+  "pad": "0px 0px",
+  "bg": "rgba(0, 0, 0, 0)",
+  "color": "rgb(255, 255, 255)",
+  "border": "0px rgb(255, 255, 255)"
+ },
+ "rowTitle": {
+  "w": 149,
+  "h": 22,
+  "font": "17px/22px 500",
+  "family": "\"IBM Plex Sans Thai\"",
+  "radius": "0px",
+  "pad": "0px 0px",
+  "bg": "rgba(0, 0, 0, 0)",
+  "color": "rgb(255, 255, 255)",
+  "border": "0px rgb(255, 255, 255)"
+ },
+ "rowDesc": {
+  "w": 149,
+  "h": 22,
+  "font": "17px/22px 400",
+  "family": "\"IBM Plex Sans Thai\"",
+  "radius": "0px",
+  "pad": "0px 0px",
+  "bg": "rgba(0, 0, 0, 0)",
+  "color": "rgba(255, 255, 255, 0.65)",
+  "border": "0px rgba(255, 255, 255, 0.65)"
+ },
+ "tag": {
+  "w": 59,
+  "h": 20,
+  "font": "14px/20px 600",
+  "family": "\"IBM Plex Sans Thai\"",
+  "radius": "0px",
+  "pad": "0px 0px",
+  "bg": "rgba(0, 0, 0, 0)",
+  "color": "rgb(0, 127, 59)",
+  "border": "0px rgb(0, 127, 59)"
+ },
+ "segment": null,
+ "bodyText": {
+  "w": 632,
+  "h": 22,
+  "font": "17px/22px 400",
+  "family": "\"IBM Plex Sans Thai\"",
+  "radius": "0px",
+  "pad": "0px 0px",
+  "bg": "rgba(0, 0, 0, 0)",
+  "color": "rgb(255, 255, 255)",
+  "border": "0px rgb(255, 255, 255)"
+ },
+ "checkbox": {
+  "w": 20,
+  "h": 20,
+  "font": "17px/normal 400",
+  "family": "Arial",
+  "radius": "0px",
+  "pad": "0px 0px",
+  "bg": "rgba(0, 0, 0, 0)",
+  "color": "rgb(255, 255, 255)",
+  "border": "0px rgb(255, 255, 255)"
+ },
+ "avatarLarge": {
+  "w": 48,
+  "h": 48,
+  "font": "17px/22px 400",
+  "family": "\"IBM Plex Sans Thai\"",
+  "radius": "100%",
+  "pad": "0px 0px",
+  "bg": "rgba(0, 0, 0, 0)",
+  "color": "rgb(0, 122, 168)",
+  "border": "1px rgba(0, 0, 0, 0)"
+ }
+}

@@ -1,0 +1,178 @@
+{
+ "h1": {
+  "w": 368,
+  "h": 28,
+  "font": "22px/28px 400",
+  "family": "\"IBM Plex Sans Thai\"",
+  "radius": "0px",
+  "pad": "0px 0px",
+  "bg": "rgba(0, 0, 0, 0)",
+  "color": "rgb(255, 255, 255)",
+  "border": "0px rgba(255, 255, 255, 0.15)"
+ },
+ "h2": {
+  "w": 169,
+  "h": 25,
+  "font": "20px/25px 400",
+  "family": "\"IBM Plex Sans Thai\"",
+  "radius": "0px",
+  "pad": "0px 0px",
+  "bg": "rgba(0, 0, 0, 0)",
+  "color": "rgb(255, 255, 255)",
+  "border": "0px rgba(255, 255, 255, 0.15)"
+ },
+ "approve": {
+  "w": 188,
+  "h": 54,
+  "font": "17px/22px 600",
+  "family": "\"IBM Plex Sans Thai\"",
+  "radius": "3.35544e+07px",
+  "pad": "16px 32px",
+  "bg": "rgb(65, 81, 96)",
+  "color": "rgb(255, 255, 255)",
+  "border": "0px rgba(255, 255, 255, 0.15)"
+ },
+ "secondaryBtn": {
+  "w": 152,
+  "h": 54,
+  "font": "17px/22px 600",
+  "family": "\"IBM Plex Sans Thai\"",
+  "radius": "3.35544e+07px",
+  "pad": "16px 32px",
+  "bg": "rgb(26, 26, 26)",
+  "color": "rgb(255, 255, 255)",
+  "border": "0px rgba(255, 255, 255, 0.15)"
+ },
+ "rejectBtn": {
+  "w": 111,
+  "h": 54,
+  "font": "17px/22px 600",
+  "family": "\"IBM Plex Sans Thai\"",
+  "radius": "3.35544e+07px",
+  "pad": "16px 32px",
+  "bg": "rgb(243, 9, 9)",
+  "color": "rgb(255, 255, 255)",
+  "border": "0px rgba(255, 255, 255, 0.15)"
+ },
+ "input": {
+  "w": 368,
+  "h": 54,
+  "font": "17px/22px 400",
+  "family": "\"IBM Plex Sans Thai\"",
+  "radius": "8px",
+  "pad": "16px 16px",
+  "bg": "oklab(0.655181 -0.00253665 -0.0207896 / 0.197647)",
+  "color": "rgb(255, 255, 255)",
+  "border": "1px rgba(138, 145, 158, 0.66)"
+ },
+ "inputLabel": {
+  "w": 368,
+  "h": 20,
+  "font": "14px/20px 400",
+  "family": "\"IBM Plex Sans Thai\"",
+  "radius": "0px",
+  "pad": "0px 0px",
+  "bg": "rgba(0, 0, 0, 0)",
+  "color": "rgba(255, 255, 255, 0.65)",
+  "border": "0px rgba(255, 255, 255, 0.15)"
+ },
+ "textarea": {
+  "w": 632,
+  "h": 64,
+  "font": "17px/22px 400",
+  "family": "\"IBM Plex Sans Thai\"",
+  "radius": "8px",
+  "pad": "16px 16px",
+  "bg": "oklab(0.655181 -0.00253665 -0.0207896 / 0.197647)",
+  "color": "rgb(255, 255, 255)",
+  "border": "1px rgba(138, 145, 158, 0.66)"
+ },
+ "listRow": {
+  "w": 368,
+  "h": 76,
+  "font": "17px/22px 400",
+  "family": "\"IBM Plex Sans Thai\"",
+  "radius": "0px",
+  "pad": "0px 0px",
+  "bg": "rgba(0, 0, 0, 0)",
+  "color": "rgb(255, 255, 255)",
+  "border": "0px rgba(255, 255, 255, 0.15)"
+ },
+ "rowTitle": {
+  "w": 211,
+  "h": 22,
+  "font": "17px/22px 500",
+  "family": "\"IBM Plex Sans Thai\"",
+  "radius": "0px",
+  "pad": "0px 0px",
+  "bg": "rgba(0, 0, 0, 0)",
+  "color": "rgb(255, 255, 255)",
+  "border": "0px rgba(255, 255, 255, 0.15)"
+ },
+ "rowDesc": {
+  "w": 211,
+  "h": 22,
+  "font": "17px/22px 400",
+  "family": "\"IBM Plex Sans Thai\"",
+  "radius": "0px",
+  "pad": "0px 0px",
+  "bg": "rgba(0, 0, 0, 0)",
+  "color": "rgba(255, 255, 255, 0.65)",
+  "border": "0px rgba(255, 255, 255, 0.15)"
+ },
+ "tag": {
+  "w": 77,
+  "h": 26,
+  "font": "14px/20px 600",
+  "family": "\"IBM Plex Sans Thai\"",
+  "radius": "4px",
+  "pad": "2px 8px",
+  "bg": "oklab(0.716975 -0.170894 0.0985752 / 0.1)",
+  "color": "rgb(0, 196, 91)",
+  "border": "1px rgba(0, 0, 0, 0)"
+ },
+ "segment": {
+  "w": 120,
+  "h": 27,
+  "font": "14px/20px 500",
+  "family": "\"IBM Plex Sans Thai\"",
+  "radius": "3.35544e+07px",
+  "pad": "4px 8px",
+  "bg": "oklab(0.655181 -0.00253665 -0.0207896 / 0.197647)",
+  "color": "rgb(255, 255, 255)",
+  "border": "1px rgba(138, 145, 158, 0.66)"
+ },
+ "bodyText": {
+  "w": 632,
+  "h": 22,
+  "font": "17px/22px 400",
+  "family": "\"IBM Plex Sans Thai\"",
+  "radius": "0px",
+  "pad": "0px 0px",
+  "bg": "rgba(0, 0, 0, 0)",
+  "color": "rgb(255, 255, 255)",
+  "border": "0px rgba(255, 255, 255, 0.15)"
+ },
+ "checkbox": {
+  "w": 20,
+  "h": 20,
+  "font": "17px/22px 400",
+  "family": "\"IBM Plex Sans Thai\"",
+  "radius": "4px",
+  "pad": "0px 0px",
+  "bg": "oklab(0.655181 -0.00253665 -0.0207896 / 0.197647)",
+  "color": "rgb(255, 255, 255)",
+  "border": "1px rgba(138, 145, 158, 0.66)"
+ },
+ "avatarLarge": {
+  "w": 48,
+  "h": 48,
+  "font": "17px/22px 400",
+  "family": "\"IBM Plex Sans Thai\"",
+  "radius": "3.35544e+07px",
+  "pad": "0px 0px",
+  "bg": "rgba(0, 0, 0, 0)",
+  "color": "rgb(255, 255, 255)",
+  "border": "0px rgba(255, 255, 255, 0.15)"
+ }
+}

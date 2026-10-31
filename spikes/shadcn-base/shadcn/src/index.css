@@ -1,0 +1,77 @@
+/* PROTOTYPE (spike): shadcn/ui on Tailwind v4, themed from Neon's CSS adapter (theme.css). */
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "./theme/theme.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: var(--fontFamily-body);
+  --text-title1: var(--fontSize-title1); --text-title1--line-height: var(--lineHeight-title1); --text-title1--font-weight: var(--fontWeight-title1);
+  --text-title2: var(--fontSize-title2); --text-title2--line-height: var(--lineHeight-title2); --text-title2--font-weight: var(--fontWeight-title2);
+  --text-title3: var(--fontSize-title3); --text-title3--line-height: var(--lineHeight-title3); --text-title3--font-weight: var(--fontWeight-title3);
+  --text-headline: var(--fontSize-headline); --text-headline--line-height: var(--lineHeight-headline); --text-headline--font-weight: var(--fontWeight-headline);
+  --text-body: var(--fontSize-body); --text-body--line-height: var(--lineHeight-body); --text-body--font-weight: var(--fontWeight-body);
+  --text-label1: var(--fontSize-label1); --text-label1--line-height: var(--lineHeight-label1); --text-label1--font-weight: var(--fontWeight-label1);
+  --text-label2: var(--fontSize-label2); --text-label2--line-height: var(--lineHeight-label2); --text-label2--font-weight: var(--fontWeight-label2);
+  --text-caption: var(--fontSize-caption); --text-caption--line-height: var(--lineHeight-caption); --text-caption--font-weight: var(--fontWeight-caption);
+
+  --radius-sm: var(--borderRadius-100);
+  --radius-md: var(--borderRadius-200);
+  --radius-lg: var(--borderRadius-300);
+  --radius-xl: var(--borderRadius-400);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  /* Neon roles shadcn has no slot for. */
+  --color-positive: var(--color-fgPositive);
+  --color-warning: var(--color-fgWarning);
+  --color-negative: var(--color-fgNegative);
+  --color-line-heavy: var(--color-bgLineHeavy);
+}
+
+/* One adapter: shadcn's slots alias Neon roles, so light/dark come from theme.css alone. */
+:root {
+  --background: var(--color-bg);
+  --foreground: var(--color-fg);
+  --card: var(--color-bgElevation1);
+  --card-foreground: var(--color-fg);
+  --popover: var(--color-bgElevation2);
+  --popover-foreground: var(--color-fg);
+  --primary: var(--color-bgPrimary);
+  --primary-foreground: var(--color-fgInverse);
+  --secondary: var(--color-bgSecondary);
+  --secondary-foreground: var(--color-fg);
+  --muted: var(--color-bgSecondary);
+  --muted-foreground: var(--color-fgMuted);
+  --accent: var(--color-bgAlternate);
+  --accent-foreground: var(--color-fg);
+  --destructive: var(--color-bgNegative);
+  --border: var(--color-bgLine);
+  --input: var(--color-bgLineHeavy);
+  --ring: var(--color-bgLinePrimary);
+}
+/* onColorLabel: dark filled buttons take fg (white), as createTheme.ts does for CDS. */
+.dark { --primary-foreground: var(--color-fg); }
+
+@layer base {
+  * { @apply border-border outline-ring/50; }
+  body { @apply bg-background text-foreground font-sans text-body; }
+}
