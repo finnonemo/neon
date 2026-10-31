@@ -29,6 +29,16 @@ Read for Back Office and Product Feature screens that show money, units, fees, c
 
 Make the task reachable in narrow and wide layouts. A detail panel can move behind a selection with a clear return path; hiding it must not remove essential actions. Use actual destinations for navigation, and preserve the app's reading and keyboard order. Do not add external ecosystem links unless requested.
 
+### One question, first screen
+
+For a functional screen, put its answer and its main action where the employee looks first:
+
+1. Before building, write the screen's main question and its most frequent action, one line each.
+2. At 1440×900, the element that answers the question is the most prominent on the screen, and every block the request names shows its heading and first rows without scrolling. A KPI strip or summary must not push the requested list below the fold. Cap overview lists and link to the full list.
+3. The most frequent action is visible where its answer appears: in the title row, or on the row that needs it. It is never only inside a menu.
+
+In existing UI with `composition: 'preserve'`, report a miss as an observation; it does not license rearranging the screen.
+
 ## Verification
 
 Use the [shared checklist](../../neon-redesign/references/verification.md#shared-checklist) and [creation additions](../../neon-redesign/references/verification.md#creation-additions). For explicitly adapted existing composition, apply the composition additions too. A copied template or a source-only inspection is not completion.
