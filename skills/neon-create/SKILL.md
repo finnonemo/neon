@@ -30,6 +30,7 @@ If the app already has a working Finnomena CDS theme, start with the requested c
 - New project: [scaffold and layout](references/scaffold.md). Never scaffold over a nonempty app.
 - Explicit rebuild of an existing React app on CDS: [rebuild](references/rebuild.md), into a new directory.
 - Any supplied reference design or outside style file: [reference design](../neon-audit/references/reference-design.md).
+- Writing sections for a new or rebuilt Campaign Page: [campaign content](references/campaign-content.md).
 - Theme/provider/dependency changes: [CDS integration](references/cds-integration.md). Preserve customized files and theme-mode ownership.
 - Complex feature states, mock figures on a functional screen or existing-app integration: [new UI workflow](references/new-ui-workflow.md).
 - Font, mode, migration or installer conflict: the matching section of [theme integration](../neon-audit/references/theme-integration.md).
