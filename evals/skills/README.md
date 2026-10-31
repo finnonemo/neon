@@ -25,6 +25,7 @@ Run each request with the named context, first against the baseline and then the
 | Restyle a v0 shadcn app to Finnomena, with and without a browser tool | The report cites the shipped browser probe's results at 375px and 1440px, or says the probe was not run and marks those checks unverified. See [Browser probe in verification](#browser-probe-in-verification) |
 | Restyle a v0/Lovable React + Tailwind v4 + shadcn project to Finnomena | Detects shadcn on v4; edits `:root`/`.dark` by role and pair; leaves `@theme inline`; installs no CDS. See [shadcn on Tailwind v4 restyle](#shadcn-on-tailwind-v4-restyle) |
 | Rebuild an existing React prototype on CDS; colors-only and feature requests on the same apps | See [CDS rebuild](#cds-rebuild) |
+| Build a Back Office fee-report screen with mock data | Totals equal the sum of rows; numbers right-aligned with tabular figures; a fall in fees takes the color of its declared good direction; a zero prints as `0`; sample values appear in the Handoff Summary. See [Sample figures](#sample-figures) |
 
 Verdicts are pass, fail or unverified for routing, scope, resource retrieval, component correctness, color roles, feature completion, responsive behavior and evidence honesty. Link actual artifacts. Do not turn a successful retrieval simulation into a claim that an app was built or looked better.
 
@@ -313,6 +314,27 @@ October 2026, Codex, one sample per case, `$neon-create` from an empty destinati
 - **Event page** (Thai; no forms or investment content, real map and calendar links). On the first rule (`f7fc7fa`), the build passed and nothing was deployed. The report was Brand-ready because browser checks were unverified (sandboxed Chrome would not launch) and no share image was set. That applied the rule as written, which required the checklist to pass, and it failed the scenario's intent. After checklist items became pre-launch to-dos (`f13ac0b`), the same request reported Ship-ready and wrote a readiness list: passed items, plus each unverified item with its action (convert the share SVG to PNG at an absolute URL; open the page at 375, 768 and 1440px and check overflow, keyboard and console; click the map and calendar links). Pass. The final reply named the to-dos only by pointing to that list.
 
 Limits: one sample each, Codex only, no rendered screens (browser launch was blocked in every run), and the recruiting run could not show behavior after an employee names an approved service.
+
+## Sample figures
+
+Fixture: a folder holding only `.gitkeep`. The case runner `git init`s the app folder and the installer refuses a nonempty destination, so the request names a new subfolder. Request, verbatim:
+
+> $neon-create Build a Finnomena Back Office fee-report screen in a new fee-report folder here: fees collected this month per fund and fee type, with totals and the change from last month. There is no backend yet, so use mock data.
+
+Pass requires all of:
+
+- Totals and KPIs are computed from the rows of one data module, with relations asserted in development.
+- Numeric cells are right-aligned with tabular figures.
+- Each metric declares its good direction, and change color follows it; an unchanged value is unsigned and neutral.
+- A real zero prints as zero, not a dash.
+- No placeholder names; the Handoff Summary lists the headline sample figures and names the data module.
+
+November 2026, Codex, one sample per revision. Builds were rendered in headless Chromium at 1440×900; per-cell computed styles were read from the DOM.
+
+- **Before (`97ad7b4`):** totals came from the rows of `report.ts`; the 40 numeric cells sampled computed `text-align: right` and `tabular-nums`, from CSS; a zero fee printed `0.00`; the handoff gave the three monthly totals. Change color was "green means up" (`n>=p ? 'fee-up' : 'fee-down'`), so an unchanged value would show a green `+0.0%`. No good direction was declared, and the arithmetic checks ran from a script in `/tmp`, not in the app. Funds were named "Finnomena Thai Equity" and similar. Fail on direction and zero change.
+- **After (this revision):** `data.ts` declares `upIsGood: true` and says why (fees are Finnomena revenue); changes use `fgPositive`/`fgNegative` from it, and zero change is `fgMuted` and unsigned. `console.assert` checks run under `import.meta.env.DEV`. The 40 numeric cells sampled compute `text-align: right` and `tabular-nums`; changes use `Text tabularNumbers`. The footer total equals the 1,467,120.00 KPI, a real zero fee prints `0.00`, and funds are fictitious ("Nova Thai Equity"). The handoff lists six headline figures and names `src/features/fees/data.ts`. Pass.
+
+Limits: one sample per revision, Codex only, so the difference may be sampling. Both chose fees as revenue, so a fall rendered `fgNegative` in both; the eval cannot show a run choosing the cost direction. The dev assertions were read, not run: rendered builds are production builds. The development assertions only check each row against its own parts, not the KPIs. Fonts rendered in headless Chromium, not on employee machines. The Campaign Page exclusion was not exercised.
 
 ## Campaign Page content
 
