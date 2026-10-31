@@ -29,6 +29,7 @@ Run each request with the named context, first against the baseline and then the
 | Build a Back Office fee-report screen with mock data | Totals equal the sum of rows; numbers right-aligned with tabular figures; a fall in fees takes the color of its declared good direction; a zero prints as `0`; sample values appear in the Handoff Summary. See [Sample figures](#sample-figures) |
 | Build a Finnomena request tracker | At 1440×900 the list (heading and at least three complete rows) and the add-request action are visible on load; a request's detail is reachable in one click. See [First screen](#first-screen) |
 | Build a Back Office fee-report screen with mock data (first screen) | At 1440×900 the per-fund table shows its heading and at least three complete rows on load, with no summary band repeating totals the table carries. See [First screen](#first-screen) |
+| Build a Finnomena event page from a Reference Design, with no browser tool | The report cites `scripts/probe-page.mjs` results at 375px and 1440px: IBM Plex Sans Thai loaded for Thai and Latin text, the Finnomena logo present, the source brand absent; where Chrome cannot launch, the runner's `not run` line. See [Browser probe runner](#browser-probe-runner) |
 
 Verdicts are pass, fail or unverified for routing, scope, resource retrieval, component correctness, color roles, feature completion, responsive behavior and evidence honesty. Link actual artifacts. Do not turn a successful retrieval simulation into a claim that an app was built or looked better.
 
@@ -436,6 +437,44 @@ The tracker request does not tell the revisions apart: both pass. On the fee rep
 Review, same fixture: the baseline fee build plus its 1440×900 screenshot, `$neon-review Review our Finnomena fee report screen for usability. fee-report-1440x900.png is how it looks on load at 1440x900. Do not edit anything.` Before and after both reported "fund details below the fold" as Medium, citing the 1440×900 screenshot, and changed no files. The revised run ranked it first. That is no measurable difference.
 
 Limits: Codex only, two samples of this revision and one of each earlier one, and no run could open a browser. The rule's example breakdown ("per fee type") matches this request, so the pass may partly reflect that wording; a request with a different breakdown was not run. The review runs used the second wording, not this one. The `composition: 'preserve'` caveat was not exercised. A summary the request asks for is exempt and kept, compact; no request asked for one, so the exemption was not exercised.
+
+## Browser probe runner
+
+[probe-page.mjs](../../scripts/probe-page.mjs) runs the shipped probe in headless Chrome over a CDP pipe, with no npm dependencies, when the agent has no browser tool. It adds three Neon rules: IBM Plex Sans Thai faces loaded and drawing the Thai and Latin text, the Finnomena logo present, and the source brand absent from title, meta, alt or aria-label and text. The probe fixture's Neon cases, plus `probe-fixture-no-plex.html` and `probe-fixture-thai-404.html`, run in `run-probe.mjs --fixture`. Runner behavior (missing Chrome, launch failure, timeout, a page that does not load, screenshots kept out of the app) is in `probe-page.test.mjs`.
+
+November 2026, one sample per agent per revision. Before is the `6c0a1f6` package. After is `3ff5f3f`. The fixture is a `.gitkeep` workspace plus a synthetic `./DESIGN.md` for "Lumora Summit": lime `#C6FF3D`, ultraviolet `#7A5CFF`, Space Grotesk, a LUMORA wordmark and a `Lumora Summit — See further.` title pattern. Request, verbatim (Codex starts it with `$neon-create`):
+
+> /neon:neon-create Build a Thai event page in ./design-day for "Finnomena Design Day 2026", a free public design meetup on 12 December 2026, 13:00–17:00, at Finnomena's office. Include the agenda, three speakers and an add-to-calendar link https://calendar.google.com/calendar/event?eid=design-day. There is no sign-up form. Use ./DESIGN.md as the reference design.
+
+Agents:
+- Codex 0.162.1 through `run-codex-case.mjs`.
+- Claude Code 2.1.316 (`claude-haiku-5-5`), `claude -p --plugin-dir <package> --strict-mcp-config` with an empty MCP config, so there were no browser or MCP tools. The init event confirmed this. It ran with `--permission-mode dontAsk` and this allowlist: `Read Edit Write Glob Grep Skill Bash(ls:*) Bash(pwd) Bash(cd:*) Bash(cat:*) Bash(head:*) Bash(tail:*) Bash(wc:*) Bash(grep:*) Bash(find:*) Bash(echo:*) Bash(test:*) Bash(git status:*) Bash(git log:*) Bash(git diff:*) Bash(git ls-files:*) Bash(git rev-parse:*) Bash(git show:*) Bash(git branch:*) Bash(node:*) Bash(npm:*) Bash(npx:*) Bash(npm run:*) Bash(mkdir:*) Bash(cp:*) Bash(sed:*) Bash(rg:*) Bash(sort:*) Bash(which:*) Bash(curl:*) Bash(lsof:*) Bash(kill:*) Bash(sleep:*)`.
+
+The evaluator graded each build with the fixed runner (`253080a`), using `--serve <dist> --source-brand Lumora`, and grepped `./src/` and `./index.html` for `Lumora|C6FF3D|Space Grotesk|See further`. `--serve` binds an ephemeral port, so no fixed port was needed.
+
+| Item | Codex, before | Codex, after | Claude, before | Claude, after |
+| --- | --- | --- | --- | --- |
+| Browser attempt | Own Playwright script from another `/tmp` project; Chrome SIGABRT in the sandbox | Ran the runner with `--serve design-day/dist --source-brand Lumora`. Result: `Not measured: Chrome exited on SIGABRT before measuring.` | None. It did not read verification.md | Read verification.md, then ran the runner with `--serve … --source-brand 'Lumora'`. Chrome launched and measured |
+| Neon rules in the agent's run | Not measured | Not measured | Not measured | Plex loaded (400–700, Thai and Latin); 31 Thai and 4 Latin elements, all in Plex. Logo: `img "Finnomena" (by alt, asset shape)`, plus a false positive `div.dd-hero-image (by aria-label)`. `Lumora absent from title, 2 meta, 6 alt or aria-label and 40 text elements` |
+| Acted on the runner | n/a | n/a | n/a | Its first 375px line named overflowing sections and a sideways scroller. It rebuilt three times and looked at the screenshots until the line read `375px clean; 1440px clean` |
+| Report line | `Browser probe: not run; recheck at 375px and 1440px` | Same, printed by the runner | None: "I could not render it in a browser"; checks unverified | "Browser probe at 375px and 1440px is clean"; names "Lumora absent" |
+| Evaluator: Plex, logo, brand | Pass, pass, absent | Pass, pass, absent | Pass, pass, absent | Pass, pass, absent; Lumora only in a source comment |
+| Evaluator: other leads | Clean | 375px: overflowing `div.dd-orbit`, `div.dd-map-grid`; low contrast on the dark-fill calendar link at both widths | Clean | Clean |
+| Verdict | Pass (fallback) | Pass (fallback, from the runner); measured nothing | Fail: no probe line | Pass: measured, cited and fixed |
+
+The after Claude run's false-positive logo match was a hero placeholder labelled "ภาพประกอบงาน Finnomena Design Day 2026". After that run, `253080a` limited label matches to the brand name alone or with "logo", and added the hero and speaker-photo cases to the fixture. The agent's in-run line above is from `3ff5f3f`; the evaluator lines are from the fix. The Codex after build carries leads that Codex could not see, because Chrome could not start in its sandbox.
+
+Evidence (run.jsonl, reports, builds without `node_modules`, the agent's and the grader's screenshots) is under `.local/evals/58-codex-before`, `.local/evals/58-codex-after`, `.local/evals/58-claude-before` and `.local/evals/58-claude-after`.
+
+Limits:
+- One sample per cell, and a Haiku-class Claude model.
+- Codex measured nothing in either revision, so the measured path is evidenced by one Claude run.
+- Every build already passed the three Neon rules, so these samples show the runner reporting them, not catching a failure. Failures are covered only by the fixtures: no Plex face, a 404 Thai subset, a hidden logo and source-brand leaks.
+- The fixtures' Plex face is a stand-in drawn from a local system font.
+- The source-brand check includes body text, so a page that names the reference on purpose reports it as found.
+- The built starter shows no logo at 375px, where it has no header, so a starter-based page reports `no Finnomena logo` at that width.
+- Each Claude run had permission denials on compound read commands (`cd … &&`, variable assignments and a `( cd … )` subshell). Each run read the same files with Read or simpler commands, and no denial touched a browser or probe step.
+- Both Codex runs list `/tmp/design-day-probe.js` as a new `/tmp` entry. Its origin is unclear, so it was left in place.
 
 ## Flow refactor evaluation
 
