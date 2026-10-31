@@ -128,6 +128,19 @@ Review then removed "whether or not a browser is available" from the Measure bul
 
 The first sample is the only run so far to name the probe, on the fallback path. The second shows the browser path failing upstream of the Measure wording: the run skipped the shared checklist that SKILL.md step 5 links. Limits: one sample per condition, the browser tool and its MCP server are the evaluator's and stayed local, and the permission settings shaped what each run could do. The browser path has still not passed in an agent run, so this case does not pass.
 
+The failing run had followed the two read conditions in SKILL.md that use a read verb or sit in Done: step 3's "read the Tailwind mapping rules … including on the fast path" and Done's readiness link. Step 5 only said "Verify with the shared checklist", and the fast path listed what to skip. Step 5 now says to read the checklist before reporting, on the fast path and for colors-only work. The fast path says it skips installation and audit, not verification. Done ties the report to checklist item 5. Two samples then reran the second sample's setup: same command, permissions, browser tool and dev server at 5173, each on a pristine copy of the fixture. The first ran the package from #66's head plus this change; the second ran main at `0a80f01` (#65 and #66 merged) plus this change. The two packages differ only in #65's item 4 motion wording.
+
+| Item | Claude, third sample | Claude, fourth sample |
+| --- | --- | --- |
+| Read verification.md | Yes, second reference read, before editing | Yes, second reference read, before editing |
+| Read browser-probe.js | Yes, after the first navigate | Yes, after the first navigate |
+| Probe evaluated | The probe's code, comments stripped, at 1440px light and 375px dark; `viewportWidth` 1440 and 375 | The same code wrapped as `window.__probe`, at 1440px light and dark and 375px light and dark; `viewportWidth` 1440 and 375 |
+| Report | "Probe at 1440px (light) and 375px (dark): no horizontal overflow and no fills that disappear into their background." Lists the probe at 1440px dark and 375px light as not run | "Nothing scrolls sideways at either width in either mode" and "nothing in the layout blends into its background"; does not use the word "probe" |
+| Grader | Pass | Pass |
+| Verdict | Pass | Pass: per-width probe results cited, probe not named |
+
+The fourth sample also reported, from its 375px screenshot, rows whose codes overlap their badges and a Remove button past the card edge. The probe came back clean at 375px because it does not detect content overflowing a fixed-width container. Neither run tried the allowed `npm run build`; each had a listing command denied first and reported the shell as blocked, so the build result is the grader's. Limits: two samples, Claude Code only, the evaluator's MCP browser tool, and no rerun of the fallback path or of Codex with this change. The browser path has now passed twice in Claude Code with a live server.
+
 ## Mock labeling
 
 Fixture: an empty folder. Request, verbatim:
