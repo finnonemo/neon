@@ -31,7 +31,19 @@ Start from the employee's main task and the information needed to complete it. U
 
 **Functional screens:** prioritize scanning, comparison and action. Forms use clear labels, nearby help and validation. Tables suit dense comparisons; lists suit short summaries. A detail pane earns its space when users need to inspect and act on a selected record. Reuse the existing shell. In the starter, `AppShell` supplies list/detail emphasis, `ContentLayout` emphasizes the main content, `SimpleLayout` omits the inspector, and `MultiColumnLayout` is for explicit board workflows. These names are not guaranteed exports in an existing app.
 
-**Immersive screens:** colorful Finnomena surfaces, expressive illustrations and palette-based gradients are allowed when they support the story. Navy/white need not dominate every section. Use a focused reading sequence, clear proposition, relevant imagery and an identifiable next action. Choose accessible action colors for each surface; indigo is not a mandatory hero or CTA color. Keep status colors semantic when communicating system feedback. `ImmersiveLayout` is a starter option, not a mandatory landing-page recipe. A user-supplied reference design contributes only what its [Brand Intensity](#reference-designs-and-brand-intensity) allows; it never supersedes the Brand Floor.
+**Immersive screens:** colorful Finnomena surfaces, expressive illustrations and [palette-based gradients](#gradients) are allowed when they support the story. Navy/white need not dominate every section. Use a focused reading sequence, clear proposition, relevant imagery and an identifiable next action. Choose accessible action colors for each surface; indigo is not a mandatory hero or CTA color. Keep status colors semantic when communicating system feedback. `ImmersiveLayout` is a starter option, not a mandatory landing-page recipe. A user-supplied reference design contributes only what its [Brand Intensity](#reference-designs-and-brand-intensity) allows; it never supersedes the Brand Floor.
+
+## Gradients
+
+Gradients belong on immersive surfaces, such as a hero field, a card or a section fading into the next, not on functional scaffolding. Build them from these recipes. The recipes are provisional: they are derived from Finnomena campaign files, not design-approved. Keep them page-scoped, in the page's own styles, never in theme files or shared theme variables. Direction, angle and coverage are free.
+
+| Recipe | Stops | Text at every stop | Seen in |
+| --- | --- | --- | --- |
+| Tint fade | One family, 100 or 75 → 25 of the same family, or → transparent into the next section | Navy, on Yellow, Light Grey, Green, Blue, Teal, Orange, Red or Magenta | Club card and footer fades |
+| Navy depth | Navy/100 → Navy/75 | White | Club Ultra card |
+| Field to navy | A family's 25 or 50 → Navy/100 | Placement-dependent | KKP hero |
+
+Write each stop as its `theme/tokens/colors.json` hex, or as an existing theme variable with exactly that value, such as `accentBoldGray` for Navy/100. Any other color, including a near-palette tint from a design file, is a new brand value. Text and actions over a gradient need 4.5:1, or 3:1 for large text, against every stop beneath them. Where a stop fails, move the content, add a scrim from a recipe stop or choose another recipe.
 
 ## Reference designs and Brand Intensity
 
@@ -43,7 +55,7 @@ A reference design is an outside style description (for example from Refero Styl
 | Blended (default) | Also geometry (radius, spacing rhythm, shadow, type scale and weight) and motion | Palette, typeface, logo |
 | Reference-led | Also neutral and surface colors, such as a dark canvas | Accent and action colors, typeface, logo |
 
-**Brand Floor**, kept at every level: the Finnomena logo, IBM Plex Sans Thai, Finnomena accent and action colors, accessible contrast for text and actions on every surface, and no source-brand logo, imagery, illustration, copy, product name or font file. Status colors stay semantic. A reference's accent color becomes the matching Finnomena role, never a new brand value.
+**Brand Floor**, kept at every level: the Finnomena logo, IBM Plex Sans Thai, Finnomena accent and action colors, accessible contrast for text and actions on every surface, including every gradient stop beneath them, and no source-brand logo, imagery, illustration, copy, product name or font file. Status colors stay semantic. A reference's accent color becomes the matching Finnomena role, never a new brand value. A reference's gradient keeps its placement, direction and coverage wherever its geometry survives, while its stops become a [gradient recipe](#gradients); at Reference-led, a gradient made only of the reference's neutral surface colors may keep them.
 
 ## Task-based choices
 
