@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import { mkdtemp, access, readdir, readFile, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { packagePlugin } from '../../scripts/package-plugin.mjs';
 
 test('distribution contains the shared design contract and conditional CDS guide', async () => {
@@ -51,6 +51,28 @@ test('distribution ships the source lint the shared checklist runs, and it runs 
   const run = spawnSync(process.execPath, [join(destination, 'scripts/source-lint.mjs'), app, 'index.html'], { encoding: 'utf8' });
   assert.equal(run.status, 0, run.stderr);
   assert.match(run.stdout, /^Source lint: 1 warning in 1 file/m);
+});
+
+test('distribution ships the browser probe runner with no npm dependencies, runnable from the package alone', async () => {
+  const destination = await mkdtemp(join(tmpdir(), 'neon-package-test-'));
+  await packagePlugin({ destination });
+  const runner = join(destination, 'scripts/probe-page.mjs');
+  // Every import, followed through shipped relative files, is a Node built-in.
+  const pending = [runner];
+  for (const seen = new Set(); pending.length;) {
+    const file = pending.pop();
+    if (seen.has(file)) continue;
+    seen.add(file);
+    const source = await readFile(file, 'utf8');
+    for (const [, specifier] of source.matchAll(/(?:\bfrom\s+|\bimport\s*\(\s*|^\s*import\s+)['"]([^'"]+)['"]/gm)) {
+      if (specifier.startsWith('.')) pending.push(resolve(dirname(file), specifier));
+      else assert.ok(specifier.startsWith('node:'), `${file} imports ${specifier}`);
+    }
+  }
+  // The packaged copy finds the shipped probe and degrades without Chrome.
+  const result = spawnSync(process.execPath, [runner, 'http://127.0.0.1:9/', '--chrome', join(destination, 'no-chrome')], { cwd: destination, encoding: 'utf8' });
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stdout, /^Browser probe: not run; recheck at 375px and 1440px$/m);
 });
 
 test('missing required payload fails before writing destination', async () => {
