@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, access, readdir, readFile } from 'node:fs/promises';
+import { spawnSync } from 'node:child_process';
+import { mkdtemp, access, readdir, readFile, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { packagePlugin } from '../../scripts/package-plugin.mjs';
@@ -35,6 +36,21 @@ test('distribution ships the browser probe the shared checklist measures with, a
   const verification = await readFile(join(destination, 'skills/neon-redesign/references/verification.md'), 'utf8');
   assert.ok(verification.includes('](browser-probe.js)'), 'verification.md must link the probe');
   await assert.rejects(access(join(import.meta.dirname, 'browser-probe.js')));
+});
+
+test('distribution ships the source lint the shared checklist runs, and it runs from the package', async () => {
+  const destination = await mkdtemp(join(tmpdir(), 'neon-package-test-'));
+  await packagePlugin({ destination });
+  for (const file of ['scripts/source-lint.mjs', 'scripts/lib/source-rules.mjs']) {
+    assert.equal(await readFile(join(destination, file), 'utf8'), await readFile(join(import.meta.dirname, '../..', file), 'utf8'));
+  }
+  const verification = await readFile(join(destination, 'skills/neon-redesign/references/verification.md'), 'utf8');
+  assert.ok(verification.includes('${CLAUDE_PLUGIN_ROOT}/scripts/source-lint.mjs'), 'verification.md must run the lint');
+  const app = await mkdtemp(join(tmpdir(), 'neon-package-lint-'));
+  await writeFile(join(app, 'index.html'), '<p>Lorem</p>\n');
+  const run = spawnSync(process.execPath, [join(destination, 'scripts/source-lint.mjs'), app, 'index.html'], { encoding: 'utf8' });
+  assert.equal(run.status, 0, run.stderr);
+  assert.match(run.stdout, /^Source lint: 1 warning in 1 file/m);
 });
 
 test('missing required payload fails before writing destination', async () => {
