@@ -345,7 +345,7 @@ The tracker request does not tell the revisions apart: both pass. On the fee rep
 
 Review, same fixture: the baseline fee build plus its 1440×900 screenshot, `$neon-review Review our Finnomena fee report screen for usability. fee-report-1440x900.png is how it looks on load at 1440x900. Do not edit anything.` Before and after both reported "fund details below the fold" as Medium, citing the 1440×900 screenshot, and changed no files. The revised run ranked it first. That is no measurable difference.
 
-Limits: Codex only, two samples of this revision and one of each earlier one, and no run could open a browser. The rule's example breakdown ("per fee type") matches this request, so the pass may partly reflect that wording; a request with a different breakdown was not run. The review runs used the second wording, not this one. The `composition: 'preserve'` caveat was not exercised.
+Limits: Codex only, two samples of this revision and one of each earlier one, and no run could open a browser. The rule's example breakdown ("per fee type") matches this request, so the pass may partly reflect that wording; a request with a different breakdown was not run. The review runs used the second wording, not this one. The `composition: 'preserve'` caveat was not exercised. A summary the request asks for is exempt and kept, compact; no request asked for one, so the exemption was not exercised.
 
 ## Flow refactor evaluation
 
