@@ -60,9 +60,16 @@ function launch(chromePath, profile) {
     '--headless=new', '--remote-debugging-pipe', `--user-data-dir=${profile}`,
     '--no-first-run', '--no-default-browser-check', '--disable-extensions', '--disable-sync',
     '--disable-background-networking', '--disable-component-update', '--use-mock-keychain', '--password-store=basic',
-    '--hide-scrollbars', '--mute-audio', 'about:blank',
+    '--hide-scrollbars', '--mute-audio', '--disable-breakpad', '--disable-crash-reporter', 'about:blank',
   ];
-  const child = spawn(chromePath, args, { cwd: profile, stdio: ['ignore', 'ignore', 'pipe', 'pipe', 'pipe'] });
+  // Its own process group, so a wrapper script (Linux's google-chrome) and its
+  // children die together; TMPDIR inside the profile, so Chrome's temp files go with it.
+  const child = spawn(chromePath, args, {
+    cwd: profile,
+    detached: process.platform !== 'win32',
+    env: { ...process.env, TMPDIR: profile },
+    stdio: ['ignore', 'ignore', 'pipe', 'pipe', 'pipe'],
+  });
   let stderr = '';
   child.stderr.on('data', chunk => { stderr = (stderr + chunk).slice(-2000); });
   const pending = new Map();
@@ -120,7 +127,15 @@ function launch(chromePath, profile) {
     event.catch(() => {});
     return event;
   };
-  return { child, send, once, kill: () => { if (child.exitCode === null && child.signalCode === null) child.kill('SIGKILL'); } };
+  const kill = () => {
+    if (process.platform !== 'win32') {
+      try {
+        process.kill(-child.pid, 'SIGKILL');
+      } catch {}
+    }
+    if (child.exitCode === null && child.signalCode === null) child.kill('SIGKILL');
+  };
+  return { child, send, once, kill };
 }
 
 async function measureWidth(chrome, sessionId, url, width, { scheme, brands, out, probe }) {
@@ -174,7 +189,7 @@ export async function probePage(url, { widths = [375, 1440], brands = [], scheme
     clearTimeout(timer);
     chrome.kill();
     await new Promise(done => (chrome.child.exitCode !== null || chrome.child.signalCode !== null ? done() : chrome.child.once('exit', done)));
-    rmSync(profile, { recursive: true, force: true, maxRetries: 3 });
+    rmSync(profile, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
   }
 }
 

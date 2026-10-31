@@ -78,6 +78,7 @@ function probeWithChrome(t, args) {
   const result = probe([...args, '--widths', '375', '--timeout', '30'], { timeout: 60000 });
   const reason = result.stdout.match(/^Not measured: (.*)$/m)?.[1];
   if (reason && !/did not load/.test(reason)) t.skip(reason);
+  assert.equal(result.status, 0, `stderr: ${result.stderr}\nstdout: ${result.stdout}`);
   return { ...result, skipped: Boolean(reason && !/did not load/.test(reason)) };
 }
 
@@ -87,7 +88,7 @@ test('a page that does not load is reported as not run, with Chrome closed clean
   assert.equal(result.status, 0, result.stderr);
   assert.match(result.stdout, /Not measured: http:\/\/127\.0\.0\.1:9\/ did not load: net::ERR_[A-Z_]+\./);
   assert.match(result.stdout, /^Browser probe: not run; recheck at 375px$/m);
-  assert.deepEqual(readdirSync(result.temp), []);
+  assert.deepEqual(readdirSync(result.temp), [], `stderr: ${result.stderr}`);
 });
 
 test('the Neon rules name the elements: Plex text, logos by how they matched, and the source brand', t => {
