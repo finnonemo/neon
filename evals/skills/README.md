@@ -13,12 +13,14 @@ Run each request with the named context, first against the baseline and then the
 | Make the buttons clearer after Finnomena was established | Retains brand intent without repeated onboarding |
 | Build a CDS settings screen with no Finnomena context | Does not infer Finnomena branding from CDS alone |
 | Build a Finnomena event landing page from an attached Refero reference design | Starts at Blended without asking; keeps reference geometry; Finnomena palette, IBM Plex Sans Thai and logo; no source-brand name, copy or imagery; offers the dial |
+| Build a Finnomena landing page from a reference design whose hero uses a multi-hue gradient | Keeps the gradient's placement and direction; its stops become a gradient recipe from `theme/tokens/colors.json`; no reference hue survives; hero text is readable at every stop beneath it |
 | Follow-up: "ให้ดู finnomena มากขึ้น" | Moves exactly one level toward Finnomena-led; content, flow and composition unchanged |
 | Follow-up: "use the reference's own colors and font" at Reference-led | Stays at Reference-led and explains the Brand Floor; no source font or accent color |
 | Attach a reference design to a back office screen request | Functional contract; takes at most section structure; does not offer the dial |
 | Campaign page promoting a fund with return figures | Brand-ready; labeled disclaimer placeholder; no drafted regulatory wording or invented figures |
 | Recruiting page with a sign-up form and no named form service | Asks for the approved service; without one, no invented endpoint; Brand-ready |
 | Event page with no forms or investment content | Ship-ready even with failed or unverified checklist items, which are listed as the employee's pre-launch to-dos; static build; does not deploy. See [Readiness](#readiness) |
+| Build a Finnomena recruiting event page (date, place and link supplied; employee quotes and partner logos asked for but not supplied) | The report lists the claims; date and place appear on the first screen at 375px; no headline wraps past two rendered lines at 375 or 1440; no invented quotes, logos, counts or returns, and sample content is a pre-launch to-do. See [Campaign Page content](#campaign-page-content) |
 | Colors-only restyle of a Tailwind v4 app that uses stock utilities only | See [Tailwind colors-only regression](#tailwind-colors-only-regression) |
 | Restyle a v0 shadcn app to Finnomena, with and without a browser tool | The report cites the shipped browser probe's results at 375px and 1440px, or says the probe was not run and marks those checks unverified. See [Browser probe in verification](#browser-probe-in-verification) |
 | Restyle a v0/Lovable React + Tailwind v4 + shadcn project to Finnomena | Detects shadcn on v4; edits `:root`/`.dark` by role and pair; leaves `@theme inline`; installs no CDS. See [shadcn on Tailwind v4 restyle](#shadcn-on-tailwind-v4-restyle) |
@@ -286,6 +288,8 @@ October 2026, Codex, one sample per revision. The fixture holds `./DESIGN.md`, a
 
 Limits: one sample each, Codex only, source text inspected rather than rendered screens (browser checks were blocked by the sandbox), the 2px radius did not visibly carry over so Blended geometry is only partly shown, follow-up dial moves and Reference-led were not run, and the reference is synthetic rather than a Refero style.
 
+The gradient scenario added with the gradient recipes (November 2026) has not been run; only `gradient-recipes.test.mjs` checks the recipe table against the token export and its contrast claims.
+
 ## Readiness
 
 October 2026, Codex, one sample per case, `$neon-create` from an empty destination, after compliance confirmed the readiness criteria in #32. Requests named the campaign, event and links, and gave no hint about readiness.
@@ -295,6 +299,28 @@ October 2026, Codex, one sample per case, `$neon-create` from an empty destinati
 - **Event page** (Thai; no forms or investment content, real map and calendar links). On the first rule (`f7fc7fa`), the build passed and nothing was deployed. The report was Brand-ready because browser checks were unverified (sandboxed Chrome would not launch) and no share image was set. That applied the rule as written, which required the checklist to pass, and it failed the scenario's intent. After checklist items became pre-launch to-dos (`f13ac0b`), the same request reported Ship-ready and wrote a readiness list: passed items, plus each unverified item with its action (convert the share SVG to PNG at an absolute URL; open the page at 375, 768 and 1440px and check overflow, keyboard and console; click the map and calendar links). Pass. The final reply named the to-dos only by pointing to that list.
 
 Limits: one sample each, Codex only, no rendered screens (browser launch was blocked in every run), and the recruiting run could not show behavior after an employee names an approved service.
+
+## Campaign Page content
+
+November 2026, Codex 0.162.1, one sample per revision, `$neon-create` through `run-codex-case.mjs` into `./open-house` beside a `.gitkeep`-only workspace. Before is main at `97ad7b4`. After adds [campaign content](../../skills/neon-create/references/campaign-content.md) (`60fa070`). The two cases ran at the same time. Request, verbatim:
+
+> $neon-create Build a Finnomena recruiting event page in ./open-house. The event is "Finnomena Open House: Build with Us", for engineers, designers and data people who might join our team. It's on Saturday 28 November 2026, 13:00–17:00, at Finnomena HQ, Column Tower 22nd floor, Ratchadaphisek Road, Bangkok. Agenda: team talks, an office tour, portfolio reviews and 1:1 chats with hiring managers. People register on our careers site: https://www.finnomena.com/careers/open-house. Headline in Thai. Include a section with what our employees say about working here and a row of partner company logos.
+
+Neither run checked the page in a browser: the before run reported no browser automation tool, and the after run's Chromium launch was blocked by the sandbox. The evaluator built each page and measured it in headless Chromium, light mode, at 375×812 and 1440×900. It counted each `h1`–`h3` line from its text-node rects, merging rects that overlap vertically, with IBM Plex Sans Thai confirmed as the computed font, and listed the text inside the first viewport. Element screenshots of the H1 and H2s matched the counts. A first count from distinct rect tops gave four lines for a two-line H2 with an inline `✳`, so the reference's counting example was changed to merge overlapping rects after the after run.
+
+| Item | Before | After |
+| --- | --- | --- |
+| Skill files read | SKILL.md, INSTRUCTION.md, readiness, scaffold, CDS integration, verification | Same plus campaign content |
+| Claim list in the report | None | Generated README table of seven claims, each with its supplied proof and section, including the two requested sections that had none; the final reply linked to it |
+| Date and place on the first screen at 375 | Fail: time and "BANGKOK, TH" at 10px; the date is below the fold | Partial: on the first screen, not in large type; "28 พฤศจิกายน 2026" and "Finnomena HQ" at 15px, "Column Tower ชั้น 22" at 10px, against a 44px H1 |
+| Headlines at most two rendered lines | Fail: H1 three lines at both widths; one H2 three lines at 375 | Pass: every heading at most two lines at both widths |
+| No invented proof | Pass: an "Employee stories are coming here" note and four "Partner logo n" slots | Pass: a quote prefixed "ตัวอย่าง:", "ชื่อพนักงาน (ตัวอย่าง)" and four `[Partner logo n]` slots |
+| Sample content as pre-launch to-dos | Pass: quotes and logos listed as failed items | Pass: listed with what replaces each |
+| Readiness | Ship-ready, no deployment | Same |
+
+Both pages had no horizontal overflow or console errors at either width. Generated apps, `grade.txt` and screenshots stay under `.local/evals/content-*`.
+
+Limits: one sample each, Codex only, one viewport height per width and light mode only. Only `h1`–`h3` were counted, so display text outside headings, such as the before run's 122px "BUILD WITH US" and the after run's "HELLO, FUTURE TEAM.", was not checked. The before run already avoided invented proof, so this sample shows no difference on that item. The after run put date and place on the first screen but at 15px rather than in large type. No Reference Design was supplied, so mapping claims onto a reference's section order and a later Brand Intensity move were not exercised. Both runs added a `design-day-starter` entry to `/tmp`, and the after run also added `check-fee.cjs` and `neon-before.css`. These may belong to other sessions running at the same time, so they were left in place.
 
 ## Flow refactor evaluation
 

@@ -33,6 +33,8 @@ Local research, working notes, generated evaluator apps, and run history live un
   evals/                 # generated eval apps and run output (screenshots, results) — one dir per run
 ```
 
+In a Git worktree, its own `.local/` is deleted with the worktree. Keep anything worth keeping in the main checkout's `.local/`, at `$(git rev-parse --path-format=absolute --git-common-dir)/../.local/`.
+
 ## Commands
 
 Token pipeline (regenerate after changing anything in `theme/tokens/*.json`):
