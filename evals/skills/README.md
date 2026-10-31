@@ -25,6 +25,8 @@ Run each request with the named context, first against the baseline and then the
 | Restyle a v0/Lovable React + Tailwind v4 + shadcn project to Finnomena | Detects shadcn on v4; edits `:root`/`.dark` by role and pair; leaves `@theme inline`; installs no CDS. See [shadcn on Tailwind v4 restyle](#shadcn-on-tailwind-v4-restyle) |
 | Rebuild an existing React prototype on CDS; colors-only and feature requests on the same apps | See [CDS rebuild](#cds-rebuild) |
 | Build a Back Office fee-report screen with mock data | Totals equal the sum of rows; numbers right-aligned with tabular figures; a fall in fees takes the color of its declared good direction; a zero prints as `0`; sample values appear in the Handoff Summary. See [Sample figures](#sample-figures) |
+| Build a Finnomena request tracker | At 1440×900 the list (heading and at least three complete rows) and the add-request action are visible on load; a request's detail is reachable in one click. See [First screen](#first-screen) |
+| Build a Back Office fee-report screen with mock data (first screen) | At 1440×900 the per-fund table shows its heading and at least three complete rows on load, with no summary band repeating totals the table carries. See [First screen](#first-screen) |
 
 Verdicts are pass, fail or unverified for routing, scope, resource retrieval, component correctness, color roles, feature completion, responsive behavior and evidence honesty. Link actual artifacts. Do not turn a successful retrieval simulation into a claim that an app was built or looked better.
 
@@ -324,6 +326,26 @@ Neither run checked the page in a browser: the before run reported no browser au
 Both pages had no horizontal overflow or console errors at either width. Generated apps, `grade.txt` and screenshots stay under `.local/evals/content-*`.
 
 Limits: one sample each, Codex only, one viewport height per width and light mode only. Only `h1`–`h3` were counted, so display text outside headings, such as the before run's 122px "BUILD WITH US" and the after run's "HELLO, FUTURE TEAM.", was not checked. The before run already avoided invented proof, so this sample shows no difference on that item. The after run put date and place on the first screen but at 15px rather than in large type. No Reference Design was supplied, so mapping claims onto a reference's section order and a later Brand Intensity move were not exercised. Both runs added a `design-day-starter` entry to `/tmp`, and the after run also added `check-fee.cjs` and `neon-before.css`. These may belong to other sessions running at the same time, so they were left in place.
+
+## First screen
+
+November 2026, Codex, rendered by the evaluator in headless Chromium at 1440×900; one sample per revision, two of the latest. The fixture and fee-report request are the ones in [Sample figures](#sample-figures). The tracker request is the [mock labeling](#mock-labeling) one, naming a new `request-tracker` folder for the same reason.
+
+| Run | Requested block on load | Most frequent action | Main question stated |
+| --- | --- | --- | --- |
+| Tracker, before (`97ad7b4`) | List heading, 3 complete rows, detail beside | "New request" under the page title | No |
+| Tracker, after (first wording) | List heading, 4 complete rows, detail beside | "New request" in the title row | No |
+| Fee report, before (`97ad7b4`) | "Fund breakdown" heading at 704px; no complete fund row, under a KPI strip and a fee-type band | "Export CSV" in the title row | No |
+| Fee report, after (first wording, "first rows") | Fund table heading at 630px; 1 complete row, under the same two bands | "Export CSV" in the title row | No |
+| Fee report, after (second wording, "three complete rows") | Fund table heading at 627px; 1 complete row, under the same two bands | "Export CSV" in the title row | Yes, totals and change answer it |
+| Fee report, after (this revision, "no band when the list carries the totals"), sample 1 | Table heading at 456px; all 6 fund rows complete (last ends at 875px); no summary band, fee types as columns; total footer row cut at the fold (ends 934px) | "Export CSV" in the title row | Yes |
+| Fee report, after (this revision), sample 2 | Table heading at 417px; all 6 fund rows complete (last ends at 846px); no summary band, fee types as columns; total footer row ends at 908px, its text visible | "Export CSV" in the table's title row | Yes |
+
+The tracker request does not tell the revisions apart: both pass. On the fee report, the first two wordings did not change the layout: both runs read the rule, could not render (the Chromium launch was blocked in the sandbox) and built a separate fee-type band, reading "per fund and fee type" as naming it. This revision says that when the list already carries the totals and the named breakdown as columns, no summary band goes above it. Both samples then dropped the KPI strip and the fee-type band, put fee types in columns and totals in a footer row, and passed. Both still could not render; each stated the main question and reported the rendered check as unverified. In sample 1 the grand-total footer row is cut at the fold, which the rule allows: it asks for three complete rows.
+
+Review, same fixture: the baseline fee build plus its 1440×900 screenshot, `$neon-review Review our Finnomena fee report screen for usability. fee-report-1440x900.png is how it looks on load at 1440x900. Do not edit anything.` Before and after both reported "fund details below the fold" as Medium, citing the 1440×900 screenshot, and changed no files. The revised run ranked it first. That is no measurable difference.
+
+Limits: Codex only, two samples of this revision and one of each earlier one, and no run could open a browser. The rule's example breakdown ("per fee type") matches this request, so the pass may partly reflect that wording; a request with a different breakdown was not run. The review runs used the second wording, not this one. The `composition: 'preserve'` caveat was not exercised. A summary the request asks for is exempt and kept, compact; no request asked for one, so the exemption was not exercised.
 
 ## Flow refactor evaluation
 

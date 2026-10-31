@@ -29,6 +29,18 @@ Read for Back Office and Product Feature screens that show money, units, fees, c
 
 Make the task reachable in narrow and wide layouts. A detail panel can move behind a selection with a clear return path; hiding it must not remove essential actions. Use actual destinations for navigation, and preserve the app's reading and keyboard order. Do not add external ecosystem links unless requested.
 
+### One question, first screen
+
+For a functional screen, put its answer and its main action where the employee looks first:
+
+1. Before building, write the screen's main question and its most frequent action, one line each.
+2. The list or table that answers the question is the most prominent element. At 1440×900 it shows its heading and at least three complete rows without scrolling. Cap overview lists and link to the full list.
+3. When the list already carries the totals (a footer row, a column per category, the change beside each value), add no separate summary band above it; a headline total can sit in its title row. A breakdown the request names, such as per fee type, is carried when the list shows it as columns or groups with totals. When the request asks for KPI cards or a summary at the top, keep it, compact enough that the list's heading and three complete rows still show. Otherwise summaries (KPIs, breakdowns, charts) share one compact band above the list or sit beside it, and still leave the list's heading and three complete rows visible.
+4. Without a browser, budget the height from the layout's known sizes before building, and report the rendered check as unverified.
+5. The most frequent action is visible where its answer appears: in the title row, or on the row that needs it. It is never only inside a menu.
+
+In existing UI with `composition: 'preserve'`, report a miss as an observation; it does not license rearranging the screen.
+
 ## Verification
 
 Use the [shared checklist](../../neon-redesign/references/verification.md#shared-checklist) and [creation additions](../../neon-redesign/references/verification.md#creation-additions). For explicitly adapted existing composition, apply the composition additions too. A copied template or a source-only inspection is not completion.
