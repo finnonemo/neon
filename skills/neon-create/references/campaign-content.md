@@ -16,7 +16,7 @@ At 375px and 1440px the first screen states what the page is and the next action
 
 ## Headlines by rendered lines
 
-Check each headline by its rendered line count at 375px and 1440px: two lines or fewer at both widths. Do not estimate from character counts; Thai has no spaces between words, so wrapping depends on the font, width and line-breaking. Count lines in a browser, for example from the distinct `top` values of `Range.getClientRects()` over the heading text, with IBM Plex Sans Thai confirmed as the computed font. If no browser can run, report the headline check as unverified; a character count is not evidence.
+Check each headline by its rendered line count at 375px and 1440px: two lines or fewer at both widths. Do not estimate from character counts; Thai has no spaces between words, so wrapping depends on the font, width and line-breaking. Count lines in a browser, with IBM Plex Sans Thai confirmed as the computed font. For example, take `getClientRects()` of each text node in the heading and count rects that overlap vertically as one line, so an inline glyph or span at another size does not add a line. If no browser can run, report the headline check as unverified; a character count is not evidence.
 
 ## No invented proof
 
