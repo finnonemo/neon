@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { contrast } from '../../scripts/lib/colors.mjs';
 
 const read = path => readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8');
 const colors = JSON.parse(read('theme/tokens/colors.json'));
@@ -8,14 +9,6 @@ const hex = (family, step) => {
   const value = colors[family]?.[step]?.value;
   assert.ok(value, `${family}/${step} is not in theme/tokens/colors.json`);
   return value;
-};
-
-const luminance = value => [1, 3, 5].map(i => parseInt(value.slice(i, i + 2), 16) / 255)
-  .map(v => v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4)
-  .reduce((sum, v, i) => sum + v * [0.2126, 0.7152, 0.0722][i], 0);
-const contrast = (a, b) => {
-  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
-  return (hi + 0.05) / (lo + 0.05);
 };
 
 // The recipe table in the design contract is the only source of the recipes.

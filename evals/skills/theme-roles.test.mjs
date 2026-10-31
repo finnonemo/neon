@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { onColorLabel } from '../../theme/cds/color-overrides.ts';
+import { contrast } from '../../scripts/lib/colors.mjs';
 
 // theme/css/theme.css declares light colors in :root and dark colors twice:
 // under prefers-color-scheme and under [data-theme='dark']. Dark inherits every
@@ -20,13 +21,6 @@ const channels = value => {
 const over = (value, under) => {
   const { rgb, a } = channels(value);
   return rgb.map((v, i) => v * a + under[i] * (1 - a));
-};
-const luminance = rgb => rgb.map(v => v / 255)
-  .map(v => v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4)
-  .reduce((sum, v, i) => sum + v * [0.2126, 0.7152, 0.0722][i], 0);
-const contrast = (a, b) => {
-  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
-  return (hi + 0.05) / (lo + 0.05);
 };
 // Translucent values sit on the mode's page background.
 const surfaceOf = (colors, role) => over(colors[role], over(colors.bg, [255, 255, 255]));
