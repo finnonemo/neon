@@ -29,6 +29,7 @@ Run each request with the named context, first against the baseline and then the
 | Build a Back Office fee-report screen with mock data | Totals equal the sum of rows; numbers right-aligned with tabular figures; a fall in fees takes the color of its declared good direction; a zero prints as `0`; sample values appear in the Handoff Summary. See [Sample figures](#sample-figures) |
 | Build a Finnomena request tracker | At 1440×900 the list (heading and at least three complete rows) and the add-request action are visible on load; a request's detail is reachable in one click. See [First screen](#first-screen) |
 | Build a Back Office fee-report screen with mock data (first screen) | At 1440×900 the per-fund table shows its heading and at least three complete rows on load, with no summary band repeating totals the table carries. See [First screen](#first-screen) |
+| Add Finnomena approvals to an existing themed React/CDS app (Look and fix) | Before Done the run screenshots its screen at 375px and 1440px, writes at least one critique round naming the widths and applies fixes; the report gives each round its own line and no numeric score. See [Look and fix](#look-and-fix) |
 
 Verdicts are pass, fail or unverified for routing, scope, resource retrieval, component correctness, color roles, feature completion, responsive behavior and evidence honesty. Link actual artifacts. Do not turn a successful retrieval simulation into a claim that an app was built or looked better.
 
@@ -436,6 +437,35 @@ The tracker request does not tell the revisions apart: both pass. On the fee rep
 Review, same fixture: the baseline fee build plus its 1440×900 screenshot, `$neon-review Review our Finnomena fee report screen for usability. fee-report-1440x900.png is how it looks on load at 1440x900. Do not edit anything.` Before and after both reported "fund details below the fold" as Medium, citing the 1440×900 screenshot, and changed no files. The revised run ranked it first. That is no measurable difference.
 
 Limits: Codex only, two samples of this revision and one of each earlier one, and no run could open a browser. The rule's example breakdown ("per fee type") matches this request, so the pass may partly reflect that wording; a request with a different breakdown was not run. The review runs used the second wording, not this one. The `composition: 'preserve'` caveat was not exercised. A summary the request asks for is exempt and kept, compact; no request asked for one, so the exemption was not exercised.
+
+## Look and fix
+
+The shared checklist's [Look and fix](../../skills/neon-redesign/references/verification.md#look-and-fix) section asks a run to screenshot its main task at 375px and 1440px, critique the screenshots in neon-review's finding shape, fix the top three problems, stop after three rounds, and report each round on its own line. Without visible screenshots it reports the loop as not run. neon-create and neon-redesign link it from step 5 and Done.
+
+Fixture: the starter assembled at `6c0a1f6`, made into an existing app with Home and My requests hash routes (`src/app/useRoute.ts`), `src/services/requests.ts`, and a mock `src/services/approvals.ts` whose contract the comment says to keep. Vite is pinned to port 5301 and the dev server was started before each run. Each sample ran on a fresh copy of the fixture, in its own git repository, outside the Neon checkout so no `AGENTS.md` sits above it. Request, verbatim:
+
+> /neon:neon-create Add a Finnomena approvals screen to this app for managers: a list of pending expense approvals they can open to see the details, then approve, or reject with a reason. Use the existing approval service in src/services/approvals.ts and keep the app's shell, routes and theme. The dev server is already running at http://localhost:5301.
+
+Pass requires a written critique round in the report that names its screenshot widths, with fixes applied before Done, and no numeric score.
+
+November 2026, Claude Code 2.1.316, `claude -p --model claude-opus-5-5 --setting-sources project,local --plugin-dir <package> --mcp-config <browser> --strict-mcp-config --permission-mode dontAsk --allowedTools <list>`. The browser is the evaluator's MCP tool from [Browser probe in verification](#browser-probe-in-verification), whose screenshots reach the agent as images. `--setting-sources project,local` leaves out the evaluator's user hooks, which block `cd`. Baseline is the `6c0a1f6` package. Revised is `f1d0bc8` for the first sample, then `c1478c8`, which asks for the critique in messages and the widths on each report line. Runs used one of two allowlists:
+
+- Narrow: `Read Edit Write Glob Grep Skill`, the five `mcp__browser__*` tools, and `Bash(…:*)` for `ls pwd cd cat head tail wc grep find echo test sed rg sort which curl lsof kill sleep mkdir cp node npm npx`, `npm run`, and `git status/log/diff/ls-files/rev-parse/show/branch`. Revised-2 also added `--add-dir <package>`.
+- Full: the same tools with `Bash` unrestricted.
+
+| Item | Baseline-1 (narrow) | Baseline-2 (full) | Revised-1 (`f1d0bc8`, narrow) | Revised-2 (`c1478c8`, narrow) |
+| --- | --- | --- | --- | --- |
+| Denied commands | 2: a multi-file `cat` with a variable assignment, a brace-expansion `ls` | None | 1: `ls` of the package outside the workspace | 2: `cd "$PWD"; cat …` and a `cd … \|\| cd …; pwd; grep` |
+| Read verification.md | Yes | Yes, through `cat` | Yes | Yes |
+| Screenshots | 5, at 1440 and 375 | 8, at 1440 and 375 | 12, at 1440 and 375 | 14, at 1440 and 375 |
+| Edits after a screenshot | Yes: amounts clipped by `ListCell` | Yes: truncated rows, a badge blending into white | Yes | Yes |
+| Critique rounds in the report | None | None | "Round 1–3" under "Fixes I made after looking at screenshots"; no widths | "**Look and fix**": "Round 1 (1440px, list)", "Round 2 (1440px and 375px, details, reject and approve)", "Round 3 (1440px, empty and confirmation)", each with the fixes made, then problems left as they are |
+| Build | Not run: reported the shell as blocked | Passed | Passed | Passed |
+| Verdict | Fail; void under the denial rule | Fail | Partial: rounds without widths; void under the denial rule | Pass on the report criterion; finding shape not used |
+
+Every run, baseline included, looked at its own screenshots and fixed what it saw: clipped amounts, wrapping rows, an unset reason field. The skill change does not make the runs look; it makes them write the critique down and report it per round. Neither revised run wrote findings in neon-review's shape (severity, location, evidence, fix, recheck) in its visible messages. Each wrote short notes such as "Fixing: keep the amount column at full width", so that part of the section is not yet followed. Revised-2's round lines name widths, but not in the fixed `Look and fix, round N (…)` shape, and round 1 used only 1440px screenshots. No report gave a numeric score. Revised-1 called the Back Office screen Ship-ready, against [Readiness](#readiness). Revised-2 and Baseline-2 said Brand-ready. Run logs, screenshots, grades and diffs are in `.local/evals/53-{baseline-1,baseline-2,revised-1,revised-2}`. The fixture, run script and grader are in `.local/evals/53-tools`.
+
+Limits: one usable baseline and one revised sample, Claude Code only, on the evaluator's browser tool. The orchestrator's rule voids any sample with a denied command, and only Baseline-2 had none. Revised-2's two denials did not stop it using the shell, but a rerun with full Bash was refused by the evaluator session's own permission classifier, so no clean revised sample exists. The baseline and revised samples that count ran with different allowlists. Not exercised: colors-only scope, `composition: 'preserve'` on existing UI, dark mode (the fixture has none), and the no-screenshot fallback, including Codex. The "Functional screen habits" link is a placeholder until #54.
 
 ## Flow refactor evaluation
 
