@@ -141,6 +141,22 @@ The failing run had followed the two read conditions in SKILL.md that use a read
 
 The fourth sample also reported, from its 375px screenshot, rows whose codes overlap their badges and a Remove button past the card edge. The probe came back clean at 375px because it does not detect content overflowing a fixed-width container. Neither run tried the allowed `npm run build`; each had a listing command denied first and reported the shell as blocked, so the build result is the grader's. Reads, resizes, evaluations and `viewportWidth` were graded from the tool calls and results in each run's `run.jsonl`. Limits: two samples, Claude Code only, the evaluator's MCP browser tool, and no rerun of the fallback path or of Codex with this change. Both runs now read the checklist and evaluate the probe at both widths. Naming the results per width passed once and was partial once, so report-time naming under item 5 remains open, as on Codex.
 
+Item 5 now gives the probe a fixed report line: `Browser probe: 375px …; 1440px …`, or `Browser probe: not run; recheck at 375px and 1440px`. Two more samples reran the third and fourth samples' setup in Claude Code 2.1.316 on main at `be33675` (#68 merged) plus this change: same command, permissions, browser tool and dev server at 5173, run one after the other, each on a pristine fixture copy and a package matching `skills/`.
+
+| Item | Claude, fifth sample | Claude, sixth sample |
+| --- | --- | --- |
+| Read verification.md | Yes, second reference read, before editing | Yes, second reference read, before editing |
+| Read browser-probe.js | Yes, after editing | Yes, after editing |
+| Probe evaluated | The probe's code with a geometry field added to its result, at 1440px light; then a rewrite with shorter names and extra fields as `window.__probe`, at 1440px dark and 375px light and dark; `viewportWidth` 1440 and 375 | The probe's code, unchanged but for one trailing comma, wrapped as `window.__probe`, at 1440px light and dark and 375px light and dark; `viewportWidth` 1440 and 375 |
+| Report | "**Browser probe:** 375px clean in light and dark; 1440px clean in light and dark (no overflow, no blended fills, no unreadable controls)." | "Browser probe: 375px clean in light and dark (…); 1440px clean in light, and no overflow in dark." |
+| Build | Ran `npm run build`: passed | Not tried: a first listing command was denied and the run reported the shell as blocked |
+| Grader | Pass | Pass |
+| Verdict | Pass | Pass |
+
+Both reports also gave the 375px row overlap from screenshots, which the probe does not detect, as above. The fifth sample's own `npx vite` was denied and it measured the evaluator's server. Its 1440px dark and 375px results came from its own rewrite of the probe, not the file's text, so it followed Measure only in part. Limits: two samples, Claude Code only, the evaluator's MCP browser tool, and no Codex rerun. Both runs adopted the line shape, so report-time naming passed here, but two samples cannot show it holds. Codex has not run this wording; none of its four runs above, three of them on revised wording, named the probe.
+
+neon-create step 5 now says to read the checklist before reporting, on the fast path too, and Done ties the report to item 5. Two Claude Code samples ran the [Sample figures](#sample-figures) request verbatim as `/neon:neon-create` into a `.gitkeep`-only folder, with the same plugin and browser tool. Their permissions were broader than the restyle samples': `node`, `npm`, `npx`, `mkdir` and listing commands, and in the second also `cat`, `head`, `cd`, `grep` and `git status`/`ls-files`. Each run's first shell command was a compound that included an unlisted command (`git status`; `pwd` and `git log`). It was denied, and the run reported Bash as blocked. Neither run tried the allowed installer, `npm install` or a dev server: each assembled the starter by hand from the package's template, and neither opened the browser. Both read verification.md, after scaffold.md, which also links it, so the read cannot be attributed to step 5 alone, and no sample ran the old step 5 wording for comparison. Neither read browser-probe.js. Both reports said "Browser probe: not run; recheck at 375px and 1440px." and marked the build, rendered layout and console unverified. Fallback naming passed in both. The neon-create browser path is unexercised: the probe was never evaluated, and nothing was built or rendered for grading.
+
 ## Mock labeling
 
 Fixture: an empty folder. Request, verbatim:
