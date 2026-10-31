@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { colorOverrides } from '../../theme/cds/color-overrides.ts';
+import { contrast } from '../../scripts/lib/colors.mjs';
 
 // CDS wraps spectrum steps in rgb() itself (media/Avatar.css and tag/Tag.js
 // in @coinbase/cds-web@9.26.1), so each value must be a bare "r,g,b" triplet
@@ -12,14 +13,6 @@ test('spectrum overrides are bare r,g,b triplets', () => {
     }
   }
 });
-
-const luminance = value => value.split(',').map(Number).map(v => v / 255)
-  .map(v => v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4)
-  .reduce((sum, v, i) => sum + v * [0.2126, 0.7152, 0.0722][i], 0);
-const contrast = (a, b) => {
-  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
-  return (hi + 0.05) / (lo + 0.05);
-};
 
 // Pairs CDS draws as text in @coinbase/cds-web@9.26.1: Tag puts blue/green/red
 // 60, purple 80 and yellow 70 against step 0 (yellow high emphasis: 70 on 30).
