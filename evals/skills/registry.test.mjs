@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readdirSync, readFileSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { BUILD_DIR, bareCnImports, buildRegistry, darkClasses, missingTypeRoles, pinnedRegistryUrl, unpinnedUrls } from '../../scripts/lib/registry.mjs';
+import { BUILD_DIR, bareCnImports, buildRegistry, darkClasses, missingTypeRoles, pinnedRegistryUrl, tabsAsSegmented, unpinnedUrls, weightOverrides } from '../../scripts/lib/registry.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '../..');
 const read = (path) => readFileSync(join(root, path), 'utf8');
@@ -60,4 +60,18 @@ test('every theme.css type role is a text utility cn keeps apart from text color
     missingTypeRoles({ ...inputs, adapter: inputs.adapter.replace('--text-caption:', '--text-cap:') }),
     ['theme/neon.css lacks --text-caption'],
   );
+});
+
+test('registry components let each type role carry its own weight', () => {
+  assert.deepEqual(weightOverrides(sourceFiles('registry')), []);
+  assert.equal(weightOverrides([['ui/tag.tsx', 'className="text-label1 font-medium"']]).length, 1);
+  assert.equal(weightOverrides([['ui/tabs.tsx', 'className="data-[state=active]:font-semibold"']]).length, 1);
+  assert.deepEqual(weightOverrides([['ui/tag.tsx', 'className="font-sans text-label1"']]), [], 'font family is not a weight');
+});
+
+test('a segmented control is never built on Tabs', () => {
+  assert.deepEqual(tabsAsSegmented(sourceFiles('registry')), []);
+  assert.equal(tabsAsSegmented([['ui/segmented.tsx', 'import { Tabs as TabsPrimitive } from "radix-ui"\nexport function Segmented() {}']]).length, 1);
+  assert.equal(tabsAsSegmented([['app/Filter.tsx', 'import { Tabs, TabsList } from "@/components/ui/tabs"\n// segmented status filter']]).length, 1);
+  assert.deepEqual(tabsAsSegmented([['ui/segmented-control.tsx', 'import { RadioGroup as RadioGroupPrimitive } from "radix-ui"']]), []);
 });

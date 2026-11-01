@@ -79,3 +79,25 @@ export function missingTypeRoles({ themeCss, utils, adapter }) {
   }
   return problems;
 }
+
+/** Weight utilities beside type roles: a component's font-medium beats text-label1's own weight (spike trap 2). */
+export function weightOverrides(files) {
+  const problems = [];
+  for (const [path, content] of files) {
+    if (!/\.(tsx?|jsx?)$/.test(path)) continue;
+    for (const match of content.matchAll(/(?<![\w-])(?:[\w-]+:)*font-(?:thin|extralight|light|normal|medium|semibold|bold|extrabold|black)(?![\w-])/g)) {
+      problems.push(`${path} uses ${match[0]}; each type role carries its own weight`);
+    }
+  }
+  return problems;
+}
+
+/** Tabs standing in for a segmented control: tab roles without tab panels fail axe (spike trap 8). */
+export function tabsAsSegmented(files) {
+  const problems = [];
+  for (const [path, content] of files) {
+    const tabs = /\bTabs\b[^;]*from\s+["'](?:radix-ui|@radix-ui\/react-tabs|@\/components\/ui\/tabs)["']/.test(content);
+    if (tabs && /segment/i.test(content)) problems.push(`${path} builds a segmented control on Tabs; use the segmented-control item (a radio group)`);
+  }
+  return problems;
+}

@@ -1,6 +1,7 @@
 // Assembles a disposable app and runs the Playwright specs against it.
 //   node run.mjs [playwright args]                 the CDS starter (default)
 //   node run.mjs --target neon [playwright args]   the Neon base, from this checkout's registry
+//   --keep leaves the assembled app in place and prints its path, for screenshots.
 import { mkdtemp, readFile, readdir, writeFile, copyFile, rm, mkdir } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import { tmpdir } from 'node:os';
@@ -15,6 +16,7 @@ const root = resolve(here, '../..');
 const args = process.argv.slice(2);
 const targetAt = args.indexOf('--target');
 const target = targetAt >= 0 ? args.splice(targetAt, 2)[1] : 'cds';
+const keep = args.includes('--keep') && args.splice(args.indexOf('--keep'), 1).length > 0;
 if (!['cds', 'neon'].includes(target)) throw new Error(`Unknown target ${target}; use cds or neon.`);
 // shadcn's CLI is pinned: its init and registry formats change between releases.
 const SHADCN = 'shadcn@4.23.0';
@@ -52,6 +54,7 @@ async function assembleCds() {
 // Creates the app as an employee would, with shadcn init from the Neon base,
 // against this checkout's registry served locally instead of the release tag.
 async function assembleNeon() {
+  let items;
   const server = createServer(async (request, response) => {
     try {
       const body = await readFile(join(work, 'registry', decodeURIComponent(new URL(request.url, 'http://x').pathname)));
@@ -63,16 +66,17 @@ async function assembleNeon() {
     const url = `http://127.0.0.1:${server.address().port}/r`;
     await mkdir(join(work, 'registry/r'), { recursive: true });
     for (const [name, content] of await buildRegistry({ root, url })) await writeFile(join(work, 'registry/r', name), content);
+    ({ items } = JSON.parse(await readFile(join(work, 'registry/r/registry.json'), 'utf8')));
     await run('npx', ['--yes', SHADCN, 'init', '-t', 'vite', '-b', 'radix', '-n', 'app', '--no-monorepo', `${url}/neon-base.json`], work);
     // The vite template appends shadcn's stock button and a theme provider.
-    await run('npx', ['--yes', SHADCN, 'add', '@neon/button', '--overwrite', '-y'], app);
+    const components = items.filter((item) => item.type === 'registry:ui').map((item) => `@neon/${item.name}`);
+    await run('npx', ['--yes', SHADCN, 'add', ...components, '--overwrite', '-y'], app);
     await rm(join(app, 'src/components/theme-provider.tsx'), { force: true });
   } finally {
     server.close();
   }
   // Every registry file lands unchanged where its item targets, so no stock
   // file (shadcn's button, the template's index.html) survives in its place.
-  const { items } = JSON.parse(await readFile(join(work, 'registry/r/registry.json'), 'utf8'));
   for (const file of items.flatMap((item) => item.files)) {
     const path = file.target.replace(/^~\//, '');
     const installed = await readFile(join(app, path), 'utf8').catch(() => null);
@@ -99,9 +103,9 @@ async function assembleNeon() {
 
 try {
   await (target === 'neon' ? assembleNeon() : assembleCds());
-  // The layouts reach the Neon base with #95; until then it runs the match spec only.
-  const specs = target === 'neon' && !args.some((arg) => arg.endsWith('.spec.mjs')) ? ['cds-match.spec.mjs'] : [];
+  // The layouts reach the Neon base with #95; until then it runs the match and accessibility specs only.
+  const specs = target === 'neon' && !args.some((arg) => arg.endsWith('.spec.mjs')) ? ['cds-match.spec.mjs', 'neon-a11y.spec.mjs'] : [];
   await run(process.execPath, [join(here, 'node_modules/@playwright/test/cli.js'), 'test', ...specs, ...args], here, { NEON_TEST_APP: app, NEON_TARGET: target });
 } finally {
-  await rm(work, { recursive: true, force: true });
+  if (keep) console.log(`Kept the assembled app at ${app}`); else await rm(work, { recursive: true, force: true });
 }

@@ -55,6 +55,84 @@
       "files": [
         { "path": "ui/button.tsx", "type": "registry:ui", "target": "src/components/ui/button.tsx" }
       ]
+    },
+    {
+      "name": "input",
+      "type": "registry:ui",
+      "title": "Input",
+      "registryDependencies": ["@neon/utils"],
+      "files": [
+        { "path": "ui/input.tsx", "type": "registry:ui", "target": "src/components/ui/input.tsx" }
+      ]
+    },
+    {
+      "name": "textarea",
+      "type": "registry:ui",
+      "title": "Textarea",
+      "registryDependencies": ["@neon/utils"],
+      "files": [
+        { "path": "ui/textarea.tsx", "type": "registry:ui", "target": "src/components/ui/textarea.tsx" }
+      ]
+    },
+    {
+      "name": "label",
+      "type": "registry:ui",
+      "title": "Label",
+      "dependencies": ["radix-ui@^1.8.1"],
+      "registryDependencies": ["@neon/utils"],
+      "files": [
+        { "path": "ui/label.tsx", "type": "registry:ui", "target": "src/components/ui/label.tsx" }
+      ]
+    },
+    {
+      "name": "checkbox",
+      "type": "registry:ui",
+      "title": "Checkbox",
+      "dependencies": ["radix-ui@^1.8.1", "lucide-react@^1.66.0"],
+      "registryDependencies": ["@neon/utils"],
+      "files": [
+        { "path": "ui/checkbox.tsx", "type": "registry:ui", "target": "src/components/ui/checkbox.tsx" }
+      ]
+    },
+    {
+      "name": "avatar",
+      "type": "registry:ui",
+      "title": "Avatar",
+      "dependencies": ["radix-ui@^1.8.1"],
+      "registryDependencies": ["@neon/utils"],
+      "files": [
+        { "path": "ui/avatar.tsx", "type": "registry:ui", "target": "src/components/ui/avatar.tsx" }
+      ]
+    },
+    {
+      "name": "tag",
+      "type": "registry:ui",
+      "title": "Tag",
+      "dependencies": ["class-variance-authority@^0.7.1"],
+      "registryDependencies": ["@neon/utils"],
+      "files": [
+        { "path": "ui/tag.tsx", "type": "registry:ui", "target": "src/components/ui/tag.tsx" }
+      ]
+    },
+    {
+      "name": "list-row",
+      "type": "registry:ui",
+      "title": "List row",
+      "dependencies": ["lucide-react@^1.66.0"],
+      "registryDependencies": ["@neon/utils"],
+      "files": [
+        { "path": "ui/list-row.tsx", "type": "registry:ui", "target": "src/components/ui/list-row.tsx" }
+      ]
+    },
+    {
+      "name": "segmented-control",
+      "type": "registry:ui",
+      "title": "Segmented control",
+      "dependencies": ["radix-ui@^1.8.1"],
+      "registryDependencies": ["@neon/utils"],
+      "files": [
+        { "path": "ui/segmented-control.tsx", "type": "registry:ui", "target": "src/components/ui/segmented-control.tsx" }
+      ]
     }
   ]
 }
