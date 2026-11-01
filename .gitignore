@@ -27,3 +27,6 @@ tests/
 
 # Claude CLI and related local state
 .claude/
+
+# Downloaded Refero Styles DESIGN.md corpus — third-party content, kept local.
+research/refero/
