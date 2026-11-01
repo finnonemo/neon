@@ -1,11 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
+import { numericScore, section as sectionOf } from './markdown-section.mjs';
 
 // Static guards for the blind output-quality protocol (#56; README "Output quality (blind)").
 // They check the protocol is stated, not that a round was run well.
 const readme = await readFile(new URL('./README.md', import.meta.url), 'utf8');
-const section = readme.match(/^## Output quality \(blind\)\n([\s\S]*?)(?=^## )/m)?.[1] ?? '';
+const section = sectionOf(readme, 'Output quality (blind)');
 
 test('the protocol sits before the flow refactor evaluation and has the last row of the scenario table', () => {
   const headings = [...readme.matchAll(/^## (.+)$/gm)].map(match => match[1]);
@@ -37,7 +38,8 @@ test('results are preferences and named problems, never a score, and stay out of
   assert.match(section, /named problems/);
   assert.match(section, /never feeds readiness/);
   assert.match(section, /`\.local\/evals\/`/);
-  // The score shapes look-and-fix.test.mjs bans from skill files, plus percentages and rating scales
+  // The score shapes banned from skill files, plus percentages and rating scales
   // ("1-5", not a model id such as claude-opus-5-5).
-  assert.doesNotMatch(section, /\b\d+(?:\.\d+)?\s*(?:\/|out of)\s*(?:5|10|100)\b|\bweighted score\b|\bscore (?:of|cap)\b|\d\s*%|(?<![\w-])[1-5]\s*(?:-|–|to)\s*(?:5|10)\b/i);
+  assert.doesNotMatch(section, numericScore);
+  assert.doesNotMatch(section, /\d\s*%|(?<![\w-])[1-5]\s*(?:-|–|to)\s*(?:5|10)\b/i);
 });
