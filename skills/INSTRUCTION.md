@@ -37,7 +37,7 @@ Start from the employee's main task and the information needed to complete it. U
 
 ## Gradients
 
-Gradients belong on Reference-led immersive surfaces, since an Immersive Theme uses none, such as a hero field, a card or a section fading into the next, not on functional scaffolding. Build them from these recipes. The recipes are provisional: they are derived from Finnomena campaign files, not design-approved. Keep them page-scoped, in the page's own styles, never in theme files or shared theme variables. Direction, angle and coverage are free.
+Gradients belong on Reference-led immersive surfaces, such as a hero field, a card or a section fading into the next. An Immersive Theme uses none, and functional scaffolding never does. Build them from these recipes. The recipes are provisional: they are derived from Finnomena campaign files, not design-approved. Keep them page-scoped, in the page's own styles, never in theme files or shared theme variables. Direction, angle and coverage are free.
 
 | Recipe | Stops | Text at every stop | Seen in |
 | --- | --- | --- | --- |
