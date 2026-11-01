@@ -84,6 +84,10 @@ _Avoid_: tier (a styling decision), palette, color mode
 A style description in the Refero Styles format that Finnomena writes for one Immersive Theme, whose typeface and colors the theme fixes. It is where a Campaign Page starts when the employee brings no Reference Design.
 _Avoid_: design file (names the file, not the concept), Reference Design, template
 
+**Preset**:
+A maintainer's reusable choice for one part of a Theme Brief: its occasion, its layout or its imagery. A Theme Brief combines one of each with an Immersive Theme.
+_Avoid_: Tailwind preset, Reference Design (which an employee brings), template
+
 **Brand Pattern**:
 Finnomena background artwork made by Block's generator from a locked seed, placed in a section that a Theme Brief or the employee names.
 _Avoid_: texture, background, Page (Block's full composition)
