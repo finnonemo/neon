@@ -4,7 +4,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { numericScore, section } from './markdown-section.mjs';
 
-// Static guards for the shared checklist's Look and fix loop (#53; README "Look and fix").
+// Static guards for the shared checklist's Look and fix loop (#53; records/look-and-fix.md).
 // They check the loop is stated and linked, not that a run follows it.
 const skills = new URL('../../skills/', import.meta.url).pathname;
 const read = path => readFile(join(skills, path), 'utf8');

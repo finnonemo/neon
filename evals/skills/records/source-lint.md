@@ -1,0 +1,28 @@
+---
+scenarios:
+  - request: Colors-only restyle of a Tailwind v4 app whose disabled text must keep a stock utility
+    observe: The run executes the shipped source lint on its changed files and the report fixes or justifies each warning on a `Source lint:` line.
+---
+
+# Source lint
+
+Item 5 of the shared checklist runs the shipped [source-lint.mjs](../../../scripts/source-lint.mjs) on the app and asks for a `Source lint:` report line that fixes or justifies each warning. The lint reads only the files changed against HEAD plus untracked files and always exits 0. Its rules live in `scripts/lib/source-rules.mjs`, which `stylesheet-scope.mjs` imports. `source-lint.test.mjs` covers the rules and asserts the grader keeps no copy of them.
+
+Fixture (seeded, kept at `.local/evals/57-fixture`): a 60-line Vite/React "Sell orders" screen whose CSS is only `@import "tailwindcss";`, styled with stock utilities, committed as the first commit of its own git repository. It has a disabled button with `text-slate-300` text, which the Tailwind mapping rules say stays stock ("never darken it"), so a rule-following restyle always leaves at least one stock palette utility. It also has pale `green-200`/`amber-200` badge borders. The dev server is pinned to port 5701. Request, verbatim, as in [Tailwind colors-only regression](tailwind-colors-only-regression.md):
+
+> $neon-redesign Colors only: switch this app's colors to Finnomena colors. Keep the layout, components, spacing and behaviour exactly as they are.
+
+Pass requires the run to execute the lint, and the report to name each stock utility the lint warns about on the result, as fixed or kept with a reason.
+
+November 2026, Claude Code 2.1.316, `claude-opus-5-5`, one sample on the baseline package (main at `6c0a1f6`) and two on this change (package built from `808dc7b`, before the merge with the browser probe runner and before the content rules stopped reading code comments; that change does not touch the stock palette rule this case exercises). Each run used a pristine fixture copy, the evaluator's MCP browser tool, `--add-dir` for the package and `/private/tmp/claude-501`, and `--permission-mode dontAsk`. Allowed: `Read Edit Write Glob Grep Skill Bash` and the browser tools. Denied: `rm`, `rmdir`, `mv`, `git push/commit/reset/checkout/clean/stash`, `sudo`, `curl`, `wget`, `WebFetch` and `WebSearch`. The grader then ran this change's lint on each result.
+
+| Item | Baseline (`6c0a1f6`) | This change, sample 1 | This change, sample 2 |
+| --- | --- | --- | --- |
+| Read verification.md | Yes | Yes | Yes, through `cat` |
+| Ran the lint | No (not shipped) | Yes, after `npm run build` | Yes, after `npm run build` |
+| Stock utilities left (grader's lint) | `border-green-200`, `text-green-700`, `border-amber-200`, `text-amber-700`, `text-slate-300` | Same five | Same five |
+| Report | Keeps "badge text and borders" green and amber (status text measures 3.61:1 and 3.00:1, no pale border token), and disabled text "its original pale grey"; no lint line | "**Source lint:** five warnings, one for each Tailwind color kept above. All are intentional."; each kept utility is named above it with its reason | "Source lint flagged 5 old colors left in place. These are the badge text and borders and the disabled text listed above, all kept on purpose." |
+| Build, browser | Pass; probe at 1440px and overflow at 375px | Pass; probe at 375px and 1440px | Pass; probe at 375px and 1440px |
+| Verdict | Fail: no lint run; the leftovers are justified from the agent's own review | Pass | Fail: ran the lint and answered every warning, but in prose, with no `Source lint:` line |
+
+Every leftover in all three runs was a deliberate exception under the mapping rules, and the baseline justified the same five without a lint. So these samples (one pass, one fail on the report line) show the lint running and its warnings being answered in the report; they do not show it catching a utility the agent overlooked. Each run had one denied Bash call: a `VAR=…; … $VAR/…` compound (baseline, sample 2) or a `cp` into the agent's own scratchpad (sample 1). Each run kept using the shell, built, and used the browser afterwards. Three earlier samples are void and kept for reference. Two ran on the `claude -p` default model (Haiku) under a prefix allowlist, and one on `claude-opus-5-5` under that allowlist. In each, a denied compound command led the agent to report Bash as blocked. Limits: three samples, Claude Code only, no Codex run, light mode only, one seeded fixture with no overlooked utility, and a run directory inside the neon worktree, whose repository paths the agents could see. Evidence is in `.local/evals/57-before-1`, `57-after-1`, `57-after-2` and `57-void-*` (`run.jsonl`, `grade.txt`, the result app and its git history).
