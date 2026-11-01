@@ -4,6 +4,7 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { contrast, matchToken, paletteTokens } from '../lib/colors.mjs';
 import { loadInputs, PRESET_KINDS } from './inputs.mjs';
+import { assembleBrief, readProse, renderBrief, splitSections } from './render.mjs';
 import { isThirdParty, sourceHost } from './schemas.mjs';
 
 const plural = (count, one, many = `${one}s`) => `${count} ${count === 1 ? one : many}`;
@@ -89,11 +90,56 @@ function colorProblems(text, theme, tokens) {
   return problems;
 }
 
-export function checkThemeBriefs({ root, out = join(root, 'registry/theme-briefs') }) {
+// The inputs and every problem found in them, before any brief is read.
+export function checkInputs(root) {
   const inputs = loadInputs(root);
-  const { facts, presets } = inputs;
   const problems = [...inputs.problems];
-  for (const picks of inputs.picks) problems.push(...compatibility(picks, presets, facts));
+  for (const picks of inputs.picks) problems.push(...compatibility(picks, inputs.presets, inputs.facts));
+  return { inputs, problems };
+}
+
+// The brief a published brief's picks file describes, ready to render, as { brief }; or { reason } when it
+// cannot be rendered, with reason undefined when the problems already found say why.
+export function renderable(name, inputs, problems) {
+  const picks = inputs.picks.find((candidate) => candidate.name === name);
+  if (!picks) return { reason: `has no picks file theme-briefs/picks/${name}.json` };
+  const paths = ['theme/immersive-themes.json', picks.path, ...inputs.themeTexts.map(({ path }) => path),
+    ...PRESET_KINDS.map((kind) => inputs.presets[kind][picks.data?.presets?.[kind]]?.path).filter(Boolean)];
+  if (problems.some((problem) => paths.some((path) => problem.startsWith(`${path}: `)))) return {};
+  const { brief, missing } = assembleBrief(inputs, picks);
+  if (brief) return { brief };
+  return { reason: missing.length ? `needs ${missing.join(', ')} for its Sibling Themes` : undefined };
+}
+
+// The brief rewritten from fresh scripted output, keeping the prose read from it: { text } or { problems }.
+export function freshBrief(markdown, brief) {
+  const { prose, problems } = readProse(markdown, brief);
+  return problems ? { problems } : { text: renderBrief(brief, prose) };
+}
+
+const clip = (line = '') => JSON.stringify(line.length > 80 ? `${line.slice(0, 77)}...` : line);
+
+// Check 3: every scripted section equals fresh scripted output exactly, per section found by heading.
+function scriptedDrift(markdown, brief) {
+  const fresh = freshBrief(markdown, brief);
+  if (fresh.problems) return fresh.problems.map((message) => `${message}; its scripted sections cannot be checked`);
+  const found = splitSections(markdown);
+  const expected = splitSections(fresh.text);
+  const headings = (sections) => sections.map(({ heading }) => heading).join(', ');
+  if (headings(found) !== headings(expected)) return [`sections must be, in order: ${headings(expected)}; found ${headings(found)}; run scripted-only`];
+  return expected.flatMap(({ heading, text }, index) => {
+    if (found[index].text === text) return [];
+    const have = found[index].text.split('\n');
+    const want = text.split('\n');
+    const line = want.findIndex((wanted, at) => wanted !== have[at]);
+    const at = line === -1 ? want.length : line;
+    return [`section "${heading}" differs from fresh scripted output (found ${clip(have[at])}, expected ${clip(want[at])}); run scripted-only`];
+  });
+}
+
+export function checkThemeBriefs({ root, out = join(root, 'registry/theme-briefs') }) {
+  const { inputs, problems } = checkInputs(root);
+  const { facts, presets } = inputs;
   const briefs = existsSync(out) ? readdirSync(out).filter((name) => name.endsWith('.md')) : [];
 
   // Pairs: a published brief (Markdown or registry entry) has its picks file, Markdown, record and registry entry.
@@ -119,6 +165,11 @@ export function checkThemeBriefs({ root, out = join(root, 'registry/theme-briefs
     const text = readFileSync(markdown, 'utf8');
     const theme = facts.themes[picks?.data?.theme] ?? Object.values(facts.themes).find((candidate) => name.startsWith(`${candidate.id}-`));
     for (const message of colorProblems(text, theme, tokens)) problems.push(`${where}: ${message}`);
+    if (picks) {
+      const { brief, reason } = renderable(name, inputs, problems);
+      if (brief) for (const message of scriptedDrift(text, brief)) problems.push(`${where}: ${message}`);
+      else if (reason) problems.push(`${where}: ${reason}; its scripted sections cannot be checked`);
+    }
     // No source name: no site or domain name from any preset source; the first name found per source is enough.
     const leaked = sources.find((source) => new RegExp(`(?<![\\w-])${escape(source)}(?![\\w-])`, 'i').test(text));
     if (leaked) problems.push(`${where}: names "${leaked}", a preset source; no source name ships`);

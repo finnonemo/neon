@@ -35,10 +35,20 @@ function themeFacts(root, problems) {
   const css = existsSync(join(root, 'theme/css/immersive-themes.css')) ? readFileSync(join(root, 'theme/css/immersive-themes.css'), 'utf8') : '';
   const themeCss = existsSync(join(root, 'theme/css/theme.css')) ? readFileSync(join(root, 'theme/css/theme.css'), 'utf8') : '';
   const blocks = {};
+  const tokens = new Map();
   for (const [, id, body] of css.matchAll(/\[data-immersive-theme(?:="([\w-]+)")?\]\s*\{([^}]*)\}/g)) {
-    blocks[id ?? '*'] = new Map([...body.matchAll(/--immersive-([\w-]+):\s*(#[0-9a-f]{6})/gi)].map(([, name, hex]) => [name, hex.toLowerCase()]));
+    const vars = [...body.matchAll(/--immersive-([\w-]+):\s*(#[0-9a-f]{6});(?:[ \t]*\/\*\s*(.+?)\s*\*\/)?/gi)];
+    blocks[id ?? '*'] = new Map(vars.map(([, name, hex]) => [name, hex.toLowerCase()]));
+    tokens.set(id ?? '*', new Map(vars.map(([, name, , token]) => [name, token?.replace('.', ' ')])));
   }
-  const steps = (prefix) => new Set([...themeCss.matchAll(new RegExp(`--(${prefix}-[\\w]+):`, 'g'))].map(([, name]) => name));
+  // The first declaration of each variable in theme.css; rem values are given in px.
+  const declared = new Map();
+  for (const [, name, value] of themeCss.matchAll(/--([\w-]+):\s*([^;]+);/g)) if (!declared.has(name)) declared.set(name, value.trim());
+  const px = (value) => value?.endsWith('rem') ? `${parseFloat(value) * 16}px` : value;
+  const scale = (prefix) => [...declared].filter(([name]) => name.startsWith(`${prefix}-`)).map(([name, value]) => ({ name, value }));
+  const wide = themeCss.match(/@media \(min-width: (\d+px)\)\s*\{\s*:root\s*\{[^}]*--layout-endMargin:\s*([^;]+);/);
+  const typeface = declared.get('fontFamily-body')?.match(/^'([^']+)'/)?.[1];
+  const steps = (prefix) => new Set(scale(prefix).map(({ name }) => name));
   const themes = {};
   for (const [id, theme] of Object.entries(data.themes ?? {})) {
     const families = COLOURWAYS.filter((family) => theme[family]);
@@ -47,13 +57,35 @@ function themeFacts(root, problems) {
       label: theme.label,
       kind: String(theme.text).startsWith('White') ? 'dark' : 'light',
       canvas: theme.canvas,
+      canvasIsPalette: theme.palette?.['100']?.bg === theme.canvas,
+      ratio: theme.ratio ?? {},
       families,
       roles: ['action', ...families],
       steps: Object.fromEntries(families.map((family) => [family, theme[family]])),
+      familyLabels: Object.fromEntries(families.map((family) => [family, String(Object.values(theme[family])[0]?.bg).split('.')[0]])),
       vars: new Map([...(blocks['*'] ?? []), ...(blocks[id] ?? [])]),
+      own: [...(blocks[id] ?? new Map()).keys()],
+      tokens: new Map([...(tokens.get('*') ?? []), ...(tokens.get(id) ?? [])]),
     };
   }
-  return { themes, space: steps('space'), borderRadius: steps('borderRadius') };
+  return {
+    themes,
+    secondary: Object.fromEntries(Object.entries(data.secondary ?? {}).map(([family, familySteps]) => [family, Object.keys(familySteps)])),
+    space: steps('space'),
+    borderRadius: steps('borderRadius'),
+    scale: {
+      typeface,
+      type: scale('fontSize').map(({ name, value }) => {
+        const role = name.slice('fontSize-'.length);
+        return { role, size: px(value), line: px(declared.get(`lineHeight-${role}`)), weight: declared.get(`fontWeight-${role}`) };
+      }),
+      space: scale('space'),
+      borderRadius: scale('borderRadius'),
+      contentMaxWidth: declared.get('layout-contentMaxWidth'),
+      endMargin: declared.get('layout-endMargin'),
+      wideEndMargin: wide && { from: wide[1], value: wide[2].trim() },
+    },
+  };
 }
 
 export function loadInputs(root) {

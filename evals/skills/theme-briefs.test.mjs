@@ -226,21 +226,94 @@ test('a third-party source with a partial review passes the input checks', (t) =
 
 // A published brief: its Markdown, authoring record and registry entry beside the picks file.
 const BRIEF = 'registry/theme-briefs/club-run.md';
-const briefText = [
-  '# Finnomena Club · Run — Theme Brief',
-  '',
-  '**Immersive Theme:** club',
-  '',
-  '| Name | Value | Token |',
-  '|---|---|---|',
-  '| White 100 | `#ffffff` | `--immersive-canvas` |',
-  '| Navy 100 | `#01172b` | `--immersive-text` |',
-  '| Light Grey 50 | `#d3dfe6` | `--immersive-palette-50` |',
-  '',
-  'Race distance cards sit on `var(--immersive-palette-50)` with `var(--immersive-on-palette-50)` text; the main action is `var(--immersive-action)`.',
-  '',
-].join('\n');
+// Scripted rendering and scripted-only: a committed brief whose scripted parts are stale, and its prose.
+const THEME_TEXTS = {
+  'theme-briefs/themes/exclusive.json': { mood: 'Exclusive fills the page with yellow. Navy ink and grey blocks keep it calm.', sibling: 'Yellow canvas with navy ink.' },
+  'theme-briefs/themes/private.json': { mood: 'Private opens on a grey canvas. Yellow blocks mark what matters.', sibling: 'Grey canvas with yellow blocks.' },
+  'theme-briefs/themes/ultra.json': { mood: 'Ultra sets the page on navy. White ink and yellow highlights carry it.', sibling: 'Navy canvas with white ink.' },
+};
+const PROSE = {
+  tagline: 'Race day on an open canvas, with every member invited to the start line',
+  mood: 'Members train together for one weekend race, and the page counts down to the start.\nThe registration call-out carries the accent.',
+  components: [
+    ['Race distance card', 'Compare the distances on offer', 'Each card sits on var(--immersive-palette-50) with var(--immersive-on-palette-50) text and var(--borderRadius-500) corners.\nThe distance leads in title2.'],
+    ['Registration call-out', 'Carry the main registration action', 'The call-out sits on var(--immersive-accent-100) with var(--immersive-on-accent-100) text, with the deadline above the main action.'],
+  ],
+  dos: ['Show the registration deadline beside every main action, so members never hunt for the date.'],
+  donts: ['Do not use the route map as a decorative background — it hides the distances members compare.'],
+  imagery: 'Photography of members running together leads, framed close and mid.\n\nSpot illustrations mark small blocks only.',
+  layout: 'The page opens on a split hero, then alternates detail lists and a call-out at var(--space-10) gaps before the form.',
+  prompts: ['Build a race distance card on var(--immersive-palette-50) with var(--immersive-on-palette-50) text.', 'Build the registration call-out on var(--immersive-accent-100) with var(--immersive-on-accent-100) text.'],
+};
+// What a drafted brief holds before its scripted sections are refreshed: prose, and stale scripted text.
+function staleBrief(prose = PROSE, { theme = 'Club', name = 'Run' } = {}) {
+  return [
+    `# Finnomena ${theme} · ${name} — Theme Brief`,
+    `> ${prose.tagline}`,
+    '',
+    'Stale header.',
+    '',
+    'Stale theme half.',
+    prose.mood,
+    'Stale ratio.',
+    '',
+    '## Tokens — Colors',
+    '',
+    'Stale colors.',
+    '',
+    '## Components',
+    '',
+    '### Main Action',
+    '**Role:** Stale',
+    '',
+    'Stale.',
+    '',
+    ...prose.components.flatMap(([title, role, paragraph]) => [`### ${title}`, `**Role:** ${role}`, '', paragraph, '']),
+    "## Do's and Don'ts",
+    '',
+    '### Do',
+    '- Stale do.',
+    ...prose.dos.map((line) => `- ${line}`),
+    '',
+    "### Don't",
+    ...prose.donts.map((line) => `- ${line}`),
+    '',
+    '## Imagery',
+    '',
+    prose.imagery,
+    '',
+    'Stale Brand Floor sentence.',
+    '',
+    '## Layout',
+    '',
+    prose.layout,
+    '',
+    '## Agent Prompt Guide',
+    '',
+    '**Quick Color Reference**',
+    '- stale',
+    '',
+    '**Example Component Prompts**',
+    '',
+    prose.prompts.map((line, index) => `${index + 1}. ${line}`).join('\n\n'),
+    '',
+  ].join('\n');
+}
+
+// The committed brief scripted-only makes from the stale one: what a published brief holds.
+function renderBrief(changes = {}) {
+  const root = fixture({ after() {} }, { ...THEME_TEXTS, [BRIEF]: staleBrief(), ...changes });
+  try {
+    const { status, out } = run(['scripted-only', '--root', root]);
+    assert.equal(status, 0, out);
+    return readFileSync(join(root, BRIEF), 'utf8');
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+}
+const briefText = renderBrief();
 const published = (items = ['club-run']) => ({
+  ...THEME_TEXTS,
   [BRIEF]: briefText,
   'theme-briefs/records/club-run.json': { brief: 'club-run' },
   'registry/registry.json': { name: 'neon', homepage: 'https://example.invalid', items: items.map((name) => ({ name: `theme-brief-${name}`, type: 'registry:item' })) },
@@ -319,4 +392,36 @@ test('the repository passes its own Theme Brief check', () => {
   const result = run(['check-only']);
   assert.equal(result.status, 0, result.out);
   assert.match(result.out, /^Theme Brief check: 4 themes, .*; no problems$/m);
+});
+
+function scriptedOnly(root) {
+  return run(['scripted-only', '--root', root]);
+}
+
+const SECTIONS = ['Tokens — Colors', 'Tokens — Typography', 'Tokens — Spacing & Shapes', 'Components', "Do's and Don'ts", 'Surfaces', 'Elevation', 'Imagery', 'Brand Pattern', 'Layout', 'Motion', 'Agent Prompt Guide', 'Sibling Themes', 'Quick Start'];
+
+test('scripted-only renders every scripted part of a committed brief and keeps its prose', (t) => {
+  const root = fixture(t, { ...THEME_TEXTS, [BRIEF]: staleBrief() });
+  const { status, out } = scriptedOnly(root);
+  assert.equal(status, 0, out);
+  assert.match(out, /^registry\/theme-briefs\/club-run\.md: rewrote /m);
+  const brief = readFileSync(join(root, BRIEF), 'utf8');
+  assert.equal(brief.split('\n## ')[0], [
+    '# Finnomena Club · Run — Theme Brief',
+    `> ${PROSE.tagline}`,
+    '',
+    '**Theme:** light',
+    '**Immersive Theme:** club',
+    '',
+    "This is a Finnomena Theme Brief, not a Reference Design: skip Brand Intensity and apply the whole Brand Contract. Colors come from the Club Immersive Theme and type from Neon's theme; layout, components, imagery and motion are Finnomena-authored and interpreted, not measured. Provisional pending design owner review.",
+    '',
+    valid[CLUB_TEXT].mood,
+    PROSE.mood,
+    'Membership ratio: White 60%, Light Grey 15%, Yellow 15%, Navy 10%.',
+    '',
+  ].join('\n'));
+  assert.deepEqual([...brief.matchAll(/^## (.+)$/gm)].map(([, heading]) => heading), SECTIONS);
+  for (const text of [PROSE.imagery, PROSE.layout, ...PROSE.dos, ...PROSE.donts, ...PROSE.components.flat()]) assert.ok(brief.includes(text), text);
+  assert.ok(brief.includes(PROSE.prompts.map((line, index) => `${index + 1}. ${line}`).join('\n\n')));
+  assert.doesNotMatch(brief, /Stale/);
 });
