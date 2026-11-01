@@ -68,6 +68,10 @@ _Avoid_: level, mode, install mode
 The arrangement and hierarchy of a screen, chosen independently of tier; preserved unless the employee explicitly asks to adapt it.
 _Avoid_: layout change, redesign (alone)
 
+**Immersive Theme**:
+One of four on-brand color sets for a Campaign Page, taken from the Finnomena Guidelines' membership levels: Club (white canvas), Exclusive (yellow), Private (light grey) and Ultra (navy). Each fixes the canvas, text, its own 100/75/50/25 steps, an accent family's steps and the action; the guideline's secondary colors are available in all four. A page switches between them by one attribute.
+_Avoid_: tier (a styling decision), palette, color mode
+
 ### Reference designs
 
 **Reference Design**:

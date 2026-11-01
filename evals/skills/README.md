@@ -5,7 +5,9 @@ Run each request with the named context, first against the baseline and then the
 | Request/context | Observe |
 | --- | --- |
 | Add Finnomena approvals to an existing themed React/CDS app; retain providers/routes/services | Reuses installation and shell; builds actual list/detail/actions; navy foundation, indigo selection, labeled statuses |
-| Build a colorful Finnomena product landing page | Immersive composition permits prominent brand color/illustration; does not force navy/white dominance; actions remain accessible |
+| Build a colorful Finnomena product landing page | Picks an Immersive Theme; sets `data-immersive-theme` and colors only through `--immersive-*`; text only White or Navy; no gradients; a visible theme toggle on the review build; actions remain accessible |
+| Follow-up on a themed page: "ขอ theme พื้นขาว" | Switches to Club by the one attribute; layout and content unchanged |
+| Follow-up on a themed page: "ใส่สีเขียวเป็น highlight" | Uses `--immersive-green-*` with its `on-green-*` text in a small block; theme canvas and action unchanged |
 | Create a Finnomena request tracker with mock data | Scaffolds in an empty destination and builds the feature; no demo/mock banner or state switcher in the UI; the report names what is mocked; relevant states exist |
 | Build a Finnomena request tracker demo with mock data, labeled as a demo | Demo/mock labeling appears in the UI |
 | Change only a Vue header to Finnomena colors | No React/CDS installation, font/layout changes or global theme side effects |
@@ -15,9 +17,9 @@ Run each request with the named context, first against the baseline and then the
 | Build a Finnomena event landing page from an attached Refero reference design | Starts at Blended without asking; keeps reference geometry; Finnomena palette, IBM Plex Sans Thai and logo; no source-brand name, copy or imagery; offers the dial |
 | Follow-up: "ให้ดู finnomena มากขึ้น" | Moves exactly one level toward Finnomena-led; content, flow and composition unchanged |
 | Follow-up: "use the reference's own colors and font" at Reference-led | Stays at Reference-led and explains the Brand Floor; reference colors may stay with at least one Finnomena color; no source font |
-| Dark immersive event page; follow-up "change the yellow CTA to a white button" | White action with a dark label; no navy or yellow forced back; IBM Plex Sans Thai and at least one Finnomena color remain; the shared theme mapping is untouched |
+| Reference-led dark immersive event page; follow-up "change the yellow CTA to a white button" | White action with a dark label; no navy or yellow forced back; IBM Plex Sans Thai and at least one Finnomena color remain; the shared theme mapping is untouched |
 | Back office screen; "make the primary button white" | Functional contract: primary action stays navy; explains that white actions are for immersive surfaces |
-| Review an immersive page with a white CTA and no navy or yellow | No off-brand finding for the action or palette; contrast is still checked |
+| Review a Reference-led immersive page with a white CTA and no navy or yellow | No off-brand finding for the action or palette; contrast is still checked |
 | Build an immersive campaign dashboard "in this style" from one screenshot, no stated target | Shows 2–3 static directions before building; saves the screenshot with a note; builds only the picked direction |
 | Follow-up after a rejected build: "ยังไม่ใช่ที่ต้องการ" | Returns to 2–3 directions rather than another full rebuild |
 | Attach a reference design to a back office screen request | Functional contract; takes at most section structure; does not offer the dial |

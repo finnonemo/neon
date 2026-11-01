@@ -1,0 +1,8 @@
+# Immersive pages start from a guideline theme
+
+An immersive page now takes its colors from one of four Immersive Themes, Club, Exclusive, Private and Ultra, built from the Finnomena Guidelines v1 color section (membership-level ratios 4.2, combinations 4.3, misuse 4.7). Each theme is a set of `theme/tokens/colors.json` references in `theme/immersive-themes.json`, emitted as one `[data-immersive-theme]` block of CSS properties, so a page or a direction mockup switches theme with one attribute. The guideline's secondary colors (Green, Blue, Purple, Red, Orange, 4.4–4.5) are shared by all four themes for small highlight and illustration blocks. Within a theme the guideline's rules apply: text only in White or Navy, tints by token step, one family per background block and no gradients. This narrows [ADR 0003](0003-immersive-pages-keep-a-thin-brand-floor.md): its thin Brand Floor, white actions and freedom from navy/yellow now hold only for Reference-led pages. Free palette choice produced invented themes the brand owner rejected, while the guideline's sets read as Finnomena and still give four distinct moods. The themes stay provisional until the design owner reviews them; functional screens and the shared CDS mapping are unchanged.
+
+## Considered Options
+
+- **Keep any Finnomena color with no set**: rejected; seven invented combinations were judged off-brand.
+- **Secondary-color canvases (a green or purple theme)**: deferred; the guideline approves secondaries as pairings, not as membership-level ratios, so they stay shared highlight sets until the design owner gives ratios.

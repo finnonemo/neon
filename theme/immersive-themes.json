@@ -1,0 +1,317 @@
+{
+  "$comment": "Hand-maintained, provisional pending design owner review. Immersive Themes from the Finnomena Guidelines v1, Colour 4.1-4.7 (membership-level ratios 4.2, combinations 4.3, secondary colours 4.4-4.5). `secondary` is shared by every theme. Every value is a theme/tokens/colors.json reference (Family.step). theme/css/immersive-themes.css is generated from this file by theme/scripts/generate-immersive-themes.mjs.",
+  "secondary": {
+    "green": {
+      "100": {
+        "bg": "Green.100",
+        "fg": "Navy.100"
+      },
+      "75": {
+        "bg": "Green.75",
+        "fg": "Navy.100"
+      },
+      "50": {
+        "bg": "Green.50",
+        "fg": "Navy.100"
+      },
+      "25": {
+        "bg": "Green.25",
+        "fg": "Navy.100"
+      }
+    },
+    "blue": {
+      "100": {
+        "bg": "Blue.100",
+        "fg": "Navy.100"
+      },
+      "75": {
+        "bg": "Blue.75",
+        "fg": "Navy.100"
+      },
+      "50": {
+        "bg": "Blue.50",
+        "fg": "Navy.100"
+      },
+      "25": {
+        "bg": "Blue.25",
+        "fg": "Navy.100"
+      }
+    },
+    "purple": {
+      "100": {
+        "bg": "Purple.100",
+        "fg": "White.100"
+      },
+      "75": {
+        "bg": "Purple.75",
+        "fg": "Navy.100"
+      },
+      "50": {
+        "bg": "Purple.50",
+        "fg": "Navy.100"
+      },
+      "25": {
+        "bg": "Purple.25",
+        "fg": "Navy.100"
+      }
+    },
+    "red": {
+      "100": {
+        "bg": "Red.100",
+        "fg": "Navy.100"
+      },
+      "75": {
+        "bg": "Red.75",
+        "fg": "Navy.100"
+      },
+      "50": {
+        "bg": "Red.50",
+        "fg": "Navy.100"
+      },
+      "25": {
+        "bg": "Red.25",
+        "fg": "Navy.100"
+      }
+    },
+    "orange": {
+      "100": {
+        "bg": "Orange.100",
+        "fg": "Navy.100"
+      },
+      "75": {
+        "bg": "Orange.75",
+        "fg": "Navy.100"
+      },
+      "50": {
+        "bg": "Orange.50",
+        "fg": "Navy.100"
+      },
+      "25": {
+        "bg": "Orange.25",
+        "fg": "Navy.100"
+      }
+    }
+  },
+  "themes": {
+    "club": {
+      "label": "Club",
+      "ratio": {
+        "White": 60,
+        "Light Grey": 15,
+        "Yellow": 15,
+        "Navy": 10
+      },
+      "canvas": "White.100",
+      "text": "Navy.100",
+      "palette": {
+        "100": {
+          "bg": "Light Grey.100",
+          "fg": "Navy.100"
+        },
+        "75": {
+          "bg": "Light Grey.75",
+          "fg": "Navy.100"
+        },
+        "50": {
+          "bg": "Light Grey.50",
+          "fg": "Navy.100"
+        },
+        "25": {
+          "bg": "Light Grey.25",
+          "fg": "Navy.100"
+        }
+      },
+      "accent": {
+        "100": {
+          "bg": "Yellow.100",
+          "fg": "Navy.100"
+        },
+        "75": {
+          "bg": "Yellow.75",
+          "fg": "Navy.100"
+        },
+        "50": {
+          "bg": "Yellow.50",
+          "fg": "Navy.100"
+        },
+        "25": {
+          "bg": "Yellow.25",
+          "fg": "Navy.100"
+        }
+      },
+      "action": {
+        "bg": "Navy.100",
+        "fg": "White.100"
+      }
+    },
+    "exclusive": {
+      "label": "Exclusive",
+      "ratio": {
+        "Yellow": 60,
+        "Light Grey": 30,
+        "Navy": 10
+      },
+      "canvas": "Yellow.100",
+      "text": "Navy.100",
+      "palette": {
+        "100": {
+          "bg": "Yellow.100",
+          "fg": "Navy.100"
+        },
+        "75": {
+          "bg": "Yellow.75",
+          "fg": "Navy.100"
+        },
+        "50": {
+          "bg": "Yellow.50",
+          "fg": "Navy.100"
+        },
+        "25": {
+          "bg": "Yellow.25",
+          "fg": "Navy.100"
+        }
+      },
+      "accent": {
+        "100": {
+          "bg": "Light Grey.100",
+          "fg": "Navy.100"
+        },
+        "75": {
+          "bg": "Light Grey.75",
+          "fg": "Navy.100"
+        },
+        "50": {
+          "bg": "Light Grey.50",
+          "fg": "Navy.100"
+        },
+        "25": {
+          "bg": "Light Grey.25",
+          "fg": "Navy.100"
+        }
+      },
+      "action": {
+        "bg": "Navy.100",
+        "fg": "White.100"
+      }
+    },
+    "private": {
+      "label": "Private",
+      "ratio": {
+        "Light Grey": 60,
+        "Yellow": 30,
+        "Navy": 10
+      },
+      "canvas": "Light Grey.100",
+      "text": "Navy.100",
+      "palette": {
+        "100": {
+          "bg": "Light Grey.100",
+          "fg": "Navy.100"
+        },
+        "75": {
+          "bg": "Light Grey.75",
+          "fg": "Navy.100"
+        },
+        "50": {
+          "bg": "Light Grey.50",
+          "fg": "Navy.100"
+        },
+        "25": {
+          "bg": "Light Grey.25",
+          "fg": "Navy.100"
+        }
+      },
+      "accent": {
+        "100": {
+          "bg": "Yellow.100",
+          "fg": "Navy.100"
+        },
+        "75": {
+          "bg": "Yellow.75",
+          "fg": "Navy.100"
+        },
+        "50": {
+          "bg": "Yellow.50",
+          "fg": "Navy.100"
+        },
+        "25": {
+          "bg": "Yellow.25",
+          "fg": "Navy.100"
+        }
+      },
+      "action": {
+        "bg": "Navy.100",
+        "fg": "White.100"
+      }
+    },
+    "ultra": {
+      "label": "Ultra",
+      "ratio": {
+        "Navy": 60,
+        "Light Grey": 15,
+        "Yellow": 15,
+        "White": 10
+      },
+      "canvas": "Navy.100",
+      "text": "White.100",
+      "palette": {
+        "100": {
+          "bg": "Navy.100",
+          "fg": "White.100"
+        },
+        "75": {
+          "bg": "Navy.75",
+          "fg": "White.100"
+        },
+        "50": {
+          "bg": "Navy.50",
+          "fg": "Navy.100"
+        },
+        "25": {
+          "bg": "Navy.25",
+          "fg": "Navy.100"
+        }
+      },
+      "accent": {
+        "100": {
+          "bg": "Yellow.100",
+          "fg": "Navy.100"
+        },
+        "75": {
+          "bg": "Yellow.75",
+          "fg": "Navy.100"
+        },
+        "50": {
+          "bg": "Yellow.50",
+          "fg": "Navy.100"
+        },
+        "25": {
+          "bg": "Yellow.25",
+          "fg": "Navy.100"
+        }
+      },
+      "support": {
+        "100": {
+          "bg": "Light Grey.100",
+          "fg": "Navy.100"
+        },
+        "75": {
+          "bg": "Light Grey.75",
+          "fg": "Navy.100"
+        },
+        "50": {
+          "bg": "Light Grey.50",
+          "fg": "Navy.100"
+        },
+        "25": {
+          "bg": "Light Grey.25",
+          "fg": "Navy.100"
+        }
+      },
+      "action": {
+        "bg": "White.100",
+        "fg": "Navy.100"
+      }
+    }
+  }
+}
