@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Grades the mechanical half of a CDS rebuild case (README "CDS rebuild"):
+// Grades the mechanical half of a CDS rebuild case (records/cds-rebuild.md):
 // source untouched, stylesheet selectors, no leftover source UI library,
 // tests, typecheck, build and mock data unchanged. Browser checks stay manual.
 //

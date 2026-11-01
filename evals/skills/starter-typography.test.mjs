@@ -4,7 +4,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import { join, relative } from 'node:path';
 
 // Static guards for the starter's typography defaults. The real evidence is
-// an assembled app checked in a browser; see README "CDS rebuild".
+// an assembled app checked in a browser; see records/cds-rebuild.md.
 const starterSrc = new URL('../../templates/vitejs-cds/src/', import.meta.url).pathname;
 
 async function sourceFiles(dir) {

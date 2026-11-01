@@ -7,7 +7,7 @@ Read when a CSS asset is missing or its integration must change. Existing usable
 For a whole-app integration, from the resolved Neon root:
 
 ```sh
-node "${CLAUDE_PLUGIN_ROOT}/scripts/install.mjs" <target-dir> --css-only
+node "<Neon root>/scripts/install.mjs" <target-dir> --css-only
 ```
 
 The default output is `src/theme/theme.css`; `--theme-dir <project-relative-dir>` changes it. Import once through the app's existing CSS/entry mechanism. Match theme selectors to the app's mode owner before applying the asset globally.

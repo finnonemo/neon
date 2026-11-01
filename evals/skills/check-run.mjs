@@ -17,8 +17,9 @@ export function checkRun(jsonl) {
   const denied = [];
   let blockedClaim = null;
   for (const line of jsonl.split('\n')) {
-    if (!line.trim()) continue;
-    const event = JSON.parse(line);
+    let event;
+    // A run stopped at its cap can end mid-line.
+    try { event = JSON.parse(line); } catch { continue; }
     if (event.type === 'assistant') {
       for (const part of event.message?.content ?? []) {
         if (part.type === 'tool_use') uses.set(part.id, part);

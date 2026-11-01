@@ -57,7 +57,15 @@ Verdicts are pass, fail or unverified for routing, scope, resource retrieval, co
 
 ## Run harness
 
-Codex cases run through `run-codex-case.mjs`. Claude Code cases use the same allowlist and harness note for every arm, so baseline and revised differ only in the package:
+Codex cases run through `run-codex-case.mjs`. Claude Code cases run through `run-claude-case.mjs`, which gives every arm the same allowlist and harness note, so baseline and revised differ only in the package:
+
+```sh
+node evals/skills/run-claude-case.mjs --fixture <app> --case <ticket>-<arm>-<n> --ref <commit> \
+  --dev-port <port> --prompt '/neon:neon-create … The dev server is already running at http://localhost:{port}.'
+```
+
+`--ref` packages the plugin with that commit's own packager. The case folder, `.local/evals/<case>/` by default and never tracked, holds the app and its `diff.patch`, the prompt, allowlist and note, `run.jsonl`, and `summary.json` with check-run's result below. A run stops at 45 minutes (`--cap`); one stopped there with no report is unverified, not failed. Give parallel runs their own `--dev-port`. The browser tool is `browser-mcp.mjs` (navigate, resize, evaluate, screenshot, console), which needs `npm ci --prefix evals/templates`; each call stops after 60 seconds, so an `evaluate` awaiting a promise that never settles returns an error instead of stalling the run.
+
 
 - Command: `claude -p --model <model> --setting-sources project,local --plugin-dir <package> --add-dir <package> --mcp-config <browser> --strict-mcp-config --permission-mode dontAsk --output-format stream-json --verbose --allowedTools <allowlist> --append-system-prompt <note>`. `--setting-sources project,local` leaves out the evaluator's user hooks.
 - Allowlist: `Read Edit Write Glob Grep Skill`, the browser tools, and `Bash(…:*)` for `ls pwd cd cat head tail wc grep find echo test sed rg sort which curl lsof kill sleep mkdir cp node npm npx sips file python3`, `npm run`, `git status/log/diff/ls-files/rev-parse/show/branch`.

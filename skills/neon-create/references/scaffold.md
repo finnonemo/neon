@@ -7,7 +7,7 @@ Read only for a new project. The shipped starter is Vite + React + TypeScript. A
 Resolve the requested empty destination, then run from the Neon root:
 
 ```sh
-node "${CLAUDE_PLUGIN_ROOT}/scripts/install.mjs" <target-dir> --new
+node "<Neon root>/scripts/install.mjs" <target-dir> --new
 ```
 
 The installer assembles starter source plus canonical theme files and installs declared dependencies. It refuses nonempty destinations. `--skip-install` copies without installing; report dependencies as pending. Inspect the installer header for package-manager options. Never use this mode to add a feature to an existing app.
