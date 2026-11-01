@@ -48,9 +48,15 @@ async function check(root, { includeReadme = false } = {}) {
     await checkMarkdownEncoding(file);
     const content = await readFile(file, 'utf8');
     await checkMarkdownLinks(file);
-    for (const match of content.matchAll(/(?:\$\{CLAUDE_PLUGIN_ROOT\}|<Neon root>)\/([\w./-]+)/g)) {
+    // GLOSSARY: "Neon root", never CLAUDE_PLUGIN_ROOT; a host may not set it.
+    if (content.includes('${CLAUDE_PLUGIN_ROOT}')) throw new Error(`${file} names \${CLAUDE_PLUGIN_ROOT}; write <Neon root> instead`);
+    for (const match of content.matchAll(/<Neon root>\/([\w./-]+)/g)) {
       await access(join(root, match[1])).catch(() => { throw new Error(`Missing plugin resource in ${file}: ${match[1]}`); });
     }
+  }
+  // Eval records are maintainer-only, so they are checked in the source tree but never shipped.
+  if (includeReadme) {
+    for (const file of [join(root, 'evals/skills/README.md'), ...await markdownFiles(join(root, 'evals/skills/records'))]) await checkMarkdownLinks(file);
   }
   await checkPlainTextReferences(root, await referenceFiles(root), { ignored });
 }

@@ -4,7 +4,7 @@ Shared routing and handoff rules for implementation skills. Reuse a settled cont
 
 ## Resources
 
-Resolve the Neon root two directories above the loaded skill's real directory (follow symlinks). In older references, `${CLAUDE_PLUGIN_ROOT}` denotes that root when the host does not supply it. Resolve resources from the same complete package, not from the employee app's working directory. Missing required assets mean an incomplete installation; identify the missing path before setup.
+Resolve the Neon root two directories above the loaded skill's real directory (follow symlinks). References write that root as `<Neon root>`; substitute the resolved path, whether or not the host sets an environment variable for it. Resolve resources from the same complete package, not from the employee app's working directory. Missing required assets mean an incomplete installation; identify the missing path before setup.
 
 ## Scope precedence
 

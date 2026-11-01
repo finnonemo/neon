@@ -64,3 +64,31 @@ test('browser paths cover the starter, theme, browser suite, assembler, probe an
     assert.doesNotMatch(path, BROWSER_PATHS, `${path} skips the browser job`);
   }
 });
+
+// Every script the browser job runs, the modules they import and the fixture
+// files they name, so a new fixture or helper cannot fall outside the filter.
+function filesTheBrowserJobLoads() {
+  const repository = join(dirname(script), '../..');
+  const workflow = readFileSync(join(repository, '.github/workflows/template-browser.yml'), 'utf8');
+  const pending = [...workflow.matchAll(/run: node (evals\/skills\/\S+\.mjs)/g)].map(match => match[1]);
+  const loaded = new Set();
+  while (pending.length) {
+    const path = pending.pop();
+    if (loaded.has(path)) continue;
+    loaded.add(path);
+    const source = readFileSync(join(repository, path), 'utf8');
+    for (const [, target] of source.matchAll(/from '(\.{1,2}\/[^']+)'/g)) pending.push(join(dirname(path), target));
+    for (const [, name] of source.matchAll(/'([\w-]+\.html)'/g)) {
+      const fixture = join(dirname(path), name);
+      try { readFileSync(join(repository, fixture)); loaded.add(fixture); } catch {}
+    }
+  }
+  return [...loaded];
+}
+
+test('every script, module and fixture the browser job loads runs the browser job when changed', () => {
+  const loaded = filesTheBrowserJobLoads();
+  assert.ok(loaded.includes('evals/skills/probe-fixture-thai-404.html'), 'the walk finds run-probe fixtures');
+  assert.ok(loaded.includes('scripts/lib/source-rules.mjs'), 'the walk follows imports');
+  for (const path of loaded) assert.match(path, BROWSER_PATHS, `${path} is loaded by the browser job`);
+});
