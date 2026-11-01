@@ -348,3 +348,37 @@ test('robots.txt follows RFC 9309: the neon-probe group over *, longest match, A
   assert.equal(robotsDisallows('User-agent: *\nDisallow: /events\n', '/events/run'), true, '* applies when no group names neon-probe');
   assert.equal(robotsDisallows('User-agent: other\nDisallow: /\n', '/events'), false);
 });
+
+test('a Refero Styles page is refused before anything is fetched', async () => {
+  const result = await draft(['--draft-preset', 'refero', 'https://styles.refero.design/style/x', '--chrome', '/nonexistent/chrome']);
+  assert.equal(result.status, 2);
+  assert.match(result.stderr, /\(the Refero corpus is never a preset source\)/);
+});
+
+test('raw draft output may go under the Neon repository\'s .local/ but nowhere else in it, from any directory', async () => {
+  const site = await serveFixtures({ '/page': '<p>Run</p>' });
+  const repo = join(import.meta.dirname, '../..');
+  const local = join(repo, '.local', `probe-draft-test-${process.pid}`);
+  try {
+    const inRepo = await draft(['--draft-preset', 'run', `${site.origin}/page`, '--out', join(repo, 'theme-briefs', 'presets', 'layout'), '--chrome', '/nonexistent/chrome']);
+    assert.equal(inRepo.status, 2);
+    assert.match(inRepo.stderr, /Refusing --out .*: it is inside the Neon repository/);
+    const inLocal = await draft(['--draft-preset', 'run', `${site.origin}/page`, '--out', local, '--chrome', '/nonexistent/chrome']);
+    assert.match(inLocal.stdout, /^Preset draft: not measured; Chrome not found at \/nonexistent\/chrome$/m);
+    assert.equal(inLocal.status, 1);
+  } finally {
+    site.close();
+    rmSync(local, { recursive: true, force: true });
+  }
+});
+
+test('a robots.txt that answers 5xx counts as a complete disallow, per RFC 9309', async () => {
+  const site = await serveFixtures({ '/robots.txt': { status: 503, body: 'down' }, '/page': '<p>Run</p>' });
+  try {
+    const result = await draft(['--draft-preset', 'run', `${site.origin}/page`, '--chrome', '/nonexistent/chrome']);
+    assert.match(result.stdout, /^Warning: robots\.txt disallows \/page for neon-probe; recorded as source\.robotsDisallowed for the reviewer\.$/m);
+    assert.equal(result.status, 1);
+  } finally {
+    site.close();
+  }
+});

@@ -16,7 +16,7 @@ Colors and type come from the Immersive Theme. Logos, imagery, copy, names and p
 
 ## Choose the page
 
-Name one public page. Prefer Finnomena's own pages. The tool does not discover or crawl pages, and you are responsible for the site's terms of use. A Refero Styles page is never a source.
+Name one public page. Prefer Finnomena's own pages. The tool does not discover or crawl pages, and you are responsible for the site's terms of use. A Refero Styles page is never a source, and the tool refuses one.
 
 ## Run the draft
 
@@ -24,7 +24,7 @@ Name one public page. Prefer Finnomena's own pages. The tool does not discover o
 node scripts/probe-page.mjs --draft-preset <slug> https://<page>
 ```
 
-The tool measures the page at 1440px in a temporary Chrome profile that is never signed in, then removes the profile. It writes three files to a new temp directory: the draft `<slug>.json`, the raw `probe.json` and a screenshot. Raw output is never committed. An `--out` inside the current directory is refused, so from the repository root keep the default.
+The tool measures the page at 1440px in a temporary Chrome profile that is never signed in, then removes the profile. It writes three files to a new temp directory: the draft `<slug>.json`, the raw `probe.json` and a screenshot. Raw output is never committed. An `--out` inside the Neon repository is refused unless it is under `.local/`, and so is one inside the current directory.
 
 These stop the run with `Preset draft: not measured; <reason>`, and the tool exits 1 with no draft:
 
@@ -35,7 +35,7 @@ These stop the run with `Preset draft: not measured; <reason>`, and the tool exi
 
 There is no workaround for a stop. Choose another page or write the preset by hand. Never sign in, change the user agent, retry in a loop or solve a challenge.
 
-A robots.txt disallow does not stop the run. The tool matches the page's path against the groups for its product token `neon-probe`, or `*` when no group names it, using the RFC 9309 rules. It prints a warning and records the disallow as `source.robotsDisallowed: true` for the reviewer. An unreadable robots.txt records nothing.
+A robots.txt disallow does not stop the run. The tool matches the page's path against the groups for its product token `neon-probe`, or `*` when no group names it, using the RFC 9309 rules. It prints a warning and records the disallow as `source.robotsDisallowed: true` for the reviewer. A robots.txt that answers 5xx or cannot be reached counts as a disallow, and a missing one (4xx) allows the page.
 
 ## How values are drafted
 

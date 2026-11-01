@@ -573,16 +573,28 @@ export function robotsDisallows(text, path, token = ROBOTS_TOKEN) {
   return Boolean(best && !best.allow);
 }
 
-// Fetches the page's robots.txt; an unreadable one disallows nothing, and says why.
+// Fetches the page's robots.txt, saying why when it could not be read.
 async function robotsCheck(url) {
   const page = new URL(url);
   try {
     const response = await fetch(new URL('/robots.txt', page), { headers: { 'user-agent': ROBOTS_TOKEN }, signal: AbortSignal.timeout(10000) });
-    if (!response.ok) return { disallowed: false, note: response.status >= 500 ? `robots.txt answered ${response.status}; nothing recorded as disallowed` : null };
+    // RFC 9309 2.3.1: an unavailable robots.txt (4xx) allows everything; an unreachable one (5xx or a network error) disallows everything.
+    if (response.status >= 500) return { disallowed: true, note: `robots.txt answered ${response.status}, which counts as a complete disallow` };
+    if (!response.ok) return { disallowed: false, note: null };
     return { disallowed: robotsDisallows(await response.text(), page.pathname + page.search), note: null };
   } catch (error) {
-    return { disallowed: false, note: `robots.txt could not be read (${error.cause?.code ?? error.message}); nothing recorded as disallowed` };
+    return { disallowed: true, note: `robots.txt could not be read (${error.cause?.code ?? error.message}), which counts as a complete disallow` };
   }
+}
+
+// Raw draft output stays out of the Neon checkout this script runs from, except under its .local/.
+const neonRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
+function draftOutRefusal(out) {
+  const target = realPath(out);
+  const root = realPath(neonRoot);
+  if (insideDirectory(target, join(root, '.local'))) return null;
+  if (insideDirectory(target, root)) return `it is inside the Neon repository at ${root}, where only .local/ takes raw output`;
+  return outRefusal(out);
 }
 
 /** Why `url` cannot be drafted from (not a public https page, or a local http one for checks), or null. */
@@ -593,6 +605,7 @@ export function draftUrlRefusal(url) {
   } catch {
     return 'it is not a URL';
   }
+  if (parsed.hostname === 'refero.design' || parsed.hostname.endsWith('.refero.design')) return 'the Refero corpus is never a preset source';
   if (parsed.protocol === 'https:') return null;
   if (parsed.protocol === 'http:' && ['127.0.0.1', 'localhost', '[::1]'].includes(parsed.hostname)) return null;
   return 'name a public https page';
@@ -642,7 +655,7 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
       console.error(`Usage: node probe-page.mjs --draft-preset <slug> <https url> [--out <dir>] [--chrome <path>] [--timeout <seconds>] [--json]${urlRefusal ? ` (${urlRefusal})` : ''}`);
       process.exit(2);
     }
-    const refusal = values.out && outRefusal(values.out);
+    const refusal = values.out && draftOutRefusal(values.out);
     if (refusal) {
       console.error(`Refusing --out ${values.out}: ${refusal}. Name a directory outside it, or omit --out for a temp directory.`);
       process.exit(2);
