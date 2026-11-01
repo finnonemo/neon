@@ -23,7 +23,7 @@ After items 1–4 and before reporting, look at your own screenshots and fix wha
    - Are color roles as the [design contract](../../INSTRUCTION.md#color-roles) assigns them?
    - Does Thai text wrap without clipping or overlapping?
    - At 375px, can the user still reach the main task and its details?
-   <!-- Functional screen habits table (#54): link it here when it exists. -->
+   - On a functional screen, does it show any [functional screen habit](../../neon-review/references/review-checks.md#functional-screen-habits)? Name the habit in the finding and use its alternative as the fix.
 3. **Fix** the top three problems, ranked in this order: task hierarchy, composition and edges, typography and wrapping, color roles, states and focus, motion. Take new screenshots at the same widths and states and recheck. Stop after three rounds, or when a round finds nothing a user would notice.
 4. **Report** each round in the Done report on its own line, in this shape: `Look and fix, round 1 (375px, 1440px): <findings>; fixed <what changed>`, naming the widths that round's screenshots used. List the problems that remain plainly.
 

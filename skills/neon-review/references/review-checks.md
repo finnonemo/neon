@@ -21,6 +21,23 @@ For typography reviews, distinguish a declared font from a loaded font. Check co
 
 For color mapping disagreements, identify the documented rule and actual mapping. If the design reference and token mapping conflict, report an unresolved reference conflict rather than deciding an authoritative replacement without evidence.
 
+## Functional screen habits
+
+Generated dashboards repeat a few habits. On a Back Office or Product Feature screen, name the habit in the finding, cite the visible evidence and give its Neon alternative as the fix. Names are CDS 9.26.1; confirm them in the installed types.
+
+| Habit | Neon alternative |
+| --- | --- |
+| KPI tiles, each with an icon on top and its own tinted fill | One KPI container (composition): the figures as labeled `Text` in one compact band, or each figure in the title row of the list or `Card` it summarizes, per [one question, first screen](../../neon-create/references/new-ui-workflow.md#one-question-first-screen) |
+| A chart recolored per bar or point, or categories that change color between charts | One hue per series question: a single series keeps one `color`; several series keep a stable `id`, `label` and `color` per category across charts and show a `legend` |
+| Hand-rolled zebra rows or uppercase, letter-spaced column headers | CDS `Table` defaults: `variant` unset or `"ruled"`, `compact` for density, `TableHeader` `sticky` on long lists, header labels in the data's own case |
+| Saturated custom status chips, or color alone marking a status | A `Tag` with `emphasis="low"` whose text names the status, its `colorScheme` chosen by meaning: `green` success, `yellow` warning, `red` error, `blue` information, `gray` neutral |
+| Pagination under an overview list | Composition: cap the overview at a few rows with a "View all" `Link` in its title row; `Pagination` belongs on the full list |
+| A greeting such as "Welcome back 👋", or emoji in headings | Composition: the page title names the task and its scope, such as "Fund fees, October 2026"; no greeting line or emoji |
+| Figures centered or left-aligned in proportional digits | `TableCell` `justifyContent="flex-end"` and `Text` `tabularNumbers`, per the [sample data rules](../../neon-create/references/new-ui-workflow.md#sample-data-and-figures) |
+| Cards nested in cards, or a gradient or heavy shadow behind every block | Composition: one container per group of related content; whitespace and a `Divider` set the hierarchy |
+
+Navy structure and primary actions, and indigo focus, selection and links, are the contract's [color roles](../../INSTRUCTION.md#color-roles), not habits. Habits are findings only on functional screens; immersive pages follow their own composition. Under colors-only scope only the chart and status rows apply. Under `composition: 'preserve'` the composition rows are observations for the owner. Review-only work suggests these fixes and edits nothing.
+
 ## Responsive behavior
 
 Use provided viewport requirements. Otherwise sample a narrow and wide viewport (375px and 1440px are useful starting points), then inspect relevant transitions if the app changes panes/navigation. Record actual widths, not a claim that all breakpoints were covered. Check horizontal overflow, clipped Thai labels, sticky elements obscuring controls, and access to collapsed regions.
