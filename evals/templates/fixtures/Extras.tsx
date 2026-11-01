@@ -7,7 +7,7 @@ import { Text } from "@coinbase/cds-web/typography";
 import { Select } from "@coinbase/cds-web/alpha/select";
 import { DatePicker } from "@coinbase/cds-web/dates";
 import { Dropdown } from "@coinbase/cds-web/dropdown";
-import { SelectOption } from "@coinbase/cds-web/controls";
+import { Checkbox, SelectOption, TextInput } from "@coinbase/cds-web/controls";
 import { Modal, ModalBody, ModalFooter, ModalHeader, Tooltip } from "@coinbase/cds-web/overlays";
 import { useToast } from "@coinbase/cds-web/overlays/useToast";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "@coinbase/cds-web/tables";
@@ -39,6 +39,10 @@ export function Extras() {
         <Hook name="help">
           <Tooltip content="ช่วยเหลือ / Help"><IconButton name="info" accessibilityLabel="ช่วยเหลือ" transparent /></Tooltip>
         </Hook>
+      </HStack>
+      <HStack gap={2} alignItems="center" flexWrap="wrap">
+        <Hook name="disabled-field"><Box width={256}><TextInput label="ผู้อนุมัติ / Approver" value="Kanya Srisuk" disabled readOnly /></Box></Hook>
+        <Hook name="disabled-check"><Checkbox checked disabled onChange={() => {}}>แจ้งผู้ขอ</Checkbox></Hook>
       </HStack>
       <Hook name="table">
         <Table>

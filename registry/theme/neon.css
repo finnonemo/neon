@@ -55,6 +55,9 @@
   --color-warning: var(--color-fgWarning);
   --color-negative: var(--color-fgNegative);
   --color-line-heavy: var(--color-bgLineHeavy);
+  --color-primary-disabled: var(--primary-disabled);
+  --color-secondary-disabled: var(--secondary-disabled);
+  --color-destructive-disabled: var(--destructive-disabled);
 }
 
 :root {
@@ -80,6 +83,13 @@
   /* Text on filled colors (onColorLabel): fgInverse in light. */
   --primary-foreground: var(--color-fgInverse);
   --destructive-foreground: var(--color-fgInverse);
+  /* Disabled fills (spike trap 4): CDS blends a filled control's color into the
+   * page background at 75%, raised for colors far from the background in
+   * luminance (getBlendedColor). The mixes below are that blend worked out for
+   * each role; disabled controls also fade to 50% opacity, as in CDS. */
+  --primary-disabled: color-mix(in srgb, var(--primary) 93.7%, var(--background));
+  --secondary-disabled: color-mix(in srgb, var(--secondary) 75%, var(--background));
+  --destructive-disabled: color-mix(in srgb, var(--destructive) 92%, var(--background));
 }
 
 /* onColorLabel in dark: filled buttons take fg (white), as createTheme.ts does
@@ -89,11 +99,15 @@
   :root:not([data-theme="light"]) {
     --primary-foreground: var(--color-fg);
     --destructive-foreground: var(--color-fg);
+    --primary-disabled: color-mix(in srgb, var(--primary) 75%, var(--background));
+    --destructive-disabled: color-mix(in srgb, var(--destructive) 75%, var(--background));
   }
 }
 :root[data-theme="dark"] {
   --primary-foreground: var(--color-fg);
   --destructive-foreground: var(--color-fg);
+  --primary-disabled: color-mix(in srgb, var(--primary) 75%, var(--background));
+  --destructive-disabled: color-mix(in srgb, var(--destructive) 75%, var(--background));
 }
 
 @layer base {

@@ -5,15 +5,16 @@ import { Slot } from "radix-ui"
 import { cn } from "@/lib/utils"
 
 // Sized and colored like the CDS Button: 54px pill, headline type, Neon roles
-// in light and dark. Disabled is half opacity, as in CDS.
+// in light and dark. Disabled blends the fill into the page and halves the
+// opacity, as CDS does.
 const buttonVariants = cva(
   "inline-flex shrink-0 items-center justify-center gap-2 rounded-full text-headline whitespace-nowrap transition-[color,background-color,box-shadow] outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:ring-[3px] aria-invalid:ring-destructive/20 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
-        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        secondary: "bg-secondary text-secondary-foreground hover:bg-accent",
+        default: "bg-primary text-primary-foreground hover:bg-primary/90 disabled:bg-primary-disabled",
+        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90 disabled:bg-destructive-disabled",
+        secondary: "bg-secondary text-secondary-foreground hover:bg-accent disabled:bg-secondary-disabled",
         outline: "border border-input bg-background text-foreground hover:bg-accent",
         ghost: "text-foreground hover:bg-accent",
         link: "text-primary underline-offset-4 hover:underline",

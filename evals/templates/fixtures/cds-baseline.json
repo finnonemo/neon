@@ -379,6 +379,33 @@
       },
       "forwardDisabled": {
         "h": 54,
+        "opacity": 0.5,
+        "bg": "rgb(17, 38, 56)",
+        "color": "rgb(255, 255, 255)"
+      },
+      "disabledInput": {
+        "h": 56,
+        "border": {
+          "width": 1,
+          "color": "rgba(91, 97, 110, 0.66)"
+        },
+        "bg": "rgb(255, 255, 255)",
+        "opacity": 0.5
+      },
+      "disabledInputText": {
+        "color": "rgba(0, 0, 0, 0.85)",
+        "opacity": 0.5
+      },
+      "disabledCheckbox": {
+        "border": {
+          "width": 1,
+          "color": "rgb(1, 23, 43)"
+        },
+        "bg": "rgb(1, 23, 43)",
+        "opacity": 0.5
+      },
+      "disabledCheckboxLabel": {
+        "color": "rgba(0, 0, 0, 0.85)",
         "opacity": 0.5
       }
     },
@@ -939,6 +966,33 @@
       },
       "forwardDisabled": {
         "h": 54,
+        "opacity": 0.5,
+        "bg": "rgb(49, 61, 72)",
+        "color": "rgb(255, 255, 255)"
+      },
+      "disabledInput": {
+        "h": 56,
+        "border": {
+          "width": 1,
+          "color": "rgba(138, 145, 158, 0.66)"
+        },
+        "bg": "rgb(0, 0, 0)",
+        "opacity": 0.5
+      },
+      "disabledInputText": {
+        "color": "rgb(255, 255, 255)",
+        "opacity": 0.5
+      },
+      "disabledCheckbox": {
+        "border": {
+          "width": 1,
+          "color": "rgb(65, 81, 96)"
+        },
+        "bg": "rgb(65, 81, 96)",
+        "opacity": 0.5
+      },
+      "disabledCheckboxLabel": {
+        "color": "rgb(255, 255, 255)",
         "opacity": 0.5
       }
     },
@@ -1499,6 +1553,33 @@
       },
       "forwardDisabled": {
         "h": 54,
+        "opacity": 0.5,
+        "bg": "rgb(17, 38, 56)",
+        "color": "rgb(255, 255, 255)"
+      },
+      "disabledInput": {
+        "h": 56,
+        "border": {
+          "width": 1,
+          "color": "rgba(91, 97, 110, 0.66)"
+        },
+        "bg": "rgb(255, 255, 255)",
+        "opacity": 0.5
+      },
+      "disabledInputText": {
+        "color": "rgba(0, 0, 0, 0.85)",
+        "opacity": 0.5
+      },
+      "disabledCheckbox": {
+        "border": {
+          "width": 1,
+          "color": "rgb(1, 23, 43)"
+        },
+        "bg": "rgb(1, 23, 43)",
+        "opacity": 0.5
+      },
+      "disabledCheckboxLabel": {
+        "color": "rgba(0, 0, 0, 0.85)",
         "opacity": 0.5
       }
     },
@@ -2059,6 +2140,33 @@
       },
       "forwardDisabled": {
         "h": 54,
+        "opacity": 0.5,
+        "bg": "rgb(49, 61, 72)",
+        "color": "rgb(255, 255, 255)"
+      },
+      "disabledInput": {
+        "h": 56,
+        "border": {
+          "width": 1,
+          "color": "rgba(138, 145, 158, 0.66)"
+        },
+        "bg": "rgb(0, 0, 0)",
+        "opacity": 0.5
+      },
+      "disabledInputText": {
+        "color": "rgb(255, 255, 255)",
+        "opacity": 0.5
+      },
+      "disabledCheckbox": {
+        "border": {
+          "width": 1,
+          "color": "rgb(65, 81, 96)"
+        },
+        "bg": "rgb(65, 81, 96)",
+        "opacity": 0.5
+      },
+      "disabledCheckboxLabel": {
+        "color": "rgb(255, 255, 255)",
         "opacity": 0.5
       }
     },

@@ -10,7 +10,7 @@
 //   radius rendered top-left radius, capped at half the box, so a 56px pill
 //          and a 9999px pill of the same height agree
 //   border top border width and color
-//   opacity the element's own opacity, which disabled controls set
+//   opacity the element's opacity times its ancestors', which disabled controls set
 // both: the Neon fixture mirrors the CDS markup, so one selector reads either.
 const both = (selector, check) => ({ cds: selector, neon: selector, check });
 const button = (n, check = ['font', 'color', 'bg', 'h', 'pad', 'radius']) => both(`[data-measure=actions] button:nth-of-type(${n})`, check);
@@ -83,8 +83,12 @@ export const screens = [
       rowMenuButton: { cds: '[data-measure=table] tbody tr:nth-child(1) button', check: ['h', 'w'] },
       rejectRequest: button(1),
       save: button(2),
-      // CDS also blends a disabled fill by luminance; only the opacity is held.
-      forwardDisabled: button(3, ['h', 'opacity']),
+      // Disabled controls keep CDS's blended disabled fill as well as its opacity (spike trap 4).
+      forwardDisabled: button(3, ['h', 'opacity', 'bg', 'color']),
+      disabledInput: { cds: '[data-measure=disabled-field] [data-testid=input-interactable-area]', check: ['h', 'border', 'bg', 'opacity'] },
+      disabledInputText: { cds: '[data-measure=disabled-field] input', check: ['color', 'opacity'] },
+      disabledCheckbox: { cds: '[data-measure=disabled-check] [data-testid=checkbox-outer]', check: ['border', 'bg', 'opacity'] },
+      disabledCheckboxLabel: { cds: '[data-measure=disabled-check] label span[id]', check: ['color', 'opacity'] },
     },
     gaps: [
       ['selectLabel', 'selectTrigger', 'y'],
@@ -174,6 +178,15 @@ export function measureInPage(targets) {
     for (const node of el.querySelectorAll('*')) if (owns(node) && node.getBoundingClientRect().width) return node;
     return el;
   };
+  // What the eye sees: the element's opacity times every ancestor's, since CDS fades a control's wrapper.
+  const opacity = (el) => { let value = 1; for (let node = el; node; node = node.parentElement) value *= Number(getComputedStyle(node).opacity); return value; };
+  // color-mix() computes to color(srgb r g b / a); the baseline holds rgb().
+  const rgb = (value) => {
+    const match = value.match(/^color\(srgb ([\d.]+) ([\d.]+) ([\d.]+)(?: \/ ([\d.]+))?\)$/);
+    if (!match) return value;
+    const [r, g, b] = match.slice(1, 4).map((v) => Math.round(Number(v) * 255));
+    return match[4] === undefined || Number(match[4]) === 1 ? `rgb(${r}, ${g}, ${b})` : `rgba(${r}, ${g}, ${b}, ${Number(match[4])})`;
+  };
   const px = (value) => Math.round(parseFloat(value) * 10) / 10;
   const out = {};
   for (const [name, selector] of Object.entries(targets)) {
@@ -189,11 +202,11 @@ export function measureInPage(targets) {
       box: { top: box.top, right: box.right, bottom: box.bottom, left: box.left },
       h: Math.round(box.height), w: Math.round(box.width),
       font: { size: px(text.fontSize), lineHeight: text.lineHeight === 'normal' ? 'normal' : px(text.lineHeight), weight: Number(text.fontWeight) },
-      color: text.color, bg: style.backgroundColor,
+      color: rgb(text.color), bg: rgb(style.backgroundColor),
       pad: [style.paddingTop, style.paddingRight, style.paddingBottom, style.paddingLeft].map(px),
       radius: px(Math.min(parseFloat(style.borderTopLeftRadius), box.width / 2, box.height / 2)),
-      border: { width: px(style.borderTopWidth), color: style.borderTopColor },
-      opacity: Number(style.opacity),
+      border: { width: px(style.borderTopWidth), color: rgb(style.borderTopColor) },
+      opacity: Math.round(opacity(el) * 100) / 100,
     };
   }
   return out;
