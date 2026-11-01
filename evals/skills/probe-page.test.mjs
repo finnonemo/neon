@@ -127,8 +127,10 @@ test('text on a filled block below 4.5:1 is a lead, through transparent wrappers
   assert.deepEqual(found, {
     'canvas-text-on-tint': { fill: 'tint-block', fg: 'rgb(255,255,255)', bg: 'rgb(192,197,202)', contrast: 1.74 },
     wrapped: { fill: 'tint-50-block', fg: 'rgb(255,255,255)', bg: 'rgb(128,139,149)', contrast: 3.47 },
+    // Inside a dark control that passes; the failing control's own label stays under darkBackgroundControls only.
+    'black-in-button': { fill: 'save', fg: 'rgb(0,0,0)', bg: 'rgb(43,43,43)', contrast: 1.48 },
   });
-  assert.match(reportLine, /^Browser probe: 375px low contrast text on fill p#canvas-text-on-tint "[^"]*"; p#wrapped/);
+  assert.match(reportLine, /, low contrast text on fill p#canvas-text-on-tint "[^"]*"; p#wrapped "[^"]*" \+1 more,/);
 });
 
 test('--serve measures a production build on its own port, falling back to index.html for app routes', t => {
