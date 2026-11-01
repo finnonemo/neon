@@ -53,6 +53,8 @@ jobs:
       - run: node evals/skills/grade-restyle.mjs --source evals/skills/fixtures/shadcn-v4-app --result evals/skills/fixtures/shadcn-v4-app --shots shadcn-v4
       - run: node evals/skills/run-probe.mjs shadcn-v4 --widths 1024 --dark-class
       - run: npm test --prefix evals/templates
+      # The Neon base, created with shadcn init from this checkout's registry.
+      - run: npm test --prefix evals/templates -- --target neon
       - uses: actions/upload-artifact@v4
         if: always()
         with:

@@ -1,0 +1,67 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "neon-base",
+  "type": "registry:base",
+  "title": "Neon base",
+  "description": "A Vite + React 19 app on shadcn/ui, Radix and Tailwind v4, themed with Finnomena's Neon roles.",
+  "extends": "none",
+  "config": {
+    "style": "radix-nova",
+    "tailwind": {
+      "baseColor": "neutral",
+      "cssVariables": true
+    },
+    "iconLibrary": "lucide",
+    "registries": {
+      "@neon": "https://raw.githubusercontent.com/finnonemo/neon/neon--v0.5.0/registry/r/{name}.json"
+    }
+  },
+  "dependencies": [
+    "@fontsource/ibm-plex-sans-thai@^5.3.0"
+  ],
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/finnonemo/neon/neon--v0.5.0/registry/r/theme.json",
+    "https://raw.githubusercontent.com/finnonemo/neon/neon--v0.5.0/registry/r/utils.json",
+    "https://raw.githubusercontent.com/finnonemo/neon/neon--v0.5.0/registry/r/button.json",
+    "https://raw.githubusercontent.com/finnonemo/neon/neon--v0.5.0/registry/r/tooltip.json",
+    "https://raw.githubusercontent.com/finnonemo/neon/neon--v0.5.0/registry/r/sonner.json"
+  ],
+  "files": [
+    {
+      "path": "base/index.css",
+      "content": "@import \"tailwindcss\";\n@import \"tw-animate-css\";\n@import \"./theme/neon.css\";\n",
+      "type": "registry:file",
+      "target": "src/index.css"
+    },
+    {
+      "path": "base/main.tsx",
+      "content": "import { StrictMode } from \"react\"\nimport { createRoot } from \"react-dom/client\"\nimport \"./index.css\"\n\n// Self-hosted Thai font weights used by the Finnomena theme\nimport \"@fontsource/ibm-plex-sans-thai/400.css\"\nimport \"@fontsource/ibm-plex-sans-thai/500.css\"\nimport \"@fontsource/ibm-plex-sans-thai/600.css\"\nimport \"@fontsource/ibm-plex-sans-thai/700.css\"\n\nimport { AppRoot } from \"./app/AppRoot\"\nimport { App } from \"./App\"\n\ncreateRoot(document.getElementById(\"root\")!).render(\n  <StrictMode>\n    <AppRoot>\n      <App />\n    </AppRoot>\n  </StrictMode>\n)\n",
+      "type": "registry:file",
+      "target": "src/main.tsx"
+    },
+    {
+      "path": "base/App.tsx",
+      "content": "import { Button } from \"@/components/ui/button\"\n\nexport function App() {\n  return (\n    <main className=\"flex min-h-svh flex-col items-start gap-4 p-6\">\n      <h1 className=\"text-title2\">Finnomena App</h1>\n      <Button>เริ่มต้น / Get started</Button>\n    </main>\n  )\n}\n",
+      "type": "registry:file",
+      "target": "src/App.tsx"
+    },
+    {
+      "path": "base/app/AppRoot.tsx",
+      "content": "// The app's one provider root. theme.css reads data-theme on <html>, so the\n// color scheme is a single attribute; no theme provider is needed. The root\n// also holds the one TooltipProvider and Toaster, so screens add neither.\nimport { useLayoutEffect, type ReactNode } from \"react\"\nimport { Toaster } from \"@/components/ui/sonner\"\nimport { TooltipProvider } from \"@/components/ui/tooltip\"\nimport { ColorSchemeContext, type ColorScheme } from \"./colorScheme\"\n\nexport function AppRoot({ children, colorScheme = \"light\" }: { children: ReactNode; colorScheme?: ColorScheme }) {\n  useLayoutEffect(() => {\n    const root = document.documentElement\n    root.dataset.theme = colorScheme\n    root.style.colorScheme = colorScheme\n  }, [colorScheme])\n  return (\n    <ColorSchemeContext.Provider value={colorScheme}>\n      <TooltipProvider>\n        {children}\n        <Toaster theme={colorScheme} />\n      </TooltipProvider>\n    </ColorSchemeContext.Provider>\n  )\n}\n",
+      "type": "registry:file",
+      "target": "src/app/AppRoot.tsx"
+    },
+    {
+      "path": "base/app/colorScheme.ts",
+      "content": "import { createContext, useContext } from \"react\"\n\nexport type ColorScheme = \"light\" | \"dark\"\nexport const ColorSchemeContext = createContext<ColorScheme>(\"light\")\n/** The active color scheme, for the rare component that must branch on it. */\nexport const useColorScheme = () => useContext(ColorSchemeContext)\n",
+      "type": "registry:file",
+      "target": "src/app/colorScheme.ts"
+    },
+    {
+      "path": "../templates/vitejs-cds/index.html",
+      "content": "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <title>Finnomena App</title>\n  </head>\n  <body>\n    <div id=\"root\"></div>\n    <script type=\"module\" src=\"/src/main.tsx\"></script>\n  </body>\n</html>\n",
+      "type": "registry:file",
+      "target": "~/index.html"
+    }
+  ]
+}

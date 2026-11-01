@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "avatar",
+  "type": "registry:ui",
+  "title": "Avatar",
+  "dependencies": [
+    "radix-ui@^1.8.1"
+  ],
+  "registryDependencies": [
+    "@neon/utils"
+  ],
+  "files": [
+    {
+      "path": "ui/avatar.tsx",
+      "content": "import * as React from \"react\"\nimport { Avatar as AvatarPrimitive } from \"radix-ui\"\n\nimport { cn } from \"@/lib/utils\"\n\n// CDS Avatar sizes: default is its \"l\" (32px), lg its \"xxl\" (48px).\nfunction Avatar({\n  className,\n  size = \"default\",\n  ...props\n}: React.ComponentProps<typeof AvatarPrimitive.Root> & { size?: \"default\" | \"lg\" }) {\n  return (\n    <AvatarPrimitive.Root\n      data-slot=\"avatar\"\n      data-size={size}\n      className={cn(\"group/avatar relative flex size-8 shrink-0 overflow-hidden rounded-full select-none data-[size=lg]:size-12\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction AvatarImage({ className, ...props }: React.ComponentProps<typeof AvatarPrimitive.Image>) {\n  return <AvatarPrimitive.Image data-slot=\"avatar-image\" className={cn(\"aspect-square size-full\", className)} {...props} />\n}\n\n// The initial sits on the primary fill, in body type (title3 at lg).\nfunction AvatarFallback({ className, ...props }: React.ComponentProps<typeof AvatarPrimitive.Fallback>) {\n  return (\n    <AvatarPrimitive.Fallback\n      data-slot=\"avatar-fallback\"\n      className={cn(\"flex size-full items-center justify-center rounded-full bg-primary text-body text-primary-foreground group-data-[size=lg]/avatar:text-title3\", className)}\n      {...props}\n    />\n  )\n}\n\nexport { Avatar, AvatarImage, AvatarFallback }\n",
+      "type": "registry:ui",
+      "target": "src/components/ui/avatar.tsx"
+    }
+  ]
+}

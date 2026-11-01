@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "calendar",
+  "type": "registry:ui",
+  "title": "Calendar",
+  "dependencies": [
+    "react-day-picker@^10.0.2",
+    "date-fns@^4.1.0",
+    "lucide-react@^1.66.0"
+  ],
+  "registryDependencies": [
+    "@neon/utils",
+    "@neon/button"
+  ],
+  "files": [
+    {
+      "path": "ui/calendar.tsx",
+      "content": "import * as React from \"react\"\nimport { format } from \"date-fns\"\nimport { ChevronLeftIcon, ChevronRightIcon } from \"lucide-react\"\nimport { DayPicker, getDefaultClassNames, type DayButton } from \"react-day-picker\"\n\nimport { Button, buttonVariants } from \"@/components/ui/button\"\nimport { cn } from \"@/lib/utils\"\n\n// The CDS calendar: the month in headline type at the left, the arrows at the\n// right, round 40px days 8px apart in body type. Today has a primary ring; the\n// picked day takes the primary fill. Days of other months are not shown.\n// Every date is read through date-fns, so a Thai browser locale never turns\n// the year Buddhist; pass a date-fns locale to change the names.\nfunction Calendar({ className, classNames, showOutsideDays = false, components, ...props }: React.ComponentProps<typeof DayPicker>) {\n  const defaultClassNames = getDefaultClassNames()\n\n  return (\n    <DayPicker\n      showOutsideDays={showOutsideDays}\n      className={cn(\"w-fit\", className)}\n      classNames={{\n        root: cn(\"w-fit\", defaultClassNames.root),\n        months: cn(\"relative flex flex-col gap-4 md:flex-row\", defaultClassNames.months),\n        month: cn(\"flex w-full flex-col gap-4\", defaultClassNames.month),\n        nav: cn(\"absolute top-0 right-3 flex items-center gap-2\", defaultClassNames.nav),\n        button_previous: cn(buttonVariants({ variant: \"ghost\", size: \"icon\" }), \"aria-disabled:opacity-50\", defaultClassNames.button_previous),\n        button_next: cn(buttonVariants({ variant: \"ghost\", size: \"icon\" }), \"aria-disabled:opacity-50\", defaultClassNames.button_next),\n        month_caption: cn(\"flex h-10 items-center px-3\", defaultClassNames.month_caption),\n        caption_label: cn(\"text-headline text-foreground select-none\", defaultClassNames.caption_label),\n        month_grid: cn(\"w-full border-collapse\", defaultClassNames.month_grid),\n        weekdays: cn(\"flex gap-2\", defaultClassNames.weekdays),\n        weekday: cn(\"flex size-10 items-center justify-center text-body text-foreground select-none\", defaultClassNames.weekday),\n        week: cn(\"mt-2 flex gap-2\", defaultClassNames.week),\n        day: cn(\"size-10 p-0 text-center select-none\", defaultClassNames.day),\n        today: defaultClassNames.today,\n        outside: cn(\"text-muted-foreground\", defaultClassNames.outside),\n        disabled: cn(\"opacity-50\", defaultClassNames.disabled),\n        hidden: cn(\"invisible\", defaultClassNames.hidden),\n        ...classNames,\n      }}\n      components={{\n        Root: ({ className, rootRef, ...props }) => <div data-slot=\"calendar\" ref={rootRef} className={className} {...props} />,\n        Chevron: ({ className, orientation, ...props }) => {\n          const Icon = orientation === \"left\" ? ChevronLeftIcon : ChevronRightIcon\n          return <Icon className={cn(\"size-5\", className)} {...props} />\n        },\n        DayButton: CalendarDayButton,\n        ...components,\n      }}\n      {...props}\n    />\n  )\n}\n\nfunction CalendarDayButton({ className, day, modifiers, ...props }: React.ComponentProps<typeof DayButton>) {\n  const ref = React.useRef<HTMLButtonElement>(null)\n  React.useEffect(() => {\n    if (modifiers.focused) ref.current?.focus()\n  }, [modifiers.focused])\n\n  return (\n    <Button\n      ref={ref}\n      variant=\"ghost\"\n      size=\"icon\"\n      data-day={format(day.date, \"yyyy-MM-dd\")}\n      data-today={modifiers.today}\n      data-selected-single={modifiers.selected}\n      className={cn(\n        \"border border-transparent text-body data-[today=true]:border-primary data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport { Calendar, CalendarDayButton }\n",
+      "type": "registry:ui",
+      "target": "src/components/ui/calendar.tsx"
+    }
+  ]
+}
