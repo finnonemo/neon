@@ -1,0 +1,5 @@
+# Theme Brief presets borrow only structure from named public pages
+
+Maintainers may draft a Theme Brief preset from a public page they name, including a third-party one, but only its section structure, geometry and motion carry over; colors and typeface come from the Immersive Theme, and no logo, imagery, copy, prose or name of the source is kept. Raw measurements and the source record never ship, and a Theme Brief with a third-party source ships only after a Finnomena design review through the [example library](../design/example-library.md), so what Neon distributes stays Finnomena-made under [ADR 0001](0001-employees-bring-reference-designs.md). Pages behind sign-in or bot challenges are not measured; a robots.txt disallow is recorded for the reviewer but does not stop a single maintainer-named page view. Finnomena-only sources were rejected because Finnomena's own pages are mostly functional and give presets too little range.
+
+This narrows ADR 0001 and does not supersede it: Neon still ships no third-party Reference Designs, and nothing extracted from a third-party page reaches the plugin or a registry item.
