@@ -46,6 +46,7 @@ function compatibility({ path, data }, presets, facts) {
   const thirdParty = thirdPartyKinds(chosen);
   for (const kind of thirdParty) {
     if (!data.review) problems.push(`${kind} "${data.presets[kind]}" has a third-party source, so the picks file needs a review record`);
+    else if (data.review.status === 'illustrative') problems.push(`${kind} "${data.presets[kind]}" has a third-party source and its review status is "illustrative"; it ships only after a Finnomena design review`);
   }
   if (data.review && !thirdParty.length && Object.keys(chosen).length === PRESET_KINDS.length) {
     problems.push('review record without a third-party source; remove it');
@@ -95,7 +96,7 @@ export function checkThemeBriefs({ root, out = join(root, 'registry/theme-briefs
   for (const picks of inputs.picks) problems.push(...compatibility(picks, presets, facts));
   const briefs = existsSync(out) ? readdirSync(out).filter((name) => name.endsWith('.md')) : [];
 
-  // Pairs and review: a published brief (Markdown or registry entry) has its picks file, Markdown, record and registry entry.
+  // Pairs: a published brief (Markdown or registry entry) has its picks file, Markdown, record and registry entry.
   const at = (path) => relative(root, path);
   const registry = JSON.parse(existsSync(join(root, 'registry/registry.json')) ? readFileSync(join(root, 'registry/registry.json'), 'utf8') : '{}');
   const entries = new Set((registry.items ?? []).map((item) => item.name).filter((name) => name?.startsWith('theme-brief-')).map((name) => name.slice('theme-brief-'.length)));
@@ -114,9 +115,6 @@ export function checkThemeBriefs({ root, out = join(root, 'registry/theme-briefs
       !entries.has(name) && `registry entry "theme-brief-${name}" in registry/registry.json`,
     ].filter(Boolean);
     for (const part of missing) problems.push(`${where}: published brief "${name}" has no ${part}`);
-    if (picks && picks.data?.review?.status === 'illustrative' && thirdPartyKinds(chosenPresets(picks.data, presets).chosen).length) {
-      problems.push(`${picks.path}: brief "${name}" has a third-party source and its review status is "illustrative"; it ships only after a Finnomena design review`);
-    }
     if (!existsSync(markdown)) continue;
     const text = readFileSync(markdown, 'utf8');
     const theme = facts.themes[picks?.data?.theme] ?? Object.values(facts.themes).find((candidate) => name.startsWith(`${candidate.id}-`));

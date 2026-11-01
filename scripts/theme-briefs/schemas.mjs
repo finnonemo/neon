@@ -199,10 +199,13 @@ export function presetProblems(kind, data) {
   return problems;
 }
 
-// A review past illustrative names who reviewed it and when.
+// A review past illustrative names who reviewed it and when; a partial one lists what was approved.
 export function picksProblems(data) {
-  const { status, reviewer, reviewed_on } = data?.review ?? {};
-  return status && status !== 'illustrative' && (!reviewer || !reviewed_on) ? [`review status "${status}" needs a reviewer and reviewed_on`] : [];
+  const { status, reviewer, reviewed_on, approved_properties } = data?.review ?? {};
+  const problems = [];
+  if (status && status !== 'illustrative' && (!reviewer || !reviewed_on)) problems.push(`review status "${status}" needs a reviewer and reviewed_on`);
+  if (status === 'partially-reviewed' && Array.isArray(approved_properties) && !approved_properties.length) problems.push('review status "partially-reviewed" needs its approved_properties');
+  return problems;
 }
 
 // The preset's source host, '' when its URL cannot be read, undefined when it has no source.

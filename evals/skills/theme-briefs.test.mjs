@@ -192,6 +192,7 @@ const COMPATIBILITY_REFUSALS = {
   'a source URL that does not parse, as a third party': [edit(LAYOUT, (p) => ({ ...p, source: source('https://[x]/events') })), /^theme-briefs\/picks\/club-run\.json: layout "event-landing" has a third-party source, so the picks file needs a review record$/m],
   'a Refero Styles page as a source': [edit(IMAGERY, (p) => ({ ...p, source: source('https://www.refero.design/styles/run') })), /^theme-briefs\/presets\/imagery\/people-in-action\.json: "source\.url" is a Refero Styles page; the Refero corpus is never a preset source$/m],
   'a review past illustrative with no reviewer or date': [edit(PICKS, (p) => ({ ...p, review: { ...review('reviewed'), reviewer: null, reviewed_on: null } })), /^theme-briefs\/picks\/club-run\.json: review status "reviewed" needs a reviewer and reviewed_on$/m],
+  'a partial review with no approved properties': [edit(PICKS, (p) => ({ ...p, review: review('partially-reviewed') })), /^theme-briefs\/picks\/club-run\.json: review status "partially-reviewed" needs its approved_properties$/m],
   'a review record with no third-party source': [edit(PICKS, (p) => ({ ...p, review: review('reviewed') })), /^theme-briefs\/picks\/club-run\.json: review record without a third-party source; remove it$/m],
 };
 
@@ -209,10 +210,15 @@ test('palette 100 may be the bare canvas, and a Finnomena source needs no review
   assert.equal(status, 0, out);
 });
 
-test('a third-party source with a review record passes the input checks', (t) => {
+test('check-only refuses a third-party source whose review is illustrative, before any brief is published', (t) => assertRefused(t, {
+  ...edit(LAYOUT, (p) => ({ ...p, source: source('https://www.example-run.com/events') })),
+  ...edit(PICKS, (p) => ({ ...p, review: review('illustrative') })),
+}, /^theme-briefs\/picks\/club-run\.json: layout "event-landing" has a third-party source and its review status is "illustrative"; it ships only after a Finnomena design review$/m));
+
+test('a third-party source with a partial review passes the input checks', (t) => {
   const root = fixture(t, {
     ...edit(LAYOUT, (p) => ({ ...p, source: source('https://www.example-run.com/events') })),
-    ...edit(PICKS, (p) => ({ ...p, review: review('illustrative') })),
+    ...edit(PICKS, (p) => ({ ...p, review: { ...review('partially-reviewed'), approved_properties: ['composition'] } })),
   });
   const { status, out } = checkOnly(root);
   assert.equal(status, 0, out);
@@ -261,7 +267,6 @@ const BRIEF_REFUSALS = {
     /^registry\/theme-briefs\/club-run\.md: published brief "club-run" has no registry entry "theme-brief-club-run" in registry\/registry\.json$/m,
   ]],
   'a registry entry with no brief Markdown': [{ ...published(), [BRIEF]: null }, /^registry\/registry\.json: published brief "club-run" has no Markdown registry\/theme-briefs\/club-run\.md$/m],
-  'a third-party brief whose review is illustrative': [thirdParty('illustrative'), /^theme-briefs\/picks\/club-run\.json: brief "club-run" has a third-party source and its review status is "illustrative"; it ships only after a Finnomena design review$/m],
   'a brief that names its source domain': [{ ...thirdParty('reviewed'), [BRIEF]: `${briefText}Measured from www.Example-Run.com.\n` }, /^registry\/theme-briefs\/club-run\.md: names "example-run\.com", a preset source; no source name ships$/m],
   'a brief that names its source site': [{ ...thirdParty('reviewed'), [BRIEF]: `${briefText}A layout in the Example-Run style.\n` }, /^registry\/theme-briefs\/club-run\.md: names "example-run", a preset source; no source name ships$/m],
   'an off-token hex': [{ ...published(), [BRIEF]: `${briefText}| Ink | \`#01172c\` | x |\n` }, /^registry\/theme-briefs\/club-run\.md: #01172c is not a color token \(nearest Navy\/100 #01172b\)$/m],

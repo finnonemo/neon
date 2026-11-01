@@ -60,7 +60,7 @@ A **picks file** is named after its theme and brief name: theme `club` with brie
 - The colourway is one of the theme's own families, never a secondary color, and the ground is a step of it.
 - A Brand Pattern sits on the bare canvas only as `palette` 100. A ground whose fill is the theme's canvas color under any other colourway or step is refused. On Club, whose palette 100 is a grey tint, every Pattern therefore sits on a tinted section.
 
-When any chosen preset has a source outside finnomena.com, the picks file needs a `review` record in the [example library](example-library.md) shape. It holds `status`, `source_revision`, `reviewer`, `reviewed_on` and `approved_properties`; a status past `illustrative` names the reviewer and date. A source URL the tool cannot read counts as third-party. A picks file with no such source carries no review record.
+When any chosen preset has a source outside finnomena.com, the picks file needs a `review` record in the [example library](example-library.md) shape. It holds `status`, `source_revision`, `reviewer`, `reviewed_on` and `approved_properties`. Its status must be past `illustrative`, with the reviewer and date filled in, and a `partially-reviewed` record lists its approved properties. A source URL the tool cannot read counts as third-party. A picks file with no such source carries no review record.
 
 **Theme texts** stay true when a theme is added. They hold no ratio or percentage, no superlative and no comparison with another theme.
 
@@ -80,7 +80,7 @@ The check module in `scripts/theme-briefs` is shared by the tool's `check-only` 
 | `uses role … which <Theme> lacks`, `is not one of <Theme>'s families`, `is not a step of`, `bare canvas` | The picks file does not fit its theme. Choose another preset, colourway or ground. |
 | `Brand Pattern section … is not one of its sections` | A layout places the Pattern in a section it does not have. |
 | `preset … not found` | A picks file names a preset with no file. Add the preset or fix the slug. |
-| `needs a review record`, `review status is "illustrative"`, `needs a reviewer and reviewed_on` | A third-party source needs a recorded Finnomena design review before the brief ships. Record it, or leave the brief unpublished. |
+| `needs a review record`, `review status is "illustrative"`, `needs a reviewer and reviewed_on` | A third-party source needs a recorded Finnomena design review before its picks file is committed. Record the review, or choose presets with no third-party source. |
 | `review record without a third-party source` | None of the chosen presets needs a review. Remove the record. |
 | `published brief … has no …` | A published brief is missing its picks file, Markdown, authoring record or registry entry. Add the missing part, or remove the others. |
 | `is not a color token`, `which <Theme> does not define`, `text needs 4.5:1`, `an action's edge needs 3:1` | A brief names a color or pair the theme cannot back. Use a token, or a variable and pair the theme defines and keeps readable. |
