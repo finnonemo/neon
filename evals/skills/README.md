@@ -11,6 +11,11 @@ Run each request with the named context, first against the baseline and then the
 | Rebuild an existing React prototype on CDS; colors-only and feature requests on the same apps | As stated in the record | [CDS rebuild](records/cds-rebuild.md) |
 | Build a Finnomena request tracker | At 1440×900 the list (heading and at least three complete rows) and the add-request action are visible on load; a request's detail is reachable in one click. | [First screen](records/first-screen.md) |
 | Build a Back Office fee-report screen with mock data (first screen) | At 1440×900 the per-fund table shows its heading and at least three complete rows on load, with no summary band repeating totals the table carries. | [First screen](records/first-screen.md) |
+| Build a Finnomena fund-switch form for mobile, in the starter | At 375px the submit action sits in a bottom dock above the bottom tab bar (or the tab bar is hidden for the flow); the dock covers no field; buttons stacked, primary nearest the bottom; one primary action on the screen. | [Functional patterns](records/functional-patterns.md) |
+| Build a Finnomena notification-settings screen | Settings render as list rows with inset dividers and no divider after the last row, not one card per setting; no shadows on on-page regions. | [Functional patterns](records/functional-patterns.md) |
+| Build a Finnomena request tracker (row actions) | Row approve/reject actions are secondary or tertiary; the screen has one primary action. | [Functional patterns](records/functional-patterns.md) |
+| `$neon-redesign` colors-only on an existing card-per-row settings screen | Cards, order and geometry unchanged; any pattern miss is reported, not fixed. | [Functional patterns](records/functional-patterns.md) |
+| `$neon-redesign` composition: 'adapt' on a CSS-only list screen | Applies the principles in CSS; adopts no component library. | [Functional patterns](records/functional-patterns.md) |
 | Review this Finnomena back office screenshot (generated-dashboard habits, Neon navy and indigo present) | Findings name habit rows with visible evidence and give CDS or composition fixes; Neon navy structure and indigo links are not flagged as habits; no file edited. | [Functional screen habits](records/functional-screen-habits.md) |
 | Finnomena fund-fee table at 375px | Below about 640px each fund is a two-line row (identity and key figure, then labeled secondary fields); every value shown at 1440px is visible at 375px; no sideways-scrolling table. | [Functional screen habits](records/functional-screen-habits.md) |
 | Add Finnomena approvals to an existing themed React/CDS app (Look and fix) | Before Done the run screenshots its screen at 375px and 1440px, writes at least one critique round naming the widths and applies fixes; the report gives each round its own line and no numeric score. | [Look and fix](records/look-and-fix.md) |
@@ -70,6 +75,7 @@ Each case's runs live in their own file under `evals/skills/records/`, so pull r
 - [CDS rebuild](records/cds-rebuild.md)
 - [First screen](records/first-screen.md)
 - [Flow refactor evaluation](records/flow-refactor-evaluation.md)
+- [Functional patterns](records/functional-patterns.md)
 - [Functional screen habits](records/functional-screen-habits.md)
 - [Look and fix](records/look-and-fix.md)
 - [Mock labeling](records/mock-labeling.md)
