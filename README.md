@@ -266,6 +266,8 @@ Packaging does not publish a release. Full contribution, token update and releas
 | [`theme/`](theme/) | Exported tokens, CDS adapters and CSS theme |
 | [`templates/vitejs-cds/`](templates/vitejs-cds/) | React starter source, layouts and Finnomena logo assets |
 | [`scripts/`](scripts/) | Theme installation, starter assembly, the browser probe runner, packaging and resource checks |
+| [`scripts/theme-briefs/`](scripts/theme-briefs/) | Maintainer-only Theme Brief tool and its checks, not packaged |
+| [`theme-briefs/`](theme-briefs/) | Maintainer-only Theme Brief presets, picks files and theme texts, not packaged |
 | [`evals/skills/`](evals/skills/) | Skill scenarios and packaging regression checks |
 | [`docs/`](docs/) | Maintainer documentation |
 

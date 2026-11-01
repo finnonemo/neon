@@ -92,6 +92,10 @@ _Avoid_: Tailwind preset, Reference Design (which an employee brings), template
 Finnomena background artwork made by Block's generator from a locked seed, placed in a section that a Theme Brief or the employee names.
 _Avoid_: texture, background, Page (Block's full composition)
 
+**Brand Pattern colourway**:
+The one Immersive Theme color family (its palette, accent or support) whose steps a Brand Pattern and the block beneath it use.
+_Avoid_: pattern palette, pattern color, secondary color
+
 ### Reference designs
 
 **Reference Design**:

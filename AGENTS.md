@@ -3,6 +3,7 @@
 This repository distributes skills, theme assets and a CDS starter. It is not an employee application.
 
 - Read `skills/INSTRUCTION.md` for current visual policy. New work uses the Neon base, and CDS is frozen for apps already on it ([ADR 0006](docs/adr/0006-new-work-on-shadcn-matched-to-cds.md)); skills still describe CDS until their migration. Functional layouts favor restrained, task-led composition; immersive layouts may be colorful. Preserve the provisional status of token mappings.
+- Theme Briefs, presets, or adding an Immersive Theme's briefs: read `docs/design/theme-briefs.md`.
 - Use the domain terms in `GLOSSARY.md`: install mode is what the installer does, styling tier is a skill's decision.
 - Read the relevant skill and its callers before editing. Keep entrypoints concise with fast paths and read conditions; move setup details into reachable conditional references. Audit is optional for unclear integration, not a mandatory gateway.
 - Preserve scope: existing apps reuse providers/routes/services; colors-only stays colors-only; composition defaults to preserve and adapts only on explicit request, separately from styling tier; review-only stays read-only. Reuse explicit or established brand intent.
