@@ -473,6 +473,29 @@ Every run, baseline included, looked at its own screenshots and edited after a 1
 
 Limits: one usable baseline and one revised sample, Claude Code only, on the evaluator's browser tool. The orchestrator's rule voids any sample with a denied command, and only Baseline-2 had none. Revised-2's two denials did not stop it using the shell, but a rerun with full Bash was refused by the evaluator session's own permission classifier, so no clean revised sample exists. The baseline and revised samples that count ran with different allowlists. Not exercised: colors-only scope, `composition: 'preserve'` on existing UI, dark mode (the fixture has none), and the no-screenshot fallback, including Codex. The "Functional screen habits" link was a placeholder in these samples; #54 added the table, see [Functional screen habits](#functional-screen-habits).
 
+### Paired rerun, 1 November 2026
+
+This rerun closes the allowlist gap above: both arms used the same allowlist and the same harness note, on Claude Code 2.1.316, with the command above plus `--add-dir <package>` and `--append-system-prompt <note>`. Baseline is the `6c0a1f6` package. Revised is the `e968065` package; the package built from `df3f6d8` is byte-identical. Each sample ran on a fresh fixture copy under a 45-minute cap. Sample 1 of each arm ran at the same time, baseline on port 5301 and revised on 5302. Sample 2 swapped the ports.
+
+- Allowlist: `Read Edit Write Glob Grep Skill`, the five `mcp__browser__*` tools (`navigate resize evaluate screenshot console`), and `Bash(…:*)` for `ls pwd cd cat head tail wc grep find echo test git status git log git diff git ls-files node npm npx mkdir cp sed rg sort which curl lsof kill sleep git rev-parse git show git branch npm run sips file python3`.
+- Note, verbatim: "Shell permissions in this session: Bash is allowed for commands that start with one of: ls pwd cd cat head tail wc grep find echo test sed rg sort which curl lsof kill sleep mkdir cp node npm npx sips file python3, npm run, git status, git log, git diff, git ls-files, git rev-parse, git show, git branch. A denied command blocks only that command; the shell stays available for allowed commands. Variable assignments, loops and $(...) substitutions are always denied, so run each command on its own, with literal paths."
+
+| Item | Baseline-1 | Baseline-2 | Revised-1 | Revised-2 |
+| --- | --- | --- | --- | --- |
+| Denied commands | 1: `cd <app dir> && sed -i …` on the routes; it used Edit instead | 1: `cd node_modules/…; grep …` | 1: `cd node_modules/…; grep …` | 1: a `for` loop over CDS type files |
+| Sample under the denial rule | Counts: it built afterwards | Counts, but killed at the cap with no report | Counts | Counts |
+| Read verification.md | Yes | Yes, through `cat` | Yes, through `cat` | Yes, through `cat` |
+| Screenshots | 8, at 1440 and 375 | 7, at 1440 only | 19, at 1440 and 375 | 13, at 1440 and 375 |
+| Ran `<Neon root>/scripts/` tools | No | No | `probe-page.mjs` and `source-lint.mjs` | `probe-page.mjs` and `source-lint.mjs` |
+| Critique rounds in the report | None; the Checks list names 1440px and 375px | No report | `Look and fix, round 1 (1440px)`, `round 2 (1440px)`, `round 3 (375px)`, each with its fixes | `Look and fix, round 1 (1440px)`, `round 2 (1440px)`, `round 3 (375px)`, each with its fixes |
+| Build | Passed | Not reached | Passed | Passed |
+| Readiness word | Ship-ready | None | Brand-ready | Ship-ready, apart from the mock service |
+| Verdict | Fail: no critique rounds | Unverified: no report | Pass | Pass |
+
+Baseline-2's last browser call before the cap was an `evaluate` whose promise never resolved; the agent said its probe hung and was splitting it into steps when the cap stopped it. The harness's part in the hang is unverified. Both revised runs wrote round lines in the section's `Look and fix, round N (…)` shape. Revised-2's round 1 claim, amounts cut to "฿12,60…" in the list at 1440px, matches its first screenshot. Its round 3 fixes (focus after a decision, screen-reader announcements, an empty detail page after refresh) are behavior found by testing, not problems visible in a 375px screenshot. Neither revised run wrote findings in neon-review's shape in its messages. Baseline-1 and Revised-2 called the Back Office screen Ship-ready, against [Readiness](#readiness). No report gave a numeric score.
+
+Limits: one usable baseline and two revised samples, Claude Code only, on the evaluator's browser tool. Every sample had one denied command, and none stopped the build or the look. With one usable baseline, whether the skill change causes the round lines is still unverified. Revised-1 said the probe's 1440px pass timed out twice and checked that width by hand; the cause is unverified. Run logs, screenshots, grades and diffs are in `.local/evals/53-rerun-{baseline-1,baseline-2,revised-1,revised-2}` in the orchestrator worktree. The prep, launch and collect scripts, the allowlist and the note are in `.local/evals/53-rerun-tools`.
+
 ## Browser probe runner
 
 [probe-page.mjs](../../scripts/probe-page.mjs) runs the shipped probe in headless Chrome over a CDP pipe, with no npm dependencies, when the agent has no browser tool. It adds three Neon rules: IBM Plex Sans Thai faces loaded and drawing the Thai and Latin text, the Finnomena logo present, and the source brand absent from the title, meta content and alt text. The probe fixture's Neon cases, plus `probe-fixture-no-plex.html` and `probe-fixture-thai-404.html`, run in `run-probe.mjs --fixture`. Runner behavior (missing Chrome, launch failure, timeout, a page that does not load, screenshots kept out of the app) is in `probe-page.test.mjs`.
