@@ -38,6 +38,14 @@ test('a wrong id set fails', () => {
   ]);
 });
 
+test('a category mapping ids to match reasons compares the reasons each entry reports', () => {
+  const want = { finnomenaLogo: { 'logo-data': ['alt', 'asset shape'] } };
+  assert.deepEqual(fixtureFailures('light', want, { finnomenaLogo: [{ element: 'img#logo-data "Finnomena"', by: ['alt', 'asset shape'] }] }), []);
+  assert.deepEqual(fixtureFailures('light', want, { finnomenaLogo: [{ element: 'img#logo-data "Finnomena"', by: ['alt'] }] }), [
+    'light finnomenaLogo logo-data: matched by [alt], expected [alt,asset shape]',
+  ]);
+});
+
 test('a category of ids checks no contrast', () => {
   assert.deepEqual(fixtureFailures('light', { underlinedNavLinks: ['nav-text'] }, { underlinedNavLinks: [{ element: 'a#nav-text', contrast: 99 }] }), []);
 });

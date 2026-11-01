@@ -48,7 +48,7 @@ async function check(root, { includeReadme = false } = {}) {
     await checkMarkdownEncoding(file);
     const content = await readFile(file, 'utf8');
     await checkMarkdownLinks(file);
-    for (const match of content.matchAll(/\$\{CLAUDE_PLUGIN_ROOT\}\/([\w./-]+)/g)) {
+    for (const match of content.matchAll(/(?:\$\{CLAUDE_PLUGIN_ROOT\}|<Neon root>)\/([\w./-]+)/g)) {
       await access(join(root, match[1])).catch(() => { throw new Error(`Missing plugin resource in ${file}: ${match[1]}`); });
     }
   }
