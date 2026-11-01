@@ -1,0 +1,2350 @@
+{
+  "approval@375-light": {
+    "elements": {
+      "title": {
+        "font": {
+          "size": 22,
+          "lineHeight": 28,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "searchLabel": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.65)"
+      },
+      "searchInput": {
+        "h": 56,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgba(91, 97, 110, 0.66)"
+        },
+        "bg": "rgb(255, 255, 255)"
+      },
+      "searchText": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "segmented": {
+        "h": 38,
+        "radius": 19,
+        "bg": "rgb(242, 242, 242)"
+      },
+      "segmentThumb": {
+        "h": 38,
+        "radius": 19,
+        "bg": "rgb(0, 0, 0)"
+      },
+      "segmentActive": {
+        "h": 38,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)"
+      },
+      "segment": {
+        "h": 38,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "row": {
+        "h": 64,
+        "radius": 8
+      },
+      "rowTitle": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "rowDescription": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.65)"
+      },
+      "rowAvatar": {
+        "h": 32,
+        "w": 32
+      },
+      "tag": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 600
+        },
+        "h": 24,
+        "pad": [
+          2,
+          4,
+          2,
+          4
+        ],
+        "radius": 4
+      },
+      "selectedRow": {
+        "h": 64
+      }
+    },
+    "gaps": {
+      "searchLabel→searchInput": 4,
+      "selectedRow→row": 16
+    }
+  },
+  "approval-detail@375-light": {
+    "elements": {
+      "detailAvatar": {
+        "h": 48,
+        "w": 48
+      },
+      "detailTitle": {
+        "font": {
+          "size": 20,
+          "lineHeight": 25,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "detailMeta": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.65)"
+      },
+      "detailsHeading": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "detailsBody": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "detailsCaption": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.65)"
+      },
+      "notesLabel": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.65)"
+      },
+      "notes": {
+        "h": 100,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgba(91, 97, 110, 0.66)"
+        },
+        "bg": "rgb(255, 255, 255)"
+      },
+      "notesText": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "pad": [
+          16,
+          16,
+          16,
+          16
+        ]
+      },
+      "checkbox": {
+        "h": 20,
+        "w": 20,
+        "radius": 4,
+        "border": {
+          "width": 1,
+          "color": "rgb(1, 23, 43)"
+        }
+      },
+      "checkboxLabel": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "approve": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(1, 23, 43)",
+        "h": 54,
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ],
+        "radius": 27
+      },
+      "requestInfo": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "bg": "rgb(242, 242, 242)",
+        "h": 54,
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ],
+        "radius": 27
+      },
+      "reject": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(214, 8, 8)",
+        "h": 54,
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ],
+        "radius": 27
+      }
+    },
+    "gaps": {
+      "detailTitle→detailMeta": 4,
+      "notesLabel→notes": 4,
+      "approve→requestInfo": 8,
+      "requestInfo→reject": 8
+    }
+  },
+  "extras@375-light": {
+    "elements": {
+      "title": {
+        "font": {
+          "size": 22,
+          "lineHeight": 28,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "selectLabel": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.65)"
+      },
+      "selectTrigger": {
+        "h": 56,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgba(91, 97, 110, 0.66)"
+        },
+        "bg": "rgb(255, 255, 255)"
+      },
+      "selectValue": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.65)"
+      },
+      "dateLabel": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.65)"
+      },
+      "dateField": {
+        "h": 56,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgba(91, 97, 110, 0.66)"
+        },
+        "bg": "rgb(255, 255, 255)"
+      },
+      "helpButton": {
+        "h": 40,
+        "w": 40
+      },
+      "headerCell": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(0, 0, 0, 0.65)",
+        "h": 76
+      },
+      "bodyRow": {
+        "h": 76
+      },
+      "bodyCell": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "rowMenuButton": {
+        "h": 40,
+        "w": 40
+      },
+      "rejectRequest": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(214, 8, 8)",
+        "h": 54,
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ],
+        "radius": 27
+      },
+      "save": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "bg": "rgb(242, 242, 242)",
+        "h": 54,
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ],
+        "radius": 27
+      },
+      "forwardDisabled": {
+        "h": 54,
+        "opacity": 0.5,
+        "bg": "rgb(17, 38, 56)",
+        "color": "rgb(255, 255, 255)"
+      },
+      "disabledInput": {
+        "h": 56,
+        "border": {
+          "width": 1,
+          "color": "rgba(91, 97, 110, 0.66)"
+        },
+        "bg": "rgb(255, 255, 255)",
+        "opacity": 0.5
+      },
+      "disabledInputText": {
+        "color": "rgba(0, 0, 0, 0.85)",
+        "opacity": 0.5
+      },
+      "disabledCheckbox": {
+        "border": {
+          "width": 1,
+          "color": "rgb(1, 23, 43)"
+        },
+        "bg": "rgb(1, 23, 43)",
+        "opacity": 0.5
+      },
+      "disabledCheckboxLabel": {
+        "color": "rgba(0, 0, 0, 0.85)",
+        "opacity": 0.5
+      }
+    },
+    "gaps": {
+      "selectLabel→selectTrigger": 4,
+      "bodyRow→bodyRow2": 0,
+      "rejectRequest→save": 8
+    }
+  },
+  "select-open@375-light": {
+    "elements": {
+      "listbox": {
+        "radius": 16,
+        "bg": "rgb(255, 255, 255)"
+      },
+      "option": {
+        "h": 60,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      }
+    },
+    "gaps": {}
+  },
+  "date-open@375-light": {
+    "elements": {
+      "calendar": {
+        "radius": 16,
+        "bg": "rgb(255, 255, 255)"
+      },
+      "month": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "day": {
+        "h": 40,
+        "w": 40,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      }
+    },
+    "gaps": {}
+  },
+  "menu-open@375-light": {
+    "elements": {
+      "menu": {
+        "radius": 16,
+        "bg": "rgb(255, 255, 255)"
+      },
+      "menuItem": {
+        "h": 48,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "menuItemNegative": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(214, 8, 8)"
+      }
+    },
+    "gaps": {}
+  },
+  "dialog-open@375-light": {
+    "elements": {
+      "dialog": {
+        "w": 375,
+        "radius": 0,
+        "bg": "rgb(255, 255, 255)"
+      },
+      "dialogTitle": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "dialogBody": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "dialogCancel": {
+        "h": 54,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ],
+        "radius": 27,
+        "bg": "rgb(242, 242, 242)"
+      },
+      "dialogConfirm": {
+        "h": 54,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ],
+        "radius": 27,
+        "bg": "rgb(214, 8, 8)"
+      }
+    },
+    "gaps": {
+      "dialogCancel→dialogConfirm": -327
+    }
+  },
+  "toast-open@375-light": {
+    "elements": {
+      "toast": {
+        "radius": 8,
+        "bg": "rgb(242, 242, 242)"
+      },
+      "toastText": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      }
+    },
+    "gaps": {}
+  },
+  "tooltip-open@375-light": {
+    "elements": {
+      "tooltip": {
+        "radius": 8,
+        "bg": "rgb(0, 0, 0)",
+        "pad": [
+          8,
+          16,
+          8,
+          16
+        ]
+      },
+      "tooltipText": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)"
+      }
+    },
+    "gaps": {}
+  },
+  "approval@375-dark": {
+    "elements": {
+      "title": {
+        "font": {
+          "size": 22,
+          "lineHeight": 28,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)"
+      },
+      "searchLabel": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(255, 255, 255, 0.65)"
+      },
+      "searchInput": {
+        "h": 56,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgba(138, 145, 158, 0.66)"
+        },
+        "bg": "rgb(0, 0, 0)"
+      },
+      "searchText": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)"
+      },
+      "segmented": {
+        "h": 38,
+        "radius": 19,
+        "bg": "rgb(26, 26, 26)"
+      },
+      "segmentThumb": {
+        "h": 38,
+        "radius": 19,
+        "bg": "rgb(255, 255, 255)"
+      },
+      "segmentActive": {
+        "h": 38,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "segment": {
+        "h": 38,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)"
+      },
+      "row": {
+        "h": 64,
+        "radius": 8
+      },
+      "rowTitle": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)"
+      },
+      "rowDescription": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(255, 255, 255, 0.65)"
+      },
+      "rowAvatar": {
+        "h": 32,
+        "w": 32
+      },
+      "tag": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 600
+        },
+        "h": 24,
+        "pad": [
+          2,
+          4,
+          2,
+          4
+        ],
+        "radius": 4
+      },
+      "selectedRow": {
+        "h": 64
+      }
+    },
+    "gaps": {
+      "searchLabel→searchInput": 4,
+      "selectedRow→row": 16
+    }
+  },
+  "approval-detail@375-dark": {
+    "elements": {
+      "detailAvatar": {
+        "h": 48,
+        "w": 48
+      },
+      "detailTitle": {
+        "font": {
+          "size": 20,
+          "lineHeight": 25,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)"
+      },
+      "detailMeta": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(255, 255, 255, 0.65)"
+      },
+      "detailsHeading": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)"
+      },
+      "detailsBody": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)"
+      },
+      "detailsCaption": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(255, 255, 255, 0.65)"
+      },
+      "notesLabel": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(255, 255, 255, 0.65)"
+      },
+      "notes": {
+        "h": 100,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgba(138, 145, 158, 0.66)"
+        },
+        "bg": "rgb(0, 0, 0)"
+      },
+      "notesText": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)",
+        "pad": [
+          16,
+          16,
+          16,
+          16
+        ]
+      },
+      "checkbox": {
+        "h": 20,
+        "w": 20,
+        "radius": 4,
+        "border": {
+          "width": 1,
+          "color": "rgb(65, 81, 96)"
+        }
+      },
+      "checkboxLabel": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)"
+      },
+      "approve": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(65, 81, 96)",
+        "h": 54,
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ],
+        "radius": 27
+      },
+      "requestInfo": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(26, 26, 26)",
+        "h": 54,
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ],
+        "radius": 27
+      },
+      "reject": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(243, 9, 9)",
+        "h": 54,
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ],
+        "radius": 27
+      }
+    },
+    "gaps": {
+      "detailTitle→detailMeta": 4,
+      "notesLabel→notes": 4,
+      "approve→requestInfo": 8,
+      "requestInfo→reject": 8
+    }
+  },
+  "extras@375-dark": {
+    "elements": {
+      "title": {
+        "font": {
+          "size": 22,
+          "lineHeight": 28,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)"
+      },
+      "selectLabel": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(255, 255, 255, 0.65)"
+      },
+      "selectTrigger": {
+        "h": 56,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgba(138, 145, 158, 0.66)"
+        },
+        "bg": "rgb(0, 0, 0)"
+      },
+      "selectValue": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(255, 255, 255, 0.65)"
+      },
+      "dateLabel": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(255, 255, 255, 0.65)"
+      },
+      "dateField": {
+        "h": 56,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgba(138, 145, 158, 0.66)"
+        },
+        "bg": "rgb(0, 0, 0)"
+      },
+      "helpButton": {
+        "h": 40,
+        "w": 40
+      },
+      "headerCell": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(255, 255, 255, 0.65)",
+        "h": 76
+      },
+      "bodyRow": {
+        "h": 76
+      },
+      "bodyCell": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)"
+      },
+      "rowMenuButton": {
+        "h": 40,
+        "w": 40
+      },
+      "rejectRequest": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(243, 9, 9)",
+        "h": 54,
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ],
+        "radius": 27
+      },
+      "save": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(26, 26, 26)",
+        "h": 54,
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ],
+        "radius": 27
+      },
+      "forwardDisabled": {
+        "h": 54,
+        "opacity": 0.5,
+        "bg": "rgb(49, 61, 72)",
+        "color": "rgb(255, 255, 255)"
+      },
+      "disabledInput": {
+        "h": 56,
+        "border": {
+          "width": 1,
+          "color": "rgba(138, 145, 158, 0.66)"
+        },
+        "bg": "rgb(0, 0, 0)",
+        "opacity": 0.5
+      },
+      "disabledInputText": {
+        "color": "rgb(255, 255, 255)",
+        "opacity": 0.5
+      },
+      "disabledCheckbox": {
+        "border": {
+          "width": 1,
+          "color": "rgb(65, 81, 96)"
+        },
+        "bg": "rgb(65, 81, 96)",
+        "opacity": 0.5
+      },
+      "disabledCheckboxLabel": {
+        "color": "rgb(255, 255, 255)",
+        "opacity": 0.5
+      }
+    },
+    "gaps": {
+      "selectLabel→selectTrigger": 4,
+      "bodyRow→bodyRow2": 0,
+      "rejectRequest→save": 8
+    }
+  },
+  "select-open@375-dark": {
+    "elements": {
+      "listbox": {
+        "radius": 16,
+        "bg": "rgb(51, 51, 51)"
+      },
+      "option": {
+        "h": 60,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)"
+      }
+    },
+    "gaps": {}
+  },
+  "date-open@375-dark": {
+    "elements": {
+      "calendar": {
+        "radius": 16,
+        "bg": "rgb(51, 51, 51)"
+      },
+      "month": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)"
+      },
+      "day": {
+        "h": 40,
+        "w": 40,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)"
+      }
+    },
+    "gaps": {}
+  },
+  "menu-open@375-dark": {
+    "elements": {
+      "menu": {
+        "radius": 16,
+        "bg": "rgb(0, 0, 0)"
+      },
+      "menuItem": {
+        "h": 48,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)"
+      },
+      "menuItemNegative": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(243, 9, 9)"
+      }
+    },
+    "gaps": {}
+  },
+  "dialog-open@375-dark": {
+    "elements": {
+      "dialog": {
+        "w": 375,
+        "radius": 0,
+        "bg": "rgb(51, 51, 51)"
+      },
+      "dialogTitle": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)"
+      },
+      "dialogBody": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)"
+      },
+      "dialogCancel": {
+        "h": 54,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ],
+        "radius": 27,
+        "bg": "rgb(26, 26, 26)"
+      },
+      "dialogConfirm": {
+        "h": 54,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ],
+        "radius": 27,
+        "bg": "rgb(243, 9, 9)"
+      }
+    },
+    "gaps": {
+      "dialogCancel→dialogConfirm": -327
+    }
+  },
+  "toast-open@375-dark": {
+    "elements": {
+      "toast": {
+        "radius": 8,
+        "bg": "rgb(26, 26, 26)"
+      },
+      "toastText": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)"
+      }
+    },
+    "gaps": {}
+  },
+  "tooltip-open@375-dark": {
+    "elements": {
+      "tooltip": {
+        "radius": 8,
+        "bg": "rgb(255, 255, 255)",
+        "pad": [
+          8,
+          16,
+          8,
+          16
+        ]
+      },
+      "tooltipText": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      }
+    },
+    "gaps": {}
+  },
+  "approval@1440-light": {
+    "elements": {
+      "title": {
+        "font": {
+          "size": 22,
+          "lineHeight": 28,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "searchLabel": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.65)"
+      },
+      "searchInput": {
+        "h": 56,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgba(91, 97, 110, 0.66)"
+        },
+        "bg": "rgb(255, 255, 255)"
+      },
+      "searchText": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "segmented": {
+        "h": 38,
+        "radius": 19,
+        "bg": "rgb(242, 242, 242)"
+      },
+      "segmentThumb": {
+        "h": 38,
+        "radius": 19,
+        "bg": "rgb(0, 0, 0)"
+      },
+      "segmentActive": {
+        "h": 38,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)"
+      },
+      "segment": {
+        "h": 38,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "row": {
+        "h": 64,
+        "radius": 8
+      },
+      "rowTitle": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "rowDescription": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.65)"
+      },
+      "rowAvatar": {
+        "h": 32,
+        "w": 32
+      },
+      "tag": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 600
+        },
+        "h": 24,
+        "pad": [
+          2,
+          4,
+          2,
+          4
+        ],
+        "radius": 4
+      },
+      "selectedRow": {
+        "h": 64
+      }
+    },
+    "gaps": {
+      "searchLabel→searchInput": 4,
+      "selectedRow→row": 16
+    }
+  },
+  "approval-detail@1440-light": {
+    "elements": {
+      "detailAvatar": {
+        "h": 48,
+        "w": 48
+      },
+      "detailTitle": {
+        "font": {
+          "size": 20,
+          "lineHeight": 25,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "detailMeta": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.65)"
+      },
+      "detailsHeading": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "detailsBody": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "detailsCaption": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.65)"
+      },
+      "notesLabel": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.65)"
+      },
+      "notes": {
+        "h": 100,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgba(91, 97, 110, 0.66)"
+        },
+        "bg": "rgb(255, 255, 255)"
+      },
+      "notesText": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "pad": [
+          16,
+          16,
+          16,
+          16
+        ]
+      },
+      "checkbox": {
+        "h": 20,
+        "w": 20,
+        "radius": 4,
+        "border": {
+          "width": 1,
+          "color": "rgb(1, 23, 43)"
+        }
+      },
+      "checkboxLabel": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "approve": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(1, 23, 43)",
+        "h": 54,
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ],
+        "radius": 27
+      },
+      "requestInfo": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "bg": "rgb(242, 242, 242)",
+        "h": 54,
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ],
+        "radius": 27
+      },
+      "reject": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(214, 8, 8)",
+        "h": 54,
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ],
+        "radius": 27
+      }
+    },
+    "gaps": {
+      "detailTitle→detailMeta": 4,
+      "notesLabel→notes": 4,
+      "approve→requestInfo": 8,
+      "requestInfo→reject": 8
+    }
+  },
+  "extras@1440-light": {
+    "elements": {
+      "title": {
+        "font": {
+          "size": 22,
+          "lineHeight": 28,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "selectLabel": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.65)"
+      },
+      "selectTrigger": {
+        "h": 56,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgba(91, 97, 110, 0.66)"
+        },
+        "bg": "rgb(255, 255, 255)"
+      },
+      "selectValue": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.65)"
+      },
+      "dateLabel": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.65)"
+      },
+      "dateField": {
+        "h": 56,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgba(91, 97, 110, 0.66)"
+        },
+        "bg": "rgb(255, 255, 255)"
+      },
+      "helpButton": {
+        "h": 40,
+        "w": 40
+      },
+      "headerCell": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(0, 0, 0, 0.65)",
+        "h": 54
+      },
+      "bodyRow": {
+        "h": 72
+      },
+      "bodyCell": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "rowMenuButton": {
+        "h": 40,
+        "w": 40
+      },
+      "rejectRequest": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(214, 8, 8)",
+        "h": 54,
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ],
+        "radius": 27
+      },
+      "save": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "bg": "rgb(242, 242, 242)",
+        "h": 54,
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ],
+        "radius": 27
+      },
+      "forwardDisabled": {
+        "h": 54,
+        "opacity": 0.5,
+        "bg": "rgb(17, 38, 56)",
+        "color": "rgb(255, 255, 255)"
+      },
+      "disabledInput": {
+        "h": 56,
+        "border": {
+          "width": 1,
+          "color": "rgba(91, 97, 110, 0.66)"
+        },
+        "bg": "rgb(255, 255, 255)",
+        "opacity": 0.5
+      },
+      "disabledInputText": {
+        "color": "rgba(0, 0, 0, 0.85)",
+        "opacity": 0.5
+      },
+      "disabledCheckbox": {
+        "border": {
+          "width": 1,
+          "color": "rgb(1, 23, 43)"
+        },
+        "bg": "rgb(1, 23, 43)",
+        "opacity": 0.5
+      },
+      "disabledCheckboxLabel": {
+        "color": "rgba(0, 0, 0, 0.85)",
+        "opacity": 0.5
+      }
+    },
+    "gaps": {
+      "selectLabel→selectTrigger": 4,
+      "bodyRow→bodyRow2": 0,
+      "rejectRequest→save": 8
+    }
+  },
+  "select-open@1440-light": {
+    "elements": {
+      "listbox": {
+        "radius": 16,
+        "bg": "rgb(255, 255, 255)"
+      },
+      "option": {
+        "h": 60,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      }
+    },
+    "gaps": {}
+  },
+  "date-open@1440-light": {
+    "elements": {
+      "calendar": {
+        "radius": 16,
+        "bg": "rgb(255, 255, 255)"
+      },
+      "month": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "day": {
+        "h": 40,
+        "w": 40,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      }
+    },
+    "gaps": {}
+  },
+  "menu-open@1440-light": {
+    "elements": {
+      "menu": {
+        "radius": 16,
+        "bg": "rgb(255, 255, 255)"
+      },
+      "menuItem": {
+        "h": 48,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "menuItemNegative": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(214, 8, 8)"
+      }
+    },
+    "gaps": {}
+  },
+  "dialog-open@1440-light": {
+    "elements": {
+      "dialog": {
+        "w": 612,
+        "radius": 8,
+        "bg": "rgb(255, 255, 255)"
+      },
+      "dialogTitle": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "dialogBody": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "dialogCancel": {
+        "h": 54,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ],
+        "radius": 27,
+        "bg": "rgb(242, 242, 242)"
+      },
+      "dialogConfirm": {
+        "h": 54,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ],
+        "radius": 27,
+        "bg": "rgb(214, 8, 8)"
+      }
+    },
+    "gaps": {
+      "dialogCancel→dialogConfirm": 16
+    }
+  },
+  "toast-open@1440-light": {
+    "elements": {
+      "toast": {
+        "radius": 8,
+        "bg": "rgb(242, 242, 242)"
+      },
+      "toastText": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      }
+    },
+    "gaps": {}
+  },
+  "tooltip-open@1440-light": {
+    "elements": {
+      "tooltip": {
+        "radius": 8,
+        "bg": "rgb(0, 0, 0)",
+        "pad": [
+          8,
+          16,
+          8,
+          16
+        ]
+      },
+      "tooltipText": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)"
+      }
+    },
+    "gaps": {}
+  },
+  "approval@1440-dark": {
+    "elements": {
+      "title": {
+        "font": {
+          "size": 22,
+          "lineHeight": 28,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)"
+      },
+      "searchLabel": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(255, 255, 255, 0.65)"
+      },
+      "searchInput": {
+        "h": 56,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgba(138, 145, 158, 0.66)"
+        },
+        "bg": "rgb(0, 0, 0)"
+      },
+      "searchText": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)"
+      },
+      "segmented": {
+        "h": 38,
+        "radius": 19,
+        "bg": "rgb(26, 26, 26)"
+      },
+      "segmentThumb": {
+        "h": 38,
+        "radius": 19,
+        "bg": "rgb(255, 255, 255)"
+      },
+      "segmentActive": {
+        "h": 38,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "segment": {
+        "h": 38,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)"
+      },
+      "row": {
+        "h": 64,
+        "radius": 8
+      },
+      "rowTitle": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)"
+      },
+      "rowDescription": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(255, 255, 255, 0.65)"
+      },
+      "rowAvatar": {
+        "h": 32,
+        "w": 32
+      },
+      "tag": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 600
+        },
+        "h": 24,
+        "pad": [
+          2,
+          4,
+          2,
+          4
+        ],
+        "radius": 4
+      },
+      "selectedRow": {
+        "h": 64
+      }
+    },
+    "gaps": {
+      "searchLabel→searchInput": 4,
+      "selectedRow→row": 16
+    }
+  },
+  "approval-detail@1440-dark": {
+    "elements": {
+      "detailAvatar": {
+        "h": 48,
+        "w": 48
+      },
+      "detailTitle": {
+        "font": {
+          "size": 20,
+          "lineHeight": 25,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)"
+      },
+      "detailMeta": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(255, 255, 255, 0.65)"
+      },
+      "detailsHeading": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)"
+      },
+      "detailsBody": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)"
+      },
+      "detailsCaption": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(255, 255, 255, 0.65)"
+      },
+      "notesLabel": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(255, 255, 255, 0.65)"
+      },
+      "notes": {
+        "h": 100,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgba(138, 145, 158, 0.66)"
+        },
+        "bg": "rgb(0, 0, 0)"
+      },
+      "notesText": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)",
+        "pad": [
+          16,
+          16,
+          16,
+          16
+        ]
+      },
+      "checkbox": {
+        "h": 20,
+        "w": 20,
+        "radius": 4,
+        "border": {
+          "width": 1,
+          "color": "rgb(65, 81, 96)"
+        }
+      },
+      "checkboxLabel": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)"
+      },
+      "approve": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(65, 81, 96)",
+        "h": 54,
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ],
+        "radius": 27
+      },
+      "requestInfo": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(26, 26, 26)",
+        "h": 54,
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ],
+        "radius": 27
+      },
+      "reject": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(243, 9, 9)",
+        "h": 54,
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ],
+        "radius": 27
+      }
+    },
+    "gaps": {
+      "detailTitle→detailMeta": 4,
+      "notesLabel→notes": 4,
+      "approve→requestInfo": 8,
+      "requestInfo→reject": 8
+    }
+  },
+  "extras@1440-dark": {
+    "elements": {
+      "title": {
+        "font": {
+          "size": 22,
+          "lineHeight": 28,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)"
+      },
+      "selectLabel": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(255, 255, 255, 0.65)"
+      },
+      "selectTrigger": {
+        "h": 56,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgba(138, 145, 158, 0.66)"
+        },
+        "bg": "rgb(0, 0, 0)"
+      },
+      "selectValue": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(255, 255, 255, 0.65)"
+      },
+      "dateLabel": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(255, 255, 255, 0.65)"
+      },
+      "dateField": {
+        "h": 56,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgba(138, 145, 158, 0.66)"
+        },
+        "bg": "rgb(0, 0, 0)"
+      },
+      "helpButton": {
+        "h": 40,
+        "w": 40
+      },
+      "headerCell": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(255, 255, 255, 0.65)",
+        "h": 54
+      },
+      "bodyRow": {
+        "h": 72
+      },
+      "bodyCell": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)"
+      },
+      "rowMenuButton": {
+        "h": 40,
+        "w": 40
+      },
+      "rejectRequest": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(243, 9, 9)",
+        "h": 54,
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ],
+        "radius": 27
+      },
+      "save": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(26, 26, 26)",
+        "h": 54,
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ],
+        "radius": 27
+      },
+      "forwardDisabled": {
+        "h": 54,
+        "opacity": 0.5,
+        "bg": "rgb(49, 61, 72)",
+        "color": "rgb(255, 255, 255)"
+      },
+      "disabledInput": {
+        "h": 56,
+        "border": {
+          "width": 1,
+          "color": "rgba(138, 145, 158, 0.66)"
+        },
+        "bg": "rgb(0, 0, 0)",
+        "opacity": 0.5
+      },
+      "disabledInputText": {
+        "color": "rgb(255, 255, 255)",
+        "opacity": 0.5
+      },
+      "disabledCheckbox": {
+        "border": {
+          "width": 1,
+          "color": "rgb(65, 81, 96)"
+        },
+        "bg": "rgb(65, 81, 96)",
+        "opacity": 0.5
+      },
+      "disabledCheckboxLabel": {
+        "color": "rgb(255, 255, 255)",
+        "opacity": 0.5
+      }
+    },
+    "gaps": {
+      "selectLabel→selectTrigger": 4,
+      "bodyRow→bodyRow2": 0,
+      "rejectRequest→save": 8
+    }
+  },
+  "select-open@1440-dark": {
+    "elements": {
+      "listbox": {
+        "radius": 16,
+        "bg": "rgb(51, 51, 51)"
+      },
+      "option": {
+        "h": 60,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)"
+      }
+    },
+    "gaps": {}
+  },
+  "date-open@1440-dark": {
+    "elements": {
+      "calendar": {
+        "radius": 16,
+        "bg": "rgb(51, 51, 51)"
+      },
+      "month": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)"
+      },
+      "day": {
+        "h": 40,
+        "w": 40,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)"
+      }
+    },
+    "gaps": {}
+  },
+  "menu-open@1440-dark": {
+    "elements": {
+      "menu": {
+        "radius": 16,
+        "bg": "rgb(0, 0, 0)"
+      },
+      "menuItem": {
+        "h": 48,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)"
+      },
+      "menuItemNegative": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(243, 9, 9)"
+      }
+    },
+    "gaps": {}
+  },
+  "dialog-open@1440-dark": {
+    "elements": {
+      "dialog": {
+        "w": 612,
+        "radius": 8,
+        "bg": "rgb(51, 51, 51)"
+      },
+      "dialogTitle": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)"
+      },
+      "dialogBody": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)"
+      },
+      "dialogCancel": {
+        "h": 54,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ],
+        "radius": 27,
+        "bg": "rgb(26, 26, 26)"
+      },
+      "dialogConfirm": {
+        "h": 54,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ],
+        "radius": 27,
+        "bg": "rgb(243, 9, 9)"
+      }
+    },
+    "gaps": {
+      "dialogCancel→dialogConfirm": 16
+    }
+  },
+  "toast-open@1440-dark": {
+    "elements": {
+      "toast": {
+        "radius": 8,
+        "bg": "rgb(26, 26, 26)"
+      },
+      "toastText": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)"
+      }
+    },
+    "gaps": {}
+  },
+  "tooltip-open@1440-dark": {
+    "elements": {
+      "tooltip": {
+        "radius": 8,
+        "bg": "rgb(255, 255, 255)",
+        "pad": [
+          8,
+          16,
+          8,
+          16
+        ]
+      },
+      "tooltipText": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      }
+    },
+    "gaps": {}
+  }
+}

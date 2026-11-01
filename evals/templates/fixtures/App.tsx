@@ -18,6 +18,8 @@ import { SimpleLayout } from "../layout/SimpleLayout";
 import { MultiColumnLayout } from "../layout/MultiColumnLayout";
 import { ImmersiveLayout } from "../layout/ImmersiveLayout";
 import { Logo } from "../layout/Logo";
+import { Approval } from "./Approval";
+import { Extras } from "./Extras";
 import type { ActivePane } from "../layout/ResponsivePanes";
 import type { NavItem } from "../layout/navItems";
 
@@ -108,7 +110,9 @@ export function App() {
       <Logo /><Logo tone="light" />
       <button onClick={() => setDark(!dark)}>Toggle theme</button>
       {clicked && <Text role="status">Completed</Text>}
-    </Box> : layout === "on-color" ? <OnColorSamples />
+    </Box> : layout === "approval" ? <Approval />
+      : layout === "extras" ? <Extras />
+      : layout === "on-color" ? <OnColorSamples />
       : layout === "spectrum" ? <SpectrumSamples />
       : layout === "app" ? <AppShell {...props} />
       : layout === "content" ? <ContentLayout {...props} />
