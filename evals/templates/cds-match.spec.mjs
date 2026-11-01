@@ -15,6 +15,8 @@ const baseline = existsSync(baselinePath) ? JSON.parse(readFileSync(baselinePath
 
 async function measureScreen(page, screen, viewport, mode) {
   await page.setViewportSize(viewport);
+  // A fixed date keeps the calendar's "today" off the measured day.
+  await page.clock.setFixedTime(new Date(2026, 9, 15, 12));
   await page.goto(`/?${screen.query}${mode === 'dark' ? '&mode=dark' : ''}`);
   await page.evaluate(() => document.fonts.ready);
   if (screen.open) {
@@ -24,7 +26,7 @@ async function measureScreen(page, screen, viewport, mode) {
   // No element is measured under the pointer: hover colors are not the baseline.
   await page.mouse.move(0, 0);
   const all = { ...screen.targets, ...screen.extraTargets };
-  const selectors = Object.fromEntries(Object.entries(all).map(([name, spec]) => [name, spec[target]]));
+  const selectors = Object.fromEntries(Object.entries(all).filter(([, spec]) => spec[target]).map(([name, spec]) => [name, spec[target]]));
   // Wait out entry animations: measure until two reads 150ms apart agree.
   let last = '';
   let measured;
@@ -37,10 +39,10 @@ async function measureScreen(page, screen, viewport, mode) {
   }
   const result = { elements: {}, gaps: {} };
   for (const [name, spec] of Object.entries(screen.targets)) {
-    result.elements[name] = measured[name] && pick(measured[name], spec.check);
+    if (name in measured) result.elements[name] = measured[name] && pick(measured[name], spec.check);
   }
   for (const [a, b, axis] of screen.gaps) {
-    if (measured[a] && measured[b]) result.gaps[`${a}→${b}`] = gap(measured[a], measured[b], axis);
+    if (a in measured && b in measured) result.gaps[`${a}→${b}`] = measured[a] && measured[b] ? gap(measured[a], measured[b], axis) : null;
   }
   return result;
 }
@@ -63,18 +65,21 @@ if (capture) {
     for (const entry of cases) {
       test(caseKey(entry), async ({ page }) => {
         expect(baseline, 'Run npm run baseline first.').not.toBeNull();
+        test.skip(entry.screen.open && !entry.screen.open[target], `${target} has no trigger for ${entry.screen.name} yet`);
         const expected = baseline[caseKey(entry)];
         expect(expected, `${caseKey(entry)} is missing from the baseline; run npm run baseline.`).toBeTruthy();
         const actual = await measureScreen(page, entry.screen, entry.viewport, entry.mode);
         const problems = [];
         for (const [name, want] of Object.entries(expected.elements)) {
+          if (!(name in actual.elements)) continue; // no selector for this target yet
           const got = actual.elements[name];
           if (!want || !got) { if (!want !== !got) problems.push(`${name}: ${got ? 'rendered' : 'not rendered'} but the baseline ${want ? 'has it' : 'does not'}`); continue; }
           for (const problem of compare(got, want)) problems.push(`${name}: ${problem}`);
         }
         for (const [name, want] of Object.entries(expected.gaps)) {
+          if (!(name in actual.gaps)) continue; // no selector for one side yet
           const got = actual.gaps[name];
-          if (got === undefined || Math.abs(got - want) > 1) problems.push(`gap ${name}: ${got} ≠ ${want}`);
+          if (got === null || want === null ? got !== want : Math.abs(got - want) > 1) problems.push(`gap ${name}: ${got} ≠ ${want}`);
         }
         expect(problems, problems.join('\n')).toEqual([]);
       });

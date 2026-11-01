@@ -5,7 +5,8 @@ import { Box, Divider, HStack, VStack } from "@coinbase/cds-web/layout";
 import { Button } from "@coinbase/cds-web/buttons";
 import { Text } from "@coinbase/cds-web/typography";
 import { ListCell } from "@coinbase/cds-web/cells";
-import { Checkbox, NativeTextArea, SegmentedControl, TextInput } from "@coinbase/cds-web/controls";
+import { Checkbox, NativeTextArea, TextInput } from "@coinbase/cds-web/controls";
+import { SegmentedTabs } from "@coinbase/cds-web/tabs";
 import { Tag } from "@coinbase/cds-web/tag";
 import { Avatar } from "@coinbase/cds-web/media";
 import { AppShell } from "../layout/AppShell";
@@ -24,6 +25,7 @@ const Hook = ({ name, children }: { name: string; children: ReactNode }) =>
 
 export function Approval() {
   const [tab, setTab] = useState("all");
+  const tabs = [{ id: "all", label: "ทั้งหมด" }, { id: "pending", label: "รอ" }, { id: "approved", label: "อนุมัติ" }];
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState(requests[0].id);
   const [confirmed, setConfirmed] = useState(false);
@@ -39,10 +41,7 @@ export function Approval() {
         <TextInput label="ค้นหา / Search" placeholder="ชื่อผู้ขอ" value={query} onChange={(e) => setQuery(e.target.value)} />
       </Hook>
       <Hook name="segmented">
-        <SegmentedControl
-          options={[{ value: "all", label: "ทั้งหมด" }, { value: "pending", label: "รอ" }, { value: "approved", label: "อนุมัติ" }]}
-          value={tab} onChange={setTab}
-        />
+        <SegmentedTabs accessibilityLabel="สถานะ / Status" tabs={tabs} activeTab={tabs.find((t) => t.id === tab) ?? null} onChange={(t) => setTab(t?.id ?? "all")} />
       </Hook>
       <Hook name="list">
         <VStack>
@@ -81,10 +80,7 @@ export function Approval() {
         </VStack>
       </Hook>
       <Hook name="notes">
-        <VStack gap={1}>
-          <Text as="label" font="label1" htmlFor="notes">บันทึก / Notes</Text>
-          <NativeTextArea id="notes" rows={3} placeholder="เหตุผลประกอบการพิจารณา" />
-        </VStack>
+        <TextInput label="บันทึก / Notes" inputNode={<NativeTextArea rows={3} placeholder="เหตุผลประกอบการพิจารณา" />} />
       </Hook>
       <Hook name="confirm">
         <Checkbox checked={confirmed} onChange={() => setConfirmed(!confirmed)}>ตรวจสอบเอกสารครบแล้ว</Checkbox>

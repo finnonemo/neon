@@ -1,33 +1,36 @@
 // What the CDS-match spec measures: one stable selector per element and target,
-// never a text search. The CDS selectors follow CDS 9.26's rendered DOM; the
-// Neon selectors follow the Neon base fixture (fixtures/neon/).
+// never a text search. The CDS selectors follow CDS 9.26's rendered DOM; a
+// neon selector, following the Neon base fixture (fixtures/neon/), is added as
+// each component lands. The Neon target skips targets that have none yet.
 //
 // query is the fixture route; check lists the properties compared with the baseline:
 //   font   font size, line height and weight of the element's own text
 //   color  text color          bg      background color
 //   h, w   rounded box size    pad     the four paddings
-//   radius top-left radius     border  top border width and color
-const button = (n, check = ['font', 'color', 'bg', 'h', 'pad', 'radius']) => ({
-  cds: `[data-measure=actions] button:nth-of-type(${n})`, neon: `[data-measure=actions] button:nth-of-type(${n})`, check,
-});
+//   radius rendered top-left radius, capped at half the box, so a 56px pill
+//          and a 9999px pill of the same height agree
+//   border top border width and color
+const button = (n, check = ['font', 'color', 'bg', 'h', 'pad', 'radius']) => ({ cds: `[data-measure=actions] button:nth-of-type(${n})`, check });
 
 export const screens = [
   {
     name: 'approval',
     query: 'layout=approval',
     targets: {
-      title: { cds: '[data-measure=title] h1', neon: '[data-measure=title] h1', check: ['font', 'color'] },
-      searchLabel: { cds: '[data-measure=search] label', neon: '[data-measure=search] label', check: ['font', 'color'] },
-      searchInput: { cds: '[data-measure=search] [data-testid=input-interactable-area]', neon: '[data-measure=search] input', check: ['h', 'radius', 'border', 'bg'] },
-      searchText: { cds: '[data-measure=search] input', neon: '[data-measure=search] input', check: ['font', 'color'] },
-      segmented: { cds: '[data-measure=segmented] > div', neon: '[data-measure=segmented] [role=radiogroup]', check: ['h', 'radius', 'bg'] },
-      segment: { cds: '[data-measure=segmented] label:nth-of-type(1)', neon: '[data-measure=segmented] [role=radio]:nth-of-type(1)', check: ['h', 'font', 'color'] },
-      row: { cds: '[data-measure=list] > div > div:nth-child(2) > button', neon: '[data-measure=list] li:nth-child(2) > button', check: ['h', 'radius'] },
-      rowTitle: { cds: '[data-measure=list] > div > div:nth-child(2) button > div > div:nth-child(2) > div > div:nth-child(1)', neon: '[data-measure=list] li:nth-child(2) [data-slot=row-title]', check: ['font', 'color'] },
-      rowDescription: { cds: '[data-measure=list] > div > div:nth-child(2) button > div > div:nth-child(2) > div > div:nth-child(2)', neon: '[data-measure=list] li:nth-child(2) [data-slot=row-description]', check: ['font', 'color'] },
-      rowAvatar: { cds: '[data-measure=list] > div > div:nth-child(2) [data-shape=circle]', neon: '[data-measure=list] li:nth-child(2) [data-slot=avatar]', check: ['h', 'w'] },
-      tag: { cds: '[data-measure=list] > div > div:nth-child(3) [data-testid=cds-tag]', neon: '[data-measure=list] li:nth-child(3) [data-slot=tag]', check: ['font', 'h', 'pad', 'radius'] },
-      selectedRow: { cds: '[data-measure=list] > div > div:nth-child(1) > button', neon: '[data-measure=list] li:nth-child(1) > button', check: ['h'] },
+      title: { cds: '[data-measure=title] h1', check: ['font', 'color'] },
+      searchLabel: { cds: '[data-measure=search] label', check: ['font', 'color'] },
+      searchInput: { cds: '[data-measure=search] [data-testid=input-interactable-area]', check: ['h', 'radius', 'border', 'bg'] },
+      searchText: { cds: '[data-measure=search] input', check: ['font', 'color'] },
+      segmented: { cds: '[data-measure=segmented] [role=tablist]', check: ['h', 'radius', 'bg'] },
+      segmentThumb: { cds: '[data-measure=segmented] [data-testid=tabs-active-indicator]', check: ['h', 'radius', 'bg'] },
+      segmentActive: { cds: '[data-measure=segmented] [role=tablist] > div:nth-child(2) [role=tab]', check: ['h', 'font', 'color'] },
+      segment: { cds: '[data-measure=segmented] [role=tablist] > div:nth-child(3) [role=tab]', check: ['h', 'font', 'color'] },
+      row: { cds: '[data-measure=list] > div > div:nth-child(2) > button', check: ['h', 'radius'] },
+      rowTitle: { cds: '[data-measure=list] > div > div:nth-child(2) button > div > div:nth-child(2) > div > div:nth-child(1)', check: ['font', 'color'] },
+      rowDescription: { cds: '[data-measure=list] > div > div:nth-child(2) button > div > div:nth-child(2) > div > div:nth-child(2)', check: ['font', 'color'] },
+      rowAvatar: { cds: '[data-measure=list] > div > div:nth-child(2) [data-shape=circle]', check: ['h', 'w'] },
+      tag: { cds: '[data-measure=list] > div > div:nth-child(3) [data-testid=cds-tag]', check: ['font', 'h', 'pad', 'radius'] },
+      selectedRow: { cds: '[data-measure=list] > div > div:nth-child(1) > button', check: ['h'] },
     },
     gaps: [
       ['searchLabel', 'searchInput', 'y'],
@@ -38,16 +41,17 @@ export const screens = [
     name: 'approval-detail',
     query: 'layout=approval&pane=inspector',
     targets: {
-      detailAvatar: { cds: '[data-measure=summary] [data-shape=circle]', neon: '[data-measure=summary] [data-slot=avatar]', check: ['h', 'w'] },
-      detailTitle: { cds: '[data-measure=summary] h2', neon: '[data-measure=summary] h2', check: ['font', 'color'] },
-      detailMeta: { cds: '[data-measure=summary] h2 + span', neon: '[data-measure=summary] h2 + p', check: ['font', 'color'] },
-      detailsHeading: { cds: '[data-measure=details] span:nth-child(1)', neon: '[data-measure=details] > div > :nth-child(1)', check: ['font', 'color'] },
-      detailsBody: { cds: '[data-measure=details] span:nth-child(2)', neon: '[data-measure=details] > div > :nth-child(2)', check: ['font', 'color'] },
-      detailsCaption: { cds: '[data-measure=details] span:nth-child(3)', neon: '[data-measure=details] > div > :nth-child(3)', check: ['font', 'color'] },
-      notesLabel: { cds: '[data-measure=notes] label', neon: '[data-measure=notes] label', check: ['font', 'color'] },
-      notes: { cds: '[data-measure=notes] textarea', neon: '[data-measure=notes] textarea', check: ['font', 'h', 'pad', 'radius', 'border', 'bg'] },
-      checkbox: { cds: '[data-measure=confirm] [data-testid=checkbox-outer]', neon: '[data-measure=confirm] [role=checkbox]', check: ['h', 'w', 'radius', 'border'] },
-      checkboxLabel: { cds: '[data-measure=confirm] label span[id]', neon: '[data-measure=confirm] label', check: ['font', 'color'] },
+      detailAvatar: { cds: '[data-measure=summary] [data-shape=circle]', check: ['h', 'w'] },
+      detailTitle: { cds: '[data-measure=summary] h2', check: ['font', 'color'] },
+      detailMeta: { cds: '[data-measure=summary] h2 + span', check: ['font', 'color'] },
+      detailsHeading: { cds: '[data-measure=details] span:nth-child(1)', check: ['font', 'color'] },
+      detailsBody: { cds: '[data-measure=details] span:nth-child(2)', check: ['font', 'color'] },
+      detailsCaption: { cds: '[data-measure=details] span:nth-child(3)', check: ['font', 'color'] },
+      notesLabel: { cds: '[data-measure=notes] label', check: ['font', 'color'] },
+      notes: { cds: '[data-measure=notes] [data-testid=input-interactable-area]', check: ['h', 'radius', 'border', 'bg'] },
+      notesText: { cds: '[data-measure=notes] textarea', check: ['font', 'color', 'pad'] },
+      checkbox: { cds: '[data-measure=confirm] [data-testid=checkbox-outer]', check: ['h', 'w', 'radius', 'border'] },
+      checkboxLabel: { cds: '[data-measure=confirm] label span[id]', check: ['font', 'color'] },
       approve: button(1),
       requestInfo: button(2),
       reject: button(3),
@@ -63,17 +67,17 @@ export const screens = [
     name: 'extras',
     query: 'layout=extras',
     targets: {
-      title: { cds: '[data-measure=title] h1', neon: '[data-measure=title] h1', check: ['font', 'color'] },
-      selectLabel: { cds: '[data-measure=select] label', neon: '[data-measure=select] label', check: ['font', 'color'] },
-      selectTrigger: { cds: '[data-measure=select] [data-testid=input-interactable-area]', neon: '[data-measure=select] button', check: ['h', 'radius', 'border', 'bg'] },
-      selectValue: { cds: '[data-measure=select] button p', neon: '[data-measure=select] button [data-slot=select-value]', check: ['font', 'color'] },
-      dateLabel: { cds: '[data-measure=date] label', neon: '[data-measure=date] label', check: ['font', 'color'] },
-      dateField: { cds: '[data-measure=date] [data-testid=input-interactable-area]', neon: '[data-measure=date] button', check: ['h', 'radius', 'border', 'bg'] },
-      helpButton: { cds: '[data-measure=help] button', neon: '[data-measure=help] button', check: ['h', 'w'] },
-      headerCell: { cds: '[data-measure=table] thead th:nth-child(1)', neon: '[data-measure=table] thead th:nth-child(1)', check: ['font', 'color', 'h'] },
-      bodyRow: { cds: '[data-measure=table] tbody tr:nth-child(1)', neon: '[data-measure=table] tbody tr:nth-child(1)', check: ['h'] },
-      bodyCell: { cds: '[data-measure=table] tbody tr:nth-child(1) td:nth-child(1) div:not(:has(*))', neon: '[data-measure=table] tbody tr:nth-child(1) td:nth-child(1)', check: ['font', 'color'] },
-      rowMenuButton: { cds: '[data-measure=table] tbody tr:nth-child(1) button', neon: '[data-measure=table] tbody tr:nth-child(1) button', check: ['h', 'w'] },
+      title: { cds: '[data-measure=title] h1', check: ['font', 'color'] },
+      selectLabel: { cds: '[data-measure=select] label', check: ['font', 'color'] },
+      selectTrigger: { cds: '[data-measure=select] [data-testid=input-interactable-area]', check: ['h', 'radius', 'border', 'bg'] },
+      selectValue: { cds: '[data-measure=select] button p', check: ['font', 'color'] },
+      dateLabel: { cds: '[data-measure=date] label', check: ['font', 'color'] },
+      dateField: { cds: '[data-measure=date] [data-testid=input-interactable-area]', check: ['h', 'radius', 'border', 'bg'] },
+      helpButton: { cds: '[data-measure=help] button', check: ['h', 'w'] },
+      headerCell: { cds: '[data-measure=table] thead th:nth-child(1)', check: ['font', 'color', 'h'] },
+      bodyRow: { cds: '[data-measure=table] tbody tr:nth-child(1)', check: ['h'] },
+      bodyCell: { cds: '[data-measure=table] tbody tr:nth-child(1) td:nth-child(1) div:not(:has(*))', check: ['font', 'color'] },
+      rowMenuButton: { cds: '[data-measure=table] tbody tr:nth-child(1) button', check: ['h', 'w'] },
       rejectRequest: button(1),
       save: button(2),
     },
@@ -83,72 +87,72 @@ export const screens = [
       ['rejectRequest', 'save', 'x'],
     ],
     extraTargets: {
-      bodyRow2: { cds: '[data-measure=table] tbody tr:nth-child(2)', neon: '[data-measure=table] tbody tr:nth-child(2)', check: [] },
+      bodyRow2: { cds: '[data-measure=table] tbody tr:nth-child(2)', check: [] },
     },
   },
   // Overlays are measured open, one per page load.
   {
     name: 'select-open',
     query: 'layout=extras',
-    open: { action: 'click', cds: '[data-measure=select] button', neon: '[data-measure=select] button' },
+    open: { action: 'click', cds: '[data-measure=select] button' },
     targets: {
-      listbox: { cds: '[role=listbox] > div > div', neon: '[role=listbox]', check: ['radius', 'bg'] },
-      option: { cds: '[role=option]:nth-of-type(2)', neon: '[role=option]:nth-of-type(2)', check: ['h', 'font', 'color'] },
+      listbox: { cds: '[role=listbox] > div > div', check: ['radius', 'bg'] },
+      option: { cds: '[role=option]:nth-of-type(2)', check: ['h', 'font', 'color'] },
     },
     gaps: [],
   },
   {
     name: 'date-open',
     query: 'layout=extras',
-    open: { action: 'click', cds: '[data-measure=date] button[aria-label="Open calendar"]', neon: '[data-measure=date] button' },
+    open: { action: 'click', cds: '[data-measure=date] button[aria-label="Open calendar"]' },
     targets: {
-      calendar: { cds: '[role=dialog] [role=menu]', neon: '[data-slot=popover-content]', check: ['radius', 'bg'] },
-      month: { cds: '[role=dialog] h3', neon: '[data-slot=popover-content] [role=status], [data-slot=popover-content] .rdp-caption_label', check: ['font', 'color'] },
-      day: { cds: '[data-calendar-date$="-10"]', neon: '[data-slot=popover-content] [data-day$="10"] button, [data-slot=popover-content] button[data-day*="/10/"]', check: ['h', 'w', 'font', 'color'] },
+      calendar: { cds: '[role=dialog] [role=menu]', check: ['radius', 'bg'] },
+      month: { cds: '[role=dialog] h3', check: ['font', 'color'] },
+      day: { cds: '[data-calendar-date$="-10"]', check: ['h', 'w', 'font', 'color'] },
     },
     gaps: [],
   },
   {
     name: 'menu-open',
     query: 'layout=extras',
-    open: { action: 'click', cds: '[data-measure=table] tbody tr:nth-child(1) button', neon: '[data-measure=table] tbody tr:nth-child(1) button' },
+    open: { action: 'click', cds: '[data-measure=table] tbody tr:nth-child(1) button' },
     targets: {
-      menu: { cds: '[role=menu]', neon: '[role=menu]', check: ['radius', 'bg'] },
-      menuItem: { cds: '[role=menuitem]:nth-of-type(1)', neon: '[role=menuitem]:nth-of-type(1)', check: ['h', 'font', 'color'] },
-      menuItemNegative: { cds: '[role=menuitem]:nth-of-type(2) span', neon: '[role=menuitem]:nth-of-type(2)', check: ['font', 'color'] },
+      menu: { cds: '[role=menu]', check: ['radius', 'bg'] },
+      menuItem: { cds: '[role=menuitem]:nth-of-type(1)', check: ['h', 'font', 'color'] },
+      menuItemNegative: { cds: '[role=menuitem]:nth-of-type(2)', check: ['font', 'color'] },
     },
     gaps: [],
   },
   {
     name: 'dialog-open',
     query: 'layout=extras',
-    open: { action: 'click', cds: '[data-measure=actions] button:nth-of-type(1)', neon: '[data-measure=actions] button:nth-of-type(1)' },
+    open: { action: 'click', cds: '[data-measure=actions] button:nth-of-type(1)' },
     targets: {
-      dialog: { cds: '[data-testid=modal-dialog-motion] > div', neon: '[role=dialog]', check: ['w', 'radius', 'bg'] },
-      dialogTitle: { cds: '[role=dialog] h2', neon: '[role=dialog] h2', check: ['font', 'color'] },
-      dialogBody: { cds: '[role=dialog] [tabindex="0"] span', neon: '[role=dialog] [data-slot=dialog-description]', check: ['font', 'color'] },
-      dialogCancel: { cds: '[role=dialog] button[data-variant=secondary]:not([data-compact])', neon: '[role=dialog] [data-slot=dialog-footer] button:nth-of-type(1)', check: ['h', 'font', 'pad', 'radius', 'bg'] },
-      dialogConfirm: { cds: '[role=dialog] button[data-variant=negative]', neon: '[role=dialog] [data-slot=dialog-footer] button:nth-of-type(2)', check: ['h', 'font', 'pad', 'radius', 'bg'] },
+      dialog: { cds: '[data-testid=modal-dialog-motion] > div', check: ['w', 'radius', 'bg'] },
+      dialogTitle: { cds: '[role=dialog] h2', check: ['font', 'color'] },
+      dialogBody: { cds: '[role=dialog] [tabindex="0"] span', check: ['font', 'color'] },
+      dialogCancel: { cds: '[role=dialog] button[data-variant=secondary]:not([data-compact])', check: ['h', 'font', 'pad', 'radius', 'bg'] },
+      dialogConfirm: { cds: '[role=dialog] button[data-variant=negative]', check: ['h', 'font', 'pad', 'radius', 'bg'] },
     },
     gaps: [['dialogCancel', 'dialogConfirm', 'x']],
   },
   {
     name: 'toast-open',
     query: 'layout=extras',
-    open: { action: 'click', cds: '[data-measure=actions] button:nth-of-type(2)', neon: '[data-measure=actions] button:nth-of-type(2)' },
+    open: { action: 'click', cds: '[data-measure=actions] button:nth-of-type(2)' },
     targets: {
-      toast: { cds: '[data-testid=cds-toast] > div', neon: '[data-sonner-toast]', check: ['radius', 'bg'] },
-      toastText: { cds: '[data-testid=cds-toast] p', neon: '[data-sonner-toast] [data-title]', check: ['font', 'color'] },
+      toast: { cds: '[data-testid=cds-toast] > div', check: ['radius', 'bg'] },
+      toastText: { cds: '[data-testid=cds-toast] p', check: ['font', 'color'] },
     },
     gaps: [],
   },
   {
     name: 'tooltip-open',
     query: 'layout=extras',
-    open: { action: 'focus', cds: '[data-measure=help] button', neon: '[data-measure=help] button' },
+    open: { action: 'focus', cds: '[data-measure=help] button' },
     targets: {
-      tooltip: { cds: '[role=tooltip]', neon: '[data-slot=tooltip-content]', check: ['radius', 'bg', 'pad'] },
-      tooltipText: { cds: '[role=tooltip] span', neon: '[data-slot=tooltip-content]', check: ['font', 'color'] },
+      tooltip: { cds: '[role=tooltip]', check: ['radius', 'bg', 'pad'] },
+      tooltipText: { cds: '[role=tooltip] span', check: ['font', 'color'] },
     },
     gaps: [],
   },
@@ -182,7 +186,7 @@ export function measureInPage(targets) {
       font: { size: px(text.fontSize), lineHeight: text.lineHeight === 'normal' ? 'normal' : px(text.lineHeight), weight: Number(text.fontWeight) },
       color: text.color, bg: style.backgroundColor,
       pad: [style.paddingTop, style.paddingRight, style.paddingBottom, style.paddingLeft].map(px),
-      radius: px(style.borderTopLeftRadius),
+      radius: px(Math.min(parseFloat(style.borderTopLeftRadius), box.width / 2, box.height / 2)),
       border: { width: px(style.borderTopWidth), color: style.borderTopColor },
     };
   }

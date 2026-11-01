@@ -6,7 +6,8 @@ import { Button, IconButton } from "@coinbase/cds-web/buttons";
 import { Text } from "@coinbase/cds-web/typography";
 import { Select } from "@coinbase/cds-web/alpha/select";
 import { DatePicker } from "@coinbase/cds-web/dates";
-import { Dropdown, MenuItem } from "@coinbase/cds-web/dropdown";
+import { Dropdown } from "@coinbase/cds-web/dropdown";
+import { SelectOption } from "@coinbase/cds-web/controls";
 import { Modal, ModalBody, ModalFooter, ModalHeader, Tooltip } from "@coinbase/cds-web/overlays";
 import { useToast } from "@coinbase/cds-web/overlays/useToast";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "@coinbase/cds-web/tables";
@@ -49,7 +50,7 @@ export function Extras() {
               <TableRow key={r.id}>
                 <TableCell title={r.name} /><TableCell title={r.type} /><TableCell title={r.amount} alignItems="flex-end" /><TableCell title={statusLabel[r.status]} />
                 <TableCell>
-                  <Dropdown content={<><MenuItem value="view"><Text font="body">ดูรายละเอียด</Text></MenuItem><MenuItem value="reject"><Text font="body" color="fgNegative">ปฏิเสธ</Text></MenuItem></>}>
+                  <Dropdown content={<><SelectOption value="view" title="ดูรายละเอียด" /><SelectOption value="reject" title={<Text font="headline" color="fgNegative">ปฏิเสธ</Text>} /></>}>
                     <IconButton name="more" accessibilityLabel={`ตัวเลือก ${r.name}`} transparent />
                   </Dropdown>
                 </TableCell>
