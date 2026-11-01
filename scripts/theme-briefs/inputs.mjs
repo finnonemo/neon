@@ -76,17 +76,13 @@ export function loadInputs(root) {
     check(path, data, picksSchema(facts), problems, expected === name ? [] : [`file name must be "${expected}.json" (theme and brief name)`]);
   }
   for (const { path, id, data } of themeTexts) {
-    const extra = themeTextProblems(data, id, facts);
-    if (facts.themes[id]) check(path, data, themeTextSchema, problems, extra);
-    else if (data !== undefined) problems.push(...extra.map((message) => `${path}: ${message}`));
+    if (facts.themes[id]) check(path, data, themeTextSchema, problems, themeTextProblems(data, id, facts));
+    else problems.push(`${path}: no Immersive Theme "${id}"`);
   }
   for (const { path, name, data } of library) {
     if (name === 'shared') check(path, data, sharedSchema, problems);
-    else if (data !== undefined) {
-      const extra = entryProblems(name, data);
-      if (extra.length && !ENTRIES.includes(name)) problems.push(`${path}: ${extra[0]}`);
-      else check(path, data, entrySchema, problems, extra);
-    }
+    else if (!ENTRIES.includes(name)) problems.push(...entryProblems(name, data).map((message) => `${path}: ${message}`));
+    else check(path, data, entrySchema, problems, entryProblems(name, data));
   }
   return { facts, presets, picks, themeTexts, library, problems };
 }

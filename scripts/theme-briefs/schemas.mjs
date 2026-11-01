@@ -158,7 +158,6 @@ const words = (value) => value.trim().split(/\s+/).filter(Boolean).length;
 
 // Theme texts never go stale when a theme is added: no ratios, percentages, superlatives or comparisons.
 export function themeTextProblems(data, id, facts) {
-  if (!facts.themes[id]) return [`no Immersive Theme "${id}"`];
   const problems = [];
   const others = Object.values(facts.themes).filter((theme) => theme.id !== id).map((theme) => theme.label);
   for (const key of ['mood', 'sibling']) {
