@@ -552,6 +552,12 @@ test('scripted-only refuses to drop hand-added prose it cannot place', (t) => {
       /^registry\/theme-briefs\/club-run\.md: "### Do" has 7 bullets, more than its 5 stock bullets and the occasion preset's 1; not rewritten$/m],
     'a paragraph after the Brand Floor sentence': [briefText.replace(BRAND_FLOOR, `${BRAND_FLOOR}\n\nNo stock photos.`),
       /^registry\/theme-briefs\/club-run\.md: Imagery has text after its Brand Floor sentence, which must come last; not rewritten$/m],
+    'a paragraph after a drifted Brand Floor sentence': [briefText.replace(BRAND_FLOOR, `${BRAND_FLOOR.replace('IBM Plex Sans Thai', 'Inter')}\n\nNo stock photos.`),
+      /^registry\/theme-briefs\/club-run\.md: Imagery has text after its Brand Floor sentence, which must come last; not rewritten$/m],
+    'a hand-added section': [briefText.replace('## Quick Start', '## Notes\n\nKeep the start-line photo.\n\n## Quick Start'),
+      /^registry\/theme-briefs\/club-run\.md: section "Notes" is not a Theme Brief section; move its text into a prose section or remove it; not rewritten$/m],
+    'a paragraph added to the header': [briefText.replace('\nClub opens the membership', '\nA note for the team.\n\nClub opens the membership'),
+      /^registry\/theme-briefs\/club-run\.md: the header has 5 paragraphs; it holds the title and tagline, labels, status and mood paragraph only; not rewritten$/m],
   };
   for (const [name, [text, expected]] of Object.entries(cases)) {
     const root = fixture(t, { ...published(), [BRIEF]: text });
@@ -559,6 +565,7 @@ test('scripted-only refuses to drop hand-added prose it cannot place', (t) => {
     assert.equal(status, 1, `${name}: ${out}`);
     assert.match(out, expected, name);
     assert.equal(readFileSync(join(root, BRIEF), 'utf8'), text, name);
+    assert.match(checkOnly(root).out, new RegExp(expected.source.replace('; not rewritten', '; its scripted sections cannot be checked'), 'm'), name);
   }
 });
 

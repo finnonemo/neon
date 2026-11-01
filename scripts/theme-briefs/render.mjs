@@ -261,7 +261,9 @@ function elevation() {
   return '## Elevation\n\n- **None.** The tokens define no shadow. Separate surfaces with tint steps, not shadows or borders.';
 }
 
-const brandFloor = (facts) => `Imagery never carries another brand's logo, copy or look, and the Finnomena logo and ${facts.scale.typeface} stay on every screen.`;
+// Its opening is fixed, so a paragraph after it is found even when the typeface has changed.
+const BRAND_FLOOR_OPENING = "Imagery never carries another brand's";
+const brandFloor = (facts) => `${BRAND_FLOOR_OPENING} logo, copy or look, and the Finnomena logo and ${facts.scale.typeface} stay on every screen.`;
 
 function imagery({ facts }, prose) {
   return `## Imagery\n\n${prose.imagery.paragraph}\n\n${brandFloor(facts)}`;
@@ -311,7 +313,12 @@ export function readProse(markdown, brief) {
     if (!sections.has(heading)) problems.push(`section "${heading}" is missing, so its prose cannot be read`);
     return sections.get(heading) ?? '';
   };
+  for (const heading of sections.keys()) {
+    if (heading !== HEADER && !SECTIONS.includes(heading)) problems.push(`section "${heading}" is not a Theme Brief section; move its text into a prose section or remove it`);
+  }
   const head = section(HEADER);
+  // Title and tagline, labels, status, mood: anything more would be dropped on a rewrite.
+  if (paragraphs(head).length > 4) problems.push(`the header has ${paragraphs(head).length} paragraphs; it holds the title and tagline, labels, status and mood paragraph only`);
   const tagline = head.split('\n').find((line) => line.startsWith('> '))?.slice(2);
   if (tagline === undefined) problems.push('the header has no "> " tagline line');
   const mood = paragraphs(head).at(-1)?.split('\n') ?? [];
@@ -340,7 +347,7 @@ export function readProse(markdown, brief) {
 
   const imageryParts = paragraphs(body(section('Imagery')));
   if (imageryParts.length < 2) problems.push('Imagery must keep its prose and the Brand Floor sentence as separate paragraphs');
-  else if (imageryParts.slice(0, -1).includes(brandFloor(brief.facts))) problems.push('Imagery has text after its Brand Floor sentence, which must come last');
+  else if (imageryParts.slice(0, -1).some((part) => part.startsWith(BRAND_FLOOR_OPENING))) problems.push('Imagery has text after its Brand Floor sentence, which must come last');
   const layout = body(section('Layout'));
   const guide = section('Agent Prompt Guide').split(PROMPTS_LABEL);
   if (guide.length < 2) problems.push(`Agent Prompt Guide has no ${PROMPTS_LABEL} label`);
