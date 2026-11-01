@@ -90,6 +90,10 @@ _Avoid_: strength, mix, Finnomena level
 The Finnomena properties no Brand Intensity may remove: the Finnomena logo, Finnomena typeface, at least one identifiable Finnomena color, accessible contrast, and the absence of any source brand's logo, imagery, copy or product names.
 _Avoid_: minimum branding, baseline
 
+**Gradient Recipe**:
+A named Finnomena gradient built only from palette steps, used on a Reference-led Campaign Page (an Immersive Theme uses none) instead of any Reference Design's own gradient colors; provisional until a design owner approves it.
+_Avoid_: brand gradient, gradient token
+
 ### Readiness
 
 **Brand-ready**:

@@ -15,6 +15,7 @@ Run each request with the named context, first against the baseline and then the
 | Make the buttons clearer after Finnomena was established | Retains brand intent without repeated onboarding |
 | Build a CDS settings screen with no Finnomena context | Does not infer Finnomena branding from CDS alone |
 | Build a Finnomena event landing page from an attached Refero reference design | Starts at Blended without asking; keeps reference geometry; Finnomena palette, IBM Plex Sans Thai and logo; no source-brand name, copy or imagery; offers the dial |
+| Build a Finnomena landing page from a reference design whose hero uses a multi-hue gradient | Keeps the gradient's placement and direction; its stops become a gradient recipe from `theme/tokens/colors.json`; no reference hue survives; hero text is readable at every stop beneath it |
 | Follow-up: "ให้ดู finnomena มากขึ้น" | Moves exactly one level toward Finnomena-led; content, flow and composition unchanged |
 | Follow-up: "use the reference's own colors and font" at Reference-led | Stays at Reference-led and explains the Brand Floor; reference colors may stay with at least one Finnomena color; no source font |
 | Reference-led dark immersive event page; follow-up "change the yellow CTA to a white button" | White action with a dark label; no navy or yellow forced back; IBM Plex Sans Thai and at least one Finnomena color remain; the shared theme mapping is untouched |
@@ -26,9 +27,15 @@ Run each request with the named context, first against the baseline and then the
 | Campaign page promoting a fund with return figures | Brand-ready; labeled disclaimer placeholder; no drafted regulatory wording or invented figures |
 | Recruiting page with a sign-up form and no named form service | Asks for the approved service; without one, no invented endpoint; Brand-ready |
 | Event page with no forms or investment content | Ship-ready even with failed or unverified checklist items, which are listed as the employee's pre-launch to-dos; static build; does not deploy. See [Readiness](#readiness) |
+| Blended event page from a motion-heavy reference design | Under reduced motion every section is visible, no content waits on a reveal script, and the heading is readable at first paint; Ship-ready checklist evidence names the production preview for 375px and 1440px. See [Motion safety](#motion-safety) |
+| Build a Finnomena recruiting event page (date, place and link supplied; employee quotes and partner logos asked for but not supplied) | The report lists the claims; date and place appear on the first screen at 375px; no headline wraps past two rendered lines at 375 or 1440; no invented quotes, logos, counts or returns, and sample content is a pre-launch to-do. See [Campaign Page content](#campaign-page-content) |
 | Colors-only restyle of a Tailwind v4 app that uses stock utilities only | See [Tailwind colors-only regression](#tailwind-colors-only-regression) |
+| Restyle a v0 shadcn app to Finnomena, with and without a browser tool | The report cites the shipped browser probe's results at 375px and 1440px, or says the probe was not run and marks those checks unverified. See [Browser probe in verification](#browser-probe-in-verification) |
 | Restyle a v0/Lovable React + Tailwind v4 + shadcn project to Finnomena | Detects shadcn on v4; edits `:root`/`.dark` by role and pair; leaves `@theme inline`; installs no CDS. See [shadcn on Tailwind v4 restyle](#shadcn-on-tailwind-v4-restyle) |
 | Rebuild an existing React prototype on CDS; colors-only and feature requests on the same apps | See [CDS rebuild](#cds-rebuild) |
+| Build a Back Office fee-report screen with mock data | Totals equal the sum of rows; numbers right-aligned with tabular figures; a fall in fees takes the color of its declared good direction; a zero prints as `0`; sample values appear in the Handoff Summary. See [Sample figures](#sample-figures) |
+| Build a Finnomena request tracker | At 1440×900 the list (heading and at least three complete rows) and the add-request action are visible on load; a request's detail is reachable in one click. See [First screen](#first-screen) |
+| Build a Back Office fee-report screen with mock data (first screen) | At 1440×900 the per-fund table shows its heading and at least three complete rows on load, with no summary band repeating totals the table carries. See [First screen](#first-screen) |
 
 Verdicts are pass, fail or unverified for routing, scope, resource retrieval, component correctness, color roles, feature completion, responsive behavior and evidence honesty. Link actual artifacts. Do not turn a successful retrieval simulation into a claim that an app was built or looked better.
 
@@ -96,6 +103,67 @@ On the original items main already passed: its format sections and the adapter w
 
 Grading: `node evals/skills/grade-restyle.mjs --source <fixture> --result <case>/shadcn-v4-app` checks the first and last pass items: only stylesheets changed, `@theme inline` byte-identical, `--chart-*` and `--radius` kept, build passes. Add `--shots <name>` to also build the result into `.local/shots/<name>`, then run `node evals/skills/run-probe.mjs <name> --widths 1024 --dark-class`. That run reports badges and other rounded fills that blend into their card as `sameFill`, and controls on dark fills under `lowContrast`. Run again without `--dark-class` for light. Pairs, `--ring`, `--accent` and ghost hovers stay manual. On the three runs above, the grader passed all four checks for each. The dark probe flagged both secondary badges at 1:1 for Before and the first revision, and nothing for the second; no run had low-contrast controls. The stock fixture's light secondary badge reads 1.09:1.
 
+## Browser probe in verification
+
+The shared checklist's Measure step evaluates the shipped [browser-probe.js](../../skills/neon-redesign/references/browser-probe.js) at 375px and 1440px when a browser tool can run JavaScript. Without such a tool, the run says the probe was not run, marks those checks unverified and gives the probe at both widths as the recheck. Fixture and request: the [shadcn on Tailwind v4 restyle](#shadcn-on-tailwind-v4-restyle) above, verbatim.
+
+Pass requires the report to cite the probe's per-width results, or to state that the probe was not run and name both widths as the recheck.
+
+November 2026, Codex 0.162.1, run through `run-codex-case.mjs`. Codex has no browser tool, so these runs could exercise only the fallback. Every run read verification.md.
+
+| Item | Before (main at `97ad7b4`) | After, first sample | After, second sample (report wording added) |
+| --- | --- | --- | --- |
+| Browser attempt | Tried to launch Chromium through a cached `playwright-core`; it failed | None | None |
+| Report | "Browser checks were blocked by Chrome failing to launch." | "browser checks remain unverified"; an earlier message names 375px and 1440px | "Browser checks remain unverified"; "Recheck both modes at 375px and 1440px before release." |
+| Probe named | No | No | No |
+| Grader | Pass | Build not run: `npm ci` was interrupted | Pass |
+| Verdict | Fail | Fail | Partial: unverified and both widths, probe not named |
+
+A third sample moved the reporting rule into item 5 ("Name the browser probe's results per width, or state that it was not run…") and opened the Measure bullet with "whether or not a browser is available". It read verification.md, passed the grader and reported "Browser checks remain unverified; recheck both modes at 375px and 1440px", without naming the probe: Partial again. In every revised run the case runner found the plugin Codex installed identical to the package, so the probe reaches an installed host.
+
+The evaluator then took the browser-available path with the shipped copy. `run-probe.mjs` evaluates the probe's text the way the Measure step asks. It ran on the Before build and the second After build at 375px and 1440px, light and `.dark`. `viewportWidth` matched each width, and both builds came back clean in every category. Limits: one sample of Before and three of After, each on a different wording, Codex only, the agent never ran the probe itself, and no sample named the probe in its report, so this case does not yet pass.
+
+Review then removed "whether or not a browser is available" from the Measure bullet, which contradicted its fallback, and made the fallback name the probe as not run with both widths as the recheck. Two samples ran that wording in Claude Code 2.1.316 with the package loaded through `--plugin-dir`, and an evaluator-written MCP browser tool (navigate, resize, evaluate, screenshot, console) backed by headless Chromium. Permissions allowed file tools and the browser tool; the shell was denied in the first sample and limited to build, typecheck and listing commands in the second.
+
+| Item | Claude, first sample (no app server) | Claude, second sample (dev server already running) |
+| --- | --- | --- |
+| Read verification.md | Yes | No: read style-migration.md, theme.css and readiness.md only |
+| Browser attempt | Navigated to `localhost:5173`; connection refused | Before/after screenshots, light and dark, its own contrast and add/remove scripts at the default 1440px viewport |
+| Probe evaluated | No | No; never resized to 375px |
+| Report | "The layout and contrast measuring script (the skill's browser probe) was not run. Run it at 375px and 1440px." | Browser checks listed; "Not checked: the 375px mobile width, the browser console and a production build." |
+| Verdict | Pass (fallback) | Fail: browser available, probe not evaluated or named |
+
+The first sample is the only run so far to name the probe, on the fallback path. The second shows the browser path failing upstream of the Measure wording: the run skipped the shared checklist that SKILL.md step 5 links. Limits: one sample per condition, the browser tool and its MCP server are the evaluator's and stayed local, and the permission settings shaped what each run could do. The browser path has still not passed in an agent run, so this case does not pass.
+
+The failing run had followed the two read conditions in SKILL.md that use a read verb or sit in Done: step 3's "read the Tailwind mapping rules … including on the fast path" and Done's readiness link. Step 5 only said "Verify with the shared checklist", and the fast path listed what to skip. Step 5 now says to read the checklist before reporting, on the fast path and for colors-only work. The fast path says it skips installation and audit, not verification. Done ties the report to checklist item 5. Two samples then reran the second sample's setup: same command, permissions, browser tool and dev server at 5173, each on a pristine copy of the fixture. The first ran the package from #66's head plus this change; the second ran main at `0a80f01` (#65 and #66 merged) plus this change. The two packages differ only in #65's item 4 motion wording.
+
+| Item | Claude, third sample | Claude, fourth sample |
+| --- | --- | --- |
+| Read verification.md | Yes, second reference read, before editing | Yes, second reference read, before editing |
+| Read browser-probe.js | Yes, after the first navigate | Yes, after the first navigate |
+| Probe evaluated | The probe's code, comments stripped, at 1440px light and 375px dark; `viewportWidth` 1440 and 375 | The same code wrapped as `window.__probe`, at 1440px light and dark and 375px light and dark; `viewportWidth` 1440 and 375 |
+| Report | "Probe at 1440px (light) and 375px (dark): no horizontal overflow and no fills that disappear into their background." Lists the probe at 1440px dark and 375px light as not run | "Nothing scrolls sideways at either width in either mode" and "nothing in the layout blends into its background"; does not use the word "probe" |
+| Grader | Pass | Pass |
+| Verdict | Pass | Partial: probe read and evaluated at both widths, but its results are not named per width or attributed to the probe |
+
+The fourth sample also reported, from its 375px screenshot, rows whose codes overlap their badges and a Remove button past the card edge. The probe came back clean at 375px because it does not detect content overflowing a fixed-width container. Neither run tried the allowed `npm run build`; each had a listing command denied first and reported the shell as blocked, so the build result is the grader's. Reads, resizes, evaluations and `viewportWidth` were graded from the tool calls and results in each run's `run.jsonl`. Limits: two samples, Claude Code only, the evaluator's MCP browser tool, and no rerun of the fallback path or of Codex with this change. Both runs now read the checklist and evaluate the probe at both widths. Naming the results per width passed once and was partial once, so report-time naming under item 5 remains open, as on Codex.
+
+Item 5 now gives the probe a fixed report line: `Browser probe: 375px …; 1440px …`, or `Browser probe: not run; recheck at 375px and 1440px`. Two more samples reran the third and fourth samples' setup in Claude Code 2.1.316 on main at `be33675` (#68 merged) plus this change: same command, permissions, browser tool and dev server at 5173, run one after the other, each on a pristine fixture copy and a package matching `skills/`.
+
+| Item | Claude, fifth sample | Claude, sixth sample |
+| --- | --- | --- |
+| Read verification.md | Yes, second reference read, before editing | Yes, second reference read, before editing |
+| Read browser-probe.js | Yes, after editing | Yes, after editing |
+| Probe evaluated | The probe's code with a geometry field added to its result, at 1440px light; then a rewrite with shorter names and extra fields as `window.__probe`, at 1440px dark and 375px light and dark; `viewportWidth` 1440 and 375 | The probe's code, unchanged but for one trailing comma, wrapped as `window.__probe`, at 1440px light and dark and 375px light and dark; `viewportWidth` 1440 and 375 |
+| Report | "**Browser probe:** 375px clean in light and dark; 1440px clean in light and dark (no overflow, no blended fills, no unreadable controls)." | "Browser probe: 375px clean in light and dark (…); 1440px clean in light, and no overflow in dark." |
+| Build | Ran `npm run build`: passed | Not tried: a first listing command was denied and the run reported the shell as blocked |
+| Grader | Pass | Pass |
+| Verdict | Pass | Pass |
+
+Both reports also gave the 375px row overlap from screenshots, which the probe does not detect, as above. The fifth sample's own `npx vite` was denied and it measured the evaluator's server. Its 1440px dark and 375px results came from its own rewrite of the probe, not the file's text, so it followed Measure only in part. Limits: two samples, Claude Code only, the evaluator's MCP browser tool, and no Codex rerun. Both runs adopted the line shape, so report-time naming passed here, but two samples cannot show it holds. Codex has not run this wording; none of its four runs above, three of them on revised wording, named the probe.
+
+neon-create step 5 now says to read the checklist before reporting, on the fast path too, and Done ties the report to item 5. Two Claude Code samples ran the [Sample figures](#sample-figures) request verbatim as `/neon:neon-create` into a `.gitkeep`-only folder, with the same plugin and browser tool. Their permissions were broader than the restyle samples': `node`, `npm`, `npx`, `mkdir` and listing commands, and in the second also `cat`, `head`, `cd`, `grep` and `git status`/`ls-files`. Each run's first shell command was a compound that included an unlisted command (`git status`; `pwd` and `git log`). It was denied, and the run reported Bash as blocked. Neither run tried the allowed installer, `npm install` or a dev server: each assembled the starter by hand from the package's template, and neither opened the browser. Both read verification.md, after scaffold.md, which also links it, so the read cannot be attributed to step 5 alone, and no sample ran the old step 5 wording for comparison. Neither read browser-probe.js. Both reports said "Browser probe: not run; recheck at 375px and 1440px." and marked the build, rendered layout and console unverified. Fallback naming passed in both. The neon-create browser path is unexercised: the probe was never evaluated, and nothing was built or rendered for grading.
+
 ## Mock labeling
 
 Fixture: an empty folder. Request, verbatim:
@@ -129,7 +197,7 @@ Pass requires all of:
 
 Run a case with `node evals/skills/run-codex-case.mjs --fixture <app> --case <name> --prompt "<request>"`. It installs the packaged plugin into a private Codex home and checks the installed copy against the package. It gives Codex its own `HOME` and `TMPDIR`; in a check run Codex listed only its built-in and `neon:` skills, with no user-level `ponytail`. Codex still writes to the real `/tmp`: by their logs, hc-s1, hc-s3 and bs-s2 of the re-sample left files there, the scripts named after the fixtures (`/tmp/rebuild-hc.py`, `/tmp/check-batch-parity.cjs`), so delete them before the next run. It retries capacity failures (that path is untested) and deletes the copied `auth.json` on exit. The `authRemoved` field in `summary.json` scans the whole root, so cases running at the same time report each other's live copy as leftover. After all cases finish, check with `find <root> -name auth.json`. Then run `node evals/skills/grade-rebuild.mjs --source <case>/<app> --rebuild <case>/<app>-cds --shots <name>`, which prints pass or FAIL for the source, stylesheet, test, typecheck, build and mock data items, and for source UI libraries in packages and imports (leftover library classes stay a manual check). The CDS-component half of the stylesheet check has flagged only synthetic cases so far; none of the recorded runs put a class on a non-layout CDS component. To record which skill files a case read, run `node evals/skills/reference-reads.mjs <case>...`: it expands brace paths and counts a file as read only when its lines appear in the command output, so a path that is only named, as in `ls`, reads as "named only".
 
-`--shots` builds into `.local/shots`, copies the probe there and adds the `eval-shots` preview server. In the browser, run `eval(await (await fetch('/browser-probe.js')).text())` at 375px and desktop. A hidden pane lays out at width 0. Viewport emulation (`resize_window` at 375×812 and 1440×900) measured true widths even with the pane hidden, so check `viewportWidth` either way. [browser-probe.js](browser-probe.js) reports page overflow, content scrolled sideways at load, sideways-scrolling containers, text counts per font, contrast on dark-background controls, rounded fills within 1.1:1 of what is behind them with no border or shadow (`sameAsParentFill`), nav underlines and dialog fit, naming each element measured. Colors are composited on a canvas, so `oklch()` and translucent fills measure as drawn; until 27 October contrast read `oklch()` channels as `rgb()` and put shadcn v4 controls at 1:1. On the recorded health-check samples at 375px it flagged the first sample's black "Home" label on navy (1.16:1), the sideways-scrolling columns of the second and fourth, and the third's underlined bottom nav; the fifth came back clean. Serif detection was first checked only against an unstyled element injected into the third sample's page, whose `<body>` computes to `Times`; the headless run below found r3's real desktop nav labels in `Times`. Content overflowing a fixed-width container, such as r2's nav labels past the rail, is not detected. Contrast is read from the control's own `color`, only for controls with text or an SVG icon; nav underlines count only on links with text. Before this rule, bs-s5's empty gauge-dot buttons read 1:1 and the starter's image-only Logo link read as an underlined nav link. With both rules, the probe at 375px still flagged r1 to r4 as above, since r3's icon-font glyphs count as text. It also found r2 and r4 loaded already scrolled sideways, by 30px and 52px. On the re-sample's hc-s1 and hc-s3, icon-only bottom nav links read 1.93:1 (default link blue on navy) while their glyphs render white. Inventory items, interactions and dialogs stay manual.
+`--shots` builds into `.local/shots`, copies the probe there and adds the `eval-shots` preview server. In the browser, run `eval(await (await fetch('/browser-probe.js')).text())` at 375px and desktop. A hidden pane lays out at width 0. Viewport emulation (`resize_window` at 375×812 and 1440×900) measured true widths even with the pane hidden, so check `viewportWidth` either way. The probe ships with the skills as [browser-probe.js](../../skills/neon-redesign/references/browser-probe.js), which the shared verification checklist's Measure step evaluates; these evals use that copy. It reports page overflow, content scrolled sideways at load, sideways-scrolling containers, text counts per font, contrast on dark-background controls, rounded fills within 1.1:1 of what is behind them with no border or shadow (`sameAsParentFill`), nav underlines and dialog fit, naming each element measured. Colors are composited on a canvas, so `oklch()` and translucent fills measure as drawn; until 27 October contrast read `oklch()` channels as `rgb()` and put shadcn v4 controls at 1:1. On the recorded health-check samples at 375px it flagged the first sample's black "Home" label on navy (1.16:1), the sideways-scrolling columns of the second and fourth, and the third's underlined bottom nav; the fifth came back clean. Serif detection was first checked only against an unstyled element injected into the third sample's page, whose `<body>` computes to `Times`; the headless run below found r3's real desktop nav labels in `Times`. Content overflowing a fixed-width container, such as r2's nav labels past the rail, is not detected. Contrast is read from the control's own `color`, only for controls with text or an SVG icon; nav underlines count only on links with text. Before this rule, bs-s5's empty gauge-dot buttons read 1:1 and the starter's image-only Logo link read as an underlined nav link. With both rules, the probe at 375px still flagged r1 to r4 as above, since r3's icon-font glyphs count as text. It also found r2 and r4 loaded already scrolled sideways, by 30px and 52px. On the re-sample's hc-s1 and hc-s3, icon-only bottom nav links read 1.93:1 (default link blue on navy) while their glyphs render white. Inventory items, interactions and dialogs stay manual.
 
 Without the preview pane, `node evals/skills/run-probe.mjs` serves each build in `.local/shots` and runs the probe in headless Chromium at 375px and 1440px in light mode, printing one line per build and width (`--json` for the full result, names to limit the builds). `--scheme dark` sets `prefers-color-scheme`, and `--dark-class` adds `dark` to `<html>` after load. It uses Playwright from `evals/templates`, so run `npm ci --prefix evals/templates` first. `--fixture` checks the probe against [probe-fixture.html](probe-fixture.html), whose expected ids cover each filter above, and whose expected contrast values catch a misread color, in light and again with both dark switches; the template-browser workflow runs it whenever the probe changes, then grades the unmodified restyle fixture as its own result and probes it with `--dark-class`. On 27 October the headless run repeated the 375px results above for r1 to r5 and bs-s4 to s6, including r2's 30px and r4's 52px scroll. At 1440px it found five of r3's side-nav labels in `Times` ("Home", "Search", "Analytics", "Insights", "Notifications"), which the evaluator confirmed in the preview pane; the r1 to r5 results recorded above were measured at 375px only.
 
@@ -274,7 +342,7 @@ October 2026, Codex, one sample per revision. The fixture holds `./DESIGN.md`, a
 
 Limits: one sample each, Codex only, source text inspected rather than rendered screens (browser checks were blocked by the sandbox), the 2px radius did not visibly carry over so Blended geometry is only partly shown, follow-up dial moves and Reference-led were not run, and the reference is synthetic rather than a Refero style.
 
-November 2026: [ADR 0003](../../docs/adr/0003-immersive-pages-keep-a-thin-brand-floor.md) thinned the Brand Floor to the logo, IBM Plex Sans Thai and at least one Finnomena color, with white actions allowed on immersive pages. Decision walkthroughs, 1 November 2026, Claude (general-purpose subagents), one sample each, against the uncommitted revision for #70. Fresh agents read the installed skills and reported files read, decisions and the lines behind them; nothing was built or rendered.
+November 2026: [ADR 0004](../../docs/adr/0004-immersive-pages-keep-a-thin-brand-floor.md) thinned the Brand Floor to the logo, IBM Plex Sans Thai and at least one Finnomena color, with white actions allowed on immersive pages. Decision walkthroughs, 1 November 2026, Claude (general-purpose subagents), one sample each, against the uncommitted revision for #70. Fresh agents read the installed skills and reported files read, decisions and the lines behind them; nothing was built or rendered.
 
 - **White CTA follow-up** on a dark campaign page: white fill, navy label, a 3:1 boundary only on light sections, change kept in the page's existing scoped mechanism, shared theme untouched. Pass. It noted that neon-create's "colors-only … follows neon-redesign" line pulls against staying on the CDS path.
 - **Back office "make the primary button white"**: keeps the shared primary navy, asks one scope question, offers only a local exception with a dark label and boundary. Pass.
@@ -283,6 +351,8 @@ November 2026: [ADR 0003](../../docs/adr/0003-immersive-pages-keep-a-thin-brand-
 - **"ยังไม่ใช่ที่ต้องการ" after two rejected builds**: no fourth rebuild; three distinct static directions and rereads the saved note. Pass.
 
 Limits: one sample per case, one model, decisions only; no app was built, so visual quality and the mockups themselves are unverified.
+
+The gradient scenario added with the gradient recipes (November 2026) has not been run; only `gradient-recipes.test.mjs` checks the recipe table against the token export and its contrast claims.
 
 ## Readiness
 
@@ -293,6 +363,96 @@ October 2026, Codex, one sample per case, `$neon-create` from an empty destinati
 - **Event page** (Thai; no forms or investment content, real map and calendar links). On the first rule (`f7fc7fa`), the build passed and nothing was deployed. The report was Brand-ready because browser checks were unverified (sandboxed Chrome would not launch) and no share image was set. That applied the rule as written, which required the checklist to pass, and it failed the scenario's intent. After checklist items became pre-launch to-dos (`f13ac0b`), the same request reported Ship-ready and wrote a readiness list: passed items, plus each unverified item with its action (convert the share SVG to PNG at an absolute URL; open the page at 375, 768 and 1440px and check overflow, keyboard and console; click the map and calendar links). Pass. The final reply named the to-dos only by pointing to that list.
 
 Limits: one sample each, Codex only, no rendered screens (browser launch was blocked in every run), and the recruiting run could not show behavior after an employee names an approved service.
+
+## Motion safety
+
+Fixture: an empty folder holding a `./DESIGN.md` for a fictional analytics brand whose motion "carries the whole page": hero headline words rise from `opacity: 0`, every section below the hero starts at `opacity: 0` until an IntersectionObserver adds a class, plus a marquee, a floating card and a scroll-drawn timeline. Request, verbatim:
+
+> $neon-create Build a Thai event page in this folder for "Finnomena Design Day 2026", a free public design meetup on 12 December 2026 at Finnomena's office. Include the agenda, three speakers, a venue section with this map link https://maps.app.goo.gl/finnomena-office and an add-to-calendar link https://calendar.google.com/calendar/event?eid=design-day. There is no sign-up form. Use ./DESIGN.md as the reference design.
+
+Pass requires all of:
+
+- Under emulated `prefers-reduced-motion: reduce`, every section's text is visible at 375px and 1440px as soon as it is scrolled into view, without waiting for an animation or a reveal script. The evaluator reads every section without scrolling, which is stricter.
+- With the IntersectionObserver stubbed to never fire, no text stays hidden: no hidden starting state waits on a script.
+- The `<h1>` and its children are at full opacity 100ms after `DOMContentLoaded` with default motion.
+- The Ship-ready checklist names the production preview, not the dev server, for the 375px and 1440px check.
+
+November 2026, Codex 0.162.1, one sample per revision, run through `run-codex-case.mjs`. The evaluator built each result with Vite and measured it with a scratch Playwright script.
+
+| Item | Before (main at `97ad7b4`) | After |
+| --- | --- | --- |
+| Read readiness, reference design, verification | Yes | Yes |
+| Reduced motion, 375px and 1440px | Only the hidden "pause animations" button | Nothing hidden by motion; a header label is `display: none` at 375px by layout |
+| Reveal script stubbed | Nothing hidden: sections hide only under a class the script adds | Nothing hidden: no observer |
+| Heading at first paint | Each `<h1>` line at opacity 0, rising in | Full opacity, no entrance animation |
+| 375px/1440px evidence | "development server returns HTTP 200"; recheck says "open the preview" | Pre-launch to-do: "Verify production build and preview at 375px, 800px and 1440px" |
+| Readiness | Ship-ready, to-dos listed | Ship-ready, to-dos listed, plus a reduced-motion to-do |
+| Verdict | Fail: heading, dev-server evidence | Pass |
+
+Both runs built and typechecked, and neither could launch a browser, so each reported rendered checks unverified. After kept less of the reference's motion than Before: one date card floats under `no-preference`, with no hero rise, section reveals or marquee. The skill asks for safe motion, not less of it, so a second sample should show whether this is a pattern. Limits: one sample per revision, Codex only, the motion checks were measured by the evaluator rather than the runs, and both runs wrote working files to the real `/tmp`. The fixture and the evaluator's Playwright script stayed local, so the case is described here rather than rerunnable from the repository. After also wrote a new `./VERIFICATION.md` into the app beside its `./README.md`, which Before did not; this record does not attribute that to the change.
+
+## Sample figures
+
+Fixture: a folder holding only `.gitkeep`. The case runner `git init`s the app folder and the installer refuses a nonempty destination, so the request names a new subfolder. Request, verbatim:
+
+> $neon-create Build a Finnomena Back Office fee-report screen in a new fee-report folder here: fees collected this month per fund and fee type, with totals and the change from last month. There is no backend yet, so use mock data.
+
+Pass requires all of:
+
+- Totals and KPIs are computed from the rows of one data module, with relations asserted in development.
+- Numeric cells are right-aligned with tabular figures.
+- Each metric declares its good direction, and change color follows it; an unchanged value is unsigned and neutral.
+- A real zero prints as zero, not a dash.
+- No placeholder names; the Handoff Summary lists the headline sample figures and names the data module.
+
+November 2026, Codex, one sample per revision. Builds were rendered in headless Chromium at 1440×900; per-cell computed styles were read from the DOM.
+
+- **Before (`97ad7b4`):** totals came from the rows of `report.ts`; the 40 numeric cells sampled computed `text-align: right` and `tabular-nums`, from CSS; a zero fee printed `0.00`; the handoff gave the three monthly totals. Change color was "green means up" (`n>=p ? 'fee-up' : 'fee-down'`), so an unchanged value would show a green `+0.0%`. No good direction was declared, and the arithmetic checks ran from a script in `/tmp`, not in the app. Funds were named "Finnomena Thai Equity" and similar. Fail on direction and zero change.
+- **After (this revision):** `data.ts` declares `upIsGood: true` and says why (fees are Finnomena revenue); changes use `fgPositive`/`fgNegative` from it, and zero change is `fgMuted` and unsigned. `console.assert` checks run under `import.meta.env.DEV`. The 40 numeric cells sampled compute `text-align: right` and `tabular-nums`; changes use `Text tabularNumbers`. The footer total equals the 1,467,120.00 KPI, a real zero fee prints `0.00`, and funds are fictitious ("Nova Thai Equity"). The handoff lists six headline figures and names `src/features/fees/data.ts`. Pass.
+
+Limits: one sample per revision, Codex only, so the difference may be sampling. Both chose fees as revenue, so a fall rendered `fgNegative` in both; the eval cannot show a run choosing the cost direction. The dev assertions were read, not run: rendered builds are production builds. The development assertions only check each row against its own parts, not the KPIs. Fonts rendered in headless Chromium, not on employee machines. The Campaign Page exclusion was not exercised.
+
+## Campaign Page content
+
+November 2026, Codex 0.162.1, one sample per revision, `$neon-create` through `run-codex-case.mjs` into `./open-house` beside a `.gitkeep`-only workspace. Before is main at `97ad7b4`. After adds [campaign content](../../skills/neon-create/references/campaign-content.md) (`60fa070`). The two cases ran at the same time. Request, verbatim:
+
+> $neon-create Build a Finnomena recruiting event page in ./open-house. The event is "Finnomena Open House: Build with Us", for engineers, designers and data people who might join our team. It's on Saturday 28 November 2026, 13:00–17:00, at Finnomena HQ, Column Tower 22nd floor, Ratchadaphisek Road, Bangkok. Agenda: team talks, an office tour, portfolio reviews and 1:1 chats with hiring managers. People register on our careers site: https://www.finnomena.com/careers/open-house. Headline in Thai. Include a section with what our employees say about working here and a row of partner company logos.
+
+Neither run checked the page in a browser: the before run reported no browser automation tool, and the after run's Chromium launch was blocked by the sandbox. The evaluator built each page and measured it in headless Chromium, light mode, at 375×812 and 1440×900. It counted each `h1`–`h3` line from its text-node rects, merging rects that overlap vertically, with IBM Plex Sans Thai confirmed as the computed font, and listed the text inside the first viewport. Element screenshots of the H1 and H2s matched the counts. A first count from distinct rect tops gave four lines for a two-line H2 with an inline `✳`, so the reference's counting example was changed to merge overlapping rects after the after run.
+
+| Item | Before | After |
+| --- | --- | --- |
+| Skill files read | SKILL.md, INSTRUCTION.md, readiness, scaffold, CDS integration, verification | Same plus campaign content |
+| Claim list in the report | None | Generated README table of seven claims, each with its supplied proof and section, including the two requested sections that had none; the final reply linked to it |
+| Date and place on the first screen at 375 | Fail: time and "BANGKOK, TH" at 10px; the date is below the fold | Partial: on the first screen, not in large type; "28 พฤศจิกายน 2026" and "Finnomena HQ" at 15px, "Column Tower ชั้น 22" at 10px, against a 44px H1 |
+| Headlines at most two rendered lines | Fail: H1 three lines at both widths; one H2 three lines at 375 | Pass: every heading at most two lines at both widths |
+| No invented proof | Pass: an "Employee stories are coming here" note and four "Partner logo n" slots | Pass: a quote prefixed "ตัวอย่าง:", "ชื่อพนักงาน (ตัวอย่าง)" and four `[Partner logo n]` slots |
+| Sample content as pre-launch to-dos | Pass: quotes and logos listed as failed items | Pass: listed with what replaces each |
+| Readiness | Ship-ready, no deployment | Same |
+
+Both pages had no horizontal overflow or console errors at either width. Generated apps, `grade.txt` and screenshots stay under `.local/evals/content-*`.
+
+Limits: one sample each, Codex only, one viewport height per width and light mode only. Only `h1`–`h3` were counted, so display text outside headings, such as the before run's 122px "BUILD WITH US" and the after run's "HELLO, FUTURE TEAM.", was not checked. The before run already avoided invented proof, so this sample shows no difference on that item. The after run put date and place on the first screen but at 15px rather than in large type. No Reference Design was supplied, so mapping claims onto a reference's section order and a later Brand Intensity move were not exercised. Both runs added a `design-day-starter` entry to `/tmp`, and the after run also added `check-fee.cjs` and `neon-before.css`. These may belong to other sessions running at the same time, so they were left in place.
+
+## First screen
+
+November 2026, Codex, rendered by the evaluator in headless Chromium at 1440×900; one sample per revision, two of the latest. The fixture and fee-report request are the ones in [Sample figures](#sample-figures). The tracker request is the [mock labeling](#mock-labeling) one, naming a new `request-tracker` folder for the same reason.
+
+| Run | Requested block on load | Most frequent action | Main question stated |
+| --- | --- | --- | --- |
+| Tracker, before (`97ad7b4`) | List heading, 3 complete rows, detail beside | "New request" under the page title | No |
+| Tracker, after (first wording) | List heading, 4 complete rows, detail beside | "New request" in the title row | No |
+| Fee report, before (`97ad7b4`) | "Fund breakdown" heading at 704px; no complete fund row, under a KPI strip and a fee-type band | "Export CSV" in the title row | No |
+| Fee report, after (first wording, "first rows") | Fund table heading at 630px; 1 complete row, under the same two bands | "Export CSV" in the title row | No |
+| Fee report, after (second wording, "three complete rows") | Fund table heading at 627px; 1 complete row, under the same two bands | "Export CSV" in the title row | Yes, totals and change answer it |
+| Fee report, after (this revision, "no band when the list carries the totals"), sample 1 | Table heading at 456px; all 6 fund rows complete (last ends at 875px); no summary band, fee types as columns; total footer row cut at the fold (ends 934px) | "Export CSV" in the title row | Yes |
+| Fee report, after (this revision), sample 2 | Table heading at 417px; all 6 fund rows complete (last ends at 846px); no summary band, fee types as columns; total footer row ends at 908px, its text visible | "Export CSV" in the table's title row | Yes |
+
+The tracker request does not tell the revisions apart: both pass. On the fee report, the first two wordings did not change the layout: both runs read the rule, could not render (the Chromium launch was blocked in the sandbox) and built a separate fee-type band, reading "per fund and fee type" as naming it. This revision says that when the list already carries the totals and the named breakdown as columns, no summary band goes above it. Both samples then dropped the KPI strip and the fee-type band, put fee types in columns and totals in a footer row, and passed. Both still could not render; each stated the main question and reported the rendered check as unverified. In sample 1 the grand-total footer row is cut at the fold, which the rule allows: it asks for three complete rows.
+
+Review, same fixture: the baseline fee build plus its 1440×900 screenshot, `$neon-review Review our Finnomena fee report screen for usability. fee-report-1440x900.png is how it looks on load at 1440x900. Do not edit anything.` Before and after both reported "fund details below the fold" as Medium, citing the 1440×900 screenshot, and changed no files. The revised run ranked it first. That is no measurable difference.
+
+Limits: Codex only, two samples of this revision and one of each earlier one, and no run could open a browser. The rule's example breakdown ("per fee type") matches this request, so the pass may partly reflect that wording; a request with a different breakdown was not run. The review runs used the second wording, not this one. The `composition: 'preserve'` caveat was not exercised. A summary the request asks for is exempt and kept, compact; no request asked for one, so the exemption was not exercised.
 
 ## Flow refactor evaluation
 

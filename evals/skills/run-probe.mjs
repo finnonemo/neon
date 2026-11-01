@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-// Runs browser-probe.js in headless Chromium, light scheme by default.
+// Runs the shipped probe (skills/neon-redesign/references/browser-probe.js)
+// in headless Chromium, light scheme by default.
 //
 //   node evals/skills/run-probe.mjs --fixture
 //   node evals/skills/run-probe.mjs [--shots .local/shots] [--widths 375,1440] [--scheme dark] [--dark-class] [--json] [name...]
@@ -21,7 +22,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { parseArgs } from 'node:util';
 
 const here = fileURLToPath(new URL('.', import.meta.url));
-const probe = readFileSync(join(here, 'browser-probe.js'), 'utf8');
+const probe = readFileSync(join(here, '../../skills/neon-redesign/references/browser-probe.js'), 'utf8');
 const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.png': 'image/png', '.json': 'application/json', '.woff2': 'font/woff2', '.woff': 'font/woff', '.ttf': 'font/ttf' };
 
 function loadChromium() {

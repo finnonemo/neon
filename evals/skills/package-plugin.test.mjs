@@ -27,6 +27,16 @@ test('distribution ships the reference design and readiness procedures both impl
   }
 });
 
+test('distribution ships the browser probe the shared checklist measures with, and evals keep no copy', async () => {
+  const destination = await mkdtemp(join(tmpdir(), 'neon-package-test-'));
+  await packagePlugin({ destination });
+  const probe = 'skills/neon-redesign/references/browser-probe.js';
+  assert.equal(await readFile(join(destination, probe), 'utf8'), await readFile(join(import.meta.dirname, '../..', probe), 'utf8'));
+  const verification = await readFile(join(destination, 'skills/neon-redesign/references/verification.md'), 'utf8');
+  assert.ok(verification.includes('](browser-probe.js)'), 'verification.md must link the probe');
+  await assert.rejects(access(join(import.meta.dirname, 'browser-probe.js')));
+});
+
 test('missing required payload fails before writing destination', async () => {
   const sourceRoot = await mkdtemp(join(tmpdir(), 'neon-empty-source-'));
   const destination = await mkdtemp(join(tmpdir(), 'neon-empty-dest-'));

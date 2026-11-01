@@ -6,6 +6,7 @@ import { tmpdir } from 'node:os';
 import { packagePlugin } from './package-plugin.mjs';
 import { checkMarkdownLinks } from './lib/markdown-links.mjs';
 import { checkPlainTextReferences, listFiles } from './lib/plain-text-references.mjs';
+import { checkMarkdownEncoding, checkSkillMetadata } from './lib/skill-files.mjs';
 
 const sourceRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 // Ignored paths are local or generated, so naming them in prose is expected.
@@ -38,17 +39,13 @@ async function checkCodexManifest(root) {
 async function check(root, { includeReadme = false } = {}) {
   const manifest = JSON.parse(await readFile(join(root, '.claude-plugin/plugin.json'), 'utf8'));
   for (const skill of manifest.skills) {
-    const file = join(root, skill, 'SKILL.md');
-    const content = await readFile(file, 'utf8');
-    const frontmatter = content.match(/^---\n([\s\S]*?)\n---/);
-    if (!frontmatter || !/^name: [a-z0-9-]+$/m.test(frontmatter[1]) || !/^description: .+$/m.test(frontmatter[1])) {
-      throw new Error(`Invalid skill metadata: ${file}`);
-    }
+    await checkSkillMetadata(join(root, skill, 'SKILL.md'));
   }
   await checkCodexManifest(root);
   const files = [...await markdownFiles(join(root, 'skills'))];
   if (includeReadme) files.push(join(root, 'README.md'));
   for (const file of files) {
+    await checkMarkdownEncoding(file);
     const content = await readFile(file, 'utf8');
     await checkMarkdownLinks(file);
     for (const match of content.matchAll(/\$\{CLAUDE_PLUGIN_ROOT\}\/([\w./-]+)/g)) {
@@ -61,4 +58,6 @@ await check(sourceRoot, { includeReadme: true });
 const destination = await mkdtemp(join(tmpdir(), 'neon-check-'));
 await packagePlugin({ sourceRoot, destination });
 await check(destination);
-console.log('Skill metadata and resource links pass in source and packaged artifact.');
+// Everything in the packaged artifact ships, including theme and starter Markdown.
+for (const file of await markdownFiles(destination)) await checkMarkdownEncoding(file);
+console.log('Skill metadata, Markdown encoding and resource links pass in source and packaged artifact.');
