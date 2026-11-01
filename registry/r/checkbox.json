@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "checkbox",
+  "type": "registry:ui",
+  "title": "Checkbox",
+  "dependencies": [
+    "radix-ui@^1.8.1",
+    "lucide-react@^1.66.0"
+  ],
+  "registryDependencies": [
+    "@neon/utils"
+  ],
+  "files": [
+    {
+      "path": "ui/checkbox.tsx",
+      "content": "import * as React from \"react\"\nimport { CheckIcon } from \"lucide-react\"\nimport { Checkbox as CheckboxPrimitive } from \"radix-ui\"\n\nimport { cn } from \"@/lib/utils\"\n\n// The CDS Checkbox: 20px, 4px corners, filled with the primary role when\n// checked. Disabled fades to half with its label (peer-disabled), as CDS does.\nfunction Checkbox({ className, ...props }: React.ComponentProps<typeof CheckboxPrimitive.Root>) {\n  return (\n    <CheckboxPrimitive.Root\n      data-slot=\"checkbox\"\n      className={cn(\n        \"peer size-5 shrink-0 rounded-sm border border-input bg-background transition-[border-color,box-shadow] outline-none disabled:cursor-not-allowed disabled:opacity-50\",\n        \"focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive\",\n        \"data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground\",\n        className\n      )}\n      {...props}\n    >\n      <CheckboxPrimitive.Indicator data-slot=\"checkbox-indicator\" className=\"grid place-content-center text-current\">\n        <CheckIcon className=\"size-4\" strokeWidth={3} />\n      </CheckboxPrimitive.Indicator>\n    </CheckboxPrimitive.Root>\n  )\n}\n\nexport { Checkbox }\n",
+      "type": "registry:ui",
+      "target": "src/components/ui/checkbox.tsx"
+    }
+  ]
+}

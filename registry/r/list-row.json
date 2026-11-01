@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "list-row",
+  "type": "registry:ui",
+  "title": "List row",
+  "dependencies": [
+    "lucide-react@^1.66.0"
+  ],
+  "registryDependencies": [
+    "@neon/utils"
+  ],
+  "files": [
+    {
+      "path": "ui/list-row.tsx",
+      "content": "import * as React from \"react\"\nimport { CheckIcon } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\n\n// The CDS ListCell: 64px rows, 16px apart, 8px corners, a selected row on the\n// secondary fill with a check. Rows are buttons in a list; the selected one\n// carries aria-current.\nfunction List({ className, ...props }: React.ComponentProps<\"ul\">) {\n  return <ul data-slot=\"list\" className={cn(\"flex flex-col gap-4 py-2\", className)} {...props} />\n}\n\nfunction ListRow({\n  className,\n  selected = false,\n  children,\n  ...props\n}: React.ComponentProps<\"button\"> & { selected?: boolean }) {\n  return (\n    <li className=\"flex\">\n      <button\n        type=\"button\"\n        data-slot=\"list-row\"\n        aria-current={selected || undefined}\n        className={cn(\n          \"flex min-h-16 w-full items-center gap-4 rounded-md px-4 py-2 text-left text-body text-foreground transition-colors outline-none hover:bg-accent focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-[current=true]:bg-secondary\",\n          className\n        )}\n        {...props}\n      >\n        {children}\n        {selected && <CheckIcon data-slot=\"list-row-check\" className=\"size-4 shrink-0\" aria-hidden />}\n      </button>\n    </li>\n  )\n}\n\nfunction ListRowContent({ className, ...props }: React.ComponentProps<\"span\">) {\n  return <span data-slot=\"list-row-content\" className={cn(\"flex min-w-0 flex-1 flex-col\", className)} {...props} />\n}\n\nfunction ListRowTitle({ className, ...props }: React.ComponentProps<\"span\">) {\n  return <span data-slot=\"list-row-title\" className={cn(\"truncate text-headline\", className)} {...props} />\n}\n\nfunction ListRowDescription({ className, ...props }: React.ComponentProps<\"span\">) {\n  return <span data-slot=\"list-row-description\" className={cn(\"truncate text-body text-muted-foreground\", className)} {...props} />\n}\n\nexport { List, ListRow, ListRowContent, ListRowTitle, ListRowDescription }\n",
+      "type": "registry:ui",
+      "target": "src/components/ui/list-row.tsx"
+    }
+  ]
+}

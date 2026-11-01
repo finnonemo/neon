@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "table",
+  "type": "registry:ui",
+  "title": "Table",
+  "registryDependencies": [
+    "@neon/utils"
+  ],
+  "files": [
+    {
+      "path": "ui/table.tsx",
+      "content": "import * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\n\n// The CDS Table: no rules between rows, 16px around each cell's content,\n// headline headers in the muted role over body cells. Text wraps, as in CDS.\nfunction Table({ className, ...props }: React.ComponentProps<\"table\">) {\n  return (\n    <div data-slot=\"table-container\" className=\"relative w-full overflow-x-auto\">\n      <table data-slot=\"table\" className={cn(\"w-full caption-bottom text-body\", className)} {...props} />\n    </div>\n  )\n}\n\nfunction TableHeader(props: React.ComponentProps<\"thead\">) {\n  return <thead data-slot=\"table-header\" {...props} />\n}\n\nfunction TableBody(props: React.ComponentProps<\"tbody\">) {\n  return <tbody data-slot=\"table-body\" {...props} />\n}\n\nfunction TableFooter({ className, ...props }: React.ComponentProps<\"tfoot\">) {\n  return <tfoot data-slot=\"table-footer\" className={cn(\"bg-muted\", className)} {...props} />\n}\n\nfunction TableRow({ className, ...props }: React.ComponentProps<\"tr\">) {\n  return <tr data-slot=\"table-row\" className={cn(\"transition-colors data-[state=selected]:bg-muted\", className)} {...props} />\n}\n\nfunction TableHead({ className, ...props }: React.ComponentProps<\"th\">) {\n  return <th data-slot=\"table-head\" className={cn(\"p-4 text-left align-middle text-headline text-muted-foreground\", className)} {...props} />\n}\n\nfunction TableCell({ className, ...props }: React.ComponentProps<\"td\">) {\n  return <td data-slot=\"table-cell\" className={cn(\"p-4 align-middle text-body text-foreground\", className)} {...props} />\n}\n\nfunction TableCaption({ className, ...props }: React.ComponentProps<\"caption\">) {\n  return <caption data-slot=\"table-caption\" className={cn(\"mt-4 text-label2 text-muted-foreground\", className)} {...props} />\n}\n\nexport { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow }\n",
+      "type": "registry:ui",
+      "target": "src/components/ui/table.tsx"
+    }
+  ]
+}
