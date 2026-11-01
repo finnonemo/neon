@@ -23,6 +23,7 @@
   .card { background: #fff; border: 1px solid #ddd; padding: 8px; display: flex; gap: 8px; }
   .pill { border-radius: 6px; padding: 2px 6px; background: #f2f2f2; }
   .dark .card { background: #1a1a1a; }
+  /* The dark card keeps the light text color, so its pills' text fails on their fill. */
   .dark #class-pill { background: #1a1a1a; }
   @media (prefers-color-scheme: dark) { #scheme-pill { background: oklch(0.2 0 0 / 0.5); } }
 </style>
@@ -35,7 +36,7 @@
   <div class="navy">
     <!-- bs-s5's gauge dot: no text or icon, so nothing to contrast. -->
     <button id="dot" aria-label="Adjust allocation" style="width:14px;height:14px;background:#01172b"></button>
-    <!-- r1's black label on navy. -->
+    <!-- r1's black label on navy, listed under dark-fill controls and not again as text on a fill. -->
     <button id="black-on-navy" style="color:#000;background:#01172b">Home</button>
     <!-- r3-style icon link in default link blue. -->
     <button id="icon-button" aria-label="Search" style="color:#0000ee;background:#01172b"><svg width="16" height="16"><rect width="16" height="16" fill="currentColor"/></svg></button>
@@ -79,6 +80,7 @@
   <script type="application/json" id="probe-expected">
     {
       "darkBackgroundControls": { "black-on-navy": 1.16, "icon-button": 1.93, "oklch-dark": 17.18 },
+      "lowContrastTextOnFill": [],
       "underlinedNavLinks": ["nav-text"],
       "scrolledOnLoad": ["scrolled"],
       "sidewaysScrollers": ["scrolled", "scroller-idle"],
@@ -95,6 +97,7 @@
   <script type="application/json" id="probe-source-brands">["Lumora"]</script>
   <script type="application/json" id="probe-expected-dark">
     {
+      "lowContrastTextOnFill": { "class-pill": 1.08, "scheme-pill": 1.06 },
       "sameAsParentFill": { "class-pill": 1, "scheme-pill": 1.02, "black-pill": 1 }
     }
   </script>

@@ -81,12 +81,13 @@
 
   // Text and SVG icons draw in the control's color; an empty dot or an image-only link has no foreground to contrast.
   const drawsForeground = element => element.textContent.trim() || element.querySelector('svg');
-  const darkButtons = [...document.querySelectorAll('button, [role="button"], a[href]')]
+  const controls = 'button, [role="button"], a[href]';
+  const darkControls = [...document.querySelectorAll(controls)]
     .filter(visible)
     .filter(drawsForeground)
     .map(element => ({ element, fg: colorOf(element), bg: backgroundOf(element) }))
-    .filter(({ bg }) => luminance(bg) < 0.2)
-    .map(({ element, fg, bg }) => ({ element: label(element), fg: `rgb(${fg})`, bg: `rgb(${bg})`, contrast: contrast(fg, bg) }));
+    .filter(({ bg }) => luminance(bg) < 0.2);
+  const darkButtons = darkControls.map(({ element, fg, bg }) => ({ element: label(element), fg: `rgb(${fg})`, bg: `rgb(${bg})`, contrast: contrast(fg, bg) }));
 
   const underlinedNav = [...document.querySelectorAll('nav a, [role="navigation"] a, [role="tablist"] a')]
     .filter(visible)
@@ -150,6 +151,28 @@
     const scripts = [covers(face, 0x0e01) && 'Thai', covers(face, 0x41) && 'Latin'].filter(Boolean).join('+') || 'other';
     return `${face.weight} ${face.style} ${scripts}`;
   }))];
+
+  // Text on a filled block below 4.5:1, such as canvas text kept on a tint block
+  // instead of the block's on- token. The block is the nearest ancestor with a
+  // fill, skipping transparent wrappers; the page canvas (html, body) is not a
+  // block. Blocks with a background image are not measured, and text in a
+  // control already listed under darkBackgroundControls is not listed again.
+  const filledBlock = element => {
+    for (let node = element; node && node !== document.body && node !== document.documentElement; node = node.parentElement) {
+      const style = getComputedStyle(node);
+      if (style.backgroundImage !== 'none') return null;
+      if (!transparent(style.backgroundColor)) return node;
+    }
+    return null;
+  };
+  const darkControlElements = new Set(darkControls.map(({ element }) => element));
+  const textOnFill = textElements
+    .filter(element => !darkControlElements.has(element.closest(controls)))
+    .map(element => ({ element, block: filledBlock(element) }))
+    .filter(({ block }) => block)
+    .map(({ element, block }) => ({ element, block, fg: colorOf(element), bg: backgroundOf(block) }))
+    .filter(({ fg, bg }) => contrast(fg, bg) < 4.5)
+    .map(({ element, block, fg, bg }) => ({ element: label(element), fill: label(block), fg: `rgb(${fg})`, bg: `rgb(${bg})`, contrast: contrast(fg, bg) }));
 
   // Vite inlines small assets as data: URIs, so the logo is known by its alt,
   // aria-label or <title> (the brand name alone or as a logo, not an image that
@@ -237,6 +260,7 @@
     serifTextCount: serif.length,
     serifSamples: serif.slice(0, 5).map(label),
     darkBackgroundControls: darkButtons.slice(0, 15),
+    lowContrastTextOnFill: textOnFill.slice(0, 15),
     sameAsParentFill: sameFill.slice(0, 15),
     underlinedNavLinks: underlinedNav,
     dialogs,

@@ -141,6 +141,7 @@ function summary(name, width, result) {
     `sideways=${result.sidewaysScrollers.length}`,
     `scrolledOnLoad=${scrolled.length ? `[${scrolled.join('; ')}]` : 'none'}`,
     `lowContrast=${low.length ? `[${low.join('; ')}]` : 'none'}`,
+    `textOnFill=${result.lowContrastTextOnFill.length ? `[${result.lowContrastTextOnFill.map(entry => `${entry.element} ${entry.contrast}`).join('; ')}]` : 'none'}`,
     `sameFill=${result.sameAsParentFill.length ? `[${result.sameAsParentFill.map(entry => `${entry.element} ${entry.contrast}`).join('; ')}]` : 'none'}`,
     `underlinedNav=${result.underlinedNavLinks.length}`,
     `serif=${result.serifTextCount}`,
