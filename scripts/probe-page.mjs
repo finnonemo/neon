@@ -23,6 +23,19 @@
  * install paths. Missing Chrome, a failed launch, a page that does not load or
  * a timeout prints `Browser probe: not run; …` and exits 0: the checks stay
  * unverified, and delivery is not blocked. Exits 2 on a usage error.
+ *
+ * Maintainers only: node probe-page.mjs --draft-preset <slug> <https url>
+ *          [--out <dir>] [--chrome <path>] [--timeout <seconds>] [--json]
+ * drafts a Theme Brief layout preset from one named page (ADR 0007), measured
+ * at 1440 in the same temporary profile, never signed in. It keeps section
+ * roles, geometry snapped to --space-* and --borderRadius-* steps from
+ * theme/css/theme.css, and the motion level; never text, colors, fonts or
+ * images. It writes <slug>.json, probe.json and the screenshot to --out and
+ * exits 0. HTTP 401, 403 or 429, a sign-in wall, a bot challenge or a CAPTCHA
+ * stops it with `Preset draft: not measured; <reason>`, as does anything that
+ * stops the probe, and it exits 1 with no draft. A robots.txt disallow for
+ * neon-probe or * is a warning recorded in source.robotsDisallowed; it does
+ * not stop the page view. See docs/design/theme-briefs/drafting-from-a-page.md.
  */
 import { spawn } from 'node:child_process';
 import { createReadStream, existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, statSync, writeFileSync } from 'node:fs';
@@ -529,7 +542,7 @@ export function layoutPreset(sweep, { slug, url, measuredOn, robotsDisallowed })
 export const ROBOTS_TOKEN = 'neon-probe';
 
 // Whether a robots.txt rule's path pattern matches `path`: `*` is any run of characters and a final `$` ends the path.
-const ruleMatches = (pattern, path) => new RegExp(`^${pattern.replace(/[.+?^{}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*').replace(/\\?\$$/, '$')}`).test(path);
+const ruleMatches = (pattern, path) => new RegExp(`^${pattern.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*').replace(/\\\$$/, '$')}`).test(path);
 
 /**
  * Whether robots.txt `text` disallows `path` (path and query) for `token`, by
@@ -649,9 +662,9 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
       process.exit(0);
     }
     const { measuredPx, unmeasured } = drafted;
-    const was = value => (value === undefined ? 'not measured' : `${Math.round(value)} measured`);
+    const was = (value, unit) => (value === undefined ? 'not measured' : `${Math.round(value)}${unit} measured`);
     console.log(`  sections ${preset.sections.join(', ')}; pageWidth ${preset.pageWidth}; density ${preset.density}`);
-    console.log(`  blockRadius ${preset.blockRadius}; cardPadding ${preset.cardPadding} (${was(measuredPx.cardPadding)}px); sectionGap ${preset.sectionGap} (${was(measuredPx.sectionGap)}px); motion ${preset.motion} (${was(measuredPx.motionMs)}ms)`);
+    console.log(`  blockRadius ${preset.blockRadius}; cardPadding ${preset.cardPadding} (${was(measuredPx.cardPadding, 'px')}); sectionGap ${preset.sectionGap} (${was(measuredPx.sectionGap, 'px')}); motion ${preset.motion} (${was(measuredPx.motionMs, 'ms')})`);
     if (unmeasured.length) console.log(`  Not measured, so set by hand: ${unmeasured.join(', ')}.`);
     console.log(`  Screenshot and raw measurements: ${out}`);
     console.log(`  Before committing it to theme-briefs/presets/layout/${slug}.json: write heroPattern, navigation and footer as your own intent notes, check each field against the screenshot, and run the Theme Brief check.`);

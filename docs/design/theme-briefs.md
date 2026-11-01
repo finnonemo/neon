@@ -87,3 +87,7 @@ The check module in `scripts/theme-briefs` is shared by the tool's `check-only` 
 | `names "<name>", a preset source` | A source's site or domain name appears in a brief. Remove it. |
 
 The registry tests also run in `validate.mjs`, so a brief's registry entry must build like every other item. Checks that need rendered output, such as scripted sections matching fresh output, arrive with the renderer. The scripted-only run arrives with it too.
+
+## Branch: drafting from a page
+
+To draft a layout preset from a public page, follow [drafting from a page](theme-briefs/drafting-from-a-page.md). It covers what carries over, what stops a run and how measured values snap to steps.
