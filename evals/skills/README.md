@@ -599,9 +599,9 @@ The event page is a Finnomena-led Campaign Page: no Reference Design is attached
 
 ### Samples and screenshots
 
-Run three samples of each request per package, twelve runs in a round, on the agent's browser tool where it has one and the same permissions for every run. Check the first run's log for denied commands before starting the rest; a denial voids the sample. Cap each run's wall-clock time. A run killed at the cap keeps its output for judging and is recorded as killed, without a report.
+Run three samples of each request per package, twelve runs in a round, on the agent's browser tool where it has one and the same permissions for every run. Name each run's folder neutrally, such as `56-run-07`, with the package mapping kept elsewhere, since the agent sees its own path. Give every run the same harness note on how denials work (see the round's Limits), since agents otherwise read one denied command as the whole shell being blocked. Check the first run's log for denied commands before starting the rest, and widen the allowlist for any denial a prefix can cover. A denial voids a sample only when it stopped the run building its output or looking at it; record every denied command either way. Cap each run's wall-clock time. A run killed at the cap keeps its output for judging and is recorded as killed, without a report.
 
-The evaluator, not the agent, builds each output and screenshots it in light mode in its loaded state, at 375×812 and 1440×900: the first screen at each size and the full page at each width. `node scripts/probe-page.mjs --serve <dist> --out <dir>` takes the full-page shots; crop the first screens from them. For the approvals screen, shoot the list with one request open where the layout shows both; otherwise shoot the list. Record any output that does not build, and judge what renders.
+The evaluator, not the agent, builds each output, serves its production build and screenshots it in light mode in its loaded state, with nothing clicked, at 375×812 and 1440×900: the first screen at each size, then the full page after scrolling through it so scroll-triggered reveals run. Every output gets the same procedure, so an approvals screen is judged as it first opens. Record any output that does not build, and judge what renders.
 
 ### Blinding
 
@@ -622,6 +622,52 @@ For each pair the judge states a preference for A, B or neither, the reason in a
 Unblind with the key and record per pair: the preferred package or none, the judge's reason, and the named problems per output. Tally preferences per request as counts of pairs ("revised preferred in two of three pairs"), not percentages. Label the result as one reviewer's judgment. Under Limits, record the agent and version, the judge's model, samples, widths, color modes, states, permissions, ports, and every void, killed or unbuilt run.
 
 Generated apps, run logs, screenshots, the key and the judge's answer stay under `.local/evals/`; only this protocol and its recorded results are tracked.
+
+### November 2026 round
+
+Baseline is the main package at `6c0a1f6`. Revised is the integration tip at `1b7e7c6`, which adds Look and fix (#53), the functional screen habits table (#54), the probe runner (#58) and the source lint (#57). Claude Code 2.1.316, `claude -p --model claude-opus-5-5 --setting-sources project,local --plugin-dir <package> --add-dir <package> --mcp-config <browser> --strict-mcp-config --permission-mode dontAsk --allowedTools <list> --append-system-prompt <note>`, with the evaluator's browser tool from [Browser probe in verification](#browser-probe-in-verification). At most three runs went at once on ports 5601–5603, under a 45-minute cap. The judge was `claude -p --model claude-opus-5-5 --tools Read,Glob --strict-mcp-config --permission-mode dontAsk` in the judge folder. It made 56 reads, all inside that folder, with no denials.
+
+| Pair | Request, sample | Preferred | Judge's reason, shortened |
+| --- | --- | --- | --- |
+| 1 | Event, 1 | Revised | Date, venue and one register action in one hero column, and a numbered agenda; the baseline repeats date and venue, misaligns blocks and breaks a Thai word |
+| 2 | Event, 3 | Revised | A strong headline and a date, time and venue row at both widths; the baseline shrinks the headline at 375, uses light section headings and breaks Thai words |
+| 6 | Event, 2 | Revised | Thai wraps cleanly and sections follow one structure; the baseline breaks Thai words and mixes heading weights |
+| 3 | Approvals, 1 | Baseline | Opens with a request selected, so details and Approve/Reject are on the first screen; the revised output leaves the right half as an empty "select a request" pane |
+| 5 | Approvals, 2 | Revised | Opens with a request selected, with the review reason and actions on the first screen; the baseline shows an empty detail pane |
+| 4 | Approvals, 3 | Revised | Both leave the detail pane empty; the revised list right-aligns amounts and due times and names the overdue item in words |
+
+Pair numbers are the judge's, from the shuffled order; rows are grouped by request. Revised was preferred in three of three event pairs and two of three approvals pairs. In the one approvals pair the baseline won, the revised run was killed at the cap with no report. Each output had problems the judge named in both arms:
+
+- Thai words broken across lines, such as `เครื่อง / ดื่ม`, in four of the six event pages, in both arms.
+- On load at 1440px, an empty detail pane beside the list in four approvals outputs, two from each arm.
+- At 375px, most approvals outputs in both arms put a "View details" button above the page heading, with no logo or page context.
+- Figures left-aligned in proportional digits, named as a functional screen habit, in two baseline outputs and one revised.
+- Light-weight section headings or a pale closing register button in two baseline and one revised event page.
+
+| Run | Request, arm and sample | Denied commands | Agent's own browser screenshots | Report lines naming Look and fix | Readiness reported |
+| --- | --- | --- | --- | --- | --- |
+| `56-run-01` | Event, baseline 1 | 0 | 5 | 0 | Ship-ready |
+| `56-run-05` | Event, baseline 2 | 0 | 4 | 0 | Ship-ready |
+| `56-run-09` | Event, baseline 3 | 1: a `cp` from the package | 7 | 0 | Ship-ready |
+| `56-run-04` | Event, revised 1 | 1: a compound `cd …; grep … \| head` | 7 | 0 | Ship-ready |
+| `56-run-08` | Event, revised 2 | 0 | 9 | 1 | Ship-ready |
+| `56-run-12` | Event, revised 3 | 1: an `ls` above the workspace | 7 | 3 | Ship-ready |
+| `56-run-03` | Approvals, baseline 1 | 2: a `for` loop, a `sed -i` | 9 | 0 | Brand-ready |
+| `56-run-07` | Approvals, baseline 2 | 1: a compound `cd … && grep -v` | 11 | 0 | Brand-ready |
+| `56-run-11` | Approvals, baseline 3 | 1: a `head` of a package file | 6 | 0 | Brand-ready |
+| `56-run-02` | Approvals, revised 1 | 1: a `for` loop | 2 | None: killed at the cap during a browser `evaluate` that never returned | None |
+| `56-run-06` | Approvals, revised 2 | 1: a variable assignment | 19 | 3 | Brand-ready |
+| `56-run-10` | Approvals, revised 3 | 1: a compound `cd … && ls` | 10 | 1 | Brand-ready |
+
+Every run built its app and screenshotted it in the browser, and every output built for the evaluator with no sideways scroll at either width. No denial stopped a run building or looking, so none is void under this section's rule.
+
+Limits: one round of three samples per request and package, one judge, and Claude Code only, with the judge on the same model as the agents. Six pairs carry no statistical weight; read the result as one reviewer's judgment. Light mode only, and the loaded state only. Nothing was clicked, so approvals detail views, the reject flow, empty and error states, and the 375px detail route were not judged. Designs that open with a request selected were favored. The approvals screens scroll inside their panels, so their full-page shots equal their first screens. The rubric is the revised package's own checklist, which the baseline runs never saw, so the judgment partly measures following instructions only one arm received. The revised package also carries #57 and #58, so a preference cannot be credited to Look and fix or the habits table alone. The evaluator checked only one of the judge's claims, the empty pane in pair 3.
+
+Every run got this harness note, verbatim: "Shell permissions in this session: Bash is allowed for commands that start with one of: ls pwd cd cat head tail wc grep find echo test sed rg sort which curl lsof kill sleep mkdir cp node npm npx sips file python3, npm run, git status, git log, git diff, git ls-files, git rev-parse, git show, git branch. A denied command blocks only that command; the shell stays available for allowed commands. Variable assignments, loops and $(...) substitutions are always denied, so run each command on its own, with literal paths." Earlier sections ran without it, so their runs are not comparable on this point. Allowlist: `Read Edit Write Glob Grep Skill`, the five `mcp__browser__*` tools, and `Bash(…:*)` for those prefixes. Bash was never unrestricted. The orchestrator's rule voids any sample with a denial. This round voids a sample only when a denial stopped it building or looking, since no prefix allowlist covers assignments and loops; ten of the twelve runs had one or two denials.
+
+A first round of seven runs had no harness note and is void (`56-void-01`…`07`). Each opened with a compound `ls …; B=<package>; ls $B`, was denied, and then treated the whole shell as blocked. Three baseline runs finished with source only, saying the shell was blocked. Three more, from both arms, were stopped mid-run with no install, build or screenshot. Only `56-void-01`, a revised event run, recovered, and its folder name revealed its arm. When a run left its dev server up after reporting, the server was killed so `claude -p` could exit, and some runs then wrote a one-line follow-up saying the server had stopped.
+
+Evidence is in `.local/evals/`: run logs, prompts, harness notes, app sources without dependencies or builds, and the evaluator's screenshots, in `56-run-01`…`12` and `56-void-01`…`07`; the judge folder and its answer in `56-judge`; the key in `56-key`; and scripts, the rubric, the run map and the summary in `56-tools`.
 
 ## Flow refactor evaluation
 

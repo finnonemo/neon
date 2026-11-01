@@ -37,6 +37,7 @@ test('results are preferences and named problems, never a score, and stay out of
   assert.match(section, /named problems/);
   assert.match(section, /never feeds readiness/);
   assert.match(section, /`\.local\/evals\/`/);
-  // The score shapes look-and-fix.test.mjs bans from skill files, plus percentages and rating scales.
-  assert.doesNotMatch(section, /\b\d+(?:\.\d+)?\s*(?:\/|out of)\s*(?:5|10|100)\b|\bweighted score\b|\bscore (?:of|cap)\b|\d\s*%|\b[1-5]\s*(?:-|–|to)\s*(?:5|10)\b/i);
+  // The score shapes look-and-fix.test.mjs bans from skill files, plus percentages and rating scales
+  // ("1-5", not a model id such as claude-opus-5-5).
+  assert.doesNotMatch(section, /\b\d+(?:\.\d+)?\s*(?:\/|out of)\s*(?:5|10|100)\b|\bweighted score\b|\bscore (?:of|cap)\b|\d\s*%|(?<![\w-])[1-5]\s*(?:-|–|to)\s*(?:5|10)\b/i);
 });
