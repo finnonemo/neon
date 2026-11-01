@@ -26,6 +26,10 @@ When set to `yes`, PRs run through the same labels and states as issues, using t
 
 GitHub shares one number space across issues and PRs, so a bare `#42` may be either: resolve with `gh pr view 42` and fall back to `gh issue view 42`.
 
+## Reviewing a pull request
+
+Size it first with `gh pr view <n> --json files --jq '.files[] | "\(.additions)+ \(.deletions)- \(.path)"'`, then read only the paths under review: `gh pr diff <n> --patch | awk '/^diff --git/{keep=/ a\/<path>/} keep'`. Wait for CI with one blocking `gh pr checks <n> --watch --fail-fast` in the background, not a polling loop.
+
 ## When a skill says "publish to the issue tracker"
 
 Create a GitHub issue.
