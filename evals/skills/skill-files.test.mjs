@@ -4,7 +4,7 @@ import { mkdtemp, readFile, writeFile, rm } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { tmpdir } from 'node:os';
-import { checkSkillMetadata, checkMarkdownEncoding } from '../../scripts/lib/skill-files.mjs';
+import { checkSkillMetadata, checkMarkdownEncoding, checkStepReads } from '../../scripts/lib/skill-files.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 // Thai text saved as UTF-8, read back as Latin-1 and saved as UTF-8 again.
@@ -85,5 +85,23 @@ test('accepts every distributed skill', async () => {
     const file = join(root, skill, 'SKILL.md');
     await checkSkillMetadata(file);
     await checkMarkdownEncoding(file);
+    await checkStepReads(file);
   }
+});
+
+// Evals showed agents skip a reference a step only links ("Verify with the shared checklist").
+test('rejects a numbered step that links a Markdown reference without a read verb', async t => {
+  const file = await fixture(t, skill('Use when x', '## Steps\n\n1. Plan.\n2. Verify with the [shared checklist](references/verification.md).\n'));
+  await assert.rejects(checkStepReads(file), naming(file));
+  await assert.rejects(checkStepReads(file), /line 9/);
+});
+
+test('accepts read, use and follow pointers, and links outside numbered steps', async t => {
+  await checkStepReads(await fixture(t, skill('Use when x', [
+    '1. Before reporting, read the [shared checklist](references/verification.md).',
+    '2. Use the [shared contract](references/contract.md) if routing is unresolved.',
+    '3. Follow [readiness](references/readiness.md#ship-ready).',
+    '4. Check with the [probe](references/probe.js).',
+    '- New project: [scaffold](references/scaffold.md).',
+  ].join('\n'))));
 });

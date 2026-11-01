@@ -33,7 +33,7 @@ Local research, working notes, generated evaluator apps, and run history live un
   evals/                 # generated eval apps and run output (screenshots, results) — one dir per run
 ```
 
-In a Git worktree, its own `.local/` is deleted with the worktree. Keep anything worth keeping in the main checkout's `.local/`, at `$(git rev-parse --path-format=absolute --git-common-dir)/../.local/`.
+In a Git worktree, its own `.local/` is deleted with the worktree. Keep anything worth keeping in the main checkout's `.local/`, at `$(git rev-parse --path-format=absolute --git-common-dir)/../.local/`. A session isolated to its worktree cannot write there with file tools: write in the worktree's `.local/`, then `cp` it across.
 
 ## Commands
 

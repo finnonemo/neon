@@ -41,9 +41,21 @@ Run each request with the named context, first against the baseline and then the
 | Colors-only restyle of a Tailwind v4 app whose disabled text must keep a stock utility | The run executes the shipped source lint on its changed files and the report fixes or justifies each warning on a `Source lint:` line. See [Source lint](#source-lint) |
 | Review this Finnomena back office screenshot (generated-dashboard habits, Neon navy and indigo present) | Findings name habit rows with visible evidence and give CDS or composition fixes; Neon navy structure and indigo links are not flagged as habits; no file edited. See [Functional screen habits](#functional-screen-habits) |
 | Finnomena fund-fee table at 375px | Below about 640px each fund is a two-line row (identity and key figure, then labeled secondary fields); every value shown at 1440px is visible at 375px; no sideways-scrolling table. See [Functional screen habits](#functional-screen-habits) |
+| Add Finnomena approvals to an existing themed React/CDS app (readiness) | The report says Brand-ready with a Handoff Summary: a Back Office screen is never Ship-ready, with or without a mock service. Open: [Look and fix](#look-and-fix) Revised-2 reported "Ship-ready, apart from the mock service"; unverified since |
+| Add Finnomena approvals to an existing themed React/CDS app (critique shape) | Each Look and fix round's critique, in the run's messages, gives every finding as severity, location, evidence with width and state, who is affected, fix and recheck. Open: no revised run in [Look and fix](#look-and-fix) used this shape; unverified since |
 | Finnomena event page and Back Office approvals screen, baseline against revised skills (blind) | A judge who cannot tell the packages apart prefers one output per pair, or neither, at 375px and 1440px and names problems with the Look and fix questions and habits table; no numeric score; never feeds readiness. See [Output quality (blind)](#output-quality-blind) |
 
 Verdicts are pass, fail or unverified for routing, scope, resource retrieval, component correctness, color roles, feature completion, responsive behavior and evidence honesty. Link actual artifacts. Do not turn a successful retrieval simulation into a claim that an app was built or looked better.
+
+## Run harness
+
+Codex cases run through `run-codex-case.mjs`. Claude Code cases use the same allowlist and harness note for every arm, so baseline and revised differ only in the package:
+
+- Command: `claude -p --model <model> --setting-sources project,local --plugin-dir <package> --add-dir <package> --mcp-config <browser> --strict-mcp-config --permission-mode dontAsk --output-format stream-json --verbose --allowedTools <allowlist> --append-system-prompt <note>`. `--setting-sources project,local` leaves out the evaluator's user hooks.
+- Allowlist: `Read Edit Write Glob Grep Skill`, the browser tools, and `Bash(…:*)` for `ls pwd cd cat head tail wc grep find echo test sed rg sort which curl lsof kill sleep mkdir cp node npm npx sips file python3`, `npm run`, `git status/log/diff/ls-files/rev-parse/show/branch`.
+- Note, verbatim: "Shell permissions in this session: Bash is allowed for commands that start with one of: ls pwd cd cat head tail wc grep find echo test sed rg sort which curl lsof kill sleep mkdir cp node npm npx sips file python3, npm run, git status, git log, git diff, git ls-files, git rev-parse, git show, git branch. A denied command blocks only that command; the shell stays available for allowed commands. Variable assignments, loops and $(...) substitutions are always denied, so run each command on its own, with literal paths."
+
+After each run, `node evals/skills/check-run.mjs <run.jsonl>` lists its denied commands and marks the run VOID when it then reported the shell as blocked. Check the first run before starting the rest, and widen the allowlist for any denial a prefix can cover. A void run is rerun, not graded; record every denied command either way.
 
 ## September 2026 refactor evidence
 
@@ -640,7 +652,7 @@ The event page is a Finnomena-led Campaign Page: no Reference Design is attached
 
 ### Samples and screenshots
 
-Run three samples of each request per package, twelve runs in a round, on the agent's browser tool where it has one and the same permissions for every run. Name each run's folder neutrally, such as `56-run-07`, with the package mapping kept elsewhere, since the agent sees its own path. Give every run the same harness note on how denials work (see the round's Limits), since agents otherwise read one denied command as the whole shell being blocked. Check the first run's log for denied commands before starting the rest, and widen the allowlist for any denial a prefix can cover. A denial voids a sample only when it stopped the run building its output or looking at it; record every denied command either way. Cap each run's wall-clock time. A run killed at the cap keeps its output for judging and is recorded as killed, without a report.
+Run three samples of each request per package, twelve runs in a round, on the agent's browser tool where it has one and the same permissions for every run. Name each run's folder neutrally, such as `56-run-07`, with the package mapping kept elsewhere, since the agent sees its own path. Use the [run harness](#run-harness) note and allowlist for every run, since agents otherwise read one denied command as the whole shell being blocked. A denial voids a sample only when it stopped the run building its output or looking at it; record every denied command either way. Cap each run's wall-clock time. A run killed at the cap keeps its output for judging and is recorded as killed, without a report.
 
 The evaluator, not the agent, builds each output, serves its production build and screenshots it in light mode in its loaded state, with nothing clicked, at 375×812 and 1440×900: the first screen at each size, then the full page after scrolling through it so scroll-triggered reveals run. Every output gets the same procedure, so an approvals screen is judged as it first opens. Record any output that does not build, and judge what renders.
 
