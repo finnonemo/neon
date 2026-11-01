@@ -555,7 +555,7 @@ Pass requires findings that name the habits with visible evidence and give the C
 | Habits named as habits | Tiles, emoji title, per-bar chart colors, nested card, centered figures | Tiles, emoji title, centered figures | Emoji title, tiles, saturated chips, per-bar colors, zebra and uppercase, centered figures, pagination | All eight |
 | Missed | Chips (contrast only), zebra and uppercase; recommended more rows instead of removing pagination | Chips, pagination, chart colors, zebra | Nested card | None |
 | CDS alternatives | None | None | `Tag emphasis="low"` with green, yellow, red, gray; CDS `Table` defaults with `compact`; `tabularNumbers`; a "View all" link | The same, plus one container per group |
-| Navy and indigo | Indigo links called "blue links", contrast unverified | Links called "default browser blue … not the contract's indigo" | Not flagged | Listed under "What already follows the contract" |
+| Navy and indigo | Indigo links flagged as brand drift: "default browser-blue links" | Links called "default browser blue … not the contract's indigo" | Not flagged | Listed under "What already follows the contract" |
 | Verdict | Fail | Fail | Pass | Pass |
 
 Both baselines read review-checks.md and INSTRUCTION.md, so the difference is the table, not routing. The grader's keyword hits are loose (Baseline-1 mentions pagination while recommending more rows), so the verdicts come from reading each report. A void first revised sample (`54-review-void-1`) used an earlier fixture whose navy and indigo were off-token and had one denied compound `sips …; grep …`. It named all eight habits and called the off-token links "blue-violet, not Finnomena's indigo", which was correct for that fixture.
@@ -570,7 +570,7 @@ Pass requires every value shown at 1440px to be visible and untruncated at 375px
 
 | Item | Baseline | Revised |
 | --- | --- | --- |
-| Denied commands | 1: a `cd … && grep` in CDS types | 1: a `cd … &&` probe runner compound |
+| Denied commands | 1: a `cd … && grep` in CDS types | 1: a `cd <package> && ls; sed …` read of the guidance, then read with Read |
 | Read | new-ui-workflow.md, verification.md and INSTRUCTION.md through `cat`, browser-probe.js | INSTRUCTION.md, new-ui-workflow.md, verification.md, browser-probe.js |
 | 375px layout | Stacked rows below 988px through a breakpoint hook and a page `fundFees.css` | CDS `Table` when the container is at least 640px, labeled rows below it; no CSS file |
 | Row shape at 375px | Name and ฿ amount, code and AMC, labeled fees; 4–6 visual lines | Name and ฿ amount, code · AMC, labeled Front-end, Back-end, Mgmt, TER; 5–7 visual lines |
@@ -580,7 +580,7 @@ Pass requires every value shown at 1440px to be visible and untruncated at 375px
 
 This case does not discriminate on Claude Code: the baseline already stacked the rows without the pattern. The revised run followed the new section's 640px threshold and used CDS instead of page CSS.
 
-Limits: two review samples per package and one build sample each, Claude Code only, no Codex, light mode only, one screenshot width for the review. Every sample except Revised-2 and Revised-3 had one denied command; the baselines' denials blocked pixel sampling, which the revised runs did not attempt. The baseline and revised samples did not all run with the same allowlist. The revised build has no final report, so its Look and fix and Done lines are unverified. Not exercised: colors-only scope (chart and status rows only), `composition: 'preserve'`, and a habit table applied inside a build. Run logs, grades, screenshots and builds without `node_modules` are in `.local/evals/54-{review-baseline-1,review-baseline-2,review-revised-2,review-revised-3,review-void-1,build-baseline-1,build-revised-1}`; fixtures, the run script and the graders are in `.local/evals/54-tools`.
+Limits: two review samples per package and one build sample each, Claude Code only, no Codex, light mode only, one screenshot width for the review. Every sample except Revised-2 and Revised-3 had one denied command; the baselines' denials blocked pixel sampling, which the revised runs did not attempt. The baseline and revised samples did not all run with the same allowlist. The revised build has no final report, so its Look and fix and Done lines are unverified. The build fixtures' files were staged but not committed, so each run's `git status` showed the whole app as new and its `diff.patch` holds the full app. Not exercised: colors-only scope (chart and status rows only), `composition: 'preserve'`, and a habit table applied inside a build. Run logs, grades, screenshots and builds without `node_modules` are in `.local/evals/54-{review-baseline-1,review-baseline-2,review-revised-2,review-revised-3,review-void-1,build-baseline-1,build-revised-1}`; fixtures, the run script and the graders are in `.local/evals/54-tools`.
 
 ## Flow refactor evaluation
 
