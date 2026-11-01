@@ -437,6 +437,34 @@ Review, same fixture: the baseline fee build plus its 1440×900 screenshot, `$ne
 
 Limits: Codex only, two samples of this revision and one of each earlier one, and no run could open a browser. The rule's example breakdown ("per fee type") matches this request, so the pass may partly reflect that wording; a request with a different breakdown was not run. The review runs used the second wording, not this one. The `composition: 'preserve'` caveat was not exercised. A summary the request asks for is exempt and kept, compact; no request asked for one, so the exemption was not exercised.
 
+## Functional patterns
+
+Rules in [functional patterns](../../skills/neon-audit/references/functional-patterns.md), drawn from local research into two public product design systems (kept in `.local/research/references/`). Static guards: `functional-patterns.test.mjs`.
+
+| Request/context | Pass requires |
+| --- | --- |
+| Build a Finnomena fund-switch form for mobile, in the starter | At 375px the submit action sits in a bottom dock above the BottomNav (or the nav is hidden for the flow); the dock covers no field; buttons stacked, primary nearest the bottom; one primary action on the screen |
+| Build a Finnomena notification-settings screen | Settings render as list rows with inset dividers and no divider after the last row, not one card per setting; no shadows on on-page regions |
+| Build a Finnomena request tracker (same as [First screen](#first-screen)) | Row approve/reject actions are secondary or tertiary; the screen has one primary action |
+| `$neon-redesign` colors-only on an existing card-per-row settings screen | Cards, order and geometry unchanged; any pattern miss is reported, not fixed |
+| `$neon-redesign` `composition: 'adapt'` on a CSS-only (non-CDS) list screen | Applies the principles in CSS; installs no CDS |
+
+November 2026, Codex 0.162.1, one sample per revision, run concurrently through `run-codex-case.mjs` on a folder holding only `.gitkeep`. Before is `6c0a1f6`; after is this revision. Request, verbatim:
+
+> $neon-create Build a Finnomena notification-settings screen in a new notification-settings folder here. Customers turn email, push and LINE notifications on or off for each topic (fund NAV updates, order status, monthly statements, promotions), and set a quiet-hours window. It must work well on mobile and desktop. There is no backend yet, so use mock data.
+
+Only the after run read `functional-patterns.md` (`reference-reads.mjs`); both read INSTRUCTION.md, new-ui-workflow and verification. The evaluator built both and measured them in headless Chromium at 375×812 and 1440×900, light mode.
+
+| Item | Before | After |
+| --- | --- | --- |
+| Mobile save action | Cancel and Save side by side at the end of the page, not docked | Save alone, full width in a bottom dock fixed to the viewport; scrolled to the end, the dock covers no field |
+| Primary actions | One (Save) | One (Save); Cancel dropped |
+| Shadows | None | One, on the dock only |
+| Grouping | Topic rows inside two white cards on a grey page | Flat sections on white, rows split by dividers, no card containers |
+| Headings | Title and description run together on one line at both widths | Separate lines |
+
+The dock is the change the new rules most directly explain. Card containers that group a section were never forbidden, so the flat grouping is weaker evidence, and the run-together headings are a layout bug unrelated to these rules. Neither shell showed a bottom tab bar, so the dock/tab-bar overlap rule was not exercised. Neither run used `ListCell`, `Tray` or `Divider`: both hand-wrote CSS with literal font sizes, and the after run set `h1` to weight 600 by hand, against INSTRUCTION.md's generated typography roles. In both, unchecked switch tracks render white on white (`bgTertiary` is white). Limits: one sample each, Codex only, light mode, no interaction beyond load and scroll, and the colors-only, adapt and tracker rows above were not run.
+
 ## Flow refactor evaluation
 
 See [the paired evaluation protocol](flow-refactor-protocol.md) for exact prompts, fixture boundaries, measurements and acceptance. Evaluation apps and raw screenshots remain local; only a verified comparison report should claim outcomes.

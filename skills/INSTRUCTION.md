@@ -31,6 +31,8 @@ Start from the employee's main task and the information needed to complete it. U
 
 **Functional screens:** prioritize scanning, comparison and action. Forms use clear labels, nearby help and validation. Tables suit dense comparisons; lists suit short summaries. A detail pane earns its space when users need to inspect and act on a selected record. Reuse the existing shell. In the starter, `AppShell` supplies list/detail emphasis, `ContentLayout` emphasizes the main content, `SimpleLayout` omits the inspector, and `MultiColumnLayout` is for explicit board workflows. These names are not guaranteed exports in an existing app.
 
+Functional screens keep one primary action per screen (per panel in a multi-panel tool); row and other actions are secondary or tertiary. Prefer list rows to cards for scanning, settings and record rows. Shadows mark only layers that float above the page. These rules shape new UI and `composition: 'adapt'`; preserve and colors-only work keep existing structure. Detail: [functional patterns](neon-audit/references/functional-patterns.md).
+
 **Immersive screens:** colorful Finnomena surfaces, expressive illustrations and [palette-based gradients](#gradients) are allowed when they support the story. Navy/white need not dominate every section. Use a focused reading sequence, clear proposition, relevant imagery and an identifiable next action. Choose accessible action colors for each surface; indigo is not a mandatory hero or CTA color. Keep status colors semantic when communicating system feedback. `ImmersiveLayout` is a starter option, not a mandatory landing-page recipe. A user-supplied reference design contributes only what its [Brand Intensity](#reference-designs-and-brand-intensity) allows; it never supersedes the Brand Floor.
 
 ## Gradients
@@ -81,7 +83,7 @@ Use `templates/vitejs-cds/src/layout/Logo.tsx` and its SVG assets when the start
 
 Implement the states relevant to the task: loading, empty, error with recovery, validation, disabled/pending, success and selection, each reached through real conditions rather than a state switcher in the UI. Preserve entered data after recoverable failures. Reuse real service contracts. Mock data alone does not make an app a demo: ship a production-grade UI and report mocked behavior and missing integration in the delivery report. Label mock behavior in the UI only when the request asks for a demo, prototype or mock-labeled build. Do not invent authentication or persistence.
 
-On narrow screens, retain the main task and a way to reach navigation/details. Stack or progressively reveal panels; do not simply hide essential actions. Allow long Thai/English labels to wrap. Check keyboard focus, control names, dialog focus return and reduced motion when applicable.
+On narrow screens, retain the main task and a way to reach navigation/details. Stack or progressively reveal panels; do not simply hide essential actions. Allow long Thai/English labels to wrap. On narrow functional screens, a focused flow docks its primary action at the bottom without overlapping a tab bar, and secondary tasks open in a bottom sheet. Functional motion explains a change; no loops over 5 seconds or auto-advancing carousels. Check keyboard focus, control names, dialog focus return and reduced motion when applicable.
 
 ## Illustrative example: approvals
 
