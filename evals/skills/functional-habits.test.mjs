@@ -2,14 +2,13 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { section } from './markdown-section.mjs';
 
 // Static guards for the functional screen habits table and the narrow-screen table
 // pattern (#54; README "Functional screen habits"). They check the rules are stated
 // and linked, not that a run follows them.
 const skills = new URL('../../skills/', import.meta.url).pathname;
 const read = path => readFile(join(skills, path), 'utf8');
-const section = (source, heading, level = '##') =>
-  source.match(new RegExp(`^${level} ${heading}\\n([\\s\\S]*?)(?=^#{2,${level.length}} |$(?![\\s\\S]))`, 'm'))?.[1] ?? '';
 const tableRows = text =>
   text.split('\n').filter(line => line.startsWith('|')).slice(2).map(line => line.split('|').slice(1, -1).map(cell => cell.trim()));
 

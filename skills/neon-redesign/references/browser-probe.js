@@ -182,29 +182,26 @@
     .filter(({ by }) => by.length);
 
   // Reference Design pages: evaluate `window.neonProbeSourceBrands = ['Brand'];`
-  // first, then this file, to list where a source brand name appears.
+  // first, then this file, to list where a source brand name appears in the
+  // title, meta content and alt text. Body text is left out: a page may name
+  // the reference on purpose, such as a credit.
   const brands = [].concat(window.neonProbeSourceBrands ?? []).filter(Boolean);
   let sourceBrand = null;
   if (brands.length) {
     const named = text => brands.some(brand => text.toLowerCase().includes(String(brand).toLowerCase()));
     const metas = [...document.querySelectorAll('meta[content]')];
-    const labelled = [...document.querySelectorAll('[alt], [aria-label]')];
+    const alts = [...document.querySelectorAll('[alt]')];
     const found = [];
     if (named(document.title)) found.push({ element: 'title', text: document.title });
     for (const meta of metas) {
       const key = meta.getAttribute('name') ? `name="${meta.getAttribute('name')}"` : `property="${meta.getAttribute('property')}"`;
       if (named(meta.content)) found.push({ element: `meta[${key}]`, text: meta.content.slice(0, 80) });
     }
-    for (const element of labelled) {
-      for (const attribute of ['alt', 'aria-label']) {
-        const text = element.getAttribute(attribute);
-        if (text && named(text)) found.push({ element: `${label(element)} [${attribute}]`, text });
-      }
+    for (const element of alts) {
+      const text = element.getAttribute('alt');
+      if (text && named(text)) found.push({ element: `${label(element)} [alt]`, text });
     }
-    for (const element of textElements) {
-      if (named(ownText(element))) found.push({ element: label(element), text: ownText(element).slice(0, 80) });
-    }
-    sourceBrand = { brands, checked: { title: document.title, meta: metas.length, altOrLabel: labelled.length, textElements: textElements.length }, found: found.slice(0, 15) };
+    sourceBrand = { brands, checked: { title: document.title, meta: metas.length, alt: alts.length }, found: found.slice(0, 15) };
   }
 
   const body = getComputedStyle(document.body);

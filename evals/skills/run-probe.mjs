@@ -93,19 +93,21 @@ async function checkFixture(browser) {
     return match ? JSON.parse(match[1]) : undefined;
   };
   const failures = [];
+  // `loaded`: whether a Plex face must load (true) or none may (false); `failed`: how many Plex faces must fail.
   const passes = [
-    { name: 'light', file: 'probe-fixture.html', expected: jsonIn('probe-fixture.html', 'probe-expected') },
+    { name: 'light', file: 'probe-fixture.html', expected: jsonIn('probe-fixture.html', 'probe-expected'), faces: { loaded: true } },
     { name: 'dark', file: 'probe-fixture.html', expected: jsonIn('probe-fixture.html', 'probe-expected-dark'), scheme: 'dark', darkClass: true },
-    { name: 'no-plex', file: 'probe-fixture-no-plex.html', expected: jsonIn('probe-fixture-no-plex.html', 'probe-expected') },
-    { name: 'thai-404', file: 'probe-fixture-thai-404.html', expected: jsonIn('probe-fixture-thai-404.html', 'probe-expected') },
+    { name: 'no-plex', file: 'probe-fixture-no-plex.html', expected: jsonIn('probe-fixture-no-plex.html', 'probe-expected'), faces: { loaded: false } },
+    { name: 'thai-404', file: 'probe-fixture-thai-404.html', expected: jsonIn('probe-fixture-thai-404.html', 'probe-expected'), faces: { failed: 1 } },
   ];
-  for (const { name, file, expected, ...options } of passes) {
+  for (const { name, file, expected, faces = {}, ...options } of passes) {
     const sourceBrands = jsonIn(file, 'probe-source-brands') ?? [];
     const result = await probeAt(browser, pathToFileURL(join(here, file)).href, 375, { ...options, sourceBrands });
     const reported = categoriesOf(result);
-    if (name === 'no-plex' && result.plexThai.loadedFaces.length) failures.push(`${name} loadedFaces: [${result.plexThai.loadedFaces}], expected none`);
-    if (name === 'light' && !result.plexThai.loadedFaces.length) failures.push(`${name} loadedFaces: none, expected the stand-in face`);
-    if (name === 'thai-404' && result.plexThai.failedFaces !== 1) failures.push(`${name} failedFaces: ${result.plexThai.failedFaces}, expected 1`);
+    const { loadedFaces, failedFaces } = result.plexThai;
+    if (faces.loaded === false && loadedFaces.length) failures.push(`${name} loadedFaces: [${loadedFaces}], expected none`);
+    if (faces.loaded === true && !loadedFaces.length) failures.push(`${name} loadedFaces: none, expected the stand-in face`);
+    if (faces.failed !== undefined && failedFaces !== faces.failed) failures.push(`${name} failedFaces: ${failedFaces}, expected ${faces.failed}`);
     if (result.viewportWidth !== 375) failures.push(`${name} viewportWidth ${result.viewportWidth}, expected 375`);
     failures.push(...fixtureFailures(name, expected, reported));
   }

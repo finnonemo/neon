@@ -2,12 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile, readdir } from 'node:fs/promises';
 import { join } from 'node:path';
+import { numericScore, section } from './markdown-section.mjs';
 
 // Static guards for the shared checklist's Look and fix loop (#53; README "Look and fix").
 // They check the loop is stated and linked, not that a run follows it.
 const skills = new URL('../../skills/', import.meta.url).pathname;
 const read = path => readFile(join(skills, path), 'utf8');
-const section = (source, heading) => source.match(new RegExp(`^## ${heading}\\n([\\s\\S]*?)(?=^## |$(?![\\s\\S]))`, 'm'))?.[1] ?? '';
 
 test('verification places Look and fix between the shared checklist and the creation additions', async () => {
   const source = await read('neon-redesign/references/verification.md');
@@ -46,7 +46,7 @@ test('no skill file gives the UI a numeric score', async () => {
   const files = (await readdir(skills, { recursive: true })).filter(name => name.endsWith('.md'));
   for (const file of files) {
     const source = await read(file);
-    assert.doesNotMatch(source, /\b\d+(?:\.\d+)?\s*(?:\/|out of)\s*(?:5|10|100)\b|\bweighted score\b|\bscore (?:of|cap)\b/i, file);
+    assert.doesNotMatch(source, numericScore, file);
   }
 });
 

@@ -148,6 +148,16 @@ test('warns on stock palette utilities only once the change uses Neon color vari
   ]);
 });
 
+// #57 decision: a CDS app takes Neon colors from the CDS theme, so its changes carry no
+// `--color-*` variable; a stock palette utility there is a rebuild leftover or bypasses the theme.
+test('in a CDS app, stock palette utilities warn without any Neon color variable in the change', t => {
+  const root = repository(t, { 'package.json': '{"dependencies":{"@coinbase/cds-web":"8"}}', 'src/Badge.tsx': 'export {}\n' });
+  write(root, { 'src/Badge.tsx': '<span className="text-slate-300">Off</span>\n' });
+  const { lines } = lint(root);
+  assert.match(lines[0], /^src\/Badge\.tsx:1 {2}stock-palette {2}text-slate-300: /);
+  assert.equal(lines.at(-1), 'Source lint: 1 warning in 1 file (1 changed file checked)');
+});
+
 test('outside git it lints the files named after the app directory, or says it did not run', t => {
   const root = mkdtempSync(join(tmpdir(), 'neon-lint-plain-'));
   t.after(() => rmSync(root, { recursive: true, force: true }));

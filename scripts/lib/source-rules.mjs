@@ -120,14 +120,20 @@ export function cdsHostedClasses(files) {
   return hosts;
 }
 
-export function selectorsOnCdsHosts(css, hosts) {
+// Each selector naming a class a CDS component receives, as `{ selector, on }`
+// with `on` the components (`file: Tag`) that receive it.
+export function cdsHostSelectors(css, hosts) {
   const offenders = [];
   for (const { selector } of selectorsOf(css)) {
     for (const [, name] of selector.matchAll(/\.([A-Za-z_-][\w-]*)/g)) {
-      if (hosts.has(name)) offenders.push(`${selector} (on ${hosts.get(name).join(', ')})`);
+      if (hosts.has(name)) offenders.push({ selector, on: hosts.get(name) });
     }
   }
   return offenders;
+}
+
+export function selectorsOnCdsHosts(css, hosts) {
+  return cdsHostSelectors(css, hosts).map(({ selector, on }) => `${selector} (on ${on.join(', ')})`);
 }
 
 // Every match of a global pattern as `{ match, line }`, line 1-based.
