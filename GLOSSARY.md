@@ -68,6 +68,10 @@ _Avoid_: level, mode, install mode
 The arrangement and hierarchy of a screen, chosen independently of tier; preserved unless the employee explicitly asks to adapt it.
 _Avoid_: layout change, redesign (alone)
 
+**Immersive Theme**:
+One of four on-brand color sets for a Campaign Page, taken from the Finnomena Guidelines' membership levels: Club (white canvas), Exclusive (yellow), Private (light grey) and Ultra (navy). Each fixes the canvas, text, its own 100/75/50/25 steps, an accent family's steps and the action; the guideline's secondary colors are available in all four. A page switches between them by one attribute.
+_Avoid_: tier (a styling decision), palette, color mode
+
 ### Reference designs
 
 **Reference Design**:
@@ -79,15 +83,15 @@ Finnomena's visual language and semantic color rules; wins over any Reference De
 _Avoid_: design guide, style guide
 
 **Brand Intensity**:
-How much of a Reference Design survives on a Campaign Page: Finnomena-led (only its section structure), Blended (also its geometry and motion) or Reference-led (also its neutral surfaces).
+How much of a Reference Design survives on a Campaign Page: Finnomena-led (only its section structure), Blended (also its geometry and motion) or Reference-led (also its colors).
 _Avoid_: strength, mix, Finnomena level
 
 **Brand Floor**:
-The Finnomena properties no Brand Intensity may remove: the Finnomena logo, Finnomena typeface, Finnomena accent and action colors, accessible contrast, and the absence of any source brand's logo, imagery, copy or product names.
+The Finnomena properties no Brand Intensity may remove: the Finnomena logo, Finnomena typeface, at least one identifiable Finnomena color, accessible contrast, and the absence of any source brand's logo, imagery, copy or product names.
 _Avoid_: minimum branding, baseline
 
 **Gradient Recipe**:
-A named Finnomena gradient built only from palette steps, used on a Campaign Page instead of any Reference Design's own gradient colors; provisional until a design owner approves it.
+A named Finnomena gradient built only from palette steps, used on a Reference-led Campaign Page (an Immersive Theme uses none) instead of any Reference Design's own gradient colors; provisional until a design owner approves it.
 _Avoid_: brand gradient, gradient token
 
 ### Readiness
