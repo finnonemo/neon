@@ -524,11 +524,10 @@ test('scripted rendering holds for every theme, colourway, page width and motion
     assert.match(section(text, 'Brand Pattern'), new RegExp(`^- \\*\\*Ground:\\*\\* \`--immersive-${colourway}-50\` fill with \`--immersive-on-${colourway}-50\` text$`, 'm'), at);
     // No block may be capped at a count that a colourway's Brand Pattern ground could break.
     assert.doesNotMatch(text, /\bone per (screen|page)\b|\bonly one\b/i, at);
-    // px values appear only in the brief's own tables, and a prose px value repeats one of them.
+    // Every px value outside a table repeats one of the brief's own table values.
     const tablePx = new Set(text.split('\n').filter((line) => line.startsWith('|')).flatMap((line) => line.match(/\d+px/g) ?? []));
-    const motionPx = section(text, 'Motion').match(/\d+px/g) ?? [];
     for (const line of text.split('\n').filter((line) => !line.startsWith('|'))) {
-      for (const value of line.match(/\d+px/g) ?? []) assert.ok(tablePx.has(value) || motionPx.includes(value), `${at}${value} in "${line}"`);
+      for (const value of line.match(/\d+px/g) ?? []) assert.ok(tablePx.has(value), `${at}${value} in "${line}"`);
     }
     assert.doesNotMatch(section(text, 'Components'), /\d+px/, at);
   }
