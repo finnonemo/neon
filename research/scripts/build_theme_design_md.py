@@ -96,6 +96,7 @@ THEMES = {
         "accent_name": "Yellow",
         "support_name": "Light Grey",
         "blocks_from": "75",
+        "action_outline": "Navy.100",
         "do_extra": [
             "Let navy cover about 60% of the page, Light Grey and Yellow about 15% each, and white the remaining 10%.",
             "Switch text to navy on Navy.50, Navy.25, every Yellow step and every Light Grey step; keep white text only on Navy.100 and Navy.75.",
@@ -143,6 +144,39 @@ def contrast(fg, bg):
         return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]
     a, b = sorted([lum(fg), lum(bg)], reverse=True)
     return (a + 0.05) / (b + 0.05)
+
+
+TEXT_MIN, BOUNDARY_MIN = 4.5, 3.0
+
+
+def emitted_pairs(key):
+    """Every text-on-fill pair the file prescribes, and the main action's edge on each surface it may sit on."""
+    t = spec["themes"][key]
+    pairs = [("text on canvas", t["text"], t["canvas"], TEXT_MIN),
+             ("action label", t["action"]["fg"], t["action"]["bg"], TEXT_MIN)]
+    surfaces = [t["canvas"]]
+    for group in ("palette", "accent", "support"):
+        for step, pair in t.get(group, {}).items():
+            pairs.append((f"{group}-{step} text", pair["fg"], pair["bg"], TEXT_MIN))
+            surfaces.append(pair["bg"])
+    for fam in SECONDARY:
+        for step, pair in spec["secondary"][fam].items():
+            pairs.append((f"{fam}-{step} text", pair["fg"], pair["bg"], TEXT_MIN))
+    # A fill that blends into its block needs the outline the theme prescribes.
+    outline = THEMES[key].get("action_outline")
+    for bg in dict.fromkeys(surfaces):
+        edge = outline if outline and contrast(hex_of(t["action"]["bg"]), hex_of(bg)) < BOUNDARY_MIN else t["action"]["bg"]
+        pairs.append((f"action edge on {bg}", edge, bg, BOUNDARY_MIN))
+    return pairs
+
+
+def check_contrast(key):
+    pairs = emitted_pairs(key)
+    failing = [f"{key}: {label}: {fg} on {bg} is {contrast(hex_of(fg), hex_of(bg)):.2f}:1, needs {minimum}:1"
+               for label, fg, bg, minimum in pairs if contrast(hex_of(fg), hex_of(bg)) < minimum]
+    if failing:
+        sys.exit("Contrast below the minimum:\n" + "\n".join(failing))
+    return len(pairs)
 
 
 def build(key):
@@ -425,7 +459,9 @@ def build(key):
     return "\n".join(L)
 
 
+checked = sum(check_contrast(key) for key in ORDER)
 os.makedirs(out_dir, exist_ok=True)
+print(f"{checked} color pairs pass contrast")
 for key in ORDER:
     path = os.path.join(out_dir, key, "DESIGN.md")
     os.makedirs(os.path.dirname(path), exist_ok=True)

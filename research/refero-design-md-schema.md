@@ -72,7 +72,7 @@ All 12 Refero sections are kept, in Refero's order. Where each comes from:
 ### Checks
 
 - Every hex was looked up with `node scripts/token-lookup.mjs`: all are `colors.json` steps.
-- Every fill and text pair was checked with `node scripts/contrast.mjs`. All 64 pass; the lowest are Red.100 with Navy (4.71:1), Purple.100 with White (4.80:1) and Ultra Navy.50 with Navy (5.22:1).
+- The generator checks contrast before it writes and stops on any failure. It checks 161 pairs: every text-on-fill pair it prescribes, which must reach 4.5:1, and the main action's edge on every surface it may sit on, which must reach 3:1. Where the white fill blends into a block, Ultra's prescribed Navy outline is checked instead. The lowest text pairs are Red.100 with Navy (4.71:1), Purple.100 with White (4.80:1) and Ultra Navy.50 with Navy (5.22:1).
 
 ### Gaps and dependencies
 
