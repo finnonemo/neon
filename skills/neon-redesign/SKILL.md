@@ -11,7 +11,7 @@ Apply Finnomena visual roles to existing UI while preserving its framework and p
 
 ## When to use
 
-Use for CSS styling or presentation redesign. Full CDS adoption belongs to [neon-create](../neon-create/SKILL.md). Review-only requests belong to [neon-review](../neon-review/SKILL.md).
+Use for CSS styling or presentation redesign. Full CDS adoption, and color changes to CDS components in an app already on CDS (frozen), belong to [neon-create](../neon-create/SKILL.md). Review-only requests belong to [neon-review](../neon-review/SKILL.md).
 
 ## Fast path
 
@@ -30,6 +30,7 @@ When target, scope and theme variables are known, begin with the affected styles
 - Plain CSS/shadcn formats or mapping examples: relevant sections of [style migration](references/style-migration.md).
 - shadcn/ui on Tailwind v4 (v0, Lovable; `@theme inline` over `:root`/`.dark`): its [style migration format](references/style-migration.md#5-shadcn-style-on-tailwind-v4); edit values by role and pair in both modes.
 - Any supplied reference design or outside style file: [reference design](../neon-audit/references/reference-design.md).
+- `composition: 'adapt'` on a functional screen: [functional patterns](../neon-audit/references/functional-patterns.md), principles only; do not adopt CDS to apply them.
 - Missing CSS asset: [CSS setup](references/css-integration.md#css-setup); whole-app installation differs from a local override.
 - Typography expansion: [fonts](../neon-audit/references/theme-integration.md#font-loading). Reusing the asset still requires font loading and layout checks.
 - Mode selectors, CSS-to-CDS upgrade or customized-file conflict: relevant sections of [theme integration](../neon-audit/references/theme-integration.md).
