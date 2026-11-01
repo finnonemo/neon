@@ -11,7 +11,7 @@ Deliver the requested content and interactions with real `@coinbase/cds-web` com
 
 ## When to use
 
-Use for React/CDS implementation. A colors-only or CSS-only restyle, React apps included, follows [neon-redesign](../neon-redesign/SKILL.md) instead, with its mapping references. Preserve an explicitly requested non-React framework and use its normal feature workflow plus Neon's CSS styling path. A request to review does not authorize implementation.
+Use for React/CDS implementation. What renders the target decides colors-only work, not whether CDS is installed: a colors-only or CSS-only restyle of CSS-styled UI, React apps included, follows [neon-redesign](../neon-redesign/SKILL.md) instead, with its mapping references; a color change to CDS components in an app already on CDS (frozen) stays here, keeps colors-only scope and goes through CDS props, configuration or a scoped wrapper (step 3), not app stylesheet rules on the component. Preserve an explicitly requested non-React framework and use its normal feature workflow plus Neon's CSS styling path. A request to review does not authorize implementation.
 
 ## Fast path
 
@@ -33,6 +33,7 @@ If the app already has a working Finnomena CDS theme, start with the requested c
 - Writing sections for a new or rebuilt Campaign Page: [campaign content](references/campaign-content.md).
 - Theme/provider/dependency changes: [CDS integration](references/cds-integration.md). Preserve customized files and theme-mode ownership.
 - Complex feature states, mock figures or a comparison table on a functional screen, or existing-app integration: [new UI workflow](references/new-ui-workflow.md).
+- New or adapted functional screen with lists, overlays, mobile actions or empty states: [functional patterns](../neon-audit/references/functional-patterns.md).
 - Font, mode, migration or installer conflict: the matching section of [theme integration](../neon-audit/references/theme-integration.md).
 
 ## Done
