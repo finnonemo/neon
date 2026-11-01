@@ -29,7 +29,12 @@ test('the contract states the short rules and their scope', async () => {
 test('the reference keeps its scope, action and motion rules', async () => {
   const source = await read('neon-audit/references/functional-patterns.md');
   assert.match(source, /does not license restructuring/);
-  assert.match(source, /do not authorize adopting CDS in a CSS-only restyle/);
+  assert.match(source, /do not authorize adopting a component library in a CSS-only restyle/);
+  // New work is on the Neon base (ADR 0006): CDS names live only in the frozen note.
+  const [rules, frozen] = source.split('## CDS (frozen): apps already on CDS');
+  assert.ok(frozen, 'the frozen CDS note exists');
+  assert.doesNotMatch(rules, /CDS|ListCell|Tray|Fallback|useBreakpointTier/);
+  assert.match(frozen, /ListCell/);
   assert.match(source, /Row actions are secondary or tertiary/);
   // The starter's BottomNav is fixed to the bottom at tier sm; a dock must not sit under it.
   assert.match(source, /the dock sits above it, or the flow hides the tab bar/);
