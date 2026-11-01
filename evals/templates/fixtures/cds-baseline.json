@@ -193,7 +193,7 @@
         "radius": 4,
         "border": {
           "width": 1,
-          "color": "rgba(91, 97, 110, 0.66)"
+          "color": "rgb(1, 23, 43)"
         }
       },
       "checkboxLabel": {
@@ -202,7 +202,7 @@
           "lineHeight": 22,
           "weight": 400
         },
-        "color": "rgba(0, 0, 0, 0.65)"
+        "color": "rgba(0, 0, 0, 0.85)"
       },
       "approve": {
         "font": {
@@ -211,7 +211,7 @@
           "weight": 500
         },
         "color": "rgb(255, 255, 255)",
-        "bg": "rgb(17, 38, 56)",
+        "bg": "rgb(1, 23, 43)",
         "h": 54,
         "pad": [
           16,
@@ -376,6 +376,10 @@
           32
         ],
         "radius": 27
+      },
+      "forwardDisabled": {
+        "h": 54,
+        "opacity": 0.5
       }
     },
     "gaps": {
@@ -749,7 +753,7 @@
         "radius": 4,
         "border": {
           "width": 1,
-          "color": "rgba(138, 145, 158, 0.66)"
+          "color": "rgb(65, 81, 96)"
         }
       },
       "checkboxLabel": {
@@ -758,7 +762,7 @@
           "lineHeight": 22,
           "weight": 400
         },
-        "color": "rgba(255, 255, 255, 0.65)"
+        "color": "rgb(255, 255, 255)"
       },
       "approve": {
         "font": {
@@ -767,7 +771,7 @@
           "weight": 500
         },
         "color": "rgb(255, 255, 255)",
-        "bg": "rgb(49, 61, 72)",
+        "bg": "rgb(65, 81, 96)",
         "h": 54,
         "pad": [
           16,
@@ -932,6 +936,10 @@
           32
         ],
         "radius": 27
+      },
+      "forwardDisabled": {
+        "h": 54,
+        "opacity": 0.5
       }
     },
     "gaps": {
@@ -1305,7 +1313,7 @@
         "radius": 4,
         "border": {
           "width": 1,
-          "color": "rgba(91, 97, 110, 0.66)"
+          "color": "rgb(1, 23, 43)"
         }
       },
       "checkboxLabel": {
@@ -1314,7 +1322,7 @@
           "lineHeight": 22,
           "weight": 400
         },
-        "color": "rgba(0, 0, 0, 0.65)"
+        "color": "rgba(0, 0, 0, 0.85)"
       },
       "approve": {
         "font": {
@@ -1323,7 +1331,7 @@
           "weight": 500
         },
         "color": "rgb(255, 255, 255)",
-        "bg": "rgb(17, 38, 56)",
+        "bg": "rgb(1, 23, 43)",
         "h": 54,
         "pad": [
           16,
@@ -1488,6 +1496,10 @@
           32
         ],
         "radius": 27
+      },
+      "forwardDisabled": {
+        "h": 54,
+        "opacity": 0.5
       }
     },
     "gaps": {
@@ -1861,7 +1873,7 @@
         "radius": 4,
         "border": {
           "width": 1,
-          "color": "rgba(138, 145, 158, 0.66)"
+          "color": "rgb(65, 81, 96)"
         }
       },
       "checkboxLabel": {
@@ -1870,7 +1882,7 @@
           "lineHeight": 22,
           "weight": 400
         },
-        "color": "rgba(255, 255, 255, 0.65)"
+        "color": "rgb(255, 255, 255)"
       },
       "approve": {
         "font": {
@@ -1879,7 +1891,7 @@
           "weight": 500
         },
         "color": "rgb(255, 255, 255)",
-        "bg": "rgb(49, 61, 72)",
+        "bg": "rgb(65, 81, 96)",
         "h": 54,
         "pad": [
           16,
@@ -2044,6 +2056,10 @@
           32
         ],
         "radius": 27
+      },
+      "forwardDisabled": {
+        "h": 54,
+        "opacity": 0.5
       }
     },
     "gaps": {

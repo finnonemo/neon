@@ -10,14 +10,17 @@
 //   radius rendered top-left radius, capped at half the box, so a 56px pill
 //          and a 9999px pill of the same height agree
 //   border top border width and color
-const button = (n, check = ['font', 'color', 'bg', 'h', 'pad', 'radius']) => ({ cds: `[data-measure=actions] button:nth-of-type(${n})`, check });
+//   opacity the element's own opacity, which disabled controls set
+// both: the Neon fixture mirrors the CDS markup, so one selector reads either.
+const both = (selector, check) => ({ cds: selector, neon: selector, check });
+const button = (n, check = ['font', 'color', 'bg', 'h', 'pad', 'radius']) => both(`[data-measure=actions] button:nth-of-type(${n})`, check);
 
 export const screens = [
   {
     name: 'approval',
     query: 'layout=approval',
     targets: {
-      title: { cds: '[data-measure=title] h1', check: ['font', 'color'] },
+      title: both('[data-measure=title] h1', ['font', 'color']),
       searchLabel: { cds: '[data-measure=search] label', check: ['font', 'color'] },
       searchInput: { cds: '[data-measure=search] [data-testid=input-interactable-area]', check: ['h', 'radius', 'border', 'bg'] },
       searchText: { cds: '[data-measure=search] input', check: ['font', 'color'] },
@@ -42,11 +45,11 @@ export const screens = [
     query: 'layout=approval&pane=inspector',
     targets: {
       detailAvatar: { cds: '[data-measure=summary] [data-shape=circle]', check: ['h', 'w'] },
-      detailTitle: { cds: '[data-measure=summary] h2', check: ['font', 'color'] },
-      detailMeta: { cds: '[data-measure=summary] h2 + span', check: ['font', 'color'] },
-      detailsHeading: { cds: '[data-measure=details] span:nth-child(1)', check: ['font', 'color'] },
-      detailsBody: { cds: '[data-measure=details] span:nth-child(2)', check: ['font', 'color'] },
-      detailsCaption: { cds: '[data-measure=details] span:nth-child(3)', check: ['font', 'color'] },
+      detailTitle: both('[data-measure=summary] h2', ['font', 'color']),
+      detailMeta: both('[data-measure=summary] h2 + span', ['font', 'color']),
+      detailsHeading: both('[data-measure=details] span:nth-child(1)', ['font', 'color']),
+      detailsBody: both('[data-measure=details] span:nth-child(2)', ['font', 'color']),
+      detailsCaption: both('[data-measure=details] span:nth-child(3)', ['font', 'color']),
       notesLabel: { cds: '[data-measure=notes] label', check: ['font', 'color'] },
       notes: { cds: '[data-measure=notes] [data-testid=input-interactable-area]', check: ['h', 'radius', 'border', 'bg'] },
       notesText: { cds: '[data-measure=notes] textarea', check: ['font', 'color', 'pad'] },
@@ -67,7 +70,7 @@ export const screens = [
     name: 'extras',
     query: 'layout=extras',
     targets: {
-      title: { cds: '[data-measure=title] h1', check: ['font', 'color'] },
+      title: both('[data-measure=title] h1', ['font', 'color']),
       selectLabel: { cds: '[data-measure=select] label', check: ['font', 'color'] },
       selectTrigger: { cds: '[data-measure=select] [data-testid=input-interactable-area]', check: ['h', 'radius', 'border', 'bg'] },
       selectValue: { cds: '[data-measure=select] button p', check: ['font', 'color'] },
@@ -80,6 +83,8 @@ export const screens = [
       rowMenuButton: { cds: '[data-measure=table] tbody tr:nth-child(1) button', check: ['h', 'w'] },
       rejectRequest: button(1),
       save: button(2),
+      // CDS also blends a disabled fill by luminance; only the opacity is held.
+      forwardDisabled: button(3, ['h', 'opacity']),
     },
     gaps: [
       ['selectLabel', 'selectTrigger', 'y'],
@@ -188,6 +193,7 @@ export function measureInPage(targets) {
       pad: [style.paddingTop, style.paddingRight, style.paddingBottom, style.paddingLeft].map(px),
       radius: px(Math.min(parseFloat(style.borderTopLeftRadius), box.width / 2, box.height / 2)),
       border: { width: px(style.borderTopWidth), color: style.borderTopColor },
+      opacity: Number(style.opacity),
     };
   }
   return out;
@@ -224,7 +230,8 @@ export function compare(actual, expected, tolerance = 1) {
         const ok = part === 'weight' ? got[part] === want[part] : near(got[part], want[part]);
         if (!ok) problems.push(`font.${part} ${got[part]} ≠ ${want[part]}`);
       }
-    } else if (key === 'pad') { if (!want.every((v, i) => near(got[i], v))) problems.push(`pad ${got} ≠ ${want}`); }
+    } else if (key === 'opacity') { if (Math.abs(got - want) > 0.02) problems.push(`opacity ${got} ≠ ${want}`); }
+    else if (key === 'pad') { if (!want.every((v, i) => near(got[i], v))) problems.push(`pad ${got} ≠ ${want}`); }
     else if (key === 'border') {
       if (!near(got.width, want.width)) problems.push(`border.width ${got.width} ≠ ${want.width}`);
       else if (want.width > 0 && !sameColor(got.color, want.color)) problems.push(`border.color ${got.color} ≠ ${want.color}`);

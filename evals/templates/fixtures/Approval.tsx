@@ -28,7 +28,7 @@ export function Approval() {
   const tabs = [{ id: "all", label: "ทั้งหมด" }, { id: "pending", label: "รอ" }, { id: "approved", label: "อนุมัติ" }];
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState(requests[0].id);
-  const [confirmed, setConfirmed] = useState(false);
+  const [confirmed, setConfirmed] = useState(true);
   // ?pane=inspector opens the details pane, so the spec can measure it at 375.
   const [pane, setPane] = useState<ActivePane>(new URLSearchParams(location.search).get("pane") === "inspector" ? "inspector" : "content");
   const visible = requests.filter((r) => (tab === "all" || r.status === tab) && r.name.toLowerCase().includes(query.toLowerCase()));

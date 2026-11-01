@@ -86,3 +86,20 @@ if (capture) {
     }
   });
 }
+
+if (target === 'neon' && !capture) {
+  // Stock cn reads text-label1 as a color and drops it beside text-positive.
+  test('cn keeps a type role and a text color together', async ({ page }) => {
+    await page.goto('/?layout=approval');
+    const { font, color, positive } = await page.evaluate(() => {
+      const el = document.querySelector('[data-measure=role-and-color]');
+      const probe = document.body.appendChild(Object.assign(document.createElement('span'), { style: 'color: var(--color-fgPositive)' }));
+      const style = getComputedStyle(el);
+      const result = { font: [style.fontSize, style.lineHeight, style.fontWeight], color: style.color, positive: getComputedStyle(probe).color };
+      probe.remove();
+      return result;
+    });
+    expect(font).toEqual(['14px', '20px', '600']);
+    expect(color).toBe(positive);
+  });
+}

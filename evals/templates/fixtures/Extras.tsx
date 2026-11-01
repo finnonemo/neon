@@ -63,6 +63,7 @@ export function Extras() {
         <HStack gap={1}>
           <Button variant="negative" onClick={() => setOpen(true)}>ปฏิเสธคำขอ</Button>
           <Button variant="secondary" onClick={() => toast.show("บันทึกแล้ว / Saved")}>บันทึก</Button>
+          <Button variant="primary" disabled>ส่งต่อ</Button>
         </HStack>
       </Hook>
       <Modal visible={open} onRequestClose={() => setOpen(false)}>

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "utils",
+  "type": "registry:lib",
+  "title": "cn with Neon type roles",
+  "dependencies": [
+    "cn@^0.5.1"
+  ],
+  "files": [
+    {
+      "path": "lib/utils.ts",
+      "content": "import { createCn } from \"cn/config\"\n\n// cn merges Tailwind classes. Neon's type roles (text-body, text-label1, ...)\n// are font sizes; without this list, cn treats them as colors and drops one of\n// text-label1 or text-positive. theme/neon.css defines the same roles.\nexport const cn = createCn({\n  extend: {\n    classGroups: {\n      \"font-size\": [{ text: [\"display1\", \"display2\", \"display3\", \"title1\", \"title2\", \"title3\", \"title4\", \"headline\", \"body\", \"label1\", \"label2\", \"caption\", \"legal\"] }],\n    },\n  },\n})\n",
+      "type": "registry:lib",
+      "target": "src/lib/utils.ts"
+    }
+  ]
+}
