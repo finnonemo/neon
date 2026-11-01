@@ -4,7 +4,7 @@
 
 Read this before you change a preset, picks file, theme text or prompt library entry, before you add or review a Theme Brief, or when the Theme Brief check fails in CI.
 
-Fast path: to change a preset or picks file, edit it, run the check below until it reports no problems, then run `node scripts/validate.mjs`.
+Fast path: to change a preset or picks file, edit it and run the check below until it reports no problems. If it reports that a published brief's section differs from fresh scripted output, refresh it with `scripted-only` (see [Section map](#section-map)). Then run `node scripts/validate.mjs`.
 
 ```sh
 node scripts/theme-briefs/theme-briefs.mjs check-only
@@ -37,6 +37,38 @@ A published brief is the Markdown `<theme>-<slug>.md` in `registry/theme-briefs`
 | Authoring record | `records/<theme>-<slug>.json` | What produced the published brief |
 
 Drafts and review reports go to `.local/` and are never committed.
+
+## Section map
+
+[`render.mjs`](../../scripts/theme-briefs/render.mjs) renders every scripted part from the theme, Neon's tokens and the picks file. Prose comes from the model through the prompt library entry named in the last column; a maintainer may edit it by hand.
+
+| # | Section | Scripted | Prose |
+| --- | --- | --- | --- |
+| 0 | Header | title, `**Theme:**` and `**Immersive Theme:**` labels, status paragraph, the mood's theme half (the theme text) and membership ratio line | tagline (`tagline`); the mood's occasion half (`mood-occasion`) |
+| 1 | Tokens — Colors | the theme's roles and steps, canvas first, and the shared secondary table | — |
+| 2 | Tokens — Typography | the typeface and every type role | — |
+| 3 | Tokens — Spacing & Shapes | the space and radius scales, a Layout table with `--layout-contentMaxWidth` and `--layout-endMargin` in px, and the layout picks | — |
+| 4 | Components | Main Action, Secondary Action, Logo, Tint Block, Accent Block, and Support Block on a theme with `support` | the occasion's components (`occasion-components`) |
+| 5 | Do's and Don'ts | the stock bullets, first in each list | the preset bullets, last in each list (`preset-dos-donts`) |
+| 6 | Surfaces | canvas, block steps and the first accent and support steps | — |
+| 7 | Elevation | none | — |
+| 8 | Imagery | the Brand Floor sentence, the last paragraph | the paragraphs before it (`imagery`) |
+| 9 | Brand Pattern | section, colourway and ground | — |
+| 10 | Layout | — | one paragraph (`layout`) |
+| 11 | Motion | the level's vocabulary and the reduced-motion rule | — |
+| 12 | Agent Prompt Guide | the Quick Color Reference | prompts after **Example Component Prompts** (`example-prompts`) |
+| 13 | Sibling Themes | each other theme's label, light or dark, canvas and its `sibling` text | — |
+| 14 | Quick Start | registry items and Tailwind v4 `@theme inline` aliases | — |
+
+Scripted wording holds for every colourway, and fixed components name tokens and steps, never px. Every px value appears in the brief's own tables.
+
+To refresh a brief after its theme, tokens or picks change, run:
+
+```sh
+node scripts/theme-briefs/theme-briefs.mjs scripted-only
+```
+
+It rewrites the scripted parts of every brief in `registry/theme-briefs` (or `--out <dir>`) and keeps the prose byte for byte. Prose is read by position, as the table gives it: the mood's middle lines, the components after the fixed ones, the last bullets of each list, and so on. Keep those positions when you edit prose by hand. A brief whose prose or inputs cannot be read is reported and left as it is.
 
 ## Presets and picks files
 
@@ -85,8 +117,11 @@ The check module in `scripts/theme-briefs` is shared by the tool's `check-only` 
 | `published brief … has no …` | A published brief is missing its picks file, Markdown, authoring record or registry entry. Add the missing part, or remove the others. |
 | `is not a color token`, `which <Theme> does not define`, `text needs 4.5:1`, `an action's edge needs 3:1` | A brief names a color or pair the theme cannot back. Use a token, or a variable and pair the theme defines and keeps readable. |
 | `names "<name>", a preset source` | A source's site or domain name appears in a brief. Remove it. |
+| `differs from fresh scripted output`, `sections must be, in order` | A scripted part no longer matches the theme, tokens or picks, or was edited by hand. Run `scripted-only`, and put lasting wording changes in `render.mjs`. |
+| `its scripted sections cannot be checked`, `not rewritten` | The brief's prose cannot be found where the section map puts it, or a rewrite would drop hand-added text, such as an extra bullet, section or header paragraph, or a paragraph after the Brand Floor sentence; or its inputs have problems. Move or remove the text the message names, or fix the inputs listed first. |
+| `takes the name of a fixed component` | An occasion component is named like one the brief renders itself. Rename it. |
 
-The registry tests also run in `validate.mjs`, so a brief's registry entry must build like every other item. Checks that need rendered output, such as scripted sections matching fresh output, arrive with the renderer. The scripted-only run arrives with it too.
+The registry tests also run in `validate.mjs`, so a brief's registry entry must build like every other item.
 
 ## Branch: drafting from a page
 

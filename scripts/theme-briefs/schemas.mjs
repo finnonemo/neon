@@ -6,6 +6,8 @@ const SECTION_ROLES = ['hero', 'proof', 'detail-list', 'call-out', 'form', 'foot
 export const COLOURWAYS = ['palette', 'accent', 'support'];
 const SECONDARIES = ['green', 'blue', 'purple', 'red', 'orange'];
 const REVIEW_STATUSES = ['illustrative', 'partially-reviewed', 'reviewed'];
+// The components every brief renders itself; an occasion component never takes one of their names.
+export const FIXED_COMPONENTS = ['Main Action', 'Secondary Action', 'Logo', 'Tint Block', 'Accent Block', 'Support Block'];
 export const ENTRIES = ['tagline', 'mood-occasion', 'occasion-components', 'preset-dos-donts', 'imagery', 'layout', 'example-prompts'];
 
 const text = { type: 'string' };
@@ -194,6 +196,9 @@ export function presetProblems(kind, data) {
   const { sections, brandPattern } = data ?? {};
   if (kind === 'layout' && Array.isArray(sections) && brandPattern?.section && !sections.includes(brandPattern.section)) {
     problems.push(`Brand Pattern section "${brandPattern.section}" is not one of its sections`);
+  }
+  if (kind === 'occasion' && Array.isArray(data?.components)) {
+    for (const { name } of data.components) if (FIXED_COMPONENTS.includes(name)) problems.push(`component "${name}" takes the name of a fixed component`);
   }
   if (onDomain(sourceHost(data) ?? '', 'refero.design')) problems.push('"source.url" is a Refero Styles page; the Refero corpus is never a preset source');
   return problems;
