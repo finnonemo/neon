@@ -11,7 +11,7 @@ Apply Finnomena visual roles to existing UI while preserving its framework and p
 
 ## When to use
 
-Use for CSS styling or presentation redesign. Full CDS adoption belongs to [neon-create](../neon-create/SKILL.md). Review-only requests belong to [neon-review](../neon-review/SKILL.md).
+Use for CSS styling or presentation redesign. Full CDS adoption, and color changes to CDS components in an app already on CDS (frozen), belong to [neon-create](../neon-create/SKILL.md). Review-only requests belong to [neon-review](../neon-review/SKILL.md).
 
 ## Fast path
 
