@@ -81,3 +81,17 @@ export async function checkSkillMetadata(file) {
   if (!description) fail('"description" is required');
   if (description.length > MAX_DESCRIPTION) fail(`"description" is ${description.length} characters; the limit is ${MAX_DESCRIPTION}`);
 }
+
+// Evals showed agents skip a reference that a numbered step only links
+// ("Verify with the shared checklist"); a read verb makes them load it.
+const STEP = /^\s*\d+\.\s/;
+const MARKDOWN_LINK = /\]\([^)\s]+\.md(?:#[^)]*)?\)/;
+const READ_VERB = /\b(read|use|follow)\b/i;
+
+export async function checkStepReads(file) {
+  const lines = (await readUtf8(file)).split('\n');
+  const index = lines.findIndex(line => STEP.test(line) && MARKDOWN_LINK.test(line) && !READ_VERB.test(line));
+  if (index !== -1) {
+    throw new Error(`Step links a reference without a read verb in ${file} at line ${index + 1}: say "read the [...]" so agents load it`);
+  }
+}
