@@ -34,6 +34,7 @@ Run each request with the named context, first against the baseline and then the
 | Colors-only restyle of a Tailwind v4 app whose disabled text must keep a stock utility | The run executes the shipped source lint on its changed files and the report fixes or justifies each warning on a `Source lint:` line. See [Source lint](#source-lint) |
 | Review this Finnomena back office screenshot (generated-dashboard habits, Neon navy and indigo present) | Findings name habit rows with visible evidence and give CDS or composition fixes; Neon navy structure and indigo links are not flagged as habits; no file edited. See [Functional screen habits](#functional-screen-habits) |
 | Finnomena fund-fee table at 375px | Below about 640px each fund is a two-line row (identity and key figure, then labeled secondary fields); every value shown at 1440px is visible at 375px; no sideways-scrolling table. See [Functional screen habits](#functional-screen-habits) |
+| Finnomena event page and Back Office approvals screen, baseline against revised skills (blind) | A judge who cannot tell the packages apart prefers one output per pair, or neither, at 375px and 1440px and names problems with the Look and fix questions and habits table; no numeric score; never feeds readiness. See [Output quality (blind)](#output-quality-blind) |
 
 Verdicts are pass, fail or unverified for routing, scope, resource retrieval, component correctness, color roles, feature completion, responsive behavior and evidence honesty. Link actual artifacts. Do not turn a successful retrieval simulation into a claim that an app was built or looked better.
 
@@ -581,6 +582,46 @@ Pass requires every value shown at 1440px to be visible and untruncated at 375px
 This case does not discriminate on Claude Code: the baseline already stacked the rows without the pattern. The revised run followed the new section's 640px threshold and used CDS instead of page CSS.
 
 Limits: two review samples per package and one build sample each, Claude Code only, no Codex, light mode only, one screenshot width for the review. Every sample except Revised-2 and Revised-3 had one denied command; the baselines' denials blocked pixel sampling, which the revised runs did not attempt. The baseline and revised samples did not all run with the same allowlist. The revised build has no final report, so its Look and fix and Done lines are unverified. The build fixtures' files were staged but not committed, so each run's `git status` showed the whole app as new and its `diff.patch` holds the full app. Not exercised: colors-only scope (chart and status rows only), `composition: 'preserve'`, and a habit table applied inside a build. Run logs, grades, screenshots and builds without `node_modules` are in `.local/evals/54-{review-baseline-1,review-baseline-2,review-revised-2,review-revised-3,review-void-1,build-baseline-1,build-revised-1}`; fixtures, the run script and the graders are in `.local/evals/54-tools`.
+
+## Output quality (blind)
+
+The other sections check that a skill follows its contract. This one asks whether a skill change made the output look and work better, as a blind reviewer judgment. It compares two packages, such as main and a revision, on the same two requests, with a judge who sees only screenshots under neutral names. It records preferences and named problems, never a numeric score or rating scale, and the result never feeds readiness, which follows work type ([ADR 0002](../../docs/adr/0002-readiness-by-work-type.md)).
+
+### Requests
+
+Each sample starts in its own empty folder, a fresh git repository outside the Neon checkout, so no `AGENTS.md` or other package sits above it. The only per-run text is the trailing port sentence. Verbatim:
+
+> /neon:neon-create Build a Finnomena event page in ./event. The event is "Finnomena Data Night: เบื้องหลังเครื่องมือข้อมูล", an evening meetup for engineers, analysts and designers about how our team builds data tools. It's on Thursday 10 December 2026, 18:30–21:00, at Finnomena HQ, Column Tower 22nd floor, Ratchadaphisek Road, Bangkok. Agenda: three short talks by our data team, a live demo of our internal dashboards, then networking with food and drinks. Registration is on https://example.com/data-night. Headline in Thai. Use port &lt;port&gt; for any dev or preview server.
+
+> /neon:neon-create Build a Finnomena Back Office approvals screen in ./approvals with mock data. Operations staff review pending customer requests (fund switches, redemptions over the daily limit and KYC updates), open one to see its details, then approve it, or reject it with a reason. Use port &lt;port&gt; for any dev or preview server.
+
+The event page is a Finnomena-led Campaign Page: no Reference Design is attached, so the dial does not apply and the page is Finnomena's own. All of its content is supplied and it has no form or Investment Content, so content honesty and readiness do not confound the comparison.
+
+### Samples and screenshots
+
+Run three samples of each request per package, twelve runs in a round, on the agent's browser tool where it has one and the same permissions for every run. Check the first run's log for denied commands before starting the rest; a denial voids the sample. Cap each run's wall-clock time. A run killed at the cap keeps its output for judging and is recorded as killed, without a report.
+
+The evaluator, not the agent, builds each output and screenshots it in light mode in its loaded state, at 375×812 and 1440×900: the first screen at each size and the full page at each width. `node scripts/probe-page.mjs --serve <dist> --out <dir>` takes the full-page shots; crop the first screens from them. For the approvals screen, shoot the list with one request open where the layout shows both; otherwise shoot the list. Record any output that does not build, and judge what renders.
+
+### Blinding
+
+Pair baseline sample *n* with revised sample *n* for each request, giving six pairs. For each pair, randomly assign one output to side A and the other to side B, then shuffle the pair order. Copy the screenshots into a judge folder as `pair-<n>/<A|B>-<width>-<first|full>.png`, with the same modification time, and write the key (pair, side, package, sample) to a folder the judge never reads. Before judging, check that no screenshot names its package, revision or run.
+
+### Judge
+
+A fresh `claude -p` process with no transcript context, whose working directory is the judge folder and whose only tools are `Read` and `Glob`. The folder also holds a rubric file with the text of:
+
+- the [Look and fix](../../skills/neon-redesign/references/verification.md#look-and-fix) critique questions;
+- the [functional screen habits](../../skills/neon-review/references/review-checks.md#functional-screen-habits) table, applied to the approvals pairs only, since the event page is immersive;
+- the [color roles](../../skills/INSTRUCTION.md#color-roles) and [one question, first screen](../../skills/neon-create/references/new-ui-workflow.md#one-question-first-screen) passages those questions link to.
+
+For each pair the judge states a preference for A, B or neither, the reason in a sentence or two, and named problems for each side, each with its width and screenshot. It gives no number, score or rating. Save its answer before unblinding.
+
+### Recording
+
+Unblind with the key and record per pair: the preferred package or none, the judge's reason, and the named problems per output. Tally preferences per request as counts of pairs ("revised preferred in two of three pairs"), not percentages. Label the result as one reviewer's judgment. Under Limits, record the agent and version, the judge's model, samples, widths, color modes, states, permissions, ports, and every void, killed or unbuilt run.
+
+Generated apps, run logs, screenshots, the key and the judge's answer stay under `.local/evals/`; only this protocol and its recorded results are tracked.
 
 ## Flow refactor evaluation
 
