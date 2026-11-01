@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
-// Static guards for the functional patterns reference (README "Functional patterns").
+// Static guards for the functional patterns reference (records/functional-patterns.md).
 // They check the rules are stated and reachable, not that a run follows them.
 const skills = new URL('../../skills/', import.meta.url).pathname;
 const read = path => readFile(`${skills}${path}`, 'utf8');
