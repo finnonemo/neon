@@ -75,6 +75,14 @@ test('distribution ships the browser probe runner with no npm dependencies, runn
   assert.match(result.stdout, /^Browser probe: not run; recheck at 375px and 1440px$/m);
 });
 
+test('distribution leaves out the Theme Brief tool and its data', async () => {
+  const destination = await mkdtemp(join(tmpdir(), 'neon-package-test-'));
+  await packagePlugin({ destination });
+  const paths = await readdir(destination, { recursive: true });
+  assert.ok(paths.length > 0);
+  assert.deepEqual(paths.filter((path) => path.split(/[\\/]/).includes('theme-briefs')), []);
+});
+
 test('missing required payload fails before writing destination', async () => {
   const sourceRoot = await mkdtemp(join(tmpdir(), 'neon-empty-source-'));
   const destination = await mkdtemp(join(tmpdir(), 'neon-empty-dest-'));
