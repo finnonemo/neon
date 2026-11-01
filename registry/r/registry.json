@@ -26,7 +26,9 @@
       "registryDependencies": [
         "https://raw.githubusercontent.com/finnonemo/neon/neon--v0.5.0/registry/r/theme.json",
         "https://raw.githubusercontent.com/finnonemo/neon/neon--v0.5.0/registry/r/utils.json",
-        "https://raw.githubusercontent.com/finnonemo/neon/neon--v0.5.0/registry/r/button.json"
+        "https://raw.githubusercontent.com/finnonemo/neon/neon--v0.5.0/registry/r/button.json",
+        "https://raw.githubusercontent.com/finnonemo/neon/neon--v0.5.0/registry/r/tooltip.json",
+        "https://raw.githubusercontent.com/finnonemo/neon/neon--v0.5.0/registry/r/sonner.json"
       ],
       "files": [
         {
@@ -252,6 +254,171 @@
           "path": "ui/segmented-control.tsx",
           "type": "registry:ui",
           "target": "src/components/ui/segmented-control.tsx"
+        }
+      ]
+    },
+    {
+      "name": "tooltip",
+      "type": "registry:ui",
+      "title": "Tooltip",
+      "dependencies": [
+        "radix-ui@^1.8.1"
+      ],
+      "registryDependencies": [
+        "@neon/utils"
+      ],
+      "files": [
+        {
+          "path": "ui/tooltip.tsx",
+          "type": "registry:ui",
+          "target": "src/components/ui/tooltip.tsx"
+        }
+      ]
+    },
+    {
+      "name": "sonner",
+      "type": "registry:ui",
+      "title": "Toast",
+      "dependencies": [
+        "sonner@^2.0.8"
+      ],
+      "files": [
+        {
+          "path": "ui/sonner.tsx",
+          "type": "registry:ui",
+          "target": "src/components/ui/sonner.tsx"
+        }
+      ]
+    },
+    {
+      "name": "popover",
+      "type": "registry:ui",
+      "title": "Popover",
+      "dependencies": [
+        "radix-ui@^1.8.1"
+      ],
+      "registryDependencies": [
+        "@neon/utils"
+      ],
+      "files": [
+        {
+          "path": "ui/popover.tsx",
+          "type": "registry:ui",
+          "target": "src/components/ui/popover.tsx"
+        }
+      ]
+    },
+    {
+      "name": "select",
+      "type": "registry:ui",
+      "title": "Select",
+      "dependencies": [
+        "radix-ui@^1.8.1",
+        "lucide-react@^1.66.0"
+      ],
+      "registryDependencies": [
+        "@neon/utils"
+      ],
+      "files": [
+        {
+          "path": "ui/select.tsx",
+          "type": "registry:ui",
+          "target": "src/components/ui/select.tsx"
+        }
+      ]
+    },
+    {
+      "name": "dropdown-menu",
+      "type": "registry:ui",
+      "title": "Dropdown menu",
+      "dependencies": [
+        "radix-ui@^1.8.1"
+      ],
+      "registryDependencies": [
+        "@neon/utils"
+      ],
+      "files": [
+        {
+          "path": "ui/dropdown-menu.tsx",
+          "type": "registry:ui",
+          "target": "src/components/ui/dropdown-menu.tsx"
+        }
+      ]
+    },
+    {
+      "name": "dialog",
+      "type": "registry:ui",
+      "title": "Dialog",
+      "dependencies": [
+        "radix-ui@^1.8.1",
+        "lucide-react@^1.66.0"
+      ],
+      "registryDependencies": [
+        "@neon/utils",
+        "@neon/button"
+      ],
+      "files": [
+        {
+          "path": "ui/dialog.tsx",
+          "type": "registry:ui",
+          "target": "src/components/ui/dialog.tsx"
+        }
+      ]
+    },
+    {
+      "name": "calendar",
+      "type": "registry:ui",
+      "title": "Calendar",
+      "dependencies": [
+        "react-day-picker@^10.0.2",
+        "date-fns@^4.1.0",
+        "lucide-react@^1.66.0"
+      ],
+      "registryDependencies": [
+        "@neon/utils",
+        "@neon/button"
+      ],
+      "files": [
+        {
+          "path": "ui/calendar.tsx",
+          "type": "registry:ui",
+          "target": "src/components/ui/calendar.tsx"
+        }
+      ]
+    },
+    {
+      "name": "date-picker",
+      "type": "registry:ui",
+      "title": "Date picker",
+      "dependencies": [
+        "date-fns@^4.1.0",
+        "lucide-react@^1.66.0"
+      ],
+      "registryDependencies": [
+        "@neon/utils",
+        "@neon/calendar",
+        "@neon/popover"
+      ],
+      "files": [
+        {
+          "path": "ui/date-picker.tsx",
+          "type": "registry:ui",
+          "target": "src/components/ui/date-picker.tsx"
+        }
+      ]
+    },
+    {
+      "name": "table",
+      "type": "registry:ui",
+      "title": "Table",
+      "registryDependencies": [
+        "@neon/utils"
+      ],
+      "files": [
+        {
+          "path": "ui/table.tsx",
+          "type": "registry:ui",
+          "target": "src/components/ui/table.tsx"
         }
       ]
     }

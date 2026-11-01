@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "sonner",
+  "type": "registry:ui",
+  "title": "Toast",
+  "dependencies": [
+    "sonner@^2.0.8"
+  ],
+  "files": [
+    {
+      "path": "ui/sonner.tsx",
+      "content": "import { Toaster as Sonner, type ToasterProps } from \"sonner\"\n\n// The CDS toast: the secondary fill, 8px corners, headline type, 16px above the\n// bottom center. The base's AppRoot renders the one Toaster and passes its\n// color scheme as theme, so no theme provider is needed; call toast() from\n// \"sonner\" anywhere.\nfunction Toaster(props: ToasterProps) {\n  return (\n    <Sonner\n      position=\"bottom-center\"\n      offset={16}\n      mobileOffset={16}\n      toastOptions={{\n        unstyled: true,\n        classNames: {\n          toast: \"flex min-h-14 w-(--width) items-center gap-4 rounded-md bg-secondary px-6 py-2 text-secondary-foreground shadow-[0_8px_24px_rgba(0,0,0,0.12)]\",\n          title: \"text-headline\",\n          description: \"text-body text-muted-foreground\",\n          actionButton: \"ml-auto shrink-0 rounded-full bg-primary px-4 py-2 text-label1 text-primary-foreground\",\n          cancelButton: \"shrink-0 rounded-full px-4 py-2 text-label1\",\n        },\n      }}\n      {...props}\n    />\n  )\n}\n\nexport { Toaster }\n",
+      "type": "registry:ui",
+      "target": "src/components/ui/sonner.tsx"
+    }
+  ]
+}

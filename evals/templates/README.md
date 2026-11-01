@@ -15,7 +15,7 @@ The fixture covers both controlled and uncontrolled content/detail navigation, s
 
 `cds-match.spec.mjs` holds the Neon base to the CDS starter. Two fixture screens (approval, and extras with its overlays measured open) are measured at 375 and 1440, light and dark, into `fixtures/cds-baseline.json`: sizes within ±1px, type, colors, paddings, radii, borders and neighbor gaps. [measure.mjs](measure.mjs) lists every measured element with one selector per target, never a text search. Against the CDS app the spec checks that the baseline still holds; `npm run baseline` recaptures it after an intended CDS fixture or theme change. `npm test -- --target neon` builds the registry, serves it locally, creates the app with `shadcn init` from the Neon base, adds every registry component and runs the match spec against it.
 
-`neon-a11y.spec.mjs` runs on the Neon target only: axe (WCAG 2.1 AA) on the approval screen in light and dark, every Tag at 4.5:1 on its wash, and the segmented control's arrow keys. The one allowed violation is the dark destructive button (white on fgNegative, 4.32:1), provisional until #97.
+`neon-a11y.spec.mjs` runs on the Neon target only: axe (WCAG 2.1 AA) on both screens in light and dark, every Tag at 4.5:1 on its wash, the segmented control's arrow keys, focus returning from the Dialog and row menu, the Select closing on a pick, a polite toast with no provider in the screen, and the DatePicker's format in a `th-TH` browser (no Buddhist year). The one allowed violation is the dark destructive button (white on fgNegative, 4.32:1), provisional until #97.
 
 `--keep` leaves the assembled app in the temporary directory and prints its path, so you can preview and screenshot it.
 

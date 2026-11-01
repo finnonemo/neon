@@ -57,6 +57,7 @@
   --color-line-heavy: var(--color-bgLineHeavy);
   --color-inverse: var(--color-bgInverse);
   --color-inverse-foreground: var(--color-fgInverse);
+  --color-overlay: var(--color-bgOverlay);
   --color-positive-wash: var(--color-bgPositiveWash);
   --color-warning-wash: var(--color-bgWarningWash);
   --color-negative-wash: var(--color-bgNegativeWash);
