@@ -80,11 +80,19 @@ _Avoid_: layout change, redesign (alone)
 One of four on-brand color sets for a Campaign Page, taken from the Finnomena Guidelines' membership levels: Club (white canvas), Exclusive (yellow), Private (light grey) and Ultra (navy). Each fixes the canvas, text, its own 100/75/50/25 steps, an accent family's steps and the action; the guideline's secondary colors are available in all four. A page switches between them by one attribute.
 _Avoid_: tier (a styling decision), palette, color mode
 
+**Theme Brief**:
+A style description in the Refero Styles format that Finnomena writes for one Immersive Theme, whose typeface and colors the theme fixes. It is where a Campaign Page starts when the employee brings no Reference Design.
+_Avoid_: design file (names the file, not the concept), Reference Design, template
+
+**Brand Pattern**:
+Finnomena background artwork made by Block's generator from a locked seed, placed in a section that a Theme Brief or the employee names.
+_Avoid_: texture, background, Page (Block's full composition)
+
 ### Reference designs
 
 **Reference Design**:
 An outside style description of another product, brought by the employee (for example from Refero Styles), that shapes a Campaign Page's look while Finnomena keeps ownership of its brand.
-_Avoid_: template, theme, inspiration
+_Avoid_: template, theme, inspiration, Theme Brief (which Finnomena writes)
 
 **Brand Contract**:
 Finnomena's visual language and semantic color rules; wins over any Reference Design on every property it owns.
