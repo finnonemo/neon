@@ -304,3 +304,9 @@ test('the tool refuses to run without a mode', () => {
   assert.equal(status, 2);
   assert.match(out, /Usage: node scripts\/theme-briefs\/theme-briefs\.mjs check-only/);
 });
+
+test('the repository passes its own Theme Brief check', () => {
+  const result = run(['check-only']);
+  assert.equal(result.status, 0, result.out);
+  assert.match(result.out, /^Theme Brief check: 4 themes, .*; no problems$/m);
+});
