@@ -189,6 +189,9 @@ const COMPATIBILITY_REFUSALS = {
   'a Brand Pattern section the layout lacks': [edit(LAYOUT, (p) => ({ ...p, brandPattern: { section: 'proof' } })), /^theme-briefs\/presets\/layout\/event-landing\.json: Brand Pattern section "proof" is not one of its sections$/m],
   'a missing preset': [edit(PICKS, (p) => ({ ...p, presets: { ...p.presets, imagery: 'still-life' } })), /^theme-briefs\/picks\/club-run\.json: imagery preset "still-life" not found under theme-briefs\/presets\/imagery$/m],
   'a third-party source with no review record': [edit(LAYOUT, (p) => ({ ...p, source: source('https://www.example-run.com/events') })), /^theme-briefs\/picks\/club-run\.json: layout "event-landing" has a third-party source, so the picks file needs a review record$/m],
+  'a source URL that does not parse, as a third party': [edit(LAYOUT, (p) => ({ ...p, source: source('https://[x]/events') })), /^theme-briefs\/picks\/club-run\.json: layout "event-landing" has a third-party source, so the picks file needs a review record$/m],
+  'a Refero Styles page as a source': [edit(IMAGERY, (p) => ({ ...p, source: source('https://www.refero.design/styles/run') })), /^theme-briefs\/presets\/imagery\/people-in-action\.json: "source\.url" is a Refero Styles page; the Refero corpus is never a preset source$/m],
+  'a review past illustrative with no reviewer or date': [edit(PICKS, (p) => ({ ...p, review: { ...review('reviewed'), reviewer: null, reviewed_on: null } })), /^theme-briefs\/picks\/club-run\.json: review status "reviewed" needs a reviewer and reviewed_on$/m],
   'a review record with no third-party source': [edit(PICKS, (p) => ({ ...p, review: review('reviewed') })), /^theme-briefs\/picks\/club-run\.json: review record without a third-party source; remove it$/m],
 };
 
@@ -262,6 +265,8 @@ const BRIEF_REFUSALS = {
   'a brief that names its source domain': [{ ...thirdParty('reviewed'), [BRIEF]: `${briefText}Measured from www.Example-Run.com.\n` }, /^registry\/theme-briefs\/club-run\.md: names "example-run\.com", a preset source; no source name ships$/m],
   'a brief that names its source site': [{ ...thirdParty('reviewed'), [BRIEF]: `${briefText}A layout in the Example-Run style.\n` }, /^registry\/theme-briefs\/club-run\.md: names "example-run", a preset source; no source name ships$/m],
   'an off-token hex': [{ ...published(), [BRIEF]: `${briefText}| Ink | \`#01172c\` | x |\n` }, /^registry\/theme-briefs\/club-run\.md: #01172c is not a color token \(nearest Navy\/100 #01172b\)$/m],
+  'a short hex': [{ ...published(), [BRIEF]: `${briefText}| Ink | \`#abc\` | x |\n` }, /^registry\/theme-briefs\/club-run\.md: #abc is not a color token; tables give a token's 6-digit value$/m],
+  'a hex with alpha': [{ ...published(), [BRIEF]: `${briefText}| Ink | \`#01172bff\` | x |\n` }, /^registry\/theme-briefs\/club-run\.md: #01172bff is not a color token; tables give a token's 6-digit value$/m],
   'a variable the theme does not define': [{ ...published(), [BRIEF]: `${briefText}Use \`var(--immersive-support-50)\` with \`var(--immersive-on-support-50)\`.\n` }, /^registry\/theme-briefs\/club-run\.md: names --immersive-on-support-50, which Club does not define$/m],
   'an unreadable fill and text pair': [{ ...published(), 'theme/css/immersive-themes.css': whiteOnGrey() }, /^registry\/theme-briefs\/club-run\.md: --immersive-on-palette-50 on --immersive-palette-50 is 1\.\d\d:1 on Club; text needs 4\.5:1$/m],
 };

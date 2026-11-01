@@ -2,10 +2,10 @@
 // and every input is scanned for hex-like strings, px values and font fields
 // (type and colors come from the theme, never from an input).
 
-export const SECTION_ROLES = ['hero', 'proof', 'detail-list', 'call-out', 'form', 'footer'];
+const SECTION_ROLES = ['hero', 'proof', 'detail-list', 'call-out', 'form', 'footer'];
 export const COLOURWAYS = ['palette', 'accent', 'support'];
-export const SECONDARIES = ['green', 'blue', 'purple', 'red', 'orange'];
-export const REVIEW_STATUSES = ['illustrative', 'partially-reviewed', 'reviewed'];
+const SECONDARIES = ['green', 'blue', 'purple', 'red', 'orange'];
+const REVIEW_STATUSES = ['illustrative', 'partially-reviewed', 'reviewed'];
 export const ENTRIES = ['tagline', 'mood-occasion', 'occasion-components', 'preset-dos-donts', 'imagery', 'layout', 'example-prompts'];
 
 const text = { type: 'string' };
@@ -35,7 +35,7 @@ export function presetSchema(kind, name, facts) {
       components: list(object({ name: text, role: text, contentNotes: text, roles: list(oneOf(...COLOURWAYS, 'action'), 1) }), 2, 6),
       dos: list(text, 1, 3),
       donts: list(text, 1, 3),
-      promptInputs: list(text, 1, 5),
+      promptInputs: list(text),
       secondaryHighlights: list(oneOf(...SECONDARIES)),
     });
   }
@@ -187,18 +187,32 @@ export function entryProblems(name, data) {
   return problems;
 }
 
-export function layoutProblems(data) {
+const onDomain = (host, domain) => host === domain || host.endsWith(`.${domain}`);
+
+export function presetProblems(kind, data) {
+  const problems = [];
   const { sections, brandPattern } = data ?? {};
-  return Array.isArray(sections) && brandPattern?.section && !sections.includes(brandPattern.section)
-    ? [`Brand Pattern section "${brandPattern.section}" is not one of its sections`] : [];
+  if (kind === 'layout' && Array.isArray(sections) && brandPattern?.section && !sections.includes(brandPattern.section)) {
+    problems.push(`Brand Pattern section "${brandPattern.section}" is not one of its sections`);
+  }
+  if (onDomain(sourceHost(data) ?? '', 'refero.design')) problems.push('"source.url" is a Refero Styles page; the Refero corpus is never a preset source');
+  return problems;
 }
 
-// Finnomena's own pages need no design review; every other host is a third party.
+// A review past illustrative names who reviewed it and when.
+export function picksProblems(data) {
+  const { status, reviewer, reviewed_on } = data?.review ?? {};
+  return status && status !== 'illustrative' && (!reviewer || !reviewed_on) ? [`review status "${status}" needs a reviewer and reviewed_on`] : [];
+}
+
+// The preset's source host, '' when its URL cannot be read, undefined when it has no source.
 export function sourceHost(preset) {
+  if (!preset?.source) return undefined;
   try {
-    return new URL(preset?.source?.url).hostname.toLowerCase().replace(/^www\./, '');
+    return new URL(preset.source.url).hostname.toLowerCase().replace(/^www\./, '');
   } catch {
-    return undefined;
+    return '';
   }
 }
-export const isThirdParty = (host) => Boolean(host) && host !== 'finnomena.com' && !host.endsWith('.finnomena.com');
+// Finnomena's own pages need no design review; every other source, readable or not, is a third party.
+export const isThirdParty = (host) => host !== undefined && !onDomain(host, 'finnomena.com');

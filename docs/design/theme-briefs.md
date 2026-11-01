@@ -20,7 +20,7 @@ An employee who builds a Campaign Page on an Immersive Theme gets its colors and
 - [ADR 0001](../adr/0001-employees-bring-reference-designs.md): Neon ships no third-party reference design. A brief is Finnomena-made, and one drawn from a third-party page ships only after a design review in the [example library](example-library.md).
 - [ADR 0007](../adr/0007-theme-brief-presets-borrow-only-structure-from-named-public-pages.md): a preset may borrow structure, geometry and motion from a named public page, never its colors, type, imagery, copy or name.
 
-Every value comes from the theme and Neon's tokens and is checked in CI. A token or theme change therefore cannot leave a stale brief behind.
+Every value comes from the theme and Neon's tokens, and CI checks committed briefs and their inputs against both.
 
 ## What a Theme Brief is
 
@@ -46,13 +46,13 @@ Drafts and review reports go to `.local/` and are never committed.
 - Type comes from the theme, so no key may name a font or typeface.
 - Spacing and radius are step names (`space-4`, `borderRadius-500`), never px.
 
-**Occasion presets** have 2–6 components. Each names the roles it uses: `palette`, `accent`, `support` or `action`. They also have 1–3 do's and 1–3 don'ts, 1–5 prompt inputs and any secondary highlights.
+**Occasion presets** have 2–6 components. Each names the roles it uses: `palette`, `accent`, `support` or `action`. They also have 1–3 do's and 1–3 don'ts, their prompt inputs and any secondary highlights.
 
 **Layout presets** list generic section roles (`hero`, `proof`, `detail-list`, `call-out`, `form`, `footer`) and a density. They give block radius, section gap and card padding as steps, a page width of `contained` or `full-bleed`, and a motion level of `still`, `subtle` or `lively`. The Brand Pattern's section must be one of the layout's own roles.
 
 **Imagery presets** describe what leads, framing, subject, illustration and density.
 
-A layout or imagery preset drafted from a page records it in `source`. The URL is https with no fragment. The record also holds the date measured, which of structure, geometry and motion were kept, and whether robots.txt disallowed the page. The source is provenance only: it is never a drafting input, and no name from it may appear in a brief.
+A layout or imagery preset drafted from a page records it in `source`. The URL is https with no fragment. The record also holds the date measured, which of structure, geometry and motion were kept, and whether robots.txt disallowed the page. A Refero Styles page is never a source. The source is provenance only: it is never a drafting input, and no name from it may appear in a brief.
 
 A **picks file** is named after its theme and brief name: theme `club` with brief name `Run` gives `club-run.json`. Its choices must fit the theme:
 
@@ -60,7 +60,7 @@ A **picks file** is named after its theme and brief name: theme `club` with brie
 - The colourway is one of the theme's own families, never a secondary color, and the ground is a step of it.
 - A Brand Pattern sits on the bare canvas only as `palette` 100. A ground whose fill is the theme's canvas color under any other colourway or step is refused. On Club, whose palette 100 is a grey tint, every Pattern therefore sits on a tinted section.
 
-When any chosen preset has a source outside finnomena.com, the picks file needs a `review` record in the [example library](example-library.md) shape. It holds `status`, `source_revision`, `reviewer`, `reviewed_on` and `approved_properties`. A picks file with no such source carries no review record.
+When any chosen preset has a source outside finnomena.com, the picks file needs a `review` record in the [example library](example-library.md) shape. It holds `status`, `source_revision`, `reviewer`, `reviewed_on` and `approved_properties`; a status past `illustrative` names the reviewer and date. A source URL the tool cannot read counts as third-party. A picks file with no such source carries no review record.
 
 **Theme texts** stay true when a theme is added. They hold no ratio or percentage, no superlative and no comparison with another theme.
 
@@ -70,11 +70,18 @@ The check module in `scripts/theme-briefs` is shared by the tool's `check-only` 
 
 | Failure | Meaning and fix |
 | --- | --- |
-| `unknown key`, `missing key`, `must be one of`, `must have N items` | The file does not match its schema. Fix the key, value or count the message names. |
+| `not valid JSON`, `unknown key`, `missing key`, `must be one of`, `must have N items`, `must match the file name` | The file does not match its schema. Fix the syntax, key, value or count the message names. |
+| `file name must be "<theme>-<slug>.json"` | A picks file is named apart from its theme and brief name. Rename the file or fix the brief name. |
+| `no Immersive Theme`, `must be 2–4 sentences`, `must be 20 words or fewer` | A theme text names no theme, or its `mood` or `sibling` is the wrong length. |
+| `not a prompt library entry`, `names a preset source`, `names the entry itself` | A prompt library entry has an unknown name, takes a source as input, or runs after itself. |
+| `is a Refero Styles page` | A preset names the Refero corpus as its source. Draft from another page. |
 | `holds a hex-like value`, `holds a px value`, `is a font field` | An input carries a value the theme owns. Describe the intent instead, and use a step name. |
 | `compares or ranks themes`, `holds a ratio or percentage` | A theme text will go stale when themes change. Describe the theme on its own terms. |
 | `uses role … which <Theme> lacks`, `is not one of <Theme>'s families`, `is not a step of`, `bare canvas` | The picks file does not fit its theme. Choose another preset, colourway or ground. |
-| `needs a review record`, `review status is "illustrative"` | A third-party source needs a Finnomena design review before the brief ships. Record it, or leave the brief unpublished. |
+| `Brand Pattern section … is not one of its sections` | A layout places the Pattern in a section it does not have. |
+| `preset … not found` | A picks file names a preset with no file. Add the preset or fix the slug. |
+| `needs a review record`, `review status is "illustrative"`, `needs a reviewer and reviewed_on` | A third-party source needs a recorded Finnomena design review before the brief ships. Record it, or leave the brief unpublished. |
+| `review record without a third-party source` | None of the chosen presets needs a review. Remove the record. |
 | `published brief … has no …` | A published brief is missing its picks file, Markdown, authoring record or registry entry. Add the missing part, or remove the others. |
 | `is not a color token`, `which <Theme> does not define`, `text needs 4.5:1`, `an action's edge needs 3:1` | A brief names a color or pair the theme cannot back. Use a token, or a variable and pair the theme defines and keeps readable. |
 | `names "<name>", a preset source` | A source's site or domain name appears in a brief. Remove it. |

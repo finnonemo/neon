@@ -4,7 +4,7 @@
 // is collected as "<repo-relative path>: <message>"; nothing stops at the first.
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { bans, briefSlug, ENTRIES, entryProblems, layoutProblems, entrySchema, picksSchema, presetSchema, sharedSchema, themeTextProblems, themeTextSchema, validate } from './schemas.mjs';
+import { bans, briefSlug, COLOURWAYS, ENTRIES, entryProblems, entrySchema, picksProblems, picksSchema, presetProblems, presetSchema, sharedSchema, themeTextProblems, themeTextSchema, validate } from './schemas.mjs';
 
 export const PRESET_KINDS = ['occasion', 'layout', 'imagery'];
 
@@ -30,7 +30,7 @@ function check(path, data, schema, problems, extra = []) {
 }
 
 // Theme facts: families, light/dark, roles, variables and steps, from the Immersive Themes data and theme CSS.
-export function themeFacts(root, problems = []) {
+function themeFacts(root, problems) {
   const data = readJson(root, 'theme/immersive-themes.json', problems) ?? { themes: {} };
   const css = existsSync(join(root, 'theme/css/immersive-themes.css')) ? readFileSync(join(root, 'theme/css/immersive-themes.css'), 'utf8') : '';
   const themeCss = existsSync(join(root, 'theme/css/theme.css')) ? readFileSync(join(root, 'theme/css/theme.css'), 'utf8') : '';
@@ -41,7 +41,7 @@ export function themeFacts(root, problems = []) {
   const steps = (prefix) => new Set([...themeCss.matchAll(new RegExp(`--(${prefix}-[\\w]+):`, 'g'))].map(([, name]) => name));
   const themes = {};
   for (const [id, theme] of Object.entries(data.themes ?? {})) {
-    const families = ['palette', 'accent', 'support'].filter((family) => theme[family]);
+    const families = COLOURWAYS.filter((family) => theme[family]);
     themes[id] = {
       id,
       label: theme.label,
@@ -64,7 +64,7 @@ export function loadInputs(root) {
     for (const path of jsonFiles(root, `theme-briefs/presets/${kind}`)) {
       const data = readJson(root, path, problems);
       if (data === undefined) continue;
-      check(path, data, presetSchema(kind, base(path), facts), problems, kind === 'layout' ? layoutProblems(data) : []);
+      check(path, data, presetSchema(kind, base(path), facts), problems, presetProblems(kind, data));
       presets[kind][base(path)] = { path, data };
     }
   }
@@ -73,7 +73,7 @@ export function loadInputs(root) {
   const library = jsonFiles(root, 'theme-briefs/prompt-library').map((path) => ({ path, name: base(path), data: readJson(root, path, problems) }));
   for (const { path, name, data } of picks) {
     const expected = typeof data?.theme === 'string' && typeof data?.briefName === 'string' ? `${data.theme}-${briefSlug(data.briefName)}` : name;
-    check(path, data, picksSchema(facts), problems, expected === name ? [] : [`file name must be "${expected}.json" (theme and brief name)`]);
+    check(path, data, picksSchema(facts), problems, [...(expected === name ? [] : [`file name must be "${expected}.json" (theme and brief name)`]), ...picksProblems(data)]);
   }
   for (const { path, id, data } of themeTexts) {
     if (facts.themes[id]) check(path, data, themeTextSchema, problems, themeTextProblems(data, id, facts));

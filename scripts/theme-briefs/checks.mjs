@@ -23,7 +23,7 @@ function chosenPresets(data, presets) {
 
 const thirdPartyKinds = (chosen) => Object.keys(chosen).filter((kind) => isThirdParty(sourceHost(chosen[kind])));
 
-// Check 2: the picks file's presets and colourway fit its theme. Skips what the schema already refused.
+// Compatibility: the picks file's presets and colourway fit its theme. Skips what the schema already refused.
 function compatibility({ path, data }, presets, facts) {
   const theme = facts.themes[data?.theme];
   if (!theme || typeof data.presets !== 'object' || data.presets === null) return [];
@@ -62,10 +62,14 @@ function sourceNames(host) {
 }
 const escape = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-// Check 5: every hex is a color token, and every fill/text pair the brief names is readable.
+// Colors: every hex is a color token, and every fill/text pair the brief names is readable.
 function colorProblems(text, theme, tokens) {
   const problems = [];
-  for (const hex of new Set(text.match(/#[0-9a-f]{6}\b/gi) ?? [])) {
+  for (const hex of new Set(text.match(/#[0-9a-f]{3,8}\b/gi) ?? [])) {
+    if (hex.length !== 7) {
+      problems.push(`${hex} is not a color token; tables give a token's 6-digit value`);
+      continue;
+    }
     const { exact, nearest } = matchToken(hex, tokens);
     if (!exact) problems.push(`${hex} is not a color token (nearest ${nearest.name} ${nearest.value})`);
   }
@@ -91,7 +95,7 @@ export function checkThemeBriefs({ root, out = join(root, 'registry/theme-briefs
   for (const picks of inputs.picks) problems.push(...compatibility(picks, presets, facts));
   const briefs = existsSync(out) ? readdirSync(out).filter((name) => name.endsWith('.md')) : [];
 
-  // Check 8: a published brief (Markdown or registry entry) has its picks file, Markdown, record and registry entry.
+  // Pairs and review: a published brief (Markdown or registry entry) has its picks file, Markdown, record and registry entry.
   const at = (path) => relative(root, path);
   const registry = JSON.parse(existsSync(join(root, 'registry/registry.json')) ? readFileSync(join(root, 'registry/registry.json'), 'utf8') : '{}');
   const entries = new Set((registry.items ?? []).map((item) => item.name).filter((name) => name?.startsWith('theme-brief-')).map((name) => name.slice('theme-brief-'.length)));
@@ -117,7 +121,7 @@ export function checkThemeBriefs({ root, out = join(root, 'registry/theme-briefs
     const text = readFileSync(markdown, 'utf8');
     const theme = facts.themes[picks?.data?.theme] ?? Object.values(facts.themes).find((candidate) => name.startsWith(`${candidate.id}-`));
     for (const message of colorProblems(text, theme, tokens)) problems.push(`${where}: ${message}`);
-    // Check 7: no site or domain name from any preset source; the first name found per source is enough.
+    // No source name: no site or domain name from any preset source; the first name found per source is enough.
     const leaked = sources.find((source) => new RegExp(`(?<![\\w-])${escape(source)}(?![\\w-])`, 'i').test(text));
     if (leaked) problems.push(`${where}: names "${leaked}", a preset source; no source name ships`);
   }
