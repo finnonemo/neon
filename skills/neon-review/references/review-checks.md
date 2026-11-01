@@ -23,7 +23,7 @@ For color mapping disagreements, identify the documented rule and actual mapping
 
 ## Functional screen habits
 
-Generated dashboards repeat a few habits. On a Back Office or Product Feature screen, name the habit in the finding, cite the visible evidence and give its Neon alternative as the fix. Names are CDS 9.26.1; confirm them in the installed types.
+Generated Back Office and Product Feature screens repeat a few habits. On such a screen, name the habit in the finding, cite the visible evidence and give its Neon alternative as the fix. Names are CDS 9.26.1; confirm them in the installed types.
 
 | Habit | Neon alternative |
 | --- | --- |

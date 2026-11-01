@@ -17,7 +17,8 @@
  * the Reference Design's brand in title, meta and alt text), each naming
  * elements, then the verification report line. Screenshots and probe.json go
  * to --out, default a new directory under the OS temp dir; an --out inside the
- * current directory (the app) is refused. Chrome's profile is a temp directory
+ * current directory, the --serve build or the app holding it (its nearest
+ * package.json) is refused. Chrome's profile is a temp directory
  * removed on exit. Chrome is found through --chrome, CHROME_PATH or the usual
  * install paths. Missing Chrome, a failed launch, a page that does not load or
  * a timeout prints `Browser probe: not run; …` and exits 0: the checks stay
@@ -193,14 +194,18 @@ export async function probePage(url, { widths = [375, 1440], brands = [], scheme
   }
 }
 
-const first = (list, count = 2) => list.slice(0, count).map(entry => (typeof entry === 'string' ? entry : entry.element)).join('; ') + (list.length > count ? ` +${list.length - count} more` : '');
+// The first `count` element names of a list, and how many more there are.
+const namesOf = (list, count = 2) => list.slice(0, count).map(entry => (typeof entry === 'string' ? entry : entry.element)).join('; ') + (list.length > count ? ` +${list.length - count} more` : '');
 
 const quoted = ({ element, text }) => (element.includes(text.slice(0, 40)) ? element : `${element} "${text}"`);
 
-/** Leads a reviewer should inspect at one width, each naming its elements. */
-export function leads(result) {
+// Adds `name` and the first element names of `list` to `found` when the list is not empty.
+const adder = found => (name, list) => { if (list.length) found.push(`${name} ${namesOf(list)}`); };
+
+/** The probe's general leads at one width (overflow, contrast, fills, nav, dialogs, serif text), each naming its elements. */
+export function layoutLeads(result) {
   const found = [];
-  const add = (name, list) => { if (list.length) found.push(`${name} ${first(list)}`); };
+  const add = adder(found);
   if (result.horizontalOverflow) found.push(`page overflow to ${result.documentScrollWidth}px`);
   add('overflowing', result.overflowingElements);
   add('scrolled on load', result.scrolledOnLoad.elements);
@@ -210,14 +215,24 @@ export function leads(result) {
   add('underlined nav', result.underlinedNavLinks);
   add('dialog past the viewport', result.dialogs.filter(dialog => !dialog.fits));
   add('serif text', result.serifSamples);
+  return found;
+}
+
+/** Leads from the Neon rules at one width: IBM Plex Sans Thai, the Finnomena logo and the source brand. */
+export function neonLeads(result) {
+  const found = [];
+  const add = adder(found);
   if (!result.plexThai.loadedFaces.length) found.push('no IBM Plex Sans Thai face loaded');
   if (result.plexThai.failedFaces) found.push(`${result.plexThai.failedFaces} IBM Plex Sans Thai faces failed to load`);
   add('Thai text not in IBM Plex Sans Thai', result.plexThai.thai.notInPlex);
   add('Latin text not in IBM Plex Sans Thai', result.plexThai.latin.notInPlex);
-  if (!result.finnomenaLogo.visible.length) found.push(result.finnomenaLogo.hidden.length ? `Finnomena logo hidden (${first(result.finnomenaLogo.hidden)})` : 'no Finnomena logo');
+  if (!result.finnomenaLogo.visible.length) found.push(result.finnomenaLogo.hidden.length ? `Finnomena logo hidden (${namesOf(result.finnomenaLogo.hidden)})` : 'no Finnomena logo');
   if (result.sourceBrand) add('source brand in', result.sourceBrand.found.map(quoted));
   return found;
 }
+
+/** Leads a reviewer should inspect at one width, each naming its elements. */
+export const leads = result => [...layoutLeads(result), ...neonLeads(result)];
 
 /** The fixed report line from verification.md's item 5. */
 export function reportLine(widths, measured) {
@@ -230,16 +245,17 @@ export function reportLine(widths, measured) {
   }).join('; ')}`;
 }
 
-function neonRules(result) {
+// The Neon rules' results at one width, one indented line each, for the human-readable output.
+function neonRuleLines(result) {
   const { plexThai, finnomenaLogo, sourceBrand } = result;
-  const script = (name, { inPlex, inPlexCount, notInPlex, notInPlexCount }) => `${name} text in IBM Plex Sans Thai: ${inPlexCount}${inPlex.length ? ` (${first(inPlex)})` : ''}; not in it: ${notInPlexCount ? `${notInPlexCount} (${first(notInPlex, 3)})` : 'none'}`;
+  const script = (name, { inPlex, inPlexCount, notInPlex, notInPlexCount }) => `${name} text in IBM Plex Sans Thai: ${inPlexCount}${inPlex.length ? ` (${namesOf(inPlex)})` : ''}; not in it: ${notInPlexCount ? `${notInPlexCount} (${namesOf(notInPlex, 3)})` : 'none'}`;
   const logo = finnomenaLogo.visible.length
     ? finnomenaLogo.visible.map(entry => `${entry.element} (by ${entry.by.join(', ')})`).join('; ')
-    : finnomenaLogo.hidden.length ? `hidden at this width: ${first(finnomenaLogo.hidden)}` : 'none found';
+    : finnomenaLogo.hidden.length ? `hidden at this width: ${namesOf(finnomenaLogo.hidden)}` : 'none found';
   let brand = 'not checked; pass --source-brand <name> for a Reference Design page';
   if (sourceBrand) {
     const { checked } = sourceBrand;
-    const where = `${checked.title ? 'title' : 'an empty title'}, ${checked.meta} meta, ${checked.altOrLabel} alt or aria-label and ${checked.textElements} text elements`;
+    const where = `${checked.title ? 'title' : 'an empty title'}, ${checked.meta} meta and ${checked.alt} alt text`;
     brand = sourceBrand.found.length
       ? `${sourceBrand.brands.join(', ')} found in ${sourceBrand.found.map(quoted).join('; ')}`
       : `${sourceBrand.brands.join(', ')} absent from ${where}`;
@@ -253,7 +269,7 @@ function neonRules(result) {
   ];
 }
 
-const types = { '.html': 'text/html', '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.webp': 'image/webp', '.json': 'application/json', '.woff2': 'font/woff2', '.woff': 'font/woff', '.ttf': 'font/ttf', '.ico': 'image/x-icon' };
+const contentTypes = { '.html': 'text/html', '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.webp': 'image/webp', '.json': 'application/json', '.woff2': 'font/woff2', '.woff': 'font/woff', '.ttf': 'font/ttf', '.ico': 'image/x-icon' };
 
 // A production build on a free local port; paths that are not files get index.html, as an app's routes do.
 function serve(root) {
@@ -261,7 +277,7 @@ function serve(root) {
     let path = join(root, decodeURIComponent(new URL(request.url, 'http://x').pathname));
     if (!insideDirectory(path, root) || !existsSync(path) || statSync(path).isDirectory()) path = join(root, 'index.html');
     if (!existsSync(path)) return response.writeHead(404).end();
-    response.writeHead(200, { 'content-type': types[extname(path)] ?? 'application/octet-stream' });
+    response.writeHead(200, { 'content-type': contentTypes[extname(path)] ?? 'application/octet-stream' });
     createReadStream(path).pipe(response);
   });
   return new Promise(done => server.listen(0, '127.0.0.1', () => done(server)));
@@ -270,6 +286,33 @@ function serve(root) {
 function insideDirectory(path, directory) {
   const rel = relative(directory, path);
   return rel === '' || (!rel.startsWith('..') && !isAbsolute(rel));
+}
+
+// The real path of `path`, resolving symlinks through its nearest existing ancestor (/tmp is /private/tmp on macOS).
+function realPath(path) {
+  const absolute = resolve(path);
+  if (existsSync(absolute)) return realpathSync(absolute);
+  const parent = dirname(absolute);
+  return parent === absolute ? absolute : join(realPath(parent), relative(parent, absolute));
+}
+
+// The nearest directory at or above `start` with a package.json, short of the home and root directories.
+function nearestApp(start) {
+  for (let dir = start; dir !== dirname(dir) && dir !== realPath(homedir()); dir = dirname(dir)) {
+    if (existsSync(join(dir, 'package.json'))) return dir;
+  }
+  return null;
+}
+
+/** Why `out` may not hold screenshots (it is inside the served build, its app or the current directory), or null. */
+export function outRefusal(out, { serve, cwd = process.cwd() } = {}) {
+  const target = realPath(out);
+  const build = serve && realPath(serve);
+  const app = build && nearestApp(build);
+  if (build && insideDirectory(target, build)) return 'it is inside the served build';
+  if (app && insideDirectory(target, app)) return `it is inside the app at ${app}`;
+  if (insideDirectory(target, realPath(cwd))) return 'it is inside the current directory, which is taken to be the app';
+  return null;
 }
 
 if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) {
@@ -298,8 +341,9 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
     console.error('Usage: node probe-page.mjs <url> | --serve <build dir> [<path>] [--widths 375,1440] [--source-brand <name>]... [--scheme light|dark] [--out <dir>] [--chrome <path>] [--timeout <seconds>] [--json]');
     process.exit(2);
   }
-  if (values.out && insideDirectory(resolve(values.out), process.cwd())) {
-    console.error(`Refusing --out ${values.out}: it is inside the current directory, which is taken to be the app. Name a directory outside it, or omit --out for a temp directory.`);
+  const refusal = values.out && outRefusal(values.out, { serve: values.serve });
+  if (refusal) {
+    console.error(`Refusing --out ${values.out}: ${refusal}. Name a directory outside the app, or omit --out for a temp directory.`);
     process.exit(2);
   }
   const out = resolve(values.out ?? join(tmpdir(), `neon-probe-${Date.now()}-${process.pid}`));
@@ -315,14 +359,12 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
     console.log(JSON.stringify({ measured, notRun, reportLine: line }, null, 2));
     process.exit(0);
   }
-  {
-    for (const { width, result, screenshot } of measured) {
-      console.log(`${width}px  ${result.url}  viewportWidth ${result.viewportWidth}${result.viewportWidth === width ? '' : ` (expected ${width}: this width is void)`}  ${values.scheme}`);
-      console.log(neonRules(result).join('\n'));
-      const found = leads(result).filter(lead => !/IBM Plex|Finnomena logo|source brand/.test(lead));
-      console.log(`  Other leads: ${found.length ? found.join(', ') : 'none'}`);
-      console.log(`  Screenshot: ${screenshot}`);
-    }
+  for (const { width, result, screenshot } of measured) {
+    console.log(`${width}px  ${result.url}  viewportWidth ${result.viewportWidth}${result.viewportWidth === width ? '' : ` (expected ${width}: this width is void)`}  ${values.scheme}`);
+    console.log(neonRuleLines(result).join('\n'));
+    const found = layoutLeads(result);
+    console.log(`  Other leads: ${found.length ? found.join(', ') : 'none'}`);
+    console.log(`  Screenshot: ${screenshot}`);
   }
   if (notRun) console.log(`Not measured${measured.length ? ` after ${measured.map(entry => `${entry.width}px`).join(', ')}` : ''}: ${notRun}. Browser checks stay unverified.`);
   console.log(line);

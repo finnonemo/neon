@@ -45,7 +45,7 @@ test('distribution ships the source lint the shared checklist runs, and it runs 
     assert.equal(await readFile(join(destination, file), 'utf8'), await readFile(join(import.meta.dirname, '../..', file), 'utf8'));
   }
   const verification = await readFile(join(destination, 'skills/neon-redesign/references/verification.md'), 'utf8');
-  assert.ok(verification.includes('${CLAUDE_PLUGIN_ROOT}/scripts/source-lint.mjs'), 'verification.md must run the lint');
+  assert.ok(verification.includes('<Neon root>/scripts/source-lint.mjs'), 'verification.md must run the lint');
   const app = await mkdtemp(join(tmpdir(), 'neon-package-lint-'));
   await writeFile(join(app, 'index.html'), '<p>Lorem</p>\n');
   const run = spawnSync(process.execPath, [join(destination, 'scripts/source-lint.mjs'), app, 'index.html'], { encoding: 'utf8' });

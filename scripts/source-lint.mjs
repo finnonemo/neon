@@ -9,18 +9,19 @@
 // files under <app-dir> (default: the current directory). Files named after
 // <app-dir>, relative to it, are checked instead; outside git they are required.
 //
-// Rules: stock Tailwind palette utilities once the change uses Neon color
-// variables, selectors reaching into CDS components (CDS apps only), lorem/Acme/
-// John Doe placeholders, emoji used as UI, and transitions on all properties.
+// Rules: stock Tailwind palette utilities in a CDS app or once the change uses
+// Neon color variables, selectors reaching into CDS components (CDS apps only),
+// lorem/Acme/John Doe placeholders, emoji used as UI, and transitions on all
+// properties.
 import { spawnSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync, realpathSync, statSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import {
   cdsHostedClasses,
+  cdsHostSelectors,
   emojiText,
   placeholderText,
-  selectorsOnCdsHosts,
   stockPaletteUtilities,
   transitionAll,
   unscopedSelectors,
@@ -62,11 +63,11 @@ function read(path) {
   }
 }
 
-// Walks the app without descending into node_modules, build output or .git.
-function scriptsUnder(dir, sub = '') {
+// The app's .jsx and .tsx files, without descending into node_modules, build output or .git.
+function jsxFilesUnder(dir, sub = '') {
   return readdirSync(join(dir, sub), { withFileTypes: true }).flatMap(entry => {
     const path = sub ? `${sub}/${entry.name}` : entry.name;
-    if (entry.isDirectory()) return notUi.test(`${path}/`) ? [] : scriptsUnder(dir, path);
+    if (entry.isDirectory()) return notUi.test(`${path}/`) ? [] : jsxFilesUnder(dir, path);
     return entry.isFile() && /\.[jt]sx$/.test(entry.name) && !notUi.test(path) ? [path] : [];
   });
 }
@@ -81,8 +82,11 @@ export function lintChanged(dir, paths = []) {
 
   const manifest = read(join(dir, 'package.json')) ?? '';
   const cds = /"@coinbase\/cds-web"/.test(manifest);
+  // A CDS app takes Neon colors from the CDS theme, not from `--color-*`
+  // variables, and the starter has no Tailwind: any stock palette utility there
+  // is a leftover (a rebuild keeps no source UI library) or bypasses the theme.
   const restyled = cds || files.some(({ source }) => neonColor.test(source));
-  const hosts = cds ? cdsHostedClasses(scriptsUnder(dir).map(path => ({ path, source: read(join(dir, path)) ?? '' }))) : new Map();
+  const hosts = cds ? cdsHostedClasses(jsxFilesUnder(dir).map(path => ({ path, source: read(join(dir, path)) ?? '' }))) : new Map();
 
   const warnings = [];
   const add = (path, rule, found) => {
@@ -93,8 +97,9 @@ export function lintChanged(dir, paths = []) {
   for (const { path, source } of files) {
     if (restyled) add(path, 'stock-palette', stockPaletteUtilities(source));
     if (cds && stylesheet.test(path)) {
-      const selectors = [...unscopedSelectors(source), ...selectorsOnCdsHosts(source, hosts)];
-      add(path, 'cds-selector', selectors.map(selector => ({ match: selector, line: lineOf(source, selector) })));
+      const unscoped = unscopedSelectors(source).map(selector => ({ match: selector, line: lineOf(source, selector) }));
+      const onHosts = cdsHostSelectors(source, hosts).map(({ selector, on }) => ({ match: `${selector} (on ${on.join(', ')})`, line: lineOf(source, selector) }));
+      add(path, 'cds-selector', [...unscoped, ...onHosts]);
     }
     add(path, 'placeholder', placeholderText(source));
     add(path, 'emoji', emojiText(source));
@@ -104,7 +109,7 @@ export function lintChanged(dir, paths = []) {
 }
 
 function lineOf(source, selector) {
-  const index = source.indexOf(selector.replace(/ \(on .*\)$/, ''));
+  const index = source.indexOf(selector);
   return index === -1 ? 1 : source.slice(0, index).split('\n').length;
 }
 

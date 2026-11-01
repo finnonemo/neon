@@ -98,7 +98,9 @@ test('the Neon rules name the elements: Plex text, logos by how they matched, an
   assert.match(result.stdout, /viewportWidth 375 /);
   assert.match(result.stdout, /Thai text in IBM Plex Sans Thai: 1 \(p#thai-plex "งานออกแบบ"\); not in it: 1 \(p#thai-fallback/);
   assert.match(result.stdout, /Finnomena logo: img#logo-data "Finnomena" \(by alt, asset shape\); img#logo-base64 \(by asset shape\)/);
-  assert.match(result.stdout, /Source brand: Lumora found in meta\[name="description"\] "A Lumora-style event page"; img#brand-alt "Lumora logo" \[alt\]; p#brand-text "Hosted with Lumora"/);
+  assert.match(result.stdout, /Source brand: Lumora found in meta\[name="description"\] "A Lumora-style event page"; img#brand-alt "Lumora logo" \[alt\]$/m);
+  // Body text that names the reference, such as a credit, is not scanned.
+  assert.doesNotMatch(result.stdout, /brand-text/);
   // Screenshots go to the OS temp dir; the app is untouched.
   const shot = result.stdout.match(/Screenshot: (.*)$/m)[1];
   assert.ok(realpathSync(shot).startsWith(realpathSync(result.temp)), shot);
@@ -112,7 +114,7 @@ test('with no Plex face, no logo and the brand absent, each is said, and absence
   assert.match(result.stdout, /Font faces: no IBM Plex Sans Thai face loaded/);
   assert.match(result.stdout, /Latin text in IBM Plex Sans Thai: 0; not in it: 1 \(p#latin "Design Day"\)/);
   assert.match(result.stdout, /Finnomena logo: none found/);
-  assert.match(result.stdout, /Source brand: Halcyon absent from title, 1 meta, 1 alt or aria-label and 2 text elements/);
+  assert.match(result.stdout, /Source brand: Halcyon absent from title, 1 meta and 1 alt text/);
   assert.match(result.stdout, /^Browser probe: 375px no IBM Plex Sans Thai face loaded, .*no Finnomena logo$/m);
 });
 
@@ -127,6 +129,36 @@ test('--serve measures a production build on its own port, falling back to index
   assert.match(result.stdout, /^375px {2}http:\/\/127\.0\.0\.1:\d+\/events\/2026 {2}viewportWidth 375/m);
   // The stylesheet was served with its type, so the serif face applied.
   assert.match(result.stdout, /serif text p#built "Built page"/);
+});
+
+// Each runs from a directory outside the app, as an agent in a parent folder or the Neon root would.
+function probeFrom(args) {
+  return spawnSync(process.execPath, [runner, ...args, '--chrome', '/nonexistent/chrome'], { cwd: tempDir('neon-probe-test-cwd-'), encoding: 'utf8' });
+}
+
+test('--out inside the app that holds the served build is refused, from any directory', () => {
+  const parent = tempDir('neon-probe-test-parent-');
+  mkdirSync(join(parent, 'app/dist'), { recursive: true });
+  writeFileSync(join(parent, 'app/dist/index.html'), '<p>Built</p>');
+  writeFileSync(join(parent, 'app/package.json'), '{}');
+  const result = probeFrom(['--serve', join(parent, 'app/dist'), '--out', join(parent, 'app/shots')]);
+  assert.equal(result.status, 2, result.stdout);
+  assert.match(result.stderr, /Refusing --out .*shots: it is inside the app/);
+  assert.deepEqual(readdirSync(join(parent, 'app')).sort(), ['dist', 'package.json']);
+});
+
+test('--out inside the served build is refused even without a package.json', () => {
+  const parent = tempDir('neon-probe-test-parent-');
+  mkdirSync(join(parent, 'dist'));
+  writeFileSync(join(parent, 'dist/index.html'), '<p>Built</p>');
+  const result = probeFrom(['--serve', join(parent, 'dist'), '--out', join(parent, 'dist/shots')]);
+  assert.equal(result.status, 2, result.stdout);
+  assert.match(result.stderr, /Refusing --out .*shots: it is inside the served build/);
+  assert.deepEqual(readdirSync(join(parent, 'dist')), ['index.html']);
+  // Beside the build, outside any app, is allowed.
+  const beside = probeFrom(['--serve', join(parent, 'dist'), '--out', join(parent, 'shots')]);
+  assert.equal(beside.status, 0, beside.stderr);
+  assert.match(beside.stdout, /Browser probe: not run/);
 });
 
 test('screenshots are never written inside the app', () => {
