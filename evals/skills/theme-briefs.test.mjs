@@ -226,21 +226,94 @@ test('a third-party source with a partial review passes the input checks', (t) =
 
 // A published brief: its Markdown, authoring record and registry entry beside the picks file.
 const BRIEF = 'registry/theme-briefs/club-run.md';
-const briefText = [
-  '# Finnomena Club · Run — Theme Brief',
-  '',
-  '**Immersive Theme:** club',
-  '',
-  '| Name | Value | Token |',
-  '|---|---|---|',
-  '| White 100 | `#ffffff` | `--immersive-canvas` |',
-  '| Navy 100 | `#01172b` | `--immersive-text` |',
-  '| Light Grey 50 | `#d3dfe6` | `--immersive-palette-50` |',
-  '',
-  'Race distance cards sit on `var(--immersive-palette-50)` with `var(--immersive-on-palette-50)` text; the main action is `var(--immersive-action)`.',
-  '',
-].join('\n');
+// Scripted rendering and scripted-only: a committed brief whose scripted parts are stale, and its prose.
+const THEME_TEXTS = {
+  'theme-briefs/themes/exclusive.json': { mood: 'Exclusive fills the page with yellow. Navy ink and grey blocks keep it calm.', sibling: 'Yellow canvas with navy ink.' },
+  'theme-briefs/themes/private.json': { mood: 'Private opens on a grey canvas. Yellow blocks mark what matters.', sibling: 'Grey canvas with yellow blocks.' },
+  'theme-briefs/themes/ultra.json': { mood: 'Ultra sets the page on navy. White ink and yellow highlights carry it.', sibling: 'Navy canvas with white ink.' },
+};
+const PROSE = {
+  tagline: 'Race day on an open canvas, with every member invited to the start line',
+  mood: 'Members train together for one weekend race, and the page counts down to the start.\nThe registration call-out carries the accent.',
+  components: [
+    ['Race distance card', 'Compare the distances on offer', 'Each card sits on var(--immersive-palette-50) with var(--immersive-on-palette-50) text and var(--borderRadius-500) corners.\nThe distance leads in title2.'],
+    ['Registration call-out', 'Carry the main registration action', 'The call-out sits on var(--immersive-accent-100) with var(--immersive-on-accent-100) text, with the deadline above the main action.'],
+  ],
+  dos: ['Show the registration deadline beside every main action, so members never hunt for the date.'],
+  donts: ['Do not use the route map as a decorative background — it hides the distances members compare.'],
+  imagery: 'Photography of members running together leads, framed close and mid.\n\nSpot illustrations mark small blocks only.',
+  layout: 'The page opens on a split hero, then alternates detail lists and a call-out at var(--space-10) gaps before the form.',
+  prompts: ['Build a race distance card on var(--immersive-palette-50) with var(--immersive-on-palette-50) text.', 'Build the registration call-out on var(--immersive-accent-100) with var(--immersive-on-accent-100) text.'],
+};
+// What a drafted brief holds before its scripted sections are refreshed: prose, and stale scripted text.
+function staleBrief(prose = PROSE, { theme = 'Club', name = 'Run' } = {}) {
+  return [
+    `# Finnomena ${theme} · ${name} — Theme Brief`,
+    `> ${prose.tagline}`,
+    '',
+    'Stale header.',
+    '',
+    'Stale theme half.',
+    prose.mood,
+    'Stale ratio.',
+    '',
+    '## Tokens — Colors',
+    '',
+    'Stale colors.',
+    '',
+    '## Components',
+    '',
+    '### Main Action',
+    '**Role:** Stale',
+    '',
+    'Stale.',
+    '',
+    ...prose.components.flatMap(([title, role, paragraph]) => [`### ${title}`, `**Role:** ${role}`, '', paragraph, '']),
+    "## Do's and Don'ts",
+    '',
+    '### Do',
+    '- Stale do.',
+    ...prose.dos.map((line) => `- ${line}`),
+    '',
+    "### Don't",
+    ...prose.donts.map((line) => `- ${line}`),
+    '',
+    '## Imagery',
+    '',
+    prose.imagery,
+    '',
+    'Stale Brand Floor sentence.',
+    '',
+    '## Layout',
+    '',
+    prose.layout,
+    '',
+    '## Agent Prompt Guide',
+    '',
+    '**Quick Color Reference**',
+    '- stale',
+    '',
+    '**Example Component Prompts**',
+    '',
+    prose.prompts.map((line, index) => `${index + 1}. ${line}`).join('\n\n'),
+    '',
+  ].join('\n');
+}
+
+// The committed brief scripted-only makes from the stale one: what a published brief holds.
+function renderBrief(changes = {}) {
+  const root = fixture({ after() {} }, { ...THEME_TEXTS, [BRIEF]: staleBrief(), ...changes });
+  try {
+    const { status, out } = run(['scripted-only', '--root', root]);
+    assert.equal(status, 0, out);
+    return readFileSync(join(root, BRIEF), 'utf8');
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+}
+const briefText = renderBrief();
 const published = (items = ['club-run']) => ({
+  ...THEME_TEXTS,
   [BRIEF]: briefText,
   'theme-briefs/records/club-run.json': { brief: 'club-run' },
   'registry/registry.json': { name: 'neon', homepage: 'https://example.invalid', items: items.map((name) => ({ name: `theme-brief-${name}`, type: 'registry:item' })) },
@@ -319,4 +392,190 @@ test('the repository passes its own Theme Brief check', () => {
   const result = run(['check-only']);
   assert.equal(result.status, 0, result.out);
   assert.match(result.out, /^Theme Brief check: 4 themes, .*; no problems$/m);
+});
+
+function scriptedOnly(root) {
+  return run(['scripted-only', '--root', root]);
+}
+
+const SECTIONS = ['Tokens — Colors', 'Tokens — Typography', 'Tokens — Spacing & Shapes', 'Components', "Do's and Don'ts", 'Surfaces', 'Elevation', 'Imagery', 'Brand Pattern', 'Layout', 'Motion', 'Agent Prompt Guide', 'Sibling Themes', 'Quick Start'];
+
+test('scripted-only renders every scripted part of a committed brief and keeps its prose', (t) => {
+  const root = fixture(t, { ...THEME_TEXTS, [BRIEF]: staleBrief() });
+  const { status, out } = scriptedOnly(root);
+  assert.equal(status, 0, out);
+  assert.match(out, /^registry\/theme-briefs\/club-run\.md: rewrote /m);
+  const brief = readFileSync(join(root, BRIEF), 'utf8');
+  assert.equal(brief.split('\n## ')[0], [
+    '# Finnomena Club · Run — Theme Brief',
+    `> ${PROSE.tagline}`,
+    '',
+    '**Theme:** light',
+    '**Immersive Theme:** club',
+    '',
+    "This is a Finnomena Theme Brief, not a Reference Design: skip Brand Intensity and apply the whole Brand Contract. Colors come from the Club Immersive Theme and type from Neon's theme; layout, components, imagery and motion are Finnomena-authored and interpreted, not measured. Provisional pending design owner review.",
+    '',
+    valid[CLUB_TEXT].mood,
+    PROSE.mood,
+    'Membership ratio: White 60%, Light Grey 15%, Yellow 15%, Navy 10%.',
+    '',
+  ].join('\n'));
+  assert.deepEqual([...brief.matchAll(/^## (.+)$/gm)].map(([, heading]) => heading), SECTIONS);
+  for (const text of [PROSE.imagery, PROSE.layout, ...PROSE.dos, ...PROSE.donts, ...PROSE.components.flat()]) assert.ok(brief.includes(text), text);
+  assert.ok(brief.includes(PROSE.prompts.map((line, index) => `${index + 1}. ${line}`).join('\n\n')));
+  assert.doesNotMatch(brief, /Stale/);
+});
+
+// The wide end margin moved from 24px to 32px in theme.css.
+const widerMargin = () => readFileSync(join(repo, 'theme/css/theme.css'), 'utf8')
+  .replace(/(@media \(min-width: 1440px\)\s*\{\s*:root\s*\{[^}]*--layout-endMargin: )24px;/, (_, head) => `${head}32px;`);
+
+test('check-only refuses a brief whose scripted section drifted from the theme', (t) => {
+  const root = fixture(t, { ...published(), 'theme/css/theme.css': widerMargin() });
+  const { status, out } = checkOnly(root);
+  assert.equal(status, 1, out);
+  assert.match(out, /^registry\/theme-briefs\/club-run\.md: section "Tokens — Spacing & Shapes" differs from fresh scripted output \(found ".*", expected ".*"\); run scripted-only$/m);
+  assert.doesNotMatch(out, /section "Components"/);
+});
+
+test('check-only refuses a hand edit to a scripted line and allows one to prose', (t) => {
+  const scripted = checkOnly(fixture(t, { ...published(), [BRIEF]: briefText.replace('Build emphasis with tint steps', 'Build emphasis with opacity') }));
+  assert.equal(scripted.status, 1, scripted.out);
+  assert.match(scripted.out, /section "Do's and Don'ts" differs from fresh scripted output \(found "- Build emphasis with opacity, never with opacity\.", expected "- Build emphasis with tint steps, never with opacity\."\)/);
+  const prose = checkOnly(fixture(t, { ...published(), [BRIEF]: briefText.replace('framed close and mid', 'framed close') }));
+  assert.equal(prose.status, 0, prose.out);
+});
+
+test('scripted-only fixes a drifted brief, keeps its prose, and a second run changes nothing', (t) => {
+  const root = fixture(t, { ...published(), 'theme/css/theme.css': widerMargin(), [BRIEF]: briefText.replace('framed close and mid', 'framed close') });
+  const first = scriptedOnly(root);
+  assert.equal(first.status, 0, first.out);
+  assert.match(first.out, /^registry\/theme-briefs\/club-run\.md: rewrote Tokens — Spacing & Shapes$/m);
+  const brief = readFileSync(join(root, BRIEF), 'utf8');
+  assert.match(brief, /^\| End margin from a 1440px viewport \| 32px \| `--layout-endMargin` \|$/m);
+  assert.equal(brief, briefText.replace('framed close and mid', 'framed close').replaceAll('then 24px', 'then 32px').replace('| 24px | `--layout-endMargin`', '| 32px | `--layout-endMargin`'));
+  const second = scriptedOnly(root);
+  assert.match(second.out, /^registry\/theme-briefs\/club-run\.md: scripted sections already match fresh output$/m);
+  assert.equal(readFileSync(join(root, BRIEF), 'utf8'), brief);
+  assert.equal(checkOnly(root).status, 0);
+});
+
+test('scripted-only leaves a brief alone when its prose or inputs cannot be read', (t) => {
+  const merged = briefText.replace(`${PROSE.mood}\n`, `${PROSE.mood.replace('\n', ' ')}\n`).replace(/\nMembership ratio: [^\n]+/, '');
+  const root = fixture(t, { ...published(), [BRIEF]: merged });
+  const prose = scriptedOnly(root);
+  assert.equal(prose.status, 1, prose.out);
+  assert.match(prose.out, /^registry\/theme-briefs\/club-run\.md: the header's mood paragraph must keep its three lines: theme half, occasion half, ratio sentence; not rewritten$/m);
+  assert.equal(readFileSync(join(root, BRIEF), 'utf8'), merged);
+  assert.match(checkOnly(root).out, /^registry\/theme-briefs\/club-run\.md: the header's mood paragraph must keep its three lines: theme half, occasion half, ratio sentence; its scripted sections cannot be checked$/m);
+
+  const stale = staleBrief();
+  const inputs = fixture(t, { ...published(), [BRIEF]: stale, 'theme-briefs/themes/ultra.json': null });
+  const missing = scriptedOnly(inputs);
+  assert.equal(missing.status, 1, missing.out);
+  assert.match(missing.out, /^registry\/theme-briefs\/club-run\.md: .*theme-briefs\/themes\/ultra\.json.*; not rewritten$/m);
+  assert.equal(readFileSync(join(inputs, BRIEF), 'utf8'), stale);
+});
+
+// Every theme with each of its colourways and, on its palette, every page width and motion level, rendered in one scripted-only run.
+const LABELS = { club: 'Club', exclusive: 'Exclusive', private: 'Private', ultra: 'Ultra' };
+const COLOURWAYS = { club: ['palette', 'accent'], exclusive: ['palette', 'accent'], private: ['palette', 'accent'], ultra: ['palette', 'accent', 'support'] };
+const LAYOUT_VARIANTS = ['contained', 'full-bleed'].flatMap((pageWidth) => ['still', 'subtle', 'lively'].map((motion) => ({ pageWidth, motion })));
+const MATRIX = Object.entries(COLOURWAYS).flatMap(([theme, colourways]) => [
+  ...colourways.map((colourway) => ({ colourway, ...LAYOUT_VARIANTS[colourways.indexOf(colourway) + 1] })),
+  ...LAYOUT_VARIANTS.filter((_, index) => index !== 1).map((variant) => ({ colourway: 'palette', ...variant })),
+].map(({ colourway, pageWidth, motion }) => {
+  const briefName = `Run ${colourway} ${pageWidth.replace('-', ' ')} ${motion}`;
+  return { theme, colourway, pageWidth, motion, briefName, slug: `${theme}-${briefName.toLowerCase().replaceAll(' ', '-')}`, layout: `${pageWidth}-${motion}` };
+}));
+
+function renderMatrix(t) {
+  const files = { ...THEME_TEXTS, [PICKS]: null };
+  for (const { pageWidth, motion } of LAYOUT_VARIANTS) {
+    files[`theme-briefs/presets/layout/${pageWidth}-${motion}.json`] = { ...valid[LAYOUT], slug: `${pageWidth}-${motion}`, pageWidth, motion };
+  }
+  for (const { theme, colourway, briefName, slug, layout } of MATRIX) {
+    files[`theme-briefs/picks/${slug}.json`] = { theme, briefName, presets: { occasion: 'run', layout, imagery: 'people-in-action' }, brandPattern: { colourway, ground: 50 } };
+    files[`theme-briefs/records/${slug}.json`] = { brief: slug };
+    files[`registry/theme-briefs/${slug}.md`] = staleBrief(PROSE, { theme: LABELS[theme], name: briefName });
+  }
+  files['registry/registry.json'] = { name: 'neon', homepage: 'https://example.invalid', items: MATRIX.map(({ slug }) => ({ name: `theme-brief-${slug}`, type: 'registry:item' })) };
+  const root = fixture(t, files);
+  const { status, out } = scriptedOnly(root);
+  assert.equal(status, 0, out);
+  return { root, briefs: MATRIX.map((cell) => ({ ...cell, text: readFileSync(join(root, `registry/theme-briefs/${cell.slug}.md`), 'utf8') })) };
+}
+
+const section = (text, heading) => text.split(/^## /m).find((part) => part.startsWith(`${heading}\n`)) ?? '';
+const MOTION = { still: /150ms or less/, subtle: /16px or less, .* 150–250ms with ease-out/, lively: /200–400ms .* 32px or less\. No parallax/ };
+
+test('scripted rendering holds for every theme, colourway, page width and motion level, and passes check-only', (t) => {
+  const { root, briefs } = renderMatrix(t);
+  for (const { theme, colourway, pageWidth, motion, slug, text } of briefs) {
+    const at = `${slug}: `;
+    assert.match(text, new RegExp(`^\\*\\*Theme:\\*\\* ${theme === 'ultra' ? 'dark' : 'light'}$`, 'm'), at);
+    assert.match(text, /^This is a Finnomena Theme Brief, not a Reference Design: .* Provisional pending design owner review\.$/m, at);
+    assert.match(section(text, 'Components'), theme === 'ultra' ? /the dark-surface mark/ : /the light-surface mark/, at);
+    assert.equal(/^### Support Block$/m.test(text), theme === 'ultra', at);
+    assert.equal(/^\| — \| Light Grey 100 \| `#a6bfcc` \| `--immersive-support-100` \| Support block \|$/m.test(section(text, 'Surfaces')), theme === 'ultra', at);
+    assert.match(section(text, 'Tokens — Spacing & Shapes'), /`--layout-contentMaxWidth` \(1440px\).*`--layout-endMargin` \(16px, then 24px from a 1440px viewport\)/, at);
+    assert.match(section(text, 'Tokens — Spacing & Shapes'), pageWidth === 'contained' ? /Section fills stop at that column/ : /Section fills span the viewport/, at);
+    assert.match(section(text, 'Motion'), MOTION[motion], at);
+    assert.match(section(text, 'Brand Pattern'), new RegExp(`^- \\*\\*Ground:\\*\\* \`--immersive-${colourway}-50\` fill with \`--immersive-on-${colourway}-50\` text$`, 'm'), at);
+    // No block may be capped at a count that a colourway's Brand Pattern ground could break.
+    assert.doesNotMatch(text, /\bone per (screen|page)\b|\bonly one\b/i, at);
+    // Every px value outside a table repeats one of the brief's own table values.
+    const tablePx = new Set(text.split('\n').filter((line) => line.startsWith('|')).flatMap((line) => line.match(/\d+px/g) ?? []));
+    for (const line of text.split('\n').filter((line) => !line.startsWith('|'))) {
+      for (const value of line.match(/\d+px/g) ?? []) assert.ok(tablePx.has(value), `${at}${value} in "${line}"`);
+    }
+    assert.doesNotMatch(section(text, 'Components'), /\d+px/, at);
+  }
+  // Fixed component wording and the stock Do's and Don'ts never change with colourway, page width or motion.
+  for (const theme of Object.keys(COLOURWAYS)) {
+    const own = briefs.filter((brief) => brief.theme === theme);
+    for (const heading of ['Components', "Do's and Don'ts", 'Tokens — Colors', 'Surfaces']) {
+      assert.equal(new Set(own.map(({ text }) => section(text, heading))).size, 1, `${theme} ${heading}`);
+    }
+  }
+  assert.match(section(briefs.find((brief) => brief.theme === 'club').text, 'Components'), /^`--immersive-palette-100` to `--immersive-palette-25` fills/m);
+  assert.match(section(briefs.find((brief) => brief.theme === 'private').text, 'Components'), /^`--immersive-palette-75` to `--immersive-palette-25` fills/m);
+  const { status, out } = checkOnly(root);
+  assert.equal(status, 0, out);
+  assert.match(out, new RegExp(`, ${MATRIX.length} briefs; no problems$`, 'm'));
+});
+
+test('scripted-only refuses to drop hand-added prose it cannot place', (t) => {
+  const BRAND_FLOOR = "Imagery never carries another brand's logo, copy or look, and the Finnomena logo and IBM Plex Sans Thai stay on every screen.";
+  const cases = {
+    'an added Do bullet': [briefText.replace('- Keep one color family per block.\n', '- Keep one color family per block.\n- Keep forms short.\n'),
+      /^registry\/theme-briefs\/club-run\.md: "### Do" has 7 bullets, more than its 5 stock bullets and the occasion preset's 1; not rewritten$/m],
+    'a paragraph after the Brand Floor sentence': [briefText.replace(BRAND_FLOOR, `${BRAND_FLOOR}\n\nNo stock photos.`),
+      /^registry\/theme-briefs\/club-run\.md: Imagery has text after its Brand Floor sentence, which must come last; not rewritten$/m],
+    'a paragraph after a drifted Brand Floor sentence': [briefText.replace(BRAND_FLOOR, `${BRAND_FLOOR.replace('IBM Plex Sans Thai', 'Inter')}\n\nNo stock photos.`),
+      /^registry\/theme-briefs\/club-run\.md: Imagery has text after its Brand Floor sentence, which must come last; not rewritten$/m],
+    'a hand-added section': [briefText.replace('## Quick Start', '## Notes\n\nKeep the start-line photo.\n\n## Quick Start'),
+      /^registry\/theme-briefs\/club-run\.md: section "Notes" is not a Theme Brief section; move its text into a prose section or remove it; not rewritten$/m],
+    'a paragraph added to the header': [briefText.replace('\nClub opens the membership', '\nA note for the team.\n\nClub opens the membership'),
+      /^registry\/theme-briefs\/club-run\.md: the header has 5 paragraphs; it holds the title and tagline, labels, status and mood paragraph only; not rewritten$/m],
+  };
+  for (const [name, [text, expected]] of Object.entries(cases)) {
+    const root = fixture(t, { ...published(), [BRIEF]: text });
+    const { status, out } = scriptedOnly(root);
+    assert.equal(status, 1, `${name}: ${out}`);
+    assert.match(out, expected, name);
+    assert.equal(readFileSync(join(root, BRIEF), 'utf8'), text, name);
+    assert.match(checkOnly(root).out, new RegExp(expected.source.replace('; not rewritten', '; its scripted sections cannot be checked'), 'm'), name);
+  }
+});
+
+test('check-only refuses an occasion component named like a fixed one', (t) => assertRefused(t, edit(OCCASION, (p) => ({ ...p, components: [{ ...p.components[0], name: 'Support Block' }, p.components[1]] })),
+  /^theme-briefs\/presets\/occasion\/run\.json: component "Support Block" takes the name of a fixed component$/m));
+
+test('the Colors table marks a block step that is the canvas color', (t) => {
+  const root = fixture(t, { ...THEME_TEXTS, 'registry/theme-briefs/ultra-run.md': staleBrief(PROSE, { theme: 'Ultra' }), [PICKS]: null, 'theme-briefs/picks/ultra-run.json': { ...valid[PICKS], theme: 'ultra' } });
+  const { status, out } = run(['scripted-only', '--root', root]);
+  assert.equal(status, 0, out);
+  const brief = readFileSync(join(root, 'registry/theme-briefs/ultra-run.md'), 'utf8');
+  assert.match(brief, /^\| Navy 100 \| `#01172b` \| `--immersive-palette-100` \| The canvas color, not a block fill \|$/m);
 });
