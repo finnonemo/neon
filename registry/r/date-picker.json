@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "date-picker",
+  "type": "registry:ui",
+  "title": "Date picker",
+  "dependencies": [
+    "date-fns@^4.1.0",
+    "lucide-react@^1.66.0"
+  ],
+  "registryDependencies": [
+    "@neon/utils",
+    "@neon/calendar",
+    "@neon/popover"
+  ],
+  "files": [
+    {
+      "path": "ui/date-picker.tsx",
+      "content": "import * as React from \"react\"\nimport { format as formatDate, type Locale } from \"date-fns\"\nimport { CalendarIcon } from \"lucide-react\"\n\nimport { Calendar } from \"@/components/ui/calendar\"\nimport { Popover, PopoverContent, PopoverTrigger } from \"@/components/ui/popover\"\nimport { cn } from \"@/lib/utils\"\n\n// The CDS DatePicker: a 56px field like Input that opens the calendar in a\n// popover. The field shows the date in the caller's date-fns format, never a\n// locale default, so a Thai browser never shows a Buddhist year.\nfunction DatePicker({\n  value,\n  onChange,\n  format = \"dd/MM/yyyy\",\n  locale,\n  placeholder = format.toLowerCase(),\n  className,\n  ...props\n}: Omit<React.ComponentProps<\"button\">, \"value\" | \"onChange\"> & {\n  value?: Date\n  onChange?: (date: Date | undefined) => void\n  format?: string\n  locale?: Locale\n  placeholder?: string\n}) {\n  const [open, setOpen] = React.useState(false)\n\n  return (\n    <Popover open={open} onOpenChange={setOpen}>\n      <PopoverTrigger asChild>\n        <button\n          type=\"button\"\n          data-slot=\"date-picker\"\n          data-empty={!value}\n          className={cn(\n            \"flex h-14 w-full min-w-0 items-center justify-between gap-2 rounded-md border border-input bg-background pr-3 pl-4 text-left text-body text-foreground transition-[border-color,box-shadow] outline-none data-[empty=true]:text-muted-foreground disabled:pointer-events-none disabled:opacity-50\",\n            \"focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20\",\n            className\n          )}\n          {...props}\n        >\n          <span className=\"truncate\">{value ? formatDate(value, format, { locale }) : placeholder}</span>\n          <CalendarIcon className=\"size-5 shrink-0 text-muted-foreground\" />\n        </button>\n      </PopoverTrigger>\n      <PopoverContent className=\"w-auto\" align=\"start\">\n        <Calendar\n          mode=\"single\"\n          selected={value}\n          defaultMonth={value}\n          locale={locale}\n          onSelect={(date) => {\n            onChange?.(date)\n            setOpen(false)\n          }}\n        />\n      </PopoverContent>\n    </Popover>\n  )\n}\n\nexport { DatePicker }\n",
+      "type": "registry:ui",
+      "target": "src/components/ui/date-picker.tsx"
+    }
+  ]
+}

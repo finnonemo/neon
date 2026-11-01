@@ -101,3 +101,15 @@ export function tabsAsSegmented(files) {
   }
   return problems;
 }
+
+/** next-themes in a registry item: AppRoot owns the color scheme and passes it to the Toaster (spike trap 9). */
+export function nextThemes(files, items = []) {
+  const problems = [];
+  for (const [path, content] of files) {
+    if (/from\s+["']next-themes["']/.test(content)) problems.push(`${path} imports next-themes; take the color scheme from AppRoot`);
+  }
+  for (const item of items) {
+    if ((item.dependencies ?? []).some((dep) => /^next-themes(@|$)/.test(dep))) problems.push(`${item.name} depends on next-themes`);
+  }
+  return problems;
+}
