@@ -38,6 +38,16 @@ Run each request with the named context, first against the baseline and then the
 
 Verdicts are pass, fail or unverified for routing, scope, resource retrieval, component correctness, color roles, feature completion, responsive behavior and evidence honesty. Link actual artifacts. Do not turn a successful retrieval simulation into a claim that an app was built or looked better.
 
+## Run harness
+
+Codex cases run through `run-codex-case.mjs`. Claude Code cases use the same allowlist and harness note for every arm, so baseline and revised differ only in the package:
+
+- Command: `claude -p --model <model> --setting-sources project,local --plugin-dir <package> --add-dir <package> --mcp-config <browser> --strict-mcp-config --permission-mode dontAsk --output-format stream-json --verbose --allowedTools <allowlist> --append-system-prompt <note>`. `--setting-sources project,local` leaves out the evaluator's user hooks.
+- Allowlist: `Read Edit Write Glob Grep Skill`, the browser tools, and `Bash(…:*)` for `ls pwd cd cat head tail wc grep find echo test sed rg sort which curl lsof kill sleep mkdir cp node npm npx sips file python3`, `npm run`, `git status/log/diff/ls-files/rev-parse/show/branch`.
+- Note, verbatim: "Shell permissions in this session: Bash is allowed for commands that start with one of: ls pwd cd cat head tail wc grep find echo test sed rg sort which curl lsof kill sleep mkdir cp node npm npx sips file python3, npm run, git status, git log, git diff, git ls-files, git rev-parse, git show, git branch. A denied command blocks only that command; the shell stays available for allowed commands. Variable assignments, loops and $(...) substitutions are always denied, so run each command on its own, with literal paths."
+
+After each run, `node evals/skills/check-run.mjs <run.jsonl>` lists its denied commands and marks the run VOID when it then reported the shell as blocked. Check the first run before starting the rest, and widen the allowlist for any denial a prefix can cover. A void run is rerun, not graded; record every denied command either way.
+
 ## September 2026 refactor evidence
 
 Baseline retrieval evaluation found missing canonical guide links, an unconditional installer step despite reuse guidance, global CSS-import risk for partial restyles, and a literal-color example conflicting with token reuse. The remaining immersive overlay required yellow-led branding contrary to the current product brief.
@@ -623,7 +633,7 @@ The event page is a Finnomena-led Campaign Page: no Reference Design is attached
 
 ### Samples and screenshots
 
-Run three samples of each request per package, twelve runs in a round, on the agent's browser tool where it has one and the same permissions for every run. Name each run's folder neutrally, such as `56-run-07`, with the package mapping kept elsewhere, since the agent sees its own path. Give every run the same harness note on how denials work (see the round's Limits), since agents otherwise read one denied command as the whole shell being blocked. Check the first run's log for denied commands before starting the rest, and widen the allowlist for any denial a prefix can cover. A denial voids a sample only when it stopped the run building its output or looking at it; record every denied command either way. Cap each run's wall-clock time. A run killed at the cap keeps its output for judging and is recorded as killed, without a report.
+Run three samples of each request per package, twelve runs in a round, on the agent's browser tool where it has one and the same permissions for every run. Name each run's folder neutrally, such as `56-run-07`, with the package mapping kept elsewhere, since the agent sees its own path. Use the [run harness](#run-harness) note and allowlist for every run, since agents otherwise read one denied command as the whole shell being blocked. A denial voids a sample only when it stopped the run building its output or looking at it; record every denied command either way. Cap each run's wall-clock time. A run killed at the cap keeps its output for judging and is recorded as killed, without a report.
 
 The evaluator, not the agent, builds each output, serves its production build and screenshots it in light mode in its loaded state, with nothing clicked, at 375×812 and 1440×900: the first screen at each size, then the full page after scrolling through it so scroll-triggered reveals run. Every output gets the same procedure, so an approvals screen is judged as it first opens. Record any output that does not build, and judge what renders.
 
