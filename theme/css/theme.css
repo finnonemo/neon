@@ -35,7 +35,7 @@
  * Coinbase defaults for untouched fields don't belong in a "Finnomena"
  * branded file. The one exception to the CDS capture is the provisional
  * --layout-* group, copied by hand from the breakpoint token export (see
- * its own comment below).
+ * its own comment below); CDS's ThemeProvider never emits it.
  *
  * COLOR IS PROVISIONAL — see
  * ${CLAUDE_PLUGIN_ROOT}/theme/cds/color-overrides.ts's own
@@ -59,6 +59,7 @@
  *   - Colors only: use only the --color-* variables below.
  *   - Colors + typography: also use --fontFamily-*, --fontSize-*,
  *     --fontWeight-*, --lineHeight-*, --space-*, --borderRadius-*.
+ *     Immersive pages also take their content column from --layout-*.
  *   - Full CDS: don't use this file — see
  *     ${CLAUDE_PLUGIN_ROOT}/skills/neon-create instead (ThemeProvider +
  *     createNeonTheme() + real CDS components).
@@ -203,14 +204,15 @@
 
   /* --- Layout (mode-independent) ---
    * PROVISIONAL: the Immersive pages' shared content column, copied by hand
-   * from theme/tokens/breakpoint.json's Immersive Layout ("Content View
-   * max-width" at xxxl_1440px; "End margins" from sm_320px). Not a CDS field
-   * and nothing regenerates it. The end margin widens below. */
+   * from ${CLAUDE_PLUGIN_ROOT}/theme/tokens/breakpoint.json's Immersive
+   * Layout ("Content View max-width" from xxxl_1440px; "End margins" from
+   * sm_320px). Not a CDS field and nothing regenerates it. The end margin
+   * widens below. */
   --layout-contentMaxWidth: 1440px;
   --layout-endMargin: 16px;
 }
 
-/* "End margins" from the xxxl_1440px tier's Viewport min-width. */
+/* "End margins" from the xxxl_1440px tier (Viewport min-width 1440). */
 @media (min-width: 1440px) {
   :root {
     --layout-endMargin: 24px;
