@@ -1,6 +1,6 @@
 # Neon
 
-Neon distributes Finnomena's brand theme, a CDS starter and the skills that apply them to employees' apps.
+Neon distributes Finnomena's brand theme, Neon's components and the skills that apply them to employees' apps. New work is built on the Neon base; CDS is kept, frozen, for apps already on it.
 
 The package and installing terms describe Neon itself. The employee work terms describe what employees bring and ask for.
 
@@ -13,25 +13,33 @@ The complete Neon package directory. Skills resolve every theme, starter and ins
 _Avoid_: plugin root, `CLAUDE_PLUGIN_ROOT`
 
 **Canonical theme assets**:
-The one source copy of the CDS theme files and the CSS adapter. Every install and every starter assembly copies from it.
+The one source copy of the theme: the Neon registry's items and the CSS adapter. Every install and every starter assembly takes from it. The frozen CDS theme files stay beside them for apps already on CDS.
 _Avoid_: starter theme, theme copy
+
+**Neon base**:
+shadcn/ui on Tailwind with Radix primitives, carrying Neon's components tuned to match CDS's look in theming, sizing and spacing. Behavior is Radix's unless it would be less accessible than CDS.
+_Avoid_: shadcn (alone, which names the stock components), new starter
+
+**Neon registry**:
+The shadcn registry Neon publishes, pinned to each Neon release. Its items are the Neon base, Neon's components, the theme and the Immersive Themes. Skills add Neon's item, never the stock shadcn one.
+_Avoid_: component library, npm package
 
 ### Installing
 
 **Installer**:
-The part of Neon that puts canonical theme assets into a target project and, unless told to skip, installs the dependencies they need.
+The part of Neon that puts canonical theme assets into a target project and, unless told to skip, installs the dependencies they need: the Neon registry for React apps, and the CSS-only script for everything else.
 _Avoid_: setup script, install script
 
 **Install mode**:
-One of three things the installer can do: **New**, which assembles the starter into an empty directory; **CDS**, which adds the CDS theme to an existing project; and **CSS-only**, which adds only the CSS adapter.
+One of the things the installer can do: **New**, which starts an app from the Neon base in an empty directory; **Add**, which adds Neon registry items to an existing app; **CSS-only**, which adds only the CSS adapter; and **CDS**, frozen for apps already on CDS, which adds the CDS theme to an existing project.
 _Avoid_: tier. Tier is the styling decision a skill makes. Install mode is what the installer does to carry it out.
 
 **Starter assembly**:
-Combining the starter's source with the canonical theme assets to produce a complete, runnable app.
+Combining the Neon base with the canonical theme assets to produce a complete, runnable app.
 _Avoid_: scaffold copy, starter sync
 
 **Preflight**:
-The installer's guarantee that every check finishes before the first write, so a refused install leaves the target untouched.
+The CSS-only script's guarantee that every check finishes before the first write, so a refused install leaves the target untouched.
 _Avoid_: validation, dry run
 
 **Package-manager evidence**:
@@ -57,11 +65,11 @@ Bringing an existing app to Finnomena branding while keeping its framework, comp
 _Avoid_: theming (alone), reskin
 
 **Rebuild**:
-Recreating an existing React app on CDS from the Neon starter in a new directory, treating the original as the spec rather than as code to port.
-_Avoid_: migration, port, CDS adoption (which installs CDS into the existing app instead)
+Recreating an existing React app on the Neon base in a new directory, treating the original as the spec rather than as code to port.
+_Avoid_: migration, port, component adoption (which adds Neon's components into the existing app instead)
 
 **Tier**:
-How far a skill's styling reaches: colors only, visual system (adds typography, spacing and radius) or CDS (the Finnomena theme plus real CDS components).
+How far a skill's styling reaches: colors only, visual system (adds typography, spacing and radius) or components (the Finnomena theme plus Neon's components; CDS components in an app already on CDS).
 _Avoid_: level, mode, install mode
 
 **Composition**:
