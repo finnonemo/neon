@@ -1,0 +1,16 @@
+{
+  "kind": "occasion",
+  "slug": "run",
+  "taglineIntent": "a members' running event: energy, a shared start line, an open invitation to sign up",
+  "moodIntent": "a weekend race members train for together; momentum, a clear route and a friendly start line; the page should feel like the week before race day",
+  "components": [
+    { "name": "Race distance card", "role": "compare the distances on offer and pick one", "contentNotes": "distance, start time, cut-off time, member price, one select action per card", "roles": ["palette", "action"] },
+    { "name": "Route overview", "role": "show the course and its checkpoints", "contentNotes": "a labelled map image slot, checkpoints with distance markers, water stations", "roles": ["palette"] },
+    { "name": "Race-day schedule", "role": "list the race-day timeline", "contentNotes": "time, item and place for check-in, warm-up, start, finish and awards", "roles": ["palette"] },
+    { "name": "Registration call-out", "role": "carry the one main registration action", "contentNotes": "registration deadline, the member benefit, the main action", "roles": ["accent", "action"] }
+  ],
+  "dos": ["show the registration deadline next to every main action"],
+  "donts": ["use the route map as a decorative background, because runners need to read it"],
+  "promptInputs": ["a set of race distance cards for 5K, 10K and 21K", "a registration call-out with its deadline"],
+  "secondaryHighlights": ["green"]
+}

@@ -1,0 +1,177 @@
+{
+  "brief": "club-seminar",
+  "model": "claude-opus-5-5",
+  "effort": "high",
+  "claudeCode": "2.1.316",
+  "sharedHash": "85867cab30e4",
+  "entries": {
+    "tagline": {
+      "entryHash": "7bd8c8c28806",
+      "inputsHash": "28b6afdc2ad0",
+      "attempts": [
+        {
+          "attempt": 1,
+          "hard": [],
+          "soft": []
+        }
+      ],
+      "kept": 1,
+      "passedHard": true,
+      "outputHash": "c008c41f1794"
+    },
+    "mood-occasion": {
+      "entryHash": "933789623965",
+      "inputsHash": "226cafe719fc",
+      "attempts": [
+        {
+          "attempt": 1,
+          "hard": [],
+          "soft": []
+        }
+      ],
+      "kept": 1,
+      "passedHard": true,
+      "outputHash": "67dcd0dddbf9"
+    },
+    "imagery": {
+      "entryHash": "2dd48dbb218d",
+      "inputsHash": "934f1737e43d",
+      "attempts": [
+        {
+          "attempt": 1,
+          "hard": [],
+          "soft": []
+        }
+      ],
+      "kept": 1,
+      "passedHard": true,
+      "outputHash": "e4cb3dbc9b66"
+    },
+    "occasion-components": {
+      "entryHash": "869edd08eaf4",
+      "inputsHash": "11cfc137670a",
+      "attempts": [
+        {
+          "attempt": 1,
+          "hard": [
+            "copies 8+ words from the example"
+          ],
+          "soft": []
+        },
+        {
+          "attempt": 2,
+          "hard": [],
+          "soft": [
+            "paragraph \"Agenda timeline\": 46 words, band 25–45"
+          ]
+        }
+      ],
+      "kept": 2,
+      "passedHard": true,
+      "outputHash": "f9042ee4078c"
+    },
+    "preset-dos-donts": {
+      "entryHash": "14a69318fa91",
+      "inputsHash": "a56a27a17b3e",
+      "attempts": [
+        {
+          "attempt": 1,
+          "hard": [],
+          "soft": []
+        }
+      ],
+      "kept": 1,
+      "passedHard": true,
+      "outputHash": "ebe4a799c6bc"
+    },
+    "example-prompts": {
+      "entryHash": "01e4b99b1560",
+      "inputsHash": "9cea7beb8e0f",
+      "attempts": [
+        {
+          "attempt": 1,
+          "hard": [],
+          "soft": []
+        }
+      ],
+      "kept": 1,
+      "passedHard": true,
+      "outputHash": "fbf818c4030f"
+    },
+    "layout": {
+      "entryHash": "fc0f68c6f5f7",
+      "inputsHash": "a01b46f5d1e9",
+      "attempts": [
+        {
+          "attempt": 1,
+          "hard": [],
+          "soft": [
+            "layout: 145 words, band 90–140"
+          ]
+        },
+        {
+          "attempt": 2,
+          "hard": [],
+          "soft": []
+        }
+      ],
+      "kept": 2,
+      "passedHard": true,
+      "outputHash": "d3d460f35a66"
+    }
+  },
+  "prose": {
+    "tagline": {
+      "tagline": "Market talks on an open white canvas — a members' seminar to hear named speakers and reserve your seat"
+    },
+    "mood-occasion": {
+      "paragraph": "For the seminar evening the accent is held back for the seat reservation block alone, so readers meet it only after the agenda has made its case. The page leans on rounded blocks and generous gaps, giving each talk and speaker room to read as a calm, ordered step. It closes on a hushed hall, chairs filling row by row before the first speaker steps up."
+    },
+    "imagery": {
+      "paragraph": "Photography of members taking part leads the page. Frame close and mid shots of people mid-movement or mid-conversation, leaving generous space beside the subject for copy. Show real members and the brand's own staff, candid and never posed stock, set against the canvas so the accent stays reserved for emphasis. The brand's spot illustrations appear only in small explanatory blocks, never as hero art. Icons stay small, simple and in the accent. Beside the Brand Pattern call-out, images sit in their own column and never overlap the pattern. Keep it sparse: at most one large image per screen, with supporting images kept small."
+    },
+    "occasion-components": {
+      "components": [
+        {
+          "name": "Speaker card",
+          "role": "One speaker and their talk",
+          "paragraph": "Uses var(--immersive-palette-25) as its fill and var(--immersive-on-palette-25) for text. It carries no outline, rounds to var(--borderRadius-400) and keeps var(--space-3) of inner space. A portrait slot leads, then name in headline, job title in label2, talk title in title3 and a one-line takeaway in body."
+        },
+        {
+          "name": "Agenda timeline",
+          "role": "The evening's sessions in order",
+          "paragraph": "Sits on var(--immersive-palette-50) with var(--immersive-on-palette-50) text, thin row dividers rather than a frame, var(--borderRadius-400) rounding and var(--space-3) spacing. Each row sets the time in label1, the session title in headline and the speaker in label2. Breaks show as a plain caption row, never as a card."
+        },
+        {
+          "name": "Seat reservation form",
+          "role": "One-step seat booking form",
+          "paragraph": "A var(--immersive-palette-25) panel carrying var(--immersive-on-palette-25) text, framed by no border, curved to var(--borderRadius-400) and padded with var(--space-3). Name, phone, member number and session choice use label1 labels over body inputs, with a legal consent line. A single var(--immersive-action) button in var(--immersive-on-action) ends it."
+        },
+        {
+          "name": "Seats-left call-out",
+          "role": "Date, venue and seats remaining",
+          "paragraph": "Filled var(--immersive-accent-50) with var(--immersive-on-accent-50) text, borderless, var(--borderRadius-400) radius, var(--space-3) inside. Date and venue sit in title2, the seats-left count in display3, then a var(--immersive-action) button labelled in var(--immersive-on-action). Show only a live count, never an invented one."
+        }
+      ]
+    },
+    "preset-dos-donts": {
+      "dos": [
+        "List each speaker's credentials inside their Speaker card in var(--immersive-text), keeping the hero free of titles and qualifications."
+      ],
+      "donts": [
+        "Do not promise returns or outcomes in Agenda timeline session titles — seminar copy is educational and must never read as financial advice."
+      ]
+    },
+    "example-prompts": {
+      "prompts": [
+        "Create a Speaker card: var(--immersive-palette-25) fill, var(--immersive-on-palette-25) text, no outline, rounded to var(--borderRadius-400), var(--space-3) padding, a portrait slot first, then the speaker name in headline, job title in label2, talk title in title3 and a one-line takeaway in body.",
+        "Create a three-talk Agenda timeline: var(--immersive-palette-50) surface carrying var(--immersive-on-palette-50) text, thin row dividers instead of a frame, var(--borderRadius-400) rounding, var(--space-3) spacing, each row giving the time in label1, session title in headline and speaker in label2, with breaks as plain caption rows.",
+        "Create a Seats-left call-out: var(--immersive-accent-50) fill and var(--immersive-on-accent-50) text, borderless, var(--borderRadius-400) radius, var(--space-3) inside, date and venue in title2, the live seats-left count in display3, then one var(--immersive-action) button labelled in var(--immersive-on-action).",
+        "Create a Seat reservation form: a var(--immersive-palette-25) panel with var(--immersive-on-palette-25) text, no border, var(--borderRadius-400) curves, var(--space-3) padding, label1 labels over body inputs for name, phone, member number and session choice, a consent line in legal, and a single var(--immersive-action) button in var(--immersive-on-action)."
+      ]
+    },
+    "layout": {
+      "paragraph": "A contained page on the light canvas that opens on a centred hero: headline and one supporting line above the main action, no lead image. Sections then alternate between open canvas and raised blocks at borderRadius-400. The proof section sits in a block and holds a row of Speaker card items; the first detail-list returns to canvas with the Agenda timeline; the second detail-list sits in a block as a short list of what each seat includes. The call-out is the Brand Pattern section and carries the Seats-left call-out. The form section returns to canvas with the Seat reservation form. A top bar links by anchor to each section, and the footer is full, with logo, contact lines and legal links. Rhythm is spacious and still: space-8 between sections, space-3 inside every card."
+    }
+  }
+}

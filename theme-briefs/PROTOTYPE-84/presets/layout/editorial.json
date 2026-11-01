@@ -1,0 +1,15 @@
+{
+  "kind": "layout",
+  "slug": "editorial",
+  "sections": ["hero", "proof", "detail-list", "detail-list", "call-out", "form", "footer"],
+  "heroPattern": "centred: headline and one supporting line above the main action, no lead image",
+  "navigation": "a top bar with anchor links to each section",
+  "footer": "full: logo, contact lines, legal links",
+  "density": "spacious",
+  "blockRadius": "borderRadius-400",
+  "sectionGap": "space-8",
+  "cardPadding": "space-3",
+  "pageWidth": "contained",
+  "motion": "still",
+  "brandPattern": { "section": "call-out" }
+}

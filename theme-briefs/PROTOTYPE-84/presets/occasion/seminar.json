@@ -1,0 +1,16 @@
+{
+  "kind": "occasion",
+  "slug": "seminar",
+  "taglineIntent": "an investment seminar for members: learn from named speakers, reserve a seat",
+  "moodIntent": "an evening of expert talks on markets and planning; calm authority, a clear agenda and limited seats",
+  "components": [
+    { "name": "Speaker card", "role": "introduce one speaker and their topic", "contentNotes": "portrait image slot, name, title, talk title, one-line takeaway", "roles": ["palette"] },
+    { "name": "Agenda timeline", "role": "lay out the evening session by session", "contentNotes": "time, session title, speaker name; breaks marked plainly", "roles": ["palette"] },
+    { "name": "Seat reservation form", "role": "reserve a seat in one step", "contentNotes": "name, phone, member number, session choice, consent line, the main action", "roles": ["palette", "action"] },
+    { "name": "Seats-left call-out", "role": "state the date, venue and remaining seats", "contentNotes": "date, venue, seats left, the main action", "roles": ["accent", "action"] }
+  ],
+  "dos": ["name the speaker's credentials in their card, not in the hero"],
+  "donts": ["promise returns or outcomes in session titles, because seminar copy is educational, not advice"],
+  "promptInputs": ["a speaker card with portrait and talk title", "an agenda timeline for an evening of three talks"],
+  "secondaryHighlights": ["blue"]
+}

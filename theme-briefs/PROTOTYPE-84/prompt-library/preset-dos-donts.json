@@ -1,0 +1,10 @@
+{
+  "fills": "occasion Do and Don't bullets",
+  "inputs": ["occasion.dos", "occasion.donts", "components.names", "colorVars"],
+  "after": ["occasion-components"],
+  "formula": ["Do: an imperative verb, the element (a component name where one fits), and a var(--…) or step where one fits", "Don't: start with 'Do not', the tempting mistake, then ' — ' and why"],
+  "targets": { "words": [12, 28] },
+  "rules": ["exactly one bullet per supplied intent, in order", "one sentence each"],
+  "output": { "type": "object", "properties": { "dos": { "type": "array", "items": { "type": "string" } }, "donts": { "type": "array", "items": { "type": "string" } } }, "required": ["dos", "donts"], "additionalProperties": false },
+  "example": { "input": { "occasion.dos": ["show the firing date on every booking card"], "occasion.donts": ["use glaze photos as section backgrounds"] }, "output": { "dos": ["Print the firing date in title3 on every Kiln slot card, above its main action."], "donts": ["Do not run glaze photos behind section text — the texture breaks the contrast the theme relies on."] } }
+}

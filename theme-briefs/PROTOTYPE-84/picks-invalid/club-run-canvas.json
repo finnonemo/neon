@@ -1,0 +1,1 @@
+{ "theme": "club", "briefName": "Run canvas", "presets": { "occasion": "run", "layout": "event-landing", "imagery": "people-in-action" }, "brandPattern": { "colourway": "palette", "ground": 100 }, "accentHex": "#f2f93c" }

@@ -1,0 +1,10 @@
+{
+  "fills": "second half of the mood paragraph",
+  "inputs": ["occasion.moodIntent", "theme.mood", "brief.name", "theme.kind", "colorRoles"],
+  "after": [],
+  "formula": ["continue from the theme half without repeating it", "say how the accent is rationed for this occasion", "say the geometry the page leans on (rounded blocks, generous gaps) in words, not values", "close on one concrete image of the occasion"],
+  "targets": { "words": [45, 80], "sentences": [3, 5] },
+  "rules": ["no values: no var(--…), no px, no digits"],
+  "output": { "type": "object", "properties": { "paragraph": { "type": "string" } }, "required": ["paragraph"], "additionalProperties": false },
+  "example": { "input": { "occasion.moodIntent": "an open studio night; hands-on, unhurried", "brief.name": "Studio" }, "output": { "paragraph": "For the studio night the accent is kept for the sign-up block alone, so the eye finds it after the work on the wheels. Soft, generous blocks and wide gaps let each station breathe. The page closes on a shelf of drying bowls waiting for the kiln." } }
+}

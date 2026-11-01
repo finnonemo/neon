@@ -1,0 +1,168 @@
+{
+  "brief": "club-run",
+  "model": "claude-opus-5-5",
+  "effort": "high",
+  "claudeCode": "2.1.316",
+  "sharedHash": "85867cab30e4",
+  "entries": {
+    "tagline": {
+      "entryHash": "7bd8c8c28806",
+      "inputsHash": "c63d91e304aa",
+      "attempts": [
+        {
+          "attempt": 1,
+          "hard": [],
+          "soft": []
+        }
+      ],
+      "kept": 1,
+      "passedHard": true,
+      "outputHash": "1c459590ca8a"
+    },
+    "mood-occasion": {
+      "entryHash": "933789623965",
+      "inputsHash": "e99ecd147f2c",
+      "attempts": [
+        {
+          "attempt": 1,
+          "hard": [],
+          "soft": []
+        }
+      ],
+      "kept": 1,
+      "passedHard": true,
+      "outputHash": "fd44b00b934f"
+    },
+    "imagery": {
+      "entryHash": "2dd48dbb218d",
+      "inputsHash": "8bd68889c262",
+      "attempts": [
+        {
+          "attempt": 1,
+          "hard": [],
+          "soft": []
+        }
+      ],
+      "kept": 1,
+      "passedHard": true,
+      "outputHash": "0f9509394b72"
+    },
+    "occasion-components": {
+      "entryHash": "869edd08eaf4",
+      "inputsHash": "20e784b53345",
+      "attempts": [
+        {
+          "attempt": 1,
+          "hard": [],
+          "soft": []
+        }
+      ],
+      "kept": 1,
+      "passedHard": true,
+      "outputHash": "826318dda7e7"
+    },
+    "preset-dos-donts": {
+      "entryHash": "14a69318fa91",
+      "inputsHash": "87d9f10a6b9b",
+      "attempts": [
+        {
+          "attempt": 1,
+          "hard": [],
+          "soft": []
+        }
+      ],
+      "kept": 1,
+      "passedHard": true,
+      "outputHash": "e01777b07ebf"
+    },
+    "example-prompts": {
+      "entryHash": "01e4b99b1560",
+      "inputsHash": "054a3c6c77b5",
+      "attempts": [
+        {
+          "attempt": 1,
+          "hard": [],
+          "soft": []
+        }
+      ],
+      "kept": 1,
+      "passedHard": true,
+      "outputHash": "9d2e201193a9"
+    },
+    "layout": {
+      "entryHash": "fc0f68c6f5f7",
+      "inputsHash": "925c6b8cdfdb",
+      "attempts": [
+        {
+          "attempt": 1,
+          "hard": [],
+          "soft": [
+            "layout: 143 words, band 90–140"
+          ]
+        },
+        {
+          "attempt": 2,
+          "hard": [],
+          "soft": []
+        }
+      ],
+      "kept": 2,
+      "passedHard": true,
+      "outputHash": "f78414376262"
+    }
+  },
+  "prose": {
+    "tagline": {
+      "tagline": "Running shoes on a white canvas — a shared start line, and every member invited to sign up"
+    },
+    "mood-occasion": {
+      "paragraph": "For race week the accent is held back for the start-line countdown and nothing else, so it lands like a starter's flag. The action stays steady on the join step, never competing with it. Rounded tint blocks follow one another like stages on a route, with generous gaps that keep the pace easy to read. The page ends on a row of laced shoes by the door the night before the gun."
+    },
+    "imagery": {
+      "paragraph": "Photography of members taking part leads the page. Frame it in close and mid shots that catch people mid-movement or mid-conversation, and leave generous space beside the subject so copy can sit there. Show real members and staff, candid and never posed stock, set against the light of the canvas so faces read clearly. In the hero, place the photo beside the Brand Pattern section, never over or under it, so the pattern stays whole. Use the theme's spot illustrations only for small explanatory blocks. Keep icons small, simple and secondary, so they label points instead of decorating. Keep imagery sparse: use at most one large image per screen, and keep supporting images small."
+    },
+    "occasion-components": {
+      "components": [
+        {
+          "name": "Race distance card",
+          "role": "One race distance to compare and pick",
+          "paragraph": "A var(--immersive-palette-50) fill carrying var(--immersive-on-palette-50) text, no border, var(--borderRadius-500) corners, var(--space-4) padding. The distance leads in title2, with start time, cut-off and member price as label2 lines, then one select action in var(--immersive-action) with var(--immersive-on-action) text. The picked card shows a 'Selected' caption."
+        },
+        {
+          "name": "Route overview",
+          "role": "The course map and its checkpoints",
+          "paragraph": "A var(--immersive-palette-25) fill carrying var(--immersive-on-palette-25) text, no border, var(--borderRadius-500) corners, var(--space-4) padding. A labelled map image slot leads, followed by checkpoints as label1 distance markers with body names and water stations noted in caption. Never leave the map slot without its label."
+        },
+        {
+          "name": "Race-day schedule",
+          "role": "The race-day timeline",
+          "paragraph": "A var(--immersive-palette-75) fill carrying var(--immersive-on-palette-75) text, no border, var(--borderRadius-500) corners, var(--space-4) padding. Each row pairs a label1 time with a body item and a label2 place, running from check-in through warm-up, start, finish and awards. Rows carry no actions."
+        },
+        {
+          "name": "Registration call-out",
+          "role": "The single main registration action",
+          "paragraph": "A var(--immersive-accent-100) fill carrying var(--immersive-on-accent-100) text, no border, var(--borderRadius-500) corners, var(--space-4) padding. The registration deadline leads in title1, a body line explains the member benefit, and the main action follows in var(--immersive-action) with var(--immersive-on-action) text. Only one call-out per page."
+        }
+      ]
+    },
+    "preset-dos-donts": {
+      "dos": [
+        "Print the registration deadline beside every main action on each Race distance card and the Registration call-out, in var(--immersive-text)."
+      ],
+      "donts": [
+        "Do not use the route map as a decorative background — runners must read its turns and distances, so it belongs in the Route overview."
+      ]
+    },
+    "example-prompts": {
+      "prompts": [
+        "Create a Race distance card set for 5K, 10K and 21K: var(--immersive-palette-50) fill with var(--immersive-on-palette-50) text, var(--borderRadius-500) corners, var(--space-4) padding, each distance in title2, start time, cut-off and member price as label2 lines, and one select action on var(--immersive-action) with var(--immersive-on-action) label.",
+        "Create a Registration call-out: var(--immersive-accent-100) fill with var(--immersive-on-accent-100) text, var(--borderRadius-500) corners, var(--space-4) padding, the registration deadline in title1, a body line on the member benefit, and a single register action on var(--immersive-action) with var(--immersive-on-action) label.",
+        "Create a Route overview: var(--immersive-palette-25) fill with var(--immersive-on-palette-25) text, var(--borderRadius-500) corners, var(--space-4) padding, a labelled course map image slot first, then checkpoint distances in label1, checkpoint names in body and water stations marked in caption.",
+        "Create a Race-day schedule: var(--immersive-palette-75) fill with var(--immersive-on-palette-75) text, var(--borderRadius-500) corners, var(--space-4) padding, rows running from check-in to awards, each with a label1 time, a body item and a label2 place, and no actions in any row."
+      ]
+    },
+    "layout": {
+      "paragraph": "A full-bleed page that opens on a split hero, which is also the Brand Pattern section: headline, supporting line and main action on one side, the lead image on the other, stacking image-last on narrow screens. Sections then alternate between open canvas and contained blocks with borderRadius-500 corners. The first detail-list sets each Race distance card on a block, the call-out holds the Registration call-out on canvas, the second detail-list pairs the Route overview and Race-day schedule on blocks, proof sits on canvas, and the form returns to a block. There is no navigation bar; a sticky main action appears on narrow screens after the hero. The footer is minimal: logo, organiser line and legal links. Rhythm stays comfortable, with space-10 between sections and space-4 inside cards."
+    }
+  }
+}

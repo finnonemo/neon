@@ -1,0 +1,10 @@
+{
+  "fills": "occasion entries in Components",
+  "inputs": ["occasion.components", "layout.blockRadius", "layout.cardPadding", "layout.density", "typeRoles", "colorVars"],
+  "after": [],
+  "formula": ["for each supplied component, in order: its name, a Role line as a noun phrase, then one paragraph", "paragraph slot order: fill → border → radius → padding → type → contents → state → an optional closing 'only' or 'never' line"],
+  "targets": { "roleWords": [2, 8], "paragraphWords": [25, 45], "paragraphSentences": [2, 4] },
+  "rules": ["fills and text as var(--immersive-…) pairs from colorVars: a fill var(--immersive-X) always with its text var(--immersive-on-X)", "radius and padding as var(--borderRadius-…) and var(--space-…) from the supplied picks", "type as role names from typeRoles, for example title2 or body", "exactly one entry per supplied component, keeping its name"],
+  "output": { "type": "object", "properties": { "components": { "type": "array", "items": { "type": "object", "properties": { "name": { "type": "string" }, "role": { "type": "string" }, "paragraph": { "type": "string" } }, "required": ["name", "role", "paragraph"], "additionalProperties": false } } }, "required": ["components"], "additionalProperties": false },
+  "example": { "input": { "occasion.components": [{ "name": "Kiln slot card", "role": "book a firing slot", "roles": ["palette", "action"] }] }, "output": { "components": [{ "name": "Kiln slot card", "role": "One bookable firing slot", "paragraph": "var(--immersive-palette-50) fill with var(--immersive-on-palette-50) text, no border, var(--borderRadius-400) corners and var(--space-3) padding. The slot time sits in title3 above a body line for the glaze rules, then one main action. Full slots show a plain 'Full' label and never a disabled button." }] } }
+}

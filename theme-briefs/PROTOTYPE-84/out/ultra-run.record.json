@@ -1,0 +1,161 @@
+{
+  "brief": "ultra-run",
+  "model": "claude-opus-5-5",
+  "effort": "high",
+  "claudeCode": "2.1.316",
+  "sharedHash": "85867cab30e4",
+  "entries": {
+    "tagline": {
+      "entryHash": "7bd8c8c28806",
+      "inputsHash": "6a89e7dabab0",
+      "attempts": [
+        {
+          "attempt": 1,
+          "hard": [],
+          "soft": []
+        }
+      ],
+      "kept": 1,
+      "passedHard": true,
+      "outputHash": "03dee86ff0c9"
+    },
+    "mood-occasion": {
+      "entryHash": "933789623965",
+      "inputsHash": "df33cc3fc2c4",
+      "attempts": [
+        {
+          "attempt": 1,
+          "hard": [],
+          "soft": []
+        }
+      ],
+      "kept": 1,
+      "passedHard": true,
+      "outputHash": "b10c4792e659"
+    },
+    "imagery": {
+      "entryHash": "2dd48dbb218d",
+      "inputsHash": "8e7514817cf3",
+      "attempts": [
+        {
+          "attempt": 1,
+          "hard": [],
+          "soft": []
+        }
+      ],
+      "kept": 1,
+      "passedHard": true,
+      "outputHash": "59833b5c2366"
+    },
+    "occasion-components": {
+      "entryHash": "869edd08eaf4",
+      "inputsHash": "116a69cf2418",
+      "attempts": [
+        {
+          "attempt": 1,
+          "hard": [],
+          "soft": []
+        }
+      ],
+      "kept": 1,
+      "passedHard": true,
+      "outputHash": "3d7510123e5d"
+    },
+    "preset-dos-donts": {
+      "entryHash": "14a69318fa91",
+      "inputsHash": "37379a57236d",
+      "attempts": [
+        {
+          "attempt": 1,
+          "hard": [],
+          "soft": []
+        }
+      ],
+      "kept": 1,
+      "passedHard": true,
+      "outputHash": "aefaabb39a22"
+    },
+    "layout": {
+      "entryHash": "fc0f68c6f5f7",
+      "inputsHash": "68e0c2e7ef65",
+      "attempts": [
+        {
+          "attempt": 1,
+          "hard": [],
+          "soft": []
+        }
+      ],
+      "kept": 1,
+      "passedHard": true,
+      "outputHash": "6fc75539d645"
+    },
+    "example-prompts": {
+      "entryHash": "01e4b99b1560",
+      "inputsHash": "f1ab4fa03b7a",
+      "attempts": [
+        {
+          "attempt": 1,
+          "hard": [],
+          "soft": []
+        }
+      ],
+      "kept": 1,
+      "passedHard": true,
+      "outputHash": "7ce11d17ba99"
+    }
+  },
+  "prose": {
+    "tagline": {
+      "tagline": "Fast feet on a shared start line — an open invitation for every member to sign up and run"
+    },
+    "mood-occasion": {
+      "paragraph": "For the race weekend the accent is saved for one moment, the start time and meeting point, so the eye lands on it the way a runner spots the first marker. Rounded blocks and generous gaps keep the route clear, letting each section read like a steady stretch of road between turns. Nothing crowds the line. The page closes on members lacing up together at a chalked start line in the early light."
+    },
+    "imagery": {
+      "paragraph": "Photography of members taking part leads the page. Use close and mid shots that catch people mid-movement or mid-conversation, and leave generous open space beside the subject so copy has room to sit. Show real members and the brand's own staff. Keep every shot candid and never use posed stock. Set the photographs against the canvas and keep the accent for actions only. In the hero, give the photograph its own column beside the Brand Pattern section so the two never overlap. Use the brand's spot illustrations only in small explanatory blocks. Keep icons simple, single-weight and quiet. Keep the page sparse: no more than one large image per screen, and keep supporting images small."
+    },
+    "occasion-components": {
+      "components": [
+        {
+          "name": "Race distance card",
+          "role": "One selectable race distance option",
+          "paragraph": "var(--immersive-palette-25) fill with var(--immersive-on-palette-25) text, no border, var(--borderRadius-500) corners and var(--space-4) padding. The distance sits in title2 above label2 rows for start time, cut-off and member price. Each card ends in one var(--immersive-action) select button with var(--immersive-on-action) text. Only one card shows as picked."
+        },
+        {
+          "name": "Route overview",
+          "role": "Course map with its checkpoints",
+          "paragraph": "var(--immersive-palette-75) fill with var(--immersive-on-palette-75) text, no border, var(--borderRadius-500) corners and var(--space-4) padding. A labelled map image slot leads, followed by checkpoints in headline with distance markers in caption and water stations in label2. Never leave the map slot unlabelled."
+        },
+        {
+          "name": "Race-day schedule",
+          "role": "Timeline of race-day events",
+          "paragraph": "var(--immersive-palette-25) fill with var(--immersive-on-palette-25) text, no border, var(--borderRadius-500) corners and var(--space-4) padding. Each row pairs a label1 time with a body item and a label2 place, running check-in, warm-up, start, finish and awards in order. Rows stay plain text, never buttons."
+        },
+        {
+          "name": "Registration call-out",
+          "role": "Main registration prompt",
+          "paragraph": "var(--immersive-accent-100) fill with var(--immersive-on-accent-100) text, no border, var(--borderRadius-500) corners and var(--space-4) padding. The deadline leads in title2, the member benefit follows in body, then one var(--immersive-action) button with var(--immersive-on-action) text. This is the only main registration action on the page."
+        }
+      ]
+    },
+    "preset-dos-donts": {
+      "dos": [
+        "Print the registration deadline beside every main action in the Registration call-out and each Race distance card, set in var(--immersive-text)."
+      ],
+      "donts": [
+        "Do not place the Route overview map behind section content as decoration — runners need to read every turn and aid station clearly."
+      ]
+    },
+    "layout": {
+      "paragraph": "A full-bleed page that opens on a split hero: headline, supporting line and main action on one side, the lead image on the other, stacking image-last on narrow screens, with the Brand Pattern set behind the hero only. Below it, sections alternate between open canvas and raised blocks at borderRadius-500. The first detail-list holds the Race distance card set on canvas; the call-out carries the Registration call-out as a block; the second detail-list pairs the Route overview with the Race-day schedule on canvas; the proof section sits in a block; the form section returns to canvas for registration. There is no top navigation; after the hero, a sticky main action appears on narrow screens. The footer stays minimal with logo, organiser line and legal links. Keep rhythm comfortable: space-10 between sections, space-4 inside cards, subtle motion."
+    },
+    "example-prompts": {
+      "prompts": [
+        "Create a Race distance card set for 5K, 10K and 21K: var(--immersive-palette-25) fill with var(--immersive-on-palette-25) text, var(--borderRadius-500) corners, var(--space-4) padding, the distance in title2, label2 rows for start time, cut-off and member price, and one select button on var(--immersive-action) with var(--immersive-on-action) label.",
+        "Create a Registration call-out with its deadline: var(--immersive-accent-100) fill with var(--immersive-on-accent-100) text, var(--borderRadius-500) corners, var(--space-4) padding, the deadline leading in title2, the member benefit below in body, and a single register button on var(--immersive-action) with var(--immersive-on-action) label.",
+        "Create a Route overview section: var(--immersive-palette-75) fill with var(--immersive-on-palette-75) text, var(--borderRadius-500) corners, var(--space-4) padding, a labelled map image slot first, then checkpoints in headline with distance markers in caption and water stations in label2.",
+        "Create a Race-day schedule: var(--immersive-palette-25) fill with var(--immersive-on-palette-25) text, var(--borderRadius-500) corners, var(--space-4) padding, plain text rows pairing a label1 time, a body item and a label2 place for check-in, warm-up, start, finish and awards."
+      ]
+    }
+  }
+}

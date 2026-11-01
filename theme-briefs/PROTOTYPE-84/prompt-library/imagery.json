@@ -1,0 +1,10 @@
+{
+  "fills": "Imagery paragraph",
+  "inputs": ["imagery", "theme.kind", "canvasRole", "brandPattern.section"],
+  "after": [],
+  "formula": ["what leads", "framing", "subject, and color only through role names such as the canvas or the accent", "how illustration is used", "icons", "a closing density verdict"],
+  "targets": { "words": [75, 120], "paragraphs": [1, 1] },
+  "rules": ["no values: no var(--…), no px, no digits", "say how images sit beside the Brand Pattern section without overlapping it"],
+  "output": { "type": "object", "properties": { "paragraph": { "type": "string" } }, "required": ["paragraph"], "additionalProperties": false },
+  "example": { "input": { "imagery.leads": "photos of hands at work" }, "output": { "paragraph": "Close photographs of hands at the wheel lead…" } }
+}

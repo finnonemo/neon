@@ -1,0 +1,15 @@
+{
+  "kind": "layout",
+  "slug": "event-landing",
+  "sections": ["hero", "detail-list", "call-out", "detail-list", "proof", "form", "footer"],
+  "heroPattern": "split: headline, supporting line and main action on one side, the lead image on the other; stacks image-last on narrow screens",
+  "navigation": "none; a sticky main action appears on narrow screens after the hero",
+  "footer": "minimal: logo, organiser line and legal links",
+  "density": "comfortable",
+  "blockRadius": "borderRadius-500",
+  "sectionGap": "space-10",
+  "cardPadding": "space-4",
+  "pageWidth": "full-bleed",
+  "motion": "subtle",
+  "brandPattern": { "section": "hero" }
+}

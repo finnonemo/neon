@@ -1,0 +1,10 @@
+{
+  "fills": "header tagline",
+  "inputs": ["occasion.taglineIntent", "theme.sibling", "theme.kind"],
+  "after": [],
+  "formula": ["a concrete subject", "a preposition", "the ground it sits on", "optionally ' — ' and a short gloss"],
+  "targets": { "words": [10, 22], "firstClauseWords": [3, 7] },
+  "rules": ["no values: no var(--…), no px, no digits", "sentence case"],
+  "output": { "type": "object", "properties": { "tagline": { "type": "string" } }, "required": ["tagline"], "additionalProperties": false },
+  "example": { "input": { "occasion.taglineIntent": "a pottery club's open studio night", "theme.sibling": "Warm clay canvas with charcoal ink", "theme.kind": "light" }, "output": { "tagline": "Wheels and wet clay on a warm canvas — an open studio night for every member" } }
+}

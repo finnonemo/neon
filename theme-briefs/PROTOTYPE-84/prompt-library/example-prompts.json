@@ -1,0 +1,10 @@
+{
+  "fills": "example prompts in the Agent Prompt Guide",
+  "inputs": ["occasion.promptInputs", "components", "layout.sections", "colorVars", "typeRoles", "layout.blockRadius", "layout.cardPadding", "layout.sectionGap", "theme.id"],
+  "after": ["occasion-components"],
+  "formula": ["each prompt starts 'Create a <component or section>:'", "then fills and text as var(--…) pairs, type roles, radius and padding as var(--…), contents"],
+  "targets": { "count": [3, 5], "words": [25, 55] },
+  "rules": ["var(--…) names only for colors, radius and spacing", "at least one prompt per supplied prompt input", "at least one prompt names an occasion component exactly"],
+  "output": { "type": "object", "properties": { "prompts": { "type": "array", "items": { "type": "string" } } }, "required": ["prompts"], "additionalProperties": false },
+  "example": { "input": {}, "output": { "prompts": ["Create a Kiln slot card: var(--immersive-palette-50) fill with var(--immersive-on-palette-50) text, var(--borderRadius-400) corners, var(--space-3) padding, the slot time in title3 and one main action on var(--immersive-action) with var(--immersive-on-action) label."] } }
+}

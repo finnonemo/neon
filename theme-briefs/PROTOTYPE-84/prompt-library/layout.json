@@ -1,0 +1,10 @@
+{
+  "fills": "Layout paragraph",
+  "inputs": ["layout", "components.names", "brandPattern.section", "theme.kind"],
+  "after": ["occasion-components"],
+  "formula": ["the page model (contained or full-bleed)", "the hero", "how sections alternate between canvas and blocks", "which component sits in which section role", "navigation", "footer", "rhythm, only through the step names supplied"],
+  "targets": { "words": [90, 140], "paragraphs": [1, 1] },
+  "rules": ["spacing and radius only as step names (space-8, borderRadius-500) or their var(--…) form, never px", "name every supplied section role in order, and place every component name in one of them", "name the Brand Pattern section"],
+  "output": { "type": "object", "properties": { "paragraph": { "type": "string" } }, "required": ["paragraph"], "additionalProperties": false },
+  "example": { "input": { "layout.sections": ["hero", "detail-list", "form"] }, "output": { "paragraph": "A contained page that opens on a centred hero…" } }
+}
