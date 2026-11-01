@@ -1,3 +1,9 @@
+---
+scenarios:
+  - request: Rebuild an existing React prototype on CDS; colors-only and feature requests on the same apps
+    observe: As stated in the record
+---
+
 # CDS rebuild
 
 Fixtures: the batch-sell calculator above and a health-check management prototype (React, `@carbon/react`, SCSS, mock data with a timed demo transition). Rebuild request, verbatim, run in each source app:

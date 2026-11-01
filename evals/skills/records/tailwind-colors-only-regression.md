@@ -1,3 +1,9 @@
+---
+scenarios:
+  - request: Colors-only restyle of a Tailwind v4 app that uses stock utilities only
+    observe: As stated in the record
+---
+
 # Tailwind colors-only regression
 
 Fixture: a Vite/React app whose CSS is only `@import "tailwindcss";`, styled with stock utilities (`slate-*` text and surfaces, pale `-200` status borders, `focus:border-blue-*` inputs, colored category dots). The local batch-sell calculator reference matches. Request, verbatim:

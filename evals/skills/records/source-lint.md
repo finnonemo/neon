@@ -1,3 +1,9 @@
+---
+scenarios:
+  - request: Colors-only restyle of a Tailwind v4 app whose disabled text must keep a stock utility
+    observe: The run executes the shipped source lint on its changed files and the report fixes or justifies each warning on a `Source lint:` line.
+---
+
 # Source lint
 
 Item 5 of the shared checklist runs the shipped [source-lint.mjs](../../../scripts/source-lint.mjs) on the app and asks for a `Source lint:` report line that fixes or justifies each warning. The lint reads only the files changed against HEAD plus untracked files and always exits 0. Its rules live in `scripts/lib/source-rules.mjs`, which `stylesheet-scope.mjs` imports. `source-lint.test.mjs` covers the rules and asserts the grader keeps no copy of them.

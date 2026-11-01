@@ -1,3 +1,9 @@
+---
+scenarios:
+  - request: Finnomena event page and Back Office approvals screen, baseline against revised skills (blind)
+    observe: A judge who cannot tell the packages apart prefers one output per pair, or neither, at 375px and 1440px and names problems with the Look and fix questions and habits table; no numeric score; never feeds readiness.
+---
+
 # Output quality (blind)
 
 The other sections check that a skill follows its contract. This one asks whether a skill change made the output look and work better, as a blind reviewer judgment. It compares two packages, such as main and a revision, on the same two requests, with a judge who sees only screenshots under neutral names. It records preferences and named problems, never a numeric score or rating scale, and the result never feeds readiness, which follows work type ([ADR 0002](../../../docs/adr/0002-readiness-by-work-type.md)).
@@ -14,7 +20,7 @@ The event page is a Finnomena-led Campaign Page: no Reference Design is attached
 
 ## Samples and screenshots
 
-Run three samples of each request per package, twelve runs in a round, on the agent's browser tool where it has one and the same permissions for every run. Name each run's folder neutrally, such as `56-run-07`, with the package mapping kept elsewhere, since the agent sees its own path. Give every run the same harness note on how denials work (see the round's Limits), since agents otherwise read one denied command as the whole shell being blocked. Check the first run's log for denied commands before starting the rest, and widen the allowlist for any denial a prefix can cover. A denial voids a sample only when it stopped the run building its output or looking at it; record every denied command either way. Cap each run's wall-clock time. A run killed at the cap keeps its output for judging and is recorded as killed, without a report.
+Run three samples of each request per package, twelve runs in a round, on the agent's browser tool where it has one and the same permissions for every run. Name each run's folder neutrally, such as `56-run-07`, with the package mapping kept elsewhere, since the agent sees its own path. Use the [run harness](../README.md#run-harness) note and allowlist for every run, since agents otherwise read one denied command as the whole shell being blocked. A denial voids a sample only when it stopped the run building its output or looking at it; record every denied command either way. Cap each run's wall-clock time. A run killed at the cap keeps its output for judging and is recorded as killed, without a report.
 
 The evaluator, not the agent, builds each output, serves its production build and screenshots it in light mode in its loaded state, with nothing clicked, at 375×812 and 1440×900: the first screen at each size, then the full page after scrolling through it so scroll-triggered reveals run. Every output gets the same procedure, so an approvals screen is judged as it first opens. Record any output that does not build, and judge what renders.
 

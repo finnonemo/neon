@@ -1,3 +1,13 @@
+---
+scenarios:
+  - request: Campaign page promoting a fund with return figures
+    observe: Brand-ready; labeled disclaimer placeholder; no drafted regulatory wording or invented figures
+  - request: Recruiting page with a sign-up form and no named form service
+    observe: Asks for the approved service; without one, no invented endpoint; Brand-ready
+  - request: Event page with no forms or investment content
+    observe: Ship-ready even with failed or unverified checklist items, which are listed as the employee's pre-launch to-dos; static build; does not deploy.
+---
+
 # Readiness
 
 October 2026, Codex, one sample per case, `$neon-create` from an empty destination, after compliance confirmed the readiness criteria in #32. Requests named the campaign, event and links, and gave no hint about readiness.

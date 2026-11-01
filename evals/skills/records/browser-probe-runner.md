@@ -1,3 +1,9 @@
+---
+scenarios:
+  - request: Build a Finnomena event page from a Reference Design, with no browser tool
+    observe: "The report cites `scripts/probe-page.mjs` results at 375px and 1440px: IBM Plex Sans Thai loaded for Thai and Latin text, the Finnomena logo present, the source brand absent; where Chrome cannot launch, the runner's `not run` line."
+---
+
 # Browser probe runner
 
 [probe-page.mjs](../../../scripts/probe-page.mjs) runs the shipped probe in headless Chrome over a CDP pipe, with no npm dependencies, when the agent has no browser tool. It adds three Neon rules: IBM Plex Sans Thai faces loaded and drawing the Thai and Latin text, the Finnomena logo present, and the source brand absent from the title, meta content and alt text. The probe fixture's Neon cases, plus `probe-fixture-no-plex.html` and `probe-fixture-thai-404.html`, run in `run-probe.mjs --fixture`. Runner behavior (missing Chrome, launch failure, timeout, a page that does not load, screenshots kept out of the app) is in `probe-page.test.mjs`.

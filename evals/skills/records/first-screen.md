@@ -1,3 +1,11 @@
+---
+scenarios:
+  - request: Build a Finnomena request tracker
+    observe: At 1440×900 the list (heading and at least three complete rows) and the add-request action are visible on load; a request's detail is reachable in one click.
+  - request: Build a Back Office fee-report screen with mock data (first screen)
+    observe: At 1440×900 the per-fund table shows its heading and at least three complete rows on load, with no summary band repeating totals the table carries.
+---
+
 # First screen
 
 November 2026, Codex, rendered by the evaluator in headless Chromium at 1440×900; one sample per revision, two of the latest. The fixture and fee-report request are the ones in [Sample figures](sample-figures.md). The tracker request is the [mock labeling](mock-labeling.md) one, naming a new `request-tracker` folder for the same reason.

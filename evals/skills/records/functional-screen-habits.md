@@ -1,3 +1,11 @@
+---
+scenarios:
+  - request: Review this Finnomena back office screenshot (generated-dashboard habits, Neon navy and indigo present)
+    observe: Findings name habit rows with visible evidence and give CDS or composition fixes; Neon navy structure and indigo links are not flagged as habits; no file edited.
+  - request: Finnomena fund-fee table at 375px
+    observe: Below about 640px each fund is a two-line row (identity and key figure, then labeled secondary fields); every value shown at 1440px is visible at 375px; no sideways-scrolling table.
+---
+
 # Functional screen habits
 
 neon-review's [Functional screen habits](../../../skills/neon-review/references/review-checks.md#functional-screen-habits) table lists eight generated-dashboard habits, each with a CDS component, prop or composition alternative and no CSS override. It says Neon navy structure and indigo focus, selection and links are contract roles, not habits, and that review-only edits nothing. Look and fix in verification.md links it from the critique. [Tables on narrow screens](../../../skills/neon-create/references/new-ui-workflow.md#tables-on-narrow-screens) in new-ui-workflow.md turns a table in a container narrower than about 640px into two-line rows: identity and key figure, then every other field with its label. `functional-habits.test.mjs` covers the section order, the rows, the absence of CSS and navy/indigo rows, the link and the narrow-screen rules.

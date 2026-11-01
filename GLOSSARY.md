@@ -1,6 +1,6 @@
 # Neon
 
-Neon distributes Finnomena's brand theme, a CDS starter and the skills that apply them to employees' apps.
+Neon distributes Finnomena's brand theme, Neon's components and the skills that apply them to employees' apps. New work is built on the Neon base; CDS is kept, frozen, for apps already on it.
 
 The package and installing terms describe Neon itself. The employee work terms describe what employees bring and ask for.
 
@@ -13,25 +13,33 @@ The complete Neon package directory. Skills resolve every theme, starter and ins
 _Avoid_: plugin root, `CLAUDE_PLUGIN_ROOT`
 
 **Canonical theme assets**:
-The one source copy of the CDS theme files and the CSS adapter. Every install and every starter assembly copies from it.
+The one source copy of the theme: the Neon registry's items and the CSS adapter. Every install and every starter assembly takes from it. The frozen CDS theme files stay beside them for apps already on CDS.
 _Avoid_: starter theme, theme copy
+
+**Neon base**:
+shadcn/ui on Tailwind with Radix primitives, carrying Neon's components tuned to match CDS's look in theming, sizing and spacing. Behavior is Radix's unless it would be less accessible than CDS.
+_Avoid_: shadcn (alone, which names the stock components), new starter
+
+**Neon registry**:
+The shadcn registry Neon publishes, pinned to each Neon release. Its items are the Neon base, Neon's components, the theme and the Immersive Themes. Skills add Neon's item, never the stock shadcn one.
+_Avoid_: component library, npm package
 
 ### Installing
 
 **Installer**:
-The part of Neon that puts canonical theme assets into a target project and, unless told to skip, installs the dependencies they need.
+The part of Neon that puts canonical theme assets into a target project and, unless told to skip, installs the dependencies they need: the Neon registry for React apps, and the CSS-only script for everything else.
 _Avoid_: setup script, install script
 
 **Install mode**:
-One of three things the installer can do: **New**, which assembles the starter into an empty directory; **CDS**, which adds the CDS theme to an existing project; and **CSS-only**, which adds only the CSS adapter.
+One of the things the installer can do: **New**, which starts an app from the Neon base in an empty directory; **Add**, which adds Neon registry items to an existing app; **CSS-only**, which adds only the CSS adapter; and **CDS**, frozen for apps already on CDS, which adds the CDS theme to an existing project.
 _Avoid_: tier. Tier is the styling decision a skill makes. Install mode is what the installer does to carry it out.
 
 **Starter assembly**:
-Combining the starter's source with the canonical theme assets to produce a complete, runnable app.
+Combining the Neon base with the canonical theme assets to produce a complete, runnable app.
 _Avoid_: scaffold copy, starter sync
 
 **Preflight**:
-The installer's guarantee that every check finishes before the first write, so a refused install leaves the target untouched.
+The CSS-only script's guarantee that every check finishes before the first write, so a refused install leaves the target untouched.
 _Avoid_: validation, dry run
 
 **Package-manager evidence**:
@@ -57,37 +65,49 @@ Bringing an existing app to Finnomena branding while keeping its framework, comp
 _Avoid_: theming (alone), reskin
 
 **Rebuild**:
-Recreating an existing React app on CDS from the Neon starter in a new directory, treating the original as the spec rather than as code to port.
-_Avoid_: migration, port, CDS adoption (which installs CDS into the existing app instead)
+Recreating an existing React app on the Neon base in a new directory, treating the original as the spec rather than as code to port.
+_Avoid_: migration, port, component adoption (which adds Neon's components into the existing app instead)
 
 **Tier**:
-How far a skill's styling reaches: colors only, visual system (adds typography, spacing and radius) or CDS (the Finnomena theme plus real CDS components).
+How far a skill's styling reaches: colors only, visual system (adds typography, spacing and radius) or components (the Finnomena theme plus Neon's components; CDS components in an app already on CDS).
 _Avoid_: level, mode, install mode
 
 **Composition**:
 The arrangement and hierarchy of a screen, chosen independently of tier; preserved unless the employee explicitly asks to adapt it.
 _Avoid_: layout change, redesign (alone)
 
+**Immersive Theme**:
+One of four on-brand color sets for a Campaign Page, taken from the Finnomena Guidelines' membership levels: Club (white canvas), Exclusive (yellow), Private (light grey) and Ultra (navy). Each fixes the canvas, text, its own 100/75/50/25 steps, an accent family's steps and the action; the guideline's secondary colors are available in all four. A page switches between them by one attribute.
+_Avoid_: tier (a styling decision), palette, color mode
+
+**Theme Brief**:
+A style description in the Refero Styles format that Finnomena writes for one Immersive Theme, whose typeface and colors the theme fixes. It is where a Campaign Page starts when the employee brings no Reference Design.
+_Avoid_: design file (names the file, not the concept), Reference Design, template
+
+**Brand Pattern**:
+Finnomena background artwork made by Block's generator from a locked seed, placed in a section that a Theme Brief or the employee names.
+_Avoid_: texture, background, Page (Block's full composition)
+
 ### Reference designs
 
 **Reference Design**:
 An outside style description of another product, brought by the employee (for example from Refero Styles), that shapes a Campaign Page's look while Finnomena keeps ownership of its brand.
-_Avoid_: template, theme, inspiration
+_Avoid_: template, theme, inspiration, Theme Brief (which Finnomena writes)
 
 **Brand Contract**:
 Finnomena's visual language and semantic color rules; wins over any Reference Design on every property it owns.
 _Avoid_: design guide, style guide
 
 **Brand Intensity**:
-How much of a Reference Design survives on a Campaign Page: Finnomena-led (only its section structure), Blended (also its geometry and motion) or Reference-led (also its neutral surfaces).
+How much of a Reference Design survives on a Campaign Page: Finnomena-led (only its section structure), Blended (also its geometry and motion) or Reference-led (also its colors).
 _Avoid_: strength, mix, Finnomena level
 
 **Brand Floor**:
-The Finnomena properties no Brand Intensity may remove: the Finnomena logo, Finnomena typeface, Finnomena accent and action colors, accessible contrast, and the absence of any source brand's logo, imagery, copy or product names.
+The Finnomena properties no Brand Intensity may remove: the Finnomena logo, Finnomena typeface, at least one identifiable Finnomena color, accessible contrast, and the absence of any source brand's logo, imagery, copy or product names.
 _Avoid_: minimum branding, baseline
 
 **Gradient Recipe**:
-A named Finnomena gradient built only from palette steps, used on a Campaign Page instead of any Reference Design's own gradient colors; provisional until a design owner approves it.
+A named Finnomena gradient built only from palette steps, used on a Reference-led Campaign Page (an Immersive Theme uses none) instead of any Reference Design's own gradient colors; provisional until a design owner approves it.
 _Avoid_: brand gradient, gradient token
 
 ### Readiness

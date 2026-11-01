@@ -1,3 +1,9 @@
+---
+scenarios:
+  - request: Build a Back Office fee-report screen with mock data
+    observe: Totals equal the sum of rows; numbers right-aligned with tabular figures; a fall in fees takes the color of its declared good direction; a zero prints as `0`; sample values appear in the Handoff Summary.
+---
+
 # Sample figures
 
 Fixture: a folder holding only `.gitkeep`. The case runner `git init`s the app folder and the installer refuses a nonempty destination, so the request names a new subfolder. Request, verbatim:

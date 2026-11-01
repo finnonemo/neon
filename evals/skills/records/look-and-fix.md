@@ -1,3 +1,13 @@
+---
+scenarios:
+  - request: Add Finnomena approvals to an existing themed React/CDS app (Look and fix)
+    observe: Before Done the run screenshots its screen at 375px and 1440px, writes at least one critique round naming the widths and applies fixes; the report gives each round its own line and no numeric score.
+  - request: Add Finnomena approvals to an existing themed React/CDS app (readiness)
+    observe: "The report says Brand-ready with a Handoff Summary: a Back Office screen is never Ship-ready, with or without a mock service. Open: Look and fix Revised-2 reported \"Ship-ready, apart from the mock service\"; unverified since"
+  - request: Add Finnomena approvals to an existing themed React/CDS app (critique shape)
+    observe: "Each Look and fix round's critique, in the run's messages, gives every finding as severity, location, evidence with width and state, who is affected, fix and recheck. Open: no revised run in Look and fix used this shape; unverified since"
+---
+
 # Look and fix
 
 The shared checklist's [Look and fix](../../../skills/neon-redesign/references/verification.md#look-and-fix) section asks a run to screenshot its main task at 375px and 1440px, critique the screenshots in neon-review's finding shape, fix the top three problems, stop after three rounds, and report each round on its own line. Without visible screenshots it reports the loop as not run. neon-create and neon-redesign link it from step 5 and Done.

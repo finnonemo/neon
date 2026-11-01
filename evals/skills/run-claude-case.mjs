@@ -12,9 +12,8 @@
 // is packaged from --ref (a temporary worktree), taken from --package, or packaged
 // from this checkout. `{port}` in the prompt becomes --dev-port, where the app's
 // `npm run dev` is started before the run and stopped after it. The run is
-// stopped at --cap seconds. summary.json lists every denied command; a denial
-// voids the sample only if it stopped the build or the look (README "Running
-// agent samples").
+// stopped at --cap seconds. summary.json carries check-run.mjs's result: every
+// denied command, and void when the run then reported the shell as blocked.
 import { execFileSync, spawn } from 'node:child_process';
 import { existsSync, mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -22,6 +21,7 @@ import { basename, join, resolve } from 'node:path';
 import { parseArgs } from 'node:util';
 import { pathToFileURL } from 'node:url';
 import { packagePlugin } from '../../scripts/package-plugin.mjs';
+import { checkRun } from './check-run.mjs';
 
 const repositoryRoot = resolve(import.meta.dirname, '../..');
 
@@ -33,11 +33,11 @@ const bashPrefixes = [
   'git status', 'git log', 'git diff', 'git ls-files', 'git rev-parse', 'git show', 'git branch',
 ];
 export const BROWSER_TOOLS = ['navigate', 'resize', 'evaluate', 'screenshot', 'console'].map(name => `mcp__browser__${name}`);
-export const ALLOWED_TOOLS = ['Read', 'Edit', 'Write', 'Glob', 'Grep', 'Skill', ...BROWSER_TOOLS, 'Bash(pwd)', ...bashPrefixes.filter(prefix => prefix !== 'pwd').map(prefix => `Bash(${prefix}:*)`)];
+export const ALLOWED_TOOLS = ['Read', 'Edit', 'Write', 'Glob', 'Grep', 'Skill', ...BROWSER_TOOLS, ...bashPrefixes.map(prefix => `Bash(${prefix}:*)`)];
 
 // Without this note, runs read one denied compound command as "the shell is
 // blocked" and stopped before building or looking (records/output-quality-blind.md).
-export const PERMISSION_NOTE = `Shell permissions in this session: Bash is allowed for commands that start with one of: ${bashPrefixes.join(', ')}. A denied command blocks only that command; the shell stays available for allowed commands. Variable assignments, loops and $(...) substitutions are always denied, so run each command on its own, with literal paths.`;
+export const PERMISSION_NOTE = `Shell permissions in this session: Bash is allowed for commands that start with one of: ${[bashPrefixes.filter(prefix => !prefix.includes(' ')).join(' '), ...bashPrefixes.filter(prefix => prefix.includes(' '))].join(', ')}. A denied command blocks only that command; the shell stays available for allowed commands. Variable assignments, loops and $(...) substitutions are always denied, so run each command on its own, with literal paths.`;
 
 export function claudeArgs({ plugin, mcpConfig, prompt, model }) {
   return [
@@ -50,24 +50,6 @@ export function claudeArgs({ plugin, mcpConfig, prompt, model }) {
     '--append-system-prompt', PERMISSION_NOTE,
     '--output-format', 'stream-json', '--verbose', prompt,
   ];
-}
-
-// Every permission denial in a stream-json transcript, including one cut off before its result event.
-export function deniedCommands(jsonl) {
-  const inputs = new Map();
-  const denied = [];
-  for (const line of jsonl.split('\n')) {
-    let event;
-    try { event = JSON.parse(line); } catch { continue; }
-    for (const part of event.message?.content ?? []) {
-      if (part.type === 'tool_use') inputs.set(part.id, part.input);
-    }
-    if (event.type === 'system' && event.subtype === 'permission_denied') {
-      const input = inputs.get(event.tool_use_id) ?? {};
-      denied.push({ tool: event.tool_name, command: input.command ?? input.file_path ?? null });
-    }
-  }
-  return denied;
 }
 
 function packageAt(ref, destination) {
@@ -171,7 +153,7 @@ async function main() {
       const jsonl = Buffer.concat(out).toString();
       writeFileSync(join(caseDirectory, 'run.jsonl'), jsonl);
       writeFileSync(join(caseDirectory, 'run.err'), Buffer.concat(err).toString());
-      summary.deniedCommands = deniedCommands(jsonl);
+      Object.assign(summary, checkRun(jsonl));
       // Staged first, so files the run created appear in the patch.
       execFileSync('git', ['-C', app, 'add', '-A']);
       writeFileSync(join(caseDirectory, 'diff.patch'), execFileSync('git', ['-C', app, 'diff', '--cached', 'HEAD'], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }));

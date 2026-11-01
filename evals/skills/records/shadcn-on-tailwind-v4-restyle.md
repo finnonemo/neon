@@ -1,3 +1,9 @@
+---
+scenarios:
+  - request: Restyle a v0/Lovable React + Tailwind v4 + shadcn project to Finnomena
+    observe: Detects shadcn on v4; edits `:root`/`.dark` by role and pair; leaves `@theme inline`; installs no CDS.
+---
+
 # shadcn on Tailwind v4 restyle
 
 Fixture: [fixtures/shadcn-v4-app](../fixtures/shadcn-v4-app), a Vite/React app in current shadcn/ui v4 form: `@import "tailwindcss"`, `@custom-variant dark`, the default neutral `:root`/`.dark` values and `@theme inline` mapping (its radius lines use the older `calc(var(--radius) - 4px)` form), a `components.json`, and the registry's `button`, `input`, `card` and `badge` with `asChild` removed. The page has primary, outline, ghost and destructive buttons, an input, secondary and outline badges on cards, `text-destructive` text, `chart-1`–`chart-5` dots and a toggle that sets `.dark` on `<html>`. Request, verbatim:

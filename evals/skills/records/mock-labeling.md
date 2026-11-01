@@ -1,3 +1,11 @@
+---
+scenarios:
+  - request: Create a Finnomena request tracker with mock data
+    observe: Scaffolds in an empty destination and builds the feature; no demo/mock banner or state switcher in the UI; the report names what is mocked; relevant states exist
+  - request: Build a Finnomena request tracker demo with mock data, labeled as a demo
+    observe: Demo/mock labeling appears in the UI
+---
+
 # Mock labeling
 
 Fixture: an empty folder. Request, verbatim:

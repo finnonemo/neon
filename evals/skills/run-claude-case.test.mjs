@@ -4,7 +4,7 @@ import { spawnSync } from 'node:child_process';
 import { mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { ALLOWED_TOOLS, BROWSER_TOOLS, PERMISSION_NOTE, claudeArgs, deniedCommands } from './run-claude-case.mjs';
+import { ALLOWED_TOOLS, BROWSER_TOOLS, PERMISSION_NOTE, claudeArgs } from './run-claude-case.mjs';
 
 const runner = join(import.meta.dirname, 'run-claude-case.mjs');
 
@@ -32,13 +32,9 @@ test('every run gets the same permissions, note, browser tool and isolation from
   assert.equal(claudeArgs({ plugin: '/pkg', mcpConfig: '/m', prompt: 'p', model: 'claude-opus-5-5' })[2], 'claude-opus-5-5');
 });
 
-test('denied commands are listed even when the run was cut off before its result event', () => {
-  const jsonl = [
-    { type: 'assistant', message: { content: [{ type: 'tool_use', id: 't1', name: 'Bash', input: { command: 'B=src; ls $B' } }] } },
-    { type: 'system', subtype: 'permission_denied', tool_name: 'Bash', tool_use_id: 't1' },
-    { type: 'assistant', message: { content: [{ type: 'tool_use', id: 't2', name: 'Bash', input: { command: 'ls src' } }] } },
-  ].map(event => JSON.stringify(event)).join('\n') + '\n{"truncated';
-  assert.deepEqual(deniedCommands(jsonl), [{ tool: 'Bash', command: 'B=src; ls $B' }]);
+test('the README quotes the note and allowlist the runner uses', async () => {
+  const readme = await readFile(join(import.meta.dirname, 'README.md'), 'utf8');
+  assert.ok(readme.includes(`Note, verbatim: "${PERMISSION_NOTE}"`), 'README quotes PERMISSION_NOTE');
 });
 
 test('a dry run copies the fixture into a fresh repository and writes the run inputs', async t => {

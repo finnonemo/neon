@@ -2,15 +2,17 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { numericScore } from './markdown-section.mjs';
+import { parseRecord } from './build-index.mjs';
 
 // Static guards for the blind output-quality protocol (#56; records/output-quality-blind.md).
 // They check the protocol is stated, not that a round was run well.
-const readme = await readFile(new URL('./README.md', import.meta.url), 'utf8');
-const section = await readFile(new URL('./records/output-quality-blind.md', import.meta.url), 'utf8');
+const file = new URL('./records/output-quality-blind.md', import.meta.url);
+const section = await readFile(file, 'utf8');
 
-test('the scenario table links the protocol', () => {
-  const table = readme.match(/^\| Request\/context \| Observe \|\n(?:^\|.*\n)+/m)[0];
-  assert.match(table, /See \[Output quality \(blind\)\]\(records\/output-quality-blind\.md\)/);
+test('the record owns the blind comparison scenario row', () => {
+  const { title, scenarios } = parseRecord(section, 'records/output-quality-blind.md');
+  assert.equal(title, 'Output quality (blind)');
+  assert.ok(scenarios.some(row => /baseline against revised skills \(blind\)/.test(row.request) && /never feeds readiness/.test(row.observe)));
 });
 
 test('both requests appear verbatim, with only the port left per run', () => {

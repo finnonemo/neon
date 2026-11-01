@@ -1,3 +1,9 @@
+---
+scenarios:
+  - request: Build a Finnomena recruiting event page (date, place and link supplied; employee quotes and partner logos asked for but not supplied)
+    observe: The report lists the claims; date and place appear on the first screen at 375px; no headline wraps past two rendered lines at 375 or 1440; no invented quotes, logos, counts or returns, and sample content is a pre-launch to-do.
+---
+
 # Campaign Page content
 
 November 2026, Codex 0.162.1, one sample per revision, `$neon-create` through `run-codex-case.mjs` into `./open-house` beside a `.gitkeep`-only workspace. Before is main at `97ad7b4`. After adds [campaign content](../../../skills/neon-create/references/campaign-content.md) (`60fa070`). The two cases ran at the same time. Request, verbatim:

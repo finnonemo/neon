@@ -1,3 +1,9 @@
+---
+scenarios:
+  - request: Restyle a v0 shadcn app to Finnomena, with and without a browser tool
+    observe: The report cites the shipped browser probe's results at 375px and 1440px, or says the probe was not run and marks those checks unverified.
+---
+
 # Browser probe in verification
 
 The shared checklist's Measure step evaluates the shipped [browser-probe.js](../../../skills/neon-redesign/references/browser-probe.js) at 375px and 1440px when a browser tool can run JavaScript. Without such a tool, the run says the probe was not run, marks those checks unverified and gives the probe at both widths as the recheck. Fixture and request: the [shadcn on Tailwind v4 restyle](shadcn-on-tailwind-v4-restyle.md) above, verbatim.
