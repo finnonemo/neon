@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { cdsHostedClasses, selectorsOnCdsHosts, unscopedSelectors } from './stylesheet-scope.mjs';
 
-// Rules taken from the health-check rebuild samples recorded in README "CDS rebuild".
+// Rules taken from the health-check rebuild samples recorded in records/cds-rebuild.md.
 test('flags the bare element rules the fourth rebuild sample wrote', () => {
   const css = `
     body { margin: 0; }

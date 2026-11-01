@@ -23,3 +23,8 @@ test('keeps a run whose denial did not stop it using the shell', () => {
 test('ignores a blocked-shell remark made before any denial', () => {
   assert.equal(checkRun(run(say('If Bash is blocked I will use Read.'), use('a', 'ls'))).void, false);
 });
+
+test('reads a run cut off mid-line at its cap', () => {
+  const result = checkRun(`${run(use('a', 'B=src; ls $B'), deny('a'))}\n{"type":"assi`);
+  assert.deepEqual(result.denied, [{ tool: 'Bash', command: 'B=src; ls $B' }]);
+});

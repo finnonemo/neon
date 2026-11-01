@@ -4,7 +4,7 @@ Shared routing and handoff rules for implementation skills. Reuse a settled cont
 
 ## Resources
 
-Resolve the Neon root two directories above the loaded skill's real directory (follow symlinks). In older references, `${CLAUDE_PLUGIN_ROOT}` denotes that root when the host does not supply it. Resolve resources from the same complete package, not from the employee app's working directory. Missing required assets mean an incomplete installation; identify the missing path before setup.
+Resolve the Neon root two directories above the loaded skill's real directory (follow symlinks). References write that root as `<Neon root>`; substitute the resolved path, whether or not the host sets an environment variable for it. Resolve resources from the same complete package, not from the employee app's working directory. Missing required assets mean an incomplete installation; identify the missing path before setup.
 
 ## Scope precedence
 
@@ -21,7 +21,8 @@ For existing UI, omitted `composition` means `preserve`. Set `adapt` for explici
 | Review only | `neon-review`; no installation or implementation handoff |
 | New React app, or new app without a named framework | `neon-create`; new-project path |
 | Existing Finnomena CDS app, feature request | `neon-create`; reuse setup, start at the feature |
-| Explicit CSS-only restyle | `neon-redesign`, even if CDS is a dependency |
+| App already on CDS (frozen), colors-only change to CDS components | `neon-create`; colors-only scope through CDS props, configuration or a scoped wrapper, not app stylesheet rules on the component |
+| Explicit CSS-only restyle, or colors-only on CSS-styled UI | `neon-redesign`, even if CDS is a dependency |
 | Existing non-React app | `neon-redesign` for styling; preserve framework |
 | Explicit non-React new app | Use the framework's normal scaffold, then the CSS styling path; the Neon starter is React-only |
 | Explicit rebuild of an existing React app on CDS | `neon-create`; rebuild path into a new directory |
@@ -61,6 +62,6 @@ type NeonContext = {
 
 `referenceDesign` and `brandIntensity` apply to campaign pages only. Decide `readiness` with [readiness and handoff](readiness.md) before reporting.
 
-`tier`: `colors` uses CSS colors only; `visual-system` also uses brand typography, spacing and radius; `cds` uses real CDS components and the Finnomena theme. Tier does not grant composition changes. Omit `surface` until known; do not guess it to fill a record. Unknown framework/rendering stays `unknown`; missing package manager stays `null`. Other unavailable evidence can remain empty with its uncertainty noted. Only investigate unknowns that affect the next action.
+`tier`: `colors` changes colors only, through CSS color variables or, on CDS components, CDS configuration; `visual-system` also uses brand typography, spacing and radius; `cds` uses real CDS components and the Finnomena theme. Tier does not grant composition changes. Omit `surface` until known; do not guess it to fill a record. Unknown framework/rendering stays `unknown`; missing package manager stays `null`. Other unavailable evidence can remain empty with its uncertainty noted. Only investigate unknowns that affect the next action.
 
 `preserve` carries protected behavior and local/global style conflicts. `targetPaths` includes relevant existing wiring; `verificationCommands` records discovered app checks. Reuse task, primary action and relevant states from the conversation without creating another mandatory schema. Theme-only integration uses `operation: 'restyle'` with `tier: 'cds'`; no new operation enum is required.

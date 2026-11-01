@@ -9,7 +9,7 @@ Inspect the target manifest/lockfile, relevant entry and current providers. Reus
 From the resolved Neon root, when theme installation is needed:
 
 ```sh
-node "${CLAUDE_PLUGIN_ROOT}/scripts/install.mjs" <target-dir>
+node "<Neon root>/scripts/install.mjs" <target-dir>
 ```
 
 This copies four canonical CDS theme files and installs CDS if absent; it does not wire providers or replace component code. `--theme-dir <project-relative-dir>` changes the default `src/theme`; `--package-manager` selects the manager; `--skip-install` leaves dependencies pending. See the installer header for exact semantics.

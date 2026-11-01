@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
 // Static guards for neon-create reference rules that came from rebuild samples
-// (README "CDS rebuild"). They check the rule is stated, not that a run follows it.
+// (records/cds-rebuild.md). They check the rule is stated, not that a run follows it.
 const references = new URL('../../skills/neon-create/references/', import.meta.url).pathname;
 
 test('the rebuild inventory records responsive rules and carries them over', async () => {
@@ -43,7 +43,7 @@ test('neon-create links the Campaign Page content reference behind one condition
 
 test('the Campaign Page content reference keeps its four rules', async () => {
   const source = await readFile(`${references}campaign-content.md`, 'utf8');
-  // README "Campaign Page content": claims first, first screen, rendered headline lines, no invented proof.
+  // records/campaign-page-content.md: claims first, first screen, rendered headline lines, no invented proof.
   assert.match(source, /claim list.*Done report/);
   assert.match(source, /map the claims onto its section order/);
   assert.match(source, /date and place appear there/);

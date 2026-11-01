@@ -2,11 +2,11 @@
 
 The HOW for `neon-redesign` — what "restyle this UI to Finnomena's brand"
 actually means step by step, once
-`${CLAUDE_PLUGIN_ROOT}/skills/neon-audit/references/workflow-contract.md`'s
+`<Neon root>/skills/neon-audit/references/workflow-contract.md`'s
 `NeonContext` has established scope (`tier`, `targetPaths`, `preserve`).
 For a general "did I actually check the UI I changed" checklist — usable
 here and by other neon skills — see
-`${CLAUDE_PLUGIN_ROOT}/skills/neon-redesign/references/verification.md`.
+`<Neon root>/skills/neon-redesign/references/verification.md`.
 
 ## Migration sequence
 
@@ -24,7 +24,7 @@ Use `NeonContext.tier` from the contract, not a separate vocabulary:
 - **`tier: 'visual-system'`** ("Colors + typography/spacing/radius") —
   also update font, spacing, and radius tokens that are part of the
   brand's visual system per
-  `${CLAUDE_PLUGIN_ROOT}/skills/INSTRUCTION.md`
+  `<Neon root>/skills/INSTRUCTION.md`
   . Composition remains `preserve` unless explicitly requested as `adapt`;
   tier alone never grants layout redesign.
 - `tier: 'cds'` doesn't apply here — that's `neon-create`'s job.
@@ -111,11 +111,11 @@ matches it exactly.
 **Update:** Define/edit custom properties directly on `:root` (global
 scope) or on a scoped class/CSS-module root (partial scope — see
 **Partial scope — local vs. shared/global tokens** in
-`${CLAUDE_PLUGIN_ROOT}/skills/neon-audit/references/project-inspection.md`
+`<Neon root>/skills/neon-audit/references/project-inspection.md`
 and scoped updates above). Values usually hold a complete
 color (`#01172b` or `rgb(1, 23, 43)`) referenced directly as
 `var(--name)` — this is the same convention
-`${CLAUDE_PLUGIN_ROOT}/theme/css/theme.css` itself uses, so its
+`<Neon root>/theme/css/theme.css` itself uses, so its
 values can often be used close to verbatim. **Still check** — some
 plain-CSS projects also use the bare-component convention from
 **shadcn-style on Tailwind v3** below without using shadcn itself.
@@ -219,7 +219,7 @@ new semantic name; then declare the variable in both `:root` and `.dark`
 and map it in `@theme inline`, as shadcn does for its own tokens.
 
 Take each value from the same mode of
-`${CLAUDE_PLUGIN_ROOT}/theme/css/theme.css`: `:root` from its `:root`,
+`<Neon root>/theme/css/theme.css`: `:root` from its `:root`,
 `.dark` from its dark block. A role the dark block does not redeclare,
 such as `bgLinePrimary`, keeps its `:root` value. Convert to the file's
 color function and keep alpha: Navy Ink `rgb(1, 23, 43)` becomes
@@ -254,7 +254,7 @@ so replacing only the background leaves dark text on a dark button. Do
 not copy the dark `fgInverse` for that label: it is black, for text on
 the white dark-mode `bgInverse`, and measures 2.4:1 on dark `bgPrimary`.
 Text on a colored fill is `fgInverse` in light and `fg` in dark, per
-`onColorLabel` in `${CLAUDE_PLUGIN_ROOT}/theme/cds/color-overrides.ts`.
+`onColorLabel` in `<Neon root>/theme/cds/color-overrides.ts`.
 
 Current shadcn has no `--destructive-foreground`: its destructive button
 and badge use `text-white`, over `dark:bg-destructive/60` in dark. At
@@ -415,7 +415,7 @@ button while the request is in flight. `tier: 'colors'`.
   logic at all, but that must be *checked* after the change, not assumed
   from the fact that only `className` strings and an `@theme` block were
   edited — this is the concrete case
-  `${CLAUDE_PLUGIN_ROOT}/skills/neon-redesign/references/verification.md`'s
+  `<Neon root>/skills/neon-redesign/references/verification.md`'s
   "unchanged form/route behavior" acceptance criterion is calibrated
   against.
 
