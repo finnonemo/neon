@@ -10,7 +10,10 @@
 // --fixture loads probe-fixture.html at 375px and fails unless the ids the
 // probe reports per category equal the fixture's expected ids (and contrast to
 // two decimals, where the fixture gives one), then again with the dark scheme
-// and class against its dark expected ids. Otherwise each build under the
+// and class against its dark expected ids, then probe-fixture-no-plex.html
+// and probe-fixture-thai-404.html.
+// A fixture's #probe-source-brands is set as the probe's source-brand global
+// first, as probe-page.mjs does. Otherwise each build under the
 // shots directory (grade-rebuild.mjs --shots), or each named one, is served
 // over HTTP and probed at every width, one summary line each.
 // Uses @playwright/test from evals/templates (npm ci --prefix evals/templates).
@@ -36,19 +39,23 @@ function loadChromium() {
 const elementOf = entry => (typeof entry === 'string' ? entry : entry.element);
 const idsOf = entries => entries.map(entry => elementOf(entry).match(/#([\w-]+)/)?.[1] ?? elementOf(entry)).sort();
 
-async function probeAt(browser, url, width, { scheme = 'light', darkClass = false } = {}) {
+async function probeAt(browser, url, width, { scheme = 'light', darkClass = false, sourceBrands = [] } = {}) {
   const page = await browser.newPage({ viewport: { width, height: width < 768 ? 812 : 900 }, colorScheme: scheme });
   try {
     await page.goto(url, { waitUntil: 'networkidle' });
     if (darkClass) await page.evaluate(() => document.documentElement.classList.add('dark'));
+    await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(300);
+    // As probe-page.mjs and verification.md do: the brand global first, then the probe's unchanged text.
+    if (sourceBrands.length) await page.evaluate(brands => { window.neonProbeSourceBrands = brands; }, sourceBrands);
     return await page.evaluate(probe);
   } finally {
     await page.close();
   }
 }
 
-// A category lists ids, or maps each id to the contrast it must report, compared to two decimals.
+// A category lists ids, or maps each id to the contrast it must report, compared
+// to two decimals, or to the reasons (`by`) it must report a match for.
 export function fixtureFailures(name, expected, reported) {
   const failures = [];
   for (const [category, want] of Object.entries(expected)) {
@@ -58,24 +65,49 @@ export function fixtureFailures(name, expected, reported) {
     if (Array.isArray(want)) continue;
     for (const entry of reported[category]) {
       const [id] = idsOf([entry]);
-      if (id in want && Math.round(entry.contrast * 100) !== Math.round(want[id] * 100)) failures.push(`${name} ${category} ${id}: contrast ${entry.contrast}, expected ${want[id]}`);
+      if (!(id in want)) continue;
+      if (Array.isArray(want[id])) {
+        if (String(entry.by) !== String(want[id])) failures.push(`${name} ${category} ${id}: matched by [${entry.by}], expected [${want[id]}]`);
+      } else if (Math.round(entry.contrast * 100) !== Math.round(want[id] * 100)) failures.push(`${name} ${category} ${id}: contrast ${entry.contrast}, expected ${want[id]}`);
     }
   }
   return failures;
 }
 
+// Nested probe results as flat categories of element-named entries.
+const categoriesOf = result => ({
+  ...result,
+  scrolledOnLoad: result.scrolledOnLoad.elements,
+  thaiTextInPlex: result.plexThai.thai.inPlex,
+  thaiTextNotInPlex: result.plexThai.thai.notInPlex,
+  latinTextInPlex: result.plexThai.latin.inPlex,
+  latinTextNotInPlex: result.plexThai.latin.notInPlex,
+  finnomenaLogo: result.finnomenaLogo.visible,
+  finnomenaLogoHidden: result.finnomenaLogo.hidden,
+  sourceBrandFound: result.sourceBrand?.found ?? [],
+});
+
 async function checkFixture(browser) {
-  const path = join(here, 'probe-fixture.html');
-  const html = readFileSync(path, 'utf8');
-  const expectedFor = id => JSON.parse(html.match(new RegExp(`<script type="application/json" id="${id}">([\\s\\S]*?)</script>`))[1]);
+  const jsonIn = (file, id) => {
+    const match = readFileSync(join(here, file), 'utf8').match(new RegExp(`<script type="application/json" id="${id}">([\\s\\S]*?)</script>`));
+    return match ? JSON.parse(match[1]) : undefined;
+  };
   const failures = [];
+  // `loaded`: whether a Plex face must load (true) or none may (false); `failed`: how many Plex faces must fail.
   const passes = [
-    { name: 'light', expected: expectedFor('probe-expected') },
-    { name: 'dark', expected: expectedFor('probe-expected-dark'), scheme: 'dark', darkClass: true },
+    { name: 'light', file: 'probe-fixture.html', expected: jsonIn('probe-fixture.html', 'probe-expected'), faces: { loaded: true } },
+    { name: 'dark', file: 'probe-fixture.html', expected: jsonIn('probe-fixture.html', 'probe-expected-dark'), scheme: 'dark', darkClass: true },
+    { name: 'no-plex', file: 'probe-fixture-no-plex.html', expected: jsonIn('probe-fixture-no-plex.html', 'probe-expected'), faces: { loaded: false } },
+    { name: 'thai-404', file: 'probe-fixture-thai-404.html', expected: jsonIn('probe-fixture-thai-404.html', 'probe-expected'), faces: { failed: 1 } },
   ];
-  for (const { name, expected, ...options } of passes) {
-    const result = await probeAt(browser, pathToFileURL(path).href, 375, options);
-    const reported = { ...result, scrolledOnLoad: result.scrolledOnLoad.elements };
+  for (const { name, file, expected, faces = {}, ...options } of passes) {
+    const sourceBrands = jsonIn(file, 'probe-source-brands') ?? [];
+    const result = await probeAt(browser, pathToFileURL(join(here, file)).href, 375, { ...options, sourceBrands });
+    const reported = categoriesOf(result);
+    const { loadedFaces, failedFaces } = result.plexThai;
+    if (faces.loaded === false && loadedFaces.length) failures.push(`${name} loadedFaces: [${loadedFaces}], expected none`);
+    if (faces.loaded === true && !loadedFaces.length) failures.push(`${name} loadedFaces: none, expected the stand-in face`);
+    if (faces.failed !== undefined && failedFaces !== faces.failed) failures.push(`${name} failedFaces: ${failedFaces}, expected ${faces.failed}`);
     if (result.viewportWidth !== 375) failures.push(`${name} viewportWidth ${result.viewportWidth}, expected 375`);
     failures.push(...fixtureFailures(name, expected, reported));
   }

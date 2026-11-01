@@ -6,7 +6,7 @@ import { tmpdir } from 'node:os';
 import { packagePlugin } from './package-plugin.mjs';
 import { checkMarkdownLinks } from './lib/markdown-links.mjs';
 import { checkPlainTextReferences, listFiles } from './lib/plain-text-references.mjs';
-import { checkMarkdownEncoding, checkSkillMetadata } from './lib/skill-files.mjs';
+import { checkMarkdownEncoding, checkSkillMetadata, checkStepReads } from './lib/skill-files.mjs';
 
 const sourceRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 // Ignored paths are local or generated, so naming them in prose is expected.
@@ -40,6 +40,7 @@ async function check(root, { includeReadme = false } = {}) {
   const manifest = JSON.parse(await readFile(join(root, '.claude-plugin/plugin.json'), 'utf8'));
   for (const skill of manifest.skills) {
     await checkSkillMetadata(join(root, skill, 'SKILL.md'));
+    await checkStepReads(join(root, skill, 'SKILL.md'));
   }
   await checkCodexManifest(root);
   const files = [...await markdownFiles(join(root, 'skills'))];
@@ -48,7 +49,7 @@ async function check(root, { includeReadme = false } = {}) {
     await checkMarkdownEncoding(file);
     const content = await readFile(file, 'utf8');
     await checkMarkdownLinks(file);
-    for (const match of content.matchAll(/\$\{CLAUDE_PLUGIN_ROOT\}\/([\w./-]+)/g)) {
+    for (const match of content.matchAll(/(?:\$\{CLAUDE_PLUGIN_ROOT\}|<Neon root>)\/([\w./-]+)/g)) {
       await access(join(root, match[1])).catch(() => { throw new Error(`Missing plugin resource in ${file}: ${match[1]}`); });
     }
   }

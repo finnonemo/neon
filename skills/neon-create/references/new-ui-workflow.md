@@ -1,6 +1,6 @@
 # Feature implementation
 
-Read for complex feature states, mock figures on functional screens or integration into an existing app. New-project mechanics live in [scaffold](scaffold.md); theme changes live in [CDS integration](cds-integration.md).
+Read for complex feature states, mock figures or comparison tables on functional screens, or integration into an existing app. New-project mechanics live in [scaffold](scaffold.md); theme changes live in [CDS integration](cds-integration.md).
 
 ## Existing app integration
 
@@ -40,6 +40,17 @@ For a functional screen, put its answer and its main action where the employee l
 5. The most frequent action is visible where its answer appears: in the title row, or on the row that needs it. It is never only inside a menu. On a row it is a secondary or tertiary action, so the screen keeps one primary action ([functional patterns](../../neon-audit/references/functional-patterns.md#actions)).
 
 In existing UI with `composition: 'preserve'`, report a miss as an observation; it does not license rearranging the screen.
+
+### Tables on narrow screens
+
+When a comparison table's container is narrower than about 640px, show each record as one of a list of two-line rows instead of a table that scrolls sideways:
+
+1. Line 1 holds the record's identity and its key figure, the value the screen's main question asks about, right-aligned.
+2. Line 2 holds every other field, each with its label inline (`Fee 1.25%`) because the column headers are gone, wrapping onto more lines when needed. Fields move to line 2; they are never dropped or truncated. In CDS 9.26.1, `ListCell` takes `title`, `detail` and `description`, and cuts `description` to one line unless `multiline` is set; confirm both in the installed types.
+3. The row's action and its way into the detail stay on the row. A total row stays as a final row.
+4. Filters fold into one control row or a sheet: a single row of controls above the list, or one button that opens them in a sheet and shows the active filters as text.
+
+At 375px, check that every field shown at 1440px is still on screen. In existing UI with `composition: 'preserve'`, a sideways-scrolling table is an observation, not a license to rebuild it.
 
 ## Verification
 

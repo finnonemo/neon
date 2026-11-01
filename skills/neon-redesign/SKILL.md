@@ -23,7 +23,7 @@ When target, scope and theme variables are known, begin with the affected styles
 2. Inventory the affected styles and shared consumers. Record existing behavior and a before view. Resolve Neon resources two levels above this skill's real directory; use the [design contract](../INSTRUCTION.md) for the relevant visual roles.
 3. Map by meaning: primary action, selection, status and chart category are different jobs even if they share a hex value. Reuse matching tokens; preserve domain color meaning. Do not use a global replacement for a local request. Tailwind target (config, `@theme` or stock utilities such as `bg-slate-900`): read the [Tailwind mapping rules](references/style-migration.md#tailwind-mapping-rules) and the matching format section before mapping, including on the fast path.
 4. Update scoped tokens, then remaining component styles. For `adapt`, reorganize presentation within the named scope while retaining routes, handlers, service contracts, data meaning and access to essential actions. Do not adopt a new framework or component library to rearrange a page.
-5. Before reporting, read the [shared checklist](references/verification.md) and apply it, including on the fast path and for colors-only work: before/after appearance, preserved behavior and unrelated consumers for partial changes.
+5. Before reporting, read the [shared checklist](references/verification.md) and apply it, including on the fast path and for colors-only work: before/after appearance, preserved behavior and unrelated consumers for partial changes. Then run its [Look and fix](references/verification.md#look-and-fix) loop on your own screenshots, within scope.
 
 ## Conditional references
 
@@ -38,4 +38,4 @@ When target, scope and theme variables are known, begin with the affected styles
 
 ## Done
 
-Report changed scope/tokens, observed visual and behavior checks, and exceptions or unavailable checks, as item 5 of the [shared checklist](references/verification.md#shared-checklist) asks. State Ship-ready or Brand-ready per [readiness and handoff](../neon-audit/references/readiness.md), with a Handoff Summary for Brand-ready work. Color mapping is provisional; identify relevant discrepancies without inventing replacement brand values. Read-only review is a separate task, not a mandatory extra gate.
+Report changed scope/tokens, observed visual and behavior checks, and exceptions or unavailable checks, as item 5 of the [shared checklist](references/verification.md#shared-checklist) asks, with each [Look and fix](references/verification.md#look-and-fix) round or its not-run line. State Ship-ready or Brand-ready per [readiness and handoff](../neon-audit/references/readiness.md), with a Handoff Summary for Brand-ready work. Color mapping is provisional; identify relevant discrepancies without inventing replacement brand values. Read-only review is a separate task, not a mandatory extra gate.

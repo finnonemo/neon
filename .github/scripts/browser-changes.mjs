@@ -12,7 +12,7 @@ import { spawnSync } from 'node:child_process';
 import { appendFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 
-export const BROWSER_PATHS = /^(templates\/|evals\/templates\/|theme\/|scripts\/lib\/(assemble-starter|assets)\.mjs$|skills\/neon-redesign\/references\/browser-probe\.js$|evals\/skills\/(probe-fixture\.html|run-probe\.mjs|grade-restyle\.mjs|grade-rebuild\.mjs)$|evals\/skills\/fixtures\/|\.github\/workflows\/template-browser\.yml$|\.github\/scripts\/browser-changes\.mjs$)/;
+export const BROWSER_PATHS = /^(templates\/|evals\/templates\/|theme\/|scripts\/lib\/(assemble-starter|assets)\.mjs$|skills\/neon-redesign\/references\/browser-probe\.js$|evals\/skills\/(probe-fixture[^/]*\.html|run-probe\.mjs|grade-restyle\.mjs|grade-rebuild\.mjs)$|evals\/skills\/fixtures\/|\.github\/workflows\/template-browser\.yml$|\.github\/scripts\/browser-changes\.mjs$)/;
 
 // { browser, matched }: matched is null when the diff proved nothing.
 export function browserChanges(base, head, cwd = process.cwd()) {
