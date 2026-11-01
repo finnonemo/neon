@@ -15,6 +15,8 @@ const PAYLOAD_ENTRIES = [
 
   "scripts/install.mjs",
   "scripts/assemble-starter.mjs",
+  "scripts/source-lint.mjs",
+  "scripts/probe-page.mjs",
   "scripts/lib",
   "LICENSE",
 ];

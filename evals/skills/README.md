@@ -36,6 +36,12 @@ Run each request with the named context, first against the baseline and then the
 | Build a Back Office fee-report screen with mock data | Totals equal the sum of rows; numbers right-aligned with tabular figures; a fall in fees takes the color of its declared good direction; a zero prints as `0`; sample values appear in the Handoff Summary. See [Sample figures](#sample-figures) |
 | Build a Finnomena request tracker | At 1440×900 the list (heading and at least three complete rows) and the add-request action are visible on load; a request's detail is reachable in one click. See [First screen](#first-screen) |
 | Build a Back Office fee-report screen with mock data (first screen) | At 1440×900 the per-fund table shows its heading and at least three complete rows on load, with no summary band repeating totals the table carries. See [First screen](#first-screen) |
+| Add Finnomena approvals to an existing themed React/CDS app (Look and fix) | Before Done the run screenshots its screen at 375px and 1440px, writes at least one critique round naming the widths and applies fixes; the report gives each round its own line and no numeric score. See [Look and fix](#look-and-fix) |
+| Build a Finnomena event page from a Reference Design, with no browser tool | The report cites `scripts/probe-page.mjs` results at 375px and 1440px: IBM Plex Sans Thai loaded for Thai and Latin text, the Finnomena logo present, the source brand absent; where Chrome cannot launch, the runner's `not run` line. See [Browser probe runner](#browser-probe-runner) |
+| Colors-only restyle of a Tailwind v4 app whose disabled text must keep a stock utility | The run executes the shipped source lint on its changed files and the report fixes or justifies each warning on a `Source lint:` line. See [Source lint](#source-lint) |
+| Review this Finnomena back office screenshot (generated-dashboard habits, Neon navy and indigo present) | Findings name habit rows with visible evidence and give CDS or composition fixes; Neon navy structure and indigo links are not flagged as habits; no file edited. See [Functional screen habits](#functional-screen-habits) |
+| Finnomena fund-fee table at 375px | Below about 640px each fund is a two-line row (identity and key figure, then labeled secondary fields); every value shown at 1440px is visible at 375px; no sideways-scrolling table. See [Functional screen habits](#functional-screen-habits) |
+| Finnomena event page and Back Office approvals screen, baseline against revised skills (blind) | A judge who cannot tell the packages apart prefers one output per pair, or neither, at 375px and 1440px and names problems with the Look and fix questions and habits table; no numeric score; never feeds readiness. See [Output quality (blind)](#output-quality-blind) |
 
 Verdicts are pass, fail or unverified for routing, scope, resource retrieval, component correctness, color roles, feature completion, responsive behavior and evidence honesty. Link actual artifacts. Do not turn a successful retrieval simulation into a claim that an app was built or looked better.
 
@@ -453,6 +459,256 @@ The tracker request does not tell the revisions apart: both pass. On the fee rep
 Review, same fixture: the baseline fee build plus its 1440×900 screenshot, `$neon-review Review our Finnomena fee report screen for usability. fee-report-1440x900.png is how it looks on load at 1440x900. Do not edit anything.` Before and after both reported "fund details below the fold" as Medium, citing the 1440×900 screenshot, and changed no files. The revised run ranked it first. That is no measurable difference.
 
 Limits: Codex only, two samples of this revision and one of each earlier one, and no run could open a browser. The rule's example breakdown ("per fee type") matches this request, so the pass may partly reflect that wording; a request with a different breakdown was not run. The review runs used the second wording, not this one. The `composition: 'preserve'` caveat was not exercised. A summary the request asks for is exempt and kept, compact; no request asked for one, so the exemption was not exercised.
+
+## Look and fix
+
+The shared checklist's [Look and fix](../../skills/neon-redesign/references/verification.md#look-and-fix) section asks a run to screenshot its main task at 375px and 1440px, critique the screenshots in neon-review's finding shape, fix the top three problems, stop after three rounds, and report each round on its own line. Without visible screenshots it reports the loop as not run. neon-create and neon-redesign link it from step 5 and Done.
+
+Fixture: the starter assembled at `6c0a1f6`, made into an existing app with Home and My requests hash routes (`src/app/useRoute.ts`), `src/services/requests.ts`, and a mock `src/services/approvals.ts` whose contract the comment says to keep. Vite is pinned to port 5301 and the dev server was started before each run. Each sample ran on a fresh copy of the fixture, in its own git repository, outside the Neon checkout so no `AGENTS.md` sits above it. Request, verbatim:
+
+> /neon:neon-create Add a Finnomena approvals screen to this app for managers: a list of pending expense approvals they can open to see the details, then approve, or reject with a reason. Use the existing approval service in src/services/approvals.ts and keep the app's shell, routes and theme. The dev server is already running at http://localhost:5301.
+
+Pass requires a written critique round in the report that names its screenshot widths, with fixes applied before Done, and no numeric score.
+
+November 2026, Claude Code 2.1.316, `claude -p --model claude-opus-5-5 --setting-sources project,local --plugin-dir <package> --mcp-config <browser> --strict-mcp-config --permission-mode dontAsk --allowedTools <list>`. The browser is the evaluator's MCP tool from [Browser probe in verification](#browser-probe-in-verification), whose screenshots reach the agent as images. `--setting-sources project,local` leaves out the evaluator's user hooks, which block `cd`. Baseline is the `6c0a1f6` package. Revised is `f1d0bc8` for the first sample, then `c1478c8`, which asks for the critique in messages and the widths on each report line. Runs used one of two allowlists:
+
+- Narrow: `Read Edit Write Glob Grep Skill`, the five `mcp__browser__*` tools, and `Bash(…:*)` for `ls pwd cd cat head tail wc grep find echo test sed rg sort which curl lsof kill sleep mkdir cp node npm npx`, `npm run`, and `git status/log/diff/ls-files/rev-parse/show/branch`. Every run after Revised-1 also passed `--add-dir <package>`.
+- Full: the same tools with `Bash` unrestricted.
+
+| Item | Baseline-1 (narrow) | Baseline-2 (full) | Revised-1 (`f1d0bc8`, narrow) | Revised-2 (`c1478c8`, narrow) |
+| --- | --- | --- | --- | --- |
+| Denied commands | 2: a multi-file `cat` with a variable assignment, a brace-expansion `ls` | None | 1: `ls` of the package outside the workspace | 2: `cd "$PWD"; cat …` and a `cd … \|\| cd …; pwd; grep` |
+| Read verification.md | Yes | Yes, through `cat` | Yes | Yes |
+| Screenshots | 5, at 1440 and 375 | 8, at 1440 and 375 | 12, at 1440 and 375 | 14, at 1440 and 375 |
+| Edits after a screenshot | Yes, at 1440px: truncated list rows, cut to requester and date | Yes, at 1440px: list rows truncated in a 360px pane, rebuilt on `Pressable` (the agent blamed `ListCell`; unverified), and a yellow tag drawn white on white | Yes, at 1440px: a missing selected-row bar and textarea placeholder | Yes, at 1440px: truncated titles and amounts |
+| Critique rounds in the report | None | None | "Round 1–3" under "Fixes I made after looking at screenshots"; no widths | "**Look and fix**": "Round 1 (1440px, list)", "Round 2 (1440px and 375px, details, reject and approve)", "Round 3 (1440px, empty and confirmation)", each with the fixes made, then problems left as they are |
+| Build | Not run: reported the shell as blocked | Passed | Passed | Passed |
+| Sample under the denial rule | Void | Counts | Void | Void, though it kept using the shell |
+| Verdict | Fail | Fail | Fail: rounds without widths | Pass on the report criterion; the finding shape was not used |
+
+Every run, baseline included, looked at its own screenshots and edited after a 1440px screenshot (see the table). Only the revised runs wrote rounds into the report. With one usable sample per arm, whether the skill change causes that is unverified. Neither revised run wrote findings in neon-review's shape (severity, location, evidence, fix, recheck) in its visible messages. Each wrote short notes such as "Fixing: keep the amount column at full width", so that part of the section is not yet followed. Revised-2's round lines name widths, but not in the fixed `Look and fix, round N (…)` shape, and round 1 used only 1440px screenshots. No report gave a numeric score. Revised-1 called the Back Office screen Ship-ready, against [Readiness](#readiness). Revised-2 and Baseline-2 said Brand-ready. Run logs, screenshots, grades and diffs are in `.local/evals/53-{baseline-1,baseline-2,revised-1,revised-2}`. The fixture, run script and grader are in `.local/evals/53-tools`.
+
+Limits: one usable baseline and one revised sample, Claude Code only, on the evaluator's browser tool. The orchestrator's rule voids any sample with a denied command, and only Baseline-2 had none. Revised-2's two denials did not stop it using the shell, but a rerun with full Bash was refused by the evaluator session's own permission classifier, so no clean revised sample existed until the [paired rerun](#paired-rerun-1-november-2026). The baseline and revised samples that count ran with different allowlists. Not exercised: colors-only scope, `composition: 'preserve'` on existing UI, dark mode (the fixture has none), and the no-screenshot fallback, including Codex. The "Functional screen habits" link was a placeholder in these samples; #54 added the table, see [Functional screen habits](#functional-screen-habits).
+
+### Paired rerun, 1 November 2026
+
+This rerun closes the allowlist gap above: both arms used the same allowlist and the same harness note, on Claude Code 2.1.316, with the command above plus `--add-dir <package>` and `--append-system-prompt <note>`. Baseline is the `6c0a1f6` package. Revised is the `e968065` package; the package built from `df3f6d8` is byte-identical. Each sample ran on a fresh fixture copy under a 45-minute cap. Sample 1 of each arm ran at the same time, baseline on port 5301 and revised on 5302. Sample 2 swapped the ports.
+
+- Allowlist: `Read Edit Write Glob Grep Skill`, the five `mcp__browser__*` tools (`navigate resize evaluate screenshot console`), and `Bash(…:*)` for `ls pwd cd cat head tail wc grep find echo test git status git log git diff git ls-files node npm npx mkdir cp sed rg sort which curl lsof kill sleep git rev-parse git show git branch npm run sips file python3`.
+- Note, verbatim: "Shell permissions in this session: Bash is allowed for commands that start with one of: ls pwd cd cat head tail wc grep find echo test sed rg sort which curl lsof kill sleep mkdir cp node npm npx sips file python3, npm run, git status, git log, git diff, git ls-files, git rev-parse, git show, git branch. A denied command blocks only that command; the shell stays available for allowed commands. Variable assignments, loops and $(...) substitutions are always denied, so run each command on its own, with literal paths."
+
+| Item | Baseline-1 | Baseline-2 | Revised-1 | Revised-2 |
+| --- | --- | --- | --- | --- |
+| Denied commands | 1: `cd <app dir> && sed -i …` on the routes; it used Edit instead | 1: `cd node_modules/…; grep …` | 1: `cd node_modules/…; grep …` | 1: a `for` loop over CDS type files |
+| Sample under the denial rule | Counts: it built afterwards | Counts, but killed at the cap with no report | Counts | Counts |
+| Read verification.md | Yes | Yes, through `cat` | Yes, through `cat` | Yes, through `cat` |
+| Screenshots | 8, at 1440 and 375 | 7, at 1440 only | 19, at 1440 and 375 | 13, at 1440 and 375 |
+| Ran `<Neon root>/scripts/` tools | No | No | `probe-page.mjs` and `source-lint.mjs` | `probe-page.mjs` and `source-lint.mjs` |
+| Critique rounds in the report | None; the Checks list names 1440px and 375px | No report | `Look and fix, round 1 (1440px)`, `round 2 (1440px)`, `round 3 (375px)`, each with its fixes | `Look and fix, round 1 (1440px)`, `round 2 (1440px)`, `round 3 (375px)`, each with its fixes |
+| Build | Passed | Not reached | Passed | Passed |
+| Readiness word | Ship-ready | None | Brand-ready | Ship-ready, apart from the mock service |
+| Verdict | Fail: no critique rounds | Unverified: no report | Pass | Pass |
+
+In Baseline-2, one browser `evaluate` whose promise never resolved ran from 02:43 to 03:13 UTC, when Claude Code's 1800-second MCP timeout aborted it: two-thirds of the 45-minute budget. The agent then split the probe into steps, but its next `navigate` got no reply until the cap closed the browser at 03:25. The harness's part in both stalls is unverified, so the sample is unverified rather than a fail. Both revised runs wrote round lines in the section's `Look and fix, round N (…)` shape. Revised-2's round 1 claim, amounts cut to "฿12,60…" in the list at 1440px, matches its first screenshot. Its round 3 fixes (focus after a decision, screen-reader announcements, an empty detail page after refresh) are behavior found by testing, not problems visible in a 375px screenshot. Neither revised run wrote findings in neon-review's shape in its messages. Baseline-1 and Revised-2 called the Back Office screen Ship-ready, against [Readiness](#readiness). No report gave a numeric score.
+
+Limits: one usable baseline and two revised samples, Claude Code only, on the evaluator's browser tool. Every sample had one denied command, and none stopped the build or the look. With one usable baseline, whether the skill change causes the round lines is still unverified. Revised-1 said the probe's 1440px pass timed out twice and checked that width by hand; the cause is unverified. Run logs, screenshots, grades and diffs are in `.local/evals/53-rerun-{baseline-1,baseline-2,revised-1,revised-2}` in the orchestrator worktree. The prep, launch and collect scripts, the allowlist and the note are in `.local/evals/53-rerun-tools`.
+
+## Browser probe runner
+
+[probe-page.mjs](../../scripts/probe-page.mjs) runs the shipped probe in headless Chrome over a CDP pipe, with no npm dependencies, when the agent has no browser tool. It adds three Neon rules: IBM Plex Sans Thai faces loaded and drawing the Thai and Latin text, the Finnomena logo present, and the source brand absent from the title, meta content and alt text. The probe fixture's Neon cases, plus `probe-fixture-no-plex.html` and `probe-fixture-thai-404.html`, run in `run-probe.mjs --fixture`. Runner behavior (missing Chrome, launch failure, timeout, a page that does not load, screenshots kept out of the app) is in `probe-page.test.mjs`.
+
+November 2026, one sample per agent per revision. Before is the `6c0a1f6` package. After is `3ff5f3f`. The fixture is a `.gitkeep` workspace plus a synthetic `./DESIGN.md` for "Lumora Summit": lime `#C6FF3D`, ultraviolet `#7A5CFF`, Space Grotesk, a LUMORA wordmark and a `Lumora Summit — See further.` title pattern. Request, verbatim (Codex starts it with `$neon-create`):
+
+> /neon:neon-create Build a Thai event page in ./design-day for "Finnomena Design Day 2026", a free public design meetup on 12 December 2026, 13:00–17:00, at Finnomena's office. Include the agenda, three speakers and an add-to-calendar link https://calendar.google.com/calendar/event?eid=design-day. There is no sign-up form. Use ./DESIGN.md as the reference design.
+
+Agents:
+- Codex 0.162.1 through `run-codex-case.mjs`.
+- Claude Code 2.1.316 (`claude-haiku-5-5`), `claude -p --plugin-dir <package> --strict-mcp-config` with an empty MCP config, so there were no browser or MCP tools. The init event confirmed this. It ran with `--permission-mode dontAsk` and this allowlist: `Read Edit Write Glob Grep Skill Bash(ls:*) Bash(pwd) Bash(cd:*) Bash(cat:*) Bash(head:*) Bash(tail:*) Bash(wc:*) Bash(grep:*) Bash(find:*) Bash(echo:*) Bash(test:*) Bash(git status:*) Bash(git log:*) Bash(git diff:*) Bash(git ls-files:*) Bash(git rev-parse:*) Bash(git show:*) Bash(git branch:*) Bash(node:*) Bash(npm:*) Bash(npx:*) Bash(npm run:*) Bash(mkdir:*) Bash(cp:*) Bash(sed:*) Bash(rg:*) Bash(sort:*) Bash(which:*) Bash(curl:*) Bash(lsof:*) Bash(kill:*) Bash(sleep:*)`.
+
+The evaluator graded each build with the fixed runner (`253080a`), using `--serve <dist> --source-brand Lumora`, and grepped `./src/` and `./index.html` for `Lumora|C6FF3D|Space Grotesk|See further`. `--serve` binds an ephemeral port, so no fixed port was needed.
+
+| Item | Codex, before | Codex, after | Claude, before | Claude, after |
+| --- | --- | --- | --- | --- |
+| Browser attempt | Own Playwright script from another `/tmp` project; Chrome SIGABRT in the sandbox | Ran the runner with `--serve design-day/dist --source-brand Lumora`. Result: `Not measured: Chrome exited on SIGABRT before measuring.` | None. It did not read verification.md | Read verification.md, then ran the runner with `--serve … --source-brand 'Lumora'`. Chrome launched and measured |
+| Neon rules in the agent's run | Not measured | Not measured | Not measured | Plex loaded (400–700, Thai and Latin); 31 Thai and 4 Latin elements, all in Plex. Logo: `img "Finnomena" (by alt, asset shape)`, plus a false positive `div.dd-hero-image (by aria-label)`. `Lumora absent from title, 2 meta, 6 alt or aria-label and 40 text elements` |
+| Acted on the runner | n/a | n/a | n/a | Its first 375px line named overflowing sections and a sideways scroller. It rebuilt three times and looked at the screenshots until the line read `375px clean; 1440px clean` |
+| Report line | `Browser probe: not run; recheck at 375px and 1440px` | Same, printed by the runner | None: "I could not render it in a browser"; checks unverified | "Browser probe at 375px and 1440px is clean"; names "Lumora absent" |
+| Evaluator: Plex, logo, brand | Pass, pass, absent | Pass, pass, absent | Pass, pass, absent | Pass, pass, absent; Lumora only in a source comment |
+| Evaluator: other leads | Clean | 375px: overflowing `div.dd-orbit`, `div.dd-map-grid`; low contrast on the dark-fill calendar link at both widths | Clean | Clean |
+| Verdict | Unverified: no runner yet; reported the probe as not run | Unverified: the runner ran but measured nothing, and printed the not-run line | Fail: no probe line | Pass: measured, cited and fixed |
+
+The after Claude run's false-positive logo match was a hero placeholder labelled "ภาพประกอบงาน Finnomena Design Day 2026". After that run, `253080a` limited label matches to the brand name alone or with "logo", and added the hero and speaker-photo cases to the fixture. The agent's in-run line above is from `3ff5f3f`; the evaluator lines are from the fix. The Codex after build carries leads that Codex could not see: Chrome exited on SIGABRT in its run. The Codex sandbox as the cause is unverified.
+
+Evidence (run.jsonl, reports, builds without `node_modules`, the agent's and the grader's screenshots) is under `.local/evals/58-codex-before`, `.local/evals/58-codex-after`, `.local/evals/58-claude-before` and `.local/evals/58-claude-after`.
+
+Limits:
+- One sample per cell, and a Haiku-class Claude model.
+- Codex measured nothing in either revision, so the measured path is evidenced by one Claude run.
+- Every build already passed the three Neon rules, so these samples show the runner reporting them, not catching a failure. Failures are covered only by the fixtures: no Plex face, a 404 Thai subset, a hidden logo and source-brand leaks.
+- The fixtures' Plex face is a stand-in drawn from a local system font.
+- These runs used a source-brand check that also scanned aria-label and body text. The check now scans only the title, meta content and alt text, as #58 asks, so a page that credits the reference in its body is no longer reported. The runs were not repeated after that change.
+- The built starter shows no logo at 375px, where it has no header, so a starter-based page reports `no Finnomena logo` at that width.
+- The before Claude Fail is not caused by this change. The `6c0a1f6` checklist already asked for the `Browser probe:` line, and that run never read verification.md. This change did not touch that routing. What this change adds is shown only by the after Claude run, which measured, acted on leads and cited the results.
+- The `claude -p` runs inherited the user-level Claude setup: its hooks, the `swift-lsp` and built-in plugins, and probably the user-level instructions file. They still had no browser or MCP tools.
+- Both Claude runs had `dontAsk` denials on compound read commands (`cd … &&` and variable assignments). The baseline also had a denied `( cd … )` subshell and two commands blocked by a user `no-cd` hook. Each run then read the same files with Read or simpler commands. No denial or block touched a browser or probe step.
+- Both Codex runs list `/tmp/design-day-probe.js` as a new `/tmp` entry. Its origin is unclear, so it was left in place.
+
+## Source lint
+
+Item 5 of the shared checklist runs the shipped [source-lint.mjs](../../scripts/source-lint.mjs) on the app and asks for a `Source lint:` report line that fixes or justifies each warning. The lint reads only the files changed against HEAD plus untracked files and always exits 0. Its rules live in `scripts/lib/source-rules.mjs`, which `stylesheet-scope.mjs` imports. `source-lint.test.mjs` covers the rules and asserts the grader keeps no copy of them.
+
+Fixture (seeded, kept at `.local/evals/57-fixture`): a 60-line Vite/React "Sell orders" screen whose CSS is only `@import "tailwindcss";`, styled with stock utilities, committed as the first commit of its own git repository. It has a disabled button with `text-slate-300` text, which the Tailwind mapping rules say stays stock ("never darken it"), so a rule-following restyle always leaves at least one stock palette utility. It also has pale `green-200`/`amber-200` badge borders. The dev server is pinned to port 5701. Request, verbatim, as in [Tailwind colors-only regression](#tailwind-colors-only-regression):
+
+> $neon-redesign Colors only: switch this app's colors to Finnomena colors. Keep the layout, components, spacing and behaviour exactly as they are.
+
+Pass requires the run to execute the lint, and the report to name each stock utility the lint warns about on the result, as fixed or kept with a reason.
+
+November 2026, Claude Code 2.1.316, `claude-opus-5-5`, one sample on the baseline package (main at `6c0a1f6`) and two on this change (package built from `808dc7b`, before the merge with the browser probe runner and before the content rules stopped reading code comments; that change does not touch the stock palette rule this case exercises). Each run used a pristine fixture copy, the evaluator's MCP browser tool, `--add-dir` for the package and `/private/tmp/claude-501`, and `--permission-mode dontAsk`. Allowed: `Read Edit Write Glob Grep Skill Bash` and the browser tools. Denied: `rm`, `rmdir`, `mv`, `git push/commit/reset/checkout/clean/stash`, `sudo`, `curl`, `wget`, `WebFetch` and `WebSearch`. The grader then ran this change's lint on each result.
+
+| Item | Baseline (`6c0a1f6`) | This change, sample 1 | This change, sample 2 |
+| --- | --- | --- | --- |
+| Read verification.md | Yes | Yes | Yes, through `cat` |
+| Ran the lint | No (not shipped) | Yes, after `npm run build` | Yes, after `npm run build` |
+| Stock utilities left (grader's lint) | `border-green-200`, `text-green-700`, `border-amber-200`, `text-amber-700`, `text-slate-300` | Same five | Same five |
+| Report | Keeps "badge text and borders" green and amber (status text measures 3.61:1 and 3.00:1, no pale border token), and disabled text "its original pale grey"; no lint line | "**Source lint:** five warnings, one for each Tailwind color kept above. All are intentional."; each kept utility is named above it with its reason | "Source lint flagged 5 old colors left in place. These are the badge text and borders and the disabled text listed above, all kept on purpose." |
+| Build, browser | Pass; probe at 1440px and overflow at 375px | Pass; probe at 375px and 1440px | Pass; probe at 375px and 1440px |
+| Verdict | Fail: no lint run; the leftovers are justified from the agent's own review | Pass | Fail: ran the lint and answered every warning, but in prose, with no `Source lint:` line |
+
+Every leftover in all three runs was a deliberate exception under the mapping rules, and the baseline justified the same five without a lint. So these samples (one pass, one fail on the report line) show the lint running and its warnings being answered in the report; they do not show it catching a utility the agent overlooked. Each run had one denied Bash call: a `VAR=…; … $VAR/…` compound (baseline, sample 2) or a `cp` into the agent's own scratchpad (sample 1). Each run kept using the shell, built, and used the browser afterwards. Three earlier samples are void and kept for reference. Two ran on the `claude -p` default model (Haiku) under a prefix allowlist, and one on `claude-opus-5-5` under that allowlist. In each, a denied compound command led the agent to report Bash as blocked. Limits: three samples, Claude Code only, no Codex run, light mode only, one seeded fixture with no overlooked utility, and a run directory inside the neon worktree, whose repository paths the agents could see. Evidence is in `.local/evals/57-before-1`, `57-after-1`, `57-after-2` and `57-void-*` (`run.jsonl`, `grade.txt`, the result app and its git history).
+
+## Functional screen habits
+
+neon-review's [Functional screen habits](../../skills/neon-review/references/review-checks.md#functional-screen-habits) table lists eight generated-dashboard habits, each with a CDS component, prop or composition alternative and no CSS override. It says Neon navy structure and indigo focus, selection and links are contract roles, not habits, and that review-only edits nothing. Look and fix in verification.md links it from the critique. [Tables on narrow screens](../../skills/neon-create/references/new-ui-workflow.md#tables-on-narrow-screens) in new-ui-workflow.md turns a table in a container narrower than about 640px into two-line rows: identity and key figure, then every other field with its label. `functional-habits.test.mjs` covers the section order, the rows, the absence of CSS and navy/indigo rows, the link and the narrow-screen rules.
+
+November 2026, Claude Code 2.1.316, `claude -p --model claude-opus-5-5 --setting-sources project,local --plugin-dir <package> --add-dir <package> --mcp-config <browser> --strict-mcp-config --permission-mode dontAsk`, with the evaluator's browser tool from [Browser probe in verification](#browser-probe-in-verification). Baseline is the `8a98f91` package; revised is `eef5202`. Each sample ran on a fresh fixture copy in its own git repository outside the Neon checkout. Allowlist: `Read Edit Write Glob Grep Skill`, the five `mcp__browser__*` tools, and `Bash(…:*)` for `ls pwd cd cat head tail wc grep find echo test sed rg sort which curl lsof kill sleep mkdir cp node npm npx`, `npm run`, `git status/log/diff/ls-files/rev-parse/show/branch`, plus `sips` and `file` from Revised-2 on and `python3` from Baseline-2 on (Baseline-2, Revised-3 and the build baseline). Bash was never unrestricted.
+
+### Review of a habit-laden screenshot
+
+Fixture (`.local/evals/54-tools/fixtures/review`): a 1440×900 light-mode "Fee overview" screenshot with an on-token navy `#01172b` sidebar, an indigo `#6968ef` active bar and indigo `#4645ec` underlined links. It carries every habit: a "Welcome back 👋" title, four tinted icon KPI tiles, a single-series bar chart with a different color per bar inside a nested card, zebra rows with uppercase tracked headers, centered figures, saturated status chips, and pagination under the overview. Request, verbatim:
+
+> /neon:neon-review Review this Finnomena back office screenshot: fee-dashboard.png. Ops staff open this fee overview every morning to see what changed.
+
+Pass requires findings that name the habits with visible evidence and give the CDS or composition alternative, leave navy and indigo unflagged, and edit no file.
+
+| Item | Baseline-1 | Baseline-2 | Revised-2 | Revised-3 |
+| --- | --- | --- | --- | --- |
+| Denied commands | 1: `cd … && python3` pixel sampling | 1: a multi-line `python3 -I -c` | None | None |
+| Files edited | None | None | None | None |
+| Habits named as habits | Tiles, emoji title, per-bar chart colors, nested card, centered figures | Tiles, emoji title, centered figures | Emoji title, tiles, saturated chips, per-bar colors, zebra and uppercase, centered figures, pagination | All eight |
+| Missed | Chips (contrast only), zebra and uppercase; recommended more rows instead of removing pagination | Chips, pagination, chart colors, zebra | Nested card | None |
+| CDS alternatives | None | None | `Tag emphasis="low"` with green, yellow, red, gray; CDS `Table` defaults with `compact`; `tabularNumbers`; a "View all" link | The same, plus one container per group |
+| Navy and indigo | Indigo links flagged as brand drift: "default browser-blue links" | Links called "default browser blue … not the contract's indigo" | Not flagged | Listed under "What already follows the contract" |
+| Verdict | Fail | Fail | Pass | Pass |
+
+Both baselines read review-checks.md and INSTRUCTION.md, so routing did not differ. That the table caused the difference is unverified with two samples per arm. The grader's keyword hits are loose (Baseline-1 mentions pagination while recommending more rows), so the verdicts come from reading each report. A void first revised sample (`54-review-void-1`) used an earlier fixture whose navy and indigo were off-token and had one denied compound `sips …; grep …`. It named all eight habits and called the off-token links "blue-violet, not Finnomena's indigo", which was correct for that fixture.
+
+### Finnomena fund-fee table at 375px
+
+Fixture (`.local/evals/54-tools/fixtures/fees-app`): the #53 approvals app with its Home title set to "Finnomena Back Office", Vite pinned to port 5401 and the dev server started before each run. Request, verbatim:
+
+> /neon:neon-create Add a Finnomena fund-fee table to this back office app: one row per fund with fund name, fund code, AMC, front-end fee, back-end fee, management fee, total expense ratio and fees collected this month. Ops staff mostly check it on their phones, so it must work at 375px. Use mock data and keep the app's shell, routes and theme. The dev server is already running at http://localhost:5401.
+
+Pass requires every value shown at 1440px to be visible and untruncated at 375px, no sideways-scrolling table, and rows that lead with identity and the key figure. `grade-fees.mjs` compares the visible text at both widths in headless Chrome.
+
+| Item | Baseline | Revised |
+| --- | --- | --- |
+| Denied commands | 1: a `cd … && grep` in CDS types | 1: a `cd <package> && ls; sed …` read of the guidance, then read with Read |
+| Read | new-ui-workflow.md, verification.md and INSTRUCTION.md through `cat`, browser-probe.js | INSTRUCTION.md, new-ui-workflow.md, verification.md, browser-probe.js |
+| 375px layout | Stacked rows below 988px through a breakpoint hook and a page `fundFees.css` | CDS `Table` when the container is at least 640px, labeled rows below it; no CSS file |
+| Row shape at 375px | Name and ฿ amount, code and AMC, labeled fees; 4–6 visual lines | Name and ฿ amount, code · AMC, labeled Front-end, Back-end, Mgmt, TER; 5–7 visual lines |
+| Grader | 49 of 49 values at 375px, none truncated, no sideways scroller | 47 of 47, none truncated, no sideways scroller |
+| Report | Done report with Look and fix rounds, Brand-ready | None: a browser `evaluate` call with a `setTimeout` promise hung for over 26 minutes and the run was killed |
+| Verdict | Pass | Pass: the grader found every value; with no report, its Look and fix and Done lines are unverified |
+
+This case does not discriminate on Claude Code: the baseline already stacked the rows without the pattern. The revised run followed the new section's 640px threshold and used CDS instead of page CSS.
+
+Limits: two review samples per package and one build sample each, Claude Code only, no Codex, light mode only, one screenshot width for the review. Every sample except Revised-2 and Revised-3 had one denied command; the baselines' denials blocked pixel sampling, which the revised runs did not attempt. The baseline and revised samples did not all run with the same allowlist. The revised build has no final report, so its Look and fix and Done lines are unverified. The build fixtures' files were staged but not committed, so each run's `git status` showed the whole app as new and its `diff.patch` holds the full app. Not exercised: colors-only scope (chart and status rows only), `composition: 'preserve'`, and a habit table applied inside a build. Run logs, grades, screenshots and builds without `node_modules` are in `.local/evals/54-{review-baseline-1,review-baseline-2,review-revised-2,review-revised-3,review-void-1,build-baseline-1,build-revised-1}`; fixtures, the run script and the graders are in `.local/evals/54-tools`.
+
+## Output quality (blind)
+
+The other sections check that a skill follows its contract. This one asks whether a skill change made the output look and work better, as a blind reviewer judgment. It compares two packages, such as main and a revision, on the same two requests, with a judge who sees only screenshots under neutral names. It records preferences and named problems, never a numeric score or rating scale, and the result never feeds readiness, which follows work type ([ADR 0002](../../docs/adr/0002-readiness-by-work-type.md)).
+
+### Requests
+
+Each sample starts in its own empty folder, a fresh git repository outside the Neon checkout, so no `AGENTS.md` or other package sits above it. The only per-run text is the trailing port sentence. Verbatim:
+
+> /neon:neon-create Build a Finnomena event page in ./event. The event is "Finnomena Data Night: เบื้องหลังเครื่องมือข้อมูล", an evening meetup for engineers, analysts and designers about how our team builds data tools. It's on Thursday 10 December 2026, 18:30–21:00, at Finnomena HQ, Column Tower 22nd floor, Ratchadaphisek Road, Bangkok. Agenda: three short talks by our data team, a live demo of our internal dashboards, then networking with food and drinks. Registration is on https://example.com/data-night. Headline in Thai. Use port &lt;port&gt; for any dev or preview server.
+
+> /neon:neon-create Build a Finnomena Back Office approvals screen in ./approvals with mock data. Operations staff review pending customer requests (fund switches, redemptions over the daily limit and KYC updates), open one to see its details, then approve it, or reject it with a reason. Use port &lt;port&gt; for any dev or preview server.
+
+The event page is a Finnomena-led Campaign Page: no Reference Design is attached, so the dial does not apply and the page is Finnomena's own. All of its content is supplied and it has no form or Investment Content, so content honesty and readiness do not confound the comparison.
+
+### Samples and screenshots
+
+Run three samples of each request per package, twelve runs in a round, on the agent's browser tool where it has one and the same permissions for every run. Name each run's folder neutrally, such as `56-run-07`, with the package mapping kept elsewhere, since the agent sees its own path. Give every run the same harness note on how denials work (see the round's Limits), since agents otherwise read one denied command as the whole shell being blocked. Check the first run's log for denied commands before starting the rest, and widen the allowlist for any denial a prefix can cover. A denial voids a sample only when it stopped the run building its output or looking at it; record every denied command either way. Cap each run's wall-clock time. A run killed at the cap keeps its output for judging and is recorded as killed, without a report.
+
+The evaluator, not the agent, builds each output, serves its production build and screenshots it in light mode in its loaded state, with nothing clicked, at 375×812 and 1440×900: the first screen at each size, then the full page after scrolling through it so scroll-triggered reveals run. Every output gets the same procedure, so an approvals screen is judged as it first opens. Record any output that does not build, and judge what renders.
+
+### Blinding
+
+Pair baseline sample *n* with revised sample *n* for each request, giving six pairs. For each pair, randomly assign one output to side A and the other to side B, then shuffle the pair order. Copy the screenshots into a judge folder as `pair-<n>/<A|B>-<width>-<first|full>.png`, with the same modification time, and write the key (pair, side, package, sample) to a folder the judge never reads. Before judging, check that no screenshot names its package, revision or run.
+
+### Judge
+
+A fresh `claude -p` process with no transcript context, whose working directory is the judge folder and whose only tools are `Read` and `Glob`. The folder also holds a rubric file with the text of:
+
+- the [Look and fix](../../skills/neon-redesign/references/verification.md#look-and-fix) critique questions;
+- the [functional screen habits](../../skills/neon-review/references/review-checks.md#functional-screen-habits) table, applied to the approvals pairs only, since the event page is immersive;
+- the [color roles](../../skills/INSTRUCTION.md#color-roles) and [one question, first screen](../../skills/neon-create/references/new-ui-workflow.md#one-question-first-screen) passages those questions link to.
+
+For each pair the judge states a preference for A, B or neither, the reason in a sentence or two, and named problems for each side, each with its width and screenshot. It gives no number, score or rating. Save its answer before unblinding.
+
+### Recording
+
+Unblind with the key and record per pair: the preferred package or none, the judge's reason, and the named problems per output. Tally preferences per request as counts of pairs ("revised preferred in two of three pairs"), not percentages. Label the result as one reviewer's judgment. Under Limits, record the agent and version, the judge's model, samples, widths, color modes, states, permissions, ports, and every void, killed or unbuilt run.
+
+Generated apps, run logs, screenshots, the key and the judge's answer stay under `.local/evals/`; only this protocol and its recorded results are tracked.
+
+### November 2026 round
+
+Baseline is the main package at `6c0a1f6`. Revised is the integration tip at `1b7e7c6`, which adds Look and fix (#53), the functional screen habits table (#54), the probe runner (#58) and the source lint (#57). Claude Code 2.1.316, `claude -p --model claude-opus-5-5 --setting-sources project,local --plugin-dir <package> --add-dir <package> --mcp-config <browser> --strict-mcp-config --permission-mode dontAsk --allowedTools <list> --append-system-prompt <note>`, with the evaluator's browser tool from [Browser probe in verification](#browser-probe-in-verification). At most three runs went at once on ports 5601–5603, under a 45-minute cap. The judge was `claude -p --model claude-opus-5-5 --setting-sources local --tools Read,Glob --strict-mcp-config --permission-mode dontAsk` in the judge folder. It made one Glob and 55 Reads, all inside that folder, with no denials.
+
+| Pair | Request, sample | Preferred | Judge's reason, shortened |
+| --- | --- | --- | --- |
+| 1 | Event, 1 | Revised | Date, venue and one register action in one hero column, and a numbered agenda; the baseline repeats date and venue, misaligns blocks and breaks a Thai word |
+| 2 | Event, 3 | Revised | A strong headline and a date, time and venue row at both widths; the baseline shrinks the headline at 375, uses light section headings and breaks Thai words |
+| 6 | Event, 2 | Revised | Thai wraps cleanly and sections follow one structure; the baseline breaks Thai words and mixes heading weights |
+| 3 | Approvals, 1 | Baseline | Opens with a request selected, so details and Approve/Reject are on the first screen; the revised output leaves the right half as an empty "select a request" pane |
+| 5 | Approvals, 2 | Revised | Opens with a request selected, with the review reason and actions on the first screen; the baseline shows an empty detail pane |
+| 4 | Approvals, 3 | Revised | Both leave the detail pane empty; the revised list right-aligns amounts and due times and names the overdue item in words |
+
+Pair numbers are the judge's, from the shuffled order; rows are grouped by request. Revised was preferred in three of three event pairs and two of three approvals pairs. In the one approvals pair the baseline won, the revised run was killed at the cap with no report. Each output had problems the judge named in both arms:
+
+- Thai words broken across lines, such as `เครื่อง / ดื่ม`, in four of the six event pages: three baseline (two at 1440px, two at 375px; one at both) and one revised (375px).
+- On load at 1440px, an empty detail pane beside the list in four approvals outputs, two from each arm.
+- At 375px, five of the six approvals outputs, three baseline and two revised, put a "View details" button above the page heading; the judge noted no logo or page context in three of them.
+- At 1440px, figures left-aligned in proportional digits, named as a functional screen habit, in two baseline outputs and one revised.
+- At 1440px, light-weight section headings or a pale closing register button in two baseline and one revised event page.
+
+| Run | Request, arm and sample | Denied commands | Agent's own browser screenshots | Report lines naming Look and fix | Readiness reported |
+| --- | --- | --- | --- | --- | --- |
+| `56-run-01` | Event, baseline 1 | 0 | 5 | 0 | Ship-ready |
+| `56-run-05` | Event, baseline 2 | 0 | 4 | 0 | Ship-ready |
+| `56-run-09` | Event, baseline 3 | 1: a `cp` from the package | 7 | 0 | Ship-ready |
+| `56-run-04` | Event, revised 1 | 1: a compound `cd …; grep … \| head` | 7 | 0 | Ship-ready |
+| `56-run-08` | Event, revised 2 | 0 | 9 | 1 | Ship-ready |
+| `56-run-12` | Event, revised 3 | 1: an `ls` above the workspace | 7 | 3 | Ship-ready |
+| `56-run-03` | Approvals, baseline 1 | 2: a `for` loop, a `sed -i` | 9 | 0 | Brand-ready |
+| `56-run-07` | Approvals, baseline 2 | 1: a compound `cd … && grep -v` | 11 | 0 | Brand-ready |
+| `56-run-11` | Approvals, baseline 3 | 1: a `head` of a package file | 6 | 0 | Brand-ready |
+| `56-run-02` | Approvals, revised 1 | 1: a `for` loop | 2 | None: killed at the cap during a browser `evaluate` that never returned | None |
+| `56-run-06` | Approvals, revised 2 | 1: a variable assignment | 19 | 3 | Brand-ready |
+| `56-run-10` | Approvals, revised 3 | 1: a compound `cd … && ls` | 10 | 1 | Brand-ready |
+
+Every run built its app and screenshotted it in the browser, and every output built for the evaluator with no sideways scroll at either width. No denial stopped a run building or looking, so none is void under this section's rule.
+
+Limits: one round of three samples per request and package, one judge, and Claude Code only, with the judge on the same model as the agents. Six pairs carry no statistical weight; read the result as one reviewer's judgment. Light mode only, and the loaded state only. Nothing was clicked, so approvals detail views, the reject flow, empty and error states, and the 375px detail route were not judged. Designs that open with a request selected were favored. The approvals screens scroll inside their panels, so their full-page shots equal their first screens. The rubric is the revised package's own checklist, which the baseline runs never saw, so the judgment partly measures following instructions only one arm received. The revised package also carries #57 and #58, so a preference cannot be credited to Look and fix or the habits table alone. The evaluator checked only one of the judge's claims, the empty pane in pair 3.
+
+Every run got this harness note, verbatim: "Shell permissions in this session: Bash is allowed for commands that start with one of: ls pwd cd cat head tail wc grep find echo test sed rg sort which curl lsof kill sleep mkdir cp node npm npx sips file python3, npm run, git status, git log, git diff, git ls-files, git rev-parse, git show, git branch. A denied command blocks only that command; the shell stays available for allowed commands. Variable assignments, loops and $(...) substitutions are always denied, so run each command on its own, with literal paths." Earlier sections ran without it, so their runs are not comparable on this point. Allowlist: `Read Edit Write Glob Grep Skill`, the five `mcp__browser__*` tools, and `Bash(…:*)` for those prefixes. Bash was never unrestricted. The orchestrator's rule voids any sample with a denial. This round voids a sample only when a denial stopped it building or looking, since no prefix allowlist covers assignments and loops; ten of the twelve runs had one or two denials.
+
+A first round of seven runs had no harness note and is void (`56-void-01`…`07`). Each opened with a compound `ls …; B=<package>; ls $B`, was denied, and then treated the whole shell as blocked. Three baseline runs finished with source only, saying the shell was blocked. Three more, from both arms, were stopped mid-run with no install, build or screenshot. Only `56-void-01`, a revised event run, recovered, and its folder name revealed its arm. When a run left its dev server up after reporting, the server was killed so `claude -p` could exit, and some runs then wrote a one-line follow-up saying the server had stopped.
+
+Evidence is in `.local/evals/`: run logs, prompts, harness notes, app sources without dependencies or builds, and the evaluator's screenshots, in `56-run-01`…`12` and `56-void-01`…`07`; the judge folder and its answer in `56-judge`; the key in `56-key`; and scripts, the rubric, the run map and the summary in `56-tools`.
 
 ## Flow refactor evaluation
 

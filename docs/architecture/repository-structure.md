@@ -10,7 +10,7 @@
 | `GLOSSARY.md`, `docs/adr/` | maintainer | Domain vocabulary and recorded decisions for maintainers. Not packaged, so distributed skills define terms inline instead of linking here. |
 | `theme/` | maintainer | Canonical theme assets — the raw Figma token export (`theme/tokens/`), generated/resolved token files, CDS-tier adapters (`theme/cds/`), the CSS-variable tier (`theme/css/theme.css`), and the generator scripts (`theme/scripts/`) that produce the generated files from the raw tokens. One source of truth; `skills/INSTRUCTION.md` and the starter both trace back to it. |
 | `templates/vitejs-cds/` | maintainer | Starter source — application wiring and layout patterns only, no tracked theme files of its own (assembled from `theme/cds/` at build time). |
-| `scripts/` | maintainer | Stable, public commands: the installer (`install.mjs`), the maintainer assembly CLI (`assemble-starter.mjs` + `scripts/lib/`), and the plugin packager (`package-plugin.mjs`). |
+| `scripts/` | maintainer | Stable, public commands: the installer (`install.mjs`), the maintainer assembly CLI (`assemble-starter.mjs` + `scripts/lib/`), the browser probe runner skills use without a browser tool (`probe-page.mjs`), the warn-only source lint the shared verification checklist runs (`source-lint.mjs`, rules in `scripts/lib/source-rules.mjs` that the eval graders also import), and the plugin packager (`package-plugin.mjs`). |
 | `docs/` | maintainer | This directory — curated, tracked documentation about the repository itself (architecture). Not shipped in the distributed plugin. |
 | `evals/skills/` | maintainer | Skill scenarios and packaging regression checks, run with `node --test evals/skills/*.test.mjs`. |
 | `evals/templates/` | maintainer | Browser suite for the starter: assembles a disposable app, builds it and runs Playwright layout and integration checks. Reports go to `.local/evals/templates/`. |
@@ -19,7 +19,7 @@
 
 ## Packaging boundary
 
-`node scripts/package-plugin.mjs <destination-dir>` is the authoritative definition of what ships. It copies an explicit allowlist — currently `.claude-plugin/`, `.codex-plugin/`, `skills/`, `theme/`, `templates/vitejs-cds/`, `scripts/install.mjs`, `scripts/assemble-starter.mjs`, `scripts/lib/`, and `LICENSE` — into the destination. Everything else (`docs/`, `evals/`, `.local/`, `notes/`, dependencies, build output) is excluded by construction, not by convention: it's simply not in that list. If a path should ship, it has to be added to `PAYLOAD_ENTRIES` in that script; being tracked in Git is necessary but not sufficient.
+`node scripts/package-plugin.mjs <destination-dir>` is the authoritative definition of what ships. It copies an explicit allowlist — currently `.claude-plugin/`, `.codex-plugin/`, `skills/`, `theme/`, `templates/vitejs-cds/`, `scripts/install.mjs`, `scripts/assemble-starter.mjs`, `scripts/source-lint.mjs`, `scripts/probe-page.mjs`, `scripts/lib/`, and `LICENSE` — into the destination. Everything else (`docs/`, `evals/`, `.local/`, `notes/`, dependencies, build output) is excluded by construction, not by convention: it's simply not in that list. If a path should ship, it has to be added to `PAYLOAD_ENTRIES` in that script; being tracked in Git is necessary but not sufficient.
 
 ## Local material
 
