@@ -1,0 +1,65 @@
+<!doctype html>
+<!--
+  A page to draft a layout preset from (probe-page.mjs --draft-preset). Its
+  geometry and motion come from the query string, so probe-page.test.mjs drives
+  each snapping case from one page: ?radius=, ?pad=, ?gap= and ?motion= set the
+  card radius, card padding, gap above each section and transition length.
+  Its brand name, colors, font and copy must never reach the drafted preset.
+  The sign-in dialog is hidden, so it is no sign-in wall.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lumora Night Run 2026</title>
+<style>
+  :root { --radius: 10px; --pad: 20px; --gap: 68px; --motion: 200ms; }
+  body { margin: 0; font-family: "Playfair Display", serif; background: #fafafa; color: #222222; }
+  header { display: flex; gap: 24px; padding: 16px 32px; }
+  main > section { padding: var(--gap) 64px 0; }
+  #hero { background: #e4007c; color: #ffffff; padding: 120px 64px 80px; }
+  .card { box-sizing: border-box; width: 400px; min-height: 300px; background: #ffffff; border-radius: var(--radius); padding: var(--pad); }
+  ul { display: flex; gap: 24px; list-style: none; margin: 0; padding: 0; }
+  a, .card { transition: transform var(--motion) ease-out; }
+  .button { display: inline-block; padding: 14px 28px; border-radius: 999px; background: #1a1a1a; color: #ffffff; }
+  footer { padding: 40px 64px; }
+  dialog { display: none; }
+</style>
+<script>
+  for (const [name, value] of new URLSearchParams(location.search)) document.documentElement.style.setProperty(`--${name}`, value);
+</script>
+</head>
+<body>
+  <header>
+    <img alt="Lumora logo" width="96" height="32" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='32'/%3E">
+    <nav><a href="#route">Route</a> <a href="#prizes">Prizes</a> <a href="#join">Join</a></nav>
+  </header>
+  <main>
+    <section id="hero">
+      <h1>Lumora Night Run 2026</h1>
+      <p>Ten kilometres under the city lights.</p>
+      <a class="button" href="#join">Register now</a>
+    </section>
+    <section id="details">
+      <ul>
+        <li class="card">5K fun run</li>
+        <li class="card">10K race</li>
+        <li class="card">Kids' dash</li>
+      </ul>
+    </section>
+    <section id="proof">
+      <div class="card"><blockquote>"The best night of my running year."</blockquote></div>
+    </section>
+    <section id="call-out">
+      <div class="card"><h2>Early bird closes Friday</h2><a class="button" href="#join">Save my spot</a></div>
+    </section>
+    <section id="join">
+      <div class="card">
+        <form><input name="name" placeholder="Name"> <input name="email" type="email" placeholder="Email"> <button>Join</button></form>
+      </div>
+    </section>
+  </main>
+  <footer><p>© Lumora Events</p></footer>
+  <dialog id="sign-in"><input type="password" name="pass"></dialog>
+</body>
+</html>
