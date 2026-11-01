@@ -425,3 +425,54 @@ test('scripted-only renders every scripted part of a committed brief and keeps i
   assert.ok(brief.includes(PROSE.prompts.map((line, index) => `${index + 1}. ${line}`).join('\n\n')));
   assert.doesNotMatch(brief, /Stale/);
 });
+
+// The wide end margin moved from 24px to 32px in theme.css.
+const widerMargin = () => readFileSync(join(repo, 'theme/css/theme.css'), 'utf8')
+  .replace(/(@media \(min-width: 1440px\)\s*\{\s*:root\s*\{[^}]*--layout-endMargin: )24px;/, (_, head) => `${head}32px;`);
+
+test('check-only refuses a brief whose scripted section drifted from the theme', (t) => {
+  const root = fixture(t, { ...published(), 'theme/css/theme.css': widerMargin() });
+  const { status, out } = checkOnly(root);
+  assert.equal(status, 1, out);
+  assert.match(out, /^registry\/theme-briefs\/club-run\.md: section "Tokens — Spacing & Shapes" differs from fresh scripted output \(found ".*", expected ".*"\); run scripted-only$/m);
+  assert.doesNotMatch(out, /section "Components"/);
+});
+
+test('check-only refuses a hand edit to a scripted line and allows one to prose', (t) => {
+  const scripted = checkOnly(fixture(t, { ...published(), [BRIEF]: briefText.replace('Build emphasis with tint steps', 'Build emphasis with opacity') }));
+  assert.equal(scripted.status, 1, scripted.out);
+  assert.match(scripted.out, /section "Do's and Don'ts" differs from fresh scripted output \(found "- Build emphasis with opacity, never with opacity\.", expected "- Build emphasis with tint steps, never with opacity\."\)/);
+  const prose = checkOnly(fixture(t, { ...published(), [BRIEF]: briefText.replace('framed close and mid', 'framed close') }));
+  assert.equal(prose.status, 0, prose.out);
+});
+
+test('scripted-only fixes a drifted brief, keeps its prose, and a second run changes nothing', (t) => {
+  const root = fixture(t, { ...published(), 'theme/css/theme.css': widerMargin(), [BRIEF]: briefText.replace('framed close and mid', 'framed close') });
+  const first = scriptedOnly(root);
+  assert.equal(first.status, 0, first.out);
+  assert.match(first.out, /^registry\/theme-briefs\/club-run\.md: rewrote Tokens — Spacing & Shapes$/m);
+  const brief = readFileSync(join(root, BRIEF), 'utf8');
+  assert.match(brief, /^\| End margin from a 1440px viewport \| 32px \| `--layout-endMargin` \|$/m);
+  assert.equal(brief, briefText.replace('framed close and mid', 'framed close').replaceAll('then 24px', 'then 32px').replace('| 24px | `--layout-endMargin`', '| 32px | `--layout-endMargin`'));
+  const second = scriptedOnly(root);
+  assert.match(second.out, /^registry\/theme-briefs\/club-run\.md: scripted sections already match fresh output$/m);
+  assert.equal(readFileSync(join(root, BRIEF), 'utf8'), brief);
+  assert.equal(checkOnly(root).status, 0);
+});
+
+test('scripted-only leaves a brief alone when its prose or inputs cannot be read', (t) => {
+  const merged = briefText.replace(`${PROSE.mood}\n`, `${PROSE.mood.replace('\n', ' ')}\n`).replace(/\nMembership ratio: [^\n]+/, '');
+  const root = fixture(t, { ...published(), [BRIEF]: merged });
+  const prose = scriptedOnly(root);
+  assert.equal(prose.status, 1, prose.out);
+  assert.match(prose.out, /^registry\/theme-briefs\/club-run\.md: the header's mood paragraph must keep its three lines: theme half, occasion half, ratio sentence; not rewritten$/m);
+  assert.equal(readFileSync(join(root, BRIEF), 'utf8'), merged);
+  assert.match(checkOnly(root).out, /^registry\/theme-briefs\/club-run\.md: the header's mood paragraph must keep its three lines: theme half, occasion half, ratio sentence; its scripted sections cannot be checked$/m);
+
+  const stale = staleBrief();
+  const inputs = fixture(t, { ...published(), [BRIEF]: stale, 'theme-briefs/themes/ultra.json': null });
+  const missing = scriptedOnly(inputs);
+  assert.equal(missing.status, 1, missing.out);
+  assert.match(missing.out, /^registry\/theme-briefs\/club-run\.md: .*theme-briefs\/themes\/ultra\.json.*; not rewritten$/m);
+  assert.equal(readFileSync(join(inputs, BRIEF), 'utf8'), stale);
+});
