@@ -35,6 +35,12 @@ test('every run gets the same permissions, note, browser tool and isolation from
 test('the README quotes the note and allowlist the runner uses', async () => {
   const readme = await readFile(join(import.meta.dirname, 'README.md'), 'utf8');
   assert.ok(readme.includes(`Note, verbatim: "${PERMISSION_NOTE}"`), 'README quotes PERMISSION_NOTE');
+  const allowlist = readme.match(/^- Allowlist: .*$/m)[0];
+  for (const tool of ALLOWED_TOOLS) {
+    const prefix = tool.match(/^Bash\((.+):\*\)$/)?.[1];
+    if (prefix) for (const word of prefix.split(' ')) assert.match(allowlist, new RegExp(`[\\s\`/]${word}[\\s\`/,]`), prefix);
+    else if (!BROWSER_TOOLS.includes(tool)) assert.ok(allowlist.includes(tool), tool);
+  }
 });
 
 test('a dry run copies the fixture into a fresh repository and writes the run inputs', async t => {
