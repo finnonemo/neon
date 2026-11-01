@@ -4,7 +4,7 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { contrast, matchToken, paletteTokens } from '../lib/colors.mjs';
 import { loadInputs, PRESET_KINDS } from './inputs.mjs';
-import { assembleBrief, readProse, renderBrief, splitSections } from './render.mjs';
+import { assembleBrief, freshBrief, splitSections } from './render.mjs';
 import { isThirdParty, sourceHost } from './schemas.mjs';
 
 const plural = (count, one, many = `${one}s`) => `${count} ${count === 1 ? one : many}`;
@@ -109,12 +109,6 @@ export function renderable(name, inputs, problems) {
   const { brief, missing } = assembleBrief(inputs, picks);
   if (brief) return { brief };
   return { reason: missing.length ? `needs ${missing.join(', ')} for its Sibling Themes` : undefined };
-}
-
-// The brief rewritten from fresh scripted output, keeping the prose read from it: { text } or { problems }.
-export function freshBrief(markdown, brief) {
-  const { prose, problems } = readProse(markdown, brief);
-  return problems ? { problems } : { text: renderBrief(brief, prose) };
 }
 
 const clip = (line = '') => JSON.stringify(line.length > 80 ? `${line.slice(0, 77)}...` : line);

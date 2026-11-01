@@ -544,3 +544,31 @@ test('scripted rendering holds for every theme, colourway, page width and motion
   assert.equal(status, 0, out);
   assert.match(out, new RegExp(`, ${MATRIX.length} briefs; no problems$`, 'm'));
 });
+
+test('scripted-only refuses to drop hand-added prose it cannot place', (t) => {
+  const BRAND_FLOOR = "Imagery never carries another brand's logo, copy or look, and the Finnomena logo and IBM Plex Sans Thai stay on every screen.";
+  const cases = {
+    'an added Do bullet': [briefText.replace('- Keep one color family per block.\n', '- Keep one color family per block.\n- Keep forms short.\n'),
+      /^registry\/theme-briefs\/club-run\.md: "### Do" has 7 bullets, more than its 5 stock bullets and the occasion preset's 1; not rewritten$/m],
+    'a paragraph after the Brand Floor sentence': [briefText.replace(BRAND_FLOOR, `${BRAND_FLOOR}\n\nNo stock photos.`),
+      /^registry\/theme-briefs\/club-run\.md: Imagery has text after its Brand Floor sentence, which must come last; not rewritten$/m],
+  };
+  for (const [name, [text, expected]] of Object.entries(cases)) {
+    const root = fixture(t, { ...published(), [BRIEF]: text });
+    const { status, out } = scriptedOnly(root);
+    assert.equal(status, 1, `${name}: ${out}`);
+    assert.match(out, expected, name);
+    assert.equal(readFileSync(join(root, BRIEF), 'utf8'), text, name);
+  }
+});
+
+test('check-only refuses an occasion component named like a fixed one', (t) => assertRefused(t, edit(OCCASION, (p) => ({ ...p, components: [{ ...p.components[0], name: 'Support Block' }, p.components[1]] })),
+  /^theme-briefs\/presets\/occasion\/run\.json: component "Support Block" takes the name of a fixed component$/m));
+
+test('the Colors table marks a block step that is the canvas color', (t) => {
+  const root = fixture(t, { ...THEME_TEXTS, 'registry/theme-briefs/ultra-run.md': staleBrief(PROSE, { theme: 'Ultra' }), [PICKS]: null, 'theme-briefs/picks/ultra-run.json': { ...valid[PICKS], theme: 'ultra' } });
+  const { status, out } = run(['scripted-only', '--root', root]);
+  assert.equal(status, 0, out);
+  const brief = readFileSync(join(root, 'registry/theme-briefs/ultra-run.md'), 'utf8');
+  assert.match(brief, /^\| Navy 100 \| `#01172b` \| `--immersive-palette-100` \| The canvas color, not a block fill \|$/m);
+});

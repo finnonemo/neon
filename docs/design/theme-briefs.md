@@ -4,7 +4,7 @@
 
 Read this before you change a preset, picks file, theme text or prompt library entry, before you add or review a Theme Brief, or when the Theme Brief check fails in CI.
 
-Fast path: to change a preset or picks file, edit it, run the check below until it reports no problems, then run `node scripts/validate.mjs`.
+Fast path: to change a preset or picks file, edit it and run the check below until it reports no problems. If it reports that a published brief's section differs from fresh scripted output, refresh it with `scripted-only` (see [Section map](#section-map)). Then run `node scripts/validate.mjs`.
 
 ```sh
 node scripts/theme-briefs/theme-briefs.mjs check-only
@@ -118,6 +118,7 @@ The check module in `scripts/theme-briefs` is shared by the tool's `check-only` 
 | `is not a color token`, `which <Theme> does not define`, `text needs 4.5:1`, `an action's edge needs 3:1` | A brief names a color or pair the theme cannot back. Use a token, or a variable and pair the theme defines and keeps readable. |
 | `names "<name>", a preset source` | A source's site or domain name appears in a brief. Remove it. |
 | `differs from fresh scripted output`, `sections must be, in order` | A scripted part no longer matches the theme, tokens or picks, or was edited by hand. Run `scripted-only`, and put lasting wording changes in `render.mjs`. |
-| `its scripted sections cannot be checked`, `not rewritten` | The brief's prose cannot be found where the section map puts it, or its inputs have problems. Restore the structure the message names, or fix the inputs listed first. |
+| `its scripted sections cannot be checked`, `not rewritten` | The brief's prose cannot be found where the section map puts it, or a rewrite would drop hand-added text, such as an extra bullet or a paragraph after the Brand Floor sentence; or its inputs have problems. Move or remove the text the message names, or fix the inputs listed first. |
+| `takes the name of a fixed component` | An occasion component is named like one the brief renders itself. Rename it. |
 
 The registry tests also run in `validate.mjs`, so a brief's registry entry must build like every other item.

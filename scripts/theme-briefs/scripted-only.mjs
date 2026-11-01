@@ -4,8 +4,8 @@
 // and left as it is.
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
-import { checkInputs, freshBrief, renderable } from './checks.mjs';
-import { splitSections } from './render.mjs';
+import { checkInputs, renderable } from './checks.mjs';
+import { freshBrief, splitSections } from './render.mjs';
 
 export function scriptedOnly({ root, out = join(root, 'registry/theme-briefs') }) {
   const { inputs, problems } = checkInputs(root);

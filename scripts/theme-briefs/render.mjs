@@ -7,10 +7,10 @@
 // tagline { tagline }, mood-occasion { paragraph }, occasion-components
 // { components: [{ name, role, paragraph }] }, preset-dos-donts { dos, donts },
 // imagery { paragraph }, layout { paragraph }, example-prompts { prompts }.
+import { FIXED_COMPONENTS } from './schemas.mjs';
 
-export const SECTIONS = ['Tokens — Colors', 'Tokens — Typography', 'Tokens — Spacing & Shapes', 'Components', "Do's and Don'ts", 'Surfaces', 'Elevation', 'Imagery', 'Brand Pattern', 'Layout', 'Motion', 'Agent Prompt Guide', 'Sibling Themes', 'Quick Start'];
-export const HEADER = 'Header';
-const FIXED_COMPONENTS = ['Main Action', 'Secondary Action', 'Logo', 'Tint Block', 'Accent Block', 'Support Block'];
+const SECTIONS = ['Tokens — Colors', 'Tokens — Typography', 'Tokens — Spacing & Shapes', 'Components', "Do's and Don'ts", 'Surfaces', 'Elevation', 'Imagery', 'Brand Pattern', 'Layout', 'Motion', 'Agent Prompt Guide', 'Sibling Themes', 'Quick Start'];
+const HEADER = 'Header';
 const PROMPTS_LABEL = '**Example Component Prompts**';
 
 // Provisional (pending design owner review): Neon has no motion tokens.
@@ -63,6 +63,7 @@ function colors({ theme, facts }) {
     if (name === 'text') return 'Text on the canvas';
     if (name === 'action') return `Main action fill; label ${variable('on-action')}`;
     if (name === 'on-action') return 'Main action label';
+    if (theme.vars.get(name) === theme.vars.get('canvas')) return 'The canvas color, not a block fill';
     const kind = { palette: 'Tint block', accent: 'Accent block', support: 'Support block' }[name.split('-')[0]];
     return `${kind}; text ${variable(`on-${name}`)}`;
   };
@@ -162,7 +163,8 @@ function components({ theme }, prose) {
   return ['## Components', ...entries.map(([name, role, body]) => `### ${name}\n**Role:** ${role}\n\n${body}`)].join('\n\n');
 }
 
-function dosAndDonts({ theme }, prose) {
+// The stock Do's and Don'ts, keyed on theme facts; the preset bullets follow them.
+function stockRules(theme) {
   const tints = blockSteps(theme, 'palette');
   const dos = [
     `Set ${code(`data-immersive-theme="${theme.id}"`)} on the page root and color every section from the theme's ${code('--immersive-')} variables.`,
@@ -172,15 +174,20 @@ function dosAndDonts({ theme }, prose) {
     theme.canvasIsPalette
       ? `Start stepped blocks at ${variable(`palette-${tints[0]}`)}; ${variable('palette-100')} is the canvas.`
       : `Use ${variable('palette-100')} for blocks too: the canvas is not a palette step.`,
-    ...prose['preset-dos-donts'].dos,
   ];
   const donts = [
     'Do not use gradients — Immersive Themes have none.',
     'Do not write new hex values or near-palette tints — every color is a token step.',
     'Do not let the shared secondary colors lead — keep them to small highlight, tag and illustration blocks.',
     `Do not use ${variable('action')} (${theme.tokens.get('action')}) as a block fill — it is reserved for the main action and its ${variable('on-action')} label.`,
-    ...prose['preset-dos-donts'].donts,
   ];
+  return { dos, donts };
+}
+
+function dosAndDonts({ theme }, prose) {
+  const stock = stockRules(theme);
+  const dos = [...stock.dos, ...prose['preset-dos-donts'].dos];
+  const donts = [...stock.donts, ...prose['preset-dos-donts'].donts];
   return ["## Do's and Don'ts", '', '### Do', ...dos.map((line) => `- ${line}`), '', "### Don't", ...donts.map((line) => `- ${line}`)].join('\n');
 }
 
@@ -250,26 +257,35 @@ function quickStart({ theme, name }) {
   ].join('\n');
 }
 
-// The brief's sections in order, each { heading, text }; the header comes first, under HEADER.
-export function renderSections(brief, prose) {
-  const parts = [colors, typography, spacing, components, dosAndDonts, surfaces, elevation, imagery, brandPattern, layoutSection, motion, promptGuide, siblings, quickStart];
-  return [{ heading: HEADER, text: header(brief, prose) }, ...parts.map((part, index) => ({ heading: SECTIONS[index], text: part(brief, prose) }))];
-}
-
 function elevation() {
   return '## Elevation\n\n- **None.** The tokens define no shadow. Separate surfaces with tint steps, not shadows or borders.';
 }
 
+const brandFloor = (facts) => `Imagery never carries another brand's logo, copy or look, and the Finnomena logo and ${facts.scale.typeface} stay on every screen.`;
+
 function imagery({ facts }, prose) {
-  return `## Imagery\n\n${prose.imagery.paragraph}\n\nImagery never carries another brand's logo, copy or look, and the Finnomena logo and ${facts.scale.typeface} stay on every screen.`;
+  return `## Imagery\n\n${prose.imagery.paragraph}\n\n${brandFloor(facts)}`;
 }
 
-function layoutSection(brief, prose) {
+function layoutSection(_, prose) {
   return `## Layout\n\n${prose.layout.paragraph}`;
 }
 
-export const joinSections = (sections) => `${sections.map(({ text }) => text).join('\n\n')}\n`;
-export const renderBrief = (brief, prose) => joinSections(renderSections(brief, prose));
+// Each section's renderer, by heading, in the order SECTIONS gives.
+const RENDERERS = {
+  'Tokens — Colors': colors, 'Tokens — Typography': typography, 'Tokens — Spacing & Shapes': spacing, Components: components,
+  "Do's and Don'ts": dosAndDonts, Surfaces: surfaces, Elevation: elevation, Imagery: imagery, 'Brand Pattern': brandPattern,
+  Layout: layoutSection, Motion: motion, 'Agent Prompt Guide': promptGuide, 'Sibling Themes': siblings, 'Quick Start': quickStart,
+};
+
+// The whole brief: the header, then each section in order.
+export const renderBrief = (brief, prose) => `${[header(brief, prose), ...SECTIONS.map((heading) => RENDERERS[heading](brief, prose))].join('\n\n')}\n`;
+
+// The brief rewritten from fresh scripted output, keeping the prose read from it: { text } or { problems }.
+export function freshBrief(markdown, brief) {
+  const { prose, problems } = readProse(markdown, brief);
+  return problems ? { problems } : { text: renderBrief(brief, prose) };
+}
 
 // A brief's Markdown split at its "## " headings; text before the first is the header.
 export function splitSections(markdown) {
@@ -310,16 +326,21 @@ export function readProse(markdown, brief) {
     });
 
   const rules = section("Do's and Don'ts");
-  const bullets = (title, count, side) => {
+  // Preset bullets are the last in each list. A list longer than the stock and preset bullets together
+  // holds a hand-added bullet that a rewrite would drop.
+  const stock = stockRules(brief.theme);
+  const bullets = (title, stockCount, count) => {
     const list = rules.split(new RegExp(`^### ${title}$`, 'm'))[1]?.split(/^### /m)[0].split('\n').filter((line) => line.startsWith('- ')).map((line) => line.slice(2)) ?? [];
-    if (list.length < count) problems.push(`"### ${title}" has ${list.length} bullets; the ${side} need the last ${count}`);
+    if (list.length < count) problems.push(`"### ${title}" has ${list.length} bullets; the occasion preset's need the last ${count}`);
+    if (list.length > stockCount + count) problems.push(`"### ${title}" has ${list.length} bullets, more than its ${stockCount} stock bullets and the occasion preset's ${count}`);
     return list.slice(list.length - count);
   };
-  const dos = bullets('Do', brief.occasion.dos.length, 'occasion preset\'s dos');
-  const donts = bullets("Don't", brief.occasion.donts.length, 'occasion preset\'s don\'ts');
+  const dos = bullets('Do', stock.dos.length, brief.occasion.dos.length);
+  const donts = bullets("Don't", stock.donts.length, brief.occasion.donts.length);
 
   const imageryParts = paragraphs(body(section('Imagery')));
   if (imageryParts.length < 2) problems.push('Imagery must keep its prose and the Brand Floor sentence as separate paragraphs');
+  else if (imageryParts.slice(0, -1).includes(brandFloor(brief.facts))) problems.push('Imagery has text after its Brand Floor sentence, which must come last');
   const layout = body(section('Layout'));
   const guide = section('Agent Prompt Guide').split(PROMPTS_LABEL);
   if (guide.length < 2) problems.push(`Agent Prompt Guide has no ${PROMPTS_LABEL} label`);
