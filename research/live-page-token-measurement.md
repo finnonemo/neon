@@ -13,7 +13,7 @@ Measure the rendered page, and read the stylesheets for the names.
 3. **Take screenshots for judgment only:** recurring components, imagery, overall density. Treat them as evidence for judgment calls. Don't read token values from them.
 4. **Use Playwright with a CDP session only when needed:** forced pseudo-states without a pointer, flattened shadow DOM and iframes, or a headless batch run. It is Chromium-only and needs a browser install. Headless runs announce automation.
 
-No method gets past a sign-in wall the agent isn't already through, a bot challenge, or a closed shadow root. robots.txt is a crawler convention, not access control. What the skill does about it is a policy question for #73.
+No method gets past a sign-in wall the agent isn't already through, or a bot challenge. Page JavaScript can't reach a closed shadow root. A CDP snapshot or `pierce` might reach one, but the protocol doesn't say and this wasn't tested. robots.txt is a crawler convention, not access control. What the skill does about it is a policy question for #73.
 
 ## What a DESIGN file needs, and where each field comes from
 
@@ -108,13 +108,13 @@ One page, `https://playwright.dev/docs/intro`, measured in the desktop browser p
 Fallbacks:
 
 - **No browser tool:** use HTTP fetch and CSS text only. The output must say that values and frequencies are unmeasured.
-- **Need forced states, closed-root or iframe flattening, or batch runs:** use Playwright with `newCDPSession`, Chromium only.
+- **Need forced states, shadow-DOM or iframe flattening, or batch runs:** use Playwright with `newCDPSession`, Chromium only. Whether this reaches closed roots is untested.
 
 ## Evidence limits
 
 - One public page, one session, desktop browser pane only. Claude in Chrome, Playwright and CDP were not exercised. Their rows rest on the docs and the protocol JSON.
 - The test page had no iframes, no shadow DOM, no sign-in and no bot challenge. Those rows are untested.
 - The browser-pane capabilities used here come from this session's tool schemas, not from public documentation. They may differ across app versions.
-- The CORS/`crossorigin` explanation for `SecurityError` is general knowledge, not quoted from a spec. Whether `getComputedStyle` works on elements inside closed shadow roots, given an element reference, was not verified.
+- The CORS/`crossorigin` explanation for `SecurityError` is general knowledge, not quoted from a spec. Whether `getComputedStyle` works on elements inside closed shadow roots, given an element reference, was not verified. Neither was whether `DOMSnapshot.captureSnapshot` or `DOM.getDocument` with `pierce` includes closed roots: the protocol says "flattened" and "shadow roots" without naming the mode.
 - Bot-detection behavior beyond `navigator.webdriver` was not researched.
 - The sweep's weighting (text per element, backgrounds per area) is one choice. It counts the whole page, not only what is above the fold.
