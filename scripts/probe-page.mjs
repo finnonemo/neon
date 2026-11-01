@@ -35,7 +35,8 @@
  * stops it with `Preset draft: not measured; <reason>`, as does anything that
  * stops the probe, and it exits 1 with no draft. A robots.txt disallow for
  * neon-probe or * is a warning recorded in source.robotsDisallowed; it does
- * not stop the page view. See docs/design/theme-briefs/drafting-from-a-page.md.
+ * not stop the page view. The maintainer steps are in the Neon repository's
+ * Theme Brief write-up, under drafting from a page.
  */
 import { spawn } from 'node:child_process';
 import { createReadStream, existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, statSync, writeFileSync } from 'node:fs';
@@ -166,7 +167,7 @@ async function measureWidth(chrome, sessionId, url, width, { scheme, brands, out
   await loaded;
   // Let a client-rendered app paint and its fonts load before measuring.
   await send('Runtime.evaluate', { expression: 'new Promise(r => setTimeout(r, 500)).then(() => document.fonts.ready).then(() => new Promise(r => setTimeout(r, 200)))', awaitPromise: true }, sessionId);
-  const stopped = gate && (gate.status() ?? await gate.page(sessionId));
+  const stopped = gate && (gate.status() ?? await gate.page());
   if (stopped) throw new Unverified(stopped);
   if (brands.length) await send('Runtime.evaluate', { expression: `window.neonProbeSourceBrands = ${JSON.stringify(brands)};` }, sessionId);
   const evaluated = await send('Runtime.evaluate', { expression: probe, returnByValue: true, awaitPromise: true }, sessionId);
@@ -342,6 +343,7 @@ export function outRefusal(out, { serve, cwd = process.cwd() } = {}) {
 const STOP_STATUSES = { 401: 'the page answered HTTP 401 (sign-in required)', 403: 'the page answered HTTP 403 (forbidden)', 429: 'the page answered HTTP 429 (too many requests)' };
 
 // What stops a draft: the top document's status, read from the network, and what the loaded page shows.
+// The top frame's id is its target id, so frameId is the targetId.
 async function draftGate(chrome, sessionId, frameId, url) {
   let response = null;
   chrome.on('Network.responseReceived', sessionId, params => {
@@ -452,10 +454,10 @@ async function draftSweep() {
     const full = radius.endsWith('%') ? px(radius) >= 50 : px(radius) >= Math.min(box.width, box.height) / 2;
     return { radius: full ? 'full' : px(radius), padding: [style.paddingTop, style.paddingRight, style.paddingBottom, style.paddingLeft].map(px) };
   }));
-  const seconds = value => value.split(',').map(part => parseFloat(part) * (part.trim().endsWith('ms') ? 1 : 1000));
+  const toMs = value => value.split(',').map(part => parseFloat(part) * (part.trim().endsWith('ms') ? 1 : 1000));
   const durations = [...document.querySelectorAll('*')].filter(visible).map(element => {
     const style = getComputedStyle(element);
-    return Math.max(...seconds(style.transitionDuration), ...seconds(style.animationDuration));
+    return Math.max(...toMs(style.transitionDuration), ...toMs(style.animationDuration));
   }).filter(duration => duration > 0);
   return { viewportWidth: innerWidth, sections, cards, durations };
 }

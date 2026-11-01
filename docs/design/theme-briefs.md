@@ -90,4 +90,4 @@ The registry tests also run in `validate.mjs`, so a brief's registry entry must 
 
 ## Branch: drafting from a page
 
-To draft a layout preset from a public page, follow [drafting from a page](theme-briefs/drafting-from-a-page.md). It covers what carries over, what stops a run and how measured values snap to steps.
+To draft a layout preset from a public page, follow [drafting from a page](./theme-briefs/drafting-from-a-page.md). It covers what carries over, what stops a run and how measured values snap to steps.

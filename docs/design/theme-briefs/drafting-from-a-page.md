@@ -12,7 +12,7 @@ Under [ADR 0007](../../adr/0007-theme-brief-presets-borrow-only-structure-from-n
 - **Geometry:** block radius, section gap, card padding, page width and density.
 - **Motion:** the motion level.
 
-Colors and type come from the Immersive Theme. Logos, imagery, copy, names and prose from the page never carry over. Imagery presets carry nothing over, so they are always written by hand.
+Colors and type come from the Immersive Theme. Logos, imagery, copy, names and prose from the page never carry over. The tool drafts layout presets only, so write an imagery preset by hand.
 
 ## Choose the page
 
@@ -59,5 +59,5 @@ Each measured px value snaps to the nearest `--space-*` or `--borderRadius-*` st
 
 1. Write `heroPattern`, `navigation` and `footer` as your own short intent notes, replacing the `maintainer to write:` placeholders. Never copy wording from the page.
 2. Check every field against the screenshot, and correct any roles the heuristics got wrong.
-3. Save it as `theme-briefs/presets/layout/<slug>.json`, then run the Theme Brief check.
+3. Save it under `theme-briefs/` as `presets/layout/<slug>.json`, then run the Theme Brief check.
 4. A brief that uses a preset sourced outside finnomena.com needs a review record in its picks file before it ships. See [the Theme Brief write-up](../theme-briefs.md).

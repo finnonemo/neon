@@ -8,6 +8,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { loadInputs } from '../../scripts/theme-briefs/inputs.mjs';
 import { bans, presetSchema, validate } from '../../scripts/theme-briefs/schemas.mjs';
+import { robotsDisallows } from '../../scripts/probe-page.mjs';
 
 const runner = join(import.meta.dirname, '../../scripts/probe-page.mjs');
 const notRun = /^Browser probe: not run; recheck at 375px and 1440px$/m;
@@ -334,4 +335,16 @@ test('the drafted preset passes the closed layout schema with its source filled,
   } finally {
     site.close();
   }
+});
+
+test('robots.txt follows RFC 9309: the neon-probe group over *, longest match, Allow on a tie, $ and *', () => {
+  const robots = 'User-agent: *\nDisallow: /\n\nUser-agent: Neon-Probe\nDisallow: /private\nAllow: /private/open\nDisallow: /tie\nAllow: /tie\nDisallow: /*.pdf$\n';
+  assert.equal(robotsDisallows(robots, '/events'), false, 'the named group replaces *');
+  assert.equal(robotsDisallows(robots, '/private/page'), true);
+  assert.equal(robotsDisallows(robots, '/private/open/page'), false, 'the longer Allow wins');
+  assert.equal(robotsDisallows(robots, '/tie'), false, 'Allow wins a tie');
+  assert.equal(robotsDisallows(robots, '/files/a.pdf'), true);
+  assert.equal(robotsDisallows(robots, '/files/a.pdf?x=1'), false, '$ anchors the end');
+  assert.equal(robotsDisallows('User-agent: *\nDisallow: /events\n', '/events/run'), true, '* applies when no group names neon-probe');
+  assert.equal(robotsDisallows('User-agent: other\nDisallow: /\n', '/events'), false);
 });
