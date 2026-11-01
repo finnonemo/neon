@@ -20,6 +20,16 @@ export async function listFiles(directory, root = directory) {
   return nested.flat();
 }
 
+// Starter and example code resolve their relative paths inside an assembled app, not this tree.
+// Research notes live on throwaway branches, never ship, and name outside file formats by filename.
+const OUT_OF_TREE = ['templates/', 'theme/examples/', 'research/'];
+
+export async function referenceFiles(root, ignored = []) {
+  return (await listFiles(root)).filter(file => !ignored.some(pattern => file.startsWith(pattern.replace(/^\//, '')))
+    && !OUT_OF_TREE.some(prefix => file.startsWith(prefix))
+    && (file.endsWith('.md') || (/^(theme|scripts)\//.test(file) && /\.(ts|tsx|mjs|css)$/.test(file))));
+}
+
 // Keep only comment text, replacing everything else with its newlines so line numbers survive.
 function commentsOnly(source) {
   let kept = '';
