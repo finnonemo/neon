@@ -5,7 +5,9 @@ Run each request with the named context, first against the baseline and then the
 | Request/context | Observe |
 | --- | --- |
 | Add Finnomena approvals to an existing themed React/CDS app; retain providers/routes/services | Reuses installation and shell; builds actual list/detail/actions; navy foundation, indigo selection, labeled statuses |
-| Build a colorful Finnomena product landing page | Immersive composition permits prominent brand color/illustration; does not force navy/white dominance; actions remain accessible |
+| Build a colorful Finnomena product landing page | Picks an Immersive Theme; sets `data-immersive-theme` and colors only through `--immersive-*`; text only White or Navy; no gradients; a visible theme toggle on the review build; actions remain accessible |
+| Follow-up on a themed page: "ขอ theme พื้นขาว" | Switches to Club by the one attribute; layout and content unchanged |
+| Follow-up on a themed page: "ใส่สีเขียวเป็น highlight" | Uses `--immersive-green-*` with its `on-green-*` text in a small block; theme canvas and action unchanged |
 | Create a Finnomena request tracker with mock data | Scaffolds in an empty destination and builds the feature; no demo/mock banner or state switcher in the UI; the report names what is mocked; relevant states exist |
 | Build a Finnomena request tracker demo with mock data, labeled as a demo | Demo/mock labeling appears in the UI |
 | Change only a Vue header to Finnomena colors | No React/CDS installation, font/layout changes or global theme side effects |
@@ -15,7 +17,12 @@ Run each request with the named context, first against the baseline and then the
 | Build a Finnomena event landing page from an attached Refero reference design | Starts at Blended without asking; keeps reference geometry; Finnomena palette, IBM Plex Sans Thai and logo; no source-brand name, copy or imagery; offers the dial |
 | Build a Finnomena landing page from a reference design whose hero uses a multi-hue gradient | Keeps the gradient's placement and direction; its stops become a gradient recipe from `theme/tokens/colors.json`; no reference hue survives; hero text is readable at every stop beneath it |
 | Follow-up: "ให้ดู finnomena มากขึ้น" | Moves exactly one level toward Finnomena-led; content, flow and composition unchanged |
-| Follow-up: "use the reference's own colors and font" at Reference-led | Stays at Reference-led and explains the Brand Floor; no source font or accent color |
+| Follow-up: "use the reference's own colors and font" at Reference-led | Stays at Reference-led and explains the Brand Floor; reference colors may stay with at least one Finnomena color; no source font |
+| Reference-led dark immersive event page; follow-up "change the yellow CTA to a white button" | White action with a dark label; no navy or yellow forced back; IBM Plex Sans Thai and at least one Finnomena color remain; the shared theme mapping is untouched |
+| Back office screen; "make the primary button white" | Functional contract: primary action stays navy; explains that white actions are for immersive surfaces |
+| Review a Reference-led immersive page with a white CTA and no navy or yellow | No off-brand finding for the action or palette; contrast is still checked |
+| Build an immersive campaign dashboard "in this style" from one screenshot, no stated target | Shows 2–3 static directions before building; saves the screenshot with a note; builds only the picked direction |
+| Follow-up after a rejected build: "ยังไม่ใช่ที่ต้องการ" | Returns to 2–3 directions rather than another full rebuild |
 | Attach a reference design to a back office screen request | Functional contract; takes at most section structure; does not offer the dial |
 | Campaign page promoting a fund with return figures | Brand-ready; labeled disclaimer placeholder; no drafted regulatory wording or invented figures |
 | Recruiting page with a sign-up form and no named form service | Asks for the approved service; without one, no invented endpoint; Brand-ready |
@@ -352,6 +359,16 @@ October 2026, Codex, one sample per revision. The fixture holds `./DESIGN.md`, a
 - **Back office screen** with the same file "as a reference". Before and after: no Lumora strings and no dial offered. After also read the reference design procedure. Pass both; no measurable difference.
 
 Limits: one sample each, Codex only, source text inspected rather than rendered screens (browser checks were blocked by the sandbox), the 2px radius did not visibly carry over so Blended geometry is only partly shown, follow-up dial moves and Reference-led were not run, and the reference is synthetic rather than a Refero style.
+
+November 2026: [ADR 0004](../../docs/adr/0004-immersive-pages-keep-a-thin-brand-floor.md) thinned the Brand Floor to the logo, IBM Plex Sans Thai and at least one Finnomena color, with white actions allowed on immersive pages. Decision walkthroughs, 1 November 2026, Claude (general-purpose subagents), one sample each, against the uncommitted revision for #70. Fresh agents read the installed skills and reported files read, decisions and the lines behind them; nothing was built or rendered.
+
+- **White CTA follow-up** on a dark campaign page: white fill, navy label, a 3:1 boundary only on light sections, change kept in the page's existing scoped mechanism, shared theme untouched. Pass. It noted that neon-create's "colors-only … follows neon-redesign" line pulls against staying on the CDS path.
+- **Back office "make the primary button white"**: keeps the shared primary navy, asks one scope question, offers only a local exception with a dark label and boundary. Pass.
+- **Review of a white-CTA immersive page** with no navy or yellow: no brand finding; indigo-on-charcoal contrast listed as unverified. Pass.
+- **"This style" from one telemetry screenshot**, empty folder: three static mockups before any build, screenshot saved with a note, source logos, photos and typeface dropped. Pass. It found that saving the reference before scaffolding makes the installer refuse the folder; the rule now saves after scaffolding.
+- **"ยังไม่ใช่ที่ต้องการ" after two rejected builds**: no fourth rebuild; three distinct static directions and rereads the saved note. Pass.
+
+Limits: one sample per case, one model, decisions only; no app was built, so visual quality and the mockups themselves are unverified.
 
 The gradient scenario added with the gradient recipes (November 2026) has not been run; only `gradient-recipes.test.mjs` checks the recipe table against the token export and its contrast claims.
 
