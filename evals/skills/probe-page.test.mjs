@@ -118,6 +118,21 @@ test('with no Plex face, no logo and the brand absent, each is said, and absence
   assert.match(result.stdout, /^Browser probe: 375px no IBM Plex Sans Thai face loaded, .*no Finnomena logo$/m);
 });
 
+test('text on a filled block below 4.5:1 is a lead, through transparent wrappers, and on-token text is not', t => {
+  const result = probeWithChrome(t, [fixture('probe-fixture-text-on-fill.html'), '--json']);
+  if (result.skipped) return;
+  const { measured: [{ result: probed }], reportLine } = JSON.parse(result.stdout);
+  const found = Object.fromEntries(probed.lowContrastTextOnFill.map(({ element, fill, fg, bg, contrast }) => [element.match(/#([\w-]+)/)[1], { fill: fill.match(/#([\w-]+)/)[1], fg, bg, contrast }]));
+  // Measured against the nearest filled block, not the transparent wrappers or the canvas behind them.
+  assert.deepEqual(found, {
+    'canvas-text-on-tint': { fill: 'tint-block', fg: 'rgb(255,255,255)', bg: 'rgb(192,197,202)', contrast: 1.74 },
+    wrapped: { fill: 'tint-50-block', fg: 'rgb(255,255,255)', bg: 'rgb(128,139,149)', contrast: 3.47 },
+    // Inside a dark control that passes; the failing control's own label stays under darkBackgroundControls only.
+    'black-in-button': { fill: 'save', fg: 'rgb(0,0,0)', bg: 'rgb(43,43,43)', contrast: 1.48 },
+  });
+  assert.match(reportLine, /, low contrast text on fill p#canvas-text-on-tint "[^"]*"; p#wrapped "[^"]*" \+1 more,/);
+});
+
 test('--serve measures a production build on its own port, falling back to index.html for app routes', t => {
   const dist = tempDir('neon-probe-test-dist-');
   writeFileSync(join(dist, 'index.html'), '<!doctype html><title>Built</title><link rel="stylesheet" href="/assets/app.css"><p id="built">Built page</p>');

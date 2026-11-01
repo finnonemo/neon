@@ -99,6 +99,7 @@ async function checkFixture(browser) {
     { name: 'dark', file: 'probe-fixture.html', expected: jsonIn('probe-fixture.html', 'probe-expected-dark'), scheme: 'dark', darkClass: true },
     { name: 'no-plex', file: 'probe-fixture-no-plex.html', expected: jsonIn('probe-fixture-no-plex.html', 'probe-expected'), faces: { loaded: false } },
     { name: 'thai-404', file: 'probe-fixture-thai-404.html', expected: jsonIn('probe-fixture-thai-404.html', 'probe-expected'), faces: { failed: 1 } },
+    { name: 'text-on-fill', file: 'probe-fixture-text-on-fill.html', expected: jsonIn('probe-fixture-text-on-fill.html', 'probe-expected') },
   ];
   for (const { name, file, expected, faces = {}, ...options } of passes) {
     const sourceBrands = jsonIn(file, 'probe-source-brands') ?? [];
@@ -141,6 +142,7 @@ function summary(name, width, result) {
     `sideways=${result.sidewaysScrollers.length}`,
     `scrolledOnLoad=${scrolled.length ? `[${scrolled.join('; ')}]` : 'none'}`,
     `lowContrast=${low.length ? `[${low.join('; ')}]` : 'none'}`,
+    `textOnFill=${result.lowContrastTextOnFill.length ? `[${result.lowContrastTextOnFill.map(entry => `${entry.element} ${entry.contrast}`).join('; ')}]` : 'none'}`,
     `sameFill=${result.sameAsParentFill.length ? `[${result.sameAsParentFill.map(entry => `${entry.element} ${entry.contrast}`).join('; ')}]` : 'none'}`,
     `underlinedNav=${result.underlinedNavLinks.length}`,
     `serif=${result.serifTextCount}`,

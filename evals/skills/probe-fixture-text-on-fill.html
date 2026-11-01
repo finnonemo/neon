@@ -1,0 +1,49 @@
+<!doctype html>
+<!--
+  Text on filled blocks, with Ultra's values inlined (theme/css/immersive-themes.css):
+  canvas text White on the Navy canvas, and tint blocks Navy 25 and Navy 50 whose
+  on- token is Navy. #canvas-text-on-tint keeps the canvas text token on a tint
+  block, as #84's prototype page did (1.74:1). #wrapped reaches its block through
+  transparent wrappers. #on-token uses the block's on- token and raises nothing.
+  probe-page.test.mjs asserts each lead's block; run-probe.mjs --fixture compares
+  the ids and contrast in #probe-expected.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Probe fixture: text on filled blocks</title>
+<style>
+  body { margin: 0; font-family: sans-serif; background: #01172b; color: #ffffff; }
+  .tint-25 { background: #c0c5ca; padding: 8px; }
+  .tint-50 { background: #808b95; padding: 8px; }
+</style>
+</head>
+<body>
+  <p id="canvas-caption">Text on the canvas is not on a filled block.</p>
+  <section id="tint-block" class="tint-25">
+    <p id="canvas-text-on-tint">Registration closes 30 Nov</p>
+    <p id="on-token" style="color:#01172b">Registration closes 30 Nov</p>
+  </section>
+  <section id="tint-50-block" class="tint-50">
+    <div style="background:transparent">
+      <div style="background:rgba(0, 0, 0, 0)">
+        <p id="wrapped">5K, 10K and 21K</p>
+      </div>
+    </div>
+  </section>
+  <!-- An app root painted the canvas color is the canvas, not a block. -->
+  <div id="app-root" style="background:#01172b">
+    <p id="dim-on-canvas" style="color:#1d3a55">Text on a canvas-colored root is not on a filled block.</p>
+  </div>
+  <!-- A failing dark control is listed under darkBackgroundControls only; a passing one still has its text measured. -->
+  <button id="black-on-dark" style="border:0;background:#2b2b2b;color:#000">Home</button>
+  <button id="save" style="border:0;background:#2b2b2b;color:#fff">Save <span id="black-in-button" style="color:#000">now</span></button>
+  <script type="application/json" id="probe-expected">
+    {
+      "lowContrastTextOnFill": { "canvas-text-on-tint": 1.74, "wrapped": 3.47, "black-in-button": 1.48 },
+      "darkBackgroundControls": { "black-on-dark": 1.48, "save": 14.16 }
+    }
+  </script>
+</body>
+</html>

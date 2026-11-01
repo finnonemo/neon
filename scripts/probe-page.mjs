@@ -211,6 +211,7 @@ export function layoutLeads(result) {
   add('scrolled on load', result.scrolledOnLoad.elements);
   add('sideways scrollers', result.sidewaysScrollers);
   add('low contrast on dark fill', result.darkBackgroundControls.filter(entry => entry.contrast < 4.5));
+  add('low contrast text on fill', result.lowContrastTextOnFill);
   add('fill matching its background', result.sameAsParentFill);
   add('underlined nav', result.underlinedNavLinks);
   add('dialog past the viewport', result.dialogs.filter(dialog => !dialog.fits));
