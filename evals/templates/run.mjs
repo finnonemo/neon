@@ -21,8 +21,10 @@ try {
   await run('npm', ['ci', '--no-audit', '--no-fund'], app);
   // Build the shipped app before adding any test-only fixtures.
   await run('npm', ['run', 'build'], app);
-  await mkdir(join(app, 'src/app'), { recursive: true });
-  await copyFile(join(here, 'fixtures/App.tsx'), join(app, 'src/app/App.tsx'));
+  await mkdir(join(app, 'src/app/shared'), { recursive: true });
+  for (const file of ['App.tsx', 'Approval.tsx', 'Extras.tsx', 'shared/data.ts']) {
+    await copyFile(join(here, 'fixtures', file), join(app, 'src/app', file));
+  }
   await copyFile(join(root, 'theme/examples/app-entry.tsx'), join(app, 'src/app/IntegrationRoot.tsx'));
   const mainPath = join(app, 'src/main.tsx');
   let main = await readFile(mainPath, 'utf8');

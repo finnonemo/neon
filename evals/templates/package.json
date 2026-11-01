@@ -3,7 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node run.mjs"
+    "test": "node run.mjs",
+    "baseline": "NEON_CAPTURE_BASELINE=1 node run.mjs cds-match.spec.mjs"
   },
   "devDependencies": {
     "@playwright/test": "1.61.1"
