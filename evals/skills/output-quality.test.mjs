@@ -1,18 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { numericScore, section as sectionOf } from './markdown-section.mjs';
+import { numericScore } from './markdown-section.mjs';
 
-// Static guards for the blind output-quality protocol (#56; README "Output quality (blind)").
+// Static guards for the blind output-quality protocol (#56; records/output-quality-blind.md).
 // They check the protocol is stated, not that a round was run well.
 const readme = await readFile(new URL('./README.md', import.meta.url), 'utf8');
-const section = sectionOf(readme, 'Output quality (blind)');
+const section = await readFile(new URL('./records/output-quality-blind.md', import.meta.url), 'utf8');
 
-test('the protocol sits before the flow refactor evaluation and has the last row of the scenario table', () => {
-  const headings = [...readme.matchAll(/^## (.+)$/gm)].map(match => match[1]);
-  assert.equal(headings[headings.indexOf('Flow refactor evaluation') - 1], 'Output quality (blind)');
-  const table = readme.match(/^\| Request\/context \| Observe \|\n(?:^\|.*\n)+/m)[0].trim().split('\n');
-  assert.match(table.at(-1), /See \[Output quality \(blind\)\]\(#output-quality-blind\)/);
+test('the scenario table links the protocol', () => {
+  const table = readme.match(/^\| Request\/context \| Observe \|\n(?:^\|.*\n)+/m)[0];
+  assert.match(table, /See \[Output quality \(blind\)\]\(records\/output-quality-blind\.md\)/);
 });
 
 test('both requests appear verbatim, with only the port left per run', () => {

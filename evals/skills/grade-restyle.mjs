@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-// Grades the mechanical half of a restyle case (README "shadcn on Tailwind v4
-// restyle"): stylesheets are the only files changed, `@theme inline` blocks
+// Grades the mechanical half of a restyle case
+// (records/shadcn-on-tailwind-v4-restyle.md): stylesheets are the only files changed, `@theme inline` blocks
 // are byte-identical, `--chart-*` and `--radius` keep their values, and the
 // result builds. Contrast and surfaces stay with the browser probe.
 //

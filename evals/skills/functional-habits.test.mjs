@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { section } from './markdown-section.mjs';
 
 // Static guards for the functional screen habits table and the narrow-screen table
-// pattern (#54; README "Functional screen habits"). They check the rules are stated
+// pattern (#54; records/functional-screen-habits.md). They check the rules are stated
 // and linked, not that a run follows them.
 const skills = new URL('../../skills/', import.meta.url).pathname;
 const read = path => readFile(join(skills, path), 'utf8');
