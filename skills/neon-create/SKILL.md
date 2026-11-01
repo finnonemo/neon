@@ -33,6 +33,7 @@ If the app already has a working Finnomena CDS theme, start with the requested c
 - Writing sections for a new or rebuilt Campaign Page: [campaign content](references/campaign-content.md).
 - Theme/provider/dependency changes: [CDS integration](references/cds-integration.md). Preserve customized files and theme-mode ownership.
 - Complex feature states, mock figures or a comparison table on a functional screen, or existing-app integration: [new UI workflow](references/new-ui-workflow.md).
+- New or adapted functional screen with lists, overlays, mobile actions or empty states: [functional patterns](../neon-audit/references/functional-patterns.md).
 - Font, mode, migration or installer conflict: the matching section of [theme integration](../neon-audit/references/theme-integration.md).
 
 ## Done
