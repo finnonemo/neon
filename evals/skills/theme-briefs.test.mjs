@@ -476,3 +476,72 @@ test('scripted-only leaves a brief alone when its prose or inputs cannot be read
   assert.match(missing.out, /^registry\/theme-briefs\/club-run\.md: .*theme-briefs\/themes\/ultra\.json.*; not rewritten$/m);
   assert.equal(readFileSync(join(inputs, BRIEF), 'utf8'), stale);
 });
+
+// Every theme with each of its colourways and, on its palette, every page width and motion level, rendered in one scripted-only run.
+const LABELS = { club: 'Club', exclusive: 'Exclusive', private: 'Private', ultra: 'Ultra' };
+const COLOURWAYS = { club: ['palette', 'accent'], exclusive: ['palette', 'accent'], private: ['palette', 'accent'], ultra: ['palette', 'accent', 'support'] };
+const LAYOUT_VARIANTS = ['contained', 'full-bleed'].flatMap((pageWidth) => ['still', 'subtle', 'lively'].map((motion) => ({ pageWidth, motion })));
+const MATRIX = Object.entries(COLOURWAYS).flatMap(([theme, colourways]) => [
+  ...colourways.map((colourway) => ({ colourway, ...LAYOUT_VARIANTS[colourways.indexOf(colourway) + 1] })),
+  ...LAYOUT_VARIANTS.filter((_, index) => index !== 1).map((variant) => ({ colourway: 'palette', ...variant })),
+].map(({ colourway, pageWidth, motion }) => {
+  const briefName = `Run ${colourway} ${pageWidth.replace('-', ' ')} ${motion}`;
+  return { theme, colourway, pageWidth, motion, briefName, slug: `${theme}-${briefName.toLowerCase().replaceAll(' ', '-')}`, layout: `${pageWidth}-${motion}` };
+}));
+
+function renderMatrix(t) {
+  const files = { ...THEME_TEXTS, [PICKS]: null };
+  for (const { pageWidth, motion } of LAYOUT_VARIANTS) {
+    files[`theme-briefs/presets/layout/${pageWidth}-${motion}.json`] = { ...valid[LAYOUT], slug: `${pageWidth}-${motion}`, pageWidth, motion };
+  }
+  for (const { theme, colourway, briefName, slug, layout } of MATRIX) {
+    files[`theme-briefs/picks/${slug}.json`] = { theme, briefName, presets: { occasion: 'run', layout, imagery: 'people-in-action' }, brandPattern: { colourway, ground: 50 } };
+    files[`theme-briefs/records/${slug}.json`] = { brief: slug };
+    files[`registry/theme-briefs/${slug}.md`] = staleBrief(PROSE, { theme: LABELS[theme], name: briefName });
+  }
+  files['registry/registry.json'] = { name: 'neon', homepage: 'https://example.invalid', items: MATRIX.map(({ slug }) => ({ name: `theme-brief-${slug}`, type: 'registry:item' })) };
+  const root = fixture(t, files);
+  const { status, out } = scriptedOnly(root);
+  assert.equal(status, 0, out);
+  return { root, briefs: MATRIX.map((cell) => ({ ...cell, text: readFileSync(join(root, `registry/theme-briefs/${cell.slug}.md`), 'utf8') })) };
+}
+
+const section = (text, heading) => text.split(/^## /m).find((part) => part.startsWith(`${heading}\n`)) ?? '';
+const MOTION = { still: /150ms or less/, subtle: /16px or less, .* 150–250ms with ease-out/, lively: /200–400ms .* 32px or less\. No parallax/ };
+
+test('scripted rendering holds for every theme, colourway, page width and motion level, and passes check-only', (t) => {
+  const { root, briefs } = renderMatrix(t);
+  for (const { theme, colourway, pageWidth, motion, slug, text } of briefs) {
+    const at = `${slug}: `;
+    assert.match(text, new RegExp(`^\\*\\*Theme:\\*\\* ${theme === 'ultra' ? 'dark' : 'light'}$`, 'm'), at);
+    assert.match(text, /^This is a Finnomena Theme Brief, not a Reference Design: .* Provisional pending design owner review\.$/m, at);
+    assert.match(section(text, 'Components'), theme === 'ultra' ? /the dark-surface mark/ : /the light-surface mark/, at);
+    assert.equal(/^### Support Block$/m.test(text), theme === 'ultra', at);
+    assert.equal(/^\| — \| Light Grey 100 \| `#a6bfcc` \| `--immersive-support-100` \| Support block \|$/m.test(section(text, 'Surfaces')), theme === 'ultra', at);
+    assert.match(section(text, 'Tokens — Spacing & Shapes'), /`--layout-contentMaxWidth` \(1440px\).*`--layout-endMargin` \(16px, then 24px from a 1440px viewport\)/, at);
+    assert.match(section(text, 'Tokens — Spacing & Shapes'), pageWidth === 'contained' ? /Section fills stop at that column/ : /Section fills span the viewport/, at);
+    assert.match(section(text, 'Motion'), MOTION[motion], at);
+    assert.match(section(text, 'Brand Pattern'), new RegExp(`^- \\*\\*Ground:\\*\\* \`--immersive-${colourway}-50\` fill with \`--immersive-on-${colourway}-50\` text$`, 'm'), at);
+    // No block may be capped at a count that a colourway's Brand Pattern ground could break.
+    assert.doesNotMatch(text, /\bone per (screen|page)\b|\bonly one\b/i, at);
+    // px values appear only in the brief's own tables, and a prose px value repeats one of them.
+    const tablePx = new Set(text.split('\n').filter((line) => line.startsWith('|')).flatMap((line) => line.match(/\d+px/g) ?? []));
+    const motionPx = section(text, 'Motion').match(/\d+px/g) ?? [];
+    for (const line of text.split('\n').filter((line) => !line.startsWith('|'))) {
+      for (const value of line.match(/\d+px/g) ?? []) assert.ok(tablePx.has(value) || motionPx.includes(value), `${at}${value} in "${line}"`);
+    }
+    assert.doesNotMatch(section(text, 'Components'), /\d+px/, at);
+  }
+  // Fixed component wording and the stock Do's and Don'ts never change with colourway, page width or motion.
+  for (const theme of Object.keys(COLOURWAYS)) {
+    const own = briefs.filter((brief) => brief.theme === theme);
+    for (const heading of ['Components', "Do's and Don'ts", 'Tokens — Colors', 'Surfaces']) {
+      assert.equal(new Set(own.map(({ text }) => section(text, heading))).size, 1, `${theme} ${heading}`);
+    }
+  }
+  assert.match(section(briefs.find((brief) => brief.theme === 'club').text, 'Components'), /^`--immersive-palette-100` to `--immersive-palette-25` fills/m);
+  assert.match(section(briefs.find((brief) => brief.theme === 'private').text, 'Components'), /^`--immersive-palette-75` to `--immersive-palette-25` fills/m);
+  const { status, out } = checkOnly(root);
+  assert.equal(status, 0, out);
+  assert.match(out, new RegExp(`, ${MATRIX.length} briefs; no problems$`, 'm'));
+});

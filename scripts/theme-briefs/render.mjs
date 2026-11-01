@@ -189,7 +189,8 @@ function surfaces({ theme }) {
   return ['## Surfaces', '', table(['Level', 'Name', 'Value', 'Token', 'Purpose'], [
     row('1', 'canvas', 'Page background'),
     ...blockSteps(theme, 'palette').map((step, index) => row(String(index + 2), `palette-${step}`, 'Tint block')),
-    row('—', 'accent-100', 'Accent block'),
+    row('—', `accent-${blockSteps(theme, 'accent')[0]}`, 'Accent block'),
+    ...(theme.families.includes('support') ? [row('—', `support-${blockSteps(theme, 'support')[0]}`, 'Support block')] : []),
   ])].join('\n');
 }
 
