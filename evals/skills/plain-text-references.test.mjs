@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtemp, mkdir, writeFile, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
-import { checkPlainTextReferences } from '../../scripts/lib/plain-text-references.mjs';
+import { checkPlainTextReferences, referenceFiles } from '../../scripts/lib/plain-text-references.mjs';
 
 async function fixture(t, files) {
   const root = await mkdtemp(join(tmpdir(), 'neon-plain-refs-'));
@@ -66,4 +66,16 @@ test('ignores paths covered by ignore patterns', async t => {
   const root = await fixture(t, { 'AGENTS.md': 'Keep artifacts in `.local/` and see theme/tokens.resolved.json.\n' });
   await assert.rejects(checkPlainTextReferences(root, ['AGENTS.md']));
   await checkPlainTextReferences(root, ['AGENTS.md'], { ignored: ['.local/', 'theme/tokens.resolved.json'] });
+});
+
+test('leaves unpackaged research notes and app code out of the checked files', async t => {
+  const root = await fixture(t, { 'skills/demo/SKILL.md': '# Demo\n' });
+  await mkdir(join(root, 'research/notes'), { recursive: true });
+  await writeFile(join(root, 'research/notes/survey.md'), 'Each brand ships a DESIGN.md.\n');
+  await mkdir(join(root, 'templates/app'), { recursive: true });
+  await writeFile(join(root, 'templates/app/README.md'), 'See ./src.\n');
+  const files = await referenceFiles(root);
+  assert.ok(files.includes('skills/demo/SKILL.md'));
+  assert.ok(!files.some(file => file.startsWith('research/') || file.startsWith('templates/')));
+  await checkPlainTextReferences(root, files);
 });
