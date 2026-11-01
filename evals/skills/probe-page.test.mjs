@@ -1,10 +1,13 @@
 import test, { after } from 'node:test';
 import assert from 'node:assert/strict';
-import { spawnSync } from 'node:child_process';
-import { chmodSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
+import { execFile, spawnSync } from 'node:child_process';
+import { chmodSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
+import { createServer } from 'node:http';
 import { pathToFileURL } from 'node:url';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { loadInputs } from '../../scripts/theme-briefs/inputs.mjs';
+import { bans, presetSchema, validate } from '../../scripts/theme-briefs/schemas.mjs';
 
 const runner = join(import.meta.dirname, '../../scripts/probe-page.mjs');
 const notRun = /^Browser probe: not run; recheck at 375px and 1440px$/m;
@@ -182,4 +185,153 @@ test('screenshots are never written inside the app', () => {
   assert.equal(result.status, 2);
   assert.match(result.stderr, /Refusing --out shots: it is inside the current directory/);
   assert.deepEqual(readdirSync(app), []);
+});
+
+// Drafting a preset from a named page (spec 113, ADR 0007). Each page is served
+// by a local server in this process, so the runner is spawned asynchronously.
+function serveFixtures(routes) {
+  const server = createServer((request, response) => {
+    const path = new URL(request.url, 'http://x').pathname;
+    const route = routes[path];
+    if (!route) return response.writeHead(404, { 'content-type': 'text/plain' }).end('not found');
+    const { status = 200, type = 'text/html', headers = {}, body = '' } = typeof route === 'string' ? { body: route } : route;
+    response.writeHead(status, { 'content-type': type, ...headers }).end(body);
+  });
+  return new Promise(done => server.listen(0, '127.0.0.1', () => done({ origin: `http://127.0.0.1:${server.address().port}`, close: () => server.close() })));
+}
+
+function draft(args, { timeout = 60000 } = {}) {
+  const temp = tempDir('neon-probe-test-tmp-');
+  const app = tempDir('neon-probe-test-app-');
+  return new Promise(done => {
+    execFile(process.execPath, [runner, ...args], { cwd: app, env: { ...process.env, TMPDIR: temp, CHROME_PATH: '' }, encoding: 'utf8', timeout }, (error, stdout, stderr) => {
+      done({ status: error ? error.code ?? 1 : 0, stdout, stderr, temp, app });
+    });
+  });
+}
+
+const fixtureHtml = name => readFileSync(join(import.meta.dirname, name), 'utf8');
+
+test('a robots.txt disallow is a warning recorded for the reviewer, not a stop, and no Chrome stops the draft', async () => {
+  const site = await serveFixtures({
+    '/robots.txt': { type: 'text/plain', body: 'User-agent: *\nDisallow: /events/\nAllow: /events/open\n' },
+    '/events/run': '<p>Run</p>',
+  });
+  try {
+    const result = await draft(['--draft-preset', 'run-landing', `${site.origin}/events/run`, '--chrome', '/nonexistent/chrome']);
+    assert.match(result.stdout, /^Warning: robots\.txt disallows \/events\/run for neon-probe; recorded as source\.robotsDisallowed for the reviewer\.$/m);
+    assert.match(result.stdout, /^Preset draft: not measured; Chrome not found at \/nonexistent\/chrome$/m);
+    assert.equal(result.status, 1);
+    assert.deepEqual(readdirSync(result.temp), []);
+  } finally {
+    site.close();
+  }
+});
+
+// Drafts with a real Chrome; where none launches the test skips with the runner's reason.
+async function draftWithChrome(t, args) {
+  const result = await draft([...args, '--timeout', '30']);
+  const reason = result.stdout.match(/^Preset draft: not measured; (Chrome (?:not found|exited|failed).*)$/m)?.[1];
+  if (reason) t.skip(reason);
+  return { ...result, skipped: Boolean(reason) };
+}
+
+for (const [status, reason] of [[401, 'the page answered HTTP 401 (sign-in required)'], [403, 'the page answered HTTP 403 (forbidden)'], [429, 'the page answered HTTP 429 (too many requests)']]) {
+  test(`HTTP ${status} stops the draft with no workaround and writes no preset`, async t => {
+    const site = await serveFixtures({ '/page': { status, body: '<p>Blocked</p>' } });
+    try {
+      const out = join(tempDir('neon-probe-test-out-'), 'draft');
+      const result = await draftWithChrome(t, ['--draft-preset', 'blocked', `${site.origin}/page`, '--out', out]);
+      if (result.skipped) return;
+      assert.match(result.stdout, new RegExp(`^Preset draft: not measured; ${reason.replace(/[()]/g, '\\$&')}$`, 'm'));
+      assert.equal(result.status, 1);
+      assert.equal(existsSync(out), false, 'nothing is written for a stopped page');
+      assert.deepEqual(readdirSync(result.temp), []);
+    } finally {
+      site.close();
+    }
+  });
+}
+
+const stops = [
+  ['a visible password field', { '/page': '<form><input name="user"><input type="password" name="pass"></form>' }, 'a sign-in wall (a visible password field)'],
+  ['a redirect to a sign-in page', { '/members': { status: 302, headers: { location: '/account/login?next=/members' } }, '/account/login': '<p>Welcome back</p>' }, 'a sign-in wall (redirected to /account/login)'],
+  ['a challenge title', { '/page': '<title>Just a moment...</title><p>Checking your browser</p>' }, 'a bot challenge (title "Just a moment...")'],
+  ['a challenge header', { '/page': { headers: { 'cf-mitigated': 'challenge' }, body: '<p>One moment</p>' } }, 'a bot challenge (cf-mitigated: challenge)'],
+  ['a Turnstile widget', { '/page': '<p>Confirm</p><div class="cf-turnstile" style="width:300px;height:65px"></div>' }, 'a bot challenge (.cf-turnstile)'],
+  ['a CAPTCHA widget', { '/page': '<form><div class="g-recaptcha" style="width:304px;height:78px"></div></form>' }, 'a CAPTCHA (.g-recaptcha)'],
+];
+for (const [name, routes, reason] of stops) {
+  test(`${name} stops the draft as not measured, never worked around`, async t => {
+    const site = await serveFixtures(routes);
+    try {
+      const out = join(tempDir('neon-probe-test-out-'), 'draft');
+      const result = await draftWithChrome(t, ['--draft-preset', 'walled', `${site.origin}${Object.keys(routes)[0]}`, '--out', out]);
+      if (result.skipped) return;
+      assert.ok(result.stdout.split('\n').includes(`Preset draft: not measured; ${reason}`), result.stdout);
+      assert.equal(result.status, 1);
+      assert.equal(existsSync(out), false, 'nothing is written for a stopped page');
+    } finally {
+      site.close();
+    }
+  });
+}
+
+// Each case's expected steps come from theme.css: space-1_5 12px, space-2 16px,
+// space-3 24px, space-4 32px, space-8 64px, space-9 72px, space-10 80px (the last);
+// borderRadius-200 8px, -300 12px, -900 56px (the last before full-round -1000).
+const snapping = [
+  ['ties go to the smaller step', '?radius=10px&pad=20px&gap=68px&motion=200ms', { blockRadius: 'borderRadius-200', cardPadding: 'space-2', sectionGap: 'space-8', motion: 'subtle', density: 'compact' }],
+  ['full-round becomes borderRadius-1000 and values past the scale cap at its last step', '?radius=9999px&pad=40px&gap=200px&motion=150ms', { blockRadius: 'borderRadius-1000', cardPadding: 'space-5', sectionGap: 'space-10', motion: 'still', density: 'spacious' }],
+  ['a large radius short of full-round caps at borderRadius-900', '?radius=120px&pad=28px&gap=6px&motion=350ms', { blockRadius: 'borderRadius-900', cardPadding: 'space-3', sectionGap: 'space-0_75', motion: 'lively', density: 'comfortable' }],
+  ['a 50% radius is full-round, and no transitions is still', '?radius=50%25&pad=12px&gap=72px&motion=0s', { blockRadius: 'borderRadius-1000', cardPadding: 'space-1_5', sectionGap: 'space-9', motion: 'still', density: 'compact' }],
+];
+for (const [name, query, expected] of snapping) {
+  test(`drafting snaps measured geometry and motion to steps: ${name}`, async t => {
+    const site = await serveFixtures({ '/run': fixtureHtml('probe-fixture-preset.html') });
+    try {
+      const out = join(tempDir('neon-probe-test-out-'), 'draft');
+      const result = await draftWithChrome(t, ['--draft-preset', 'night-run', `${site.origin}/run${query}`, '--out', out]);
+      if (result.skipped) return;
+      assert.equal(result.status, 0, `stderr: ${result.stderr}\nstdout: ${result.stdout}`);
+      const preset = JSON.parse(readFileSync(join(out, 'night-run.json'), 'utf8'));
+      const { blockRadius, cardPadding, sectionGap, motion, density } = preset;
+      assert.deepEqual({ blockRadius, cardPadding, sectionGap, motion, density }, expected);
+    } finally {
+      site.close();
+    }
+  });
+}
+
+test('the drafted preset passes the closed layout schema with its source filled, and keeps nothing the page says or shows', async t => {
+  const site = await serveFixtures({
+    '/robots.txt': { type: 'text/plain', body: 'User-agent: neon-probe\nDisallow: /run\n\nUser-agent: *\nAllow: /\n' },
+    '/run': fixtureHtml('probe-fixture-preset.html'),
+  });
+  try {
+    const out = join(tempDir('neon-probe-test-out-'), 'draft');
+    const result = await draftWithChrome(t, ['--draft-preset', 'night-run', `${site.origin}/run#hero`, '--out', out]);
+    if (result.skipped) return;
+    assert.equal(result.status, 0, `stderr: ${result.stderr}\nstdout: ${result.stdout}`);
+    assert.match(result.stdout, /^Warning: robots\.txt disallows \/run for neon-probe; recorded as source\.robotsDisallowed for the reviewer\.$/m);
+    const file = join(out, 'night-run.json');
+    assert.match(result.stdout, new RegExp(`^Preset draft: ${file.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'm'));
+    const text = readFileSync(file, 'utf8');
+    const preset = JSON.parse(text);
+    // Structure: the sections in page order, with the Pattern in the hero.
+    assert.deepEqual(preset.sections, ['hero', 'detail-list', 'proof', 'call-out', 'form', 'footer']);
+    assert.equal(preset.pageWidth, 'full-bleed');
+    assert.deepEqual(preset.brandPattern, { section: 'hero' });
+    // Provenance: the named page without its fragment, today, what was kept, and the robots.txt disallow.
+    assert.deepEqual({ ...preset.source, measuredOn: undefined }, { url: `${site.origin}/run`, measuredOn: undefined, kept: ['structure', 'geometry', 'motion'], robotsDisallowed: true });
+    assert.match(preset.source.measuredOn, /^\d{4}-\d{2}-\d{2}$/);
+    // The fixture is served over http on loopback; a named public page is https, which the schema requires.
+    const asPublic = { ...preset, source: { ...preset.source, url: preset.source.url.replace(site.origin, 'https://events.example') } };
+    const facts = loadInputs(join(import.meta.dirname, '../..')).facts;
+    assert.deepEqual([...validate(asPublic, presetSchema('layout', 'night-run', facts)), ...bans(preset)], []);
+    // Nothing from the page: no brand, copy, color or font.
+    for (const leak of ['Lumora', 'Night Run', 'Register', 'city lights', 'e4007c', '#', 'Playfair', 'serif']) assert.ok(!text.includes(leak), `the draft holds "${leak}": ${text}`);
+  } finally {
+    site.close();
+  }
 });

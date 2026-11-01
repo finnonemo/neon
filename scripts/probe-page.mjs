@@ -136,21 +136,27 @@ function launch(chromePath, profile) {
     }
     if (child.exitCode === null && child.signalCode === null) child.kill('SIGKILL');
   };
-  return { child, send, once, kill };
+  // Calls `listener` with the params of every `method` event on `sessionId`.
+  const on = (method, sessionId, listener) => listeners.add(message => {
+    if (message.method === method && message.sessionId === sessionId) listener(message.params);
+  });
+  return { child, send, once, on, kill };
 }
 
-async function measureWidth(chrome, sessionId, url, width, { scheme, brands, out, probe }) {
+async function measureWidth(chrome, sessionId, url, width, { scheme, brands, out, probe, gate }) {
   const { send, once } = chrome;
   await send('Emulation.setDeviceMetricsOverride', { width, height: width < 768 ? 812 : 900, deviceScaleFactor: 1, mobile: false }, sessionId);
   await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-color-scheme', value: scheme }] }, sessionId);
   const loaded = once('Page.loadEventFired', sessionId);
   const { errorText } = await send('Page.navigate', { url }, sessionId);
-  if (errorText) throw new Unverified(`${url} did not load: ${errorText}`);
+  if (errorText) throw new Unverified(gate?.status() ?? `${url} did not load: ${errorText}`);
   await loaded;
   // Let a client-rendered app paint and its fonts load before measuring.
   await send('Runtime.evaluate', { expression: 'new Promise(r => setTimeout(r, 500)).then(() => document.fonts.ready).then(() => new Promise(r => setTimeout(r, 200)))', awaitPromise: true }, sessionId);
+  const stopped = gate && (gate.status() ?? await gate.page(sessionId));
+  if (stopped) throw new Unverified(stopped);
   if (brands.length) await send('Runtime.evaluate', { expression: `window.neonProbeSourceBrands = ${JSON.stringify(brands)};` }, sessionId);
-  const evaluated = await send('Runtime.evaluate', { expression: probe, returnByValue: true }, sessionId);
+  const evaluated = await send('Runtime.evaluate', { expression: probe, returnByValue: true, awaitPromise: true }, sessionId);
   if (evaluated.exceptionDetails) throw new Unverified(`the probe threw: ${evaluated.exceptionDetails.exception?.description ?? evaluated.exceptionDetails.text}`);
   const { cssContentSize } = await send('Page.getLayoutMetrics', {}, sessionId);
   const height = Math.min(Math.ceil(cssContentSize.height), 12000);
@@ -165,8 +171,8 @@ async function measureWidth(chrome, sessionId, url, width, { scheme, brands, out
  * Probes `url` at each width. Resolves to { measured: [{ width, result,
  * screenshot }], notRun: reason | null }; never rejects for browser trouble.
  */
-export async function probePage(url, { widths = [375, 1440], brands = [], scheme = 'light', out, chrome: chromePath, timeout = 60 } = {}) {
-  const probe = readFileSync(probePath, 'utf8');
+export async function probePage(url, { widths = [375, 1440], brands = [], scheme = 'light', out, chrome: chromePath, timeout = 60, draft = false } = {}) {
+  const probe = draft ? `(${draftSweep})()` : readFileSync(probePath, 'utf8');
   const found = findChrome(chromePath);
   if (!found.path) return { measured: [], notRun: found.reason };
   const profile = mkdtempSync(join(tmpdir(), 'neon-probe-profile-'));
@@ -179,7 +185,8 @@ export async function probePage(url, { widths = [375, 1440], brands = [], scheme
       const { targetId } = await chrome.send('Target.createTarget', { url: 'about:blank' });
       const { sessionId } = await chrome.send('Target.attachToTarget', { targetId, flatten: true });
       await chrome.send('Page.enable', {}, sessionId);
-      for (const width of widths) measured.push(await measureWidth(chrome, sessionId, url, width, { scheme, brands, out, probe }));
+      const gate = draft ? await draftGate(chrome, sessionId, targetId, url) : null;
+      for (const width of widths) measured.push(await measureWidth(chrome, sessionId, url, width, { scheme, brands, out, probe, gate }));
     })();
     run.catch(() => {});
     await Promise.race([run, timedOut]);
@@ -316,6 +323,281 @@ export function outRefusal(out, { serve, cwd = process.cwd() } = {}) {
   return null;
 }
 
+// Drafting a layout preset from a page a maintainer names (ADR 0007). Only
+// structure, geometry and motion carry over; nothing the page says or shows does.
+
+const STOP_STATUSES = { 401: 'the page answered HTTP 401 (sign-in required)', 403: 'the page answered HTTP 403 (forbidden)', 429: 'the page answered HTTP 429 (too many requests)' };
+
+// What stops a draft: the top document's status, read from the network, and what the loaded page shows.
+async function draftGate(chrome, sessionId, frameId, url) {
+  let response = null;
+  chrome.on('Network.responseReceived', sessionId, params => {
+    if (params.type === 'Document' && params.frameId === frameId) response = params.response;
+  });
+  await chrome.send('Network.enable', {}, sessionId);
+  const named = new URL(url);
+  return {
+    // The response's stop, if any: its status, a challenge header, or a redirect to a sign-in path.
+    status: () => {
+      if (!response) return null;
+      if (STOP_STATUSES[response.status]) return STOP_STATUSES[response.status];
+      const header = Object.entries(response.headers ?? {}).find(([name]) => name.toLowerCase() === 'cf-mitigated')?.[1];
+      if (/challenge/i.test(header ?? '')) return `a bot challenge (cf-mitigated: ${header})`;
+      const { pathname } = new URL(response.url);
+      if (SIGN_IN_PATH.test(pathname) && !SIGN_IN_PATH.test(named.pathname)) return `a sign-in wall (redirected to ${pathname})`;
+      return null;
+    },
+    page: async () => {
+      const { result } = await chrome.send('Runtime.evaluate', { expression: `(${pageWall})()`, returnByValue: true }, sessionId);
+      return result.value ?? null;
+    },
+  };
+}
+
+const SIGN_IN_PATH = /(?:^|\/)(?:log-?in|sign-?in|auth|sso)(?:\/|$)/i;
+
+// Runs in the page: a bot challenge, CAPTCHA or sign-in form the page shows instead of itself, or null.
+function pageWall() {
+  const visible = element => {
+    const box = element.getBoundingClientRect();
+    const style = getComputedStyle(element);
+    return box.width > 0 && box.height > 0 && style.visibility !== 'hidden' && style.display !== 'none';
+  };
+  const title = document.title.trim();
+  if (/^(just a moment|attention required|verify you are (a )?human|are you a robot|security check)/i.test(title)) return `a bot challenge (title "${title}")`;
+  const markers = [
+    ['a bot challenge', '#challenge-form, #cf-challenge-running, .cf-turnstile, iframe[src*="challenges.cloudflare.com"]'],
+    ['a CAPTCHA', '.g-recaptcha, .h-captcha, iframe[src*="hcaptcha.com"], iframe[src*="recaptcha/api2/bframe"]'],
+  ];
+  for (const [kind, selector] of markers) {
+    const found = [...document.querySelectorAll(selector)].find(visible);
+    if (found) return `${kind} (${found.id ? `#${found.id}` : found.matches('iframe') ? `iframe from ${new URL(found.src, location.href).hostname}` : `.${[...found.classList].find(name => selector.includes(`.${name}`))}`})`;
+  }
+  if ([...document.querySelectorAll('input[type="password"]')].some(visible)) return 'a sign-in wall (a visible password field)';
+  return null;
+}
+
+// Runs in the page after scrolling it through: the structure, geometry and
+// motion a layout preset keeps, as section roles and px or ms numbers. Colors
+// only decide what counts as a filled block; no text, color or font is returned.
+async function draftSweep() {
+  for (let y = 0; y < document.documentElement.scrollHeight; y += innerHeight) {
+    scrollTo(0, y);
+    await new Promise(done => setTimeout(done, 100));
+  }
+  scrollTo(0, 0);
+  const visible = element => {
+    const box = element.getBoundingClientRect();
+    const style = getComputedStyle(element);
+    return box.width > 0 && box.height > 0 && style.visibility !== 'hidden' && style.display !== 'none';
+  };
+  const painted = color => !/^(transparent|rgba\(.*,\s*0\))$/.test(color);
+  const fillOf = element => {
+    for (let at = element; at; at = at.parentElement) {
+      const color = getComputedStyle(at).backgroundColor;
+      if (painted(color)) return color;
+    }
+    return 'rgb(255, 255, 255)';
+  };
+  const px = value => parseFloat(value) || 0;
+  // The page's section container: <main>, else the first element below <body> with more than one visible child.
+  let container = document.querySelector('main') ?? document.body;
+  for (let kids = [...container.children].filter(visible); kids.length === 1 && container !== document.querySelector('main'); kids = [...container.children].filter(visible)) container = kids[0];
+  const blocks = [...container.children].filter(element => visible(element) && element.getBoundingClientRect().height >= 40 && !element.matches('header, nav, [role="banner"], [role="navigation"]'));
+  const footers = [...document.querySelectorAll('footer, [role="contentinfo"]')].filter(element => visible(element) && !container.contains(element) && !element.parentElement.closest('footer, [role="contentinfo"]'));
+  const role = (element, index) => {
+    if (element.matches('footer, [role="contentinfo"]')) return 'footer';
+    if (index === 0) return 'hero';
+    if (element.querySelector('form') || element.querySelectorAll('input:not([type="hidden"]):not([type="submit"]), textarea, select').length >= 2) return 'form';
+    if (element.querySelector('blockquote, q')) return 'proof';
+    if ([...element.querySelectorAll('ul, ol')].some(list => list.children.length >= 3)) return 'detail-list';
+    return 'call-out';
+  };
+  const sections = [...blocks, ...footers].map((element, index) => {
+    const box = element.getBoundingClientRect();
+    const style = getComputedStyle(element);
+    return {
+      role: role(element, index),
+      top: box.top + scrollY,
+      bottom: box.bottom + scrollY,
+      paddingTop: px(style.paddingTop),
+      fullBleed: box.width >= innerWidth * 0.98 && (style.backgroundImage !== 'none' || (painted(style.backgroundColor) && style.backgroundColor !== fillOf(document.body))),
+    };
+  });
+  // Filled blocks inside sections: a fill unlike what is behind it, a border or a shadow; controls are not blocks.
+  const cards = blocks.flatMap(section => [...section.querySelectorAll('*')].filter(element => {
+    if (!visible(element) || element.matches('a, button, input, select, textarea, label, img, svg, video, iframe')) return false;
+    const box = element.getBoundingClientRect();
+    if (box.width < 80 || box.height < 40 || box.width >= section.getBoundingClientRect().width * 0.9) return false;
+    const style = getComputedStyle(element);
+    const filled = painted(style.backgroundColor) && style.backgroundColor !== fillOf(element.parentElement);
+    return filled || (px(style.borderTopWidth) > 0 && painted(style.borderTopColor)) || style.boxShadow !== 'none';
+  }).map(element => {
+    const box = element.getBoundingClientRect();
+    const style = getComputedStyle(element);
+    const radius = style.borderTopLeftRadius;
+    const full = radius.endsWith('%') ? px(radius) >= 50 : px(radius) >= Math.min(box.width, box.height) / 2;
+    return { radius: full ? 'full' : px(radius), padding: [style.paddingTop, style.paddingRight, style.paddingBottom, style.paddingLeft].map(px) };
+  }));
+  const seconds = value => value.split(',').map(part => parseFloat(part) * (part.trim().endsWith('ms') ? 1 : 1000));
+  const durations = [...document.querySelectorAll('*')].filter(visible).map(element => {
+    const style = getComputedStyle(element);
+    return Math.max(...seconds(style.transitionDuration), ...seconds(style.animationDuration));
+  }).filter(duration => duration > 0);
+  return { viewportWidth: innerWidth, sections, cards, durations };
+}
+
+const themeSteps = (() => {
+  let css = '';
+  try {
+    css = readFileSync(join(dirname(fileURLToPath(import.meta.url)), '../theme/css/theme.css'), 'utf8');
+  } catch {}
+  const steps = prefix => [...css.matchAll(new RegExp(`--(${prefix}-[\\w]+):\\s*([\\d.]+)px`, 'g'))].map(([, name, value]) => ({ name, px: Number(value) })).sort((a, b) => a.px - b.px);
+  return { space: steps('space'), borderRadius: steps('borderRadius') };
+})();
+
+const FULL_ROUND = 'borderRadius-1000';
+
+/**
+ * The step nearest `px`; a tie goes to the smaller step, and a value past the
+ * scale caps at its last step. The full-round radius is never a nearest step.
+ */
+export function snapToStep(px, steps) {
+  const scale = steps.filter(step => step.name !== FULL_ROUND);
+  return scale.reduce((best, step) => (Math.abs(step.px - px) < Math.abs(best.px - px) ? step : best)).name;
+}
+
+// The motion levels' upper bounds in ms (provisional, spec 113): still up to 150, subtle up to 250, lively past it.
+export const motionLevel = ms => (ms === undefined || ms <= 150 ? 'still' : ms <= 250 ? 'subtle' : 'lively');
+
+const median = values => {
+  const sorted = [...values].sort((a, b) => a - b);
+  return sorted.length ? sorted[Math.floor((sorted.length - 1) / 2)] : undefined;
+};
+
+// Placeholders for the intent notes a maintainer writes; nothing from the page goes in them.
+const INTENT_PLACEHOLDERS = {
+  heroPattern: 'maintainer to write: how the hero is arranged and how it stacks on narrow screens',
+  navigation: 'maintainer to write: the navigation, if any, and how it behaves on narrow screens',
+  footer: 'maintainer to write: what the footer holds',
+};
+
+/**
+ * A layout preset from one sweep: section roles in page order, geometry
+ * snapped to space and borderRadius steps, motion mapped to its level.
+ * Returns { preset, measuredPx, unmeasured: [field] }.
+ */
+export function layoutPreset(sweep, { slug, url, measuredOn, robotsDisallowed }) {
+  const { sections, cards, durations } = sweep;
+  const main = sections.filter(section => section.role !== 'footer');
+  const gaps = main.slice(1).map((section, index) => Math.max(section.top - main[index].bottom, section.paddingTop));
+  const unmeasured = [];
+  const radii = cards.map(card => (card.radius === 'full' ? FULL_ROUND : snapToStep(card.radius, themeSteps.borderRadius)));
+  const counts = radii.reduce((tally, name) => tally.set(name, (tally.get(name) ?? 0) + 1), new Map());
+  const stepPx = name => themeSteps.borderRadius.find(step => step.name === name).px;
+  const blockRadius = [...counts].sort(([a, countA], [b, countB]) => countB - countA || stepPx(a) - stepPx(b))[0]?.[0];
+  const paddings = cards.flatMap(card => card.padding).filter(value => value > 0);
+  const measuredPx = { cardPadding: median(paddings), sectionGap: median(gaps.length ? gaps : main.map(section => section.paddingTop)), motionMs: median(durations) };
+  const step = (field, value, fallback) => {
+    if (value !== undefined) return snapToStep(value, themeSteps.space);
+    unmeasured.push(field);
+    return fallback;
+  };
+  if (!blockRadius) unmeasured.push('blockRadius');
+  const cardPadding = step('cardPadding', measuredPx.cardPadding, 'space-4');
+  const cardPaddingPx = themeSteps.space.find(entry => entry.name === cardPadding).px;
+  const roles = sections.map(section => section.role);
+  if (!roles.length) unmeasured.push('sections');
+  const preset = {
+    kind: 'layout',
+    slug,
+    sections: roles.length ? roles : ['hero'],
+    ...INTENT_PLACEHOLDERS,
+    density: cardPaddingPx <= 16 ? 'compact' : cardPaddingPx <= 32 ? 'comfortable' : 'spacious',
+    blockRadius: blockRadius ?? 'borderRadius-0',
+    sectionGap: step('sectionGap', measuredPx.sectionGap, 'space-8'),
+    cardPadding,
+    pageWidth: sections.some(section => section.fullBleed) ? 'full-bleed' : 'contained',
+    motion: motionLevel(measuredPx.motionMs),
+    brandPattern: { section: roles.includes('hero') ? 'hero' : roles[0] ?? 'hero' },
+    source: { url, measuredOn, kept: ['structure', 'geometry', 'motion'], robotsDisallowed },
+  };
+  return { preset, measuredPx, unmeasured };
+}
+
+// The product token robots.txt rules are matched against, beside `*`.
+export const ROBOTS_TOKEN = 'neon-probe';
+
+// Whether a robots.txt rule's path pattern matches `path`: `*` is any run of characters and a final `$` ends the path.
+const ruleMatches = (pattern, path) => new RegExp(`^${pattern.replace(/[.+?^{}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*').replace(/\\?\$$/, '$')}`).test(path);
+
+/**
+ * Whether robots.txt `text` disallows `path` (path and query) for `token`, by
+ * RFC 9309: the groups naming the token, else the `*` groups; the longest
+ * matching rule wins, and Allow wins a tie.
+ */
+export function robotsDisallows(text, path, token = ROBOTS_TOKEN) {
+  const groups = [];
+  let current = null;
+  for (const line of text.split(/\r?\n/)) {
+    const match = line.replace(/#.*/, '').match(/^\s*([\w-]+)\s*:\s*(.*?)\s*$/);
+    if (!match) continue;
+    const field = match[1].toLowerCase();
+    const value = match[2];
+    if (field === 'user-agent') {
+      if (!current || current.rules.length) groups.push(current = { agents: [], rules: [] });
+      current.agents.push(value.toLowerCase());
+    } else if ((field === 'allow' || field === 'disallow') && current) {
+      current.rules.push({ allow: field === 'allow', pattern: value });
+    }
+  }
+  const named = groups.filter(group => group.agents.includes(token.toLowerCase()));
+  const rules = (named.length ? named : groups.filter(group => group.agents.includes('*'))).flatMap(group => group.rules).filter(rule => rule.pattern);
+  const best = rules.filter(rule => ruleMatches(rule.pattern, path))
+    .sort((a, b) => b.pattern.length - a.pattern.length || Number(b.allow) - Number(a.allow))[0];
+  return Boolean(best && !best.allow);
+}
+
+// Fetches the page's robots.txt; an unreadable one disallows nothing, and says why.
+async function robotsCheck(url) {
+  const page = new URL(url);
+  try {
+    const response = await fetch(new URL('/robots.txt', page), { headers: { 'user-agent': ROBOTS_TOKEN }, signal: AbortSignal.timeout(10000) });
+    if (!response.ok) return { disallowed: false, note: response.status >= 500 ? `robots.txt answered ${response.status}; nothing recorded as disallowed` : null };
+    return { disallowed: robotsDisallows(await response.text(), page.pathname + page.search), note: null };
+  } catch (error) {
+    return { disallowed: false, note: `robots.txt could not be read (${error.cause?.code ?? error.message}); nothing recorded as disallowed` };
+  }
+}
+
+/** Why `url` cannot be drafted from (not a public https page, or a local http one for checks), or null. */
+export function draftUrlRefusal(url) {
+  let parsed;
+  try {
+    parsed = new URL(url);
+  } catch {
+    return 'it is not a URL';
+  }
+  if (parsed.protocol === 'https:') return null;
+  if (parsed.protocol === 'http:' && ['127.0.0.1', 'localhost', '[::1]'].includes(parsed.hostname)) return null;
+  return 'name a public https page';
+}
+
+/**
+ * Drafts a layout preset named `slug` from `url`. Resolves to { preset,
+ * measured, notMeasured: reason | null, robots }; never rejects for browser
+ * trouble or a stop.
+ */
+export async function draftPreset(url, slug, { out, chrome, timeout = 60, measuredOn = new Date().toLocaleDateString('en-CA') } = {}) {
+  const page = new URL(url);
+  page.hash = '';
+  const robots = await robotsCheck(page.href);
+  const { measured, notRun } = await probePage(page.href, { widths: [1440], out, chrome, timeout, draft: true });
+  if (notRun || !measured.length) return { preset: null, measured, notMeasured: notRun ?? 'nothing was measured', robots };
+  const { preset, measuredPx, unmeasured } = layoutPreset(measured[0].result, { slug, url: page.href, measuredOn, robotsDisallowed: robots.disallowed });
+  return { preset, measuredPx, unmeasured, measured, notMeasured: null, robots };
+}
+
 if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) {
   let options;
   try {
@@ -330,6 +612,7 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
         timeout: { type: 'string', default: '60' },
         serve: { type: 'string' },
         json: { type: 'boolean' },
+        'draft-preset': { type: 'string' },
       },
     });
   } catch (error) {
@@ -337,6 +620,44 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
     process.exit(2);
   }
   const { values, positionals } = options;
+  const slug = values['draft-preset'];
+  if (slug !== undefined) {
+    const urlRefusal = positionals.length === 1 ? draftUrlRefusal(positionals[0]) : 'name one page';
+    if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug) || values.serve || urlRefusal) {
+      console.error(`Usage: node probe-page.mjs --draft-preset <slug> <https url> [--out <dir>] [--chrome <path>] [--timeout <seconds>] [--json]${urlRefusal ? ` (${urlRefusal})` : ''}`);
+      process.exit(2);
+    }
+    const refusal = values.out && outRefusal(values.out);
+    if (refusal) {
+      console.error(`Refusing --out ${values.out}: ${refusal}. Name a directory outside it, or omit --out for a temp directory.`);
+      process.exit(2);
+    }
+    const out = resolve(values.out ?? join(tmpdir(), `neon-probe-${Date.now()}-${process.pid}`));
+    const drafted = await draftPreset(positionals[0], slug, { out, chrome: values.chrome, timeout: Number(values.timeout) });
+    const { preset, notMeasured, robots } = drafted;
+    if (robots.note) console.log(`Note: ${robots.note}.`);
+    if (robots.disallowed) console.log(`Warning: robots.txt disallows ${new URL(positionals[0]).pathname} for ${ROBOTS_TOKEN}; recorded as source.robotsDisallowed for the reviewer.`);
+    if (!preset) {
+      console.log(`Preset draft: not measured; ${notMeasured}`);
+      process.exit(1);
+    }
+    const file = join(out, `${slug}.json`);
+    writeFileSync(join(out, 'probe.json'), JSON.stringify({ measured: drafted.measured, robots }, null, 2));
+    writeFileSync(file, `${JSON.stringify(preset, null, 2)}\n`);
+    if (values.json) {
+      console.log(JSON.stringify({ preset, measuredPx: drafted.measuredPx, unmeasured: drafted.unmeasured, robots }, null, 2));
+      process.exit(0);
+    }
+    const { measuredPx, unmeasured } = drafted;
+    const was = value => (value === undefined ? 'not measured' : `${Math.round(value)} measured`);
+    console.log(`  sections ${preset.sections.join(', ')}; pageWidth ${preset.pageWidth}; density ${preset.density}`);
+    console.log(`  blockRadius ${preset.blockRadius}; cardPadding ${preset.cardPadding} (${was(measuredPx.cardPadding)}px); sectionGap ${preset.sectionGap} (${was(measuredPx.sectionGap)}px); motion ${preset.motion} (${was(measuredPx.motionMs)}ms)`);
+    if (unmeasured.length) console.log(`  Not measured, so set by hand: ${unmeasured.join(', ')}.`);
+    console.log(`  Screenshot and raw measurements: ${out}`);
+    console.log(`  Before committing it to theme-briefs/presets/layout/${slug}.json: write heroPattern, navigation and footer as your own intent notes, check each field against the screenshot, and run the Theme Brief check.`);
+    console.log(`Preset draft: ${file}`);
+    process.exit(0);
+  }
   const widths = values.widths.split(',').map(Number);
   if (positionals.length !== 1 && !(values.serve && positionals.length === 0) || widths.some(width => !Number.isInteger(width) || width <= 0) || !['light', 'dark'].includes(values.scheme)) {
     console.error('Usage: node probe-page.mjs <url> | --serve <build dir> [<path>] [--widths 375,1440] [--source-brand <name>]... [--scheme light|dark] [--out <dir>] [--chrome <path>] [--timeout <seconds>] [--json]');
