@@ -33,7 +33,9 @@
  * fontFamilyMono) are deliberately omitted — app code should reference
  * semantic tokens (--color-fg, not a raw spectrum step), and CDS's generic
  * Coinbase defaults for untouched fields don't belong in a "Finnomena"
- * branded file.
+ * branded file. The one exception to the CDS capture is the provisional
+ * --layout-* group, copied by hand from the breakpoint token export (see
+ * its own comment below).
  *
  * COLOR IS PROVISIONAL — see
  * ${CLAUDE_PLUGIN_ROOT}/theme/cds/color-overrides.ts's own
@@ -198,6 +200,21 @@
   --borderRadius-800: 48px;
   --borderRadius-900: 56px;
   --borderRadius-1000: 100000px;
+
+  /* --- Layout (mode-independent) ---
+   * PROVISIONAL: the Immersive pages' shared content column, copied by hand
+   * from theme/tokens/breakpoint.json's Immersive Layout ("Content View
+   * max-width" at xxxl_1440px; "End margins" from sm_320px). Not a CDS field
+   * and nothing regenerates it. The end margin widens below. */
+  --layout-contentMaxWidth: 1440px;
+  --layout-endMargin: 16px;
+}
+
+/* "End margins" from the xxxl_1440px tier's Viewport min-width. */
+@media (min-width: 1440px) {
+  :root {
+    --layout-endMargin: 24px;
+  }
 }
 
 /* --- Colors (dark) — OS preference --- */
