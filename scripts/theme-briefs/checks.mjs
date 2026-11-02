@@ -4,7 +4,7 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { contrast, matchToken, paletteTokens } from '../lib/colors.mjs';
 import { loadInputs, PRESET_KINDS } from './inputs.mjs';
-import { accentPlacements, accentProblems, proseText, valueProblems } from './prose-checks.mjs';
+import { accentPlacements, accentProblems, pairingProblems, proseText, valueProblems } from './prose-checks.mjs';
 import { assembleBrief, freshBrief, readProse, splitSections } from './render.mjs';
 import { isThirdParty, sourceHost } from './schemas.mjs';
 
@@ -97,11 +97,31 @@ function colorProblems(text, theme, tokens) {
   return problems;
 }
 
+// Check 9: no two picks files of one theme share all three presets; a colourway alone is no new design.
+// Each twin is reported on the later file, naming the earlier.
+function distinctness(picks) {
+  const seen = new Map();
+  const problems = [];
+  for (const { path, data } of picks) {
+    if (typeof data?.theme !== 'string' || PRESET_KINDS.some((kind) => typeof data.presets?.[kind] !== 'string')) continue;
+    const key = JSON.stringify([data.theme, ...PRESET_KINDS.map((kind) => data.presets[kind])]);
+    const earlier = seen.get(key);
+    if (!earlier) {
+      seen.set(key, { path, data });
+      continue;
+    }
+    const colourwayOnly = earlier.data.brandPattern?.colourway !== data.brandPattern?.colourway;
+    problems.push(`${path}: has the same occasion, layout and imagery presets as ${earlier.path}; briefs on one theme differ in at least one preset${colourwayOnly ? ', not only in colourway' : ''}`);
+  }
+  return problems;
+}
+
 // The inputs and every problem found in them, before any brief is read.
 export function checkInputs(root) {
   const inputs = loadInputs(root);
   const problems = [...inputs.problems];
   for (const picks of inputs.picks) problems.push(...compatibility(picks, inputs.presets, inputs.facts));
+  problems.push(...distinctness(inputs.picks));
   return { inputs, problems };
 }
 
@@ -138,7 +158,7 @@ function scriptedDrift(markdown, brief) {
   });
 }
 
-// Checks 3, 4, 5, 7 and 10 on one brief's Markdown, each message once. `brief` is undefined when the brief
+// Checks 3, 4, 5, 6, 7 and 10 on one brief's Markdown, each message once. `brief` is undefined when the brief
 // cannot be rendered, and `record` when it has no authoring record.
 export function briefProblems(text, { theme, brief, tokens, sources, record }) {
   const problems = new Set(colorProblems(text, theme, tokens));
@@ -147,6 +167,8 @@ export function briefProblems(text, { theme, brief, tokens, sources, record }) {
     const { prose } = readProse(text, brief);
     if (prose) {
       for (const message of valueProblems(proseText(prose), brief)) problems.add(message);
+      // Check 6, hard only: a fill with no text named is a draft-time warning, never a CI failure.
+      for (const message of pairingProblems(proseText(prose), brief.theme).hard) problems.add(message);
       if (record) for (const message of accentProblems(record.accentPlacement, prose['mood-occasion'].paragraph, accentPlacements(brief))) problems.add(message);
     }
   }

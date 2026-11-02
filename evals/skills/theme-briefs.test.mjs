@@ -207,6 +207,30 @@ for (const [name, [changes, expected]] of Object.entries(COMPATIBILITY_REFUSALS)
   test(`check-only refuses ${name}`, (t) => assertRefused(t, changes, expected));
 }
 
+// Check 9: a second Club picks file, a twin of club-run unless it changes something.
+const twin = (change = (p) => p) => ({ 'theme-briefs/picks/club-race.json': change({ ...structuredClone(valid[PICKS]), briefName: 'Race' }) });
+const DISTINCTNESS_REFUSALS = {
+  'two picks files of one theme with the same presets': [twin(), /^theme-briefs\/picks\/club-run\.json: has the same occasion, layout and imagery presets as theme-briefs\/picks\/club-race\.json; briefs on one theme differ in at least one preset$/m],
+  'two picks files of one theme that differ only in ground': [twin((p) => ({ ...p, brandPattern: { ...p.brandPattern, ground: 75 } })), /^theme-briefs\/picks\/club-run\.json: has the same occasion, layout and imagery presets as theme-briefs\/picks\/club-race\.json; briefs on one theme differ in at least one preset$/m],
+  'two picks files of one theme that differ only in colourway': [twin((p) => ({ ...p, brandPattern: { colourway: 'palette', ground: 75 } })), /^theme-briefs\/picks\/club-run\.json: has the same occasion, layout and imagery presets as theme-briefs\/picks\/club-race\.json; briefs on one theme differ in at least one preset, not only in colourway$/m],
+};
+
+for (const [name, [changes, expected]] of Object.entries(DISTINCTNESS_REFUSALS)) {
+  test(`check-only refuses ${name}`, (t) => assertRefused(t, changes, expected));
+}
+
+test('the same presets may serve two themes, and one changed preset makes a distinct brief', (t) => {
+  const otherLayout = { ...valid[LAYOUT], slug: 'editorial' };
+  const root = fixture(t, {
+    'theme-briefs/picks/ultra-run.json': { ...valid[PICKS], theme: 'ultra' },
+    'theme-briefs/presets/layout/editorial.json': otherLayout,
+    ...twin((p) => ({ ...p, presets: { ...p.presets, layout: 'editorial' } })),
+  });
+  const { status, out } = checkOnly(root);
+  assert.equal(status, 0, out);
+  assert.match(out, /3 picks files/);
+});
+
 test('palette 100 may be the bare canvas, and a Finnomena source needs no review', (t) => {
   const root = fixture(t, {
     'theme-briefs/picks/club-run.json': null,
@@ -501,8 +525,11 @@ function renderMatrix(t) {
   for (const { pageWidth, motion } of LAYOUT_VARIANTS) {
     files[`theme-briefs/presets/layout/${pageWidth}-${motion}.json`] = { ...valid[LAYOUT], slug: `${pageWidth}-${motion}`, pageWidth, motion };
   }
+  // One imagery preset per colourway, so no two briefs of a theme share all three presets (check 9).
+  for (const colourway of ['accent', 'support']) files[`theme-briefs/presets/imagery/people-in-action-${colourway}.json`] = { ...valid[IMAGERY], slug: `people-in-action-${colourway}` };
   for (const { theme, colourway, briefName, slug, layout } of MATRIX) {
-    files[`theme-briefs/picks/${slug}.json`] = { theme, briefName, presets: { occasion: 'run', layout, imagery: 'people-in-action' }, brandPattern: { colourway, ground: 50 } };
+    const imagery = colourway === 'palette' ? 'people-in-action' : `people-in-action-${colourway}`;
+    files[`theme-briefs/picks/${slug}.json`] = { theme, briefName, presets: { occasion: 'run', layout, imagery }, brandPattern: { colourway, ground: 50 } };
     files[`theme-briefs/records/${slug}.json`] = { brief: slug, accentPlacement: 'Registration call-out' };
     files[`registry/theme-briefs/${slug}.md`] = staleBrief(PROSE, { theme: LABELS[theme], name: briefName });
   }
@@ -695,7 +722,10 @@ test('every prompt library entry takes the theme kind and mood', () => {
 test('the review report gives each entry hash, the scripted-section check and per-section overlap with same-theme briefs', (t) => {
   const first = draft(t);
   assert.equal(first.status, 0, first.out);
-  const sibling = { 'theme-briefs/picks/club-trail-run.json': { ...valid[PICKS], briefName: 'Trail Run' }, 'registry/theme-briefs/club-trail-run.md': readFileSync(join(first.root, BRIEF), 'utf8') };
+  const sibling = {
+    'theme-briefs/presets/imagery/trail-crowd.json': { ...valid[IMAGERY], slug: 'trail-crowd' },
+    'theme-briefs/picks/club-trail-run.json': { ...valid[PICKS], briefName: 'Trail Run', presets: { ...valid[PICKS].presets, imagery: 'trail-crowd' } },
+    'registry/theme-briefs/club-trail-run.md': readFileSync(join(first.root, BRIEF), 'utf8') };
   const { root, status, out } = draft(t, { changes: sibling });
   assert.equal(status, 0, out);
   const report = readFileSync(local(root, 'review.md'), 'utf8');
@@ -797,6 +827,8 @@ const DRAFT_REFUSALS = {
   'a variable the theme does not define': ['occasion-components', components([]), /— occasion-components:\*\* names --immersive-support-50, which Club does not define/, (answer) => { answer.components[0].paragraph = answer.components[0].paragraph.replace('palette-50) with var(--immersive-on-palette-50)', 'support-50) with var(--immersive-on-support-50)'); }],
   'a px value no table holds': ['example-prompts', { prompts: GOOD['example-prompts'].prompts.map((prompt) => prompt.replace('var(--space-4) padding', '11px padding')) }, /— example-prompts:\*\* prose gives 11px, which no table in the brief holds/],
   'a type size off the scale': ['example-prompts', { prompts: GOOD['example-prompts'].prompts.map((prompt) => prompt.replace('the distance in title2', 'the distance at 17px/23px')) }, /prose gives 17px\/23px, which is not a Type Scale size and line height/],
+  'a foreign font name': ['example-prompts', { prompts: GOOD['example-prompts'].prompts.map((prompt) => prompt.replace('the distance in title2', 'the distance in Inter')) }, /— example-prompts:\*\* prose names "Inter", a font other than IBM Plex Sans Thai; type comes from the theme/],
+  'text from another fill': ['occasion-components', components([]), /— occasion-components:\*\* names --immersive-accent-100 as a fill with --immersive-on-palette-50 text; text on it is --immersive-on-accent-100/, (answer) => { answer.components[1].paragraph = answer.components[1].paragraph.replace('on-accent-100', 'on-palette-50'); }],
   'a gradient': ['imagery', { paragraph: imagery.replace('never tinted with the accent', 'never under a gradient') }, /— imagery:\*\* prose names a gradient; Immersive Themes have none/],
   'motion beyond the level': ['layout', { paragraph: GOOD.layout.paragraph.replace('keeping a comfortable rhythm', 'with staggered entrances, keeping a comfortable rhythm') }, /— layout:\*\* prose names "staggered", which the subtle motion level does not allow/],
   'a duration beyond the level': ['layout', { paragraph: GOOD.layout.paragraph.replace('from top to bottom', 'from top to bottom over 600ms') }, /— layout:\*\* prose gives 600ms, more than the subtle motion level's 250ms/],
@@ -892,6 +924,22 @@ const proseBrief = (prose) => renderBrief({ [BRIEF]: staleBrief({ ...PROSE, ...p
 const withRecord = (accentPlacement) => ({ ...published(), [RECORD]: { brief: 'club-run', accentPlacement } });
 const COMMITTED_REFUSALS = {
   'prose with a px value no table holds': [{ ...published(), [BRIEF]: proseBrief({ layout: `${PROSE.layout} Cards keep 11px padding.` }) }, /^registry\/theme-briefs\/club-run\.md: prose gives 11px, which no table in the brief holds$/m],
+  'prose that names a foreign font': [{ ...published(), [BRIEF]: proseBrief({ layout: `${PROSE.layout} Headlines are set in Finnomena Trek, not IBM Plex Sans.` }) }, [
+    /^registry\/theme-briefs\/club-run\.md: prose names "Finnomena Trek", a font other than IBM Plex Sans Thai; type comes from the theme$/m,
+    /^registry\/theme-briefs\/club-run\.md: prose names "IBM Plex Sans", a font other than IBM Plex Sans Thai; type comes from the theme$/m,
+  ]],
+  'a fill paired with another family\'s text': [{ ...published(), [BRIEF]: proseBrief({ prompts: [PROSE.prompts[0], 'Build the registration call-out on var(--immersive-accent-100) with var(--immersive-on-palette-100) text.'] }) },
+    /^registry\/theme-briefs\/club-run\.md: names --immersive-accent-100 as a fill with --immersive-on-palette-100 text; text on it is --immersive-on-accent-100$/m],
+  'a fill paired with another step\'s text': [{ ...published(), [BRIEF]: proseBrief({ layout: `${PROSE.layout} Detail rows sit on var(--immersive-palette-50) with var(--immersive-on-palette-75) labels.` }) },
+    /^registry\/theme-briefs\/club-run\.md: names --immersive-palette-50 as a fill with --immersive-on-palette-75 text; text on it is --immersive-on-palette-50$/m],
+  'a filled block with the canvas text': [{ ...published(), [BRIEF]: proseBrief({ layout: `${PROSE.layout} The form sits on var(--immersive-palette-25) in var(--immersive-text).` }) },
+    /^registry\/theme-briefs\/club-run\.md: names --immersive-palette-25 as a fill with --immersive-text text; text on it is --immersive-on-palette-25$/m],
+  'the canvas paired with a block\'s text': [{ ...published(), [BRIEF]: proseBrief({ layout: `${PROSE.layout} The footer sits on var(--immersive-canvas) with var(--immersive-on-palette-50) links.` }) },
+    /^registry\/theme-briefs\/club-run\.md: names --immersive-canvas as a fill with --immersive-on-palette-50 text; text on it is --immersive-text$/m],
+  'a paired fill beside another block\'s text': [{ ...published(), [BRIEF]: proseBrief({ layout: `${PROSE.layout} Detail rows sit on var(--immersive-palette-50) with var(--immersive-on-palette-50) titles and var(--immersive-on-accent-100) links.` }) },
+    /^registry\/theme-briefs\/club-run\.md: names --immersive-on-accent-100 text beside --immersive-palette-50, whose text is --immersive-on-palette-50$/m],
+  'a paired fill beside the canvas text': [{ ...published(), [BRIEF]: proseBrief({ layout: `${PROSE.layout} Cards sit on var(--immersive-palette-50) with var(--immersive-text) captions and var(--immersive-on-palette-50) titles.` }) },
+    /^registry\/theme-briefs\/club-run\.md: names --immersive-text text beside --immersive-palette-50, whose text is --immersive-on-palette-50$/m],
   'prose that names a gradient': [{ ...published(), [BRIEF]: proseBrief({ imagery: `${PROSE.imagery} Photos fade into a gradient.` }) }, /^registry\/theme-briefs\/club-run\.md: prose names a gradient; Immersive Themes have none$/m],
   'prose with motion beyond its level': [{ ...published(), [BRIEF]: proseBrief({ layout: `${PROSE.layout} Cards stagger in.` }) }, /^registry\/theme-briefs\/club-run\.md: prose names "stagger", which the subtle motion level does not allow$/m],
   'a record whose accent placement is not the brief\'s': [withRecord('Race distance card'), /^registry\/theme-briefs\/club-run\.md: accent placement "Race distance card" is not one of Registration call-out, Brand Pattern section$/m],
@@ -908,6 +956,45 @@ test('check-only reports a variable the theme lacks once, though prose and color
   const { status, out } = checkOnly(fixture(t, { ...published(), [BRIEF]: proseBrief(prose) }));
   assert.equal(status, 1, out);
   assert.equal(out.match(/names --immersive-support-50, which Club does not define$/gm)?.length, 1, out);
+});
+
+test('prose may name the theme\'s own typeface', (t) => {
+  const { status, out } = checkOnly(fixture(t, { ...published(), [BRIEF]: proseBrief({ layout: `${PROSE.layout} Every headline stays in IBM Plex Sans Thai.` }) }));
+  assert.equal(status, 0, out);
+});
+
+test('a sentence may pair several fills, each with its own text, beside the canvas text', (t) => {
+  const prompt = 'Build a hero on the canvas with a var(--immersive-text) headline, a var(--immersive-accent-100) badge with var(--immersive-on-accent-100) text, and one main action on var(--immersive-action) with a var(--immersive-on-action) label.';
+  const { status, out } = checkOnly(fixture(t, { ...published(), [BRIEF]: proseBrief({ prompts: [...PROSE.prompts, prompt] }) }));
+  assert.equal(status, 0, out);
+});
+
+test('a fill with no text named is sent back, then kept as a review warning, and CI passes it', (t) => {
+  const lone = { prompts: GOOD['example-prompts'].prompts.map((prompt, index) => index ? prompt : prompt.replace(' with var(--immersive-on-palette-50) text', '')) };
+  const { root, fake, status, out } = draft(t, { answers: { 'example-prompts': [lone] } });
+  assert.equal(status, 0, out);
+  const sent = calls(fake, 'example-prompts');
+  assert.equal(sent.length, 3);
+  assert.match(sent[1].prompt, /^- names --immersive-palette-50 as a fill with no text; name --immersive-on-palette-50 in the same sentence$/m);
+  assert.match(readFileSync(local(root, 'review.md'), 'utf8'), /^- Warning: names --immersive-palette-50 as a fill with no text; name --immersive-on-palette-50 in the same sentence$/m);
+  assert.ok(readFileSync(join(root, BRIEF), 'utf8').includes(lone.prompts[0]));
+  writeFileSync(join(root, 'registry/registry.json'), JSON.stringify({ name: 'neon', homepage: 'https://example.invalid', items: [{ name: 'theme-brief-club-run', type: 'registry:item' }] }));
+  const check = checkOnly(root);
+  assert.equal(check.status, 0, check.out);
+});
+
+test('a font whose name starts with another listed font is reported once', (t) => {
+  const { status, out } = checkOnly(fixture(t, { ...published(), [BRIEF]: proseBrief({ layout: `${PROSE.layout} Thai captions use Noto Sans Thai.` }) }));
+  assert.equal(status, 1, out);
+  assert.match(out, /^registry\/theme-briefs\/club-run\.md: prose names "Noto Sans Thai", a font other than IBM Plex Sans Thai; type comes from the theme$/m);
+  assert.doesNotMatch(out, /prose names "Noto Sans",/);
+});
+
+test('an abbreviation does not end the sentence that pairs a fill with its text', (t) => {
+  const abbreviated = { prompts: [...GOOD['example-prompts'].prompts.slice(0, 2), 'Create a sold-out Race distance card: a small var(--immersive-accent-100) badge, e.g. one short word in var(--immersive-on-accent-100) text, sits above the start time in body, with var(--space-4) padding and no select action.'] };
+  const { fake, status, out } = draft(t, { answers: { 'example-prompts': [abbreviated] } });
+  assert.equal(status, 0, out);
+  assert.equal(calls(fake, 'example-prompts').length, 1);
 });
 
 // Redraft and accept run on a brief drafted with GOOD answers. Each later run gets a fresh fake, so its

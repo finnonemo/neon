@@ -1,5 +1,6 @@
-// Checks on model-drafted prose. Check 4 (values) and check 10 (accent placement) run in draft mode on each
-// entry's answer and in CI on the prose read back from a committed brief; the rest run in draft mode only.
+// Checks on model-drafted prose. Check 4 (values), check 6's hard half (fill/text pairing) and check 10 (accent
+// placement) run in draft mode on each entry's answer and in CI on the prose read back from a committed brief;
+// the rest run in draft mode only.
 // Hard checks refuse an answer; soft checks only send it back for another attempt.
 import { BRAND_FLOOR_OPENING, placeholderProse, renderBrief } from './render.mjs';
 import { jsonSchemaProblems } from './schemas.mjs';
@@ -17,6 +18,12 @@ const MOTION = {
   lively: { max: 400, banned: [] },
 };
 const NEVER_MOVES = ['parallax', 'loop', 'autoplay', 'bounce'];
+// Font names prose may not give, matched by case and whole word; a font missing here is not caught.
+// Finnomena Trek is in theme/tokens. Prompt (a Thai font) and generic families like serif are left out: they are common words.
+const FONTS = ['Finnomena Trek', 'IBM Plex Sans', 'IBM Plex Serif', 'IBM Plex Mono', 'Inter', 'Roboto', 'Helvetica', 'Arial', 'Georgia',
+  'Times New Roman', 'Futura', 'Garamond', 'Montserrat', 'Poppins', 'Lato', 'Open Sans', 'Noto Sans', 'Noto Serif', 'Source Sans',
+  'SF Pro', 'Segoe UI', 'Verdana', 'Tahoma', 'Courier', 'Avenir', 'Proxima Nova', 'Gotham', 'DM Sans', 'Manrope', 'Space Grotesk',
+  'Playfair Display', 'Merriweather', 'Comic Sans', 'Bodoni', 'Didot', 'Kanit', 'Sarabun', 'Mitr', 'Anuphan', 'Noto Sans Thai'];
 // A motion word in any form: fade, fades, faded, fading.
 const motionWord = (word) => new RegExp(`\\b${word.replace(/e$/, '')}(?:e|es|ed|ing|s|ion|ions)?\\b`, 'i');
 
@@ -49,6 +56,14 @@ export function valueProblems(text, brief) {
       if (!type.some((row) => row.size === size)) problems.push(`prose gives ${named}, which is not a Type Scale size`);
     }
   }
+  // The typeface, then each font found, longest first, is taken out, so a shorter name is not found inside it.
+  let untyped = typeface ? text.replaceAll(typeface, ' ') : text;
+  for (const font of [...FONTS].sort((a, b) => b.length - a.length)) {
+    const pattern = new RegExp(`(?<![\\w-])${escape(font)}(?![\\w-])`, 'g');
+    if (!pattern.test(untyped)) continue;
+    problems.push(`prose names "${font}", a font other than ${typeface}; type comes from the theme`);
+    untyped = untyped.replace(pattern, ' ');
+  }
   const allowed = tablePx(brief);
   for (const px of new Set(text.match(PX) ?? [])) if (!allowed.has(px)) problems.push(`prose gives ${px}, which no table in the brief holds`);
   if (/\bgradients?\b/i.test(text)) problems.push('prose names a gradient; Immersive Themes have none');
@@ -61,6 +76,35 @@ export function valueProblems(text, brief) {
     if (Number(ms) > level.max) problems.push(`prose gives ${value}, more than the ${layout.motion} motion level's ${level.max}ms`);
   }
   return problems;
+}
+
+// Check 6: each fill prose names takes its own text in the same sentence: --immersive-on-<fill> of the same
+// family and step, and --immersive-text on the canvas. A fill is any variable with an on- partner, or the
+// canvas. Hard when a sentence with a fill gives a text no fill in it takes; --immersive-text is let through
+// when the sentence names the canvas in words. Soft when a fill has no text at all.
+export function pairingProblems(text, theme) {
+  const hard = [];
+  const soft = [];
+  const textOf = (fill) => fill === 'canvas' ? 'text' : `on-${fill}`;
+  const list = (names) => names.map((name) => `--immersive-${name}`).join(', ');
+  // A stop followed by a capital ends a sentence, so "e.g." does not.
+  for (const sentence of text.split(/\n|(?<=[.!?])\s+(?=\p{Lu})/u)) {
+    const named = [...new Set([...sentence.matchAll(/--immersive-([\w-]*\w)/g)].map(([, name]) => name))];
+    const fills = named.filter((name) => name === 'canvas' || (!name.startsWith('on-') && theme.vars.has(`on-${name}`)));
+    if (!fills.length) continue;
+    const texts = named.filter((name) => name === 'text' || name.startsWith('on-'));
+    const canvasInWords = /\bcanvas\b/i.test(sentence.replaceAll('--immersive-canvas', ''));
+    const spare = texts.filter((name) => !fills.some((fill) => textOf(fill) === name) && !(name === 'text' && canvasInWords));
+    const unpaired = fills.filter((name) => !texts.includes(textOf(name)));
+    for (const fill of unpaired) {
+      if (spare.length) hard.push(`names --immersive-${fill} as a fill with ${list(spare)} text; text on it is --immersive-${textOf(fill)}`);
+      else soft.push(`names --immersive-${fill} as a fill with no text; name --immersive-${textOf(fill)} in the same sentence`);
+    }
+    if (!unpaired.length && spare.length) {
+      hard.push(`names ${list(spare)} text beside ${list(fills)}, whose text is ${list(fills.map(textOf))}`);
+    }
+  }
+  return { hard: [...new Set(hard)], soft: [...new Set(soft)] };
 }
 
 // Where the accent may go: each occasion component with the accent role, and the Brand Pattern section
@@ -136,6 +180,9 @@ export function entryChecks(name, answer, { brief, data, schema, bands, placemen
   }
   if (name === 'layout') for (const px of new Set(prose.match(PX) ?? [])) hard.push(`"paragraph" holds ${px}; Layout names spacing by step, never in px`);
   hard.push(...valueProblems(prose, brief));
+  const pairing = pairingProblems(prose, theme);
+  hard.push(...pairing.hard);
+  soft.push(...pairing.soft);
   if (name === 'mood-occasion') hard.push(...accentProblems(answer.accentPlacement, answer.paragraph, placements));
   if (data.example) {
     const example = runs(proseText(data.example.output));
