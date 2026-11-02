@@ -6,6 +6,8 @@ scenarios:
 
 # CDS rebuild
 
+These runs rebuilt onto CDS, before a rebuild targeted the Neon base. `grade-rebuild.mjs` now grades against the Neon base, so regrading these samples needs the grader from before the [Neon rebuild](neon-rebuild.md) change.
+
 Fixtures: the batch-sell calculator above and a health-check management prototype (React, `@carbon/react`, SCSS, mock data with a timed demo transition). Rebuild request, verbatim, run in each source app:
 
 > $neon-create Rebuild this app on CDS with the Finnomena starter. Keep every screen, feature, filter and the Thai/English text working.

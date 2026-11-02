@@ -1,18 +1,18 @@
 # Scaffold a new app
 
-Read only for a new project. The shipped starter is Vite + React + TypeScript. An explicit non-React request uses that framework's normal scaffold and Neon's CSS path; do not substitute React.
+Read only for a new project. A new app starts on the Neon base: Vite, React 19, TypeScript, Tailwind v4 and Neon's tuned shadcn/ui components from the Neon registry. An explicit non-React request uses that framework's normal scaffold and Neon's CSS path; do not substitute React.
 
-## Assemble and install
+## Create the app
 
-Resolve the requested empty destination, then run from the Neon root:
+Resolve the requested destination, then run from the Neon root:
 
 ```sh
 node "<Neon root>/scripts/install.mjs" <target-dir> --new
 ```
 
-The installer assembles starter source plus canonical theme files and installs declared dependencies. It refuses nonempty destinations. `--skip-install` copies without installing; report dependencies as pending. Inspect the installer header for package-manager options. Never use this mode to add a feature to an existing app.
+The installer runs the pinned shadcn CLI's `init` from the Neon base item of the registry pinned to this release, then checks that every file landed. The destination may be missing or empty, anywhere, inside a repository too; the installer refuses a nonempty one. shadcn installs the dependencies with npm. Never use this mode to add a feature to an existing app.
 
-The starter wires `createNeonTheme()` and the providers and loads IBM Plex Sans Thai. Reuse its mode/font setup. Implement the requested content after assembly; empty Content/Inspector placeholders are not a deliverable.
+The base adds the theme, Neon's `cn`, the starter layouts, `Logo`, `button`, `tooltip` and `sonner`. `AppRoot` owns the color scheme and holds the tooltip provider and toaster, and `main.tsx` loads IBM Plex Sans Thai. Reuse that setup. Add every other component the feature needs as a Neon item per [Neon base](neon-base.md). Implement the requested content after creating the app; the default `App.tsx` placeholders are not a deliverable.
 
 ## Starter layouts
 
@@ -24,9 +24,9 @@ Choose based on the task, not the default `App.tsx`:
 | `ContentLayout` | Content-dominant workspace with supporting detail |
 | `SimpleLayout` | Navigation and content without an inspector |
 | `MultiColumnLayout` | Explicit board/kanban task |
-| `ImmersiveLayout` | Focused content or landing page; full-bleed except at the widest tier, where content caps at 1440px |
+| `ImmersiveLayout` | Focused content or landing page; full-bleed except at the widest tier, where content caps at 1440px. `immersiveTheme` sets a Campaign Page's [Immersive Theme](../../INSTRUCTION.md#composition) |
 
-These are starter exports, not guaranteed imports in other apps. Inspect `src/layout/layoutPanes.ts` for corroborated versus extrapolated geometry. Supply navigation for actual destinations; ecosystem links are opt-in. Use the shipped `Logo` and SVG marks appropriate to the surface, not a recreated text wordmark.
+Import them from `@/layout/<name>`. These are starter exports, not guaranteed imports in other apps. Inspect `src/layout/layoutPanes.ts` for corroborated versus extrapolated geometry. Supply navigation for actual destinations; ecosystem links are opt-in. Use the shipped `Logo` and SVG marks appropriate to the surface, not a recreated text wordmark.
 
 ## Content and details on narrow screens
 
@@ -53,7 +53,7 @@ const [activePane, setActivePane] = useState<"content" | "inspector">("content")
 
 The list/detail components above belong to the app, not the starter. Controlled callers must update `activePane` in `onActivePaneChange`; the shell cannot infer selection from arbitrary children. Preserve the same component identities/keys and existing selection/filter state. The inspector should provide an empty-selection state when nothing is selected. Keyboard focus moves into details and returns to the content control that opened it, without scrolling the list back to the top.
 
-All five layouts reserve space for visible mobile navigation and device safe areas. Empty navigation reserves no space. `AppRoot` accepts the app's existing `colorScheme`; default logos adapt to that scheme, while `Logo`'s explicit `tone` selects the asset for a custom surface.
+All five layouts reserve space for visible mobile navigation and device safe areas. Empty navigation reserves no space. `AppRoot` takes the app's `colorScheme` (`light` by default) and sets it as `data-theme` on `<html>`; default logos adapt to that scheme, while `Logo`'s explicit `tone` selects the asset for a custom surface.
 
 ## Finish the feature
 

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
 // Static guards for neon-create reference rules that came from rebuild samples
-// (records/cds-rebuild.md). They check the rule is stated, not that a run follows it.
+// (records/cds-rebuild.md, records/neon-rebuild.md). They check the rule is stated, not that a run follows it.
 const references = new URL('../../skills/neon-create/references/', import.meta.url).pathname;
 
 test('the rebuild inventory records responsive rules and carries them over', async () => {
@@ -25,13 +25,67 @@ test('CDS integration warns that Box lays children out in a flex row', async () 
   assert.match(source, /`VStack`/);
 });
 
-test('the rebuild reference carries the Box flex-row rule', async () => {
+test('the rebuild reference builds on the Neon base from Neon items only', async () => {
   const source = await readFile(`${references}rebuild.md`, 'utf8');
   const build = source.match(/## Build\n([\s\S]*?)\n## /)?.[1] ?? '';
-  // bs-s1's <Box as="section"> panels overflowed; state the rule where rebuilds lay out panels.
-  assert.match(build, /`Box` is a flex row/);
-  assert.match(build, /flexDirection="column"/);
-  assert.match(build, /`VStack`/);
+  // ADR 0006: a rebuild targets the Neon base, even when the request names CDS, and adds @neon items only.
+  assert.match(source, /always targets the Neon base/);
+  assert.match(source, /`<app>-neon`/);
+  assert.match(build, /no source shadcn component and no CDS/);
+  assert.match(build, /never a stock shadcn item/);
+  assert.match(build, /\(neon-base\.md#add-neon-items\)/);
+  // The base is Tailwind v4, so Tailwind is no longer a source library to leave behind.
+  assert.doesNotMatch(build, /Carbon, Tailwind/);
+  // CDS's Box rule belongs to apps already on CDS.
+  assert.doesNotMatch(build, /`Box`|VStack/);
+});
+
+test('the scaffold creates a new app with --new from the Neon registry', async () => {
+  const source = await readFile(`${references}scaffold.md`, 'utf8');
+  assert.match(source, /install\.mjs" <target-dir> --new/);
+  // shadcn installs with npm; the installer refuses --skip-install with --new.
+  assert.doesNotMatch(source, /--skip-install|createNeonTheme/);
+  assert.match(source, /inside a repository too/);
+  assert.match(source, /`@\/layout\/<name>`/);
+});
+
+test('neon-create adds only @neon items, through the installer', async () => {
+  const files = ['SKILL.md', ...['neon-base.md', 'scaffold.md', 'rebuild.md', 'new-ui-workflow.md'].map(name => `references/${name}`)];
+  for (const name of files) {
+    const source = await readFile(new URL(`../../skills/neon-create/${name}`, import.meta.url), 'utf8');
+    // Any shadcn add the skill shows names a Neon item.
+    for (const [command] of source.matchAll(/shadcn(?:@[\w.]+)? add [^\n`]*/g)) assert.match(command, /add @neon\//, `${name}: ${command}`);
+  }
+  const base = await readFile(`${references}neon-base.md`, 'utf8');
+  assert.match(base, /install\.mjs" <app-dir> --add <item>/);
+  assert.match(base, /Never run `shadcn add` with a stock item or another registry, and never install CDS/);
+});
+
+test('the Neon base reference lists every Neon component item', async () => {
+  const { items } = JSON.parse(await readFile(new URL('../../registry/registry.json', import.meta.url), 'utf8'));
+  const base = await readFile(`${references}neon-base.md`, 'utf8');
+  const listed = base.match(/^Items: (.*)$/m)?.[1] ?? '';
+  const names = [...listed.matchAll(/`([\w-]+)`/g)].map(match => match[1]).sort();
+  const shipped = items.filter(item => item.type === 'registry:ui' || ['logo', 'layouts', 'immersive-themes'].includes(item.name)).map(item => item.name).sort();
+  assert.deepEqual(names, shipped);
+});
+
+test('neon-create keeps the two bases apart and names the items it added', async () => {
+  const skill = await readFile(new URL('../../skills/neon-create/SKILL.md', import.meta.url), 'utf8');
+  // The components tier: Neon items on a new or Neon-base app, CDS components on an app already on CDS.
+  assert.match(skill, /Neon registry items \(`@neon\/<item>`\) in a new or Neon-base app, CDS components in an app already on CDS\. One app never mixes the two/);
+  assert.match(skill, /`@neon` registry entry marks the Neon base/);
+  assert.match(skill, /On CDS use verified CDS exports and prop types, never a Neon or shadcn item/);
+  assert.match(skill.split('## Done')[1], /Name every `@neon\/` item the work added, in the Handoff Summary/);
+  // Routing for apps already on CDS stays with neon-create.
+  assert.match(skill.match(/^description: .*$/m)[0], /already on Coinbase Design System/);
+});
+
+test('the contract themes a Neon-base Campaign Page through ImmersiveLayout', async () => {
+  const contract = await readFile(new URL('../../skills/INSTRUCTION.md', import.meta.url), 'utf8');
+  assert.match(contract, /pass the theme as `ImmersiveLayout`'s `immersiveTheme` \(the `@neon\/immersive-themes` registry item\)/);
+  assert.match(contract, /Elsewhere, copy the \[generated theme CSS\]/);
+  assert.match(contract, /build on the Neon base with Neon registry items; an app already on CDS keeps CDS/);
 });
 
 test('neon-create links the Campaign Page content reference behind one condition', async () => {

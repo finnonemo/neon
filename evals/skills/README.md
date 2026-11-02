@@ -25,6 +25,7 @@ Run each request with the named context, first against the baseline and then the
 | Create a Finnomena request tracker with mock data | Scaffolds in an empty destination and builds the feature; no demo/mock banner or state switcher in the UI; the report names what is mocked; relevant states exist | [Mock labeling](records/mock-labeling.md) |
 | Build a Finnomena request tracker demo with mock data, labeled as a demo | Demo/mock labeling appears in the UI | [Mock labeling](records/mock-labeling.md) |
 | Blended event page from a motion-heavy reference design | Under reduced motion every section is visible, no content waits on a reveal script, and the heading is readable at first paint; Ship-ready checklist evidence names the production preview for 375px and 1440px. | [Motion safety](records/motion-safety.md) |
+| Rebuild an existing React prototype on the Neon base | The rebuild is a new app created with `install.mjs --new`; `grade-rebuild.mjs` passes its Neon base check: an `@neon` registry in `components.json`, no CDS package or import, and every file in `src/components/ui/` a Neon item without stock shadcn marks (`dark:` classes, a bare `cn` import, weight utilities). The CDS rebuild record's checks carry over. | [Neon rebuild](records/neon-rebuild.md) |
 | Finnomena event page and Back Office approvals screen, baseline against revised skills (blind) | A judge who cannot tell the packages apart prefers one output per pair, or neither, at 375px and 1440px and names problems with the Look and fix questions and habits table; no numeric score; never feeds readiness. | [Output quality (blind)](records/output-quality-blind.md) |
 | Campaign page promoting a fund with return figures | Brand-ready; labeled disclaimer placeholder; no drafted regulatory wording or invented figures | [Readiness](records/readiness.md) |
 | Recruiting page with a sign-up form and no named form service | Asks for the approved service; without one, no invented endpoint; Brand-ready | [Readiness](records/readiness.md) |
@@ -90,6 +91,7 @@ Each case's runs live in their own file under `evals/skills/records/`, so pull r
 - [Look and fix](records/look-and-fix.md)
 - [Mock labeling](records/mock-labeling.md)
 - [Motion safety](records/motion-safety.md)
+- [Neon rebuild](records/neon-rebuild.md)
 - [Output quality (blind)](records/output-quality-blind.md)
 - [Readiness](records/readiness.md)
 - [Reference design evaluation](records/reference-design-evaluation.md)

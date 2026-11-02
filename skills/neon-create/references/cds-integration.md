@@ -1,6 +1,6 @@
-# CDS integration
+# CDS integration (frozen): apps already on CDS
 
-Read only when changing theme, providers, dependencies or token configuration. A working Finnomena app adding a feature skips this setup.
+Read only in an app already on CDS, which is frozen there: for its components, or when changing its theme, providers, dependencies or token configuration. New apps and rebuilds use the [Neon base](neon-base.md); never add CDS to an app without it, nor Neon or shadcn items to an app on CDS. A working Finnomena app adding a feature skips the setup below.
 
 ## Prepare and install
 
@@ -12,7 +12,7 @@ From the resolved Neon root, when theme installation is needed:
 node "<Neon root>/scripts/install.mjs" <target-dir>
 ```
 
-This copies four canonical CDS theme files and installs CDS if absent; it does not wire providers or replace component code. `--theme-dir <project-relative-dir>` changes the default `src/theme`; `--package-manager` selects the manager; `--skip-install` leaves dependencies pending. See the installer header for exact semantics.
+This CDS install mode copies four canonical CDS theme files and installs CDS if absent; it does not wire providers or replace component code. `--theme-dir <project-relative-dir>` changes the default `src/theme`; `--package-manager` selects the manager; `--skip-install` leaves dependencies pending. See the installer header for exact semantics.
 
 Customized destination files are protected. Use [conflict handling](../../neon-audit/references/theme-integration.md#installer-conflicts), not deletion or a fabricated force flag. After an I/O failure, inspect partial writes before retrying.
 
