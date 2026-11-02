@@ -2,7 +2,7 @@
 
 ## Read when
 
-Read this before you change a preset, picks file, theme text or prompt library entry, before you add or review a Theme Brief, or when the Theme Brief check fails in CI.
+Read this before you change a preset, picks file, theme text or prompt library entry, before you add or review a Theme Brief or add an Immersive Theme, or when the Theme Brief check fails in CI.
 
 Fast path: to change a preset or picks file, edit it and run the check below until it reports no problems. If it reports that a published brief's section differs from fresh scripted output, refresh it with `scripted-only` (see [Section map](#section-map)). Then run `node scripts/validate.mjs`.
 
@@ -123,9 +123,9 @@ The authoring record holds versions, labels and hashes only:
 - each attempt's count of hard and soft misses;
 - the accent placement.
 
-It holds no prompt, answer, path, account or session detail. The tests confirm this against a fake. A real run's output is first checked in [#122](https://github.com/finnonemo/neon/issues/122).
+It holds no prompt, answer, path, account or session detail. The tests confirm this against a fake.
 
-Read the draft against its review, then add the registry entry and run `check-only`.
+A brief the tool writes is not yet published: [review and publish](#review-and-publish) it.
 
 ### Hand edits
 
@@ -163,6 +163,39 @@ Limits:
 - A fill named with no text (check 6) is a warning in the review report only. Read each one: it may be a fill whose text the sentence leaves to the reader.
 - A failure in a whole-brief check (3, 4, 5, 6, 7 or 10) is marked in the draft but not retried, since it belongs to no one entry. Each entry's own checks already cover checks 4, 6 and 10 and source names, so this failure is rare; fix it by hand or rerun.
 
+## Review and publish
+
+A brief is published when its Markdown, picks file, authoring record and registry entry are merged together. Publish in one PR:
+
+1. **Review.** Read `draft.md` against `review.md` in `.local/theme-briefs/<brief>/`. Check each entry's misses, the diff against the committed brief, and the word overlap with the theme's other briefs, so their model sections do not repeat each other. Read every warning for a fill named with no text. Fix prose by hand and `accept` it, or `redraft` the entry.
+2. **Review record.** When a chosen preset has a third-party source, record the design review in the picks file's `review` before you commit it (see [Presets and picks files](#presets-and-picks-files)). A brief from Finnomena's own presets needs no record.
+3. **Registry entry.** Add the brief's entry to `registry/registry.json`. The registry tests check it against the picks file and Markdown:
+
+   ```json
+   {
+     "name": "theme-brief-club-run",
+     "type": "registry:item",
+     "title": "Club · Run",
+     "description": "<the brief's tagline, the line after > in its header>",
+     "categories": ["theme-brief", "club"],
+     "meta": {
+       "immersiveTheme": "club",
+       "briefName": "Run",
+       "presets": { "occasion": "run", "layout": "event-landing", "imagery": "people-in-action" },
+       "status": "provisional"
+     },
+     "registryDependencies": ["@neon/theme", "@neon/immersive-themes"],
+     "files": [{ "path": "theme-briefs/club-run.md", "type": "registry:file", "target": "~/docs/theme-briefs/club-run.md" }]
+   }
+   ```
+
+   The title is the theme label and brief name, and `meta.presets` copies the picks file. The one file installs to the app's `docs/theme-briefs/`.
+4. **Build.** Run `node scripts/build-registry.mjs`. It inlines the Markdown into `registry/r/theme-brief-<theme>-<slug>.json`, pinned to the release tag like every item. A later edit to the brief needs the build again.
+5. **Validate.** Run `check-only`, then `node scripts/validate.mjs`.
+6. **PR.** Commit the Markdown, picks file, authoring record, registry entry and build, plus any new preset or theme text. Say in the PR which account label the record carries and who reviewed the draft. Nothing from `.local/` is committed.
+
+A brief reaches employees only through a release that serves the registry.
+
 ## Checks
 
 The check module in `scripts/theme-briefs` is shared by the tool's `check-only` mode and by `evals/skills/theme-briefs.test.mjs`, which runs it over this repository in `node scripts/validate.mjs`. Every problem is listed as `<path>: <message>`. Each line names the file to fix:
@@ -191,6 +224,7 @@ The check module in `scripts/theme-briefs` is shared by the tool's `check-only` 
 | `takes the name of a fixed component` | An occasion component is named like one the brief renders itself. Rename it. |
 | `is not an input the tool supplies`, `takes the output of`, `is not a band`, `must have an accentPlacement property`, `makes a cycle`, `has the placeholder` | A prompt library file names an input, band, order or placeholder the tool cannot fill. Use one the message lists, and name in `after` each entry whose output the entry takes. |
 | `prose holds #…`, `prose gives …px`, `is not a Type Scale size`, `prose names a gradient`, `motion level does not allow`, `more than the … motion level's`, `a font other than` | Check 4: prose gives a value the theme does not. Name colors by variable or role, spacing by step and type by role, use px only as the brief's tables give it, keep motion within the layout's level, and name no typeface but the theme's. Fonts are found from a fixed list in `prose-checks.mjs`, so a font missing from it is not caught. |
+| `has no published brief`, `missing; every Immersive Theme needs a theme text` | Check 11: an Immersive Theme has no theme text, or no published brief in the registry folder. Write its theme text, and publish at least its baseline brief. `check-only --skip-coverage` leaves this check out, for fixture trees that hold fewer themes than the theme data; CI never passes it. |
 | `accent placement … is not one of`, `does not name its accent placement`, `nothing in this brief carries the accent` | Check 10: the record's accent placement is not one the brief allows, or the mood paragraph does not name it. Redraft the mood, or edit it to name the placement. |
 
 The registry tests also run in `validate.mjs`, so a brief's registry entry must build like every other item.
@@ -198,3 +232,7 @@ The registry tests also run in `validate.mjs`, so a brief's registry entry must 
 ## Branch: drafting from a page
 
 To draft a layout preset from a public page, follow [drafting from a page](./theme-briefs/drafting-from-a-page.md). It covers what carries over, what stops a run and how measured values snap to steps.
+
+## Branch: adding a theme
+
+To add an Immersive Theme, follow [adding a theme](./theme-briefs/adding-a-theme.md). It covers the theme data, its theme text and baseline brief, and the briefs that change with it, in one PR.
