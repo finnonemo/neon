@@ -10,7 +10,7 @@ const THEME = /^\*\*Immersive Theme:\*\* (\S+)\s*$/m;
 
 async function briefItems({ url, fetchJson }) {
   const index = await fetchJson(`${url}/registry.json`).catch((err) => {
-    throw new Error(`The Theme Brief index at ${url}/registry.json is unreachable: ${err.message}`);
+    throw new Error(`The Theme Brief index at ${url}/registry.json is unreachable: ${err.message}`, { cause: err });
   });
   return index.items.filter((item) => item.categories?.includes('theme-brief'));
 }
@@ -42,7 +42,7 @@ export async function matchThemeBrief({ text, url, fetchJson = fetchRegistryJson
   try {
     items = await briefItems({ url, fetchJson });
   } catch (err) {
-    return { verdict: 'reference-design', reason: `its header names ${title}, but ${err.message}, so it cannot be verified` };
+    return { verdict: 'reference-design', reason: `its header names ${title}, but the Theme Brief index at ${url}/registry.json is unreachable (${err.cause.message}), so it cannot be verified` };
   }
   const item = items.find((candidate) => candidate.title === title && candidate.meta?.immersiveTheme === theme);
   if (!item) return { verdict: 'reference-design', reason: `its header names ${title} (Immersive Theme ${theme}), which matches no Theme Brief in the registry` };
