@@ -4,8 +4,8 @@
  * app, template and theme changes. It builds this checkout's Neon registry,
  * serves it locally, and through the installer creates an app with --new
  * (shadcn init from the Neon base; real dependency install, needs network),
- * tunes a Neon file, adds an item with --add, then runs the app's production
- * build. It checks that no source imports the bare `cn` and that the add
+ * tunes a Neon file, adds an item and a Theme Brief with --add, then runs the
+ * app's production build. It checks that no source imports the bare `cn` and that the add
  * changed nothing but the item's own new file.
  *
  * A passing step prints one summary line; a failing step prints its full
@@ -37,6 +37,8 @@ const destinations = process.argv[2]
 // the smoke tunes first: Dialog uses Button.
 const ADD_ITEM = "dialog";
 const TUNED = "src/components/ui/button.tsx";
+// A Theme Brief item, whose one file installs outside src, to the app's ./docs/theme-briefs/.
+const BRIEF = "club-run";
 
 // Async, so the registry server in this process keeps answering.
 function step(label, command, args, cwd, summarize) {
@@ -113,6 +115,11 @@ for (const destination of destinations) {
     ...(changed.includes(added) ? [] : [`${added} was not added`]),
   ]);
   check("no bare cn import after --add", bareCnImports(after));
+
+  await step(`install --add theme-brief-${BRIEF}`, process.execPath, installArgs(destination, "--add", `theme-brief-${BRIEF}`), root, (out) => lastMatch(out, /^Done/));
+  const briefPath = `docs/theme-briefs/${BRIEF}.md`;
+  const brief = await readFile(join(destination, briefPath), "utf8").catch(() => null);
+  check(`--add theme-brief-${BRIEF} put the brief at ${briefPath}`, brief === (await readFile(join(root, "registry/theme-briefs", `${BRIEF}.md`), "utf8")) ? [] : [`${briefPath} ${brief === null ? "is missing" : "differs from the published brief"}`]);
 
   await step("build", "npm", ["run", "build"], destination, (out) => lastMatch(out, /built in/));
   console.log(`App kept at ${destination}`);

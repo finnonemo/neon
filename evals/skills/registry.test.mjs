@@ -1,11 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readdirSync, readFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { execFileSync } from 'node:child_process';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadImmersiveThemes, resolveColor } from '../../theme/scripts/generate-immersive-themes.mjs';
-import { BUILD_DIR, bareCnImports, buildRegistry, darkClasses, missingTypeRoles, nextThemes, pinnedRegistryUrl, tabsAsSegmented, unpinnedUrls, weightOverrides } from '../../scripts/lib/registry.mjs';
+import { BUILD_DIR, bareCnImports, buildRegistry, darkClasses, missingTypeRoles, nextThemes, pinnedRegistryUrl, tabsAsSegmented, themeBriefItemProblems, unpinnedUrls, weightOverrides } from '../../scripts/lib/registry.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '../..');
 const read = (path) => readFileSync(join(root, path), 'utf8');
@@ -154,4 +155,62 @@ test('the toast takes its theme from AppRoot, never next-themes', () => {
   assert.ok(read('registry/base/app/AppRoot.tsx').includes('<Toaster theme={colorScheme}'), 'AppRoot passes its color scheme to the Toaster');
   assert.equal(nextThemes([['ui/sonner.tsx', 'import { useTheme } from "next-themes"']]).length, 1);
   assert.equal(nextThemes([], [{ name: 'sonner', dependencies: ['sonner@^2.0.8', 'next-themes'] }]).length, 1);
+});
+
+// Theme Brief items (#122): one Markdown file each, added to the employee app's docs/theme-briefs/.
+const BRIEF_ITEM = {
+  name: 'theme-brief-club-run',
+  type: 'registry:item',
+  title: 'Club · Run',
+  description: 'Race day on an open canvas, with every member invited to the start line',
+  categories: ['theme-brief', 'club'],
+  meta: { immersiveTheme: 'club', briefName: 'Run', presets: { occasion: 'run', layout: 'event-landing', imagery: 'people-in-action' }, status: 'provisional' },
+  registryDependencies: ['@neon/theme', '@neon/immersive-themes'],
+  files: [{ path: 'theme-briefs/club-run.md', type: 'registry:file', target: '~/docs/theme-briefs/club-run.md' }],
+};
+const BRIEF_MARKDOWN = '# Finnomena Club · Run — Theme Brief\n> Race day on an open canvas, with every member invited to the start line\n\n**Theme:** light\n';
+const briefInputs = (markdown = BRIEF_MARKDOWN) => new Map([['club-run', {
+  label: 'Club',
+  markdown,
+  picks: { theme: 'club', briefName: 'Run', presets: { occasion: 'run', layout: 'event-landing', imagery: 'people-in-action' }, brandPattern: { colourway: 'accent', ground: 50 } },
+}]]);
+
+test('a Theme Brief item carries its title, tagline, categories, meta, dependencies and docs target', () => {
+  assert.deepEqual(themeBriefItemProblems([BRIEF_ITEM], briefInputs()), []);
+  const refused = (change, expected) => assert.deepEqual(themeBriefItemProblems([{ ...structuredClone(BRIEF_ITEM), ...change }], briefInputs()), [expected]);
+  refused({ type: 'registry:ui' }, 'theme-brief-club-run: type must be "registry:item"');
+  refused({ title: 'Club Run' }, 'theme-brief-club-run: title must be "Club · Run"');
+  refused({ description: 'Race day' }, "theme-brief-club-run: description must be the brief's tagline");
+  refused({ categories: ['theme-brief'] }, 'theme-brief-club-run: categories must be ["theme-brief","club"]');
+  refused({ meta: { ...BRIEF_ITEM.meta, presets: { ...BRIEF_ITEM.meta.presets, layout: 'editorial' } } }, 'theme-brief-club-run: meta must be {"immersiveTheme":"club","briefName":"Run","presets":{"occasion":"run","layout":"event-landing","imagery":"people-in-action"},"status":"provisional"}');
+  refused({ registryDependencies: ['@neon/theme'] }, 'theme-brief-club-run: registryDependencies must include @neon/immersive-themes');
+  refused({ files: [{ ...BRIEF_ITEM.files[0], target: 'src/docs/club-run.md' }] }, 'theme-brief-club-run: its one file must be theme-briefs/club-run.md, a registry:file targeting ~/docs/theme-briefs/club-run.md');
+  refused({ files: [...BRIEF_ITEM.files, BRIEF_ITEM.files[0]] }, 'theme-brief-club-run: its one file must be theme-briefs/club-run.md, a registry:file targeting ~/docs/theme-briefs/club-run.md');
+  assert.deepEqual(themeBriefItemProblems([{ ...BRIEF_ITEM, name: 'theme-brief-ultra-run' }], briefInputs()), ['theme-brief-ultra-run: no picks file and Markdown for ultra-run']);
+  assert.deepEqual(themeBriefItemProblems([{ name: 'button', type: 'registry:ui' }], new Map()), [], 'other items are not briefs');
+});
+
+// Every published brief's item, read from the repository: empty until the first briefs are drafted.
+test('every Theme Brief item in the registry matches its picks file and Markdown', () => {
+  const { themes } = JSON.parse(read('theme/immersive-themes.json'));
+  const items = JSON.parse(read('registry/registry.json')).items.filter((item) => item.name.startsWith('theme-brief-'));
+  const briefs = new Map(items.map((item) => item.name.slice('theme-brief-'.length)).map((name) => {
+    const picks = JSON.parse(read(`theme-briefs/picks/${name}.json`));
+    return [name, { picks, label: themes[picks.theme].label, markdown: read(`registry/theme-briefs/${name}.md`) }];
+  }));
+  assert.deepEqual(themeBriefItemProblems(items, briefs), []);
+});
+
+test('a Theme Brief item builds byte-identically at the pinned release, with its Markdown inlined at its docs target', async (t) => {
+  const temp = mkdtempSync(join(tmpdir(), 'neon-brief-registry-'));
+  t.after(() => rmSync(temp, { recursive: true, force: true }));
+  mkdirSync(join(temp, 'registry/theme-briefs'), { recursive: true });
+  writeFileSync(join(temp, 'registry/registry.json'), JSON.stringify({ name: 'neon', homepage: 'https://example.invalid', items: [BRIEF_ITEM] }));
+  writeFileSync(join(temp, 'registry/theme-briefs/club-run.md'), BRIEF_MARKDOWN);
+  const url = await pinnedRegistryUrl(root);
+  const [first, second] = await Promise.all([buildRegistry({ root: temp, url }), buildRegistry({ root: temp, url })]);
+  assert.deepEqual([...first], [...second]);
+  const built = JSON.parse(first.get('theme-brief-club-run.json'));
+  assert.deepEqual(built.files, [{ path: 'theme-briefs/club-run.md', content: BRIEF_MARKDOWN, type: 'registry:file', target: '~/docs/theme-briefs/club-run.md' }]);
+  assert.deepEqual([built.categories, built.meta, built.registryDependencies], [BRIEF_ITEM.categories, BRIEF_ITEM.meta, BRIEF_ITEM.registryDependencies]);
 });

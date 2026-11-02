@@ -178,7 +178,17 @@ export function briefProblems(text, { theme, brief, tokens, sources, record }) {
   return [...problems];
 }
 
-export function checkThemeBriefs({ root, out = join(root, 'registry/theme-briefs') }) {
+// Check 11, theme coverage: every Immersive Theme has a theme text and at least one published brief.
+function coverageProblems(inputs, published, where) {
+  const texts = new Set(inputs.themeTexts.map(({ id }) => id));
+  return Object.values(inputs.facts.themes).flatMap((theme) => [
+    ...(texts.has(theme.id) ? [] : [`theme-briefs/themes/${theme.id}.json: missing; every Immersive Theme needs a theme text`]),
+    ...(published.has(theme.id) ? [] : [`${where}: ${theme.label} has no published brief; every Immersive Theme needs at least one`]),
+  ]);
+}
+
+// `coverage: false` skips check 11, for fixture trees that hold fewer themes' briefs than the theme data.
+export function checkThemeBriefs({ root, out = join(root, 'registry/theme-briefs'), coverage = true }) {
   const { inputs, problems } = checkInputs(root);
   const { facts, presets } = inputs;
   const briefs = existsSync(out) ? readdirSync(out).filter((name) => name.endsWith('.md')) : [];
@@ -190,6 +200,7 @@ export function checkThemeBriefs({ root, out = join(root, 'registry/theme-briefs
   const picksByName = new Map(inputs.picks.map((picks) => [picks.name, picks]));
   const tokens = paletteTokens(join(root, 'theme/tokens/colors.json'));
   const sources = sourceNamesOf(presets);
+  const published = new Set();
   for (const name of [...new Set([...briefs.map((file) => file.replace(/\.md$/, '')), ...entries])].sort()) {
     const markdown = join(out, `${name}.md`);
     const where = existsSync(markdown) ? at(markdown) : 'registry/registry.json';
@@ -205,6 +216,7 @@ export function checkThemeBriefs({ root, out = join(root, 'registry/theme-briefs
     if (!existsSync(markdown)) continue;
     const text = readFileSync(markdown, 'utf8');
     const theme = facts.themes[picks?.data?.theme] ?? Object.values(facts.themes).find((candidate) => name.startsWith(`${candidate.id}-`));
+    if (theme) published.add(theme.id);
     const { brief, reason } = picks ? renderable(name, inputs, problems) : {};
     if (reason) problems.push(`${where}: ${reason}; its scripted sections cannot be checked`);
     let record;
@@ -215,6 +227,7 @@ export function checkThemeBriefs({ root, out = join(root, 'registry/theme-briefs
     }
     for (const message of briefProblems(text, { theme, brief, tokens, sources, record })) problems.push(`${where}: ${message}`);
   }
+  if (coverage) problems.push(...coverageProblems(inputs, published, at(out)));
   const counts = [
     plural(Object.keys(inputs.facts.themes).length, 'theme'),
     plural(PRESET_KINDS.reduce((sum, kind) => sum + Object.keys(inputs.presets[kind]).length, 0), 'preset'),

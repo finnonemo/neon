@@ -167,7 +167,7 @@ function components({ theme }, prose) {
 function stockRules(theme) {
   const tints = blockSteps(theme, 'palette');
   const dos = [
-    `Set ${code(`data-immersive-theme="${theme.id}"`)} on the page root and color every section from the theme's ${code('--immersive-')} variables.`,
+    `Pass ${code(`immersiveTheme="${theme.id}"`)} to ${code('ImmersiveLayout')} and color every section from the theme's ${code('--immersive-')} variables.`,
     `Pair every fill with its own ${code('on-')} text variable, and text on the canvas with ${variable('text')}.`,
     'Build emphasis with tint steps, never with opacity.',
     'Keep one color family per block.',
@@ -244,7 +244,7 @@ function quickStart({ theme, name }) {
   return [
     '## Quick Start',
     '',
-    `Build on the Neon base. Add ${code('@neon/theme')}, the Immersive Themes item and this brief's item, ${code(`@neon/theme-brief-${name}`)}, then set ${code(`data-immersive-theme="${theme.id}"`)} on the page root. Every value comes from the installed CSS; never retype the values above.`,
+    `Build on the Neon base. Add ${code('@neon/theme')}, ${code('@neon/immersive-themes')} and this brief's item, ${code(`@neon/theme-brief-${name}`)}, then pass ${code(`immersiveTheme="${theme.id}"`)} to ${code('ImmersiveLayout')}. It sets ${code('data-immersive-theme')} and maps the theme onto the Neon components; the attribute set by hand on another root gives the variables without that mapping. Every value comes from the installed CSS; never retype the values above.`,
     '',
     '### Tailwind v4',
     '',
