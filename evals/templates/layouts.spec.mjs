@@ -1,6 +1,9 @@
 import { test, expect } from '@playwright/test';
 
 // Fixtures exercise actual assembled starter components, not copies of their logic.
+// Runs on both targets; NEON_TARGET=neon reads the Neon base's layouts.
+const target = process.env.NEON_TARGET ?? 'cds';
+const cdsOnly = () => test.skip(target !== 'cds', 'CDS theme integration; the Neon base has no CDS provider');
 test.beforeEach(async ({ page }) => {
   page.on('pageerror', error => { throw error; });
   page.on('console', message => { if (message.type() === 'error') throw new Error(message.text()); });
@@ -130,7 +133,8 @@ for (const mode of ['light', 'dark']) {
     await page.goto(`/?layout=simple&mode=${mode}`);
     await page.evaluate(() => document.fonts.ready);
     const contrast = await page.locator('.neon-bottom-nav').evaluate(nav => {
-      const icon = nav.querySelector('a span');
+      // A CDS Icon is a glyph span; a lucide icon is an svg drawn in currentColor.
+      const icon = nav.querySelector('a span, a svg');
       const parse = color => color.match(/[\d.]+/g).map(Number);
       const bg = parse(getComputedStyle(nav).backgroundColor);
       const fg = parse(getComputedStyle(icon).color);
@@ -141,13 +145,14 @@ for (const mode of ['light', 'dark']) {
       return (Math.max(lum(composite), lum(bg)) + .05) / (Math.min(lum(composite), lum(bg)) + .05);
     });
     expect(contrast).toBeGreaterThanOrEqual(3);
-    expect(await page.evaluate(() => [...document.fonts].some(f => f.family.includes('CoinbaseIcons') && f.status === 'loaded'))).toBe(true);
+    if (target === 'cds') expect(await page.evaluate(() => [...document.fonts].some(f => f.family.includes('CoinbaseIcons') && f.status === 'loaded'))).toBe(true);
     expect(await page.evaluate(() => [...document.fonts].some(f => f.family.includes('IBM Plex Sans Thai') && f.status === 'loaded'))).toBe(true);
     await page.screenshot({ path: test.info().outputPath(`nav-${mode}.png`) });
   });
 }
 
 test('integration reference supplies styles, icons, theme switching and logo override', async ({ page }) => {
+  cdsOnly();
   await page.goto('/?layout=integration');
   await page.getByRole('button', { name: 'CDS action', exact: true }).click();
   await expect(page.getByRole('status')).toHaveText('Completed');
@@ -182,6 +187,7 @@ const glyphColor = el => { while (el.lastElementChild) el = el.lastElementChild;
 for (const root of ['starter', 'integration']) {
   for (const mode of ['light', 'dark']) {
     test(`${root} ${mode}: text on colored fills follows text-on-color`, async ({ page }) => {
+      cdsOnly();
       await page.goto(`/?layout=on-color&root=${root}&mode=${mode}`);
       for (const [name, color] of Object.entries(buttonLabels[mode])) {
         await expect(page.getByRole('button', { name, exact: true })).toHaveCSS('color', color);
@@ -197,6 +203,7 @@ for (const root of ['starter', 'integration']) {
 // A value in a format CDS doesn't expect (rgb(...) where CDS wraps a bare
 // r,g,b triplet itself) is invalid CSS, and the component silently falls back.
 test('merged theme keeps each CDS key and its value format', async ({ page }) => {
+  cdsOnly();
   await page.goto('/?layout=spectrum');
   const { neon, base } = await page.evaluate(() => window.neonThemeFormats);
   const kind = v => typeof v !== 'string' ? typeof v
@@ -221,6 +228,7 @@ const contrastOf = el => {
 };
 for (const mode of ['light', 'dark']) {
   test(`${mode}: Tag and Avatar text on spectrum fills reaches 4.5:1`, async ({ page }) => {
+    cdsOnly();
     await page.goto(`/?layout=spectrum&mode=${mode}`);
     const samples = await page.evaluate(() => {
       const glyph = el => { while (el.lastElementChild) el = el.lastElementChild; return getComputedStyle(el).color; };

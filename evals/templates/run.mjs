@@ -103,9 +103,7 @@ async function assembleNeon() {
 
 try {
   await (target === 'neon' ? assembleNeon() : assembleCds());
-  // The layouts reach the Neon base with #95; until then it runs the match and accessibility specs only.
-  const specs = target === 'neon' && !args.some((arg) => arg.endsWith('.spec.mjs')) ? ['cds-match.spec.mjs', 'neon-a11y.spec.mjs'] : [];
-  await run(process.execPath, [join(here, 'node_modules/@playwright/test/cli.js'), 'test', ...specs, ...args], here, { NEON_TEST_APP: app, NEON_TARGET: target });
+  await run(process.execPath, [join(here, 'node_modules/@playwright/test/cli.js'), 'test', ...args], here, { NEON_TEST_APP: app, NEON_TARGET: target });
 } finally {
   if (keep) console.log(`Kept the assembled app at ${app}`); else await rm(work, { recursive: true, force: true });
 }
