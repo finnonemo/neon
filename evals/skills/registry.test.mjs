@@ -201,13 +201,13 @@ test('every Theme Brief item in the registry matches its picks file and Markdown
   assert.deepEqual(themeBriefItemProblems(items, briefs), []);
 });
 
-test('a Theme Brief item builds byte-identically, with its Markdown inlined at its docs target', async (t) => {
+test('a Theme Brief item builds byte-identically at the pinned release, with its Markdown inlined at its docs target', async (t) => {
   const temp = mkdtempSync(join(tmpdir(), 'neon-brief-registry-'));
   t.after(() => rmSync(temp, { recursive: true, force: true }));
   mkdirSync(join(temp, 'registry/theme-briefs'), { recursive: true });
   writeFileSync(join(temp, 'registry/registry.json'), JSON.stringify({ name: 'neon', homepage: 'https://example.invalid', items: [BRIEF_ITEM] }));
   writeFileSync(join(temp, 'registry/theme-briefs/club-run.md'), BRIEF_MARKDOWN);
-  const url = 'http://127.0.0.1:1/r';
+  const url = await pinnedRegistryUrl(root);
   const [first, second] = await Promise.all([buildRegistry({ root: temp, url }), buildRegistry({ root: temp, url })]);
   assert.deepEqual([...first], [...second]);
   const built = JSON.parse(first.get('theme-brief-club-run.json'));

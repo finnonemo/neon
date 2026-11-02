@@ -179,7 +179,7 @@ export function briefProblems(text, { theme, brief, tokens, sources, record }) {
 }
 
 // Check 11, theme coverage: every Immersive Theme has a theme text and at least one published brief.
-function coverage(inputs, published, where) {
+function coverageProblems(inputs, published, where) {
   const texts = new Set(inputs.themeTexts.map(({ id }) => id));
   return Object.values(inputs.facts.themes).flatMap((theme) => [
     ...(texts.has(theme.id) ? [] : [`theme-briefs/themes/${theme.id}.json: missing; every Immersive Theme needs a theme text`]),
@@ -188,7 +188,7 @@ function coverage(inputs, published, where) {
 }
 
 // `coverage: false` skips check 11, for fixture trees that hold fewer themes' briefs than the theme data.
-export function checkThemeBriefs({ root, out = join(root, 'registry/theme-briefs'), coverage: covered = true }) {
+export function checkThemeBriefs({ root, out = join(root, 'registry/theme-briefs'), coverage = true }) {
   const { inputs, problems } = checkInputs(root);
   const { facts, presets } = inputs;
   const briefs = existsSync(out) ? readdirSync(out).filter((name) => name.endsWith('.md')) : [];
@@ -227,7 +227,7 @@ export function checkThemeBriefs({ root, out = join(root, 'registry/theme-briefs
     }
     for (const message of briefProblems(text, { theme, brief, tokens, sources, record })) problems.push(`${where}: ${message}`);
   }
-  if (covered) problems.push(...coverage(inputs, published, at(out)));
+  if (coverage) problems.push(...coverageProblems(inputs, published, at(out)));
   const counts = [
     plural(Object.keys(inputs.facts.themes).length, 'theme'),
     plural(PRESET_KINDS.reduce((sum, kind) => sum + Object.keys(inputs.presets[kind]).length, 0), 'preset'),

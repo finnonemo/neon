@@ -100,7 +100,7 @@ When any chosen preset has a source outside finnomena.com, the picks file needs 
 
 ## Author a brief
 
-Commit the brief's picks file and every theme text, sign in to Claude Code, and run the tool with the brief's name. `draft` is the default mode:
+Commit the brief's picks file and every theme text, sign Claude Code in to a neutral account (or set a neutral API key), and run the tool with the brief's name. `draft` is the default mode:
 
 ```sh
 node scripts/theme-briefs/theme-briefs.mjs club-run
@@ -168,7 +168,7 @@ Limits:
 A brief is published when its Markdown, picks file, authoring record and registry entry are merged together. Publish in one PR:
 
 1. **Review.** In `.local/theme-briefs/<brief>/`, read the draft against its review report. Check each entry's misses, the diff against the committed brief, and the word overlap with the theme's other briefs, so their model sections do not repeat each other. Read every warning for a fill named with no text. Fix prose by hand and `accept` it, or `redraft` the entry.
-2. **Review record.** When a chosen preset has a third-party source, record the design review in the picks file's `review` before you commit it (see [Presets and picks files](#presets-and-picks-files)). A brief from Finnomena's own presets needs no record.
+2. **Review record.** When a chosen preset has a third-party source, the picks file must carry the design review in its `review` record (see [Presets and picks files](#presets-and-picks-files)). A brief from Finnomena's own presets needs no record.
 3. **Registry entry.** Add the brief's entry to `registry/registry.json`. The registry tests check it against the picks file and Markdown:
 
    ```json
@@ -192,9 +192,9 @@ A brief is published when its Markdown, picks file, authoring record and registr
    The title is the theme label and brief name, and `meta.presets` copies the picks file. The one file installs to `./docs/theme-briefs/` in the app.
 4. **Build.** Run `node scripts/build-registry.mjs`. It inlines the Markdown into `registry/r/theme-brief-<theme>-<slug>.json`, pinned to the release tag like every item. A later edit to the brief needs the build again.
 5. **Validate.** Run `check-only`, then `node scripts/validate.mjs`.
-6. **PR.** Commit the Markdown, picks file, authoring record, registry entry and build, plus any new preset or theme text. Say in the PR which account label the record carries and who reviewed the draft. Nothing from `.local/` is committed.
+6. **PR.** Commit the Markdown, picks file, authoring record, registry entry and build, plus any new preset or theme text. Say in the PR who reviewed the draft. A brief to publish is drafted under a neutral account or key, and its record says so (`neutral-account` or `neutral-key`); a `maintainer-sign-in` record is for trial runs. Nothing from `.local/` is committed.
 
-A brief reaches employees only through a release that serves the registry.
+A preset's first brief ships only once the Theme Briefs evaluation records its page-layer runs. A brief reaches employees only through a release that serves the registry.
 
 ## Checks
 
@@ -224,7 +224,7 @@ The check module in `scripts/theme-briefs` is shared by the tool's `check-only` 
 | `takes the name of a fixed component` | An occasion component is named like one the brief renders itself. Rename it. |
 | `is not an input the tool supplies`, `takes the output of`, `is not a band`, `must have an accentPlacement property`, `makes a cycle`, `has the placeholder` | A prompt library file names an input, band, order or placeholder the tool cannot fill. Use one the message lists, and name in `after` each entry whose output the entry takes. |
 | `prose holds #…`, `prose gives …px`, `is not a Type Scale size`, `prose names a gradient`, `motion level does not allow`, `more than the … motion level's`, `a font other than` | Check 4: prose gives a value the theme does not. Name colors by variable or role, spacing by step and type by role, use px only as the brief's tables give it, keep motion within the layout's level, and name no typeface but the theme's. Fonts are found from a fixed list in `prose-checks.mjs`, so a font missing from it is not caught. |
-| `has no published brief`, `missing; every Immersive Theme needs a theme text` | Check 11: an Immersive Theme has no theme text, or no published brief in the registry folder. Write its theme text, and publish at least its baseline brief. `check-only --skip-coverage` leaves this check out, for fixture trees that hold fewer themes than the theme data; CI never passes it. |
+| `has no published brief`, `missing; every Immersive Theme needs a theme text` | Check 11: an Immersive Theme has no theme text, or no published brief in the registry folder. Write its theme text, and publish at least one brief for it. `check-only --skip-coverage` leaves this check out, for fixture trees that hold fewer themes than the theme data; CI never passes it. |
 | `accent placement … is not one of`, `does not name its accent placement`, `nothing in this brief carries the accent` | Check 10: the record's accent placement is not one the brief allows, or the mood paragraph does not name it. Redraft the mood, or edit it to name the placement. |
 
 The registry tests also run in `validate.mjs`, so a brief's registry entry must build like every other item.
@@ -235,4 +235,4 @@ To draft a layout preset from a public page, follow [drafting from a page](./the
 
 ## Branch: adding a theme
 
-To add an Immersive Theme, follow [adding a theme](./theme-briefs/adding-a-theme.md). It covers the theme data, its theme text and baseline brief, and the briefs that change with it, in one PR.
+To add an Immersive Theme, follow [adding a theme](./theme-briefs/adding-a-theme.md). It covers the theme data, its theme text and first brief, and the briefs that change with it, in one PR.
