@@ -3,7 +3,9 @@
   "inputs": [
     "layout",
     "occasion-components.names",
-    "brandPattern.section"
+    "brandPattern.section",
+    "theme.kind",
+    "theme.mood"
   ],
   "after": [
     "occasion-components"

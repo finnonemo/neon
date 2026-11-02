@@ -4,7 +4,8 @@
     "imagery",
     "theme.kind",
     "theme.roles",
-    "brandPattern.section"
+    "brandPattern.section",
+    "theme.mood"
   ],
   "after": [],
   "formula": [

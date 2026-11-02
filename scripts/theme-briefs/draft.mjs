@@ -9,7 +9,7 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 
 import { join, relative } from 'node:path';
 import { briefProblems, checkInputs, renderable, sourceNamesOf } from './checks.mjs';
 import { askClaude, ClaudeError, claudeVersion, EFFORT, MODEL } from './model.mjs';
-import { accentPlacements, entryChecks, proseText } from './prose-checks.mjs';
+import { accentPlacements, entryChecks, proseText, words } from './prose-checks.mjs';
 import { freshBrief, placeholderProse, readProse, renderBrief, SCRIPTED_SECTIONS, splitSections } from './render.mjs';
 import { ENTRIES, entryOrder } from './schemas.mjs';
 import { paletteTokens } from '../lib/colors.mjs';
@@ -28,7 +28,6 @@ const hash = (value) => createHash('sha256').update(typeof value === 'string' ? 
 const normalize = (value) => typeof value === 'string' ? value.replace(/\s+/g, ' ').trim()
   : Array.isArray(value) ? value.map(normalize)
     : value && typeof value === 'object' ? Object.fromEntries(Object.entries(value).map(([key, inner]) => [key, normalize(inner)])) : value;
-const words = (text) => text.split(/\s+/).filter((token) => /[\p{L}\p{N}]/u.test(token)).length;
 
 // The tool's own version: a hash of its modules.
 const toolVersion = () => hash(readdirSync(import.meta.dirname).filter((file) => file.endsWith('.mjs')).sort().map((file) => readFileSync(join(import.meta.dirname, file), 'utf8')).join('\0'));
@@ -124,13 +123,14 @@ function draftBrief(name, brief, { library, claude, model, sources, tokens }) {
       ? `**Not drafted — ${entry}:** it waits on ${runs[entry].waiting.join(', ')}, which did not pass its hard checks.`
       : `**Hard checks failed — ${entry}:** ${runs[entry].attempts.at(-1).hard.join('; ')}`,
   }));
+  let scripted;
   if (!markers.length) {
-    const fresh = freshBrief(text, brief);
-    const problems = fresh.text === text ? briefProblems(text, { theme: brief.theme, brief, tokens, sources, record: { accentPlacement: outputs['mood-occasion'].accentPlacement } })
+    scripted = freshBrief(text, brief).text === text;
+    const problems = scripted ? briefProblems(text, { theme: brief.theme, brief, tokens, sources, record: { accentPlacement: outputs['mood-occasion'].accentPlacement } })
       : ['the drafted prose does not read back from the brief'];
     if (problems.length) markers.push({ heading: 'Header', line: `**Brief checks failed:** ${problems.join('; ')}` });
   }
-  return { name, brief, system, runs, order, outputs, text, passed: !markers.length, draft: withMarkers(text, markers) };
+  return { name, brief, system, runs, order, outputs, text, scripted, passed: !markers.length, draft: withMarkers(text, markers) };
 }
 
 // The brief with each marker as a paragraph straight after its section's heading line.
@@ -150,11 +150,11 @@ function record(result, { commit, version, claudeVersion: claudeCode, model, acc
     tool: { commit, version },
     claudeCode: { version: claudeCode, model, effort: EFFORT, modelOverride: model !== MODEL },
     account,
-    shared: hash(result.system),
     entries: Object.fromEntries(result.order.map((entry) => {
       const { inputs, attempts, kept } = result.runs[entry];
       return [entry, {
         entry: hash(result.library[entry]),
+        shared: hash(result.shared),
         inputs: hash(inputs),
         attempts: attempts.map(({ hard, soft }) => ({ hard: hard.length, soft: soft.length })),
         kept: kept.number,
@@ -163,6 +163,14 @@ function record(result, { commit, version, claudeVersion: claudeCode, model, acc
     })),
     accentPlacement: result.outputs['mood-occasion'].accentPlacement,
   };
+}
+
+// The sections that hold model prose, and each one's set of words in a brief.
+const MODEL_SECTIONS = [...new Set(Object.values(FILLS))];
+const sectionWords = (text) => Object.fromEntries(splitSections(text).map(({ heading, text: section }) => [heading, new Set(section.toLowerCase().match(/[\p{L}\p{N}']+/gu) ?? [])]));
+function jaccard(a = new Set(), b = new Set()) {
+  const union = new Set([...a, ...b]).size;
+  return union ? [...a].filter((word) => b.has(word)).length / union : 0;
 }
 
 const fenced = (value) => ['```json', JSON.stringify(value, null, 2), '```'];
@@ -178,11 +186,12 @@ function review(result, { root, out, others, claudeVersion: claudeCode, model })
     passed ? `Passed every check; written to ${relative(root, committedPath)}.` : 'Not written to the registry: see the failed checks below and the markers in draft.md.',
     `Claude Code ${claudeCode}, ${model}, effort ${EFFORT}.`,
     '',
-    `Scripted sections (${SCRIPTED_SECTIONS.join(', ')}): scripted, matches fresh output.`,
+    result.scripted === undefined ? 'Scripted sections not compared: the draft has failed sections.'
+      : `Scripted sections (${SCRIPTED_SECTIONS.join(', ')}): ${result.scripted ? 'scripted, matches fresh output' : 'do not match fresh output'}.`,
   ];
   for (const entry of order) {
     const run = runs[entry];
-    lines.push('', `## ${entry}`, '');
+    lines.push('', `## ${entry}`, '', `Entry ${hash(result.library[entry])}.`, '');
     if (run.waiting) {
       lines.push(`Not run: it waits on ${run.waiting.join(', ')}.`);
       continue;
@@ -203,12 +212,11 @@ function review(result, { root, out, others, claudeVersion: claudeCode, model })
       lines.push('', before.join('\n') === after.join('\n') ? 'Same as the committed brief.' : ['Against the committed brief:', '', '```diff', ...before.map((line) => `- ${line}`), ...after.map((line) => `+ ${line}`), '```'].join('\n'));
     }
   }
-  const ours = new Set(proseText(outputs).toLowerCase().match(/[\p{L}\p{N}']+/gu) ?? []);
-  lines.push('', '## Same-theme overlap', '');
+  lines.push('', '## Same-theme overlap', '', 'Word overlap (Jaccard) per model section, for information only:', '');
+  const ours = sectionWords(result.text);
   const overlaps = others.filter((other) => other.name !== name && other.theme === brief.theme.id).map((other) => {
-    const theirs = new Set(other.text.toLowerCase().match(/[\p{L}\p{N}']+/gu) ?? []);
-    const shared = [...ours].filter((word) => theirs.has(word)).length;
-    return `- ${other.name}: ${(shared / new Set([...ours, ...theirs]).size).toFixed(2)} word overlap (Jaccard)`;
+    const theirs = sectionWords(other.text);
+    return `- ${other.name}: ${MODEL_SECTIONS.map((heading) => `${heading} ${jaccard(ours[heading], theirs[heading]).toFixed(2)}`).join(', ')}`;
   });
   lines.push(...(overlaps.length ? overlaps : ['No other committed brief on this theme.']));
   return `${lines.join('\n')}\n`;
@@ -237,7 +245,7 @@ export function draftBriefs({ root, names, out = join(root, 'registry/theme-brie
   let claudeCode;
   try {
     claudeCode = claudeVersion(claude);
-    results = briefs.map(({ name, brief }) => ({ ...draftBrief(name, brief, context), library: library.entries }));
+    results = briefs.map(({ name, brief }) => ({ ...draftBrief(name, brief, context), library: library.entries, shared: library.shared }));
   } catch (error) {
     if (!(error instanceof ClaudeError)) throw error;
     return { lines: [`${error.message}. Nothing was written.`], failed: true };

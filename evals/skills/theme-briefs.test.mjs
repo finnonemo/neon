@@ -684,6 +684,38 @@ test('draft writes a brief that passes check-only, its record, and a review repo
   assert.equal(check.status, 0, check.out);
 });
 
+test('every prompt library entry takes the theme kind and mood', () => {
+  for (const [path, text] of Object.entries(libraryFiles())) {
+    if (path.endsWith('/shared.json')) continue;
+    const { inputs } = JSON.parse(text);
+    assert.ok(inputs.includes('theme.kind') && inputs.includes('theme.mood'), path);
+  }
+});
+
+test('the review report gives each entry hash, the scripted-section check and per-section overlap with same-theme briefs', (t) => {
+  const first = draft(t);
+  assert.equal(first.status, 0, first.out);
+  const sibling = { 'theme-briefs/picks/club-trail-run.json': { ...valid[PICKS], briefName: 'Trail Run' }, 'registry/theme-briefs/club-trail-run.md': readFileSync(join(first.root, BRIEF), 'utf8') };
+  const { root, status, out } = draft(t, { changes: sibling });
+  assert.equal(status, 0, out);
+  const report = readFileSync(local(root, 'review.md'), 'utf8');
+  const record = JSON.parse(readFileSync(join(root, RECORD), 'utf8'));
+  for (const [name, { entry }] of Object.entries(record.entries)) assert.match(report, new RegExp(`^## ${name}\\n\\nEntry ${entry}\\.`, 'm'), name);
+  assert.match(report, /^Scripted sections \(.+\): scripted, matches fresh output\.$/m);
+  // The sibling holds the same prose, so every model section overlaps fully.
+  assert.match(report, /^- club-trail-run: Header 1\.00, Components 1\.00, Do's and Don'ts 1\.00, Imagery 1\.00, Layout 1\.00, Agent Prompt Guide 1\.00$/m);
+});
+
+test('soft checks send back a Do longer than one sentence and component slots out of order', (t) => {
+  const twoSentences = { ...GOOD['preset-dos-donts'], dos: ['Show the deadline beside every main action on the Race distance card. Members should never hunt for the date at all.'] };
+  const outOfOrder = components([]);
+  outOfOrder.components[0] = { ...outOfOrder.components[0], paragraph: 'Each card sits on var(--immersive-palette-50) with var(--immersive-on-palette-50) text and var(--space-4) padding, no border and var(--borderRadius-500) corners. The distance leads in title2 above the start time in body, then one select action. A distance that has filled up says so in body text and offers no action.' };
+  const { fake, status, out } = draft(t, { answers: { 'preset-dos-donts': [twoSentences, GOOD['preset-dos-donts']], 'occasion-components': [outOfOrder, GOOD['occasion-components']] } });
+  assert.equal(status, 0, out);
+  assert.match(calls(fake, 'preset-dos-donts')[1].prompt, /^- "dos\.0" has 2 sentences; each bullet is one$/m);
+  assert.match(calls(fake, 'occasion-components')[1].prompt, /^- "components\.0\.paragraph" gives padding before border; the slot order is fill, border, radius, padding$/m);
+});
+
 const calls = (fake, name) => fake.calls().filter(({ entry }) => entry === name);
 // The Inputs block of a prompt, as sent.
 const promptInputs = (prompt) => JSON.parse(prompt.split('\nInputs:\n')[1].split('\n\n')[0]);
@@ -729,7 +761,9 @@ test('a persistent hard failure leaves a marked local draft, writes no brief or 
   assert.equal(calls(fake, 'layout').length, 3);
   const text = readFileSync(local(root, 'draft.md'), 'utf8');
   assert.match(text, /^## Layout\n\n\*\*Hard checks failed — layout:\*\* prose holds #e6eef2; prose names colors by variable or role, never by value\n\n\[not drafted\]$/m);
-  assert.match(readFileSync(local(root, 'review.md'), 'utf8'), /No attempt of 3 passed its hard checks\./);
+  const report = readFileSync(local(root, 'review.md'), 'utf8');
+  assert.match(report, /No attempt of 3 passed its hard checks\./);
+  assert.match(report, /^Scripted sections not compared: the draft has failed sections\.$/m);
   assert.deepEqual(withoutLocal(snapshot(root)), untouched(t, root));
 });
 
@@ -819,7 +853,10 @@ test('the authoring record holds versions, labels and hashes, and nothing about 
   assert.equal(status, 0, out);
   const text = readFileSync(join(root, RECORD), 'utf8');
   const record = JSON.parse(text);
-  assert.deepEqual(Object.keys(record), ['brief', 'tool', 'claudeCode', 'account', 'shared', 'entries', 'accentPlacement']);
+  assert.deepEqual(Object.keys(record), ['brief', 'tool', 'claudeCode', 'account', 'entries', 'accentPlacement']);
+  // Each entry carries the hash of shared.json as committed, so the record shows which briefs used an older one.
+  const shared = JSON.parse(libraryFiles()[`${LIBRARY}/shared.json`]);
+  for (const [name, entry] of Object.entries(record.entries)) assert.equal(entry.shared, sha256(JSON.stringify(Object.fromEntries(Object.entries(shared).sort()))), name);
   assert.equal(record.tool.commit, null);
   assert.match(record.tool.version, /^[0-9a-f]{64}$/);
   assert.deepEqual(record.claudeCode, { version: '2.1.316', model: 'claude-sonnet-5-5', effort: 'high', modelOverride: true });

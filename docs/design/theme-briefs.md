@@ -109,9 +109,9 @@ node scripts/theme-briefs/theme-briefs.mjs club-run
 The tool drafts the prose one prompt library entry at a time, in `after` order. Each call is `claude -p` with `claude-opus-5-5` at high effort, run from an empty folder with no tools, MCP servers, project settings or saved session. `CLAUDE_PATH` names another executable; the tests point it at a fake.
 
 - **Inputs.** An entry gets only the `inputs` it declares: preset fields, theme text and facts, the picks, computed lists and earlier entries' output. Neither a preset's `source` nor the picks file's `review` is ever an input. The shared file fills `{{variables}}` with the variables prose may name and `{{typeRoles}}` with the type roles.
-- **Checks on each answer.** Hard checks refuse an answer. They cover its shape against the entry's `output` and whatever would stop the brief reading its prose back. They also cover the values in check 4, the accent placement in check 10, eight words copied from the example, and a source name. Soft checks send an answer back: the `targets` word bands, a Don't that starts "Do not" and gives its reason after " — ", a sentence-case tagline, and agreement with the presets.
+- **Checks on each answer.** Hard checks refuse an answer. They cover its shape against the entry's `output` and whatever would stop the brief reading its prose back. They also cover the values in check 4, the accent placement in check 10, eight words copied from the example, and a source name. Soft checks send an answer back: the `targets` word bands, one sentence per Do and Don't, component paragraph slots in order (fill, border, radius, padding), a Don't that starts "Do not" and gives its reason after " — ", a sentence-case tagline, and agreement with the presets.
 - **Retries.** An entry gets up to three attempts, and each retry is sent the last attempt's misses. The tool keeps the attempt that passes the hard checks with the fewest soft misses, the earliest on a tie. Later entries take the kept attempt.
-- **Writes.** Every run writes a draft and a review report to `.local/theme-briefs/<brief>/`. The review gives each entry's inputs, its attempts and their misses, a diff against the committed brief, and the word overlap with other briefs on the same theme. When every entry passes, and the whole brief passes checks 3, 4, 5, 7 and 10, the tool also writes the brief to the registry and its authoring record to the `records` folder beside the prompt library. Otherwise it exits 1, and the draft shows `**Hard checks failed — <entry>:**` or `**Not drafted — <entry>:**` under each section it could not fill.
+- **Writes.** Every run writes a draft and a review report to `.local/theme-briefs/<brief>/`. The review gives each entry's hash and inputs, its attempts and their misses, a diff against the committed brief, and the word overlap per model section with other briefs on the same theme. When every entry passes, and the whole brief passes checks 3, 4, 5, 7 and 10, the tool also writes the brief to the registry and its authoring record to the `records` folder beside the prompt library. Otherwise it exits 1, and the draft shows `**Hard checks failed — <entry>:**` or `**Not drafted — <entry>:**` under each section it could not fill.
 - **Claude Code fails.** If Claude Code cannot answer, the run stops and writes nothing. That covers a missing sign-in, a missing executable and a timeout. It does not count as an attempt.
 - **Flags.** `--model <id>` drafts with another model, and the record notes the override. `--account` labels who signed Claude Code in: `maintainer-sign-in` (the default), `neutral-account` or `neutral-key`. `--out`, `--local` and `--root` move the brief, the draft folder and the repository.
 
@@ -119,13 +119,19 @@ The authoring record holds versions, labels and hashes only:
 
 - the tool's commit and a hash of its modules;
 - the Claude Code version, model, effort and account label;
-- SHA-256 hashes of the shared prompt, and of each entry, its inputs and its output as read back from the brief;
+- for each entry, SHA-256 hashes of the entry, `shared.json`, its inputs and its output as read back from the brief;
 - each attempt's count of hard and soft misses;
 - the accent placement.
 
 It holds no prompt, answer, path, account or session detail. The tests confirm this against a fake. A real run's output is first checked in [#122](https://github.com/finnonemo/neon/issues/122).
 
 Read the draft against its review, then add the registry entry and run `check-only`.
+
+Not yet covered:
+
+- Font names and fill/text pairing in prose come with [#119](https://github.com/finnonemo/neon/issues/119).
+- Detecting hand-edited sections against the record's output hashes comes with [#120](https://github.com/finnonemo/neon/issues/120).
+- A failure in a whole-brief check (3, 4, 5, 7 or 10) is marked in the draft but not retried, since it belongs to no one entry.
 
 ## Checks
 

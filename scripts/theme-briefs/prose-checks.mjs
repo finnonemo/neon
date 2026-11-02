@@ -92,6 +92,19 @@ const runs = (text) => {
   return found;
 };
 
+// A bullet's sentences: a stop followed by a capital starts the next one.
+const bulletSentences = (text) => text.trim().split(/(?<=[.!?])\s+(?=\p{Lu})/u).length;
+// The slots a component paragraph gives, in order; a slot it leaves out is not checked.
+const SLOTS = [['fill', /\bfill\b/i], ['border', /\bborders?\b/i], ['radius', /\b(?:corners?|radius)\b/i], ['padding', /\bpadding\b/i]];
+function slotProblem(path, paragraph) {
+  const found = SLOTS.map(([slot, pattern]) => [slot, paragraph.search(pattern)]).filter(([, at]) => at >= 0);
+  for (const [index, [slot, at]] of found.entries()) {
+    const early = found.slice(index + 1).find(([, later]) => later < at);
+    if (early) return [`"${path}" gives ${early[0]} before ${slot}; the slot order is ${SLOTS.map(([name]) => name).join(', ')}`];
+  }
+  return [];
+}
+
 const band = (path, count, [low, high], unit = 'words') => count < low || count > high ? [`"${path}" has ${count} ${unit}; the target is ${low}–${high}`] : [];
 
 // The hard and soft checks on one entry's answer, normalized. ctx: brief, entry data, output schema,
@@ -145,10 +158,17 @@ export function entryChecks(name, answer, { brief, data, schema, bands, placemen
       ...band(`components.${index}.role`, words(role), bands.roleWords),
       ...band(`components.${index}.paragraph`, words(paragraph), bands.paragraphWords),
       ...band(`components.${index}.paragraph`, sentences(paragraph), bands.paragraphSentences, 'sentences'),
+      ...slotProblem(`components.${index}.paragraph`, paragraph),
     ));
   }
   if (name === 'preset-dos-donts') {
-    for (const key of ['dos', 'donts']) answer[key].forEach((line, index) => soft.push(...band(`${key}.${index}`, words(line), bands.words)));
+    for (const key of ['dos', 'donts']) {
+      answer[key].forEach((line, index) => {
+        soft.push(...band(`${key}.${index}`, words(line), bands.words));
+        const count = bulletSentences(line);
+        if (count !== 1) soft.push(`"${key}.${index}" has ${count} sentences; each bullet is one`);
+      });
+    }
     answer.donts.forEach((line, index) => { if (!line.startsWith('Do not ') || !line.includes(' — ')) soft.push(`"donts.${index}" must start "Do not" and give its reason after " — "`); });
   }
   if (name === 'imagery' || name === 'layout') soft.push(...band('paragraph', words(answer.paragraph), bands.words));

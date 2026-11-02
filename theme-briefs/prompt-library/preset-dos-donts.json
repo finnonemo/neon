@@ -5,7 +5,9 @@
     "occasion.donts",
     "occasion-components.names",
     "theme.roles",
-    "colorVars"
+    "colorVars",
+    "theme.kind",
+    "theme.mood"
   ],
   "after": [
     "occasion-components"

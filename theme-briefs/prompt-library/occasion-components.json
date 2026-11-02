@@ -6,7 +6,9 @@
     "layout.cardPadding",
     "layout.density",
     "typeRoles",
-    "colorVars"
+    "colorVars",
+    "theme.kind",
+    "theme.mood"
   ],
   "after": [],
   "formula": [

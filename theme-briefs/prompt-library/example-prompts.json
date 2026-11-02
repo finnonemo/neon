@@ -8,7 +8,9 @@
     "typeRoles",
     "layout.blockRadius",
     "layout.cardPadding",
-    "layout.sectionGap"
+    "layout.sectionGap",
+    "theme.kind",
+    "theme.mood"
   ],
   "after": [
     "occasion-components"
