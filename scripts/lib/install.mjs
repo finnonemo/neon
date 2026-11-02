@@ -29,7 +29,9 @@
  *
  * New and Add read their items from the Neon registry pinned to this
  * package's release (`registry` overrides it, as the smoke build does with a
- * local server), and check after shadcn that every item file landed.
+ * local server; failing that, `env.NEON_REGISTRY_URL`, which the eval runner
+ * sets so the agent under test runs the plain command), and check after
+ * shadcn that every item file landed.
  *
  * Seams: `runCommand(command, args, cwd)` runs the package-manager or shadcn
  * command (default: createCommandRunner(), the real spawnSync adapter; tests
@@ -89,13 +91,15 @@ export async function install({
   runCommand = createCommandRunner(),
   registry,
   fetchJson = fetchRegistryJson,
+  env = process.env,
   log = () => {},
 }) {
   try {
     const neon = { sourceRoot, starterDir: join(sourceRoot, "templates", "vitejs-cds") };
     const options = { target: resolve(target), themeDir, packageManager, skipInstall, runCommand, registry, fetchJson, log };
-    if (mode === "new") return await installNew(neon, options);
-    if (mode === "add") return await installAdd(neon, { ...options, items });
+    const neonRegistry = { ...options, registry: registry ?? env.NEON_REGISTRY_URL };
+    if (mode === "new") return await installNew(neon, neonRegistry);
+    if (mode === "add") return await installAdd(neon, { ...neonRegistry, items });
     // Shape-check an explicit override before any mode-specific work, so it
     // is rejected even where no package manager would ever run.
     assertSupportedOverride(packageManager);

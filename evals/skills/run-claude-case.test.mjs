@@ -4,7 +4,7 @@ import { spawnSync } from 'node:child_process';
 import { mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { ALLOWED_TOOLS, BROWSER_TOOLS, PERMISSION_NOTE, claudeArgs } from './run-claude-case.mjs';
+import { ALLOWED_TOOLS, BROWSER_TOOLS, PERMISSION_NOTE, claudeArgs, serveRegistry } from './run-claude-case.mjs';
 
 const runner = join(import.meta.dirname, 'run-claude-case.mjs');
 
@@ -73,4 +73,16 @@ test('a prompt naming {port} needs --dev-port', () => {
   const run = spawnSync(process.execPath, [runner, '--fixture', '.', '--case', 'x', '--prompt', 'port {port}', '--dry-run'], { encoding: 'utf8' });
   assert.notEqual(run.status, 0);
   assert.match(run.stderr, /pass --dev-port/);
+});
+
+test('serveRegistry serves this checkout\'s registry built for its own URL', async () => {
+  const { url, close } = await serveRegistry();
+  try {
+    const base = await (await fetch(`${url}/neon-base.json`)).json();
+    assert.equal(base.name, 'neon-base');
+    assert.ok(JSON.stringify(base).includes(url), 'registry dependencies point back at the served URL');
+    assert.equal((await fetch(`${url}/missing.json`)).status, 404);
+  } finally {
+    await close();
+  }
 });
