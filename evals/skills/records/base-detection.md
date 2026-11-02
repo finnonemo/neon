@@ -44,3 +44,35 @@ No check reads runtime behavior, so the grader cannot flag the Radix behaviors A
 | The first result plus `dark:bg-slate-900 font-bold` in `App.tsx` and a stylesheet declaring `:root { --primary: … }` | FAIL: Neon roles in app source (the `dark:` class, `font-bold`); app stylesheets scoped (`:root`, `--primary` redeclared) |
 
 Limits: this checks the grader, not a skill run.
+
+## Skill runs, 3 November 2026
+
+Claude Code 2.1.316 on `claude-opus-5-5`, one sample per arm, run through `run-claude-case.mjs --serve-registry`. Baseline is main at `1fe573f`, revised is `bc5bde1`. check-run found no denied command in any run, and none reached the cap. The 8 runs cost $4.22 together. Fixtures, built in `.local/`:
+
+- `fund-watch`: a smoke-built Neon-base app with the registry's `select`, `dialog` and `sonner`, showing a fund watchlist under a `bg-secondary` header.
+- `fund-watch-review`: the same app with planted problems. It has the v0 fixture's stock `card.tsx`, `text-sm` beside `text-body`, and `dark:bg-slate-800` on the list.
+- `order-desk`: the assembled CDS starter. Its order list is built from CDS components, and its header is styled by hex colors in `orders.css`.
+- `three-apps`: a folder holding all three apps (`fund-watch`, `order-desk` and the [shadcn-v4-app](../fixtures/shadcn-v4-app) fixture), with no root manifest.
+
+Each prompt asked for no dev server; the review and audit prompts also said to edit nothing.
+
+| Request | Baseline | Revised |
+| --- | --- | --- |
+| `/neon:neon-redesign` header navy, colors only, on `fund-watch` | `bg-primary`, an on-primary title and a button recolored by class; all eight grader checks pass; the base is not named | Same header, with the button set to `variant="secondary"` instead of class overrides; read `neon-base.md`; all eight checks pass |
+| `/neon:neon-redesign` header navy, colors only, on `order-desk` | Not run | Only `orders.css` changed, to CDS theme variables; the CDS `Button` that blends into the navy header goes to neon-create rather than being recolored; all five checks pass |
+| `/neon:neon-review` of `fund-watch-review` | Finds `text-sm`, the `dark:` class and the card's weights, but treats the card as a layout pattern and never as off-base; no Radix behavior flagged | Names the Neon base from `components.json`; finds the stock card as "not a Neon item", plus `text-sm` and `dark:bg-slate-800`; lists the Select, toast and `aria-hidden` behaviors as not findings; no file edited |
+| `/neon:neon-review` of `order-desk` and `shadcn-v4-app` | Not run | Names CDS and neither; CDS fixes use `Text`, `Box`, `Table` and `Tag`, and the shadcn fixes use CSS variables with "no Neon installation needed"; neither base is a finding; no file edited |
+| `/neon:neon-audit` of `three-apps` | Neon base and CDS right; sends plain shadcn to neon-create to install the Neon theme and change type and sizes | Names each base from its manifests; Neon base and CDS to neon-create, each on its own base; plain shadcn to neon-redesign through its CSS variables, with `@neon/` items only on request; edits nothing |
+
+The revision changed the plain-shadcn audit path and the off-base review finding; the baseline already handled the Neon-base restyle. Gaps outside base detection, all unreported by the runs:
+
+- The CDS restyle scopes dark text to `.dark`, a class the CDS starter does not set.
+- The CDS restyle hard-codes one meta color as `rgb(...)`.
+- The revised audit read no reference file. Its SKILL.md alone carried the base rule.
+
+Limits:
+
+- One sample per arm, and only one model.
+- Synthetic fixtures. `fund-watch`'s `@neon` entry points at the smoke run's local registry, which the revised audit flagged.
+- No CDS or neither baseline was run, so those rows show only that the revision behaves as specified, not that it changed anything.
+- Nothing was rendered, so contrast and layout claims in the reports are the agents' calculations.
