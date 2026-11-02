@@ -232,12 +232,18 @@ export function jsonSchemaProblems(value, schema, path = '', problems = []) {
   if (schema.enum) {
     if (!schema.enum.includes(value)) problems.push(`${at} must be one of ${schema.enum.map((option) => JSON.stringify(option)).join(', ')}`);
   } else if (schema.type === 'object') {
-    if (typeOf(value) !== 'object') return [...problems, `${at} must be an object`];
+    if (typeOf(value) !== 'object') {
+      problems.push(`${at} must be an object`);
+      return problems;
+    }
     for (const key of Object.keys(value)) if (schema.additionalProperties === false && !(key in (schema.properties ?? {}))) problems.push(`unknown key "${join(path, key)}"`);
     for (const key of schema.required ?? []) if (!(key in value)) problems.push(`missing key "${join(path, key)}"`);
     for (const [key, inner] of Object.entries(schema.properties ?? {})) if (key in value) jsonSchemaProblems(value[key], inner, join(path, key), problems);
   } else if (schema.type === 'array') {
-    if (!Array.isArray(value)) return [...problems, `${at} must be an array`];
+    if (!Array.isArray(value)) {
+      problems.push(`${at} must be an array`);
+      return problems;
+    }
     if (value.length < (schema.minItems ?? 0) || value.length > (schema.maxItems ?? Infinity)) problems.push(`${at} has ${value.length} items`);
     value.forEach((item, index) => jsonSchemaProblems(item, schema.items ?? {}, join(path, index), problems));
   } else if (schema.type === 'string' && (typeof value !== 'string' || !value.trim())) {

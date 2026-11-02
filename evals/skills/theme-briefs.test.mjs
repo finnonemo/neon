@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { cpSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
@@ -169,6 +170,12 @@ Object.assign(SCHEMA_REFUSALS, {
   'a prompt library example with a hex': [{ [ENTRY]: { ...entry, example: { input: {}, output: { tagline: 'Clay on #f5e6d3' } } } }, /tagline\.json: "example\.output\.tagline" holds a hex-like value$/m],
   'a shared file with an unknown key': [{ 'theme-briefs/prompt-library/shared.json': { preamble: ['Write in English.'], bans: [], model: 'x' } }, /shared\.json: unknown key "model"$/m],
   'malformed JSON': [{ [IMAGERY]: '{ "kind": "imagery", ' }, /^theme-briefs\/presets\/imagery\/people-in-action\.json: not valid JSON/m],
+  'a prompt library input the tool does not supply': [{ [ENTRY]: { ...entry, inputs: [...entry.inputs, 'picks.review'] } }, /tagline\.json: "inputs\.3" is not an input the tool supplies$/m],
+  'a prompt library input from an entry not run before it': [{ [ENTRY]: { ...entry, inputs: [...entry.inputs, 'occasion-components.names'] } }, /tagline\.json: "inputs\.3" takes the output of "occasion-components", which "after" does not name$/m],
+  'a prompt library target the entry does not check': [{ [ENTRY]: { ...entry, targets: { ...entry.targets, sentences: [1, 2] } } }, /tagline\.json: "targets\.sentences" is not a band tagline checks; its bands are words, firstClauseWords$/m],
+  'a mood entry with no accent placement': [{ 'theme-briefs/prompt-library/mood-occasion.json': { ...entry, targets: {}, output: { type: 'object', properties: { paragraph: { type: 'string' } } } } }, /mood-occasion\.json: "output" must have an accentPlacement property$/m],
+  'prompt library entries that wait on each other': [{ [ENTRY]: { ...entry, after: ['imagery'] }, 'theme-briefs/prompt-library/imagery.json': { ...entry, targets: {}, after: ['tagline'] } }, [/tagline\.json: "after" makes a cycle through tagline, imagery$/m, /imagery\.json: "after" makes a cycle through tagline, imagery$/m]],
+  'a shared placeholder the tool does not fill': [{ 'theme-briefs/prompt-library/shared.json': { preamble: ['Use {{variables}} and {{brandName}}.'], bans: [] } }, /shared\.json: "preamble\.0" has the placeholder \{\{brandName\}\}; placeholders are \{\{variables\}\}, \{\{typeRoles\}\}$/m],
 });
 
 // A copy of the real theme data with one theme whose accent step is the canvas color.
@@ -675,4 +682,193 @@ test('draft writes a brief that passes check-only, its record, and a review repo
   writeFileSync(join(root, 'registry/registry.json'), JSON.stringify({ name: 'neon', homepage: 'https://example.invalid', items: [{ name: 'theme-brief-club-run', type: 'registry:item' }] }));
   const check = checkOnly(root);
   assert.equal(check.status, 0, check.out);
+});
+
+const calls = (fake, name) => fake.calls().filter(({ entry }) => entry === name);
+// The Inputs block of a prompt, as sent.
+const promptInputs = (prompt) => JSON.parse(prompt.split('\nInputs:\n')[1].split('\n\n')[0]);
+const longRole = 'A role that keeps on going well past the eight words a role may have';
+const components = (roles) => ({ components: GOOD['occasion-components'].components.map((component, index) => ({ ...component, role: roles[index] ?? component.role })) });
+
+test('draft retries with the last misses, stops at three attempts, and keeps the attempt with fewest misses for later entries', (t) => {
+  const reversed = { components: [...GOOD['occasion-components'].components].reverse() };
+  const { root, fake, status, out } = draft(t, { answers: { 'occasion-components': [reversed, components([longRole]), components([longRole, longRole])] } });
+  assert.equal(status, 0, out);
+  const tries = calls(fake, 'occasion-components');
+  assert.equal(tries.length, 3);
+  assert.doesNotMatch(tries[0].prompt, /Your last answer missed/);
+  assert.match(tries[1].prompt, /^- components must be "Race distance card", "Registration call-out", in that order and keeping their names; found "Registration call-out", "Race distance card"$/m);
+  assert.match(tries[2].prompt, /^- "components\.0\.role" has 15 words; the target is 1–8$/m);
+  // Attempt 2 has one miss and attempt 3 two: entries after it, and the brief, take attempt 2.
+  for (const name of ['preset-dos-donts', 'layout', 'example-prompts']) assert.equal(calls(fake, name).length, 1, name);
+  assert.deepEqual(promptInputs(calls(fake, 'example-prompts')[0].prompt)['occasion-components.components'], components([longRole]).components);
+  assert.deepEqual(promptInputs(calls(fake, 'layout')[0].prompt)['occasion-components.names'], ['Race distance card', 'Registration call-out']);
+  assert.match(readFileSync(join(root, BRIEF), 'utf8'), new RegExp(`^### Race distance card\\n\\*\\*Role:\\*\\* ${longRole}$`, 'm'));
+  const record = JSON.parse(readFileSync(join(root, RECORD), 'utf8'));
+  assert.deepEqual(record.entries['occasion-components'].attempts, [{ hard: 1, soft: 0 }, { hard: 0, soft: 1 }, { hard: 0, soft: 2 }]);
+  assert.equal(record.entries['occasion-components'].kept, 2);
+});
+
+test('an answer that is not JSON counts as an attempt and is sent back', (t) => {
+  const { fake, status, out } = draft(t, { answers: { tagline: [{ $raw: 'Race day on an open canvas' }, GOOD.tagline] } });
+  assert.equal(status, 0, out);
+  const tries = calls(fake, 'tagline');
+  assert.equal(tries.length, 2);
+  assert.match(tries[1].prompt, /^- the answer is not JSON$/m);
+});
+
+// Fixture files with the drafted outputs left out: what must be unchanged after a run that writes nothing.
+const withoutLocal = (files) => Object.fromEntries(Object.entries(files).filter(([path]) => !path.startsWith('/.local/')));
+const untouched = (t, root) => snapshot(fixture(t, { ...THEME_TEXTS, ...libraryFiles() }));
+
+test('a persistent hard failure leaves a marked local draft, writes no brief or record, and exits 1', (t) => {
+  const hex = { paragraph: GOOD.layout.paragraph.replace('soft grey blocks', 'soft #e6eef2 blocks') };
+  const { root, fake, status, out } = draft(t, { answers: { layout: [hex] } });
+  assert.equal(status, 1, out);
+  assert.match(out, /^club-run: checks failed; not written\. Draft \.local\/theme-briefs\/club-run\/draft\.md; review \.local\/theme-briefs\/club-run\/review\.md$/m);
+  assert.equal(calls(fake, 'layout').length, 3);
+  const text = readFileSync(local(root, 'draft.md'), 'utf8');
+  assert.match(text, /^## Layout\n\n\*\*Hard checks failed — layout:\*\* prose holds #e6eef2; prose names colors by variable or role, never by value\n\n\[not drafted\]$/m);
+  assert.match(readFileSync(local(root, 'review.md'), 'utf8'), /No attempt of 3 passed its hard checks\./);
+  assert.deepEqual(withoutLocal(snapshot(root)), untouched(t, root));
+});
+
+test('entries after a failed entry are not run, and the draft says what they wait on', (t) => {
+  const { root, fake, status, out } = draft(t, { answers: { 'occasion-components': [{ components: 'Race distance card' }] } });
+  assert.equal(status, 1, out);
+  for (const name of ['preset-dos-donts', 'layout', 'example-prompts']) assert.equal(calls(fake, name).length, 0, name);
+  for (const name of ['tagline', 'mood-occasion', 'imagery']) assert.equal(calls(fake, name).length, 1, name);
+  const text = readFileSync(local(root, 'draft.md'), 'utf8');
+  assert.match(text, /^## Components\n\n\*\*Hard checks failed — occasion-components:\*\* "components" must be an array$/m);
+  assert.match(text, /^## Layout\n\n\*\*Not drafted — layout:\*\* it waits on occasion-components, which did not pass its hard checks\.$/m);
+  assert.match(text, /^### Registration call-out\n\*\*Role:\*\* \[not drafted\]$/m);
+  assert.ok(!statSafe(join(root, BRIEF)) && !statSafe(join(root, RECORD)));
+});
+
+function statSafe(path) {
+  try {
+    return statSync(path);
+  } catch {
+    return undefined;
+  }
+}
+
+// Answers refused by a hard check, by entry, and the marker each leaves in the local draft.
+const mood = GOOD['mood-occasion'];
+const imagery = GOOD.imagery.paragraph;
+const DRAFT_REFUSALS = {
+  'an answer missing a key': ['tagline', { line: 'Race day' }, /— tagline:\*\* unknown key "line"; missing key "tagline"/],
+  'a heading in prose': ['imagery', { paragraph: `## ${imagery}` }, /— imagery:\*\* "paragraph" starts like a Markdown heading or fence/],
+  'imagery that opens like the Brand Floor': ['imagery', { paragraph: `Imagery never carries another brand's look. ${imagery}` }, /— imagery:\*\* "paragraph" opens like the Brand Floor sentence, which the tool adds/],
+  'a variable the theme does not define': ['occasion-components', components([]), /— occasion-components:\*\* names --immersive-support-50, which Club does not define/, (answer) => { answer.components[0].paragraph = answer.components[0].paragraph.replace('palette-50) with var(--immersive-on-palette-50)', 'support-50) with var(--immersive-on-support-50)'); }],
+  'a px value no table holds': ['example-prompts', { prompts: GOOD['example-prompts'].prompts.map((prompt) => prompt.replace('var(--space-4) padding', '11px padding')) }, /— example-prompts:\*\* prose gives 11px, which no table in the brief holds/],
+  'a type size off the scale': ['example-prompts', { prompts: GOOD['example-prompts'].prompts.map((prompt) => prompt.replace('the distance in title2', 'the distance at 17px/23px')) }, /prose gives 17px\/23px, which is not a Type Scale size and line height/],
+  'a gradient': ['imagery', { paragraph: imagery.replace('never tinted with the accent', 'never under a gradient') }, /— imagery:\*\* prose names a gradient; Immersive Themes have none/],
+  'motion beyond the level': ['layout', { paragraph: GOOD.layout.paragraph.replace('keeping a comfortable rhythm', 'with staggered entrances, keeping a comfortable rhythm') }, /— layout:\*\* prose names "staggered", which the subtle motion level does not allow/],
+  'a duration beyond the level': ['layout', { paragraph: GOOD.layout.paragraph.replace('from top to bottom', 'from top to bottom over 600ms') }, /— layout:\*\* prose gives 600ms, more than the subtle motion level's 250ms/],
+  'a value in the tagline': ['tagline', { tagline: 'Race day on var(--immersive-canvas) — every member invited to one shared start line' }, /— tagline:\*\* "tagline" holds a value \(var\(\), a variable or px\); this part names none/],
+  'a px value in Layout': ['layout', { paragraph: GOOD.layout.paragraph.replace('at var(--space-10) gaps', 'at 64px gaps') }, /— layout:\*\* "paragraph" holds 64px; Layout names spacing by step, never in px/],
+  'words copied from the example': ['imagery', { paragraph: `${imagery} Close photographs of hands at the wheel lead, cropped tight.` }, /— imagery:\*\* copies eight or more words from the example \("close photographs of hands at the wheel lead"\)/],
+  'a Do for no intent': ['preset-dos-donts', { ...GOOD['preset-dos-donts'], dos: [...GOOD['preset-dos-donts'].dos, GOOD['preset-dos-donts'].dos[0]] }, /— preset-dos-donts:\*\* "dos" must have 1 bullets, one per intent; has 2/],
+  'an accent placement not in the brief': ['mood-occasion', { ...mood, accentPlacement: 'Race distance card' }, /— mood-occasion:\*\* "accentPlacement" must be one of "Registration call-out", "Brand Pattern section"/],
+  'a mood that does not name its accent placement': ['mood-occasion', { ...mood, accentPlacement: 'Brand Pattern section' }, /— mood-occasion:\*\* the mood paragraph does not name its accent placement "Brand Pattern section"/],
+};
+
+for (const [name, [entryName, answer, expected, change]] of Object.entries(DRAFT_REFUSALS)) {
+  test(`draft refuses ${name}`, (t) => {
+    const bad = structuredClone(answer);
+    change?.(bad);
+    const { root, fake, status, out } = draft(t, { answers: { [entryName]: [bad] } });
+    assert.equal(status, 1, out);
+    assert.equal(calls(fake, entryName).length, 3);
+    assert.match(readFileSync(local(root, 'draft.md'), 'utf8'), expected);
+    assert.ok(!statSafe(join(root, RECORD)));
+  });
+}
+
+test('draft refuses prose that names a preset source', (t) => {
+  const named = { paragraph: GOOD.layout.paragraph.replace('A full-bleed page', 'An Example-Run style full-bleed page') };
+  const { root, status, out } = draft(t, { answers: { layout: [named] }, changes: thirdParty('reviewed') });
+  assert.equal(status, 1, out);
+  assert.match(readFileSync(local(root, 'draft.md'), 'utf8'), /— layout:\*\* names "example-run", a preset source; no source name ships/);
+});
+
+test('each entry receives only the inputs it declares, and never a source or review record', (t) => {
+  const partial = { ...review('partially-reviewed'), approved_properties: ['structure'], reviewer: 'Pat Reviewer' };
+  const changes = {
+    ...edit(LAYOUT, (p) => ({ ...p, source: source('https://www.example-run.com/events') })),
+    ...edit(IMAGERY, (p) => ({ ...p, source: source('https://photos.example-run.com/gallery') })),
+    ...edit(PICKS, (p) => ({ ...p, review: partial })),
+  };
+  const { fake, status, out } = draft(t, { changes });
+  assert.equal(status, 0, out);
+  const library = libraryFiles();
+  for (const { entry: name, prompt, args } of fake.calls()) {
+    const declared = JSON.parse(library[`${LIBRARY}/${name}.json`]).inputs;
+    assert.deepEqual(Object.keys(promptInputs(prompt)).sort(), [...declared].sort(), name);
+    for (const leak of ['example-run', 'https://', 'Pat Reviewer', 'measuredOn', 'robotsDisallowed', 'approved_properties', 'partially-reviewed']) {
+      assert.ok(!prompt.includes(leak) && !args.some((arg) => arg.includes(leak)), `${name} prompt carries ${leak}`);
+    }
+  }
+});
+
+const sha256 = (text) => createHash('sha256').update(text).digest('hex');
+
+test('the authoring record holds versions, labels and hashes, and nothing about the account or machine', (t) => {
+  const { root, fake, status, out } = draft(t, { args: ['--model', 'claude-sonnet-5-5', '--account', 'neutral-account'] });
+  assert.equal(status, 0, out);
+  const text = readFileSync(join(root, RECORD), 'utf8');
+  const record = JSON.parse(text);
+  assert.deepEqual(Object.keys(record), ['brief', 'tool', 'claudeCode', 'account', 'shared', 'entries', 'accentPlacement']);
+  assert.equal(record.tool.commit, null);
+  assert.match(record.tool.version, /^[0-9a-f]{64}$/);
+  assert.deepEqual(record.claudeCode, { version: '2.1.316', model: 'claude-sonnet-5-5', effort: 'high', modelOverride: true });
+  assert.equal(record.account, 'neutral-account');
+  // An output hash is the SHA-256 of the prose read back from the brief, as JSON with sorted keys.
+  assert.equal(record.entries.layout.output, sha256(JSON.stringify({ paragraph: GOOD.layout.paragraph })));
+  assert.equal(record.entries.tagline.output, sha256(JSON.stringify({ tagline: GOOD.tagline.tagline })));
+  assert.equal(record.entries['mood-occasion'].output, sha256(JSON.stringify({ paragraph: mood.paragraph })));
+  for (const leak of ['maintainer@example.com', '5f0c-session-77', '0.42', fake.path, root, tmpdir(), 'Race day']) assert.ok(!text.includes(leak), `record carries ${leak}`);
+  for (const { args } of fake.calls()) {
+    assert.deepEqual(args.slice(0, 15), ['-p', '--model', 'claude-sonnet-5-5', '--effort', 'high', '--tools', '', '--strict-mcp-config', '--mcp-config', '{"mcpServers":{}}', '--setting-sources', 'local', '--no-session-persistence', '--system-prompt', args[14]]);
+  }
+});
+
+test('a Claude Code that cannot answer stops the run before anything is written', (t) => {
+  const { root, fake, status, out } = draft(t, { answers: { imagery: [{ $exit: 1 }] } });
+  assert.equal(status, 1, out);
+  assert.match(out, /^Claude Code exited with 1: Invalid API key · Please run \/login\. Nothing was written\.$/m);
+  assert.equal(calls(fake, 'imagery').length, 1);
+  assert.deepEqual(snapshot(root), untouched(t, root));
+});
+
+test('a missing Claude Code stops the run before anything is written', (t) => {
+  const root = fixture(t, { ...THEME_TEXTS, ...libraryFiles() });
+  const { status, out } = run(['club-run', '--root', root], { CLAUDE_PATH: join(root, 'no-claude-here') });
+  assert.equal(status, 1, out);
+  assert.match(out, /^Claude Code was not found; install it or set CLAUDE_PATH\. Nothing was written\.$/m);
+  assert.deepEqual(snapshot(root), untouched(t, root));
+});
+
+// CI on committed briefs: check 4 on the prose read back from the brief, and check 10 against its record.
+const proseBrief = (prose) => renderBrief({ [BRIEF]: staleBrief({ ...PROSE, ...prose }) });
+const withRecord = (accentPlacement) => ({ ...published(), [RECORD]: { brief: 'club-run', accentPlacement } });
+const COMMITTED_REFUSALS = {
+  'prose with a px value no table holds': [{ ...published(), [BRIEF]: proseBrief({ layout: `${PROSE.layout} Cards keep 11px padding.` }) }, /^registry\/theme-briefs\/club-run\.md: prose gives 11px, which no table in the brief holds$/m],
+  'prose that names a gradient': [{ ...published(), [BRIEF]: proseBrief({ imagery: `${PROSE.imagery} Photos fade into a gradient.` }) }, /^registry\/theme-briefs\/club-run\.md: prose names a gradient; Immersive Themes have none$/m],
+  'prose with motion beyond its level': [{ ...published(), [BRIEF]: proseBrief({ layout: `${PROSE.layout} Cards stagger in.` }) }, /^registry\/theme-briefs\/club-run\.md: prose names "stagger", which the subtle motion level does not allow$/m],
+  'a record whose accent placement is not the brief\'s': [withRecord('Race distance card'), /^registry\/theme-briefs\/club-run\.md: accent placement "Race distance card" is not one of Registration call-out, Brand Pattern section$/m],
+  'a record with no accent placement': [{ ...published(), [RECORD]: { brief: 'club-run' } }, /^registry\/theme-briefs\/club-run\.md: accent placement null is not one of Registration call-out, Brand Pattern section$/m],
+  'a mood that does not name its recorded accent placement': [withRecord('Brand Pattern section'), /^registry\/theme-briefs\/club-run\.md: the mood paragraph does not name its accent placement "Brand Pattern section"$/m],
+};
+
+for (const [name, [changes, expected]] of Object.entries(COMMITTED_REFUSALS)) {
+  test(`check-only refuses ${name}`, (t) => assertRefused(t, changes, expected));
+}
+
+test('check-only reports a variable the theme lacks once, though prose and color checks both find it', (t) => {
+  const prose = { components: [[PROSE.components[0][0], PROSE.components[0][1], 'It sits on var(--immersive-support-50) with var(--immersive-on-support-50) text.'], PROSE.components[1]] };
+  const { status, out } = checkOnly(fixture(t, { ...published(), [BRIEF]: proseBrief(prose) }));
+  assert.equal(status, 1, out);
+  assert.equal(out.match(/names --immersive-support-50, which Club does not define$/gm)?.length, 1, out);
 });
