@@ -1197,3 +1197,12 @@ test('theme coverage counts a theme\'s published brief, in the folder --out name
   const moved = fixture(t, { ...published(), [BRIEF]: null, 'elsewhere/club-run.md': briefText });
   assert.match(covered(moved, '--out', join(moved, 'elsewhere')).out, /^elsewhere: Exclusive has no published brief; every Immersive Theme needs at least one$/m);
 });
+
+// On the Neon base the theme reaches shadcn's slots through ImmersiveLayout, whose stylesheet maps them;
+// an attribute set by hand on another root gets the variables and no mapping.
+test('a brief themes the page through ImmersiveLayout, never an attribute set by hand on the page root', () => {
+  const section = (heading) => briefText.split(`\n## ${heading}\n`)[1].split('\n## ')[0];
+  assert.match(section('Quick Start'), /^Build on the Neon base\. Add `@neon\/theme`, `@neon\/immersive-themes` and this brief's item, `@neon\/theme-brief-club-run`, then pass `immersiveTheme="club"` to `ImmersiveLayout`\./m);
+  assert.match(section("Do's and Don'ts"), /^- Pass `immersiveTheme="club"` to `ImmersiveLayout`/m);
+  assert.doesNotMatch(briefText, /on the page root/);
+});
