@@ -576,6 +576,130 @@
           "target": "src/theme/breakpoints.config.ts"
         }
       ]
+    },
+    {
+      "name": "theme-brief-club-run",
+      "type": "registry:item",
+      "title": "Club · Run",
+      "description": "Running shoes on a white canvas — a shared start line and an open invitation to sign up",
+      "categories": [
+        "theme-brief",
+        "club"
+      ],
+      "meta": {
+        "immersiveTheme": "club",
+        "briefName": "Run",
+        "presets": {
+          "occasion": "run",
+          "layout": "event-landing",
+          "imagery": "people-in-action"
+        },
+        "status": "provisional"
+      },
+      "registryDependencies": [
+        "@neon/theme",
+        "@neon/immersive-themes"
+      ],
+      "files": [
+        {
+          "path": "theme-briefs/club-run.md",
+          "type": "registry:file",
+          "target": "~/docs/theme-briefs/club-run.md"
+        }
+      ]
+    },
+    {
+      "name": "theme-brief-exclusive-run",
+      "type": "registry:item",
+      "title": "Exclusive · Run",
+      "description": "Laced shoes on a sunlit start line — a members' run with room for everyone who signs up",
+      "categories": [
+        "theme-brief",
+        "exclusive"
+      ],
+      "meta": {
+        "immersiveTheme": "exclusive",
+        "briefName": "Run",
+        "presets": {
+          "occasion": "run",
+          "layout": "event-landing",
+          "imagery": "people-in-action"
+        },
+        "status": "provisional"
+      },
+      "registryDependencies": [
+        "@neon/theme",
+        "@neon/immersive-themes"
+      ],
+      "files": [
+        {
+          "path": "theme-briefs/exclusive-run.md",
+          "type": "registry:file",
+          "target": "~/docs/theme-briefs/exclusive-run.md"
+        }
+      ]
+    },
+    {
+      "name": "theme-brief-private-run",
+      "type": "registry:item",
+      "title": "Private · Run",
+      "description": "Laced shoes at a shared start line — momentum for members, and an open invitation to sign up",
+      "categories": [
+        "theme-brief",
+        "private"
+      ],
+      "meta": {
+        "immersiveTheme": "private",
+        "briefName": "Run",
+        "presets": {
+          "occasion": "run",
+          "layout": "event-landing",
+          "imagery": "people-in-action"
+        },
+        "status": "provisional"
+      },
+      "registryDependencies": [
+        "@neon/theme",
+        "@neon/immersive-themes"
+      ],
+      "files": [
+        {
+          "path": "theme-briefs/private-run.md",
+          "type": "registry:file",
+          "target": "~/docs/theme-briefs/private-run.md"
+        }
+      ]
+    },
+    {
+      "name": "theme-brief-ultra-run",
+      "type": "registry:item",
+      "title": "Ultra · Run",
+      "description": "Fresh strides on a navy start line — shared momentum and an open invitation for every member to sign up",
+      "categories": [
+        "theme-brief",
+        "ultra"
+      ],
+      "meta": {
+        "immersiveTheme": "ultra",
+        "briefName": "Run",
+        "presets": {
+          "occasion": "run",
+          "layout": "event-landing",
+          "imagery": "people-in-action"
+        },
+        "status": "provisional"
+      },
+      "registryDependencies": [
+        "@neon/theme",
+        "@neon/immersive-themes"
+      ],
+      "files": [
+        {
+          "path": "theme-briefs/ultra-run.md",
+          "type": "registry:file",
+          "target": "~/docs/theme-briefs/ultra-run.md"
+        }
+      ]
     }
   ]
 }
