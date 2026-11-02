@@ -50,10 +50,17 @@ Preview the starter after editing canonical theme assets (pure filesystem assemb
 node scripts/assemble-starter.mjs /tmp/neon-preview && cd /tmp/neon-preview && npm install && npm run dev
 ```
 
-Install into a real consuming project (does the same assembly, then installs dependencies):
+Start an app from the Neon base, or add Neon registry items to an app, from the registry pinned to this release (`shadcn init` / `shadcn add`):
 
 ```sh
 node scripts/install.mjs <target-dir> --new
+node scripts/install.mjs <app-dir> --add <item>...
+```
+
+Build this checkout's registry, create and build disposable apps from it inside and outside a repository:
+
+```sh
+node scripts/smoke-new-app.mjs
 ```
 
 Package a complete, self-contained plugin artifact:

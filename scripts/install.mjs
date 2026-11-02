@@ -77,8 +77,8 @@
  *                 "Done" success message.
  *
  * --registry <url>: maintainers only. Serves --new and --add from another
- *                 build of the registry, such as the local one
- *                 scripts/smoke-new-app.mjs serves, instead of the release.
+ *                 build of the registry, such as one served locally from
+ *                 this checkout, instead of the release.
  *
  * Exits 1 on any refusal, or with the failing command's own exit status.
  */
