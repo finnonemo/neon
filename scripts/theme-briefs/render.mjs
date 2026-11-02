@@ -274,7 +274,8 @@ function layoutSection(_, prose) {
 }
 
 // Prose of the right shape for a brief, every text set to `text`: for a section no entry has drafted.
-export function placeholderProse({ occasion }, text = '[not drafted]') {
+export const PLACEHOLDER = '[not drafted]';
+export function placeholderProse({ occasion }, text = PLACEHOLDER) {
   return {
     tagline: { tagline: text },
     'mood-occasion': { paragraph: text },
