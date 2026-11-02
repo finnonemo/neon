@@ -10,7 +10,17 @@ Use the named app or a working directory inside a clear app. Otherwise inspect w
 
 Read the target manifest, lockfile and actual entry/imports. Confirm React, Vue, Svelte or other framework from active code, not an unused dependency. Unknown stays unknown. Record package manager from lockfile/workspace settings and available build/typecheck commands. Compare installed React/CDS versions with required APIs before changing dependencies; a major mismatch is a migration decision, not permission to upgrade.
 
-CDS is the React implementation path. For non-React targets, keep the existing framework and use CSS tokens. Explicit colors-only scope wins even when CDS is installed. If a framework choice is explicit and unsupported by the starter, say so rather than silently substituting React.
+New React work goes on the Neon base, and an app already on React keeps its [base](#base). For non-React targets, keep the existing framework and use CSS tokens. Explicit colors-only scope wins whatever the base. If a framework choice is explicit and unsupported by the starter, say so rather than silently substituting React.
+
+## Base
+
+Tell the base from the manifests, as neon-create does:
+
+- **Neon base:** `components.json` has an `@neon` registry entry. Its components are Neon registry items, styled by the rules in [Neon base](../../neon-create/references/neon-base.md).
+- **CDS:** `package.json` depends on `@coinbase/cds-web`. CDS is frozen for apps already on it: they keep CDS, styled as [CDS integration](../../neon-create/references/cds-integration.md) describes.
+- **Neither:** no `@neon` entry and no CDS. A `components.json` without `@neon` is plain shadcn (v0, Lovable): it keeps its own components and is restyled through its CSS variables.
+
+An app with both an `@neon` entry and CDS is mixed: report it as unresolved and add to neither side. Restyle and review keep the app on its base; a new React app starts on the Neon base. The base an app is on is not a finding. Without source, such as from a screenshot alone, the base is unknown; say so.
 
 ## Existing theme
 

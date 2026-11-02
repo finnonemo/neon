@@ -15,20 +15,20 @@ Use for unresolved integration choices or explicit assessment requests. Brand in
 
 ## Fast path
 
-Review requests go directly to [neon-review](../neon-review/SKILL.md). New React apps and features in an already themed CDS app go to [neon-create](../neon-create/SKILL.md). Explicit CSS-only restyles go to [neon-redesign](../neon-redesign/SKILL.md). Do not reopen settled choices because a theme file exists.
+Review requests go directly to [neon-review](../neon-review/SKILL.md). New React apps, and features in an app on the Neon base or already themed on CDS, go to [neon-create](../neon-create/SKILL.md). Explicit CSS-only restyles go to [neon-redesign](../neon-redesign/SKILL.md). Do not reopen settled choices because a theme file exists.
 
 ## Workflow
 
 1. Reuse known target and scope. If routing is unsettled, read the [shared contract](references/workflow-contract.md). Resolve the Neon root from this skill's real directory, two levels up; never from the target app's working directory.
-2. Inspect only missing evidence: target manifest/lockfile, relevant entry/theme/provider usage, styling mechanism and local/shared consumers. Read source, not generated/vendor files. A dependency alone does not prove active wiring.
-3. Apply explicit scope first. Non-React stays on the CSS path. Existing working theme/providers are reused. Recommend one approach with a short reason.
-4. Ask one focused question only if the app target is unresolved or a material adoption/scope choice remains. Do not offer Full CDS for non-React, ask an automatic upgrade question, or request approval for an obvious reuse decision.
-5. Pass target, tier, preserved behavior and useful evidence to the chosen skill. If the request was assessment-only, stop with the recommendation instead of starting edits.
+2. Inspect only missing evidence: target manifest/lockfile and the app's [base](references/project-inspection.md#base), relevant entry/theme/provider usage, styling mechanism and local/shared consumers. Read source, not generated/vendor files. A dependency alone does not prove active wiring.
+3. Apply explicit scope first. Non-React stays on the CSS path. An app keeps its base: a new React app starts on the Neon base, a CDS app stays on CDS, and plain shadcn takes `@neon/` items only for requested components. Existing working theme/providers are reused. Recommend one approach with a short reason.
+4. Ask one focused question only if the app target is unresolved or a material adoption/scope choice remains. Do not offer a React base for non-React, or CDS to an app not already on it, ask an automatic upgrade question, or request approval for an obvious reuse decision.
+5. Pass target, base, tier, preserved behavior and useful evidence to the chosen skill. If the request was assessment-only, stop with the recommendation instead of starting edits.
 
 ## Conditional references
 
-Read only the relevant section of [project inspection](references/project-inspection.md): [multiple apps](references/project-inspection.md#multiple-apps), [framework and dependencies](references/project-inspection.md#framework-and-dependencies), [existing theme](references/project-inspection.md#existing-theme), [SSR](references/project-inspection.md#server-rendered-react), or [partial scope](references/project-inspection.md#partial-scope). Do not load the design guide merely to identify a framework.
+Read only the relevant section of [project inspection](references/project-inspection.md): [multiple apps](references/project-inspection.md#multiple-apps), [framework and dependencies](references/project-inspection.md#framework-and-dependencies), [base](references/project-inspection.md#base), [existing theme](references/project-inspection.md#existing-theme), [SSR](references/project-inspection.md#server-rendered-react), or [partial scope](references/project-inspection.md#partial-scope). Do not load the design guide merely to identify a framework.
 
 ## Done
 
-Return the recommended path and rationale, preserved scope, and any unresolved choice. State what was inspected; do not imply an exhaustive hardcoded-style scan. Continue the authorized implementation through the selected skill without repeating onboarding.
+Return the recommended path and rationale, the app's base, preserved scope, and any unresolved choice. State what was inspected; do not imply an exhaustive hardcoded-style scan. Continue the authorized implementation through the selected skill without repeating onboarding.
