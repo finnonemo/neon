@@ -1074,3 +1074,17 @@ test('accept checks each entry as the draft reads, and passes soft misses on as 
   assert.match(second.out, /^club-run: warning — tagline: "tagline" capitalizes "Sunday"; taglines are sentence case$/m);
   assert.match(second.out, /hand-edited: tagline$/m);
 });
+
+test('a redraft record describes the latest run: its model, effort and account label', (t) => {
+  const root = drafted(t);
+  const plain = again(t, root, ['redraft', 'club-run', 'tagline']);
+  assert.equal(plain.status, 0, plain.out);
+  const record = JSON.parse(readFileSync(join(root, RECORD), 'utf8'));
+  assert.deepEqual(Object.keys(record), ['brief', 'tool', 'claudeCode', 'account', 'entries', 'accentPlacement']);
+  assert.equal(record.account, 'maintainer-sign-in');
+  const flagged = again(t, root, ['redraft', 'club-run', 'tagline', '--model', 'claude-sonnet-5-5', '--account', 'neutral-key']);
+  assert.equal(flagged.status, 0, flagged.out);
+  const after = JSON.parse(readFileSync(join(root, RECORD), 'utf8'));
+  assert.deepEqual(after.claudeCode, { version: '2.1.316', model: 'claude-sonnet-5-5', effort: 'high', modelOverride: true });
+  assert.equal(after.account, 'neutral-key');
+});

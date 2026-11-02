@@ -1,13 +1,14 @@
 // accept and redraft modes: they keep a maintainer's hand edits safe from the model. A section is
 // hand-edited when its prose, read back from the brief, no longer matches the output hash its record
 // gives. accept reruns every check on a hand-edited local draft and writes it when every hard check
-// passes; its record keeps the model's output hashes and marks the edited sections. redraft reruns named entries and the entries after them, and refuses to overwrite a hand-edited
-// section unless it is named to discard. Entry changes never trigger a redraft: redraft only says which
-// kept sections were drafted from an older entry.
+// passes; its record keeps the model's output hashes and marks the edited sections. redraft reruns named
+// entries and the entries after them, and refuses to overwrite a hand-edited section unless it is named
+// to discard. Entry changes never trigger a redraft: redraft only says which kept sections were drafted
+// from an older entry.
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { briefProblems, RECORDS } from './checks.mjs';
-import { draftBrief, entryTargets, hash, MARKERS, prepare, runClaude, writeResults } from './draft.mjs';
+import { ACCOUNTS, draftBrief, entryTargets, hash, MARKERS, prepare, runClaude, writeResults } from './draft.mjs';
 import { MODEL } from './model.mjs';
 import { accentPlacements, entryChecks } from './prose-checks.mjs';
 import { PLACEHOLDER, readProse } from './render.mjs';
@@ -32,7 +33,7 @@ function withDependents(named, entries) {
 
 const refuse = (lines) => ({ lines: [...lines, 'Redraft: nothing redrafted; fix the problems above'], failed: true });
 
-export function redraftBrief({ root, name, entries: named, discard = [], out = join(root, 'registry/theme-briefs'), local = join(root, '.local/theme-briefs'), model = MODEL, account, claude = process.env.CLAUDE_PATH || 'claude' }) {
+export function redraftBrief({ root, name, entries: named, discard = [], out = join(root, 'registry/theme-briefs'), local = join(root, '.local/theme-briefs'), model = MODEL, account = ACCOUNTS[0], claude = process.env.CLAUDE_PATH || 'claude' }) {
   const unknown = [...new Set([...named, ...discard])].filter((entry) => !ENTRIES.includes(entry));
   if (unknown.length) return refuse(unknown.map((entry) => `"${entry}" is not a prompt library entry (${ENTRIES.join(', ')})`));
   const { inputs, library, briefs, context, refused } = prepare({ root, names: [name], model, claude });
@@ -80,12 +81,12 @@ function acceptedPlacement(paragraph, brief, recorded) {
 
 // Every check on one accepted draft, as { problems, warnings, accentPlacement }: draft markers, then each
 // entry's hard and soft checks on the prose as the draft reads, then the brief-level checks.
-function acceptProblems(text, brief, run, { library, sources, tokens }) {
+function acceptProblems(text, brief, runRecord, { library, sources, tokens }) {
   const left = [PLACEHOLDER, ...MARKERS].filter((mark) => text.includes(mark));
   if (left.length) return { problems: left.map((mark) => `still holds "${mark.replace(/:\*\*$/, '')}"; replace the ${mark === PLACEHOLDER ? 'placeholder' : 'marker'} with the section's prose`), warnings: [] };
   const { prose, problems: unread } = readProse(text, brief);
   if (unread) return { problems: unread, warnings: [] };
-  const accentPlacement = acceptedPlacement(prose['mood-occasion'].paragraph, brief, run.accentPlacement);
+  const accentPlacement = acceptedPlacement(prose['mood-occasion'].paragraph, brief, runRecord.accentPlacement);
   const problems = [];
   const warnings = [];
   for (const entry of library.order) {
@@ -110,32 +111,32 @@ export function acceptBriefs({ root, names, out = join(root, 'registry/theme-bri
     const draftPath = join(local, name, 'draft.md');
     const runPath = join(local, name, 'record.json');
     const where = relative(root, draftPath);
-    let run;
+    let runRecord;
     let text;
-    let found;
-    if (!existsSync(draftPath) || !existsSync(runPath)) found = { problems: [`accept needs the draft and its run record ${relative(root, runPath)}; run draft first`] };
+    let checked;
+    if (!existsSync(draftPath) || !existsSync(runPath)) checked = { problems: [`accept needs the draft and its run record ${relative(root, runPath)}; run draft first`] };
     else {
       text = readFileSync(draftPath, 'utf8');
       try {
-        run = JSON.parse(readFileSync(runPath, 'utf8'));
-        found = acceptProblems(text, brief, run, { library, ...context });
+        runRecord = JSON.parse(readFileSync(runPath, 'utf8'));
+        checked = acceptProblems(text, brief, runRecord, { library, ...context });
       } catch (error) {
         if (!(error instanceof SyntaxError)) throw error;
-        found = { problems: [`its run record ${relative(root, runPath)} is not valid JSON (${error.message})`] };
+        checked = { problems: [`its run record ${relative(root, runPath)} is not valid JSON (${error.message})`] };
       }
     }
-    if (found.problems.length) {
+    if (checked.problems.length) {
       failed = true;
-      lines.push(...found.problems.map((problem) => `${where}: ${problem}`), `${name}: not accepted; nothing written`);
+      lines.push(...checked.problems.map((problem) => `${where}: ${problem}`), `${name}: not accepted; nothing written`);
       continue;
     }
-    lines.push(...found.warnings.map((warning) => `${name}: warning — ${warning}`));
-    const edited = handEdited(found.prose, run);
-    const entries = Object.fromEntries(Object.entries(run.entries).map(([entry, data]) => [entry, edited.includes(entry) ? { ...data, handEdited: true } : data]));
+    lines.push(...checked.warnings.map((warning) => `${name}: warning — ${warning}`));
+    const edited = handEdited(checked.prose, runRecord);
+    const entries = Object.fromEntries(Object.entries(runRecord.entries).map(([entry, data]) => [entry, edited.includes(entry) ? { ...data, handEdited: true } : data]));
     mkdirSync(out, { recursive: true });
     mkdirSync(join(root, RECORDS), { recursive: true });
     writeFileSync(join(out, `${name}.md`), text);
-    writeFileSync(join(root, RECORDS, `${name}.json`), `${JSON.stringify({ ...run, entries, accentPlacement: found.accentPlacement }, null, 2)}\n`);
+    writeFileSync(join(root, RECORDS, `${name}.json`), `${JSON.stringify({ ...runRecord, entries, accentPlacement: checked.accentPlacement }, null, 2)}\n`);
     lines.push(`${name}: accepted; written to ${relative(root, join(out, `${name}.md`))}; ${edited.length ? `hand-edited: ${edited.join(', ')}` : 'no section hand-edited'}`);
   }
   return { lines, failed };

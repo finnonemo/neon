@@ -142,7 +142,7 @@ node scripts/theme-briefs/theme-briefs.mjs accept club-run
 - It reruns every check on the prose as the draft reads: each entry's hard checks, then checks 3, 4, 5, 7 and 10 on the whole brief. A hard failure is listed as `<draft>: <entry>: <message>`, and nothing is written.
 - Soft misses do not block. They are printed as `<brief>: warning — <entry>: <message>`.
 - When every hard check passes, it writes the brief and its authoring record, and names the hand-edited sections. The record keeps the model's output hashes, or `null` where the model produced none, and marks each edited entry `"handEdited": true`. A later redraft still sees those sections as edited.
-- The accent placement is the run's while the mood paragraph names it. Otherwise it is the one placement the paragraph names.
+- The record keeps the run's accent placement while the mood paragraph still names it. Otherwise it takes the one placement the paragraph names.
 
 **redraft** reruns entries of a committed brief:
 
