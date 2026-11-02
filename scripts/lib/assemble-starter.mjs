@@ -12,7 +12,7 @@
 import { cp, mkdir, readdir, lstat, copyFile, constants } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { join, relative, resolve, isAbsolute } from "node:path";
-import { CDS_FILES } from "./assets.mjs";
+import { CDS_FILES, LOGO_DIR, LOGO_FILES } from "./assets.mjs";
 
 const EXCLUDED_NAMES = new Set(["node_modules", "dist", ".git", ".DS_Store"]);
 
@@ -74,7 +74,13 @@ function validateCanonicalSource(sourceRoot) {
       throw new Error(`assembleStarter: missing canonical theme file ${join(cdsDir, file)}`);
     }
   }
-  return { starterDir, cdsDir };
+  const logoDir = join(sourceRoot, LOGO_DIR);
+  for (const file of LOGO_FILES) {
+    if (!existsSync(join(logoDir, file))) {
+      throw new Error(`assembleStarter: missing canonical logo ${join(logoDir, file)}`);
+    }
+  }
+  return { starterDir, cdsDir, logoDir };
 }
 
 /**
@@ -87,7 +93,7 @@ export async function assembleStarter({ sourceRoot, destination }) {
   if (!sourceRoot) throw new Error("assembleStarter: sourceRoot is required");
   if (!destination) throw new Error("assembleStarter: destination is required");
 
-  const { starterDir, cdsDir } = validateCanonicalSource(sourceRoot);
+  const { starterDir, cdsDir, logoDir } = validateCanonicalSource(sourceRoot);
   const resolvedDest = await validateDestination(sourceRoot, destination);
 
   await mkdir(resolvedDest, { recursive: true });
@@ -100,6 +106,13 @@ export async function assembleStarter({ sourceRoot, destination }) {
   await mkdir(destThemeDir, { recursive: true });
   for (const file of CDS_FILES) {
     await copyFile(join(cdsDir, file), join(destThemeDir, file), constants.COPYFILE_EXCL);
+  }
+
+  // The starter's Logo imports its SVGs from src/assets/logo; they live once, in theme/logo/.
+  const destLogoDir = join(resolvedDest, "src", "assets", "logo");
+  await mkdir(destLogoDir, { recursive: true });
+  for (const file of LOGO_FILES) {
+    await copyFile(join(logoDir, file), join(destLogoDir, file), constants.COPYFILE_EXCL);
   }
 
   return { destination: resolvedDest, themeFiles: [...CDS_FILES] };

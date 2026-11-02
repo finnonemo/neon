@@ -79,7 +79,7 @@ For existing screens, apply these decisions only within authorized composition c
 
 Use IBM Plex Sans Thai via the app's font loader, with both Thai and Latin verified. Use the generated CDS typography roles and shipped spacing/radius tokens. Structural widths and responsive geometry may use documented layout dimensions; do not prohibit every numeric CSS value. Preserve geometry during colors-only work.
 
-Use `templates/vitejs-cds/src/layout/Logo.tsx` and its SVG assets when the starter is available; select the mark for its actual surface. Do not recreate the wordmark as text. Existing apps reuse their approved assets.
+Use the Finnomena logo SVGs in `theme/logo/` through a `Logo`: the Neon base's `@neon/logo` registry item, or `templates/vitejs-cds/src/layout/Logo.tsx` on CDS. Select the mark for its actual surface. Do not recreate the wordmark as text. Existing apps reuse their approved assets.
 
 ## Feature states and narrow screens
 

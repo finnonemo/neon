@@ -231,6 +231,17 @@ test('new assembles the starter with canonical theme files and runs npm ci in it
   assert.equal(result.dependenciesInstalled, true);
 });
 
+test('new takes the starter logos from the canonical theme/logo copy', async t => {
+  const destination = join(await sandbox(t), 'fresh');
+  await install({ mode: 'new', target: destination, skipInstall: true, runCommand: () => {} });
+  const logos = (await readdir(join(repoRoot, 'theme/logo'))).filter(name => name.endsWith('.svg')).sort();
+  assert.deepEqual(logos, ['logo-finnomena-icon-dark.svg', 'logo-finnomena-icon-light.svg', 'logo-finnomena-text-dark.svg', 'logo-finnomena-text-light.svg']);
+  assert.deepEqual((await readdir(join(destination, 'src/assets/logo'))).sort(), logos);
+  for (const name of logos) {
+    assert.equal(await readFile(join(destination, 'src/assets/logo', name), 'utf8'), await readFile(join(repoRoot, 'theme/logo', name), 'utf8'), name);
+  }
+});
+
 test('new with an explicit manager runs a plain install', async t => {
   const destination = join(await sandbox(t), 'fresh');
   const { calls, runCommand } = recorder();

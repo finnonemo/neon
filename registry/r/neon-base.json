@@ -24,7 +24,9 @@
     "https://raw.githubusercontent.com/finnonemo/neon/neon--v0.5.0/registry/r/utils.json",
     "https://raw.githubusercontent.com/finnonemo/neon/neon--v0.5.0/registry/r/button.json",
     "https://raw.githubusercontent.com/finnonemo/neon/neon--v0.5.0/registry/r/tooltip.json",
-    "https://raw.githubusercontent.com/finnonemo/neon/neon--v0.5.0/registry/r/sonner.json"
+    "https://raw.githubusercontent.com/finnonemo/neon/neon--v0.5.0/registry/r/sonner.json",
+    "https://raw.githubusercontent.com/finnonemo/neon/neon--v0.5.0/registry/r/logo.json",
+    "https://raw.githubusercontent.com/finnonemo/neon/neon--v0.5.0/registry/r/layouts.json"
   ],
   "files": [
     {
@@ -41,7 +43,7 @@
     },
     {
       "path": "base/App.tsx",
-      "content": "import { Button } from \"@/components/ui/button\"\n\nexport function App() {\n  return (\n    <main className=\"flex min-h-svh flex-col items-start gap-4 p-6\">\n      <h1 className=\"text-title2\">Finnomena App</h1>\n      <Button>เริ่มต้น / Get started</Button>\n    </main>\n  )\n}\n",
+      "content": "import { AppShell } from \"@/layout/AppShell\"\n\n// AppShell's `navigation` prop (see ./layout/navItems.ts's `NavItem`)\n// drives both the desktop Sidebar rail and the mobile BottomNav. Left empty\n// here so a fresh app never ships dead links; BottomNav renders nothing (not\n// an empty bar) for an empty list. Replace with your own items once real\n// in-app destinations exist, e.g. [{ label: \"Home\", icon: House, href: \"/\",\n// active: true }] with House from lucide-react. To link out to Finnomena's\n// own ecosystem instead, import `finnomenaEcosystemNav` from\n// \"@/layout/navItems\" and pass it here.\nexport function App() {\n  return (\n    <AppShell\n      sidebar={null}\n      navigation={[]}\n      content={<div>Content</div>}\n      inspector={<div>Inspector — start building here</div>}\n    />\n  )\n}\n",
       "type": "registry:file",
       "target": "src/App.tsx"
     },
