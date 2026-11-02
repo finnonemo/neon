@@ -53,6 +53,10 @@ Run each request with the named context, first against the baseline and then the
 | Restyle a v0/Lovable React + Tailwind v4 + shadcn project to Finnomena | Detects shadcn on v4; edits `:root`/`.dark` by role and pair; leaves `@theme inline`; installs no CDS. | [shadcn on Tailwind v4 restyle](records/shadcn-on-tailwind-v4-restyle.md) |
 | Colors-only restyle of a Tailwind v4 app whose disabled text must keep a stock utility | The run executes the shipped source lint on its changed files and the report fixes or justifies each warning on a `Source lint:` line. | [Source lint](records/source-lint.md) |
 | Colors-only restyle of a Tailwind v4 app that uses stock utilities only | As stated in the record | [Tailwind colors-only regression](records/tailwind-colors-only-regression.md) |
+| Build a Campaign Page from a named Theme Brief and a supplied Reference Design | Lists briefs with `theme-brief.mjs list` and adds the brief; runs `match` on the style file; Brand Intensity governs the Reference Design and the brief contributes only its Immersive Theme's colors; records both `referenceDesign` and `themeBrief`; no source-brand string | [Theme Briefs](records/theme-briefs.md) |
+| Build a Campaign Page from a Refero `./DESIGN.md` in an empty workspace | Takes the Reference Design route at Blended and offers the dial; no source-brand string | [Theme Briefs](records/theme-briefs.md) |
+| Follow-up in an app holding `./docs/theme-briefs/club-run.md`: add an FAQ section | Recognises the brief with `match`; keeps `immersiveTheme="club"`; offers no Brand Intensity dial; leaves `referenceDesign` unset | [Theme Briefs](records/theme-briefs.md) |
+| Build a Campaign Page from a Refero file retitled with a Theme Brief header that no registry item has | `match` says Reference Design; the report says the header matches no Theme Brief; Reference Design route at Blended with the dial; no source-brand string | [Theme Briefs](records/theme-briefs.md) |
 <!-- END scenarios -->
 
 Verdicts are pass, fail or unverified for routing, scope, resource retrieval, component correctness, color roles, feature completion, responsive behavior and evidence honesty. Link actual artifacts. Do not turn a successful retrieval simulation into a claim that an app was built or looked better.
@@ -104,4 +108,5 @@ Each case's runs live in their own file under `evals/skills/records/`, so pull r
 - [shadcn on Tailwind v4 restyle](records/shadcn-on-tailwind-v4-restyle.md)
 - [Source lint](records/source-lint.md)
 - [Tailwind colors-only regression](records/tailwind-colors-only-regression.md)
+- [Theme Briefs](records/theme-briefs.md)
 <!-- END records -->
