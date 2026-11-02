@@ -108,7 +108,7 @@ export async function assembleStarter({ sourceRoot, destination }) {
     await copyFile(join(cdsDir, file), join(destThemeDir, file), constants.COPYFILE_EXCL);
   }
 
-  // The starter's Logo imports ../assets/logo/; the SVGs live once, in theme/logo/.
+  // The starter's Logo imports its SVGs from src/assets/logo; they live once, in theme/logo/.
   const destLogoDir = join(resolvedDest, "src", "assets", "logo");
   await mkdir(destLogoDir, { recursive: true });
   for (const file of LOGO_FILES) {
