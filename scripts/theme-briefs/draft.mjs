@@ -24,7 +24,7 @@ const FILLS = { tagline: 'Header', 'mood-occasion': 'Header', 'occasion-componen
 const canonical = (value) => Array.isArray(value) ? `[${value.map(canonical).join(',')}]`
   : value && typeof value === 'object' ? `{${Object.keys(value).sort().map((key) => `${JSON.stringify(key)}:${canonical(value[key])}`).join(',')}}`
     : JSON.stringify(value);
-const hash = (value) => createHash('sha256').update(typeof value === 'string' ? value : canonical(value)).digest('hex');
+export const hash = (value) => createHash('sha256').update(typeof value === 'string' ? value : canonical(value)).digest('hex');
 const normalize = (value) => typeof value === 'string' ? value.replace(/\s+/g, ' ').trim()
   : Array.isArray(value) ? value.map(normalize)
     : value && typeof value === 'object' ? Object.fromEntries(Object.entries(value).map(([key, inner]) => [key, normalize(inner)])) : value;
@@ -78,27 +78,38 @@ function entryPrompt(name, data, bands, inputs, previous) {
   ].join('\n');
 }
 
-// Draft one brief's entries; returns everything the writes and the review report need.
-function draftBrief(name, brief, { library, claude, model, sources, tokens }) {
+// An entry's bands and output schema for one brief: the mood band covers the whole paragraph, less its
+// scripted theme half and ratio line, and the mood's schema takes the brief's accent placements.
+export function entryTargets(entry, data, brief) {
+  const placements = accentPlacements(brief);
+  const head = splitSections(renderBrief(brief, placeholderProse(brief)))[0].text.split('\n');
+  const scriptedMood = entry === 'mood-occasion' ? words(head.at(-3)) + words(head.at(-1)) : 0;
+  const bands = Object.fromEntries(Object.entries(data.targets).map(([key, [low, high]]) => [key, [low - scriptedMood, high - scriptedMood]]));
+  const schema = entry === 'mood-occasion'
+    ? { ...data.output, properties: { ...data.output.properties, accentPlacement: placements.length ? { type: 'string', enum: placements } : { enum: [null] } } }
+    : data.output;
+  return { bands, schema, placements };
+}
+
+// Draft one brief's entries; returns everything the writes and the review report need. Entries in `seed`
+// are not drafted: their outputs, read from a committed brief, stand in for later entries' inputs.
+export function draftBrief(name, brief, { library, claude, model, sources, tokens }, seed = {}) {
   const { shared, entries, order } = library;
   const system = systemPrompt(shared, brief);
-  const placements = accentPlacements(brief);
-  // The mood band covers the whole paragraph; the theme half and ratio line are scripted.
-  const head = splitSections(renderBrief(brief, placeholderProse(brief)))[0].text.split('\n');
-  const scriptedMood = words(head.at(-3)) + words(head.at(-1));
-  const outputs = {};
+  const outputs = { ...seed };
   const runs = {};
   for (const entry of order) {
     const data = entries[entry];
+    if (seed[entry]) {
+      runs[entry] = { seeded: true };
+      continue;
+    }
     const waiting = data.after.filter((other) => !outputs[other]);
     if (waiting.length) {
       runs[entry] = { waiting };
       continue;
     }
-    const bands = Object.fromEntries(Object.entries(data.targets).map(([key, [low, high]]) => [key, entry === 'mood-occasion' ? [low - scriptedMood, high - scriptedMood] : [low, high]]));
-    const schema = entry === 'mood-occasion'
-      ? { ...data.output, properties: { ...data.output.properties, accentPlacement: placements.length ? { type: 'string', enum: placements } : { enum: [null] } } }
-      : data.output;
+    const { bands, schema, placements } = entryTargets(entry, data, brief);
     const resolved = Object.fromEntries(data.inputs.map((input) => [input, inputValue(input, brief, outputs)]));
     const attempts = [];
     while (attempts.length < ATTEMPTS && !(attempts.length && !attempts.at(-1).hard.length && !attempts.at(-1).soft.length)) {
@@ -133,6 +144,9 @@ function draftBrief(name, brief, { library, claude, model, sources, tokens }) {
   return { name, brief, system, runs, order, outputs, text, scripted, passed: !markers.length, draft: withMarkers(text, markers) };
 }
 
+// The markers withMarkers puts where a section did not pass.
+export const MARKERS = ['**Hard checks failed —', '**Not drafted —', '**Brief checks failed:**'];
+
 // The brief with each marker as a paragraph straight after its section's heading line.
 function withMarkers(text, markers) {
   const lines = text.split('\n');
@@ -143,6 +157,8 @@ function withMarkers(text, markers) {
   return lines.join('\n');
 }
 
+// The authoring record of a run. A failed run's record, kept under .local/, has null for what an entry
+// did not produce. A seeded entry keeps its entry from the record it was seeded from (`previous`).
 function record(result, { commit, version, claudeVersion: claudeCode, model, account }) {
   const read = readProse(result.text, result.brief).prose;
   return {
@@ -151,17 +167,18 @@ function record(result, { commit, version, claudeVersion: claudeCode, model, acc
     claudeCode: { version: claudeCode, model, effort: EFFORT, modelOverride: model !== MODEL },
     account,
     entries: Object.fromEntries(result.order.map((entry) => {
-      const { inputs, attempts, kept } = result.runs[entry];
+      const { inputs, attempts = [], kept, seeded } = result.runs[entry];
+      if (seeded) return [entry, result.previous[entry]];
       return [entry, {
         entry: hash(result.library[entry]),
         shared: hash(result.shared),
-        inputs: hash(inputs),
+        inputs: inputs ? hash(inputs) : null,
         attempts: attempts.map(({ hard, soft }) => ({ hard: hard.length, soft: soft.length })),
-        kept: kept.number,
-        output: hash(read[entry]),
+        kept: kept?.number ?? null,
+        output: kept ? hash(read[entry]) : null,
       }];
     })),
-    accentPlacement: result.outputs['mood-occasion'].accentPlacement,
+    accentPlacement: result.outputs['mood-occasion']?.accentPlacement ?? null,
   };
 }
 
@@ -192,6 +209,10 @@ function review(result, { root, out, others, claudeVersion: claudeCode, model })
   for (const entry of order) {
     const run = runs[entry];
     lines.push('', `## ${entry}`, '', `Entry ${hash(result.library[entry])}.`, '');
+    if (run.seeded) {
+      lines.push('Not redrafted: kept from the committed brief.');
+      continue;
+    }
     if (run.waiting) {
       lines.push(`Not run: it waits on ${run.waiting.join(', ')}.`);
       continue;
@@ -223,7 +244,7 @@ function review(result, { root, out, others, claudeVersion: claudeCode, model })
 }
 
 // The prompt library, ready to run, as { library } or { problems }.
-function libraryOf(inputs) {
+export function libraryOf(inputs) {
   const files = Object.fromEntries(inputs.library.map(({ name, data }) => [name, data]));
   const missing = ['shared', ...ENTRIES].filter((name) => !files[name]).map((name) => `theme-briefs/prompt-library/${name}.json is missing; draft needs every entry`);
   if (missing.length) return { problems: missing };
@@ -231,26 +252,33 @@ function libraryOf(inputs) {
   return { library: { shared: files.shared, entries, order: entryOrder(Object.fromEntries(ENTRIES.map((name) => [name, entries[name].after]))).order } };
 }
 
-export function draftBriefs({ root, names, out = join(root, 'registry/theme-briefs'), local = join(root, '.local/theme-briefs'), model = MODEL, account = ACCOUNTS[0], claude = process.env.CLAUDE_PATH || 'claude' }) {
+// What a model run needs, as { inputs, library, briefs, context } or { refused }.
+export function prepare({ root, names, model, claude }) {
   const { inputs, problems } = checkInputs(root);
   const { library, problems: libraryProblems = [] } = problems.length ? {} : libraryOf(inputs);
   const refused = [...problems, ...libraryProblems];
   const briefs = refused.length ? [] : names.map((name) => ({ name, ...renderable(name, inputs, problems) }));
   for (const { name, brief, reason } of briefs) if (!brief) refused.push(`${name}: ${reason ?? 'its inputs cannot be rendered'}`);
-  if (refused.length) return { lines: [...refused, 'Draft: nothing drafted; fix the problems above'], failed: true };
+  if (refused.length) return { refused };
+  const context = { library, claude, model, sources: sourceNamesOf(inputs.presets), tokens: paletteTokens(join(root, 'theme/tokens/colors.json')) };
+  return { inputs, library, briefs, context };
+}
 
-  const sources = sourceNamesOf(inputs.presets);
-  const context = { library, claude, model, sources, tokens: paletteTokens(join(root, 'theme/tokens/colors.json')) };
-  let results;
-  let claudeCode;
+// Drafts each brief with `draft(brief)`, as { results, claudeCode } or { lines, failed } when Claude Code
+// cannot answer.
+export function runClaude(claude, briefs, draft) {
   try {
-    claudeCode = claudeVersion(claude);
-    results = briefs.map(({ name, brief }) => ({ ...draftBrief(name, brief, context), library: library.entries, shared: library.shared }));
+    const claudeCode = claudeVersion(claude);
+    return { claudeCode, results: briefs.map(draft) };
   } catch (error) {
     if (!(error instanceof ClaudeError)) throw error;
     return { lines: [`${error.message}. Nothing was written.`], failed: true };
   }
+}
 
+// Writes each result's local draft, review report and run record, and, when it passed, the brief and its
+// authoring record.
+export function writeResults(results, { root, out, local, inputs, claudeCode, model, account }) {
   const others = existsSync(out) ? readdirSync(out).filter((file) => file.endsWith('.md')).map((file) => {
     const other = file.replace(/\.md$/, '');
     return { name: other, theme: inputs.picks.find((picks) => picks.name === other)?.data?.theme, text: readFileSync(join(out, file), 'utf8') };
@@ -259,9 +287,11 @@ export function draftBriefs({ root, names, out = join(root, 'registry/theme-brie
   const lines = [];
   for (const result of results) {
     const dir = join(local, result.name);
+    const json = `${JSON.stringify(record(result, meta), null, 2)}\n`;
     mkdirSync(dir, { recursive: true });
     writeFileSync(join(dir, 'draft.md'), result.draft);
     writeFileSync(join(dir, 'review.md'), review(result, meta));
+    writeFileSync(join(dir, 'record.json'), json);
     const reviewPath = relative(root, join(dir, 'review.md'));
     if (!result.passed) {
       lines.push(`${result.name}: checks failed; not written. Draft ${relative(root, join(dir, 'draft.md'))}; review ${reviewPath}`);
@@ -270,8 +300,16 @@ export function draftBriefs({ root, names, out = join(root, 'registry/theme-brie
     mkdirSync(out, { recursive: true });
     mkdirSync(join(root, RECORDS), { recursive: true });
     writeFileSync(join(out, `${result.name}.md`), result.text);
-    writeFileSync(join(root, RECORDS, `${result.name}.json`), `${JSON.stringify(record(result, meta), null, 2)}\n`);
+    writeFileSync(join(root, RECORDS, `${result.name}.json`), json);
     lines.push(`${result.name}: written to ${relative(root, join(out, `${result.name}.md`))}; review ${reviewPath}`);
   }
   return { lines, failed: results.some(({ passed }) => !passed) };
+}
+
+export function draftBriefs({ root, names, out = join(root, 'registry/theme-briefs'), local = join(root, '.local/theme-briefs'), model = MODEL, account = ACCOUNTS[0], claude = process.env.CLAUDE_PATH || 'claude' }) {
+  const { inputs, library, briefs, context, refused } = prepare({ root, names, model, claude });
+  if (refused) return { lines: [...refused, 'Draft: nothing drafted; fix the problems above'], failed: true };
+  const run = runClaude(claude, briefs, ({ name, brief }) => ({ ...draftBrief(name, brief, context), library: library.entries, shared: library.shared }));
+  if (!run.results) return run;
+  return writeResults(run.results, { root, out, local, inputs, claudeCode: run.claudeCode, model, account });
 }

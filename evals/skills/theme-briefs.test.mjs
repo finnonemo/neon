@@ -909,3 +909,182 @@ test('check-only reports a variable the theme lacks once, though prose and color
   assert.equal(status, 1, out);
   assert.equal(out.match(/names --immersive-support-50, which Club does not define$/gm)?.length, 1, out);
 });
+
+// Redraft and accept run on a brief drafted with GOOD answers. Each later run gets a fresh fake, so its
+// attempts count from 1.
+function drafted(t) {
+  const first = draft(t);
+  assert.equal(first.status, 0, first.out);
+  return first.root;
+}
+function again(t, root, args, answers = {}) {
+  const fake = fakeClaude(t, answers);
+  return { fake, ...run([...args, '--root', root], fake.env) };
+}
+function handEdit(path, from, to) {
+  const text = readFileSync(path, 'utf8');
+  assert.ok(text.includes(from), `${path} lacks ${from}`);
+  writeFileSync(path, text.replace(from, to));
+}
+const STEADY = ['keeping a comfortable rhythm from top to bottom', 'keeping a steady rhythm from top to bottom'];
+
+test('redraft refuses to overwrite a hand-edited section after the named entry, before any model call', (t) => {
+  const root = drafted(t);
+  handEdit(join(root, BRIEF), ...STEADY);
+  const before = snapshot(root);
+  const { fake, status, out } = again(t, root, ['redraft', 'club-run', 'occasion-components']);
+  assert.equal(status, 1, out);
+  assert.match(out, /^club-run: layout is hand-edited; add --discard layout to overwrite it$/m);
+  assert.match(out, /^Redraft: nothing redrafted; fix the problems above$/m);
+  assert.equal(fake.calls().length, 0);
+  assert.deepEqual(snapshot(root), before);
+});
+
+test('redraft with --discard regenerates the named entry and those after it, and keeps every other section and its record entry', (t) => {
+  const root = drafted(t);
+  const tagline = ['every member invited to one shared start line', 'every member welcome at one shared start line'];
+  handEdit(join(root, BRIEF), ...tagline);
+  handEdit(join(root, BRIEF), ...STEADY);
+  const before = JSON.parse(readFileSync(join(root, RECORD), 'utf8'));
+  const calm = { paragraph: GOOD.layout.paragraph.replace('a comfortable rhythm', 'a calm rhythm') };
+  const { fake, status, out } = again(t, root, ['redraft', 'club-run', 'occasion-components', '--discard', 'layout'], { layout: [calm] });
+  assert.equal(status, 0, out);
+  assert.match(out, /^club-run: written to registry\/theme-briefs\/club-run\.md; review \.local\/theme-briefs\/club-run\/review\.md$/m);
+  assert.deepEqual(fake.calls().map(({ entry }) => entry).sort(), ['example-prompts', 'layout', 'occasion-components', 'preset-dos-donts']);
+  const brief = readFileSync(join(root, BRIEF), 'utf8');
+  assert.ok(brief.includes(tagline[1]) && brief.includes(calm.paragraph) && !brief.includes(STEADY[1]));
+  const after = JSON.parse(readFileSync(join(root, RECORD), 'utf8'));
+  // The kept tagline keeps its record entry, so it still reads as hand-edited.
+  for (const name of ['tagline', 'mood-occasion', 'imagery']) assert.deepEqual(after.entries[name], before.entries[name], name);
+  assert.equal(after.entries.layout.output, sha256(JSON.stringify(calm)));
+  assert.match(readFileSync(local(root, 'review.md'), 'utf8'), /^## tagline\n\nEntry [0-9a-f]{64}\.\n\nNot redrafted: kept from the committed brief\.$/m);
+  const check = again(t, root, ['redraft', 'club-run', 'tagline']);
+  assert.match(check.out, /^club-run: tagline is hand-edited; add --discard tagline to overwrite it$/m);
+});
+
+test('redrafted entries take kept sections as the brief reads now, hand edits included', (t) => {
+  const root = drafted(t);
+  handEdit(join(root, BRIEF), '**Role:** Compare the distances on offer', '**Role:** Compare every distance on offer');
+  const { fake, status, out } = again(t, root, ['redraft', 'club-run', 'example-prompts']);
+  assert.equal(status, 0, out);
+  assert.deepEqual(fake.calls().map(({ entry }) => entry), ['example-prompts']);
+  assert.equal(promptInputs(fake.calls()[0].prompt)['occasion-components.components'][0].role, 'Compare every distance on offer');
+});
+
+test('a changed entry file triggers no redraft, and redraft names the kept sections drafted from an older entry', (t) => {
+  const root = drafted(t);
+  const imagery = join(root, LIBRARY, 'imagery.json');
+  const data = JSON.parse(readFileSync(imagery, 'utf8'));
+  writeFileSync(imagery, JSON.stringify({ ...data, rules: [...data.rules, 'Keep each image beside its section.'] }));
+  const before = JSON.parse(readFileSync(join(root, RECORD), 'utf8')).entries.imagery;
+  const { fake, status, out } = again(t, root, ['redraft', 'club-run', 'tagline']);
+  assert.equal(status, 0, out);
+  assert.deepEqual(fake.calls().map(({ entry }) => entry), ['tagline']);
+  assert.match(out, /^club-run: kept imagery, drafted from an older entry or shared\.json; name it to redraft it$/m);
+  assert.equal(out.match(/drafted from an older entry/g).length, 1, out);
+  assert.deepEqual(JSON.parse(readFileSync(join(root, RECORD), 'utf8')).entries.imagery, before);
+});
+
+test('redraft refuses an unknown entry, a discard it would not rewrite, and a brief with no record', (t) => {
+  const root = drafted(t);
+  const unknown = again(t, root, ['redraft', 'club-run', 'hero']);
+  assert.equal(unknown.status, 1, unknown.out);
+  assert.match(unknown.out, /^"hero" is not a prompt library entry \(tagline, mood-occasion, /m);
+  const stray = again(t, root, ['redraft', 'club-run', 'layout', '--discard', 'tagline']);
+  assert.match(stray.out, /^club-run: --discard tagline names an entry this redraft does not rewrite$/m);
+  rmSync(join(root, RECORD));
+  const before = snapshot(root);
+  const { fake, status, out } = again(t, root, ['redraft', 'club-run', 'layout']);
+  assert.equal(status, 1, out);
+  assert.match(out, /^club-run: redraft needs the committed brief registry\/theme-briefs\/club-run\.md and its authoring record theme-briefs\/records\/club-run\.json; run draft first$/m);
+  assert.equal(fake.calls().length, 0);
+  assert.deepEqual(snapshot(root), before);
+});
+
+// A draft whose layout failed its hard checks: a marker and a placeholder under ## Layout.
+function failedLayout(t) {
+  const hex = { paragraph: GOOD.layout.paragraph.replace('soft grey blocks', 'soft #e6eef2 blocks') };
+  const { root, status, out } = draft(t, { answers: { layout: [hex] } });
+  assert.equal(status, 1, out);
+  return root;
+}
+const FAILED_LAYOUT = /\*\*Hard checks failed — layout:\*\*[^\n]*\n\n\[not drafted\]/;
+function fixLayout(root, paragraph) {
+  const path = local(root, 'draft.md');
+  writeFileSync(path, readFileSync(path, 'utf8').replace(FAILED_LAYOUT, paragraph));
+}
+const accept = (root) => run(['accept', 'club-run', '--root', root]);
+
+test('accept writes a hand-fixed draft once every check passes, and records the section as hand-edited', (t) => {
+  const root = failedLayout(t);
+  const fixed = GOOD.layout.paragraph.replace(...STEADY);
+  fixLayout(root, fixed);
+  const { status, out } = accept(root);
+  assert.equal(status, 0, out);
+  assert.match(out, /^club-run: accepted; written to registry\/theme-briefs\/club-run\.md; hand-edited: layout$/m);
+  const brief = readFileSync(join(root, BRIEF), 'utf8');
+  assert.equal(brief, readFileSync(local(root, 'draft.md'), 'utf8'));
+  assert.ok(brief.includes(fixed));
+  const record = JSON.parse(readFileSync(join(root, RECORD), 'utf8'));
+  assert.equal(record.entries.layout.handEdited, true);
+  // The model produced no layout, so the record has no output hash for it.
+  assert.equal(record.entries.layout.output, null);
+  assert.deepEqual(Object.keys(record.entries).filter((name) => record.entries[name].handEdited), ['layout']);
+  assert.equal(record.accentPlacement, 'Registration call-out');
+  writeFileSync(join(root, 'registry/registry.json'), JSON.stringify({ name: 'neon', homepage: 'https://example.invalid', items: [{ name: 'theme-brief-club-run', type: 'registry:item' }] }));
+  const check = checkOnly(root);
+  assert.equal(check.status, 0, check.out);
+  // An accepted hand edit is protected from a later redraft.
+  const redraft = again(t, root, ['redraft', 'club-run', 'layout']);
+  assert.match(redraft.out, /^club-run: layout is hand-edited; add --discard layout to overwrite it$/m);
+});
+
+test('accept refuses a draft with a remaining hard failure, and writes nothing', (t) => {
+  const root = failedLayout(t);
+  fixLayout(root, GOOD.layout.paragraph.replace('soft grey blocks', 'soft #e6eef2 blocks'));
+  const before = snapshot(root);
+  const { status, out } = accept(root);
+  assert.equal(status, 1, out);
+  assert.match(out, /^\.local\/theme-briefs\/club-run\/draft\.md: layout: prose holds #e6eef2; prose names colors by variable or role, never by value$/m);
+  assert.match(out, /^club-run: not accepted; nothing written$/m);
+  assert.deepEqual(snapshot(root), before);
+});
+
+test('accept refuses a draft that still holds a marker or placeholder', (t) => {
+  const root = failedLayout(t);
+  const before = snapshot(root);
+  const { status, out } = accept(root);
+  assert.equal(status, 1, out);
+  assert.match(out, /^\.local\/theme-briefs\/club-run\/draft\.md: still holds "\*\*Hard checks failed —"; replace the marker with the section's prose$/m);
+  assert.match(out, /^\.local\/theme-briefs\/club-run\/draft\.md: still holds "\[not drafted\]"; replace the placeholder with the section's prose$/m);
+  assert.deepEqual(snapshot(root), before);
+});
+
+test('accept checks each entry as the draft reads, and passes soft misses on as warnings', (t) => {
+  const root = drafted(t);
+  const path = local(root, 'draft.md');
+  handEdit(path, 'every member invited to one shared start line', 'every member invited to one shared start line on a Sunday Morning');
+  handEdit(path, '### Registration call-out', '### Registration panel');
+  const { status, out } = accept(root);
+  assert.equal(status, 1, out);
+  assert.match(out, /: occasion-components: components must be "Race distance card", "Registration call-out", in that order/);
+  handEdit(path, '### Registration panel', '### Registration call-out');
+  const second = accept(root);
+  assert.equal(second.status, 0, second.out);
+  assert.match(second.out, /^club-run: warning — tagline: "tagline" capitalizes "Sunday"; taglines are sentence case$/m);
+  assert.match(second.out, /hand-edited: tagline$/m);
+});
+
+test('a redraft record describes the latest run: its model, effort and account label', (t) => {
+  const root = drafted(t);
+  const plain = again(t, root, ['redraft', 'club-run', 'tagline']);
+  assert.equal(plain.status, 0, plain.out);
+  const record = JSON.parse(readFileSync(join(root, RECORD), 'utf8'));
+  assert.deepEqual(Object.keys(record), ['brief', 'tool', 'claudeCode', 'account', 'entries', 'accentPlacement']);
+  assert.equal(record.account, 'maintainer-sign-in');
+  const flagged = again(t, root, ['redraft', 'club-run', 'tagline', '--model', 'claude-sonnet-5-5', '--account', 'neutral-key']);
+  assert.equal(flagged.status, 0, flagged.out);
+  const after = JSON.parse(readFileSync(join(root, RECORD), 'utf8'));
+  assert.deepEqual(after.claudeCode, { version: '2.1.316', model: 'claude-sonnet-5-5', effort: 'high', modelOverride: true });
+  assert.equal(after.account, 'neutral-key');
+});

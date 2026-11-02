@@ -111,7 +111,7 @@ The tool drafts the prose one prompt library entry at a time, in `after` order. 
 - **Inputs.** An entry gets only the `inputs` it declares: preset fields, theme text and facts, the picks, computed lists and earlier entries' output. Neither a preset's `source` nor the picks file's `review` is ever an input. The shared file fills `{{variables}}` with the variables prose may name and `{{typeRoles}}` with the type roles.
 - **Checks on each answer.** Hard checks refuse an answer. They cover its shape against the entry's `output` and whatever would stop the brief reading its prose back. They also cover the values in check 4, the accent placement in check 10, eight words copied from the example, and a source name. Soft checks send an answer back: the `targets` word bands, one sentence per Do and Don't, component paragraph slots in order (fill, border, radius, padding), a Don't that starts "Do not" and gives its reason after " — ", a sentence-case tagline, and agreement with the presets.
 - **Retries.** An entry gets up to three attempts, and each retry is sent the last attempt's misses. The tool keeps the attempt that passes the hard checks with the fewest soft misses, the earliest on a tie. Later entries take the kept attempt.
-- **Writes.** Every run writes a draft and a review report to `.local/theme-briefs/<brief>/`. The review gives each entry's hash and inputs, its attempts and their misses, a diff against the committed brief, and the word overlap per model section with other briefs on the same theme. When every entry passes, and the whole brief passes checks 3, 4, 5, 7 and 10, the tool also writes the brief to the registry and its authoring record to the `records` folder beside the prompt library. Otherwise it exits 1, and the draft shows `**Hard checks failed — <entry>:**` or `**Not drafted — <entry>:**` under each section it could not fill.
+- **Writes.** Every run writes a draft, a review report and a run record to `.local/theme-briefs/<brief>/`. The run record is the authoring record the run would commit, with `null` for what an entry did not produce. The review gives each entry's hash and inputs, its attempts and their misses, a diff against the committed brief, and the word overlap per model section with other briefs on the same theme. When every entry passes, and the whole brief passes checks 3, 4, 5, 7 and 10, the tool also writes the brief to the registry and its authoring record to the `records` folder beside the prompt library. Otherwise it exits 1, and the draft shows `**Hard checks failed — <entry>:**` or `**Not drafted — <entry>:**` under each section it could not fill.
 - **Claude Code fails.** If Claude Code cannot answer, the run stops and writes nothing. That covers a missing sign-in, a missing executable and a timeout. It does not count as an attempt.
 - **Flags.** `--model <id>` drafts with another model, and the record notes the override. `--account` labels who signed Claude Code in: `maintainer-sign-in` (the default), `neutral-account` or `neutral-key`. `--out`, `--local` and `--root` move the brief, the draft folder and the repository.
 
@@ -127,10 +127,40 @@ It holds no prompt, answer, path, account or session detail. The tests confirm t
 
 Read the draft against its review, then add the registry entry and run `check-only`.
 
+### Hand edits
+
+A section is hand-edited when its prose, read back from the brief, no longer matches the output hash in its record. Two modes keep hand edits safe from the model. `draft` itself rewrites every entry, so rerun a committed brief with `redraft`.
+
+**accept** writes a local draft you fixed by hand:
+
+```sh
+node scripts/theme-briefs/theme-briefs.mjs accept club-run
+```
+
+- It reads the local draft and its run record from `.local/theme-briefs/<brief>/`, so run `draft` or `redraft` first.
+- It refuses a draft that still holds a `**Hard checks failed —**`, `**Not drafted —**` or `**Brief checks failed:**` marker, or `[not drafted]`. Replace each with the section's prose.
+- It reruns every check on the prose as the draft reads: each entry's hard checks, then checks 3, 4, 5, 7 and 10 on the whole brief. A hard failure is listed as `<draft>: <entry>: <message>`, and nothing is written.
+- Soft misses do not block. They are printed as `<brief>: warning — <entry>: <message>`.
+- When every hard check passes, it writes the brief and its authoring record, and names the hand-edited sections. The record keeps the model's output hashes, or `null` where the model produced none, and marks each edited entry `"handEdited": true`. A later redraft still sees those sections as edited.
+- The record keeps the run's accent placement while the mood paragraph still names it. Otherwise it takes the one placement the paragraph names.
+
+**redraft** reruns entries of a committed brief:
+
+```sh
+node scripts/theme-briefs/theme-briefs.mjs redraft club-run occasion-components --discard layout
+```
+
+- It reruns the named entries and every entry `after` them. Naming `occasion-components` also reruns `preset-dos-donts`, `layout` and `example-prompts`.
+- It reads the committed brief and its record, and refuses before any model call when an entry it would rerun is hand-edited. Name each such entry with `--discard <entry>` to overwrite it. A `--discard` that names an entry the run does not rerun is refused.
+- Kept sections stay as the brief reads, hand edits included. They are the inputs for the rerun entries, and their record entries are copied unchanged.
+- It writes as `draft` does: the local draft, review and run record always, and the brief and record only when every check passes. A failed redraft can be fixed by hand and accepted.
+- It takes `draft`'s flags. The record's version, model and account fields describe the latest run.
+
+Changing an entry file or `shared.json` never redrafts a brief. Each record entry keeps the hashes it was drafted from, so the record shows which briefs used an older one. `redraft` names each kept section drafted from an older entry or `shared.json`. Redrafting it is your choice.
+
 Limits:
 
 - Font names and fill/text pairing in prose come with [#119](https://github.com/finnonemo/neon/issues/119).
-- Detecting hand-edited sections against the record's output hashes comes with [#120](https://github.com/finnonemo/neon/issues/120).
 - A failure in a whole-brief check (3, 4, 5, 7 or 10) is marked in the draft but not retried, since it belongs to no one entry. Each entry's own checks already cover check 4, check 10 and source names, so this failure is rare; fix it by hand or rerun.
 
 ## Checks
