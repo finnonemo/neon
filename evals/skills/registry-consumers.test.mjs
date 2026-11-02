@@ -79,6 +79,24 @@ test('matches whole names only and never counts a declaration as a use', async t
   ]);
 });
 
+test('a width-only class takes its color from the base layer default', async t => {
+  const registry = await fakeRegistry(t, {
+    'theme/css/theme.css': ':root {\n  --color-bgLine: rgb(200, 200, 200);\n  --color-bgLinePrimary: rgb(0, 0, 200);\n}\n',
+    'registry/theme/neon.css': '@theme inline {\n  --color-border: var(--border);\n  --color-ring: var(--ring);\n}\n:root {\n  --border: var(--color-bgLine);\n  --ring: var(--color-bgLinePrimary);\n}\n* { @apply border-border outline-ring/50; }\n',
+    'registry/ui/nav.tsx': 'const a = "border-t bg-primary";\nconst b = "divide-y-2 rounded-t";\nconst c = "focus-visible:outline-2";\nconst d = "border border-ring";\n',
+  }, [item('nav', 'ui/nav.tsx')]);
+  assert.deepEqual(summary(await findRegistryConsumers(registry, ['bgLine'])), [
+    'bgLine nav registry/ui/nav.tsx:1 border-t',
+    'bgLine nav registry/ui/nav.tsx:2 divide-y-2',
+    'bgLine theme registry/theme/neon.css:9 border-border',
+  ]);
+  assert.deepEqual(summary(await findRegistryConsumers(registry, ['bgLinePrimary'])), [
+    'bgLinePrimary nav registry/ui/nav.tsx:3 outline-2',
+    'bgLinePrimary nav registry/ui/nav.tsx:4 border-ring',
+    'bgLinePrimary theme registry/theme/neon.css:9 outline-ring',
+  ]);
+});
+
 test('an unknown token has no consumers', async t => {
   const registry = await fakeRegistry(t, {}, []);
   assert.deepEqual(await findRegistryConsumers(registry, ['blue60']), []);

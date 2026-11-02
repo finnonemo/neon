@@ -10,6 +10,10 @@ import { fileURLToPath } from 'node:url';
 import { findRegistryConsumers } from './lib/registry-consumers.mjs';
 
 const tokens = process.argv.slice(2);
+if (tokens.includes('--app')) {
+  console.error('registry-consumers reads this checkout\'s registry/; --app is cds-consumers.mjs\'s option.');
+  process.exit(2);
+}
 if (!tokens.length) {
   console.error('Usage: node scripts/registry-consumers.mjs <token>...');
   process.exit(2);

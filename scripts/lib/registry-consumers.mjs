@@ -11,6 +11,13 @@ const NAMESPACES = {
   radius: key => SIDES.map(side => `rounded-${side}${key}`),
   font: key => [`font-${key}`],
 };
+const THEMED = new RegExp(`^--(${Object.keys(NAMESPACES).join('|')})-(.+)$`);
+// Width-only classes that take their color from a `* { @apply … }` default, as
+// shadcn's `* { @apply border-border }` colors every bare `border-t`.
+const BARE_WIDTHS = {
+  border: /^(border(-[trblxyse]{1,2})?|divide-[xy])(-\d+)?$/,
+  outline: /^outline(-\d+)?$/,
+};
 
 // Comments become blank lines, so line numbers still match the file.
 const stripComments = css => css.replace(/\/\*[\s\S]*?\*\//g, comment => comment.replace(/[^\n]/g, ''));
@@ -28,7 +35,7 @@ function themeBlocks(css) {
 }
 
 function utilitiesOf(name) {
-  const [, namespace, key] = name.match(/^--(color|text|radius|font)-(.+)$/) ?? [];
+  const [, namespace, key] = name.match(THEMED) ?? [];
   // --text-headline--line-height still belongs to text-headline.
   return namespace ? NAMESPACES[namespace](key.split('--')[0]) : [];
 }
@@ -64,6 +71,7 @@ export async function findRegistryConsumers(registryDir, tokens, { context = 70 
   const readers = new Map();
   const declared = new Set();
   const themed = new Set();
+  const defaults = new Set();
   for (const [file, text] of texts) {
     if (!file.endsWith('.css')) continue;
     for (const [, name, value] of text.matchAll(DECLARATION)) {
@@ -71,25 +79,34 @@ export async function findRegistryConsumers(registryDir, tokens, { context = 70 
       for (const [, read] of value.matchAll(/var\(\s*(--[\w-]+)/g)) readers.set(read, new Set([...(readers.get(read) ?? []), name]));
     }
     for (const block of themeBlocks(text)) for (const [, name] of block.matchAll(DECLARATION)) themed.add(name);
+    for (const [, applied] of text.matchAll(/(?:^|[\s}])\*\s*\{[^}]*@apply([^;}]*)/g)) {
+      for (const utility of applied.trim().split(/\s+/).map(bareWord)) defaults.add(utility);
+    }
   }
 
-  const inside = `${resolve(registryDir)}${sep}`;
+  const colors = new Set([...themed].filter(name => name.startsWith('--color-')).flatMap(utilitiesOf));
+  const registryPrefix = `${resolve(registryDir)}${sep}`;
   const matches = [];
   for (const token of tokens) {
     const bare = token.replace(/^--/, '');
     const seeds = declared.has(`--${bare}`) ? [`--${bare}`] : [...declared].filter(name => name.endsWith(`-${bare}`));
+    if (!seeds.length) continue;
     const names = new Set(seeds);
     for (const name of names) for (const reader of readers.get(name) ?? []) names.add(reader);
     const via = new Set(names);
     for (const name of names) if (themed.has(name)) for (const utility of utilitiesOf(name)) via.add(utility);
-    if (!seeds.length) continue;
+    const widths = Object.entries(BARE_WIDTHS)
+      .filter(([property]) => [...defaults].some(utility => utility.startsWith(`${property}-`) && via.has(utility)));
 
     for (const [file, text] of texts) {
-      if (!file.startsWith(inside)) continue;
+      if (!file.startsWith(registryPrefix)) continue;
       text.split('\n').forEach((line, index) => {
         // A custom property's own declaration links the chain; other words on the line can still use a token.
         const used = file.endsWith('.css') ? line.replace(DECLARATION, '') : line;
-        const words = used.split(/[\s"'`(),;{}]+/).map(bareWord).filter(word => via.has(word));
+        const all = used.split(/[\s"'`(),;{}]+/).map(bareWord);
+        // A width keeps the default color only where the line names no other color for it.
+        const defaulted = widths.filter(([property]) => !all.some(word => word.startsWith(`${property}-`) && colors.has(word) && !via.has(word)));
+        const words = all.filter(word => via.has(word) || defaulted.some(([, width]) => width.test(word)));
         if (!words.length) return;
         const at = line.indexOf(words[0]);
         const snippet = line.slice(Math.max(0, at - context), at + words[0].length + context).replace(/\s+/g, ' ').trim();
