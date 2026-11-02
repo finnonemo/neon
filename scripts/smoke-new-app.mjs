@@ -79,10 +79,10 @@ async function sources(app) {
 
 const digest = (files) => new Map([...files].map(([path, content]) => [path, createHash("sha256").update(content).digest("hex")]));
 
-const work = mkdtempSync(join(tmpdir(), "neon-smoke-registry-"));
+const registryDir = mkdtempSync(join(tmpdir(), "neon-smoke-registry-"));
 const server = createServer(async (request, response) => {
   try {
-    const body = await readFile(join(work, decodeURIComponent(new URL(request.url, "http://x").pathname)));
+    const body = await readFile(join(registryDir, decodeURIComponent(new URL(request.url, "http://x").pathname)));
     response.writeHead(200, { "content-type": "application/json" }).end(body);
   } catch {
     response.writeHead(404).end();
@@ -90,19 +90,19 @@ const server = createServer(async (request, response) => {
 });
 await new Promise((listening) => server.listen(0, "127.0.0.1", listening));
 const url = `http://127.0.0.1:${server.address().port}/r`;
-await mkdir(join(work, "r"));
-for (const [name, content] of await buildRegistry({ root, url })) await writeFile(join(work, "r", name), content);
-const installer = (...args) => [join(root, "scripts/install.mjs"), ...args, "--registry", url];
+await mkdir(join(registryDir, "r"));
+for (const [name, content] of await buildRegistry({ root, url })) await writeFile(join(registryDir, "r", name), content);
+const installArgs = (...args) => [join(root, "scripts/install.mjs"), ...args, "--registry", url];
 
 for (const destination of destinations) {
   console.log(`\n${destination}`);
   await mkdir(dirname(destination), { recursive: true });
-  await step("install --new", process.execPath, installer(destination, "--new"), root, (out) => lastMatch(out, /^added \d+ packages|^Done/));
+  await step("install --new", process.execPath, installArgs(destination, "--new"), root, (out) => lastMatch(out, /^added \d+ packages|^Done/));
   check("no bare cn import after --new", bareCnImports(await sources(destination)));
 
   await appendFile(join(destination, TUNED), "// tuned by the smoke build\n");
   const before = digest(await sources(destination));
-  await step(`install --add ${ADD_ITEM}`, process.execPath, installer(destination, "--add", ADD_ITEM), root, (out) => lastMatch(out, /^Done/));
+  await step(`install --add ${ADD_ITEM}`, process.execPath, installArgs(destination, "--add", ADD_ITEM), root, (out) => lastMatch(out, /^Done/));
   const after = await sources(destination);
   const changed = [...digest(after)].filter(([path, hash]) => before.get(path) !== hash).map(([path]) => path);
   const removed = [...before.keys()].filter((path) => !after.has(path));

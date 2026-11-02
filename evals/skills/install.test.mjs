@@ -248,6 +248,8 @@ function fakeShadcn({ write = true } = {}) {
   const calls = [];
   const runCommand = (command, args, cwd) => {
     calls.push({ command, args, cwd });
+    // spawnSync fails with ENOENT in a missing directory.
+    if (!existsSync(cwd)) throw new InstallError(`spawnSync npx ENOENT (cwd ${cwd})`);
     assert.equal(command, 'npx');
     assert.deepEqual(args.slice(0, 2), ['--yes', SHADCN]);
     if (!write) return;
@@ -324,6 +326,20 @@ test('new fails when shadcn exits 0 without creating the Neon base', async t => 
   );
 });
 
+test('new creates missing parent directories, as the starter assembly did', async t => {
+  const destination = join(await sandbox(t), 'projects/finnomena/fresh');
+  await install({ mode: 'new', target: destination, runCommand: fakeShadcn().runCommand, ...registryOptions });
+  assert.ok(await exists(join(destination, 'src/app/AppRoot.tsx')));
+});
+
+test('new leaves an empty destination in place when shadcn init fails', async t => {
+  const destination = join(await sandbox(t), 'fresh');
+  await mkdir(destination);
+  const failing = () => { throw new InstallError('Command failed (exit 1): npx shadcn init'); };
+  await assert.rejects(install({ mode: 'new', target: destination, runCommand: failing, ...registryOptions }), /exit 1/);
+  assert.deepEqual(await readdir(destination), []);
+});
+
 // shadcn init installs as it creates and imports the theme from src/theme, so
 // these options would be silently ignored.
 test('new refuses options shadcn init cannot honour', async t => {
@@ -389,6 +405,17 @@ test('add fails when shadcn exits 0 without adding the item', async t => {
     install({ mode: 'add', target: app, items: ['dialog'], runCommand: fakeShadcn({ write: false }).runCommand, ...registryOptions }),
     /src\/components\/ui\/dialog\.tsx is not the Neon registry's/,
   );
+});
+
+// Neon's components merge type roles through Neon's cn (spike trap 1). A
+// stock cn the app keeps is reported, not replaced.
+test('add warns when the cn it keeps lacks Neon\'s type roles', async t => {
+  const app = await neonApp(t);
+  await writeFile(join(app, 'src/lib/utils.ts'), 'import { clsx } from "clsx"\nimport { twMerge } from "tailwind-merge"\nexport const cn = (...inputs) => twMerge(clsx(inputs))\n');
+  const logged = [];
+  const result = await install({ mode: 'add', target: app, items: ['dialog'], runCommand: fakeShadcn().runCommand, log: line => logged.push(line), ...registryOptions });
+  assert.deepEqual(result.keptFiles, ['src/lib/utils.ts']);
+  assert.match(logged.join('\n'), /src\/lib\/utils\.ts keeps a cn without Neon's type roles/);
 });
 
 // An app shadcn initialized from its own base has no @neon entry, and
@@ -489,6 +516,7 @@ test('CLI add and new refuse what they cannot do with one clean message', async 
   const app = await existingApp(await sandbox(t));
   for (const [args, message] of [
     [[app, '--add'], /Name at least one Neon item to add/],
+    [[app, '--css-only', '--registry', 'http://127.0.0.1:1/r'], /--registry applies only to --new and --add/],
     [[app, '--add', 'dialog', '--new'], /--new, --add and --css-only are mutually exclusive/],
     [[app, '--add', 'dialog', '--css-only'], /--new, --add and --css-only are mutually exclusive/],
     [[app, 'dialog'], /Usage: node install\.mjs/],

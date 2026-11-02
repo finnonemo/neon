@@ -99,6 +99,7 @@ export async function install({
     // Shape-check an explicit override before any mode-specific work, so it
     // is rejected even where no package manager would ever run.
     assertSupportedOverride(packageManager);
+    if (registry !== undefined) throw new Error("--registry applies only to --new and --add, which install from the Neon registry.");
     if (mode === "cds") return await installCds(neon, options);
     if (mode === "css-only") return installCssOnly(neon, options);
     throw new Error(`Unknown install mode "${mode}". Expected new, add, cds or css-only.`);
@@ -110,18 +111,23 @@ export async function install({
 async function installNew(neon, { target, themeDir, packageManager, skipInstall, runCommand, registry, fetchJson }) {
   // shadcn init installs as it creates, with the manager it detects, and the
   // base imports its theme from src/theme, so these would be silently ignored.
-  const unsupported = { "--theme-dir": themeDir !== undefined, "--skip-install": skipInstall, "--package-manager": packageManager !== undefined };
-  for (const [flag, given] of Object.entries(unsupported)) {
-    if (given) throw new Error(`${flag} is not supported with --new: shadcn init creates the Neon base app as it ships.`);
-  }
+  refuseShadcnOptions("--new: shadcn init creates the Neon base app as it ships", { themeDir, packageManager, skipInstall });
   if (existsSync(target) && readdirSync(target).length > 0) throw new Error(`New: destination is not empty: ${target}`);
   const url = registry ?? (await pinnedRegistryUrl(neon.sourceRoot));
   const files = await resolveItemFiles({ url, names: ["neon-base"], fetchJson });
 
-  // Vite refuses an existing destination, even an empty one.
-  if (existsSync(target)) rmdirSync(target);
+  // Vite refuses an existing destination, even an empty one, so an empty one
+  // is removed for init and put back if init fails before creating the app.
+  const emptied = existsSync(target);
+  if (emptied) rmdirSync(target);
+  mkdirSync(dirname(target), { recursive: true });
   const args = ["init", "-t", "vite", "-b", "radix", "-n", basename(target), "--no-monorepo", `${url}/neon-base.json`];
-  runCommand("npx", ["--yes", SHADCN, ...args], dirname(target));
+  try {
+    runCommand("npx", ["--yes", SHADCN, ...args], dirname(target));
+  } catch (err) {
+    if (emptied && !existsSync(target)) mkdirSync(target);
+    throw err;
+  }
   assertLanded(target, files);
   // The vite template's provider would be a second color scheme beside AppRoot's.
   rmSync(join(target, "src/components/theme-provider.tsx"), { force: true });
@@ -131,10 +137,7 @@ async function installNew(neon, { target, themeDir, packageManager, skipInstall,
 async function installAdd(neon, { target, items, themeDir, packageManager, skipInstall, runCommand, registry, fetchJson, log }) {
   // shadcn add installs as it adds, with the manager the app's lockfile names,
   // and writes each item where the item targets it.
-  const unsupported = { "--theme-dir": themeDir !== undefined, "--skip-install": skipInstall, "--package-manager": packageManager !== undefined };
-  for (const [flag, given] of Object.entries(unsupported)) {
-    if (given) throw new Error(`${flag} is not supported with --add: shadcn add installs each item as the registry has it.`);
-  }
+  refuseShadcnOptions("--add: shadcn add installs each item as the registry has it", { themeDir, packageManager, skipInstall });
   if (items.length === 0) throw new Error("Name at least one Neon item to add, e.g. --add dialog.");
   const configPath = join(target, "components.json");
   if (!existsSync(configPath)) {
@@ -170,6 +173,9 @@ async function installAdd(neon, { target, items, themeDir, packageManager, skipI
   }
   assertLanded(target, files, kept);
   if (kept.size > 0) log(`Kept the app's own ${[...kept.keys()].join(", ")}`);
+  if (kept.has(NEON_CN) && !/["']label1["']/.test(kept.get(NEON_CN))) {
+    log(`Warning: ${NEON_CN} keeps a cn without Neon's type roles, so Neon components can lose a text size or color when classes merge. Compare it with the Neon registry's lib/utils.ts.`);
+  }
   return result({ mode: "add", destination: target, keptFiles: [...kept.keys()], dependenciesInstalled: true });
 }
 
@@ -207,6 +213,17 @@ function installCssOnly(neon, { target, themeDir, log }) {
   const cssPath = join(neon.sourceRoot, CSS_FILE);
   const copiedFiles = copyThemeFiles(dirname(cssPath), destThemeDir, [basename(cssPath)], log);
   return result({ mode: "css-only", destination: target, themeDir: destThemeDir, copiedFiles });
+}
+
+// Neon's cn, which knows Neon's type roles (text-label1, ...) as font sizes.
+const NEON_CN = "src/lib/utils.ts";
+
+/** Refuses the CDS-mode options shadcn would silently ignore. */
+function refuseShadcnOptions(reason, { themeDir, packageManager, skipInstall }) {
+  const given = { "--theme-dir": themeDir !== undefined, "--skip-install": skipInstall, "--package-manager": packageManager !== undefined };
+  for (const [flag, isGiven] of Object.entries(given)) {
+    if (isGiven) throw new Error(`${flag} is not supported with ${reason}.`);
+  }
 }
 
 /**
