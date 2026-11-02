@@ -9,7 +9,7 @@ import { AppShell } from "@/layout/AppShell"
 import { ContentLayout } from "@/layout/ContentLayout"
 import { SimpleLayout } from "@/layout/SimpleLayout"
 import { MultiColumnLayout } from "@/layout/MultiColumnLayout"
-import { ImmersiveLayout } from "@/layout/ImmersiveLayout"
+import { ImmersiveLayout, type ImmersiveTheme } from "@/layout/ImmersiveLayout"
 import { Logo } from "@/layout/Logo"
 import type { ActivePane } from "@/layout/ResponsivePanes"
 import type { NavItem } from "@/layout/navItems"
@@ -62,5 +62,5 @@ export function App() {
     : layout === "content" ? <ContentLayout {...props} />
     : layout === "simple" ? <SimpleLayout {...props} />
     : layout === "board" ? <MultiColumnLayout {...props} columns={[content]} />
-    : <ImmersiveLayout {...props} />
+    : <ImmersiveLayout {...props} immersiveTheme={(params.get("theme") ?? undefined) as ImmersiveTheme | undefined} />
 }

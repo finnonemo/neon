@@ -237,12 +237,22 @@
       ]
     },
     {
+      "name": "immersive-themes",
+      "type": "registry:item",
+      "title": "Immersive Themes",
+      "description": "Club, Exclusive, Private and Ultra as --immersive-* properties, and the adapter that themes shadcn/ui inside a [data-immersive-theme] scope.",
+      "files": [
+        { "path": "../theme/css/immersive-themes.css", "type": "registry:file", "target": "src/theme/immersive-themes.css" },
+        { "path": "theme/immersive.css", "type": "registry:file", "target": "src/theme/immersive.css" }
+      ]
+    },
+    {
       "name": "layouts",
       "type": "registry:item",
       "title": "Functional layouts",
       "description": "The starter's App, Content, Simple, Multi-column and Immersive layouts on Neon: the same breakpoints, pane widths and mobile navigation.",
       "dependencies": ["lucide-react@^1.66.0"],
-      "registryDependencies": ["@neon/utils", "@neon/button", "@neon/logo"],
+      "registryDependencies": ["@neon/utils", "@neon/button", "@neon/logo", "@neon/immersive-themes"],
       "files": [
         { "path": "layout/AppShell.tsx", "type": "registry:file", "target": "src/layout/AppShell.tsx" },
         { "path": "layout/BottomNav.tsx", "type": "registry:file", "target": "src/layout/BottomNav.tsx" },
