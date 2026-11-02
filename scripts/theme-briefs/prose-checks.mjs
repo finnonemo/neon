@@ -17,6 +17,12 @@ const MOTION = {
   lively: { max: 400, banned: [] },
 };
 const NEVER_MOVES = ['parallax', 'loop', 'autoplay', 'bounce'];
+// Font names prose may not give, matched by case and whole word; a font missing here is not caught.
+// Finnomena Trek is in theme/tokens. Prompt (a Thai font) and generic families like serif are left out: they are common words.
+const FONTS = ['Finnomena Trek', 'IBM Plex Sans', 'IBM Plex Serif', 'IBM Plex Mono', 'Inter', 'Roboto', 'Helvetica', 'Arial', 'Georgia',
+  'Times New Roman', 'Futura', 'Garamond', 'Montserrat', 'Poppins', 'Lato', 'Open Sans', 'Noto Sans', 'Noto Serif', 'Source Sans',
+  'SF Pro', 'Segoe UI', 'Verdana', 'Tahoma', 'Courier', 'Avenir', 'Proxima Nova', 'Gotham', 'DM Sans', 'Manrope', 'Space Grotesk',
+  'Playfair Display', 'Merriweather', 'Comic Sans', 'Bodoni', 'Didot', 'Kanit', 'Sarabun', 'Mitr', 'Anuphan', 'Noto Sans Thai'];
 // A motion word in any form: fade, fades, faded, fading.
 const motionWord = (word) => new RegExp(`\\b${word.replace(/e$/, '')}(?:e|es|ed|ing|s|ion|ions)?\\b`, 'i');
 
@@ -49,6 +55,11 @@ export function valueProblems(text, brief) {
       if (!type.some((row) => row.size === size)) problems.push(`prose gives ${named}, which is not a Type Scale size`);
     }
   }
+  // The typeface is taken out first, so a font it starts with is not found inside it.
+  const untyped = typeface ? text.replaceAll(typeface, ' ') : text;
+  for (const font of FONTS) {
+    if (new RegExp(`(?<![\\w-])${escape(font)}(?![\\w-])`).test(untyped)) problems.push(`prose names "${font}", a font other than ${typeface}; type comes from the theme`);
+  }
   const allowed = tablePx(brief);
   for (const px of new Set(text.match(PX) ?? [])) if (!allowed.has(px)) problems.push(`prose gives ${px}, which no table in the brief holds`);
   if (/\bgradients?\b/i.test(text)) problems.push('prose names a gradient; Immersive Themes have none');
@@ -61,6 +72,26 @@ export function valueProblems(text, brief) {
     if (Number(ms) > level.max) problems.push(`prose gives ${value}, more than the ${layout.motion} motion level's ${level.max}ms`);
   }
   return problems;
+}
+
+// Check 6: each fill prose names takes its own text in the same sentence: --immersive-on-<fill> of the same
+// family and step, and --immersive-text on the canvas. A fill is any variable with an on- partner, or the
+// canvas. Hard when the sentence gives a text no fill in it takes; soft when it gives none.
+export function pairingProblems(text, theme) {
+  const hard = [];
+  const soft = [];
+  const textOf = (fill) => fill === 'canvas' ? 'text' : `on-${fill}`;
+  for (const sentence of text.split(/\n|(?<=[.!?])\s+/)) {
+    const named = [...new Set([...sentence.matchAll(/--immersive-([\w-]*\w)/g)].map(([, name]) => name))];
+    const fills = named.filter((name) => name === 'canvas' || (!name.startsWith('on-') && theme.vars.has(`on-${name}`)));
+    const texts = named.filter((name) => name === 'text' || name.startsWith('on-'));
+    const spare = texts.filter((name) => !fills.some((fill) => textOf(fill) === name));
+    for (const fill of fills.filter((name) => !texts.includes(textOf(name)))) {
+      if (spare.length) hard.push(`names --immersive-${fill} as a fill with ${spare.map((name) => `--immersive-${name}`).join(', ')} text; text on it is --immersive-${textOf(fill)}`);
+      else soft.push(`names --immersive-${fill} as a fill with no text; name --immersive-${textOf(fill)} in the same sentence`);
+    }
+  }
+  return { hard: [...new Set(hard)], soft: [...new Set(soft)] };
 }
 
 // Where the accent may go: each occasion component with the accent role, and the Brand Pattern section
@@ -136,6 +167,9 @@ export function entryChecks(name, answer, { brief, data, schema, bands, placemen
   }
   if (name === 'layout') for (const px of new Set(prose.match(PX) ?? [])) hard.push(`"paragraph" holds ${px}; Layout names spacing by step, never in px`);
   hard.push(...valueProblems(prose, brief));
+  const pairing = pairingProblems(prose, theme);
+  hard.push(...pairing.hard);
+  soft.push(...pairing.soft);
   if (name === 'mood-occasion') hard.push(...accentProblems(answer.accentPlacement, answer.paragraph, placements));
   if (data.example) {
     const example = runs(proseText(data.example.output));
