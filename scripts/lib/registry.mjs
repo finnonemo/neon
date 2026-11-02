@@ -113,3 +113,30 @@ export function nextThemes(files, items = []) {
   }
   return problems;
 }
+
+// Installing. The New and Add install modes run shadcn's CLI against the
+// registry; it is pinned because its init and registry formats change between
+// releases.
+
+export const SHADCN = 'shadcn@4.23.0';
+
+/**
+ * The files the named items and their registry dependencies write, as
+ * app-relative path → content. Items are fetched from `url` with
+ * `fetchJson`, since the shipped package carries no registry source.
+ */
+export async function resolveItemFiles({ url, names, fetchJson }) {
+  const files = new Map();
+  const seen = new Set();
+  async function visit(address) {
+    const itemUrl = address.startsWith('@neon/') ? `${url}/${address.slice('@neon/'.length)}.json` : address;
+    if (!itemUrl.startsWith(`${url}/`)) throw new Error(`${address} is not a Neon registry item; add Neon's own item instead.`);
+    if (seen.has(itemUrl)) return;
+    seen.add(itemUrl);
+    const item = await fetchJson(itemUrl).catch((err) => { throw new Error(`No Neon registry item at ${itemUrl}: ${err.message}`); });
+    for (const dependency of item.registryDependencies ?? []) await visit(dependency);
+    for (const file of item.files) files.set(file.target.replace(/^~\//, ''), file.content);
+  }
+  for (const name of names) await visit(`@neon/${name}`);
+  return files;
+}

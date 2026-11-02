@@ -3,8 +3,7 @@
  * assemble-starter.mjs — maintainer CLI over assembleStarter(). Never
  * invokes a package manager; just combines starter source with the
  * canonical CDS theme files at <destination>. Use this to preview the
- * starter after editing canonical theme assets, or as a manual alternative
- * to install.mjs --new.
+ * CDS starter after editing canonical theme assets.
  *
  * Usage: node scripts/assemble-starter.mjs <destination>
  */

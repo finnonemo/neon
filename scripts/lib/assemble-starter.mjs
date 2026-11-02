@@ -1,13 +1,13 @@
 /**
  * assemble-starter.mjs — combines starter source (application wiring,
  * layouts, providers) with the canonical CDS theme files into a complete,
- * runnable app. Used by both the maintainer CLI (scripts/assemble-starter.mjs)
- * and install.mjs's --new mode — one shared implementation, no duplicate
- * assembly logic.
+ * runnable app on the frozen CDS starter. Used by the maintainer CLI
+ * (scripts/assemble-starter.mjs) and the browser runner's CDS target; the
+ * installer's --new starts from the Neon registry instead.
  *
  * Never launches npm/pnpm/yarn/bun — assembly is a pure filesystem
- * operation. The caller (install.mjs) is responsible for any post-assembly
- * dependency install.
+ * operation. The caller is responsible for any post-assembly dependency
+ * install.
  */
 import { cp, mkdir, readdir, lstat, copyFile, constants } from "node:fs/promises";
 import { existsSync } from "node:fs";
