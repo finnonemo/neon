@@ -28,7 +28,9 @@
         "https://raw.githubusercontent.com/finnonemo/neon/neon--v0.5.0/registry/r/utils.json",
         "https://raw.githubusercontent.com/finnonemo/neon/neon--v0.5.0/registry/r/button.json",
         "https://raw.githubusercontent.com/finnonemo/neon/neon--v0.5.0/registry/r/tooltip.json",
-        "https://raw.githubusercontent.com/finnonemo/neon/neon--v0.5.0/registry/r/sonner.json"
+        "https://raw.githubusercontent.com/finnonemo/neon/neon--v0.5.0/registry/r/sonner.json",
+        "https://raw.githubusercontent.com/finnonemo/neon/neon--v0.5.0/registry/r/logo.json",
+        "https://raw.githubusercontent.com/finnonemo/neon/neon--v0.5.0/registry/r/layouts.json"
       ],
       "files": [
         {
@@ -419,6 +421,135 @@
           "path": "ui/table.tsx",
           "type": "registry:ui",
           "target": "src/components/ui/table.tsx"
+        }
+      ]
+    },
+    {
+      "name": "logo",
+      "type": "registry:item",
+      "title": "Finnomena logo",
+      "description": "The canonical Finnomena wordmark and compact mark, with a Logo that follows the color scheme.",
+      "files": [
+        {
+          "path": "../theme/logo/logo-finnomena-icon-dark.svg",
+          "type": "registry:file",
+          "target": "src/assets/logo/logo-finnomena-icon-dark.svg"
+        },
+        {
+          "path": "../theme/logo/logo-finnomena-icon-light.svg",
+          "type": "registry:file",
+          "target": "src/assets/logo/logo-finnomena-icon-light.svg"
+        },
+        {
+          "path": "../theme/logo/logo-finnomena-text-dark.svg",
+          "type": "registry:file",
+          "target": "src/assets/logo/logo-finnomena-text-dark.svg"
+        },
+        {
+          "path": "../theme/logo/logo-finnomena-text-light.svg",
+          "type": "registry:file",
+          "target": "src/assets/logo/logo-finnomena-text-light.svg"
+        },
+        {
+          "path": "layout/Logo.tsx",
+          "type": "registry:file",
+          "target": "src/layout/Logo.tsx"
+        }
+      ]
+    },
+    {
+      "name": "layouts",
+      "type": "registry:item",
+      "title": "Functional layouts",
+      "description": "The starter's App, Content, Simple, Multi-column and Immersive layouts on Neon: the same breakpoints, pane widths and mobile navigation.",
+      "dependencies": [
+        "lucide-react@^1.66.0"
+      ],
+      "registryDependencies": [
+        "@neon/utils",
+        "@neon/button",
+        "@neon/logo"
+      ],
+      "files": [
+        {
+          "path": "layout/AppShell.tsx",
+          "type": "registry:file",
+          "target": "src/layout/AppShell.tsx"
+        },
+        {
+          "path": "layout/BottomNav.tsx",
+          "type": "registry:file",
+          "target": "src/layout/BottomNav.tsx"
+        },
+        {
+          "path": "layout/ContentLayout.tsx",
+          "type": "registry:file",
+          "target": "src/layout/ContentLayout.tsx"
+        },
+        {
+          "path": "layout/ContentView.tsx",
+          "type": "registry:file",
+          "target": "src/layout/ContentView.tsx"
+        },
+        {
+          "path": "layout/ImmersiveLayout.tsx",
+          "type": "registry:file",
+          "target": "src/layout/ImmersiveLayout.tsx"
+        },
+        {
+          "path": "layout/InspectorView.tsx",
+          "type": "registry:file",
+          "target": "src/layout/InspectorView.tsx"
+        },
+        {
+          "path": "layout/MultiColumnLayout.tsx",
+          "type": "registry:file",
+          "target": "src/layout/MultiColumnLayout.tsx"
+        },
+        {
+          "path": "layout/ResponsivePanes.tsx",
+          "type": "registry:file",
+          "target": "src/layout/ResponsivePanes.tsx"
+        },
+        {
+          "path": "layout/Sidebar.tsx",
+          "type": "registry:file",
+          "target": "src/layout/Sidebar.tsx"
+        },
+        {
+          "path": "layout/SidebarNav.tsx",
+          "type": "registry:file",
+          "target": "src/layout/SidebarNav.tsx"
+        },
+        {
+          "path": "layout/SimpleLayout.tsx",
+          "type": "registry:file",
+          "target": "src/layout/SimpleLayout.tsx"
+        },
+        {
+          "path": "layout/layout.css",
+          "type": "registry:file",
+          "target": "src/layout/layout.css"
+        },
+        {
+          "path": "layout/layoutPanes.ts",
+          "type": "registry:file",
+          "target": "src/layout/layoutPanes.ts"
+        },
+        {
+          "path": "layout/navItems.ts",
+          "type": "registry:file",
+          "target": "src/layout/navItems.ts"
+        },
+        {
+          "path": "layout/useBreakpointTier.ts",
+          "type": "registry:file",
+          "target": "src/layout/useBreakpointTier.ts"
+        },
+        {
+          "path": "../theme/cds/breakpoints.config.ts",
+          "type": "registry:file",
+          "target": "src/theme/breakpoints.config.ts"
         }
       ]
     }

@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readdirSync, readFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { BUILD_DIR, bareCnImports, buildRegistry, darkClasses, missingTypeRoles, nextThemes, pinnedRegistryUrl, tabsAsSegmented, unpinnedUrls, weightOverrides } from '../../scripts/lib/registry.mjs';
@@ -74,6 +75,41 @@ test('a segmented control is never built on Tabs', () => {
   assert.equal(tabsAsSegmented([['ui/segmented.tsx', 'import { Tabs as TabsPrimitive } from "radix-ui"\nexport function Segmented() {}']]).length, 1);
   assert.equal(tabsAsSegmented([['app/Filter.tsx', 'import { Tabs, TabsList } from "@/components/ui/tabs"\n// segmented status filter']]).length, 1);
   assert.deepEqual(tabsAsSegmented([['ui/segmented-control.tsx', 'import { RadioGroup as RadioGroupPrimitive } from "radix-ui"']]), []);
+});
+
+const registryItem = (name) => JSON.parse(read('registry/registry.json')).items.find((item) => item.name === name);
+
+test('the Finnomena logo SVGs are tracked once, in theme/logo/', () => {
+  const tracked = execFileSync('git', ['ls-files', '*.svg'], { cwd: root, encoding: 'utf8' }).split('\n').filter((path) => /logo-finnomena/.test(path));
+  assert.deepEqual(tracked.sort(), ['icon-dark', 'icon-light', 'text-dark', 'text-light'].map((v) => `theme/logo/logo-finnomena-${v}.svg`));
+});
+
+test('the logo item ships the canonical SVGs with the Logo the layouts use, and the base pulls it in', () => {
+  const logo = registryItem('logo');
+  const svgs = readdirSync(join(root, 'theme/logo')).filter((name) => name.endsWith('.svg')).sort();
+  assert.deepEqual(
+    logo.files.filter((file) => file.path.endsWith('.svg')).map((file) => [file.path, file.target]),
+    svgs.map((name) => [`../theme/logo/${name}`, `src/assets/logo/${name}`]),
+  );
+  assert.ok(logo.files.some((file) => file.path === 'layout/Logo.tsx' && file.target === 'src/layout/Logo.tsx'));
+  for (const name of svgs) assert.ok(read('registry/layout/Logo.tsx').includes(`../assets/logo/${name}`), `Logo.tsx imports ${name}`);
+  const base = registryItem('neon-base');
+  for (const name of ['logo', 'layouts']) assert.ok(base.registryDependencies.includes(`{{registry}}/${name}.json`), `the base pulls in ${name}`);
+});
+
+// Only the files that touch CDS components or providers are rewritten; the
+// layout logic is the starter's, byte for byte (#95).
+test('the layouts item carries the starter layout logic unchanged', () => {
+  const layouts = registryItem('layouts');
+  const unchanged = ['ContentView.tsx', 'InspectorView.tsx', 'layout.css', 'layoutPanes.ts', 'useBreakpointTier.ts'];
+  for (const name of unchanged) {
+    assert.ok(layouts.files.some((file) => file.path === `layout/${name}` && file.target === `src/layout/${name}`), `layouts ships ${name}`);
+    assert.equal(read(`registry/layout/${name}`), read(`templates/vitejs-cds/src/layout/${name}`), `registry/layout/${name} differs from the starter's`);
+  }
+  assert.ok(layouts.files.some((file) => file.path === '../theme/cds/breakpoints.config.ts' && file.target === 'src/theme/breakpoints.config.ts'));
+  const starterLayouts = readdirSync(join(root, 'templates/vitejs-cds/src/layout')).filter((name) => name !== 'Logo.tsx').sort();
+  assert.deepEqual(layouts.files.map((file) => file.path.replace(/^layout\//, '')).filter((name) => !name.includes('/')).sort(), starterLayouts, 'every starter layout file has a Neon counterpart');
+  assert.ok(layouts.registryDependencies.includes('@neon/logo'));
 });
 
 test('the toast takes its theme from AppRoot, never next-themes', () => {
