@@ -1,0 +1,117 @@
+{
+  "brief": "club-run",
+  "tool": {
+    "commit": "126c0f8271e2909ecc3fde99a28a34e2c69c1d26",
+    "version": "8426a03676d63873cd1209c45d05265deea1121baf47c0c25dcfdb4673a398df"
+  },
+  "claudeCode": {
+    "version": "2.1.316",
+    "model": "claude-opus-5-5",
+    "effort": "high",
+    "modelOverride": false
+  },
+  "account": "neutral-account",
+  "entries": {
+    "tagline": {
+      "entry": "277ed470247b5530430c890dae0fe63505254300fcb6645033d3deb9bd111023",
+      "shared": "935d2a8c01c5a85ebc05a23cc765299676c01eddbf0fac2e6901efb45ef6a880",
+      "inputs": "cd71881650698c31737e749b5f81eff3db2bfcd2850c4f22bace988e6ff339bd",
+      "attempts": [
+        {
+          "hard": 0,
+          "soft": 0
+        }
+      ],
+      "kept": 1,
+      "output": "a3aea048d6a3a6aa343180a5015b8c97c32d458adf47581a068d96cf23cada50"
+    },
+    "mood-occasion": {
+      "entry": "b679ae0e1542cd0df4c5e61e8db56e89dbffea15b8825c29b9b4998dcc2dcfc3",
+      "shared": "935d2a8c01c5a85ebc05a23cc765299676c01eddbf0fac2e6901efb45ef6a880",
+      "inputs": "0bc0b032cb6797dfb7ddf2b41859efabcb750ef725c07abd7286c4e23a3d22d2",
+      "attempts": [
+        {
+          "hard": 0,
+          "soft": 0
+        }
+      ],
+      "kept": 1,
+      "output": "2275827233ef5ab6f439c22e5b62cc5ecc7730c58d5d69f9c8a5a72aa785c632"
+    },
+    "occasion-components": {
+      "entry": "0c4641fc8d581b775f590ec1c2f7ab14f6a8aa55fff1042ec8c318b495585cbf",
+      "shared": "935d2a8c01c5a85ebc05a23cc765299676c01eddbf0fac2e6901efb45ef6a880",
+      "inputs": "6d2497018f6b39d654d60c9f9d3471e89c48e67c834dfe4fcaec0760665eb98f",
+      "attempts": [
+        {
+          "hard": 0,
+          "soft": 0
+        }
+      ],
+      "kept": 1,
+      "output": "85bcf21cacfcc04696f4a627bd26b3c3d11714235593371120a6e5ae73dd673b"
+    },
+    "preset-dos-donts": {
+      "entry": "a660a7da8b8b46289a688ac235825d531f24112fa361a255d6539968e483fe94",
+      "shared": "935d2a8c01c5a85ebc05a23cc765299676c01eddbf0fac2e6901efb45ef6a880",
+      "inputs": "a8c161a927ef969972316c03fa23e82e9a06c52088651d6a7e62321e6eabc33a",
+      "attempts": [
+        {
+          "hard": 0,
+          "soft": 0
+        }
+      ],
+      "kept": 1,
+      "output": "3d70a06fb67022a96bc7bf5b6d724793ae26e8d860a8b80c9c059e2ad52c71e8"
+    },
+    "imagery": {
+      "entry": "a0fd62b0277becfc675feef7cb9350bf95caf7285a9df2ccd521cab8ac489061",
+      "shared": "935d2a8c01c5a85ebc05a23cc765299676c01eddbf0fac2e6901efb45ef6a880",
+      "inputs": "d4e1f758f6728c2fcc3bedf2beca889363510188aa8717a4f2b50912f1774dcf",
+      "attempts": [
+        {
+          "hard": 0,
+          "soft": 0
+        }
+      ],
+      "kept": 1,
+      "output": "f40f878b574997c8be8b4422190f1380d8b0f6426758a4a77c1b40d2ba157739"
+    },
+    "layout": {
+      "entry": "8852bf33ed87b1a07d5ad85b69687dcd64689652ef2e7a66ca94ace4ee88887b",
+      "shared": "935d2a8c01c5a85ebc05a23cc765299676c01eddbf0fac2e6901efb45ef6a880",
+      "inputs": "1f5e0463e7fda2b527634480388420fe46fe3ff0fd8c27c23f6c688730f9bc79",
+      "attempts": [
+        {
+          "hard": 0,
+          "soft": 1
+        },
+        {
+          "hard": 0,
+          "soft": 2
+        },
+        {
+          "hard": 0,
+          "soft": 0
+        }
+      ],
+      "kept": 3,
+      "output": "ba7820bd086697af749cfd8b438a6e1bf3a693b57001fa8d24e09e284e132816"
+    },
+    "example-prompts": {
+      "entry": "83dd9f072dea36f8f2ee5630f413654e6b9d4ad4c04d77b9300b2179021f9326",
+      "shared": "935d2a8c01c5a85ebc05a23cc765299676c01eddbf0fac2e6901efb45ef6a880",
+      "inputs": "d07fef6d4e2d91a8da1d6aed1be46dec68ef827934d9e1d2571f4654f07ac94c",
+      "attempts": [
+        {
+          "hard": 0,
+          "soft": 0
+        }
+      ],
+      "kept": 1,
+      "output": "c9bb6faece112dffe52f0393f8cc40081cefa7e0fee398ecfcda37bf1c447fba",
+      "handEdited": true
+    }
+  },
+  "accentPlacement": "Registration call-out"
+}
