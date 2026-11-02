@@ -70,8 +70,9 @@ function run(args, env = {}) {
   return { status: result.status, out: `${result.stdout}${result.stderr}` };
 }
 
+// Fixture trees publish briefs for fewer themes than the theme data holds, so these skip theme coverage.
 function checkOnly(root) {
-  return run(['check-only', '--root', root]);
+  return run(['check-only', '--root', root, '--skip-coverage']);
 }
 
 function snapshot(root) {
@@ -391,7 +392,7 @@ test('a third-party brief passes once the review is recorded', (t) => {
 
 test('--out reads committed briefs from another folder', (t) => {
   const root = fixture(t, { ...published(), [BRIEF]: null, 'elsewhere/club-run.md': briefText });
-  const { status, out } = run(['check-only', '--root', root, '--out', join(root, 'elsewhere')]);
+  const { status, out } = run(['check-only', '--root', root, '--out', join(root, 'elsewhere'), '--skip-coverage']);
   assert.equal(status, 0, out);
   assert.match(out, /, 1 brief; no problems$/m);
 });
@@ -1174,4 +1175,25 @@ test('a redraft record describes the latest run: its model, effort and account l
   const after = JSON.parse(readFileSync(join(root, RECORD), 'utf8'));
   assert.deepEqual(after.claudeCode, { version: '2.1.316', model: 'claude-sonnet-5-5', effort: 'high', modelOverride: true });
   assert.equal(after.account, 'neutral-key');
+});
+
+// Check 11, theme coverage. Fixture trees cover one theme, so their check-only skips it; these run it.
+const covered = (root, ...args) => run(['check-only', '--root', root, ...args]);
+
+test('check-only refuses a theme with no theme text or no published brief', (t) => {
+  const { status, out } = covered(fixture(t));
+  assert.equal(status, 1, out);
+  for (const id of ['exclusive', 'private', 'ultra']) assert.match(out, new RegExp(`^theme-briefs/themes/${id}\\.json: missing; every Immersive Theme needs a theme text$`, 'm'));
+  assert.doesNotMatch(out, /^theme-briefs\/themes\/club\.json: missing/m);
+  for (const label of ['Club', 'Exclusive', 'Private', 'Ultra']) assert.match(out, new RegExp(`^registry/theme-briefs: ${label} has no published brief; every Immersive Theme needs at least one$`, 'm'));
+});
+
+test('theme coverage counts a theme\'s published brief, in the folder --out names', (t) => {
+  const { status, out } = covered(fixture(t, published()));
+  assert.equal(status, 1, out);
+  assert.doesNotMatch(out, /: missing; every Immersive Theme needs a theme text$/m);
+  assert.doesNotMatch(out, /Club has no published brief/);
+  assert.equal(out.match(/has no published brief/g).length, 3, out);
+  const moved = fixture(t, { ...published(), [BRIEF]: null, 'elsewhere/club-run.md': briefText });
+  assert.match(covered(moved, '--out', join(moved, 'elsewhere')).out, /^elsewhere: Exclusive has no published brief; every Immersive Theme needs at least one$/m);
 });
