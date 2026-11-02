@@ -129,9 +129,9 @@ Read the draft against its review, then add the registry entry and run `check-on
 
 Limits:
 
-- Font names and fill/text pairing in prose come with [#119](https://github.com/finnonemo/neon/issues/119).
+- A fill named with no text (check 6) is a warning in the review report only. Read each one: it may be a fill whose text the sentence leaves to the reader.
 - Detecting hand-edited sections against the record's output hashes comes with [#120](https://github.com/finnonemo/neon/issues/120).
-- A failure in a whole-brief check (3, 4, 5, 7 or 10) is marked in the draft but not retried, since it belongs to no one entry. Each entry's own checks already cover check 4, check 10 and source names, so this failure is rare; fix it by hand or rerun.
+- A failure in a whole-brief check (3, 4, 5, 6, 7 or 10) is marked in the draft but not retried, since it belongs to no one entry. Each entry's own checks already cover checks 4, 6 and 10 and source names, so this failure is rare; fix it by hand or rerun.
 
 ## Checks
 
@@ -147,18 +147,20 @@ The check module in `scripts/theme-briefs` is shared by the tool's `check-only` 
 | `holds a hex-like value`, `holds a px value`, `is a font field` | An input carries a value the theme owns. Describe the intent instead, and use a step name. |
 | `compares or ranks themes`, `holds a ratio or percentage` | A theme text will go stale when themes change. Describe the theme on its own terms. |
 | `uses role … which <Theme> lacks`, `is not one of <Theme>'s families`, `is not a step of`, `bare canvas` | The picks file does not fit its theme. Choose another preset, colourway or ground. |
+| `has the same occasion, layout and imagery presets as` | Check 9: two picks files of one theme share all three presets, so they would be one design; a different colourway does not make them distinct. Change at least one preset in the file named first. |
 | `Brand Pattern section … is not one of its sections` | A layout places the Pattern in a section it does not have. |
 | `preset … not found` | A picks file names a preset with no file. Add the preset or fix the slug. |
 | `needs a review record`, `review status is "illustrative"`, `needs a reviewer and reviewed_on` | A third-party source needs a recorded Finnomena design review before its picks file is committed. Record the review, or choose presets with no third-party source. |
 | `review record without a third-party source` | None of the chosen presets needs a review. Remove the record. |
 | `published brief … has no …` | A published brief is missing its picks file, Markdown, authoring record or registry entry. Add the missing part, or remove the others. |
 | `is not a color token`, `which <Theme> does not define`, `text needs 4.5:1`, `an action's edge needs 3:1` | A brief names a color or pair the theme cannot back. Use a token, or a variable and pair the theme defines and keeps readable. |
+| `as a fill with … text; text on it is` | Check 6: a sentence names a fill with text that belongs to another fill, family or step, or names the canvas text on a block. Text on `--immersive-<fill>` is `--immersive-on-<fill>`, and text on `--immersive-canvas` is `--immersive-text`. A fill with no text named is only a warning in the draft's review report, never a CI failure. |
 | `names "<name>", a preset source` | A source's site or domain name appears in a brief. Remove it. |
 | `differs from fresh scripted output`, `sections must be, in order` | A scripted part no longer matches the theme, tokens or picks, or was edited by hand. Run `scripted-only`, and put lasting wording changes in `render.mjs`. |
 | `its scripted sections cannot be checked`, `not rewritten` | The brief's prose cannot be found where the section map puts it, or a rewrite would drop hand-added text, such as an extra bullet, section or header paragraph, or a paragraph after the Brand Floor sentence; or its inputs have problems. Move or remove the text the message names, or fix the inputs listed first. |
 | `takes the name of a fixed component` | An occasion component is named like one the brief renders itself. Rename it. |
 | `is not an input the tool supplies`, `takes the output of`, `is not a band`, `must have an accentPlacement property`, `makes a cycle`, `has the placeholder` | A prompt library file names an input, band, order or placeholder the tool cannot fill. Use one the message lists, and name in `after` each entry whose output the entry takes. |
-| `prose holds #…`, `prose gives …px`, `is not a Type Scale size`, `prose names a gradient`, `motion level does not allow`, `more than the … motion level's` | Check 4: prose gives a value the theme does not. Name colors by variable or role, spacing by step and type by role, use px only as the brief's tables give it, and keep motion within the layout's level. |
+| `prose holds #…`, `prose gives …px`, `is not a Type Scale size`, `prose names a gradient`, `motion level does not allow`, `more than the … motion level's`, `a font other than` | Check 4: prose gives a value the theme does not. Name colors by variable or role, spacing by step and type by role, use px only as the brief's tables give it, keep motion within the layout's level, and name no typeface but the theme's. Fonts are found from a fixed list in `prose-checks.mjs`, so a font missing from it is not caught. |
 | `accent placement … is not one of`, `does not name its accent placement`, `nothing in this brief carries the accent` | Check 10: the record's accent placement is not one the brief allows, or the mood paragraph does not name it. Redraft the mood, or edit it to name the placement. |
 
 The registry tests also run in `validate.mjs`, so a brief's registry entry must build like every other item.
