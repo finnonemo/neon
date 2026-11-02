@@ -9,6 +9,26 @@ const REVIEW_STATUSES = ['illustrative', 'partially-reviewed', 'reviewed'];
 // The components every brief renders itself; an occasion component never takes one of their names.
 export const FIXED_COMPONENTS = ['Main Action', 'Secondary Action', 'Logo', 'Tint Block', 'Accent Block', 'Support Block'];
 export const ENTRIES = ['tagline', 'mood-occasion', 'occasion-components', 'preset-dos-donts', 'imagery', 'layout', 'example-prompts'];
+// What an entry may take: preset fields (never a source), theme text and facts, picks, computed lists and
+// earlier entries' output. A whole preset ("layout", "imagery") leaves out its kind, slug and source.
+export const INPUTS = [
+  ...['taglineIntent', 'moodIntent', 'components', 'dos', 'donts', 'promptInputs', 'secondaryHighlights'].map((field) => `occasion.${field}`),
+  'layout', ...['sections', 'heroPattern', 'navigation', 'footer', 'density', 'blockRadius', 'sectionGap', 'cardPadding', 'pageWidth', 'motion', 'brandPattern'].map((field) => `layout.${field}`),
+  'imagery', ...['leads', 'framing', 'subject', 'illustration', 'density'].map((field) => `imagery.${field}`),
+  'theme.kind', 'theme.label', 'theme.mood', 'theme.sibling', 'theme.roles', 'brief.name', 'brandPattern.colourway', 'brandPattern.section',
+  'accentPlacements', 'colorVars', 'typeRoles', 'occasion-components.components', 'occasion-components.names',
+];
+// The bands each entry's soft checks read from its targets.
+export const TARGETS = {
+  tagline: ['words', 'firstClauseWords'],
+  'mood-occasion': ['paragraphWords'],
+  'occasion-components': ['roleWords', 'paragraphWords', 'paragraphSentences'],
+  'preset-dos-donts': ['words'],
+  imagery: ['words'],
+  layout: ['words'],
+  'example-prompts': ['count', 'words'],
+};
+export const PLACEHOLDERS = ['{{variables}}', '{{typeRoles}}'];
 
 const text = { type: 'string' };
 const slug = { type: 'string', pattern: /^[a-z0-9]+(?:-[a-z0-9]+)*$/, describe: 'a lowercase hyphenated slug' };
@@ -182,11 +202,65 @@ export function themeTextProblems(data, id, facts) {
 export function entryProblems(name, data) {
   if (!ENTRIES.includes(name)) return [`not a prompt library entry; entries are ${ENTRIES.join(', ')}, and shared`];
   const problems = [];
+  const after = Array.isArray(data?.after) ? data.after : [];
   (Array.isArray(data?.inputs) ? data.inputs : []).forEach((input, index) => {
+    // "layout." and "imagery." name preset fields; only the other entries' names name an output.
+    const from = ENTRIES.find((entry) => !['layout', 'imagery'].includes(entry) && String(input).startsWith(`${entry}.`));
     if (String(input).split('.').includes('source')) problems.push(`"inputs.${index}" names a preset source, which is never an input`);
+    else if (!INPUTS.includes(input)) problems.push(`"inputs.${index}" is not an input the tool supplies`);
+    else if (from && !after.includes(from)) problems.push(`"inputs.${index}" takes the output of "${from}", which "after" does not name`);
   });
-  if (Array.isArray(data?.after) && data.after.includes(name)) problems.push('"after" names the entry itself');
+  if (after.includes(name)) problems.push('"after" names the entry itself');
+  for (const key of Object.keys(data?.targets ?? {})) if (!TARGETS[name].includes(key)) problems.push(`"targets.${key}" is not a band ${name} checks; its bands are ${TARGETS[name].join(', ')}`);
+  if (name === 'mood-occasion' && data?.output && !data.output.properties?.accentPlacement) problems.push('"output" must have an accentPlacement property');
   return problems;
+}
+
+export function sharedProblems(data) {
+  const problems = [];
+  for (const key of ['preamble', 'bans']) {
+    (Array.isArray(data?.[key]) ? data[key] : []).forEach((line, index) => {
+      for (const [placeholder] of String(line).matchAll(/\{\{\w*\}\}/g)) if (!PLACEHOLDERS.includes(placeholder)) problems.push(`"${key}.${index}" has the placeholder ${placeholder}; placeholders are ${PLACEHOLDERS.join(', ')}`);
+    });
+  }
+  return problems;
+}
+
+// Problems with a model answer against an entry's output JSON Schema: the subset entries use.
+export function jsonSchemaProblems(value, schema, path = '', problems = []) {
+  const at = path ? `"${path}"` : 'the answer';
+  if (schema.enum) {
+    if (!schema.enum.includes(value)) problems.push(`${at} must be one of ${schema.enum.map((option) => JSON.stringify(option)).join(', ')}`);
+  } else if (schema.type === 'object') {
+    if (typeOf(value) !== 'object') return [...problems, `${at} must be an object`];
+    for (const key of Object.keys(value)) if (schema.additionalProperties === false && !(key in (schema.properties ?? {}))) problems.push(`unknown key "${join(path, key)}"`);
+    for (const key of schema.required ?? []) if (!(key in value)) problems.push(`missing key "${join(path, key)}"`);
+    for (const [key, inner] of Object.entries(schema.properties ?? {})) if (key in value) jsonSchemaProblems(value[key], inner, join(path, key), problems);
+  } else if (schema.type === 'array') {
+    if (!Array.isArray(value)) return [...problems, `${at} must be an array`];
+    if (value.length < (schema.minItems ?? 0) || value.length > (schema.maxItems ?? Infinity)) problems.push(`${at} has ${value.length} items`);
+    value.forEach((item, index) => jsonSchemaProblems(item, schema.items ?? {}, join(path, index), problems));
+  } else if (schema.type === 'string' && (typeof value !== 'string' || !value.trim())) {
+    problems.push(`${at} must be a non-empty string`);
+  }
+  return problems;
+}
+
+// Entries in an order where each comes after the entries its "after" names; entries left over form a cycle.
+// An "after" naming an entry not in the map is ignored here.
+export function entryOrder(afters) {
+  const order = [];
+  const left = ENTRIES.filter((name) => name in afters);
+  for (let progress = true; progress;) {
+    progress = false;
+    for (const name of [...left]) {
+      if (afters[name].some((other) => left.includes(other))) continue;
+      order.push(name);
+      left.splice(left.indexOf(name), 1);
+      progress = true;
+    }
+  }
+  return { order, cycle: left };
 }
 
 const onDomain = (host, domain) => host === domain || host.endsWith(`.${domain}`);

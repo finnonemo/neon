@@ -262,7 +262,7 @@ function elevation() {
 }
 
 // Its opening is fixed, so a paragraph after it is found even when the typeface has changed.
-const BRAND_FLOOR_OPENING = "Imagery never carries another brand's";
+export const BRAND_FLOOR_OPENING = "Imagery never carries another brand's";
 const brandFloor = (facts) => `${BRAND_FLOOR_OPENING} logo, copy or look, and the Finnomena logo and ${facts.scale.typeface} stay on every screen.`;
 
 function imagery({ facts }, prose) {
@@ -273,12 +273,28 @@ function layoutSection(_, prose) {
   return `## Layout\n\n${prose.layout.paragraph}`;
 }
 
+// Prose of the right shape for a brief, every text set to `text`: for a section no entry has drafted.
+export function placeholderProse({ occasion }, text = '[not drafted]') {
+  return {
+    tagline: { tagline: text },
+    'mood-occasion': { paragraph: text },
+    'occasion-components': { components: occasion.components.map(({ name }) => ({ name, role: text, paragraph: text })) },
+    'preset-dos-donts': { dos: occasion.dos.map(() => text), donts: occasion.donts.map(() => text) },
+    imagery: { paragraph: text },
+    layout: { paragraph: text },
+    'example-prompts': { prompts: [text] },
+  };
+}
+
 // Each section's renderer, by heading, in the order SECTIONS gives.
 const RENDERERS = {
   'Tokens — Colors': colors, 'Tokens — Typography': typography, 'Tokens — Spacing & Shapes': spacing, Components: components,
   "Do's and Don'ts": dosAndDonts, Surfaces: surfaces, Elevation: elevation, Imagery: imagery, 'Brand Pattern': brandPattern,
   Layout: layoutSection, Motion: motion, 'Agent Prompt Guide': promptGuide, 'Sibling Themes': siblings, 'Quick Start': quickStart,
 };
+
+// The sections with no prose in them.
+export const SCRIPTED_SECTIONS = SECTIONS.filter((heading) => !['Components', "Do's and Don'ts", 'Imagery', 'Layout', 'Agent Prompt Guide'].includes(heading));
 
 // The whole brief: the header, then each section in order.
 export const renderBrief = (brief, prose) => `${[header(brief, prose), ...SECTIONS.map((heading) => RENDERERS[heading](brief, prose))].join('\n\n')}\n`;

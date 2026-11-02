@@ -4,7 +4,7 @@
 // is collected as "<repo-relative path>: <message>"; nothing stops at the first.
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { bans, briefSlug, COLOURWAYS, ENTRIES, entryProblems, entrySchema, picksProblems, picksSchema, presetProblems, presetSchema, sharedSchema, themeTextProblems, themeTextSchema, validate } from './schemas.mjs';
+import { bans, briefSlug, COLOURWAYS, ENTRIES, entryOrder, entryProblems, entrySchema, picksProblems, picksSchema, presetProblems, presetSchema, sharedProblems, sharedSchema, themeTextProblems, themeTextSchema, validate } from './schemas.mjs';
 
 export const PRESET_KINDS = ['occasion', 'layout', 'imagery'];
 
@@ -49,6 +49,8 @@ function themeFacts(root, problems) {
   const wide = themeCss.match(/@media \(min-width: (\d+px)\)\s*\{\s*:root\s*\{[^}]*--layout-endMargin:\s*([^;]+);/);
   const typeface = declared.get('fontFamily-body')?.match(/^'([^']+)'/)?.[1];
   const steps = (prefix) => new Set(scale(prefix).map(({ name }) => name));
+  // The theme.css variables prose may name; colors come from the Immersive Themes, never --color-*.
+  const neonVars = new Set([...declared.keys()].filter((name) => /^(space|borderRadius|fontSize|fontWeight|lineHeight|fontFamily|layout)-/.test(name)));
   const themes = {};
   for (const [id, theme] of Object.entries(data.themes ?? {})) {
     const families = COLOURWAYS.filter((family) => theme[family]);
@@ -73,6 +75,7 @@ function themeFacts(root, problems) {
     secondary: Object.fromEntries(Object.entries(data.secondary ?? {}).map(([family, familySteps]) => [family, Object.keys(familySteps)])),
     space: steps('space'),
     borderRadius: steps('borderRadius'),
+    neonVars,
     scale: {
       typeface,
       type: scale('fontSize').map(({ name, value }) => {
@@ -112,9 +115,12 @@ export function loadInputs(root) {
     else problems.push(`${path}: no Immersive Theme "${id}"`);
   }
   for (const { path, name, data } of library) {
-    if (name === 'shared') check(path, data, sharedSchema, problems);
+    if (name === 'shared') check(path, data, sharedSchema, problems, sharedProblems(data));
     else if (!ENTRIES.includes(name)) problems.push(...entryProblems(name, data).map((message) => `${path}: ${message}`));
     else check(path, data, entrySchema, problems, entryProblems(name, data));
   }
+  const afters = Object.fromEntries(library.filter(({ name, data }) => ENTRIES.includes(name) && Array.isArray(data?.after)).map(({ name, data }) => [name, data.after]));
+  const { cycle } = entryOrder(afters);
+  for (const name of cycle) problems.push(`theme-briefs/prompt-library/${name}.json: "after" makes a cycle through ${cycle.join(', ')}`);
   return { facts, presets, picks, themeTexts, library, problems };
 }

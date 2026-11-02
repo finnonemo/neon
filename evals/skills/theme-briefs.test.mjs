@@ -315,7 +315,7 @@ const briefText = renderBrief();
 const published = (items = ['club-run']) => ({
   ...THEME_TEXTS,
   [BRIEF]: briefText,
-  'theme-briefs/records/club-run.json': { brief: 'club-run' },
+  'theme-briefs/records/club-run.json': { brief: 'club-run', accentPlacement: 'Registration call-out' },
   'registry/registry.json': { name: 'neon', homepage: 'https://example.invalid', items: items.map((name) => ({ name: `theme-brief-${name}`, type: 'registry:item' })) },
 });
 const thirdParty = (status) => ({
@@ -496,7 +496,7 @@ function renderMatrix(t) {
   }
   for (const { theme, colourway, briefName, slug, layout } of MATRIX) {
     files[`theme-briefs/picks/${slug}.json`] = { theme, briefName, presets: { occasion: 'run', layout, imagery: 'people-in-action' }, brandPattern: { colourway, ground: 50 } };
-    files[`theme-briefs/records/${slug}.json`] = { brief: slug };
+    files[`theme-briefs/records/${slug}.json`] = { brief: slug, accentPlacement: 'Registration call-out' };
     files[`registry/theme-briefs/${slug}.md`] = staleBrief(PROSE, { theme: LABELS[theme], name: briefName });
   }
   files['registry/registry.json'] = { name: 'neon', homepage: 'https://example.invalid', items: MATRIX.map(({ slug }) => ({ name: `theme-brief-${slug}`, type: 'registry:item' })) };
@@ -578,4 +578,101 @@ test('the Colors table marks a block step that is the canvas color', (t) => {
   assert.equal(status, 0, out);
   const brief = readFileSync(join(root, 'registry/theme-briefs/ultra-run.md'), 'utf8');
   assert.match(brief, /^\| Navy 100 \| `#01172b` \| `--immersive-palette-100` \| The canvas color, not a block fill \|$/m);
+});
+
+// Draft mode: a fake `claude`, chosen through CLAUDE_PATH, answers each prompt library entry from a
+// script of answers per attempt and logs every call, so no test needs a model or the network.
+const LIBRARY = 'theme-briefs/prompt-library';
+const libraryFiles = () => Object.fromEntries(readdirSync(join(repo, LIBRARY)).map((name) => [`${LIBRARY}/${name}`, readFileSync(join(repo, LIBRARY, name), 'utf8')]));
+const FAKE_CLAUDE = `#!${process.execPath}
+import { appendFileSync, readFileSync } from 'node:fs';
+const args = process.argv.slice(2);
+if (args.includes('--version')) { console.log('2.1.316 (Claude Code)'); process.exit(0); }
+const prompt = readFileSync(0, 'utf8');
+const entry = prompt.match(/^Entry: ([\\w-]+)\\./m)?.[1];
+const log = process.env.FAKE_CLAUDE_LOG;
+const attempt = readFileSync(log, 'utf8').split('\\n').filter(Boolean).map(JSON.parse).filter((call) => call.entry === entry).length + 1;
+appendFileSync(log, JSON.stringify({ entry, attempt, args, prompt }) + '\\n');
+const answers = JSON.parse(readFileSync(process.env.FAKE_CLAUDE_ANSWERS, 'utf8'))[entry];
+const answer = answers[Math.min(attempt, answers.length) - 1];
+if (answer.$exit) { console.error('Invalid API key · Please run /login'); process.exit(answer.$exit); }
+// Fields a real result carries that must never reach the record.
+const meta = { session_id: '5f0c-session-77', account: 'maintainer@example.com', total_cost_usd: 0.42 };
+console.log(JSON.stringify(answer.$raw !== undefined
+  ? { type: 'result', is_error: false, result: answer.$raw, ...meta }
+  : { type: 'result', is_error: false, result: JSON.stringify(answer), structured_output: answer, ...meta }));
+`;
+
+// Answers that pass every hard and soft check on the club-run fixture.
+const GOOD = {
+  tagline: { tagline: 'Race day on an open canvas — every member invited to one shared start line' },
+  'mood-occasion': {
+    paragraph: 'For race weekend the accent is saved for the Registration call-out, so the one action members came for is the brightest thing on the page. Everything else stays on the canvas and soft grey blocks, with rounded corners and generous gaps that give each distance room to be compared without a crowd of competing colors. The rhythm is steady rather than loud, the way a long run settles after the first kilometre. The page closes on the start line at dawn, bibs pinned, members shaking out their legs before the horn.',
+    accentPlacement: 'Registration call-out',
+  },
+  'occasion-components': {
+    components: [
+      { name: 'Race distance card', role: 'Compare the distances on offer', paragraph: 'Each card sits on var(--immersive-palette-50) with var(--immersive-on-palette-50) text, no border, var(--borderRadius-500) corners and var(--space-4) padding. The distance leads in title2 above the start time in body, then one select action. A distance that has filled up says so in body text and offers no action.' },
+      { name: 'Registration call-out', role: 'Carry the main registration action', paragraph: 'The call-out sits on var(--immersive-accent-100) with var(--immersive-on-accent-100) text, no border, var(--borderRadius-500) corners and var(--space-4) padding. The deadline sits in title3 above one main action. It appears once, after the distances.' },
+    ],
+  },
+  'preset-dos-donts': {
+    dos: ['Show the registration deadline beside every main action on the Race distance card, so members never hunt for the date.'],
+    donts: ['Do not use the route map as a decorative background — it hides the distances members came to compare.'],
+  },
+  imagery: {
+    paragraph: 'Photography of members running together leads every screen, framed close and mid so faces and stride carry the energy. Subjects are real members in candid moments on the course, set on the canvas or a soft grey block and never tinted with the accent. Spot illustrations mark small blocks only, such as a distance badge or a water station, drawn in the text color. Icons stay simple line marks beside labels. Images sit beside the hero and its Brand Pattern, never over it, with one large image per screen at most. The page should feel open and unhurried.',
+  },
+  layout: {
+    paragraph: 'A full-bleed page opens on a split hero, its headline beside one lead image, with the Brand Pattern carried by the hero section. Below it a detail list sets out the Race distance card set on soft grey blocks, then a call-out section holds the Registration call-out on its accent block. A short form follows for sign-up details, and a minimal footer closes the page. There is no navigation bar, so the hero carries the page title. Sections alternate between the canvas and tinted blocks at var(--space-10) gaps, with var(--borderRadius-500) corners on every block and var(--space-4) padding inside cards, keeping a comfortable rhythm from top to bottom.',
+  },
+  'example-prompts': {
+    prompts: [
+      'Create a Race distance card: var(--immersive-palette-50) fill with var(--immersive-on-palette-50) text, var(--borderRadius-500) corners, var(--space-4) padding, the distance in title2 and the start time in body, with one select action.',
+      'Create a Registration call-out: var(--immersive-accent-100) fill with var(--immersive-on-accent-100) text, var(--borderRadius-500) corners, var(--space-4) padding, the deadline in title3 above one main action on var(--immersive-action) with a var(--immersive-on-action) label.',
+      'Create a hero section: the canvas with var(--immersive-text) headline in display2, a lead image beside it, and one main action on var(--immersive-action) with a var(--immersive-on-action) label.',
+    ],
+  },
+};
+
+// A temp folder for the fake and its log, outside the fixture root.
+function fakeClaude(t, answers) {
+  const dir = mkdtempSync(join(tmpdir(), 'neon-fake-claude-'));
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const path = join(dir, 'claude');
+  writeFileSync(path, FAKE_CLAUDE, { mode: 0o755 });
+  writeFileSync(join(dir, 'answers.json'), JSON.stringify({ ...Object.fromEntries(Object.entries(GOOD).map(([name, answer]) => [name, [answer]])), ...answers }));
+  writeFileSync(join(dir, 'calls.log'), '');
+  return {
+    path,
+    env: { CLAUDE_PATH: path, FAKE_CLAUDE_LOG: join(dir, 'calls.log'), FAKE_CLAUDE_ANSWERS: join(dir, 'answers.json') },
+    calls: () => readFileSync(join(dir, 'calls.log'), 'utf8').split('\n').filter(Boolean).map((line) => JSON.parse(line)),
+  };
+}
+
+function draft(t, { answers = {}, changes = {}, args = [] } = {}) {
+  const root = fixture(t, { ...THEME_TEXTS, ...libraryFiles(), ...changes });
+  const fake = fakeClaude(t, answers);
+  const result = run(['draft', 'club-run', '--root', root, ...args], fake.env);
+  return { root, fake, ...result };
+}
+
+const local = (root, file) => join(root, '.local/theme-briefs/club-run', file);
+const RECORD = 'theme-briefs/records/club-run.json';
+
+test('draft writes a brief that passes check-only, its record, and a review report', (t) => {
+  const { root, fake, status, out } = draft(t);
+  assert.equal(status, 0, out);
+  assert.match(out, /^club-run: written to registry\/theme-briefs\/club-run\.md; review \.local\/theme-briefs\/club-run\/review\.md$/m);
+  assert.deepEqual(fake.calls().map(({ entry, attempt }) => `${entry} ${attempt}`).sort(), Object.keys(GOOD).map((name) => `${name} 1`).sort());
+  const brief = readFileSync(join(root, BRIEF), 'utf8');
+  assert.match(brief, /^> Race day on an open canvas — every member invited to one shared start line$/m);
+  assert.ok(brief.includes(GOOD.layout.paragraph));
+  assert.equal(readFileSync(local(root, 'draft.md'), 'utf8'), brief);
+  const record = JSON.parse(readFileSync(join(root, RECORD), 'utf8'));
+  assert.equal(record.accentPlacement, 'Registration call-out');
+  // Once the maintainer adds its registry entry, CI passes the brief.
+  writeFileSync(join(root, 'registry/registry.json'), JSON.stringify({ name: 'neon', homepage: 'https://example.invalid', items: [{ name: 'theme-brief-club-run', type: 'registry:item' }] }));
+  const check = checkOnly(root);
+  assert.equal(check.status, 0, check.out);
 });
