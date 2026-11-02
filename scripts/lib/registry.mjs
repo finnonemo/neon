@@ -113,3 +113,39 @@ export function nextThemes(files, items = []) {
   }
   return problems;
 }
+
+/**
+ * Theme Brief items (`theme-brief-<theme>-<slug>`) against their briefs, by `<theme>-<slug>`: each brief's
+ * picks file, theme label and Markdown. An item ships one Markdown file into the app's docs/theme-briefs/,
+ * titled and described as the brief is, with the meta neon-create lists briefs by.
+ */
+export function themeBriefItemProblems(items, briefs) {
+  const problems = [];
+  for (const item of items) {
+    if (!item.name?.startsWith('theme-brief-')) continue;
+    const name = item.name.slice('theme-brief-'.length);
+    const brief = briefs.get(name);
+    const problem = (message) => problems.push(`${item.name}: ${message}`);
+    if (!brief) {
+      problem(`no picks file and Markdown for ${name}`);
+      continue;
+    }
+    const { picks, label, markdown } = brief;
+    const tagline = markdown.split('\n').find((line) => line.startsWith('> '))?.slice(2);
+    const meta = { immersiveTheme: picks.theme, briefName: picks.briefName, presets: picks.presets, status: 'provisional' };
+    const categories = ['theme-brief', picks.theme];
+    if (item.type !== 'registry:item') problem('type must be "registry:item"');
+    if (item.title !== `${label} · ${picks.briefName}`) problem(`title must be "${label} · ${picks.briefName}"`);
+    if (tagline === undefined || item.description !== tagline) problem("description must be the brief's tagline");
+    if (JSON.stringify(item.categories) !== JSON.stringify(categories)) problem(`categories must be ${JSON.stringify(categories)}`);
+    if (JSON.stringify(item.meta) !== JSON.stringify(meta)) problem(`meta must be ${JSON.stringify(meta)}`);
+    for (const dependency of ['@neon/theme', '@neon/immersive-themes']) {
+      if (!(item.registryDependencies ?? []).includes(dependency)) problem(`registryDependencies must include ${dependency}`);
+    }
+    const [file, ...more] = item.files ?? [];
+    if (more.length || file?.path !== `theme-briefs/${name}.md` || file.type !== 'registry:file' || file.target !== `~/docs/theme-briefs/${name}.md`) {
+      problem(`its one file must be theme-briefs/${name}.md, a registry:file targeting ~/docs/theme-briefs/${name}.md`);
+    }
+  }
+  return problems;
+}
