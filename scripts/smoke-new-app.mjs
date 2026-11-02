@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * smoke-new-app.mjs — the disposable app build that AGENTS.md requires for
- * app, template and theme changes. It builds this checkout's Neon registry,
+ * registry, template and theme changes. It builds this checkout's Neon registry,
  * serves it locally, and through the installer creates an app with --new
  * (shadcn init from the Neon base; real dependency install, needs network),
  * tunes a Neon file, adds an item and a Theme Brief with --add, then runs the
