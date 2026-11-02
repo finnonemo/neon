@@ -125,3 +125,15 @@ test('eval-shots launch entry replaces itself and keeps other servers', () => {
   assert.deepEqual(updated.configurations.map(({ name, port }) => [name, port]), [['dev', 5173], ['eval-shots', 4793]]);
   assert.deepEqual(withEvalShots(undefined).configurations.map(({ name }) => name), ['eval-shots']);
 });
+
+test('appBase tells the Neon base, CDS and neither apart, and names a mixed app', async () => {
+  const fixture = JSON.parse(readFileSync(new URL('./fixtures/shadcn-v4-app/components.json', import.meta.url), 'utf8'));
+  const { appBase } = await import('./grade-rebuild.mjs');
+  assert.equal(appBase(neonApp()), 'neon');
+  assert.equal(appBase({ packageJson: { dependencies: { '@coinbase/cds-web': '9' } } }), 'cds');
+  // A plain shadcn app (v0, Lovable) takes Neon items when asked, but is not on the Neon base.
+  assert.equal(appBase({ componentsJson: fixture, packageJson: { dependencies: { react: '19' } } }), 'neither');
+  assert.equal(appBase({ packageJson: {} }), 'neither');
+  // One app never mixes the two, so the grader reports it rather than picking one.
+  assert.equal(appBase(neonApp({ packageJson: { dependencies: { '@coinbase/cds-web': '9' } } })), 'mixed');
+});

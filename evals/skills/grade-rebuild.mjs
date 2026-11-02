@@ -48,6 +48,17 @@ export async function neonRegistryFiles(root = repositoryRoot) {
   return resolveItemFiles({ url: 'neon:', names, fetchJson: async url => JSON.parse(built.get(basename(url))) });
 }
 
+const cdsPackages = packageJson => ['dependencies', 'devDependencies'].flatMap(field => Object.keys(packageJson?.[field] ?? {})).filter(name => cdsPackage.test(name));
+
+// The app's base, as project-inspection.md#base states it: an `@neon` registry
+// entry in components.json is the Neon base, a CDS package is CDS, and an app
+// with both is mixed. A components.json without `@neon` is plain shadcn: neither.
+export function appBase({ componentsJson, packageJson }) {
+  const neon = Boolean(componentsJson?.registries?.['@neon']);
+  const cds = cdsPackages(packageJson).length > 0;
+  return neon && cds ? 'mixed' : neon ? 'neon' : cds ? 'cds' : 'neither';
+}
+
 // What keeps a rebuild off the Neon base: no @neon registry in components.json,
 // CDS, or a ui file that is not a Neon item or carries stock shadcn's marks. A
 // Neon item the app tuned passes; its content is the app's.
@@ -55,9 +66,7 @@ export function neonBaseProblems({ componentsJson, packageJson, sources, neonFil
   const problems = [];
   if (!componentsJson) problems.push('no components.json: the rebuild was not started from the Neon base');
   else if (!componentsJson.registries?.['@neon']) problems.push('components.json has no @neon registry: the rebuild was not started from the Neon base');
-  for (const field of ['dependencies', 'devDependencies']) {
-    for (const name of Object.keys(packageJson[field] ?? {})) if (cdsPackage.test(name)) problems.push(`package.json: ${name} is CDS; a rebuild targets the Neon base`);
-  }
+  for (const name of cdsPackages(packageJson)) problems.push(`package.json: ${name} is CDS; a rebuild targets the Neon base`);
   for (const { path, source } of sources) {
     for (const [, specifier] of source.matchAll(/(?:from\s*|import\s*\(?\s*)["']([^"']+)["']/g)) {
       if (cdsPackage.test(specifier)) problems.push(`${path} imports ${specifier}; a rebuild targets the Neon base`);
@@ -74,7 +83,7 @@ function appSources(app) {
   return sourceFiles(join(app, 'src'), /\.(m?[jt]sx?|s?css)$/).map(path => ({ path: path.slice(app.length + 1), source: readFileSync(path, 'utf8') }));
 }
 
-export async function neonBaseCheck(app, neonFiles) {
+export function neonBaseCheck(app, neonFiles) {
   const read = name => (existsSync(join(app, name)) ? JSON.parse(readFileSync(join(app, name), 'utf8')) : undefined);
   return neonBaseProblems({ componentsJson: read('components.json'), packageJson: read('package.json') ?? {}, sources: appSources(app), neonFiles });
 }
