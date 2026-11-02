@@ -63,22 +63,22 @@ export function ImmersiveLayout({
   }, [immersiveTheme])
 
   // A themed page grows with its content, so the window scrolls and overscroll shows the canvas painted on <html>.
-  const scroll = immersiveTheme ? { height: "auto", minHeight: "100dvh", overflow: "visible" } : {}
+  const windowScroll = immersiveTheme ? { height: "auto", minHeight: "100dvh", overflow: "visible" } : {}
 
   return (
     <ColorSchemeContext.Provider value={immersiveTheme ? THEME_SCHEMES[immersiveTheme] : appScheme}>
-    <div className="neon-layout bg-background font-sans text-body text-foreground" data-bottom-nav={navigation.length > 0} data-immersive-theme={immersiveTheme} style={{ flexDirection: "column", ...scroll }}>
-      <header style={{ height: HEADER_HEIGHT, flexShrink: 0 }} className="flex items-center ps-4">
-        <Logo />
-      </header>
-      <div style={{ flex: 1, minHeight: 0, display: "flex", justifyContent: "center" }}>
-        {/* InspectorView is the generic "fill" pane component (Toolbar + scrollable body) — reused here since Immersive Layout is a single full-width pane with no fixed-width sibling. Capped/centered at `max` per the Figma frame; full-bleed at every other tier. */}
-        <div className="neon-immersive-content" style={{ width: "100%", maxWidth: tier === "max" ? MAX_CONTENT_WIDTH : undefined, display: "flex" }}>
-          <InspectorView pane={{}}>{content}</InspectorView>
+      <div className="neon-layout bg-background font-sans text-body text-foreground" data-bottom-nav={navigation.length > 0} data-immersive-theme={immersiveTheme} style={{ flexDirection: "column", ...windowScroll }}>
+        <header style={{ height: HEADER_HEIGHT, flexShrink: 0 }} className="flex items-center ps-4">
+          <Logo />
+        </header>
+        <div style={{ flex: 1, minHeight: 0, display: "flex", justifyContent: "center" }}>
+          {/* InspectorView is the generic "fill" pane component (Toolbar + scrollable body) — reused here since Immersive Layout is a single full-width pane with no fixed-width sibling. Capped/centered at `max` per the Figma frame; full-bleed at every other tier. */}
+          <div className="neon-immersive-content" style={{ width: "100%", maxWidth: tier === "max" ? MAX_CONTENT_WIDTH : undefined, display: "flex" }}>
+            <InspectorView pane={{}}>{content}</InspectorView>
+          </div>
         </div>
+        <BottomNav navigation={navigation} />
       </div>
-      <BottomNav navigation={navigation} />
-    </div>
     </ColorSchemeContext.Provider>
   )
 }

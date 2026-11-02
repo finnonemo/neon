@@ -4,6 +4,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { loadImmersiveThemes, resolveColor } from '../../theme/scripts/generate-immersive-themes.mjs';
 import { BUILD_DIR, bareCnImports, buildRegistry, darkClasses, missingTypeRoles, nextThemes, pinnedRegistryUrl, tabsAsSegmented, unpinnedUrls, weightOverrides } from '../../scripts/lib/registry.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -123,7 +124,28 @@ test('the Immersive Themes item ships the generated themes, and ImmersiveLayout 
   for (const file of themes.files) assert.ok(read(join('registry', file.path)), `${file.path} exists`);
   assert.ok(registryItem('layouts').registryDependencies.includes('@neon/immersive-themes'), 'the layouts item depends on it');
   const imports = [...read('registry/layout/ImmersiveLayout.tsx').matchAll(/^import\s+["'](\.\.\/theme\/[^"']+)["']/gm)].map((match) => match[1]);
-  assert.ok(imports.some((path) => themes.files.some((file) => file.target === `src/${path.slice(3)}`)), 'ImmersiveLayout imports a stylesheet the item ships');
+  assert.ok(imports.some((path) => themes.files.some((file) => file.target === `src/${path.replace(/^\.\.\//, '')}`)), 'ImmersiveLayout imports a stylesheet the item ships');
+});
+
+// A theme added to immersive-themes.json must reach ImmersiveLayout's type and
+// color schemes, each scheme following its canvas: dark where white text
+// contrasts more than black (relative luminance below 0.179).
+test('ImmersiveLayout names every Immersive Theme, each with the color scheme its canvas implies', () => {
+  const { themes, colors } = loadImmersiveThemes();
+  const source = read('registry/layout/ImmersiveLayout.tsx');
+  const union = [...source.match(/export type ImmersiveTheme = ([^\n]+)/)[1].matchAll(/"(\w+)"/g)].map((match) => match[1]);
+  const schemes = Object.fromEntries([...source.match(/THEME_SCHEMES[^=]*= \{([^}]*)\}/)[1].matchAll(/(\w+): "(\w+)"/g)].map((match) => [match[1], match[2]]));
+  assert.deepEqual(union.sort(), Object.keys(themes).sort(), 'ImmersiveTheme lists the themes in immersive-themes.json');
+  const luminance = (hex) => {
+    const [r, g, b] = hex.slice(1).match(/../g).map((v) => parseInt(v, 16) / 255).map((c) => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4));
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  };
+  const expected = Object.fromEntries(Object.entries(themes).map(([name, theme]) => [name, luminance(resolveColor(colors, theme.canvas)) < 0.179 ? 'dark' : 'light']));
+  assert.deepEqual(schemes, expected);
+  const css = read('registry/theme/immersive.css');
+  for (const [name, scheme] of Object.entries(expected)) {
+    if (scheme === 'dark') assert.match(css, new RegExp(`:root\\[data-immersive-theme="${name}"\\] \\{ color-scheme: dark !important; \\}`), `immersive.css sets ${name} dark`);
+  }
 });
 
 test('the toast takes its theme from AppRoot, never next-themes', () => {

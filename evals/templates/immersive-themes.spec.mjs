@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 
 // Each Immersive Theme on the Neon base's ImmersiveLayout (#96). Expected
 // colors come from the generated theme CSS, so the page is held to the themes
-// a Campaign Page copies, not to values restated here.
+// a Campaign Page copies; the color schemes are the ticket's rule.
 test.skip((process.env.NEON_TARGET ?? 'cds') !== 'neon', 'The Neon base only; the CDS starter takes no immersiveTheme');
 test.beforeEach(async ({ page }) => {
   page.on('pageerror', error => { throw error; });
@@ -16,13 +16,23 @@ const themeVars = name => {
   const body = css.match(new RegExp(`\\[data-immersive-theme="${name}"\\]\\s*\\{([^}]*)\\}`))[1];
   return Object.fromEntries([...body.matchAll(/--immersive-([\w-]+):\s*(#[0-9a-f]{6})/g)].map(([, key, hex]) => [key, hex]));
 };
+// Each color as the page resolves it, from an element in the body, where portalled overlays sit.
+const resolve = (page, colors) => page.evaluate(entries => Object.fromEntries(entries.map(([name, value]) => {
+  const probe = document.createElement('i');
+  probe.style.color = value;
+  document.body.append(probe);
+  const color = getComputedStyle(probe).color;
+  probe.remove();
+  return [name, color];
+})), Object.entries(colors));
 // The ticket's rule: only Ultra's navy canvas is dark.
 const SCHEMES = { club: 'light', exclusive: 'light', private: 'light', ultra: 'dark' };
 
 for (const [theme, scheme] of Object.entries(SCHEMES)) {
   const vars = themeVars(theme);
-  for (const os of ['light', 'dark']) {
-    test(`${theme} under OS ${os}: canvas, text, action, focus ring, logo and color-scheme follow the theme`, async ({ page }) => {
+  // AppRoot always writes data-theme, so the app's own dark scheme is the one the theme must override.
+  for (const [os, app] of [['light', 'light'], ['dark', 'light'], ['dark', 'dark']]) {
+    test(`${theme} under OS ${os}, app ${app}: canvas, text, action, focus ring, logo and color-scheme follow the theme`, async ({ page }) => {
       await page.setViewportSize({ width: 1440, height: 900 });
       // The logo fixture shows the light-surface logo, and the dark one under mode=dark.
       const logos = page.getByRole('img', { name: 'Finnomena', exact: true });
@@ -30,13 +40,18 @@ for (const [theme, scheme] of Object.entries(SCHEMES)) {
       const toned = await logos.first().getAttribute('src');
 
       await page.emulateMedia({ colorScheme: os });
-      await page.goto(`/?layout=immersive&theme=${theme}`);
+      await page.goto(`/?layout=immersive&theme=${theme}${app === 'dark' ? '&mode=dark' : ''}`);
       const layout = page.locator('.neon-layout');
       await expect(layout).toHaveAttribute('data-immersive-theme', theme);
       await expect(layout).toHaveCSS('background-color', rgb(vars.canvas));
       await expect(layout).toHaveCSS('color', rgb(vars.text));
       await expect(page.getByRole('heading', { level: 1 })).toHaveCSS('color', rgb(vars.text));
-      await page.screenshot({ path: test.info().outputPath(`immersive-${theme}-os-${os}.png`) });
+      await page.screenshot({ path: test.info().outputPath(`immersive-${theme}-os-${os}-app-${app}.png`) });
+
+      // Cards and popovers portalled into the body sit on the canvas in its text, so muted text stays readable;
+      // a disabled fill is CDS's blend, which every theme's far-apart action and canvas raise to 93.7%.
+      expect(await resolve(page, { card: 'var(--card)', cardText: 'var(--card-foreground)', popover: 'var(--popover)', popoverText: 'var(--popover-foreground)', disabled: 'var(--primary-disabled)' }))
+        .toEqual(await resolve(page, { card: vars.canvas, cardText: vars.text, popover: vars.canvas, popoverText: vars.text, disabled: `color-mix(in srgb, ${vars.action} 93.7%, ${vars.canvas})` }));
 
       const action = page.getByRole('button', { name: 'Final action' });
       await expect(action).toHaveCSS('background-color', rgb(vars.action));
@@ -45,14 +60,7 @@ for (const [theme, scheme] of Object.entries(SCHEMES)) {
       await page.keyboard.press('Tab');
       await expect(action).toBeFocused();
       // The Button draws its ring in --ring at 50%, transitioning in: the shadow must settle on the theme action at 50%.
-      const ring = await page.evaluate(hex => {
-        const probe = document.createElement('i');
-        probe.style.color = `color-mix(in oklab, ${hex} 50%, transparent)`;
-        document.body.append(probe);
-        const value = getComputedStyle(probe).color;
-        probe.remove();
-        return value;
-      }, vars.action);
+      const { ring } = await resolve(page, { ring: `color-mix(in oklab, ${vars.action} 50%, transparent)` });
       await expect.poll(() => action.evaluate(el => getComputedStyle(el).boxShadow), { message: 'the focus ring is drawn in the theme action' }).toContain(`${ring} 0px 0px 0px 3px`);
 
       await expect(logos.first()).toHaveAttribute('src', toned);

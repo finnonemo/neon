@@ -8,17 +8,24 @@
 /* <html> carries the attribute too, so the body, the overscroll and overlays
  * portalled into the body take the canvas. On <html> the first selector ties
  * neon.css's :root[data-theme] blocks and wins by coming after it.
+ * A theme's text is White or Navy only, so muted text is the theme's text
+ * too, and cards and popovers sit on the canvas so it stays readable there.
  * --primary-disabled is redeclared because :root's mix resolves :root's
- * --primary. A theme's text is White or Navy only, so muted text is the
- * theme's text too. */
+ * --primary; every theme's action and canvas sit far apart in luminance, so
+ * CDS's blend (getBlendedColor) comes to 93.7%, as in Neon light. Borders,
+ * inputs, secondary, accent and destructive keep the app's roles. */
 :root[data-immersive-theme],
 [data-immersive-theme] {
   --background: var(--immersive-canvas);
   --foreground: var(--immersive-text);
   --muted-foreground: var(--immersive-text);
+  --card: var(--immersive-canvas);
+  --card-foreground: var(--immersive-text);
+  --popover: var(--immersive-canvas);
+  --popover-foreground: var(--immersive-text);
   --primary: var(--immersive-action);
   --primary-foreground: var(--immersive-on-action);
-  --primary-disabled: color-mix(in srgb, var(--immersive-action) 75%, var(--immersive-canvas));
+  --primary-disabled: color-mix(in srgb, var(--immersive-action) 93.7%, var(--immersive-canvas));
   --ring: var(--immersive-action);
 }
 

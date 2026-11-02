@@ -19,7 +19,7 @@ The fixture covers both controlled and uncontrolled content/detail navigation, s
 
 `neon-a11y.spec.mjs` runs on the Neon target only: axe (WCAG 2.1 AA) on both screens in light and dark, every Tag at 4.5:1 on its wash, the segmented control's arrow keys, focus returning from the Dialog and row menu, the Select closing on a pick, a polite toast with no provider in the screen, and the DatePicker's format in a `th-TH` browser (no Buddhist year). The one allowed violation is the dark destructive button (white on fgNegative, 4.32:1), provisional until #97.
 
-`immersive-themes.spec.mjs` runs on the Neon target only: for each Immersive Theme on `ImmersiveLayout`, under OS light and dark emulation, the canvas, text, action button, focus ring and logo tone match the generated `theme/css/immersive-themes.css`, `color-scheme` is dark for Ultra only, the page scrolls with the window with no inner scroller, `html` and `body` carry the canvas behind overscroll, and the themed content keeps its full-bleed width and 1440px cap.
+`immersive-themes.spec.mjs` runs on the Neon target only: for each Immersive Theme on `ImmersiveLayout`, under OS light and dark emulation and with the app itself dark, the canvas, text, action button, disabled fill, focus ring, cards, popovers and logo tone match the generated `theme/css/immersive-themes.css`, `color-scheme` is dark for Ultra only, the page scrolls with the window with no inner scroller, `html` and `body` carry the canvas behind overscroll, and the themed content keeps its full-bleed width and 1440px cap.
 
 `--keep` leaves the assembled app in the temporary directory and prints its path, so you can preview and screenshot it.
 
