@@ -167,7 +167,7 @@ Limits:
 
 A brief is published when its Markdown, picks file, authoring record and registry entry are merged together. Publish in one PR:
 
-1. **Review.** Read `draft.md` against `review.md` in `.local/theme-briefs/<brief>/`. Check each entry's misses, the diff against the committed brief, and the word overlap with the theme's other briefs, so their model sections do not repeat each other. Read every warning for a fill named with no text. Fix prose by hand and `accept` it, or `redraft` the entry.
+1. **Review.** In `.local/theme-briefs/<brief>/`, read the draft against its review report. Check each entry's misses, the diff against the committed brief, and the word overlap with the theme's other briefs, so their model sections do not repeat each other. Read every warning for a fill named with no text. Fix prose by hand and `accept` it, or `redraft` the entry.
 2. **Review record.** When a chosen preset has a third-party source, record the design review in the picks file's `review` before you commit it (see [Presets and picks files](#presets-and-picks-files)). A brief from Finnomena's own presets needs no record.
 3. **Registry entry.** Add the brief's entry to `registry/registry.json`. The registry tests check it against the picks file and Markdown:
 
@@ -189,7 +189,7 @@ A brief is published when its Markdown, picks file, authoring record and registr
    }
    ```
 
-   The title is the theme label and brief name, and `meta.presets` copies the picks file. The one file installs to the app's `docs/theme-briefs/`.
+   The title is the theme label and brief name, and `meta.presets` copies the picks file. The one file installs to `./docs/theme-briefs/` in the app.
 4. **Build.** Run `node scripts/build-registry.mjs`. It inlines the Markdown into `registry/r/theme-brief-<theme>-<slug>.json`, pinned to the release tag like every item. A later edit to the brief needs the build again.
 5. **Validate.** Run `check-only`, then `node scripts/validate.mjs`.
 6. **PR.** Commit the Markdown, picks file, authoring record, registry entry and build, plus any new preset or theme text. Say in the PR which account label the record carries and who reviewed the draft. Nothing from `.local/` is committed.

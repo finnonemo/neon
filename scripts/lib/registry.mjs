@@ -116,7 +116,7 @@ export function nextThemes(files, items = []) {
 
 /**
  * Theme Brief items (`theme-brief-<theme>-<slug>`) against their briefs, by `<theme>-<slug>`: each brief's
- * picks file, theme label and Markdown. An item ships one Markdown file into the app's docs/theme-briefs/,
+ * picks file, theme label and Markdown. An item ships one Markdown file into the app's ./docs/theme-briefs/,
  * titled and described as the brief is, with the meta neon-create lists briefs by.
  */
 export function themeBriefItemProblems(items, briefs) {
