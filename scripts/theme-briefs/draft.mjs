@@ -7,7 +7,7 @@ import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
-import { briefProblems, checkInputs, renderable, sourceNamesOf } from './checks.mjs';
+import { briefProblems, checkInputs, RECORDS, renderable, sourceNamesOf } from './checks.mjs';
 import { askClaude, ClaudeError, claudeVersion, EFFORT, MODEL } from './model.mjs';
 import { accentPlacements, entryChecks, proseText, words } from './prose-checks.mjs';
 import { freshBrief, placeholderProse, readProse, renderBrief, SCRIPTED_SECTIONS, splitSections } from './render.mjs';
@@ -212,7 +212,7 @@ function review(result, { root, out, others, claudeVersion: claudeCode, model })
       lines.push('', before.join('\n') === after.join('\n') ? 'Same as the committed brief.' : ['Against the committed brief:', '', '```diff', ...before.map((line) => `- ${line}`), ...after.map((line) => `+ ${line}`), '```'].join('\n'));
     }
   }
-  lines.push('', '## Same-theme overlap', '', 'Word overlap (Jaccard) per model section, for information only:', '');
+  lines.push('', '## Same-theme overlap', '', 'Word overlap (Jaccard) per model section, scripted lines included, for information only:', '');
   const ours = sectionWords(result.text);
   const overlaps = others.filter((other) => other.name !== name && other.theme === brief.theme.id).map((other) => {
     const theirs = sectionWords(other.text);
@@ -268,9 +268,9 @@ export function draftBriefs({ root, names, out = join(root, 'registry/theme-brie
       continue;
     }
     mkdirSync(out, { recursive: true });
-    mkdirSync(join(root, 'theme-briefs/records'), { recursive: true });
+    mkdirSync(join(root, RECORDS), { recursive: true });
     writeFileSync(join(out, `${result.name}.md`), result.text);
-    writeFileSync(join(root, 'theme-briefs/records', `${result.name}.json`), `${JSON.stringify(record(result, meta), null, 2)}\n`);
+    writeFileSync(join(root, RECORDS, `${result.name}.json`), `${JSON.stringify(record(result, meta), null, 2)}\n`);
     lines.push(`${result.name}: written to ${relative(root, join(out, `${result.name}.md`))}; review ${reviewPath}`);
   }
   return { lines, failed: results.some(({ passed }) => !passed) };

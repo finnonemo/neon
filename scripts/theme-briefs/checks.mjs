@@ -8,6 +8,9 @@ import { accentPlacements, accentProblems, proseText, valueProblems } from './pr
 import { assembleBrief, freshBrief, readProse, splitSections } from './render.mjs';
 import { isThirdParty, sourceHost } from './schemas.mjs';
 
+// Where authoring records live: draft mode writes them and CI reads them.
+export const RECORDS = 'theme-briefs/records';
+
 const plural = (count, one, many = `${one}s`) => `${count} ${count === 1 ? one : many}`;
 
 // The presets a picks file names, by kind, and the names that have no preset file.
@@ -169,7 +172,7 @@ export function checkThemeBriefs({ root, out = join(root, 'registry/theme-briefs
     const markdown = join(out, `${name}.md`);
     const where = existsSync(markdown) ? at(markdown) : 'registry/registry.json';
     const picks = picksByName.get(name);
-    const recordPath = join(root, 'theme-briefs/records', `${name}.json`);
+    const recordPath = join(root, RECORDS, `${name}.json`);
     const missing = [
       !existsSync(markdown) && `Markdown ${at(markdown)}`,
       !picks && `picks file theme-briefs/picks/${name}.json`,

@@ -127,11 +127,11 @@ It holds no prompt, answer, path, account or session detail. The tests confirm t
 
 Read the draft against its review, then add the registry entry and run `check-only`.
 
-Not yet covered:
+Limits:
 
 - Font names and fill/text pairing in prose come with [#119](https://github.com/finnonemo/neon/issues/119).
 - Detecting hand-edited sections against the record's output hashes comes with [#120](https://github.com/finnonemo/neon/issues/120).
-- A failure in a whole-brief check (3, 4, 5, 7 or 10) is marked in the draft but not retried, since it belongs to no one entry.
+- A failure in a whole-brief check (3, 4, 5, 7 or 10) is marked in the draft but not retried, since it belongs to no one entry. Each entry's own checks already cover check 4, check 10 and source names, so this failure is rare; fix it by hand or rerun.
 
 ## Checks
 
