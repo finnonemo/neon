@@ -24,13 +24,16 @@ async function filesUnder(directory, pattern) {
 }
 
 // Every offending selector in an app's stylesheets, keyed `file: selector`.
-export async function gradeStylesheets(srcDirectory) {
+// `skip(name, css)` leaves out stylesheets the app did not write, such as the
+// Neon registry's own.
+export async function gradeStylesheets(srcDirectory, { skip = () => false } = {}) {
   const scripts = await filesUnder(srcDirectory, /\.(t|j)sx$/);
   const hosts = cdsHostedClasses(await Promise.all(scripts.map(async path => ({ path: path.slice(srcDirectory.length + 1), source: await readFile(path, 'utf8') }))));
   const offenders = [];
   for (const file of await filesUnder(srcDirectory, /\.s?css$/)) {
     const css = await readFile(file, 'utf8');
     const name = file.slice(srcDirectory.length + 1);
+    if (skip(name, css)) continue;
     for (const selector of [...unscopedSelectors(css), ...selectorsOnCdsHosts(css, hosts)]) offenders.push(`${name}: ${selector}`);
   }
   return offenders;
