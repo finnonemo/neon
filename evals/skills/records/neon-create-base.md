@@ -19,18 +19,18 @@ Fixture: an empty workspace, a git repository holding only `.gitkeep`. Each requ
 | Run | Installer calls | CDS | `components.json` `@neon` | `neonBaseCheck` | Build | Report names `@neon/` items | Cost |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Back Office, baseline | `--new` (the CDS starter) | `cds-web`, `cds-icons` | None | Fail: no `components.json`, CDS | Pass | No | $7.42 |
-| Back Office, revised | `--new`, then `--add tag list-row segmented-control dialog textarea label input table` | None | Yes | Pass | Pass | Yes, and says `table` went unused | $5.57 |
-| Product Feature, baseline | `assemble-starter.mjs` (the CDS starter) | `cds-web`, `cds-icons` | None | Fail: no `components.json`, CDS | Pass | No | $6.12 |
+| Back Office, revised | `--new`, then `--add tag list-row segmented-control dialog textarea label input table` | None | Yes | Pass | Pass | Yes, and says `table` went unused | $2.84 |
+| Product Feature, baseline | `assemble-starter.mjs` (the CDS starter) | `cds-web`, `cds-icons` | None | Fail: no `components.json`, CDS | Pass | No | $3.12 |
 | Product Feature, revised | `--new`, then `--add table list-row tag dialog input label checkbox segmented-control` | None | Yes | Pass | Pass | In its Handoff Summary file, not the closing message; says `list-row` went unused | $3.36 |
 | Campaign Page, baseline | `--new` (the CDS starter) | `cds-web`, `cds-icons` | None | Fail: no `components.json`, CDS | Pass | No | $2.80 |
 | Campaign Page, revised | `--new`, then `--add input label tag checkbox select segmented-control` | None | Yes | Pass | Pass | Yes | $2.84 |
 
-No revised app has a stock palette utility, `dark:` class, stock text size or weight utility outside `src/components/ui/` and `src/layout/`. No app stylesheet has an unscoped selector. The revised Campaign Page passes `immersiveTheme` to `ImmersiveLayout`; the baseline copied the generated Immersive Theme CSS and set `data-immersive-theme`, which was the contract on `main`. A quick look at each revised app's production build in an 800px-wide browser pane found Neon type and color roles, IBM Plex Sans Thai and populated screens after the mock loading state.
+No revised app has a stock palette utility, `dark:` class, stock text size or weight utility in its source outside `./src/components/ui/`; the same grep finds `font-medium` in a stock shadcn accordion. `appStylesheetProblems` finds no unscoped selector in any revised app. In the baseline Campaign Page it flags the `[data-immersive-theme]` rules of the generated theme CSS the app copied, which was the contract on `main`. The revised Campaign Page passes `immersiveTheme` to `ImmersiveLayout`, defaulting to `"private"`, with a theme toggle shown only on the dev server or with `?review` in the URL. A quick look at each revised app's production build in an 800px-wide browser pane found Neon type and color roles, IBM Plex Sans Thai and populated screens after the mock loading state.
 
 Limits:
 
 - One sample per arm, so the difference is the base each skill names, not a measured rate.
-- Every run hit the 2700-second cap after its closing report, because the dev server it started for the request kept the session open. The reports and diffs are complete; the cap is the harness, not the skill.
+- Costs are each run's last reported `total_cost_usd`, which is cumulative. Every run hit the 2700-second cap after its closing report, because the dev server it started for the request kept the session open. The reports and diffs are complete; the cap is the harness, not the skill.
 - Grading is `neonBaseCheck`, a build, a source grep and one screenshot per revised app. Interaction, 375px layout, dark scheme and parity were not graded here.
 - Only new apps were exercised. Adding to an existing Neon-base or shadcn app, and the CDS frozen path, ran in no sample.
 - The served registry is this checkout's; the released one may differ until it is tagged.
