@@ -13,7 +13,7 @@ The complete Neon package directory. Skills resolve every theme, starter and ins
 _Avoid_: plugin root, `CLAUDE_PLUGIN_ROOT`
 
 **Canonical theme assets**:
-The one source copy of the theme: the Neon registry's items and the CSS adapter. Every install and every starter assembly takes from it. The frozen CDS theme files stay beside them for apps already on CDS.
+The one source copy of the theme: the Neon registry's items and the CSS adapter. Every install takes from it. The frozen CDS theme files stay beside them for apps already on CDS.
 _Avoid_: starter theme, theme copy
 
 **Neon base**:
@@ -21,7 +21,7 @@ shadcn/ui on Tailwind with Radix primitives, carrying Neon's components tuned to
 _Avoid_: shadcn (alone, which names the stock components), new starter
 
 **Neon registry**:
-The shadcn registry Neon publishes, pinned to each Neon release. Its items are the Neon base, Neon's components, the theme and the Immersive Themes. Skills add Neon's item, never the stock shadcn one.
+The shadcn registry Neon publishes, pinned to each Neon release. Its items are the Neon base, Neon's components and layouts, the theme, the Immersive Themes and the Theme Briefs. Skills add Neon's item, never the stock shadcn one.
 _Avoid_: component library, npm package
 
 ### Installing
@@ -35,7 +35,7 @@ One of the things the installer can do: **New**, which starts an app from the Ne
 _Avoid_: tier. Tier is the styling decision a skill makes. Install mode is what the installer does to carry it out.
 
 **Starter assembly**:
-Combining the Neon base with the canonical theme assets to produce a complete, runnable app.
+Combining the frozen CDS starter with the CDS theme files to produce a complete, runnable CDS app. A new app starts from the Neon base in the Neon registry instead.
 _Avoid_: scaffold copy, starter sync
 
 **Preflight**:
