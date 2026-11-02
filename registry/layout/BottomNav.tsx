@@ -3,7 +3,7 @@ import "./layout.css"
 import { useBreakpointTier } from "./useBreakpointTier"
 import type { NavItem } from "./navItems"
 
-// Text on the primary fill: fgInverse in light, fg in dark, as the CDS starter's BottomNav picks.
+// Icons take primary-foreground, the role for content on the primary fill, in both modes.
 export function BottomNav({ navigation = [] }: { navigation?: NavItem[] }) {
   const tier = useBreakpointTier()
   if (tier !== "sm" || navigation.length === 0) return null

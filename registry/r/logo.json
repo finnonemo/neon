@@ -34,6 +34,12 @@
       "content": "import { useColorScheme } from \"@/app/colorScheme\"\nimport iconDark from \"../assets/logo/logo-finnomena-icon-dark.svg\"\nimport iconLight from \"../assets/logo/logo-finnomena-icon-light.svg\"\nimport textDark from \"../assets/logo/logo-finnomena-text-dark.svg\"\nimport textLight from \"../assets/logo/logo-finnomena-text-light.svg\"\n\ntype LogoProps = {\n  variant?: \"full\" | \"icon\"\n  /** The surface the logo sits on; defaults to AppRoot's color scheme. */\n  tone?: \"light\" | \"dark\"\n}\n\nconst assets = {\n  full: { light: textLight, dark: textDark },\n  icon: { light: iconLight, dark: iconDark },\n}\n\n/** Canonical Finnomena wordmark and compact mark. The SVGs live once, in Neon's theme/logo/. */\nexport function Logo({ variant = \"full\", tone }: LogoProps) {\n  const scheme = useColorScheme()\n  const isFull = variant === \"full\"\n\n  return (\n    <a href=\"https://www.finnomena.com\" target=\"_blank\" rel=\"noopener noreferrer\">\n      <img src={assets[variant][tone ?? scheme]} alt=\"Finnomena\" width={isFull ? 136 : 32} height={32} className=\"block\" />\n    </a>\n  )\n}\n",
       "type": "registry:file",
       "target": "src/layout/Logo.tsx"
+    },
+    {
+      "path": "base/app/colorScheme.ts",
+      "content": "import { createContext, useContext } from \"react\"\n\nexport type ColorScheme = \"light\" | \"dark\"\nexport const ColorSchemeContext = createContext<ColorScheme>(\"light\")\n/** The active color scheme, for the rare component that must branch on it. */\nexport const useColorScheme = () => useContext(ColorSchemeContext)\n",
+      "type": "registry:file",
+      "target": "src/app/colorScheme.ts"
     }
   ]
 }

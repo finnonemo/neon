@@ -232,7 +232,8 @@
         { "path": "../theme/logo/logo-finnomena-icon-light.svg", "type": "registry:file", "target": "src/assets/logo/logo-finnomena-icon-light.svg" },
         { "path": "../theme/logo/logo-finnomena-text-dark.svg", "type": "registry:file", "target": "src/assets/logo/logo-finnomena-text-dark.svg" },
         { "path": "../theme/logo/logo-finnomena-text-light.svg", "type": "registry:file", "target": "src/assets/logo/logo-finnomena-text-light.svg" },
-        { "path": "layout/Logo.tsx", "type": "registry:file", "target": "src/layout/Logo.tsx" }
+        { "path": "layout/Logo.tsx", "type": "registry:file", "target": "src/layout/Logo.tsx" },
+        { "path": "base/app/colorScheme.ts", "type": "registry:file", "target": "src/app/colorScheme.ts" }
       ]
     },
     {

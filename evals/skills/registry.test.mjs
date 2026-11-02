@@ -92,6 +92,8 @@ test('the logo item ships the canonical SVGs with the Logo the layouts use, and 
     svgs.map((name) => [`../theme/logo/${name}`, `src/assets/logo/${name}`]),
   );
   assert.ok(logo.files.some((file) => file.path === 'layout/Logo.tsx' && file.target === 'src/layout/Logo.tsx'));
+  // shadcn add @neon/logo outside the base still resolves Logo's color scheme.
+  assert.ok(logo.files.some((file) => file.path === 'base/app/colorScheme.ts' && file.target === 'src/app/colorScheme.ts'), 'the logo item ships the color scheme its Logo reads');
   for (const name of svgs) assert.ok(read('registry/layout/Logo.tsx').includes(`../assets/logo/${name}`), `Logo.tsx imports ${name}`);
   const base = registryItem('neon-base');
   for (const name of ['logo', 'layouts']) assert.ok(base.registryDependencies.includes(`{{registry}}/${name}.json`), `the base pulls in ${name}`);

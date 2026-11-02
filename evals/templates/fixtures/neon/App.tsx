@@ -10,6 +10,7 @@ import { ContentLayout } from "@/layout/ContentLayout"
 import { SimpleLayout } from "@/layout/SimpleLayout"
 import { MultiColumnLayout } from "@/layout/MultiColumnLayout"
 import { ImmersiveLayout } from "@/layout/ImmersiveLayout"
+import { Logo } from "@/layout/Logo"
 import type { ActivePane } from "@/layout/ResponsivePanes"
 import type { NavItem } from "@/layout/navItems"
 import { Approval } from "./app/Approval"
@@ -56,6 +57,7 @@ export function App() {
   }
   return layout === "approval" ? <Approval />
     : layout === "extras" ? <Extras />
+    : layout === "logo" ? <main><Logo /><Logo tone="light" /></main>
     : layout === "app" ? <AppShell {...props} />
     : layout === "content" ? <ContentLayout {...props} />
     : layout === "simple" ? <SimpleLayout {...props} />

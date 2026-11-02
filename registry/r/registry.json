@@ -454,6 +454,11 @@
           "path": "layout/Logo.tsx",
           "type": "registry:file",
           "target": "src/layout/Logo.tsx"
+        },
+        {
+          "path": "base/app/colorScheme.ts",
+          "type": "registry:file",
+          "target": "src/app/colorScheme.ts"
         }
       ]
     },

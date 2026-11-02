@@ -271,6 +271,17 @@ for (const layout of ['app', 'content', 'simple', 'board', 'immersive']) {
   }
 }
 
+// The CDS starter's tone override is covered by the integration test.
+test('Logo follows the color scheme unless a tone pins it', async ({ page }) => {
+  test.skip(target !== 'neon', 'The Neon base only');
+  const logos = page.getByRole('img', { name: 'Finnomena', exact: true });
+  await page.goto('/?layout=logo');
+  const light = await logos.first().getAttribute('src');
+  await page.goto('/?layout=logo&mode=dark');
+  await expect(logos.first()).not.toHaveAttribute('src', light);
+  await expect(logos.nth(1)).toHaveAttribute('src', light);
+});
+
 // Figma confirms the 1440px cap at 1920px only; 2560 checks that the starter keeps it, not a Figma frame.
 for (const width of [1919, 1920, 2560]) {
   test(`immersive ${width}px: content is full-bleed below max and capped at max`, async ({ page }) => {
