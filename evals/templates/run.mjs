@@ -9,7 +9,7 @@ import { join, relative, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawn } from 'node:child_process';
 import { assembleStarter } from '../../scripts/lib/assemble-starter.mjs';
-import { bareCnImports, buildRegistry } from '../../scripts/lib/registry.mjs';
+import { SHADCN, bareCnImports, buildRegistry } from '../../scripts/lib/registry.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, '../..');
@@ -18,8 +18,6 @@ const targetAt = args.indexOf('--target');
 const target = targetAt >= 0 ? args.splice(targetAt, 2)[1] : 'cds';
 const keep = args.includes('--keep') && args.splice(args.indexOf('--keep'), 1).length > 0;
 if (!['cds', 'neon'].includes(target)) throw new Error(`Unknown target ${target}; use cds or neon.`);
-// shadcn's CLI is pinned: its init and registry formats change between releases.
-const SHADCN = 'shadcn@4.23.0';
 const work = await mkdtemp(join(tmpdir(), 'neon-browser-'));
 const app = join(work, 'app');
 async function run(command, args, cwd, env = {}) {

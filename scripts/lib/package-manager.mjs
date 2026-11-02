@@ -34,42 +34,21 @@ export function assertSupportedOverride(override) {
 /**
  * Chooses the manager for an install that will run in `projectDir`.
  *
- * Priority: an explicit override; then evidence. With `starterDir` (the
- * --new case) the starter's own manifest/lockfiles are read first, without
- * walking upward — the walk would otherwise climb out of the starter into
- * the Neon checkout. Only when the starter carries no evidence does the walk
- * start from `projectDir` (which need not exist yet: the walk only checks
- * existence and climbs to real parents).
+ * Priority: an explicit override; then evidence, walked up from
+ * `projectDir`.
  *
  * Throws on an unsupported override or on lockfiles naming different
  * managers, rather than planting a second lockfile beside a stale one.
  */
-export function choosePackageManager({ projectDir, starterDir, override }) {
+export function choosePackageManager({ projectDir, override }) {
   assertSupportedOverride(override);
   if (override !== undefined) return override;
-
-  let evidence = starterDir ? readEvidence(starterDir) : null;
-  if (!evidence || (!evidence.declared && evidence.lockfiles.length === 0)) {
-    evidence = findEvidence(projectDir);
-  }
-  return selectFromEvidence(evidence);
+  return selectFromEvidence(findEvidence(projectDir));
 }
 
-/**
- * Builds the command that adds `packages`, or — when `packages` is empty —
- * installs a project's already-declared dependencies (`npm ci` when `ci`
- * is set and the manager is npm).
- */
-export function dependencyCommand(manager, packages = [], { ci = false } = {}) {
-  if (packages.length === 0) {
-    return manager === "npm" && ci ? { command: "npm", args: ["ci"] } : { command: manager, args: ["install"] };
-  }
+/** Builds the command that adds `packages`. */
+export function dependencyCommand(manager, packages) {
   return { command: manager, args: [ADD_SUBCOMMAND[manager], ...packages] };
-}
-
-/** True if `dir` directly contains an npm lockfile (predicts `npm ci` viability). */
-export function hasNpmLockfile(dir) {
-  return existsSync(join(dir, "package-lock.json"));
 }
 
 function selectFromEvidence({ declared, lockfiles }) {
