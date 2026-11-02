@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { cpSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
@@ -169,6 +170,12 @@ Object.assign(SCHEMA_REFUSALS, {
   'a prompt library example with a hex': [{ [ENTRY]: { ...entry, example: { input: {}, output: { tagline: 'Clay on #f5e6d3' } } } }, /tagline\.json: "example\.output\.tagline" holds a hex-like value$/m],
   'a shared file with an unknown key': [{ 'theme-briefs/prompt-library/shared.json': { preamble: ['Write in English.'], bans: [], model: 'x' } }, /shared\.json: unknown key "model"$/m],
   'malformed JSON': [{ [IMAGERY]: '{ "kind": "imagery", ' }, /^theme-briefs\/presets\/imagery\/people-in-action\.json: not valid JSON/m],
+  'a prompt library input the tool does not supply': [{ [ENTRY]: { ...entry, inputs: [...entry.inputs, 'picks.review'] } }, /tagline\.json: "inputs\.3" is not an input the tool supplies$/m],
+  'a prompt library input from an entry not run before it': [{ [ENTRY]: { ...entry, inputs: [...entry.inputs, 'occasion-components.names'] } }, /tagline\.json: "inputs\.3" takes the output of "occasion-components", which "after" does not name$/m],
+  'a prompt library target the entry does not check': [{ [ENTRY]: { ...entry, targets: { ...entry.targets, sentences: [1, 2] } } }, /tagline\.json: "targets\.sentences" is not a band tagline checks; its bands are words, firstClauseWords$/m],
+  'a mood entry with no accent placement': [{ 'theme-briefs/prompt-library/mood-occasion.json': { ...entry, targets: {}, output: { type: 'object', properties: { paragraph: { type: 'string' } } } } }, /mood-occasion\.json: "output" must have an accentPlacement property$/m],
+  'prompt library entries that wait on each other': [{ [ENTRY]: { ...entry, after: ['imagery'] }, 'theme-briefs/prompt-library/imagery.json': { ...entry, targets: {}, after: ['tagline'] } }, [/tagline\.json: "after" makes a cycle through tagline, imagery$/m, /imagery\.json: "after" makes a cycle through tagline, imagery$/m]],
+  'a shared placeholder the tool does not fill': [{ 'theme-briefs/prompt-library/shared.json': { preamble: ['Use {{variables}} and {{brandName}}.'], bans: [] } }, /shared\.json: "preamble\.0" has the placeholder \{\{brandName\}\}; placeholders are \{\{variables\}\}, \{\{typeRoles\}\}$/m],
 });
 
 // A copy of the real theme data with one theme whose accent step is the canvas color.
@@ -315,7 +322,7 @@ const briefText = renderBrief();
 const published = (items = ['club-run']) => ({
   ...THEME_TEXTS,
   [BRIEF]: briefText,
-  'theme-briefs/records/club-run.json': { brief: 'club-run' },
+  'theme-briefs/records/club-run.json': { brief: 'club-run', accentPlacement: 'Registration call-out' },
   'registry/registry.json': { name: 'neon', homepage: 'https://example.invalid', items: items.map((name) => ({ name: `theme-brief-${name}`, type: 'registry:item' })) },
 });
 const thirdParty = (status) => ({
@@ -496,7 +503,7 @@ function renderMatrix(t) {
   }
   for (const { theme, colourway, briefName, slug, layout } of MATRIX) {
     files[`theme-briefs/picks/${slug}.json`] = { theme, briefName, presets: { occasion: 'run', layout, imagery: 'people-in-action' }, brandPattern: { colourway, ground: 50 } };
-    files[`theme-briefs/records/${slug}.json`] = { brief: slug };
+    files[`theme-briefs/records/${slug}.json`] = { brief: slug, accentPlacement: 'Registration call-out' };
     files[`registry/theme-briefs/${slug}.md`] = staleBrief(PROSE, { theme: LABELS[theme], name: briefName });
   }
   files['registry/registry.json'] = { name: 'neon', homepage: 'https://example.invalid', items: MATRIX.map(({ slug }) => ({ name: `theme-brief-${slug}`, type: 'registry:item' })) };
@@ -578,4 +585,327 @@ test('the Colors table marks a block step that is the canvas color', (t) => {
   assert.equal(status, 0, out);
   const brief = readFileSync(join(root, 'registry/theme-briefs/ultra-run.md'), 'utf8');
   assert.match(brief, /^\| Navy 100 \| `#01172b` \| `--immersive-palette-100` \| The canvas color, not a block fill \|$/m);
+});
+
+// Draft mode: a fake `claude`, chosen through CLAUDE_PATH, answers each prompt library entry from a
+// script of answers per attempt and logs every call, so no test needs a model or the network.
+const LIBRARY = 'theme-briefs/prompt-library';
+const libraryFiles = () => Object.fromEntries(readdirSync(join(repo, LIBRARY)).map((name) => [`${LIBRARY}/${name}`, readFileSync(join(repo, LIBRARY, name), 'utf8')]));
+const FAKE_CLAUDE = `#!${process.execPath}
+import { appendFileSync, readFileSync } from 'node:fs';
+const args = process.argv.slice(2);
+if (args.includes('--version')) { console.log('2.1.316 (Claude Code)'); process.exit(0); }
+const prompt = readFileSync(0, 'utf8');
+const entry = prompt.match(/^Entry: ([\\w-]+)\\./m)?.[1];
+const log = process.env.FAKE_CLAUDE_LOG;
+const attempt = readFileSync(log, 'utf8').split('\\n').filter(Boolean).map(JSON.parse).filter((call) => call.entry === entry).length + 1;
+appendFileSync(log, JSON.stringify({ entry, attempt, args, prompt }) + '\\n');
+const answers = JSON.parse(readFileSync(process.env.FAKE_CLAUDE_ANSWERS, 'utf8'))[entry];
+const answer = answers[Math.min(attempt, answers.length) - 1];
+if (answer.$exit) { console.error('Invalid API key · Please run /login'); process.exit(answer.$exit); }
+// Fields a real result carries that must never reach the record.
+const meta = { session_id: '5f0c-session-77', account: 'maintainer@example.com', total_cost_usd: 0.42 };
+console.log(JSON.stringify(answer.$raw !== undefined
+  ? { type: 'result', is_error: false, result: answer.$raw, ...meta }
+  : { type: 'result', is_error: false, result: JSON.stringify(answer), structured_output: answer, ...meta }));
+`;
+
+// Answers that pass every hard and soft check on the club-run fixture.
+const GOOD = {
+  tagline: { tagline: 'Race day on an open canvas — every member invited to one shared start line' },
+  'mood-occasion': {
+    paragraph: 'For race weekend the accent is saved for the Registration call-out, so the one action members came for is the brightest thing on the page. Everything else stays on the canvas and soft grey blocks, with rounded corners and generous gaps that give each distance room to be compared without a crowd of competing colors. The rhythm is steady rather than loud, the way a long run settles after the first kilometre. The page closes on the start line at dawn, bibs pinned, members shaking out their legs before the horn.',
+    accentPlacement: 'Registration call-out',
+  },
+  'occasion-components': {
+    components: [
+      { name: 'Race distance card', role: 'Compare the distances on offer', paragraph: 'Each card sits on var(--immersive-palette-50) with var(--immersive-on-palette-50) text, no border, var(--borderRadius-500) corners and var(--space-4) padding. The distance leads in title2 above the start time in body, then one select action. A distance that has filled up says so in body text and offers no action.' },
+      { name: 'Registration call-out', role: 'Carry the main registration action', paragraph: 'The call-out sits on var(--immersive-accent-100) with var(--immersive-on-accent-100) text, no border, var(--borderRadius-500) corners and var(--space-4) padding. The deadline sits in title3 above one main action. It appears once, after the distances.' },
+    ],
+  },
+  'preset-dos-donts': {
+    dos: ['Show the registration deadline beside every main action on the Race distance card, so members never hunt for the date.'],
+    donts: ['Do not use the route map as a decorative background — it hides the distances members came to compare.'],
+  },
+  imagery: {
+    paragraph: 'Photography of members running together leads every screen, framed close and mid so faces and stride carry the energy. Subjects are real members in candid moments on the course, set on the canvas or a soft grey block and never tinted with the accent. Spot illustrations mark small blocks only, such as a distance badge or a water station, drawn in the text color. Icons stay simple line marks beside labels. Images sit beside the hero and its Brand Pattern, never over it, with one large image per screen at most. The page should feel open and unhurried.',
+  },
+  layout: {
+    paragraph: 'A full-bleed page opens on a split hero, its headline beside one lead image, with the Brand Pattern carried by the hero section. Below it a detail list sets out the Race distance card set on soft grey blocks, then a call-out section holds the Registration call-out on its accent block. A short form follows for sign-up details, and a minimal footer closes the page. There is no navigation bar, so the hero carries the page title. Sections alternate between the canvas and tinted blocks at var(--space-10) gaps, with var(--borderRadius-500) corners on every block and var(--space-4) padding inside cards, keeping a comfortable rhythm from top to bottom.',
+  },
+  'example-prompts': {
+    prompts: [
+      'Create a Race distance card: var(--immersive-palette-50) fill with var(--immersive-on-palette-50) text, var(--borderRadius-500) corners, var(--space-4) padding, the distance in title2 and the start time in body, with one select action.',
+      'Create a Registration call-out: var(--immersive-accent-100) fill with var(--immersive-on-accent-100) text, var(--borderRadius-500) corners, var(--space-4) padding, the deadline in title3 above one main action on var(--immersive-action) with a var(--immersive-on-action) label.',
+      'Create a hero section: the canvas with var(--immersive-text) headline in display2, a lead image beside it, and one main action on var(--immersive-action) with a var(--immersive-on-action) label.',
+    ],
+  },
+};
+
+// A temp folder for the fake and its log, outside the fixture root.
+function fakeClaude(t, answers) {
+  const dir = mkdtempSync(join(tmpdir(), 'neon-fake-claude-'));
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const path = join(dir, 'claude');
+  writeFileSync(path, FAKE_CLAUDE, { mode: 0o755 });
+  writeFileSync(join(dir, 'answers.json'), JSON.stringify({ ...Object.fromEntries(Object.entries(GOOD).map(([name, answer]) => [name, [answer]])), ...answers }));
+  writeFileSync(join(dir, 'calls.log'), '');
+  return {
+    path,
+    env: { CLAUDE_PATH: path, FAKE_CLAUDE_LOG: join(dir, 'calls.log'), FAKE_CLAUDE_ANSWERS: join(dir, 'answers.json') },
+    calls: () => readFileSync(join(dir, 'calls.log'), 'utf8').split('\n').filter(Boolean).map((line) => JSON.parse(line)),
+  };
+}
+
+function draft(t, { answers = {}, changes = {}, args = [] } = {}) {
+  const root = fixture(t, { ...THEME_TEXTS, ...libraryFiles(), ...changes });
+  const fake = fakeClaude(t, answers);
+  const result = run(['draft', 'club-run', '--root', root, ...args], fake.env);
+  return { root, fake, ...result };
+}
+
+const local = (root, file) => join(root, '.local/theme-briefs/club-run', file);
+const RECORD = 'theme-briefs/records/club-run.json';
+
+test('draft writes a brief that passes check-only, its record, and a review report', (t) => {
+  const { root, fake, status, out } = draft(t);
+  assert.equal(status, 0, out);
+  assert.match(out, /^club-run: written to registry\/theme-briefs\/club-run\.md; review \.local\/theme-briefs\/club-run\/review\.md$/m);
+  assert.deepEqual(fake.calls().map(({ entry, attempt }) => `${entry} ${attempt}`).sort(), Object.keys(GOOD).map((name) => `${name} 1`).sort());
+  const brief = readFileSync(join(root, BRIEF), 'utf8');
+  assert.match(brief, /^> Race day on an open canvas — every member invited to one shared start line$/m);
+  assert.ok(brief.includes(GOOD.layout.paragraph));
+  assert.equal(readFileSync(local(root, 'draft.md'), 'utf8'), brief);
+  const record = JSON.parse(readFileSync(join(root, RECORD), 'utf8'));
+  assert.equal(record.accentPlacement, 'Registration call-out');
+  // Once the maintainer adds its registry entry, CI passes the brief.
+  writeFileSync(join(root, 'registry/registry.json'), JSON.stringify({ name: 'neon', homepage: 'https://example.invalid', items: [{ name: 'theme-brief-club-run', type: 'registry:item' }] }));
+  const check = checkOnly(root);
+  assert.equal(check.status, 0, check.out);
+});
+
+test('every prompt library entry takes the theme kind and mood', () => {
+  for (const [path, text] of Object.entries(libraryFiles())) {
+    if (path.endsWith('/shared.json')) continue;
+    const { inputs } = JSON.parse(text);
+    assert.ok(inputs.includes('theme.kind') && inputs.includes('theme.mood'), path);
+  }
+});
+
+test('the review report gives each entry hash, the scripted-section check and per-section overlap with same-theme briefs', (t) => {
+  const first = draft(t);
+  assert.equal(first.status, 0, first.out);
+  const sibling = { 'theme-briefs/picks/club-trail-run.json': { ...valid[PICKS], briefName: 'Trail Run' }, 'registry/theme-briefs/club-trail-run.md': readFileSync(join(first.root, BRIEF), 'utf8') };
+  const { root, status, out } = draft(t, { changes: sibling });
+  assert.equal(status, 0, out);
+  const report = readFileSync(local(root, 'review.md'), 'utf8');
+  const record = JSON.parse(readFileSync(join(root, RECORD), 'utf8'));
+  for (const [name, { entry }] of Object.entries(record.entries)) assert.match(report, new RegExp(`^## ${name}\\n\\nEntry ${entry}\\.`, 'm'), name);
+  assert.match(report, /^Scripted sections \(.+\): scripted, matches fresh output\.$/m);
+  // The sibling holds the same prose, so every model section overlaps fully.
+  assert.match(report, /^- club-trail-run: Header 1\.00, Components 1\.00, Do's and Don'ts 1\.00, Imagery 1\.00, Layout 1\.00, Agent Prompt Guide 1\.00$/m);
+});
+
+test('soft checks send back a Do longer than one sentence and component slots out of order', (t) => {
+  const twoSentences = { ...GOOD['preset-dos-donts'], dos: ['Show the deadline beside every main action on the Race distance card. Members should never hunt for the date at all.'] };
+  const outOfOrder = components([]);
+  outOfOrder.components[0] = { ...outOfOrder.components[0], paragraph: 'Each card sits on var(--immersive-palette-50) with var(--immersive-on-palette-50) text and var(--space-4) padding, no border and var(--borderRadius-500) corners. The distance leads in title2 above the start time in body, then one select action. A distance that has filled up says so in body text and offers no action.' };
+  const { fake, status, out } = draft(t, { answers: { 'preset-dos-donts': [twoSentences, GOOD['preset-dos-donts']], 'occasion-components': [outOfOrder, GOOD['occasion-components']] } });
+  assert.equal(status, 0, out);
+  assert.match(calls(fake, 'preset-dos-donts')[1].prompt, /^- "dos\.0" has 2 sentences; each bullet is one$/m);
+  assert.match(calls(fake, 'occasion-components')[1].prompt, /^- "components\.0\.paragraph" gives padding before border; the slot order is fill, border, radius, padding$/m);
+});
+
+const calls = (fake, name) => fake.calls().filter(({ entry }) => entry === name);
+// The Inputs block of a prompt, as sent.
+const promptInputs = (prompt) => JSON.parse(prompt.split('\nInputs:\n')[1].split('\n\n')[0]);
+const longRole = 'A role that keeps on going well past the eight words a role may have';
+const components = (roles) => ({ components: GOOD['occasion-components'].components.map((component, index) => ({ ...component, role: roles[index] ?? component.role })) });
+
+test('draft retries with the last misses, stops at three attempts, and keeps the attempt with fewest misses for later entries', (t) => {
+  const reversed = { components: [...GOOD['occasion-components'].components].reverse() };
+  const { root, fake, status, out } = draft(t, { answers: { 'occasion-components': [reversed, components([longRole]), components([longRole, longRole])] } });
+  assert.equal(status, 0, out);
+  const tries = calls(fake, 'occasion-components');
+  assert.equal(tries.length, 3);
+  assert.doesNotMatch(tries[0].prompt, /Your last answer missed/);
+  assert.match(tries[1].prompt, /^- components must be "Race distance card", "Registration call-out", in that order and keeping their names; found "Registration call-out", "Race distance card"$/m);
+  assert.match(tries[2].prompt, /^- "components\.0\.role" has 15 words; the target is 1–8$/m);
+  // Attempt 2 has one miss and attempt 3 two: entries after it, and the brief, take attempt 2.
+  for (const name of ['preset-dos-donts', 'layout', 'example-prompts']) assert.equal(calls(fake, name).length, 1, name);
+  assert.deepEqual(promptInputs(calls(fake, 'example-prompts')[0].prompt)['occasion-components.components'], components([longRole]).components);
+  assert.deepEqual(promptInputs(calls(fake, 'layout')[0].prompt)['occasion-components.names'], ['Race distance card', 'Registration call-out']);
+  assert.match(readFileSync(join(root, BRIEF), 'utf8'), new RegExp(`^### Race distance card\\n\\*\\*Role:\\*\\* ${longRole}$`, 'm'));
+  const record = JSON.parse(readFileSync(join(root, RECORD), 'utf8'));
+  assert.deepEqual(record.entries['occasion-components'].attempts, [{ hard: 1, soft: 0 }, { hard: 0, soft: 1 }, { hard: 0, soft: 2 }]);
+  assert.equal(record.entries['occasion-components'].kept, 2);
+});
+
+test('an answer that is not JSON counts as an attempt and is sent back', (t) => {
+  const { fake, status, out } = draft(t, { answers: { tagline: [{ $raw: 'Race day on an open canvas' }, GOOD.tagline] } });
+  assert.equal(status, 0, out);
+  const tries = calls(fake, 'tagline');
+  assert.equal(tries.length, 2);
+  assert.match(tries[1].prompt, /^- the answer is not JSON$/m);
+});
+
+// Fixture files with the drafted outputs left out: what must be unchanged after a run that writes nothing.
+const withoutLocal = (files) => Object.fromEntries(Object.entries(files).filter(([path]) => !path.startsWith('/.local/')));
+const untouched = (t, root) => snapshot(fixture(t, { ...THEME_TEXTS, ...libraryFiles() }));
+
+test('a persistent hard failure leaves a marked local draft, writes no brief or record, and exits 1', (t) => {
+  const hex = { paragraph: GOOD.layout.paragraph.replace('soft grey blocks', 'soft #e6eef2 blocks') };
+  const { root, fake, status, out } = draft(t, { answers: { layout: [hex] } });
+  assert.equal(status, 1, out);
+  assert.match(out, /^club-run: checks failed; not written\. Draft \.local\/theme-briefs\/club-run\/draft\.md; review \.local\/theme-briefs\/club-run\/review\.md$/m);
+  assert.equal(calls(fake, 'layout').length, 3);
+  const text = readFileSync(local(root, 'draft.md'), 'utf8');
+  assert.match(text, /^## Layout\n\n\*\*Hard checks failed — layout:\*\* prose holds #e6eef2; prose names colors by variable or role, never by value\n\n\[not drafted\]$/m);
+  const report = readFileSync(local(root, 'review.md'), 'utf8');
+  assert.match(report, /No attempt of 3 passed its hard checks\./);
+  assert.match(report, /^Scripted sections not compared: the draft has failed sections\.$/m);
+  assert.deepEqual(withoutLocal(snapshot(root)), untouched(t, root));
+});
+
+test('entries after a failed entry are not run, and the draft says what they wait on', (t) => {
+  const { root, fake, status, out } = draft(t, { answers: { 'occasion-components': [{ components: 'Race distance card' }] } });
+  assert.equal(status, 1, out);
+  for (const name of ['preset-dos-donts', 'layout', 'example-prompts']) assert.equal(calls(fake, name).length, 0, name);
+  for (const name of ['tagline', 'mood-occasion', 'imagery']) assert.equal(calls(fake, name).length, 1, name);
+  const text = readFileSync(local(root, 'draft.md'), 'utf8');
+  assert.match(text, /^## Components\n\n\*\*Hard checks failed — occasion-components:\*\* "components" must be an array$/m);
+  assert.match(text, /^## Layout\n\n\*\*Not drafted — layout:\*\* it waits on occasion-components, which did not pass its hard checks\.$/m);
+  assert.match(text, /^### Registration call-out\n\*\*Role:\*\* \[not drafted\]$/m);
+  assert.ok(!statSafe(join(root, BRIEF)) && !statSafe(join(root, RECORD)));
+});
+
+function statSafe(path) {
+  try {
+    return statSync(path);
+  } catch {
+    return undefined;
+  }
+}
+
+// Answers refused by a hard check, by entry, and the marker each leaves in the local draft.
+const mood = GOOD['mood-occasion'];
+const imagery = GOOD.imagery.paragraph;
+const DRAFT_REFUSALS = {
+  'an answer missing a key': ['tagline', { line: 'Race day' }, /— tagline:\*\* unknown key "line"; missing key "tagline"/],
+  'a heading in prose': ['imagery', { paragraph: `## ${imagery}` }, /— imagery:\*\* "paragraph" starts like a Markdown heading or fence/],
+  'imagery that opens like the Brand Floor': ['imagery', { paragraph: `Imagery never carries another brand's look. ${imagery}` }, /— imagery:\*\* "paragraph" opens like the Brand Floor sentence, which the tool adds/],
+  'a variable the theme does not define': ['occasion-components', components([]), /— occasion-components:\*\* names --immersive-support-50, which Club does not define/, (answer) => { answer.components[0].paragraph = answer.components[0].paragraph.replace('palette-50) with var(--immersive-on-palette-50)', 'support-50) with var(--immersive-on-support-50)'); }],
+  'a px value no table holds': ['example-prompts', { prompts: GOOD['example-prompts'].prompts.map((prompt) => prompt.replace('var(--space-4) padding', '11px padding')) }, /— example-prompts:\*\* prose gives 11px, which no table in the brief holds/],
+  'a type size off the scale': ['example-prompts', { prompts: GOOD['example-prompts'].prompts.map((prompt) => prompt.replace('the distance in title2', 'the distance at 17px/23px')) }, /prose gives 17px\/23px, which is not a Type Scale size and line height/],
+  'a gradient': ['imagery', { paragraph: imagery.replace('never tinted with the accent', 'never under a gradient') }, /— imagery:\*\* prose names a gradient; Immersive Themes have none/],
+  'motion beyond the level': ['layout', { paragraph: GOOD.layout.paragraph.replace('keeping a comfortable rhythm', 'with staggered entrances, keeping a comfortable rhythm') }, /— layout:\*\* prose names "staggered", which the subtle motion level does not allow/],
+  'a duration beyond the level': ['layout', { paragraph: GOOD.layout.paragraph.replace('from top to bottom', 'from top to bottom over 600ms') }, /— layout:\*\* prose gives 600ms, more than the subtle motion level's 250ms/],
+  'a value in the tagline': ['tagline', { tagline: 'Race day on var(--immersive-canvas) — every member invited to one shared start line' }, /— tagline:\*\* "tagline" holds a value \(var\(\), a variable or px\); this part names none/],
+  'a px value in Layout': ['layout', { paragraph: GOOD.layout.paragraph.replace('at var(--space-10) gaps', 'at 64px gaps') }, /— layout:\*\* "paragraph" holds 64px; Layout names spacing by step, never in px/],
+  'words copied from the example': ['imagery', { paragraph: `${imagery} Close photographs of hands at the wheel lead, cropped tight.` }, /— imagery:\*\* copies eight or more words from the example \("close photographs of hands at the wheel lead"\)/],
+  'a Do for no intent': ['preset-dos-donts', { ...GOOD['preset-dos-donts'], dos: [...GOOD['preset-dos-donts'].dos, GOOD['preset-dos-donts'].dos[0]] }, /— preset-dos-donts:\*\* "dos" must have 1 bullets, one per intent; has 2/],
+  'an accent placement not in the brief': ['mood-occasion', { ...mood, accentPlacement: 'Race distance card' }, /— mood-occasion:\*\* "accentPlacement" must be one of "Registration call-out", "Brand Pattern section"/],
+  'a mood that does not name its accent placement': ['mood-occasion', { ...mood, accentPlacement: 'Brand Pattern section' }, /— mood-occasion:\*\* the mood paragraph does not name its accent placement "Brand Pattern section"/],
+};
+
+for (const [name, [entryName, answer, expected, change]] of Object.entries(DRAFT_REFUSALS)) {
+  test(`draft refuses ${name}`, (t) => {
+    const bad = structuredClone(answer);
+    change?.(bad);
+    const { root, fake, status, out } = draft(t, { answers: { [entryName]: [bad] } });
+    assert.equal(status, 1, out);
+    assert.equal(calls(fake, entryName).length, 3);
+    assert.match(readFileSync(local(root, 'draft.md'), 'utf8'), expected);
+    assert.ok(!statSafe(join(root, RECORD)));
+  });
+}
+
+test('draft refuses prose that names a preset source', (t) => {
+  const named = { paragraph: GOOD.layout.paragraph.replace('A full-bleed page', 'An Example-Run style full-bleed page') };
+  const { root, status, out } = draft(t, { answers: { layout: [named] }, changes: thirdParty('reviewed') });
+  assert.equal(status, 1, out);
+  assert.match(readFileSync(local(root, 'draft.md'), 'utf8'), /— layout:\*\* names "example-run", a preset source; no source name ships/);
+});
+
+test('each entry receives only the inputs it declares, and never a source or review record', (t) => {
+  const partial = { ...review('partially-reviewed'), approved_properties: ['structure'], reviewer: 'Pat Reviewer' };
+  const changes = {
+    ...edit(LAYOUT, (p) => ({ ...p, source: source('https://www.example-run.com/events') })),
+    ...edit(IMAGERY, (p) => ({ ...p, source: source('https://photos.example-run.com/gallery') })),
+    ...edit(PICKS, (p) => ({ ...p, review: partial })),
+  };
+  const { fake, status, out } = draft(t, { changes });
+  assert.equal(status, 0, out);
+  const library = libraryFiles();
+  for (const { entry: name, prompt, args } of fake.calls()) {
+    const declared = JSON.parse(library[`${LIBRARY}/${name}.json`]).inputs;
+    assert.deepEqual(Object.keys(promptInputs(prompt)).sort(), [...declared].sort(), name);
+    for (const leak of ['example-run', 'https://', 'Pat Reviewer', 'measuredOn', 'robotsDisallowed', 'approved_properties', 'partially-reviewed']) {
+      assert.ok(!prompt.includes(leak) && !args.some((arg) => arg.includes(leak)), `${name} prompt carries ${leak}`);
+    }
+  }
+});
+
+const sha256 = (text) => createHash('sha256').update(text).digest('hex');
+
+test('the authoring record holds versions, labels and hashes, and nothing about the account or machine', (t) => {
+  const { root, fake, status, out } = draft(t, { args: ['--model', 'claude-sonnet-5-5', '--account', 'neutral-account'] });
+  assert.equal(status, 0, out);
+  const text = readFileSync(join(root, RECORD), 'utf8');
+  const record = JSON.parse(text);
+  assert.deepEqual(Object.keys(record), ['brief', 'tool', 'claudeCode', 'account', 'entries', 'accentPlacement']);
+  // Each entry carries the hash of shared.json as committed, so the record shows which briefs used an older one.
+  const shared = JSON.parse(libraryFiles()[`${LIBRARY}/shared.json`]);
+  for (const [name, entry] of Object.entries(record.entries)) assert.equal(entry.shared, sha256(JSON.stringify(Object.fromEntries(Object.entries(shared).sort()))), name);
+  assert.equal(record.tool.commit, null);
+  assert.match(record.tool.version, /^[0-9a-f]{64}$/);
+  assert.deepEqual(record.claudeCode, { version: '2.1.316', model: 'claude-sonnet-5-5', effort: 'high', modelOverride: true });
+  assert.equal(record.account, 'neutral-account');
+  // An output hash is the SHA-256 of the prose read back from the brief, as JSON with sorted keys.
+  assert.equal(record.entries.layout.output, sha256(JSON.stringify({ paragraph: GOOD.layout.paragraph })));
+  assert.equal(record.entries.tagline.output, sha256(JSON.stringify({ tagline: GOOD.tagline.tagline })));
+  assert.equal(record.entries['mood-occasion'].output, sha256(JSON.stringify({ paragraph: mood.paragraph })));
+  for (const leak of ['maintainer@example.com', '5f0c-session-77', '0.42', fake.path, root, tmpdir(), 'Race day']) assert.ok(!text.includes(leak), `record carries ${leak}`);
+  for (const { args } of fake.calls()) {
+    assert.deepEqual(args.slice(0, 15), ['-p', '--model', 'claude-sonnet-5-5', '--effort', 'high', '--tools', '', '--strict-mcp-config', '--mcp-config', '{"mcpServers":{}}', '--setting-sources', 'local', '--no-session-persistence', '--system-prompt', args[14]]);
+  }
+});
+
+test('a Claude Code that cannot answer stops the run before anything is written', (t) => {
+  const { root, fake, status, out } = draft(t, { answers: { imagery: [{ $exit: 1 }] } });
+  assert.equal(status, 1, out);
+  assert.match(out, /^Claude Code exited with 1: Invalid API key · Please run \/login\. Nothing was written\.$/m);
+  assert.equal(calls(fake, 'imagery').length, 1);
+  assert.deepEqual(snapshot(root), untouched(t, root));
+});
+
+test('a missing Claude Code stops the run before anything is written', (t) => {
+  const root = fixture(t, { ...THEME_TEXTS, ...libraryFiles() });
+  const { status, out } = run(['club-run', '--root', root], { CLAUDE_PATH: join(root, 'no-claude-here') });
+  assert.equal(status, 1, out);
+  assert.match(out, /^Claude Code was not found; install it or set CLAUDE_PATH\. Nothing was written\.$/m);
+  assert.deepEqual(snapshot(root), untouched(t, root));
+});
+
+// CI on committed briefs: check 4 on the prose read back from the brief, and check 10 against its record.
+const proseBrief = (prose) => renderBrief({ [BRIEF]: staleBrief({ ...PROSE, ...prose }) });
+const withRecord = (accentPlacement) => ({ ...published(), [RECORD]: { brief: 'club-run', accentPlacement } });
+const COMMITTED_REFUSALS = {
+  'prose with a px value no table holds': [{ ...published(), [BRIEF]: proseBrief({ layout: `${PROSE.layout} Cards keep 11px padding.` }) }, /^registry\/theme-briefs\/club-run\.md: prose gives 11px, which no table in the brief holds$/m],
+  'prose that names a gradient': [{ ...published(), [BRIEF]: proseBrief({ imagery: `${PROSE.imagery} Photos fade into a gradient.` }) }, /^registry\/theme-briefs\/club-run\.md: prose names a gradient; Immersive Themes have none$/m],
+  'prose with motion beyond its level': [{ ...published(), [BRIEF]: proseBrief({ layout: `${PROSE.layout} Cards stagger in.` }) }, /^registry\/theme-briefs\/club-run\.md: prose names "stagger", which the subtle motion level does not allow$/m],
+  'a record whose accent placement is not the brief\'s': [withRecord('Race distance card'), /^registry\/theme-briefs\/club-run\.md: accent placement "Race distance card" is not one of Registration call-out, Brand Pattern section$/m],
+  'a record with no accent placement': [{ ...published(), [RECORD]: { brief: 'club-run' } }, /^registry\/theme-briefs\/club-run\.md: accent placement null is not one of Registration call-out, Brand Pattern section$/m],
+  'a mood that does not name its recorded accent placement': [withRecord('Brand Pattern section'), /^registry\/theme-briefs\/club-run\.md: the mood paragraph does not name its accent placement "Brand Pattern section"$/m],
+};
+
+for (const [name, [changes, expected]] of Object.entries(COMMITTED_REFUSALS)) {
+  test(`check-only refuses ${name}`, (t) => assertRefused(t, changes, expected));
+}
+
+test('check-only reports a variable the theme lacks once, though prose and color checks both find it', (t) => {
+  const prose = { components: [[PROSE.components[0][0], PROSE.components[0][1], 'It sits on var(--immersive-support-50) with var(--immersive-on-support-50) text.'], PROSE.components[1]] };
+  const { status, out } = checkOnly(fixture(t, { ...published(), [BRIEF]: proseBrief(prose) }));
+  assert.equal(status, 1, out);
+  assert.equal(out.match(/names --immersive-support-50, which Club does not define$/gm)?.length, 1, out);
 });

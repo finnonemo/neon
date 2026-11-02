@@ -1,0 +1,50 @@
+{
+  "fills": "the Imagery paragraph, before the scripted Brand Floor sentence",
+  "inputs": [
+    "imagery",
+    "theme.kind",
+    "theme.roles",
+    "brandPattern.section",
+    "theme.mood"
+  ],
+  "after": [],
+  "formula": [
+    "what leads",
+    "framing",
+    "subject, and color only through role names such as the canvas or the accent",
+    "how illustration is used",
+    "icons",
+    "a closing density verdict"
+  ],
+  "targets": {
+    "words": [
+      75,
+      120
+    ]
+  },
+  "rules": [
+    "no values: no var(--…) and no px",
+    "one paragraph with no line breaks",
+    "say how images sit beside the Brand Pattern section without overlapping it"
+  ],
+  "output": {
+    "type": "object",
+    "properties": {
+      "paragraph": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "paragraph"
+    ],
+    "additionalProperties": false
+  },
+  "example": {
+    "input": {
+      "imagery.leads": "photos of hands at work"
+    },
+    "output": {
+      "paragraph": "Close photographs of hands at the wheel lead, cropped tight so the clay fills the frame."
+    }
+  }
+}

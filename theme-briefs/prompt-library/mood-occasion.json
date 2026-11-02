@@ -1,0 +1,59 @@
+{
+  "fills": "the occasion half of the header mood paragraph",
+  "inputs": [
+    "occasion.moodIntent",
+    "theme.mood",
+    "brief.name",
+    "theme.kind",
+    "accentPlacements",
+    "brandPattern.colourway",
+    "brandPattern.section"
+  ],
+  "after": [],
+  "formula": [
+    "continue from the theme half (theme.mood) without repeating it",
+    "say where the accent goes for this occasion: name exactly one of accentPlacements in the paragraph, and set accentPlacement to it",
+    "say the geometry the page leans on, such as rounded blocks and generous gaps, in words, not values",
+    "close on one concrete image of the occasion"
+  ],
+  "targets": {
+    "paragraphWords": [
+      110,
+      132
+    ]
+  },
+  "rules": [
+    "no values: no var(--…) and no px",
+    "one paragraph with no line breaks",
+    "when the colourway is accent, the Brand Pattern section carries the accent too; never claim the accent appears only once"
+  ],
+  "output": {
+    "type": "object",
+    "properties": {
+      "paragraph": {
+        "type": "string"
+      },
+      "accentPlacement": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "paragraph",
+      "accentPlacement"
+    ],
+    "additionalProperties": false
+  },
+  "example": {
+    "input": {
+      "occasion.moodIntent": "an open studio night; hands-on, unhurried",
+      "brief.name": "Studio",
+      "accentPlacements": [
+        "Sign-up block"
+      ]
+    },
+    "output": {
+      "paragraph": "For the studio night the accent is kept for the Sign-up block alone, so the eye finds it after the work on the wheels. Soft, generous blocks and wide gaps let each station breathe. The page closes on a shelf of drying bowls waiting for the kiln.",
+      "accentPlacement": "Sign-up block"
+    }
+  }
+}

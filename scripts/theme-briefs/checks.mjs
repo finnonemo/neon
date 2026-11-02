@@ -1,11 +1,15 @@
 // The Theme Brief check module, shared by the authoring tool and CI
-// (evals/skills/theme-briefs.test.mjs). Hard checks only.
+// (evals/skills/theme-briefs.test.mjs). Hard checks only; checks on drafted prose are in prose-checks.mjs.
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { contrast, matchToken, paletteTokens } from '../lib/colors.mjs';
 import { loadInputs, PRESET_KINDS } from './inputs.mjs';
-import { assembleBrief, freshBrief, splitSections } from './render.mjs';
+import { accentPlacements, accentProblems, proseText, valueProblems } from './prose-checks.mjs';
+import { assembleBrief, freshBrief, readProse, splitSections } from './render.mjs';
 import { isThirdParty, sourceHost } from './schemas.mjs';
+
+// Where authoring records live: draft mode writes them and CI reads them.
+export const RECORDS = 'theme-briefs/records';
 
 const plural = (count, one, many = `${one}s`) => `${count} ${count === 1 ? one : many}`;
 
@@ -62,6 +66,9 @@ function sourceNames(host) {
   const domain = labels.slice(country ? -3 : -2).join('.');
   return [...new Set([host, domain, domain.split('.')[0]])].filter((name) => name.length >= 3);
 }
+// Every name a third-party preset source could leak by, across all presets.
+export const sourceNamesOf = (presets) => PRESET_KINDS.flatMap((kind) => Object.values(presets[kind]))
+  .map(({ data }) => sourceHost(data)).filter(isThirdParty).flatMap(sourceNames);
 const escape = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 // Colors: every hex is a color token, and every fill/text pair the brief names is readable.
@@ -131,6 +138,24 @@ function scriptedDrift(markdown, brief) {
   });
 }
 
+// Checks 3, 4, 5, 7 and 10 on one brief's Markdown, each message once. `brief` is undefined when the brief
+// cannot be rendered, and `record` when it has no authoring record.
+export function briefProblems(text, { theme, brief, tokens, sources, record }) {
+  const problems = new Set(colorProblems(text, theme, tokens));
+  if (brief) {
+    for (const message of scriptedDrift(text, brief)) problems.add(message);
+    const { prose } = readProse(text, brief);
+    if (prose) {
+      for (const message of valueProblems(proseText(prose), brief)) problems.add(message);
+      if (record) for (const message of accentProblems(record.accentPlacement, prose['mood-occasion'].paragraph, accentPlacements(brief))) problems.add(message);
+    }
+  }
+  // No source name: no site or domain name from any preset source; the first name found per source is enough.
+  const leaked = sources.find((source) => new RegExp(`(?<![\\w-])${escape(source)}(?![\\w-])`, 'i').test(text));
+  if (leaked) problems.add(`names "${leaked}", a preset source; no source name ships`);
+  return [...problems];
+}
+
 export function checkThemeBriefs({ root, out = join(root, 'registry/theme-briefs') }) {
   const { inputs, problems } = checkInputs(root);
   const { facts, presets } = inputs;
@@ -142,31 +167,31 @@ export function checkThemeBriefs({ root, out = join(root, 'registry/theme-briefs
   const entries = new Set((registry.items ?? []).map((item) => item.name).filter((name) => name?.startsWith('theme-brief-')).map((name) => name.slice('theme-brief-'.length)));
   const picksByName = new Map(inputs.picks.map((picks) => [picks.name, picks]));
   const tokens = paletteTokens(join(root, 'theme/tokens/colors.json'));
-  const sources = PRESET_KINDS.flatMap((kind) => Object.values(presets[kind]))
-    .map(({ data }) => sourceHost(data)).filter(isThirdParty).flatMap(sourceNames);
+  const sources = sourceNamesOf(presets);
   for (const name of [...new Set([...briefs.map((file) => file.replace(/\.md$/, '')), ...entries])].sort()) {
     const markdown = join(out, `${name}.md`);
     const where = existsSync(markdown) ? at(markdown) : 'registry/registry.json';
     const picks = picksByName.get(name);
+    const recordPath = join(root, RECORDS, `${name}.json`);
     const missing = [
       !existsSync(markdown) && `Markdown ${at(markdown)}`,
       !picks && `picks file theme-briefs/picks/${name}.json`,
-      !existsSync(join(root, 'theme-briefs/records', `${name}.json`)) && `authoring record theme-briefs/records/${name}.json`,
+      !existsSync(recordPath) && `authoring record theme-briefs/records/${name}.json`,
       !entries.has(name) && `registry entry "theme-brief-${name}" in registry/registry.json`,
     ].filter(Boolean);
     for (const part of missing) problems.push(`${where}: published brief "${name}" has no ${part}`);
     if (!existsSync(markdown)) continue;
     const text = readFileSync(markdown, 'utf8');
     const theme = facts.themes[picks?.data?.theme] ?? Object.values(facts.themes).find((candidate) => name.startsWith(`${candidate.id}-`));
-    for (const message of colorProblems(text, theme, tokens)) problems.push(`${where}: ${message}`);
-    if (picks) {
-      const { brief, reason } = renderable(name, inputs, problems);
-      if (brief) for (const message of scriptedDrift(text, brief)) problems.push(`${where}: ${message}`);
-      else if (reason) problems.push(`${where}: ${reason}; its scripted sections cannot be checked`);
+    const { brief, reason } = picks ? renderable(name, inputs, problems) : {};
+    if (reason) problems.push(`${where}: ${reason}; its scripted sections cannot be checked`);
+    let record;
+    try {
+      record = existsSync(recordPath) ? JSON.parse(readFileSync(recordPath, 'utf8')) : undefined;
+    } catch (error) {
+      problems.push(`${at(recordPath)}: not valid JSON (${error.message})`);
     }
-    // No source name: no site or domain name from any preset source; the first name found per source is enough.
-    const leaked = sources.find((source) => new RegExp(`(?<![\\w-])${escape(source)}(?![\\w-])`, 'i').test(text));
-    if (leaked) problems.push(`${where}: names "${leaked}", a preset source; no source name ships`);
+    for (const message of briefProblems(text, { theme, brief, tokens, sources, record })) problems.push(`${where}: ${message}`);
   }
   const counts = [
     plural(Object.keys(inputs.facts.themes).length, 'theme'),
