@@ -15,12 +15,14 @@
 // dependencies installed. `--shots <name>` also builds the result into
 // .local/shots/<name>, as grade-rebuild.mjs does, for
 // `run-probe.mjs <name> --dark-class`.
-import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { join, relative, resolve } from 'node:path';
 import { parseArgs } from 'node:util';
 import { pathToFileURL } from 'node:url';
-import { appBase, buildShots, neonBaseCheck, neonRegistryFiles } from './grade-rebuild.mjs';
+import { appBase, appManifests, buildShots, neonBaseCheck, neonRegistryFiles } from './grade-rebuild.mjs';
+import { bareCnImports, darkClasses, weightOverrides } from '../../scripts/lib/registry.mjs';
+import { stockPaletteUtilities, unscopedSelectors } from '../../scripts/lib/source-rules.mjs';
 
 // Installed or built output, not the app's source.
 const ignored = /(^|\/)(node_modules|\.git|dist)(\/|$)|\.tsbuildinfo$/;
@@ -66,11 +68,35 @@ function run(command, args, cwd) {
   return { pass: result.status === 0, detail: result.status === 0 ? '' : output };
 }
 
-const readJson = path => (existsSync(path) ? JSON.parse(readFileSync(path, 'utf8')) : undefined);
-export const baseOf = app => appBase({ componentsJson: readJson(join(app, 'components.json')), packageJson: readJson(join(app, 'package.json')) });
+export const baseOf = app => appBase(appManifests(app));
 
 // The Neon base's installed theme: neon-base.md keeps index.css and src/theme/ as installed.
 const neonTheme = path => path === 'src/index.css' || path.startsWith('src/theme/');
+
+// What a changed app file adds against neon-base.md's styling rules: `dark:`
+// classes, the bare `cn`, weight utilities and stock palette utilities outside
+// `dark:` classes, which already report. Marks the source already had are its
+// own, not the restyle's.
+export function neonRoleProblems(path, before, after) {
+  const marks = source => {
+    const files = [[path, source]];
+    const palette = /\.(tsx?|jsx?)$/.test(path) ? stockPaletteUtilities(source.replace(/(?<![\w-])dark:\S+/g, '')).map(({ match }) => `${path} uses ${match}; use a Neon role utility`) : [];
+    return [...darkClasses(files), ...bareCnImports(files), ...weightOverrides(files), ...palette];
+  };
+  const had = new Set(marks(before));
+  return [...new Set(marks(after))].filter(problem => !had.has(problem));
+}
+
+// Custom properties the installed theme declares, which an app stylesheet must not redeclare.
+const declaredProperties = css => new Set([...css.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/(--[\w-]+)\s*:/g)].map(([, name]) => name));
+
+const read = (app, path) => {
+  try {
+    return readFileSync(join(app, path), 'utf8');
+  } catch {
+    return '';
+  }
+};
 
 // `neonFiles` (neonRegistryFiles()) is required when the source is on the Neon base.
 export function grade({ source, result, build = true, neonFiles }) {
@@ -85,6 +111,18 @@ export function grade({ source, result, build = true, neonFiles }) {
     add('Neon base and items only', problems.length === 0, problems.join('\n'));
     const outside = changes.filter(({ path }) => !path.startsWith('src/') || neonTheme(path));
     add('theme and manifests unchanged', outside.length === 0, listed(outside));
+    const app = changes.filter(({ path, change }) => change !== 'removed' && path.startsWith('src/') && !neonTheme(path) && !path.startsWith('src/components/ui/'));
+    const roles = app.flatMap(({ path }) => neonRoleProblems(path, read(source, path), read(result, path)));
+    add('Neon roles in app source', roles.length === 0, roles.join('\n'));
+    const themeRoles = new Set(listFiles(source).filter(neonTheme).filter(path => path.endsWith('.css')).flatMap(path => [...declaredProperties(read(source, path))]));
+    const styles = app.filter(({ path }) => path.endsWith('.css')).flatMap(({ path }) => {
+      const css = read(result, path);
+      return [
+        ...unscopedSelectors(css).map(selector => `${path.slice('src/'.length)}: ${selector}`),
+        ...[...declaredProperties(css)].filter(name => themeRoles.has(name)).map(name => `${path} redeclares the theme role ${name}; restyle through role utilities`),
+      ];
+    });
+    add('app stylesheets scoped', styles.length === 0, styles.join('\n'));
   } else {
     const outside = changes.filter(({ path }) => !path.endsWith('.css'));
     add('only stylesheets changed', outside.length === 0, listed(outside));
@@ -92,13 +130,6 @@ export function grade({ source, result, build = true, neonFiles }) {
 
   // A stylesheet the result adds can redeclare a token or a second @theme inline.
   const stylesheets = [...new Set([...listFiles(source), ...listFiles(result)])].filter(path => path.endsWith('.css'));
-  const read = (app, path) => {
-    try {
-      return readFileSync(join(app, path), 'utf8');
-    } catch {
-      return '';
-    }
-  };
   const themeProblems = [];
   const tokenProblems = [];
   for (const path of stylesheets) {
@@ -112,7 +143,8 @@ export function grade({ source, result, build = true, neonFiles }) {
   }
   add('@theme inline unchanged', themeProblems.length === 0, themeProblems.join('\n'));
   add('--chart-* and --radius unchanged', tokenProblems.length === 0, tokenProblems.join('\n'));
-  add('base kept', before === after, before === after ? '' : `${before} → ${after}`);
+  if (before === 'mixed') add('base kept', false, 'the source is mixed (an @neon entry and CDS); report it as unresolved');
+  else add('base kept', before === after, before === after ? '' : `${before} → ${after}`);
 
   if (build) checks.push({ name: 'build', ...run('npm', ['run', 'build', '--silent'], result) });
   return checks;

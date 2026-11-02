@@ -18,7 +18,7 @@ neon-redesign, neon-review and neon-audit tell the app's [base](../../../skills/
 
 ## Regression cases
 
-`base-detection.test.mjs` checks that each skill states the rule for the Neon base, CDS and neither. It checks the wording, not how a run behaves. `appBase` in `grade-rebuild.mjs` is the same rule in code, built from the predicates `neonBaseProblems` uses. `eval-runner.test.mjs` pins it on the four cases: Neon base, CDS, neither (the v0 fixture's `components.json` and an empty manifest) and mixed.
+`base-detection.test.mjs` checks that each skill states the rule for the Neon base, CDS and neither. It checks the wording, not how a run behaves. `appBase` in `grade-rebuild.mjs` applies the same markers to an app's manifests and shares the `@neon` entry check with `neonBaseProblems`. `eval-runner.test.mjs` pins it on Neon base, CDS, neither (the v0 fixture's `components.json`, an empty manifest, and a CDS icon package without `@coinbase/cds-web`) and mixed.
 
 ## Restyle grader
 
@@ -26,20 +26,21 @@ neon-redesign, neon-review and neon-audit tell the app's [base](../../../skills/
 node evals/skills/grade-restyle.mjs --source <fixture> --result <case>/<app>
 ```
 
-The grader reads the source's base. On every base it checks that the base is kept, that `@theme inline` is byte-identical and that `--chart-*` and `--radius` keep their values, and it builds the result.
+The grader reads the source's base. On every base it checks that the base is kept, that `@theme inline` is byte-identical and that `--chart-*` and `--radius` keep their values, and it builds the result. A mixed source fails base kept, to be reported as unresolved.
 
 - **CDS or neither:** only stylesheets change, as before.
-- **Neon base:** colors live in role utilities, so app source may change. The grader runs the Neon base check from `grade-rebuild.mjs` on the result. It also requires `package.json`, `components.json`, every other file outside the app's `./src/`, and its `index.css` and `theme/` folder to stay as installed.
+- **Neon base:** colors live in role utilities, so app source may change. The grader runs the Neon base check from `grade-rebuild.mjs` on the result. It also requires `package.json`, `components.json`, every other file outside the app's `./src/`, and its `index.css` and `theme/` folder to stay as installed. In changed app files outside the ui folder it flags what the restyle adds: `dark:` classes, the bare `cn`, weight utilities and stock palette utilities. Changed app stylesheets must scope their selectors and leave the theme's custom properties undeclared.
 
 No check reads runtime behavior, so the grader cannot flag the Radix behaviors ADR 0006 accepts. These are Select closing on a pick, the polite toast, and Dialog's `aria-hidden` siblings in place of `aria-modal`. `grade-restyle.test.mjs` passes a Neon-base restyle whose source holds the registry's `select`, `sonner` and `dialog`. Those behaviors themselves are asserted in [`evals/templates/neon-a11y.spec.mjs`](../../templates/neon-a11y.spec.mjs), not here.
 
 ### Grader check, 3 November 2026
 
-`scripts/smoke-new-app.mjs` built a Neon-base app from this checkout's registry into `.local/`, with the base's `button`, `tooltip` and `sonner` and an added `dialog`. Its copies were graded against it:
+`scripts/smoke-new-app.mjs` built a Neon-base app from this checkout's registry into `.local/`, with the base's `button`, `tooltip` and `sonner` and an added `dialog`. Its copies were graded against it with the grader at the commit that adds this section:
 
 | Result | Verdict |
 | --- | --- |
-| `bg-primary text-primary-foreground` on the content pane in `App.tsx` | All six checks pass, build included |
+| `bg-primary text-primary-foreground` on the content pane in `App.tsx` | All eight checks pass, build included |
 | Plus a rule appended to the theme's `neon.css` and the v0 fixture's stock `card.tsx` in the ui folder | FAIL: Neon base and items only (`card.tsx` is not a Neon item, uses `font-semibold`); theme and manifests unchanged (`neon.css`) |
+| The first result plus `dark:bg-slate-900 font-bold` in `App.tsx` and a stylesheet declaring `:root { --primary: … }` | FAIL: Neon roles in app source (the `dark:` class, `font-bold`); app stylesheets scoped (`:root`, `--primary` redeclared) |
 
 Limits: this checks the grader, not a skill run.

@@ -18,7 +18,7 @@ Tell the base from the manifests, as neon-create does:
 
 - **Neon base:** `components.json` has an `@neon` registry entry. Its components are Neon registry items, styled by the rules in [Neon base](../../neon-create/references/neon-base.md).
 - **CDS:** `package.json` depends on `@coinbase/cds-web`. CDS is frozen for apps already on it: they keep CDS, styled as [CDS integration](../../neon-create/references/cds-integration.md) describes.
-- **Neither:** no `@neon` entry and no CDS. A `components.json` without `@neon` is plain shadcn (v0, Lovable): it keeps its own components and is restyled through its CSS variables.
+- **Neither:** no `@neon` entry and no CDS. A `components.json` without `@neon` is plain shadcn (v0, Lovable): it keeps its own components and is restyled through its CSS variables; it takes `@neon/` items only for components the request asks for, through neon-create.
 
 An app with both an `@neon` entry and CDS is mixed: report it as unresolved and add to neither side. Restyle and review keep the app on its base; a new React app starts on the Neon base. The base an app is on is not a finding. Without source, such as from a screenshot alone, the base is unknown; say so.
 
