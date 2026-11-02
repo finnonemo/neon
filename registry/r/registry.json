@@ -463,6 +463,24 @@
       ]
     },
     {
+      "name": "immersive-themes",
+      "type": "registry:item",
+      "title": "Immersive Themes",
+      "description": "Club, Exclusive, Private and Ultra as --immersive-* properties, and the adapter that themes shadcn/ui inside a [data-immersive-theme] scope.",
+      "files": [
+        {
+          "path": "../theme/css/immersive-themes.css",
+          "type": "registry:file",
+          "target": "src/theme/immersive-themes.css"
+        },
+        {
+          "path": "theme/immersive.css",
+          "type": "registry:file",
+          "target": "src/theme/immersive.css"
+        }
+      ]
+    },
+    {
       "name": "layouts",
       "type": "registry:item",
       "title": "Functional layouts",
@@ -473,7 +491,8 @@
       "registryDependencies": [
         "@neon/utils",
         "@neon/button",
-        "@neon/logo"
+        "@neon/logo",
+        "@neon/immersive-themes"
       ],
       "files": [
         {

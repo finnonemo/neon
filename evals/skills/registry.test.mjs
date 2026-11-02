@@ -114,6 +114,18 @@ test('the layouts item carries the starter layout logic unchanged', () => {
   assert.ok(layouts.registryDependencies.includes('@neon/logo'));
 });
 
+// Theme Briefs (#122) build on the item's name and the generated --immersive-*
+// properties, so it ships the generator's own file, not a copy (#96).
+test('the Immersive Themes item ships the generated themes, and ImmersiveLayout pulls it in', () => {
+  const themes = registryItem('immersive-themes');
+  assert.ok(themes, 'registry.json has an immersive-themes item');
+  assert.ok(themes.files.some((file) => file.path === '../theme/css/immersive-themes.css' && file.target === 'src/theme/immersive-themes.css'), 'it ships theme/css/immersive-themes.css as generated');
+  for (const file of themes.files) assert.ok(read(join('registry', file.path)), `${file.path} exists`);
+  assert.ok(registryItem('layouts').registryDependencies.includes('@neon/immersive-themes'), 'the layouts item depends on it');
+  const imports = [...read('registry/layout/ImmersiveLayout.tsx').matchAll(/^import\s+["'](\.\.\/theme\/[^"']+)["']/gm)].map((match) => match[1]);
+  assert.ok(imports.some((path) => themes.files.some((file) => file.target === `src/${path.slice(3)}`)), 'ImmersiveLayout imports a stylesheet the item ships');
+});
+
 test('the toast takes its theme from AppRoot, never next-themes', () => {
   const { items } = JSON.parse(read(join(BUILD_DIR, 'registry.json')));
   assert.deepEqual(nextThemes(sourceFiles('registry'), items), []);
