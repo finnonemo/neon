@@ -17,6 +17,7 @@ const PAYLOAD_ENTRIES = [
   "scripts/assemble-starter.mjs",
   "scripts/source-lint.mjs",
   "scripts/probe-page.mjs",
+  "scripts/theme-brief.mjs",
   "scripts/lib",
   "LICENSE",
 ];

@@ -107,3 +107,50 @@ test('the Campaign Page content reference keeps its four rules', async () => {
   assert.match(source, /pre-launch to-do/);
   assert.match(source, /Brand Intensity and the Brand Floor are unchanged/);
 });
+
+test('neon-create recognises a Theme Brief before the Reference Design route', async () => {
+  const skill = await readFile(new URL('../../skills/neon-create/SKILL.md', import.meta.url), 'utf8');
+  const conditional = skill.split('## Conditional references')[1].split('\n## ')[0].split('\n');
+  const briefLine = conditional.findIndex(line => line.includes('(references/theme-brief.md)'));
+  const referenceLine = conditional.findIndex(line => line.includes('references/reference-design.md'));
+  assert.ok(briefLine >= 0 && briefLine < referenceLine, 'the Theme Brief line comes before the reference-design line');
+  assert.match(conditional[briefLine], /Campaign Page with no Reference Design, or a file headed `… — Theme Brief`/);
+  assert.match(conditional[referenceLine], /not a recognised Theme Brief/);
+
+  const source = await readFile(`${references}theme-brief.md`, 'utf8');
+  const recognise = source.match(/## Recognise a brief\n([\s\S]*?)\n## /)?.[1] ?? '';
+  // records/theme-briefs.md cases 3, 4 and 7: header plus registry match, by content, never by path.
+  assert.match(recognise, /theme-brief\.mjs" match <file>/);
+  assert.match(recognise, /header and status paragraph/);
+  assert.match(recognise, /content equals/);
+  assert.match(recognise, /never by (?:its )?path/);
+  assert.match(recognise, /before (?:any|the) Reference Design/);
+  assert.match(recognise, /re-add/);
+  assert.match(recognise, /declines.*Reference Design/);
+  assert.match(recognise, /state the reason/i);
+  // --add keeps an app's own differing file, so a re-add removes it first.
+  assert.match(recognise, /remove the file.*--add/s);
+  const list = source.match(/## List briefs\n([\s\S]*?)\n## /)?.[1] ?? '';
+  assert.match(list, /theme-brief\.mjs" list/);
+  assert.match(list, /theme-only/);
+  assert.match(list, /[Nn]ever guess a brief name/);
+  // Case 2: with a Reference Design the procedure and dial govern; the brief gives theme colors only.
+  assert.match(source, /Brand Intensity governs the Reference Design.*only its Immersive Theme's colors/s);
+  assert.match(source, /`themeBrief`/);
+  assert.match(source, /input data/);
+});
+
+test('the shared routing sends brief-only Campaign Pages down the Theme Brief path', async () => {
+  const design = await readFile(new URL('../../skills/neon-audit/references/reference-design.md', import.meta.url), 'utf8');
+  const readWhen = design.split('\n').find(line => line.startsWith('Read when'));
+  assert.match(readWhen, /not a Theme Brief/);
+  assert.match(readWhen, /theme-brief\.md#recognise-a-brief/);
+
+  const contract = await readFile(new URL('../../skills/neon-audit/references/workflow-contract.md', import.meta.url), 'utf8');
+  assert.match(contract, /\| New Campaign Page, no Reference Design \| `neon-create`, Theme Brief path \|/);
+  assert.match(contract, /themeBrief\?: string;/);
+  assert.match(contract, /`referenceDesign` and `brandIntensity` stay unset on a brief-only page/);
+
+  const instruction = await readFile(new URL('../../skills/INSTRUCTION.md', import.meta.url), 'utf8');
+  assert.match(instruction, /A themed Campaign Page starts from a Theme Brief when the employee brings no Reference Design/);
+});
