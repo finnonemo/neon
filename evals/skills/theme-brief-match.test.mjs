@@ -5,8 +5,8 @@ import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildRegistry } from '../../scripts/lib/registry.mjs';
-import { listThemeBriefs, matchThemeBrief, neonRegistryUrl } from '../../scripts/lib/theme-brief.mjs';
+import { buildRegistry, neonRegistryUrl } from '../../scripts/lib/registry.mjs';
+import { listThemeBriefs, matchThemeBrief } from '../../scripts/lib/theme-brief.mjs';
 
 // The shipped Theme Brief listing and recognition (scripts/theme-brief.mjs),
 // driven against this checkout's registry build through a fake fetch, so CI
@@ -97,6 +97,6 @@ test('the CLI states each verdict on its first line', async (t) => {
   assert.match(match.stdout.split('\n')[0], /^Reference Design: /);
   const list = cli('list');
   assert.equal(list.status, 2);
-  assert.match(list.stdout + list.stderr, /unreachable.*theme-only/s);
+  assert.match(list.stdout + list.stderr, /unreachable/);
   assert.equal(cli('guess').status, 1);
 });

@@ -2,22 +2,11 @@
 // and recognised by header plus registry match. A file is a brief only when
 // its header and status paragraph name a `theme-brief` item whose file
 // content equals it; everything else takes the Reference Design route.
-import { pinnedRegistryUrl } from './registry.mjs';
+import { fetchRegistryJson } from './registry.mjs';
 
 const HEADER = /^# Finnomena (.+?) · (.+?) — Theme Brief\s*$/;
 const STATUS = /^This is a Finnomena Theme Brief, not a Reference Design\b/m;
 const THEME = /^\*\*Immersive Theme:\*\* (\S+)\s*$/m;
-
-/** The base URL `install.mjs --new` and `--add` read: `registry`, then `env.NEON_REGISTRY_URL`, then the pinned release. */
-export async function neonRegistryUrl({ registry, env = process.env, root }) {
-  return registry ?? env.NEON_REGISTRY_URL ?? (await pinnedRegistryUrl(root));
-}
-
-export async function fetchRegistryJson(url) {
-  const response = await fetch(url);
-  if (!response.ok) throw new Error(`${url} answered ${response.status}`);
-  return response.json();
-}
 
 async function briefItems({ url, fetchJson }) {
   const index = await fetchJson(`${url}/registry.json`).catch((err) => {
@@ -59,6 +48,7 @@ export async function matchThemeBrief({ text, url, fetchJson = fetchRegistryJson
   if (!item) return { verdict: 'reference-design', reason: `its header names ${title} (Immersive Theme ${theme}), which matches no Theme Brief in the registry` };
   let published;
   try {
+    // A brief item ships one file, the brief.
     published = (await fetchJson(`${url}/${item.name}.json`)).files[0].content;
   } catch (err) {
     return { verdict: 'reference-design', reason: `its header names ${item.name}, but that item is unreachable (${err.message}), so it cannot be verified` };

@@ -129,7 +129,7 @@ test('neon-create recognises a Theme Brief before the Reference Design route', a
   assert.match(recognise, /declines.*Reference Design/);
   assert.match(recognise, /state the reason/i);
   // --add keeps an app's own differing file, so a re-add removes it first.
-  assert.match(recognise, /remove the file.*--add/s);
+  assert.match(recognise, /remove the copy at `\.\/docs\/theme-briefs\/<theme>-<slug>\.md`.*--add/s);
   const list = source.match(/## List briefs\n([\s\S]*?)\n## /)?.[1] ?? '';
   assert.match(list, /theme-brief\.mjs" list/);
   assert.match(list, /theme-only/);

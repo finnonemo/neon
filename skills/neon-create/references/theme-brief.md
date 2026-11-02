@@ -11,11 +11,12 @@ Run `node "<Neon root>/scripts/theme-brief.mjs" list`. It reads the index of the
 Run `node "<Neon root>/scripts/theme-brief.mjs" match <file>` on every style file the employee supplies or the app holds, before any Reference Design route: `./DESIGN.md`, a file under `./docs/theme-briefs/`, a Refero Styles file. Save a brief pasted into chat to a file first. The script decides by header and content, never by path: a file is a brief only when it has the header and status paragraph, and its theme and name match a registry item whose file content equals it. Act on its first line:
 
 - `Theme Brief: <item>`: the file is that brief; [use it](#use-a-recognised-brief).
-- `Differs: <item>`: tell the employee the file differs from the current brief, from an older release or a hand edit, and offer a re-add. On a yes, remove the file, then run `install.mjs <app-dir> --add <item>`; `--add` keeps an app's own differing file, so it must be gone first. If the employee declines, the file is a Reference Design.
+- `Differs: <item>`: tell the employee the file differs from the current brief, from an older release or a hand edit, and offer a re-add. On a yes, remove the copy at `./docs/theme-briefs/<theme>-<slug>.md` if the app has one, since `--add` keeps an app's own differing file, then run `install.mjs <app-dir> --add <item>` and use the added file from then on. If the employee declines, the file is a Reference Design.
 - `Reference Design: <reason>`: follow the [reference design](../../neon-audit/references/reference-design.md) procedure. When the file is headed as a Theme Brief, state the reason to the employee.
 
 ## Use a recognised brief
 
+- Briefs target the Neon base. In an app already on CDS, or one without React, say so and offer a new Neon-base app or a theme-only page.
 - Record the item name as `themeBrief` in `NeonContext`, and leave `referenceDesign` and `brandIntensity` unset. Offer no Brand Intensity dial.
 - The page's Immersive Theme is the brief's: pass it as `ImmersiveLayout`'s `immersiveTheme`.
 - Colors and type come from the installed Neon theme and Immersive Themes CSS, never from hex values or font names in the Markdown.

@@ -23,7 +23,8 @@ import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
-import { listThemeBriefs, matchThemeBrief, neonRegistryUrl } from './lib/theme-brief.mjs';
+import { neonRegistryUrl } from './lib/registry.mjs';
+import { listThemeBriefs, matchThemeBrief } from './lib/theme-brief.mjs';
 
 const USAGE = 'Usage: node theme-brief.mjs list | match <file> [--registry <url>]';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -45,10 +46,10 @@ const url = await neonRegistryUrl({ registry: parsed.values.registry, root });
 if (command === 'list') {
   try {
     const briefs = await listThemeBriefs({ url });
-    if (briefs.length === 0) console.log('The registry lists no Theme Briefs; build the page theme-only.');
+    if (briefs.length === 0) console.log('The registry lists no Theme Briefs.');
     for (const brief of briefs) console.log(`${brief.name}: ${brief.title} (theme ${brief.theme}, occasion ${brief.occasion}) — ${brief.tagline}`);
   } catch (err) {
-    console.log(`${err.message}. Say so and continue theme-only.`);
+    console.log(`${err.message}.`);
     process.exit(2);
   }
 } else {
@@ -63,7 +64,7 @@ if (command === 'list') {
   if (result.verdict === 'brief') {
     console.log(`Theme Brief: ${result.item}\nIts content equals the registry item. Immersive Theme: ${result.theme}.`);
   } else if (result.verdict === 'differs') {
-    console.log(`Differs: ${result.item}\nIts header names ${result.item}, but its content differs from the registry item (an older release or a hand edit). Offer to re-add the current brief; if the employee declines, treat the file as a Reference Design.`);
+    console.log(`Differs: ${result.item}\nIts header names ${result.item}, but its content differs from the registry item: an older release or a hand edit.`);
   } else {
     console.log(`Reference Design: ${result.reason}.`);
   }
