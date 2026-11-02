@@ -211,6 +211,7 @@ for (const [name, [changes, expected]] of Object.entries(COMPATIBILITY_REFUSALS)
 const twin = (change = (p) => p) => ({ 'theme-briefs/picks/club-race.json': change({ ...structuredClone(valid[PICKS]), briefName: 'Race' }) });
 const DISTINCTNESS_REFUSALS = {
   'two picks files of one theme with the same presets': [twin(), /^theme-briefs\/picks\/club-run\.json: has the same occasion, layout and imagery presets as theme-briefs\/picks\/club-race\.json; briefs on one theme differ in at least one preset$/m],
+  'two picks files of one theme that differ only in ground': [twin((p) => ({ ...p, brandPattern: { ...p.brandPattern, ground: 75 } })), /^theme-briefs\/picks\/club-run\.json: has the same occasion, layout and imagery presets as theme-briefs\/picks\/club-race\.json; briefs on one theme differ in at least one preset$/m],
   'two picks files of one theme that differ only in colourway': [twin((p) => ({ ...p, brandPattern: { colourway: 'palette', ground: 75 } })), /^theme-briefs\/picks\/club-run\.json: has the same occasion, layout and imagery presets as theme-briefs\/picks\/club-race\.json; briefs on one theme differ in at least one preset, not only in colourway$/m],
 };
 
@@ -935,6 +936,10 @@ const COMMITTED_REFUSALS = {
     /^registry\/theme-briefs\/club-run\.md: names --immersive-palette-25 as a fill with --immersive-text text; text on it is --immersive-on-palette-25$/m],
   'the canvas paired with a block\'s text': [{ ...published(), [BRIEF]: proseBrief({ layout: `${PROSE.layout} The footer sits on var(--immersive-canvas) with var(--immersive-on-palette-50) links.` }) },
     /^registry\/theme-briefs\/club-run\.md: names --immersive-canvas as a fill with --immersive-on-palette-50 text; text on it is --immersive-text$/m],
+  'a paired fill beside another block\'s text': [{ ...published(), [BRIEF]: proseBrief({ layout: `${PROSE.layout} Detail rows sit on var(--immersive-palette-50) with var(--immersive-on-palette-50) titles and var(--immersive-on-accent-100) links.` }) },
+    /^registry\/theme-briefs\/club-run\.md: names --immersive-on-accent-100 text beside --immersive-palette-50, whose text is --immersive-on-palette-50$/m],
+  'a paired fill beside the canvas text': [{ ...published(), [BRIEF]: proseBrief({ layout: `${PROSE.layout} Cards sit on var(--immersive-palette-50) with var(--immersive-text) captions and var(--immersive-on-palette-50) titles.` }) },
+    /^registry\/theme-briefs\/club-run\.md: names --immersive-text text beside --immersive-palette-50, whose text is --immersive-on-palette-50$/m],
   'prose that names a gradient': [{ ...published(), [BRIEF]: proseBrief({ imagery: `${PROSE.imagery} Photos fade into a gradient.` }) }, /^registry\/theme-briefs\/club-run\.md: prose names a gradient; Immersive Themes have none$/m],
   'prose with motion beyond its level': [{ ...published(), [BRIEF]: proseBrief({ layout: `${PROSE.layout} Cards stagger in.` }) }, /^registry\/theme-briefs\/club-run\.md: prose names "stagger", which the subtle motion level does not allow$/m],
   'a record whose accent placement is not the brief\'s': [withRecord('Race distance card'), /^registry\/theme-briefs\/club-run\.md: accent placement "Race distance card" is not one of Registration call-out, Brand Pattern section$/m],
@@ -976,4 +981,18 @@ test('a fill with no text named is sent back, then kept as a review warning, and
   writeFileSync(join(root, 'registry/registry.json'), JSON.stringify({ name: 'neon', homepage: 'https://example.invalid', items: [{ name: 'theme-brief-club-run', type: 'registry:item' }] }));
   const check = checkOnly(root);
   assert.equal(check.status, 0, check.out);
+});
+
+test('a font whose name starts with another listed font is reported once', (t) => {
+  const { status, out } = checkOnly(fixture(t, { ...published(), [BRIEF]: proseBrief({ layout: `${PROSE.layout} Thai captions use Noto Sans Thai.` }) }));
+  assert.equal(status, 1, out);
+  assert.match(out, /^registry\/theme-briefs\/club-run\.md: prose names "Noto Sans Thai", a font other than IBM Plex Sans Thai; type comes from the theme$/m);
+  assert.doesNotMatch(out, /prose names "Noto Sans",/);
+});
+
+test('an abbreviation does not end the sentence that pairs a fill with its text', (t) => {
+  const abbreviated = { prompts: [...GOOD['example-prompts'].prompts.slice(0, 2), 'Create a sold-out Race distance card: a small var(--immersive-accent-100) badge, e.g. one short word in var(--immersive-on-accent-100) text, sits above the start time in body, with var(--space-4) padding and no select action.'] };
+  const { fake, status, out } = draft(t, { answers: { 'example-prompts': [abbreviated] } });
+  assert.equal(status, 0, out);
+  assert.equal(calls(fake, 'example-prompts').length, 1);
 });

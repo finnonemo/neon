@@ -110,7 +110,7 @@ function distinctness(picks) {
       seen.set(key, { path, data });
       continue;
     }
-    const colourwayOnly = JSON.stringify(earlier.data.brandPattern) !== JSON.stringify(data.brandPattern);
+    const colourwayOnly = earlier.data.brandPattern?.colourway !== data.brandPattern?.colourway;
     problems.push(`${path}: has the same occasion, layout and imagery presets as ${earlier.path}; briefs on one theme differ in at least one preset${colourwayOnly ? ', not only in colourway' : ''}`);
   }
   return problems;
