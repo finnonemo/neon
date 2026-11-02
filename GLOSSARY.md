@@ -24,6 +24,9 @@ _Avoid_: shadcn (alone, which names the stock components), new starter
 The shadcn registry Neon publishes, pinned to each Neon release. Its items are the Neon base, Neon's components and layouts, the theme, the Immersive Themes and the Theme Briefs. Skills add Neon's item, never the stock shadcn one.
 _Avoid_: component library, npm package
 
+**Counterpart**:
+The CDS component a Neon component is matched to and measured against, such as Modal for Dialog or Tray for Sheet. A shadcn component with no Counterpart has no CDS look to match, so Neon does not tune it without a design owner's decision.
+
 ### Installing
 
 **Installer**:
