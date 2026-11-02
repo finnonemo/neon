@@ -10,6 +10,8 @@ Fast path: to change a preset or picks file, edit it and run the check below unt
 node scripts/theme-briefs/theme-briefs.mjs check-only
 ```
 
+To draft a brief's prose with Claude Code, see [Author a brief](#author-a-brief).
+
 The tool and its data are for maintainers only. Neither ships in the plugin; only the published brief Markdown does, as a registry item.
 
 ## Why this method
@@ -96,6 +98,35 @@ When any chosen preset has a source outside finnomena.com, the picks file needs 
 
 **Theme texts** stay true when a theme is added. They hold no ratio or percentage, no superlative and no comparison with another theme.
 
+## Author a brief
+
+Commit the brief's picks file and every theme text, sign in to Claude Code, and run the tool with the brief's name. `draft` is the default mode:
+
+```sh
+node scripts/theme-briefs/theme-briefs.mjs club-run
+```
+
+The tool drafts the prose one prompt library entry at a time, in `after` order. Each call is `claude -p` with `claude-opus-5-5` at high effort, run from an empty folder with no tools, MCP servers, project settings or saved session. `CLAUDE_PATH` names another executable; the tests point it at a fake.
+
+- **Inputs.** An entry gets only the `inputs` it declares: preset fields, theme text and facts, the picks, computed lists and earlier entries' output. Neither a preset's `source` nor the picks file's `review` is ever an input. The shared file fills `{{variables}}` with the variables prose may name and `{{typeRoles}}` with the type roles.
+- **Checks on each answer.** Hard checks refuse an answer. They cover its shape against the entry's `output` and whatever would stop the brief reading its prose back. They also cover the values in check 4, the accent placement in check 10, eight words copied from the example, and a source name. Soft checks send an answer back: the `targets` word bands, a Don't that starts "Do not" and gives its reason after " — ", a sentence-case tagline, and agreement with the presets.
+- **Retries.** An entry gets up to three attempts, and each retry is sent the last attempt's misses. The tool keeps the attempt that passes the hard checks with the fewest soft misses, the earliest on a tie. Later entries take the kept attempt.
+- **Writes.** Every run writes `.local/theme-briefs/<brief>/draft.md` and `review.md`. The review gives each entry's inputs, its attempts and their misses, a diff against the committed brief, and the word overlap with other briefs on the same theme. When every entry passes, and the whole brief passes checks 3, 4, 5, 7 and 10, the tool also writes `registry/theme-briefs/<brief>.md` and `theme-briefs/records/<brief>.json`. Otherwise it exits 1, and the draft shows `**Hard checks failed — <entry>:**` or `**Not drafted — <entry>:**` under each section it could not fill.
+- **Claude Code fails.** If Claude Code cannot answer, the run stops and writes nothing. That covers a missing sign-in, a missing executable and a timeout. It does not count as an attempt.
+- **Flags.** `--model <id>` drafts with another model, and the record notes the override. `--account` labels who signed Claude Code in: `maintainer-sign-in` (the default), `neutral-account` or `neutral-key`. `--out`, `--local` and `--root` move the brief, the draft folder and the repository.
+
+The authoring record holds versions, labels and hashes only:
+
+- the tool's commit and a hash of its modules;
+- the Claude Code version, model, effort and account label;
+- SHA-256 hashes of the shared prompt, and of each entry, its inputs and its output as read back from the brief;
+- each attempt's count of hard and soft misses;
+- the accent placement.
+
+It holds no prompt, answer, path, account or session detail. The tests confirm this against a fake. A real run's output is first checked in [#122](https://github.com/finnonemo/neon/issues/122).
+
+Read the draft against its review, then add the registry entry and run `check-only`.
+
 ## Checks
 
 The check module in `scripts/theme-briefs` is shared by the tool's `check-only` mode and by `evals/skills/theme-briefs.test.mjs`, which runs it over this repository in `node scripts/validate.mjs`. Every problem is listed as `<path>: <message>`. Each line names the file to fix:
@@ -120,6 +151,9 @@ The check module in `scripts/theme-briefs` is shared by the tool's `check-only` 
 | `differs from fresh scripted output`, `sections must be, in order` | A scripted part no longer matches the theme, tokens or picks, or was edited by hand. Run `scripted-only`, and put lasting wording changes in `render.mjs`. |
 | `its scripted sections cannot be checked`, `not rewritten` | The brief's prose cannot be found where the section map puts it, or a rewrite would drop hand-added text, such as an extra bullet, section or header paragraph, or a paragraph after the Brand Floor sentence; or its inputs have problems. Move or remove the text the message names, or fix the inputs listed first. |
 | `takes the name of a fixed component` | An occasion component is named like one the brief renders itself. Rename it. |
+| `is not an input the tool supplies`, `takes the output of`, `is not a band`, `must have an accentPlacement property`, `makes a cycle`, `has the placeholder` | A prompt library file names an input, band, order or placeholder the tool cannot fill. Use one the message lists, and name in `after` each entry whose output the entry takes. |
+| `prose holds #…`, `prose gives …px`, `is not a Type Scale size`, `prose names a gradient`, `motion level does not allow`, `more than the … motion level's` | Check 4: prose gives a value the theme does not. Name colors by variable or role, spacing by step and type by role, use px only as the brief's tables give it, and keep motion within the layout's level. |
+| `accent placement … is not one of`, `does not name its accent placement`, `nothing in this brief carries the accent` | Check 10: the record's accent placement is not one the brief allows, or the mood paragraph does not name it. Redraft the mood, or edit it to name the placement. |
 
 The registry tests also run in `validate.mjs`, so a brief's registry entry must build like every other item.
 
