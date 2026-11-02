@@ -1,12 +1,12 @@
 # Feature implementation
 
-Read for complex feature states, mock figures or comparison tables on functional screens, or integration into an existing app. New-project mechanics live in [scaffold](scaffold.md); theme changes live in [CDS integration](cds-integration.md).
+Read for complex feature states, mock figures or comparison tables on functional screens, or integration into an existing app. New-project mechanics live in [scaffold](scaffold.md); components and styling live in [Neon base](neon-base.md), or in [CDS integration](cds-integration.md) for an app already on CDS.
 
 ## Existing app integration
 
 Find the relevant screen/component, service contract and route. Reuse existing shell, providers, state and authentication. Inspect only missing evidence. A new-screen request does not authorize scaffolding over the app or replacing its layout system. Follow explicit composition scope for existing UI.
 
-Use real CDS components where available; inspect installed exports/types rather than guessing component names or props. Choose [task-based composition](../../INSTRUCTION.md#task-based-choices). Existing wrapper components can preserve local conventions and behavior.
+Use the app's base: Neon items on the Neon base, CDS components in an app already on CDS, never both. Inspect installed exports/types rather than guessing component names or props. Choose [task-based composition](../../INSTRUCTION.md#task-based-choices). Existing wrapper components can preserve local conventions and behavior.
 
 ## States and services
 
@@ -20,7 +20,7 @@ Read for Back Office and Product Feature screens that show money, units, fees, c
 
 1. **One source.** Keep mock records in one data module that the UI renders from. Compute totals, counts and KPIs from its rows, never type them separately. Assert relations that must hold (parts summing to a total, a count matching its rows) in development, so a mismatch shows as a console error.
 2. **Formatting.** Use the app's existing formatter, else `Intl.NumberFormat`/`Intl.DateTimeFormat` for the app's locale. Fix the decimals per metric. A nonzero change carries its sign. Ranges use an en dash (`1,000–5,000`). Abbreviate large amounts only where the app already does. Do not impose a currency or calendar the app or request does not use.
-3. **Alignment.** Right-align numeric columns and their headers, with tabular numerals, and give every value in a column the same decimals so the points align. In CDS 9.26.1, `TableCell` takes `justifyContent="flex-end"` and `Text` takes `tabularNumbers`; confirm both in the installed types. Whether the loaded font draws tabular figures is a rendered check.
+3. **Alignment.** Right-align numeric columns and their headers, with tabular numerals, and give every value in a column the same decimals so the points align. On the Neon base, give the `TableHead` and `TableCell` `text-right tabular-nums`. In CDS 9.26.1, `TableCell` takes `justifyContent="flex-end"` and `Text` takes `tabularNumbers`; confirm both in the installed types. Whether the loaded font draws tabular figures is a rendered check.
 4. **Zero and missing.** A real zero prints as `0`. A missing value is a muted dash with an accessible name. A zero change is unsigned and neutral.
 5. **Change color.** Each metric declares whether up is good in the data module. Color a change with `fgPositive` or `fgNegative` from that direction, never because it rose, and pair it with a sign or icon. Measure each change color's contrast against its actual surface in each mode; a pair below 4.5:1 (3:1 for large text) is a mapping mismatch to report, not to recolor. When the good direction is unclear (a fee is revenue to Finnomena and cost to a customer), choose one and state it in the Handoff Summary.
 6. **Plausible samples.** Use plausible but fictitious fund, team and requester names in the app's language, not placeholders such as Acme or John Doe, and not a real fund paired with invented figures. The Handoff Summary lists the figures shown as headlines (KPIs, totals) and names the data module that holds every row value.
@@ -46,7 +46,7 @@ In existing UI with `composition: 'preserve'`, report a miss as an observation; 
 When a comparison table's container is narrower than about 640px, show each record as one of a list of two-line rows instead of a table that scrolls sideways:
 
 1. Line 1 holds the record's identity and its key figure, the value the screen's main question asks about, right-aligned.
-2. Line 2 holds every other field, each with its label inline (`Fee 1.25%`) because the column headers are gone, wrapping onto more lines when needed. Fields move to line 2; they are never dropped or truncated. In CDS 9.26.1, `ListCell` takes `title`, `detail` and `description`, and cuts `description` to one line unless `multiline` is set; confirm both in the installed types.
+2. Line 2 holds every other field, each with its label inline (`Fee 1.25%`) because the column headers are gone, wrapping onto more lines when needed. Fields move to line 2; they are never dropped or truncated. On the Neon base, a `ListRow`'s `ListRowContent` holds `ListRowTitle` and `ListRowDescription`, which truncate to one line; give line 2 `whitespace-normal` so it wraps. In CDS 9.26.1, `ListCell` takes `title`, `detail` and `description`, and cuts `description` to one line unless `multiline` is set; confirm both in the installed types.
 3. The row's action and its way into the detail stay on the row. A total row stays as a final row.
 4. Filters fold into one control row or a sheet: a single row of controls above the list, or one button that opens them in a sheet and shows the active filters as text.
 

@@ -5,7 +5,7 @@
 //
 //   node evals/skills/run-claude-case.mjs --fixture <app> --case <name> --prompt <text>
 //     [--ref <commit> | --package <dir>] [--dev-port <n>] [--model <id>]
-//     [--cap <seconds>] [--root .local/evals] [--dry-run]
+//     [--cap <seconds>] [--root .local/evals] [--serve-registry] [--dry-run]
 //
 // <root>/<case>/ holds the app copy (a git repository with the fixture as its
 // first commit), the run inputs, run.jsonl, run.err and summary.json. The plugin
@@ -14,13 +14,19 @@
 // `npm run dev` is started before the run and stopped after it. The run is
 // stopped at --cap seconds. summary.json carries check-run.mjs's result: every
 // denied command, and void when the run then reported the shell as blocked.
+// --serve-registry serves this checkout's Neon registry on localhost and sets
+// NEON_REGISTRY_URL for the run, so `install.mjs --new` and `--add` work
+// before the release is tagged, without the agent passing --registry.
 import { execFileSync, spawn } from 'node:child_process';
 import { existsSync, mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
+import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { createServer } from 'node:http';
 import { tmpdir } from 'node:os';
 import { basename, join, resolve } from 'node:path';
 import { parseArgs } from 'node:util';
 import { pathToFileURL } from 'node:url';
 import { packagePlugin } from '../../scripts/package-plugin.mjs';
+import { buildRegistry } from '../../scripts/lib/registry.mjs';
 import { checkRun } from './check-run.mjs';
 
 const repositoryRoot = resolve(import.meta.dirname, '../..');
@@ -64,6 +70,29 @@ function packageAt(ref, destination) {
   }
 }
 
+/** Serves this checkout's built Neon registry at `url`, as the smoke build does. */
+export async function serveRegistry() {
+  const directory = mkdtempSync(join(tmpdir(), 'neon-eval-registry-'));
+  // Async reads, so the server keeps answering while the run is awaited.
+  const server = createServer(async (request, response) => {
+    try {
+      const body = await readFile(join(directory, decodeURIComponent(new URL(request.url, 'http://x').pathname)));
+      response.writeHead(200, { 'content-type': 'application/json' }).end(body);
+    } catch {
+      response.writeHead(404).end();
+    }
+  });
+  await new Promise(listening => server.listen(0, '127.0.0.1', listening));
+  const url = `http://127.0.0.1:${server.address().port}/r`;
+  await mkdir(join(directory, 'r'));
+  for (const [name, content] of await buildRegistry({ root: repositoryRoot, url })) await writeFile(join(directory, 'r', name), content);
+  const close = async () => {
+    await new Promise(closed => server.close(closed));
+    await rm(directory, { recursive: true, force: true });
+  };
+  return { url, close };
+}
+
 async function waitFor(url, seconds) {
   for (let second = 0; second < seconds; second++) {
     try { if ((await fetch(url)).ok) return true; } catch {}
@@ -89,11 +118,12 @@ async function main() {
       model: { type: 'string' },
       cap: { type: 'string', default: '2700' },
       root: { type: 'string', default: join(repositoryRoot, '.local/evals') },
+      'serve-registry': { type: 'boolean', default: false },
       'dry-run': { type: 'boolean', default: false },
     },
   });
   if (!values.fixture || !values.case || !values.prompt || (values.ref && values.package)) {
-    throw new Error('Usage: run-claude-case.mjs --fixture <app> --case <name> --prompt <text> [--ref <commit> | --package <dir>] [--dev-port <n>] [--model <id>] [--cap <seconds>] [--root <dir>] [--dry-run]');
+    throw new Error('Usage: run-claude-case.mjs --fixture <app> --case <name> --prompt <text> [--ref <commit> | --package <dir>] [--dev-port <n>] [--model <id>] [--cap <seconds>] [--root <dir>] [--serve-registry] [--dry-run]');
   }
   const port = values['dev-port'];
   if (values.prompt.includes('{port}') && !port) throw new Error('The prompt names {port}; pass --dev-port.');
@@ -134,13 +164,19 @@ async function main() {
     summary.command = ['claude', ...args];
   } else {
     let server;
+    let registry;
+    const env = { ...process.env };
     try {
+      if (values['serve-registry']) {
+        registry = await serveRegistry();
+        env.NEON_REGISTRY_URL = summary.registry = registry.url;
+      }
       if (port) {
         server = spawn('npm', ['run', 'dev', '--', '--port', port, '--strictPort'], { cwd: app, detached: true, stdio: 'ignore' });
         if (!await waitFor(`http://localhost:${port}/`, 60)) throw new Error(`The dev server did not answer on port ${port} within 60s.`);
       }
       summary.startedAt = new Date().toISOString();
-      const run = spawn('claude', args, { cwd: app, stdio: ['ignore', 'pipe', 'pipe'] });
+      const run = spawn('claude', args, { cwd: app, env, stdio: ['ignore', 'pipe', 'pipe'] });
       const out = [];
       const err = [];
       run.stdout.on('data', chunk => out.push(chunk));
@@ -159,6 +195,7 @@ async function main() {
       writeFileSync(join(caseDirectory, 'diff.patch'), execFileSync('git', ['-C', app, 'diff', '--cached', 'HEAD'], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }));
     } finally {
       stopGroup(server);
+      await registry?.close();
     }
   }
   writeFileSync(join(caseDirectory, 'summary.json'), `${JSON.stringify(summary, null, 2)}\n`);

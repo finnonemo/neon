@@ -293,6 +293,18 @@ test('new runs the pinned shadcn init from the Neon base in the target\'s parent
   assert.equal(result.dependenciesInstalled, true);
 });
 
+test('new takes NEON_REGISTRY_URL when no registry is passed, and css-only ignores it', async t => {
+  const root = await sandbox(t);
+  const env = { NEON_REGISTRY_URL: registryUrl };
+  const { calls, runCommand } = fakeShadcn();
+  await install({ mode: 'new', target: join(root, 'fresh'), runCommand, fetchJson, env });
+  assert.equal(calls[0].args.at(-1), `${registryUrl}/neon-base.json`);
+  const app = join(root, 'cds-app');
+  await mkdir(app);
+  await writeFile(join(app, 'package.json'), '{"name":"app","dependencies":{}}');
+  await install({ mode: 'css-only', target: app, env });
+});
+
 test('new refuses a non-empty destination before running anything', async t => {
   const root = await sandbox(t);
   const destination = join(root, 'busy');

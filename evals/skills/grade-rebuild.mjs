@@ -1,9 +1,10 @@
 #!/usr/bin/env node
-// Grades the mechanical half of a CDS rebuild case (records/cds-rebuild.md):
-// source untouched, stylesheet selectors, no leftover source UI library,
+// Grades the mechanical half of a rebuild case (records/neon-rebuild.md):
+// source untouched, on the Neon base with Neon registry items only (no stock
+// shadcn item, no CDS), stylesheet selectors, no leftover source UI library,
 // tests, typecheck, build and mock data unchanged. Browser checks stay manual.
 //
-//   node evals/skills/grade-rebuild.mjs --source <app> --rebuild <app>-cds [--shots <name>] [--json]
+//   node evals/skills/grade-rebuild.mjs --source <app> --rebuild <app>-neon [--shots <name>] [--json]
 //
 // `--shots <name>` also builds the rebuild into .local/shots/<name> with a
 // relative base, copies the shipped browser-probe.js beside it and adds an
@@ -17,11 +18,14 @@ import { basename, extname, join, resolve } from 'node:path';
 import { parseArgs } from 'node:util';
 import { pathToFileURL } from 'node:url';
 import { gradeStylesheets } from './stylesheet-scope.mjs';
+import { bareCnImports, buildRegistry, darkClasses, resolveItemFiles, weightOverrides } from '../../scripts/lib/registry.mjs';
 
 const repositoryRoot = resolve(import.meta.dirname, '../..');
 
-// Packages that carry the source app's own UI system rather than CDS.
-const sourceUiLibrary = /^(@carbon\/|tailwindcss$|@tailwindcss\/|sass(-embedded)?$|@mui\/|antd$|bootstrap$|@chakra-ui\/)/;
+// Packages that carry the source app's own UI system. Tailwind is not one: the
+// Neon base is built on it.
+const sourceUiLibrary = /^(@carbon\/|sass(-embedded)?$|@mui\/|antd$|bootstrap$|@chakra-ui\/)/;
+const cdsPackage = /^@coinbase\/cds-/;
 
 export function leftoverUiLibraries(packageJson, sources) {
   const found = new Set();
@@ -34,6 +38,50 @@ export function leftoverUiLibraries(packageJson, sources) {
     }
   }
   return [...found];
+}
+
+// Every file the Neon registry can put in an app, app-relative path → content,
+// built from this checkout's registry source.
+export async function neonRegistryFiles(root = repositoryRoot) {
+  const built = await buildRegistry({ root, url: 'neon:' });
+  const names = JSON.parse(built.get('registry.json')).items.map(item => item.name);
+  return resolveItemFiles({ url: 'neon:', names, fetchJson: async url => JSON.parse(built.get(basename(url))) });
+}
+
+// What keeps a rebuild off the Neon base: no @neon registry in components.json,
+// CDS, or a ui file that is not a Neon item or carries stock shadcn's marks. A
+// Neon item the app tuned passes; its content is the app's.
+export function neonBaseProblems({ componentsJson, packageJson, sources, neonFiles }) {
+  const problems = [];
+  if (!componentsJson) problems.push('no components.json: the rebuild was not started from the Neon base');
+  else if (!componentsJson.registries?.['@neon']) problems.push('components.json has no @neon registry: the rebuild was not started from the Neon base');
+  for (const field of ['dependencies', 'devDependencies']) {
+    for (const name of Object.keys(packageJson[field] ?? {})) if (cdsPackage.test(name)) problems.push(`package.json: ${name} is CDS; a rebuild targets the Neon base`);
+  }
+  for (const { path, source } of sources) {
+    for (const [, specifier] of source.matchAll(/(?:from\s*|import\s*\(?\s*)["']([^"']+)["']/g)) {
+      if (cdsPackage.test(specifier)) problems.push(`${path} imports ${specifier}; a rebuild targets the Neon base`);
+    }
+  }
+  const ui = sources.filter(({ path }) => path.startsWith('src/components/ui/'));
+  for (const { path } of ui) if (!neonFiles.has(path)) problems.push(`${path} is not a Neon registry item; add @neon/<item> items only`);
+  const files = ui.map(({ path, source }) => [path, source]);
+  problems.push(...darkClasses(files), ...bareCnImports(files), ...weightOverrides(files));
+  return problems;
+}
+
+function appSources(app) {
+  return sourceFiles(join(app, 'src'), /\.(m?[jt]sx?|s?css)$/).map(path => ({ path: path.slice(app.length + 1), source: readFileSync(path, 'utf8') }));
+}
+
+export async function neonBaseCheck(app, neonFiles) {
+  const read = name => (existsSync(join(app, name)) ? JSON.parse(readFileSync(join(app, name), 'utf8')) : undefined);
+  return neonBaseProblems({ componentsJson: read('components.json'), packageJson: read('package.json') ?? {}, sources: appSources(app), neonFiles });
+}
+
+// Stylesheet selectors in the app's own stylesheets; the registry's, unchanged, are left out.
+export function appStylesheetProblems(app, neonFiles) {
+  return gradeStylesheets(join(app, 'src'), { skip: (name, css) => neonFiles.get(`src/${name}`) === css });
 }
 
 // Mock-data files paired by name without extension (`mockData.js` ↔ `mockData.ts`).
@@ -97,17 +145,26 @@ async function grade({ source, rebuild }) {
     add('source unchanged', status === '', status);
   } else add('source unchanged', false, 'source is not a git repository, so changes cannot be checked');
 
-  const styles = await gradeStylesheets(join(rebuild, 'src'));
+  const neonFiles = await neonRegistryFiles();
+  const base = await neonBaseCheck(rebuild, neonFiles);
+  add('Neon base and items only', base.length === 0, base.join('\n'));
+
+  const styles = await appStylesheetProblems(rebuild, neonFiles);
   add('stylesheet selectors', styles.length === 0, styles.join('\n'));
 
   const packageJson = JSON.parse(readFileSync(join(rebuild, 'package.json'), 'utf8'));
-  const scripts = sourceFiles(join(rebuild, 'src'), /\.(m?[jt]sx?|s?css)$/).map(path => ({ path: path.slice(rebuild.length + 1), source: readFileSync(path, 'utf8') }));
-  const leftovers = leftoverUiLibraries(packageJson, scripts);
+  const leftovers = leftoverUiLibraries(packageJson, appSources(rebuild));
   add('no source UI library', leftovers.length === 0, leftovers.join('\n'));
 
   if (packageJson.scripts?.test) checks.push({ name: 'tests', ...run('npm', ['test', '--silent'], rebuild) });
   else add('tests', false, 'no test script');
-  if (existsSync(join(rebuild, 'tsconfig.json'))) checks.push({ name: 'typecheck', ...run('npx', ['--no-install', 'tsc', '--noEmit'], rebuild) });
+  // The Neon base's tsconfig.json only references the app and node configs, so
+  // `tsc --noEmit` on it checks nothing; build mode follows the references.
+  const tsconfig = join(rebuild, 'tsconfig.json');
+  if (existsSync(tsconfig)) {
+    const references = /"references"\s*:/.test(readFileSync(tsconfig, 'utf8'));
+    checks.push({ name: 'typecheck', ...run('npx', ['--no-install', 'tsc', ...(references ? ['-b'] : ['--noEmit'])], rebuild) });
+  }
   checks.push({ name: 'build', ...run('npm', ['run', 'build', '--silent'], rebuild) });
 
   // Vite 8 ships no esbuild, so try the source app's copy before Node.
@@ -156,7 +213,7 @@ async function main() {
       json: { type: 'boolean', default: false },
     },
   });
-  if (!values.source || !values.rebuild) throw new Error('Usage: grade-rebuild.mjs --source <app> --rebuild <app>-cds [--shots <name>] [--json]');
+  if (!values.source || !values.rebuild) throw new Error('Usage: grade-rebuild.mjs --source <app> --rebuild <app>-neon [--shots <name>] [--json]');
   const source = resolve(values.source);
   const rebuild = resolve(values.rebuild);
   const checks = await grade({ source, rebuild });

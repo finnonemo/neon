@@ -78,7 +78,8 @@
  *
  * --registry <url>: maintainers only. Serves --new and --add from another
  *                 build of the registry, such as one served locally from
- *                 this checkout, instead of the release.
+ *                 this checkout, instead of the release. Without it, the
+ *                 NEON_REGISTRY_URL environment variable does the same.
  *
  * Exits 1 on any refusal, or with the failing command's own exit status.
  */
