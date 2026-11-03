@@ -115,6 +115,25 @@ export function nextThemes(files, items = []) {
 }
 
 /**
+ * Neon components an item's files import without the item declaring them, so
+ * shadcn add leaves a broken import or installs stock shadcn's. Every item
+ * type counts (the base's AppRoot, the layouts); a dependency is declared as
+ * @neon/<name> or {{registry}}/<name>.json.
+ */
+export function undeclaredSiblings(items, readFile) {
+  const problems = [];
+  for (const item of items) {
+    const declared = new Set((item.registryDependencies ?? []).map((dependency) => dependency.split('/').pop().replace(/\.json$/, '')));
+    for (const file of item.files ?? []) {
+      for (const [, name] of readFile(file.path).matchAll(/from\s+["']@\/components\/ui\/([a-z-]+)["']/g)) {
+        if (!declared.has(name)) problems.push(`${item.name} imports ${name} without declaring it`);
+      }
+    }
+  }
+  return problems;
+}
+
+/**
  * Theme Brief items (`theme-brief-<theme>-<slug>`) against their briefs, by `<theme>-<slug>`: each brief's
  * picks file, theme label and Markdown. An item ships one Markdown file into the app's ./docs/theme-briefs/,
  * titled and described as the brief is, with the meta neon-create lists briefs by.

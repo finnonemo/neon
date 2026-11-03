@@ -6,7 +6,7 @@ import { execFileSync } from 'node:child_process';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadImmersiveThemes, resolveColor } from '../../theme/scripts/generate-immersive-themes.mjs';
-import { BUILD_DIR, bareCnImports, browserSuiteItems, buildRegistry, darkClasses, missingTypeRoles, nextThemes, pinnedRegistryUrl, tabsAsSegmented, themeBriefItemProblems, unpinnedUrls, unreachedItems, weightOverrides } from '../../scripts/lib/registry.mjs';
+import { BUILD_DIR, bareCnImports, browserSuiteItems, buildRegistry, darkClasses, missingTypeRoles, nextThemes, pinnedRegistryUrl, tabsAsSegmented, themeBriefItemProblems, undeclaredSiblings, unpinnedUrls, unreachedItems, weightOverrides } from '../../scripts/lib/registry.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '../..');
 const read = (path) => readFileSync(join(root, path), 'utf8');
@@ -90,17 +90,17 @@ test('a segmented control is never built on Tabs', () => {
 const registryItem = (name) => JSON.parse(read('registry/registry.json')).items.find((item) => item.name === name);
 
 // An item that builds on another Neon item (input-group on button, input and
-// textarea) must pull it in, or shadcn add leaves a broken import or installs stock shadcn's.
-const undeclaredSiblings = (items, readFile) => items.filter((item) => item.type === 'registry:ui').flatMap((item) => item.files.flatMap((file) =>
-  [...readFile(file.path).matchAll(/from "@\/components\/ui\/([a-z-]+)"/g)].map((match) => match[1])
-    .filter((name) => !(item.registryDependencies ?? []).includes(`@neon/${name}`))
-    .map((name) => `${item.name} imports ${name} without @neon/${name}`)));
-
-test('every Neon component that imports another declares it as an @neon registry dependency', () => {
+// textarea; the base's AppRoot on sonner and tooltip) must pull it in, or
+// shadcn add leaves a broken import or installs stock shadcn's.
+test('every registry item that imports a Neon component declares it as a registry dependency', () => {
   const { items } = JSON.parse(read('registry/registry.json'));
   assert.deepEqual(undeclaredSiblings(items, (path) => read(join('registry', path))), []);
-  const item = { name: 'input-group', type: 'registry:ui', registryDependencies: ['@neon/utils', '@neon/button'], files: [{ path: 'ui/input-group.tsx' }] };
-  assert.deepEqual(undeclaredSiblings([item], () => 'import { Button } from "@/components/ui/button"\nimport { Input } from "@/components/ui/input"'), ['input-group imports input without @neon/input']);
+  const item = (type, registryDependencies) => ({ name: 'input-group', type, registryDependencies, files: [{ path: 'ui/input-group.tsx' }] });
+  const source = (quote) => `import { Button } from ${quote}@/components/ui/button${quote}\nimport { Input } from ${quote}@/components/ui/input${quote}`;
+  assert.deepEqual(undeclaredSiblings([item('registry:ui', ['@neon/utils', '@neon/button'])], () => source('"')), ['input-group imports input without declaring it']);
+  assert.deepEqual(undeclaredSiblings([item('registry:ui', ['@neon/utils', '@neon/button'])], () => source("'")), ['input-group imports input without declaring it'], 'single-quoted imports count');
+  assert.deepEqual(undeclaredSiblings([item('registry:item', ['@neon/button'])], () => source("'")), ['input-group imports input without declaring it'], 'every item type is checked, not only components');
+  assert.deepEqual(undeclaredSiblings([item('registry:base', ['{{registry}}/button.json', '{{registry}}/input.json'])], () => source("'")), [], 'a {{registry}} URL dependency declares the item');
 });
 
 test('the Finnomena logo SVGs are tracked once, in theme/logo/', () => {
