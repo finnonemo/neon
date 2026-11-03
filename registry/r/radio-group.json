@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "radio-group",
+  "type": "registry:ui",
+  "title": "Radio group",
+  "dependencies": [
+    "radix-ui@^1.8.1"
+  ],
+  "registryDependencies": [
+    "@neon/utils"
+  ],
+  "files": [
+    {
+      "path": "ui/radio-group.tsx",
+      "content": "import * as React from \"react\"\nimport { RadioGroup as RadioGroupPrimitive } from \"radix-ui\"\n\nimport { cn } from \"@/lib/utils\"\n\n// The CDS RadioGroup: options 16px apart, each a 20px ring on the page's\n// background. The ring is the --input role (bgLineHeavy, PROVISIONAL #134)\n// and turns primary when checked, round a primary dot two thirds its size.\n// Disabled fades to half with its label (peer-disabled), as CDS does. Radix\n// sets data-state, which radix-nova's data-checked: classes never match.\n// PROVISIONAL (#134): keyboard focus shows the Neon controls' 3px ring/50\n// ring, not CDS's 2px bgPrimary outline 2px out; the checkbox, input and\n// button share it, so it changes with them.\nfunction RadioGroup({ className, ...props }: React.ComponentProps<typeof RadioGroupPrimitive.Root>) {\n  return <RadioGroupPrimitive.Root data-slot=\"radio-group\" className={cn(\"grid gap-4\", className)} {...props} />\n}\n\nfunction RadioGroupItem({ className, ...props }: React.ComponentProps<typeof RadioGroupPrimitive.Item>) {\n  return (\n    <RadioGroupPrimitive.Item\n      data-slot=\"radio-group-item\"\n      className={cn(\n        \"peer flex size-5 shrink-0 items-center justify-center rounded-full border border-input bg-background text-primary transition-[border-color,box-shadow] outline-none disabled:cursor-not-allowed disabled:opacity-50\",\n        \"focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive\",\n        \"data-[state=checked]:border-primary\",\n        className\n      )}\n      {...props}\n    >\n      <RadioGroupPrimitive.Indicator data-slot=\"radio-group-indicator\" className=\"size-[13.33px] shrink-0 rounded-full bg-current\" />\n    </RadioGroupPrimitive.Item>\n  )\n}\n\nexport { RadioGroup, RadioGroupItem }\n",
+      "type": "registry:ui",
+      "target": "src/components/ui/radio-group.tsx"
+    }
+  ]
+}

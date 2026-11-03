@@ -1,6 +1,6 @@
 // The approval screen measured for the CDS baseline (evals/templates/cds-match.spec.mjs).
 // `data-measure` hooks use display: contents, so they never change the layout they mark.
-import { useState, type ReactNode } from "react";
+import { useState } from "react";
 import { Box, Divider, HStack, VStack } from "@coinbase/cds-web/layout";
 import { Button } from "@coinbase/cds-web/buttons";
 import { Text } from "@coinbase/cds-web/typography";
@@ -12,6 +12,7 @@ import { Avatar } from "@coinbase/cds-web/media";
 import { AppShell } from "../layout/AppShell";
 import type { NavItem } from "../layout/navItems";
 import type { ActivePane } from "../layout/ResponsivePanes";
+import { Hook } from "./Hook";
 import { requests, statusLabel, type Status } from "./shared/data";
 
 const navigation: NavItem[] = [
@@ -19,9 +20,6 @@ const navigation: NavItem[] = [
   { label: "Profile", icon: "avatar", href: "#profile" },
 ];
 const tagScheme: Record<Status, "yellow" | "green" | "red"> = { pending: "yellow", approved: "green", rejected: "red" };
-
-const Hook = ({ name, children }: { name: string; children: ReactNode }) =>
-  <div data-measure={name} style={{ display: "contents" }}>{children}</div>;
 
 export function Approval() {
   const [tab, setTab] = useState("all");

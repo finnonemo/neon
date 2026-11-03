@@ -223,6 +223,75 @@
       ]
     },
     {
+      "name": "separator",
+      "type": "registry:ui",
+      "title": "Separator",
+      "dependencies": ["radix-ui@^1.8.1"],
+      "registryDependencies": ["@neon/utils"],
+      "files": [
+        { "path": "ui/separator.tsx", "type": "registry:ui", "target": "src/components/ui/separator.tsx" }
+      ]
+    },
+    {
+      "name": "spinner",
+      "type": "registry:ui",
+      "title": "Spinner",
+      "registryDependencies": ["@neon/utils"],
+      "files": [
+        { "path": "ui/spinner.tsx", "type": "registry:ui", "target": "src/components/ui/spinner.tsx" }
+      ]
+    },
+    {
+      "name": "progress",
+      "type": "registry:ui",
+      "title": "Progress",
+      "dependencies": ["radix-ui@^1.8.1"],
+      "registryDependencies": ["@neon/utils"],
+      "files": [
+        { "path": "ui/progress.tsx", "type": "registry:ui", "target": "src/components/ui/progress.tsx" }
+      ]
+    },
+    {
+      "name": "field",
+      "type": "registry:ui",
+      "title": "Field",
+      "dependencies": ["class-variance-authority@^0.7.1", "lucide-react@^1.66.0"],
+      "registryDependencies": ["@neon/utils", "@neon/label", "@neon/separator"],
+      "files": [
+        { "path": "ui/field.tsx", "type": "registry:ui", "target": "src/components/ui/field.tsx" }
+      ]
+    },
+    {
+      "name": "input-group",
+      "type": "registry:ui",
+      "title": "Input group",
+      "dependencies": ["class-variance-authority@^0.7.1"],
+      "registryDependencies": ["@neon/utils", "@neon/button", "@neon/input", "@neon/textarea"],
+      "files": [
+        { "path": "ui/input-group.tsx", "type": "registry:ui", "target": "src/components/ui/input-group.tsx" }
+      ]
+    },
+    {
+      "name": "switch",
+      "type": "registry:ui",
+      "title": "Switch",
+      "dependencies": ["radix-ui@^1.8.1"],
+      "registryDependencies": ["@neon/utils"],
+      "files": [
+        { "path": "ui/switch.tsx", "type": "registry:ui", "target": "src/components/ui/switch.tsx" }
+      ]
+    },
+    {
+      "name": "radio-group",
+      "type": "registry:ui",
+      "title": "Radio group",
+      "dependencies": ["radix-ui@^1.8.1"],
+      "registryDependencies": ["@neon/utils"],
+      "files": [
+        { "path": "ui/radio-group.tsx", "type": "registry:ui", "target": "src/components/ui/radio-group.tsx" }
+      ]
+    },
+    {
       "name": "logo",
       "type": "registry:item",
       "title": "Finnomena logo",

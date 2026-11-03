@@ -20,6 +20,7 @@ import { ImmersiveLayout } from "../layout/ImmersiveLayout";
 import { Logo } from "../layout/Logo";
 import { Approval } from "./Approval";
 import { Extras } from "./Extras";
+import { Expansion } from "./Expansion";
 import type { ActivePane } from "../layout/ResponsivePanes";
 import type { NavItem } from "../layout/navItems";
 
@@ -115,6 +116,7 @@ export function App() {
       {clicked && <Text role="status">Completed</Text>}
     </Box> : layout === "approval" ? <Approval />
       : layout === "extras" ? <Extras />
+      : layout === "expansion" ? <Expansion />
       : layout === "on-color" ? <OnColorSamples />
       : layout === "spectrum" ? <SpectrumSamples />
       : layout === "app" ? <AppShell {...props} />
