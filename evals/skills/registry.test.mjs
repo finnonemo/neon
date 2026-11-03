@@ -7,7 +7,7 @@ import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { expansionItem, expansionItems } from '../templates/expansion.mjs';
 import { loadImmersiveThemes, resolveColor } from '../../theme/scripts/generate-immersive-themes.mjs';
-import { BUILD_DIR, bareCnImports, browserSuiteItems, buildRegistry, darkClasses, missingTypeRoles, nextThemes, pinnedRegistryUrl, tabsAsSegmented, themeBriefItemProblems, undeclaredSiblings, unmeasuredComponents, unpinnedUrls, unreachedItems, weightOverrides } from '../../scripts/lib/registry.mjs';
+import { BUILD_DIR, bareCnImports, browserSuiteItems, buildRegistry, darkClasses, missingTypeRoles, nextThemes, pinnedRegistryUrl, supportingProblems, tabsAsSegmented, themeBriefItemProblems, undeclaredSiblings, unmeasuredComponents, unpinnedUrls, unreachedItems, weightOverrides } from '../../scripts/lib/registry.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '../..');
 const read = (path) => readFileSync(join(root, path), 'utf8');
@@ -30,6 +30,8 @@ test('the browser suite installs every registry item', () => {
   const extra = { name: 'extra', type: 'registry:item', files: [] };
   assert.deepEqual(unreachedItems([...items, extra], browserSuiteItems(items)), ['extra'], 'an item outside init and the additions is reported');
   assert.deepEqual(unreachedItems([...items, extra, { name: 'needs-extra', type: 'registry:ui', registryDependencies: ['@neon/extra'], files: [] }], [...browserSuiteItems(items), 'needs-extra']), [], 'a dependency of an added item is reached');
+  // A Supporting item arrives only through the item that uses it, as `shadcn add` gives it to an app.
+  assert.deepEqual(browserSuiteItems([{ name: 'toggle', type: 'registry:ui', meta: { supporting: true } }, { name: 'toggle-group', type: 'registry:ui' }]), ['toggle-group']);
 });
 
 test('two builds are byte-identical', async () => {
@@ -127,6 +129,43 @@ test('every Neon component is measured against its Counterpart', () => {
   assert.deepEqual(unmeasuredComponents([combobox], ['combobox'], fake({}, [])), [], 'a component the approval or extras screen measures');
   assert.deepEqual(unmeasuredComponents([{ ...combobox, meta: { supporting: true } }], [], fake({}, [])), [], 'a supporting component');
   assert.deepEqual(unmeasuredComponents([{ ...combobox, type: 'registry:item' }], [], fake({}, [])), [], 'not a component');
+});
+
+// Supporting items (ADR 0008) and the items that pull them in. A Supporting
+// item has no Counterpart, so unmeasuredComponents skips it: the marker is
+// allowed only on the items named here, each declared by its users and never
+// measured on a screen of its own.
+const SUPPORTING = { toggle: ['toggle-group'] };
+
+test('every Supporting item is marked, pulled in by the items that use it, and measured only through them', () => {
+  const { items } = JSON.parse(read('registry/registry.json'));
+  const expansion = {
+    screens: (name) => expansionItems.find((item) => item.name === name)?.screens.length ?? 0,
+    fixture: (path) => existsSync(join(root, 'evals/templates/fixtures', path)),
+  };
+  assert.deepEqual(supportingProblems(items, SUPPORTING, expansion), []);
+
+  // The real registry, changed one way at a time.
+  const changed = (name, change) => items.map((item) => (item.name === name ? change(structuredClone(item)) : item));
+  const unmarked = changed('toggle', (item) => { delete item.meta; return item; });
+  assert.deepEqual(supportingProblems(unmarked, SUPPORTING, expansion), ['toggle: not marked meta.supporting']);
+  assert.ok(unmeasuredComponents(unmarked, SCREEN_MEASURED, expansion).length, 'an unmarked toggle is a component with no Counterpart screen');
+  const undeclared = changed('toggle-group', (item) => ({ ...item, registryDependencies: item.registryDependencies.filter((dependency) => dependency !== '@neon/toggle') }));
+  assert.deepEqual(supportingProblems(undeclared, SUPPORTING, expansion), ['toggle-group does not declare @neon/toggle']);
+
+  const fake = (screens, fixtures) => ({ screens: (name) => screens[name] ?? 0, fixture: (path) => fixtures.includes(path) });
+  const skeleton = { name: 'skeleton', type: 'registry:ui', meta: { supporting: true }, files: [] };
+  const sidebar = { name: 'sidebar', type: 'registry:ui', registryDependencies: ['@neon/utils', '@neon/skeleton'], files: [] };
+  assert.deepEqual(supportingProblems([skeleton, sidebar], { skeleton: ['sidebar'] }, fake({}, [])), []);
+  assert.deepEqual(supportingProblems([skeleton, sidebar], {}, fake({}, [])), ['skeleton: marked meta.supporting but no item is named to use it'], 'the marker cannot excuse a component from measurement');
+  assert.deepEqual(supportingProblems([sidebar], { skeleton: ['sidebar'] }, fake({}, [])), ['skeleton: not in registry.json']);
+  assert.deepEqual(supportingProblems([{ ...skeleton, meta: { supporting: 'yes' } }, sidebar], { skeleton: ['sidebar'] }, fake({}, [])), ['skeleton: not marked meta.supporting']);
+  assert.deepEqual(supportingProblems([skeleton, sidebar], { skeleton: ['sidebar', 'carousel'] }, fake({}, [])), ['carousel: not in registry.json']);
+  assert.deepEqual(supportingProblems([skeleton, sidebar], { skeleton: ['sidebar'] }, fake({ skeleton: 1 }, ['expansion/skeleton.tsx', 'neon/expansion/skeleton.tsx'])), [
+    'skeleton: a Supporting item has no screen of its own; remove evals/templates/expansion/skeleton.mjs',
+    'skeleton: a Supporting item has no fixture of its own; remove evals/templates/fixtures/expansion/skeleton.tsx',
+    'skeleton: a Supporting item has no fixture of its own; remove evals/templates/fixtures/neon/expansion/skeleton.tsx',
+  ]);
 });
 
 test('an expansion module without a screen fails loudly, and its screens take the expansion defaults', () => {

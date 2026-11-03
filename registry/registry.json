@@ -292,6 +292,28 @@
       ]
     },
     {
+      "name": "toggle-group",
+      "type": "registry:ui",
+      "title": "Toggle group",
+      "dependencies": ["radix-ui@^1.8.1", "class-variance-authority@^0.7.1"],
+      "registryDependencies": ["@neon/utils", "@neon/toggle"],
+      "files": [
+        { "path": "ui/toggle-group.tsx", "type": "registry:ui", "target": "src/components/ui/toggle-group.tsx" }
+      ]
+    },
+    {
+      "name": "toggle",
+      "type": "registry:ui",
+      "title": "Toggle",
+      "description": "Supporting item for toggle-group; not a component to choose on its own.",
+      "meta": { "supporting": true },
+      "dependencies": ["radix-ui@^1.8.1", "class-variance-authority@^0.7.1"],
+      "registryDependencies": ["@neon/utils"],
+      "files": [
+        { "path": "ui/toggle.tsx", "type": "registry:ui", "target": "src/components/ui/toggle.tsx" }
+      ]
+    },
+    {
       "name": "logo",
       "type": "registry:item",
       "title": "Finnomena logo",

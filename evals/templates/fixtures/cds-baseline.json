@@ -1177,6 +1177,158 @@
       "onTrack→disabledOffTrack": 16
     }
   },
+  "expansion-toggle-group@375-light": {
+    "elements": {
+      "defaultPressed": {
+        "h": 38,
+        "w": 53,
+        "pad": [
+          8,
+          16,
+          8,
+          16
+        ],
+        "radius": 19,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(11, 11, 11)"
+      },
+      "defaultUnpressed": {
+        "h": 38,
+        "w": 83,
+        "pad": [
+          8,
+          16,
+          8,
+          16
+        ],
+        "radius": 19,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "bg": "rgb(242, 242, 242)"
+      },
+      "defaultPressedLast": {
+        "h": 38,
+        "w": 62,
+        "bg": "rgb(11, 11, 11)"
+      },
+      "smPressed": {
+        "h": 32,
+        "w": 108,
+        "pad": [
+          6,
+          16,
+          6,
+          16
+        ],
+        "radius": 16,
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 600
+        },
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(11, 11, 11)"
+      },
+      "smUnpressed": {
+        "h": 32,
+        "w": 79,
+        "pad": [
+          6,
+          16,
+          6,
+          16
+        ],
+        "radius": 16,
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 600
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "bg": "rgb(242, 242, 242)"
+      },
+      "smUnpressedLast": {
+        "h": 32,
+        "w": 95
+      },
+      "lgPressed": {
+        "h": 46,
+        "w": 147,
+        "pad": [
+          12,
+          24,
+          12,
+          24
+        ],
+        "radius": 23,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(11, 11, 11)"
+      },
+      "lgUnpressed": {
+        "h": 46,
+        "w": 143,
+        "pad": [
+          12,
+          24,
+          12,
+          24
+        ],
+        "radius": 23,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "bg": "rgb(242, 242, 242)"
+      },
+      "disabledPressed": {
+        "h": 38,
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(16, 16, 16)",
+        "opacity": 0.5
+      },
+      "disabledUnpressed": {
+        "h": 38,
+        "color": "rgba(0, 0, 0, 0.85)",
+        "bg": "rgb(245, 245, 245)",
+        "opacity": 0.5
+      },
+      "verticalPressed": {
+        "h": 38,
+        "w": 320,
+        "bg": "rgb(11, 11, 11)"
+      },
+      "verticalUnpressed": {
+        "h": 38,
+        "w": 320,
+        "bg": "rgb(242, 242, 242)"
+      }
+    },
+    "gaps": {
+      "defaultPressed→defaultUnpressed": 8,
+      "defaultUnpressed→defaultPressedLast": 8,
+      "smUnpressed→smPressed": 8,
+      "lgPressed→lgUnpressed": 8,
+      "disabledPressed→disabledUnpressed": 8,
+      "verticalPressed→verticalUnpressed": 8,
+      "defaultPressed→smUnpressed": 24
+    }
+  },
   "approval@375-dark": {
     "elements": {
       "title": {
@@ -2353,6 +2505,158 @@
       "disabledOnTrack→disabledOnThumb": -31,
       "offTrack→onTrack": 16,
       "onTrack→disabledOffTrack": 16
+    }
+  },
+  "expansion-toggle-group@375-dark": {
+    "elements": {
+      "defaultPressed": {
+        "h": 38,
+        "w": 53,
+        "pad": [
+          8,
+          16,
+          8,
+          16
+        ],
+        "radius": 19,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "bg": "rgb(244, 244, 244)"
+      },
+      "defaultUnpressed": {
+        "h": 38,
+        "w": 83,
+        "pad": [
+          8,
+          16,
+          8,
+          16
+        ],
+        "radius": 19,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(26, 26, 26)"
+      },
+      "defaultPressedLast": {
+        "h": 38,
+        "w": 62,
+        "bg": "rgb(244, 244, 244)"
+      },
+      "smPressed": {
+        "h": 32,
+        "w": 108,
+        "pad": [
+          6,
+          16,
+          6,
+          16
+        ],
+        "radius": 16,
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 600
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "bg": "rgb(244, 244, 244)"
+      },
+      "smUnpressed": {
+        "h": 32,
+        "w": 79,
+        "pad": [
+          6,
+          16,
+          6,
+          16
+        ],
+        "radius": 16,
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 600
+        },
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(26, 26, 26)"
+      },
+      "smUnpressedLast": {
+        "h": 32,
+        "w": 95
+      },
+      "lgPressed": {
+        "h": 46,
+        "w": 147,
+        "pad": [
+          12,
+          24,
+          12,
+          24
+        ],
+        "radius": 23,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "bg": "rgb(244, 244, 244)"
+      },
+      "lgUnpressed": {
+        "h": 46,
+        "w": 143,
+        "pad": [
+          12,
+          24,
+          12,
+          24
+        ],
+        "radius": 23,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(26, 26, 26)"
+      },
+      "disabledPressed": {
+        "h": 38,
+        "color": "rgba(0, 0, 0, 0.85)",
+        "bg": "rgb(239, 239, 239)",
+        "opacity": 0.5
+      },
+      "disabledUnpressed": {
+        "h": 38,
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(20, 20, 20)",
+        "opacity": 0.5
+      },
+      "verticalPressed": {
+        "h": 38,
+        "w": 320,
+        "bg": "rgb(244, 244, 244)"
+      },
+      "verticalUnpressed": {
+        "h": 38,
+        "w": 320,
+        "bg": "rgb(26, 26, 26)"
+      }
+    },
+    "gaps": {
+      "defaultPressed→defaultUnpressed": 8,
+      "defaultUnpressed→defaultPressedLast": 8,
+      "smUnpressed→smPressed": 8,
+      "lgPressed→lgUnpressed": 8,
+      "disabledPressed→disabledUnpressed": 8,
+      "verticalPressed→verticalUnpressed": 8,
+      "defaultPressed→smUnpressed": 24
     }
   },
   "approval@1440-light": {
@@ -3533,6 +3837,158 @@
       "onTrack→disabledOffTrack": 16
     }
   },
+  "expansion-toggle-group@1440-light": {
+    "elements": {
+      "defaultPressed": {
+        "h": 38,
+        "w": 53,
+        "pad": [
+          8,
+          16,
+          8,
+          16
+        ],
+        "radius": 19,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(11, 11, 11)"
+      },
+      "defaultUnpressed": {
+        "h": 38,
+        "w": 83,
+        "pad": [
+          8,
+          16,
+          8,
+          16
+        ],
+        "radius": 19,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "bg": "rgb(242, 242, 242)"
+      },
+      "defaultPressedLast": {
+        "h": 38,
+        "w": 62,
+        "bg": "rgb(11, 11, 11)"
+      },
+      "smPressed": {
+        "h": 32,
+        "w": 108,
+        "pad": [
+          6,
+          16,
+          6,
+          16
+        ],
+        "radius": 16,
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 600
+        },
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(11, 11, 11)"
+      },
+      "smUnpressed": {
+        "h": 32,
+        "w": 79,
+        "pad": [
+          6,
+          16,
+          6,
+          16
+        ],
+        "radius": 16,
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 600
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "bg": "rgb(242, 242, 242)"
+      },
+      "smUnpressedLast": {
+        "h": 32,
+        "w": 95
+      },
+      "lgPressed": {
+        "h": 46,
+        "w": 147,
+        "pad": [
+          12,
+          24,
+          12,
+          24
+        ],
+        "radius": 23,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(11, 11, 11)"
+      },
+      "lgUnpressed": {
+        "h": 46,
+        "w": 143,
+        "pad": [
+          12,
+          24,
+          12,
+          24
+        ],
+        "radius": 23,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "bg": "rgb(242, 242, 242)"
+      },
+      "disabledPressed": {
+        "h": 38,
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(16, 16, 16)",
+        "opacity": 0.5
+      },
+      "disabledUnpressed": {
+        "h": 38,
+        "color": "rgba(0, 0, 0, 0.85)",
+        "bg": "rgb(245, 245, 245)",
+        "opacity": 0.5
+      },
+      "verticalPressed": {
+        "h": 38,
+        "w": 320,
+        "bg": "rgb(11, 11, 11)"
+      },
+      "verticalUnpressed": {
+        "h": 38,
+        "w": 320,
+        "bg": "rgb(242, 242, 242)"
+      }
+    },
+    "gaps": {
+      "defaultPressed→defaultUnpressed": 8,
+      "defaultUnpressed→defaultPressedLast": 8,
+      "smUnpressed→smPressed": 8,
+      "lgPressed→lgUnpressed": 8,
+      "disabledPressed→disabledUnpressed": 8,
+      "verticalPressed→verticalUnpressed": 8,
+      "defaultPressed→smUnpressed": 24
+    }
+  },
   "approval@1440-dark": {
     "elements": {
       "title": {
@@ -4709,6 +5165,158 @@
       "disabledOnTrack→disabledOnThumb": -31,
       "offTrack→onTrack": 16,
       "onTrack→disabledOffTrack": 16
+    }
+  },
+  "expansion-toggle-group@1440-dark": {
+    "elements": {
+      "defaultPressed": {
+        "h": 38,
+        "w": 53,
+        "pad": [
+          8,
+          16,
+          8,
+          16
+        ],
+        "radius": 19,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "bg": "rgb(244, 244, 244)"
+      },
+      "defaultUnpressed": {
+        "h": 38,
+        "w": 83,
+        "pad": [
+          8,
+          16,
+          8,
+          16
+        ],
+        "radius": 19,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(26, 26, 26)"
+      },
+      "defaultPressedLast": {
+        "h": 38,
+        "w": 62,
+        "bg": "rgb(244, 244, 244)"
+      },
+      "smPressed": {
+        "h": 32,
+        "w": 108,
+        "pad": [
+          6,
+          16,
+          6,
+          16
+        ],
+        "radius": 16,
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 600
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "bg": "rgb(244, 244, 244)"
+      },
+      "smUnpressed": {
+        "h": 32,
+        "w": 79,
+        "pad": [
+          6,
+          16,
+          6,
+          16
+        ],
+        "radius": 16,
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 600
+        },
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(26, 26, 26)"
+      },
+      "smUnpressedLast": {
+        "h": 32,
+        "w": 95
+      },
+      "lgPressed": {
+        "h": 46,
+        "w": 147,
+        "pad": [
+          12,
+          24,
+          12,
+          24
+        ],
+        "radius": 23,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "bg": "rgb(244, 244, 244)"
+      },
+      "lgUnpressed": {
+        "h": 46,
+        "w": 143,
+        "pad": [
+          12,
+          24,
+          12,
+          24
+        ],
+        "radius": 23,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(26, 26, 26)"
+      },
+      "disabledPressed": {
+        "h": 38,
+        "color": "rgba(0, 0, 0, 0.85)",
+        "bg": "rgb(239, 239, 239)",
+        "opacity": 0.5
+      },
+      "disabledUnpressed": {
+        "h": 38,
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(20, 20, 20)",
+        "opacity": 0.5
+      },
+      "verticalPressed": {
+        "h": 38,
+        "w": 320,
+        "bg": "rgb(244, 244, 244)"
+      },
+      "verticalUnpressed": {
+        "h": 38,
+        "w": 320,
+        "bg": "rgb(26, 26, 26)"
+      }
+    },
+    "gaps": {
+      "defaultPressed→defaultUnpressed": 8,
+      "defaultUnpressed→defaultPressedLast": 8,
+      "smUnpressed→smPressed": 8,
+      "lgPressed→lgUnpressed": 8,
+      "disabledPressed→disabledUnpressed": 8,
+      "verticalPressed→verticalUnpressed": 8,
+      "defaultPressed→smUnpressed": 24
     }
   }
 }
