@@ -3,7 +3,7 @@
 // and the DatePicker's format. Runs on the neon target only.
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-import { expansionItems, gotoExpansion } from './expansion.mjs';
+import { expansionItems, gotoExpansion, keyboardFocus } from './expansion.mjs';
 
 test.skip(process.env.NEON_TARGET !== 'neon', 'The Neon base only');
 
@@ -106,4 +106,4 @@ test.describe('in a Thai browser', () => {
 });
 
 // Each registry expansion item's behavior checks, from expansion/<item>.mjs.
-for (const item of expansionItems) if (item.a11y) test.describe(item.name, () => item.a11y({ test, expect, gotoExpansion }));
+for (const item of expansionItems) if (item.a11y) test.describe(item.name, () => item.a11y({ test, expect, gotoExpansion, keyboardFocus }));

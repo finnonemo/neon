@@ -15,8 +15,20 @@ export const screens = [{
   gaps: [...states.flatMap(([state]) => partGaps(state)), ['offTrack', 'onTrack', 'y'], ['onTrack', 'disabledOffTrack', 'y']],
 }];
 
-// Radix's keyboard model: Space flips a focused switch; a disabled one stays put.
-export function a11y({ test, expect, gotoExpansion }) {
+// Radix's keyboard model: Space flips a focused switch; a disabled one stays
+// put. PROVISIONAL (#134): the focus ring is Neon's, not CDS's 2px bgPrimary
+// outline, so it is checked for being shown rather than measured.
+export function a11y({ test, expect, gotoExpansion, keyboardFocus }) {
+  test('a switch reached from the keyboard shows a focus indicator', async ({ page }) => {
+    await gotoExpansion(page);
+    const alerts = page.locator(at('switch-off')).getByRole('switch', { name: 'แจ้งเตือน / Alerts' });
+    const focus = await keyboardFocus(page, alerts);
+    await expect(alerts).toBeFocused();
+    expect(focus.focusVisible).toBe(true);
+    expect(focus.after, 'the focused switch draws an indicator').not.toBe('');
+    expect(focus.after, 'the focused switch looks different').not.toBe(focus.before);
+  });
+
   test('a switch is named by its label and flips with Space', async ({ page }) => {
     await gotoExpansion(page);
     const alerts = page.locator(at('switch-off')).getByRole('switch', { name: 'แจ้งเตือน / Alerts' });

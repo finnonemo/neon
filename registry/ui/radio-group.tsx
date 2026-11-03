@@ -8,6 +8,9 @@ import { cn } from "@/lib/utils"
 // and turns primary when checked, round a primary dot two thirds its size.
 // Disabled fades to half with its label (peer-disabled), as CDS does. Radix
 // sets data-state, which radix-nova's data-checked: classes never match.
+// PROVISIONAL (#134): keyboard focus shows the Neon controls' 3px ring/50
+// ring, not CDS's 2px bgPrimary outline 2px out; the checkbox, input and
+// button share it, so it changes with them.
 function RadioGroup({ className, ...props }: React.ComponentProps<typeof RadioGroupPrimitive.Root>) {
   return <RadioGroupPrimitive.Root data-slot="radio-group" className={cn("grid gap-4", className)} {...props} />
 }

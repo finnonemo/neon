@@ -46,8 +46,20 @@ export const screens = [
 ];
 
 // Radix's keyboard model: the arrow keys move focus and the choice together,
-// and a disabled group takes neither.
-export function a11y({ test, expect, gotoExpansion }) {
+// and a disabled group takes neither. PROVISIONAL (#134): the focus ring is
+// Neon's, not CDS's bgPrimary outline, so it is checked for being shown
+// rather than measured.
+export function a11y({ test, expect, gotoExpansion, keyboardFocus }) {
+  test('a radio reached from the keyboard shows a focus indicator', async ({ page }) => {
+    await gotoExpansion(page);
+    const bank = page.getByRole('radiogroup', { name: 'บัญชีรับเงิน / Payout' }).getByRole('radio', { name: 'ธนาคาร / Bank' });
+    const focus = await keyboardFocus(page, bank);
+    await expect(bank).toBeFocused();
+    expect(focus.focusVisible).toBe(true);
+    expect(focus.after, 'the focused radio draws an indicator').not.toBe('');
+    expect(focus.after, 'the focused radio looks different').not.toBe(focus.before);
+  });
+
   test('a radio group is named by its label and the arrow keys move its choice', async ({ page }) => {
     await gotoExpansion(page);
     const group = page.getByRole('radiogroup', { name: 'บัญชีรับเงิน / Payout' });

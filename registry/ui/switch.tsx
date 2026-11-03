@@ -10,6 +10,9 @@ import { cn } from "@/lib/utils"
 // The thumb is the onColor role (--primary-foreground) with a bgLine hairline.
 // Disabled fades to half with its label (peer-disabled), as CDS does. Radix
 // sets data-state, which radix-nova's data-checked: classes never match.
+// PROVISIONAL (#134): keyboard focus shows the Neon controls' 3px ring/50
+// ring, not CDS's 2px bgPrimary outline 1px out; the checkbox, input and
+// button share it, so it changes with them.
 function Switch({ className, ...props }: React.ComponentProps<typeof SwitchPrimitive.Root>) {
   return (
     <SwitchPrimitive.Root
