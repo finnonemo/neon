@@ -167,6 +167,35 @@ export function unmeasuredComponents(items, screenMeasured, expansion) {
 }
 
 /**
+ * Supporting items (ADR 0008) against `expected`, name → the items that use
+ * it. Each is marked meta.supporting, which also keeps it off the component
+ * lists; each user declares it as @neon/<name>, so shadcn add pulls it in; and
+ * it is measured only through its users, with no screen or fixture of its own.
+ * The marker on any other item is a problem, since unmeasuredComponents skips it.
+ */
+export function supportingProblems(items, expected, expansion) {
+  const byName = new Map(items.map((item) => [item.name, item]));
+  const problems = [];
+  for (const [name, users] of Object.entries(expected)) {
+    const item = byName.get(name);
+    if (!item) problems.push(`${name}: not in registry.json`);
+    else if (item.meta?.supporting !== true) problems.push(`${name}: not marked meta.supporting`);
+    for (const user of users) {
+      if (!byName.has(user)) problems.push(`${user}: not in registry.json`);
+      else if (!(byName.get(user).registryDependencies ?? []).includes(`@neon/${name}`)) problems.push(`${user} does not declare @neon/${name}`);
+    }
+    if (expansion.screens(name)) problems.push(`${name}: a Supporting item has no screen of its own; remove evals/templates/expansion/${name}.mjs`);
+    for (const path of [`expansion/${name}.tsx`, `neon/expansion/${name}.tsx`]) {
+      if (expansion.fixture(path)) problems.push(`${name}: a Supporting item has no fixture of its own; remove evals/templates/fixtures/${path}`);
+    }
+  }
+  for (const item of items) {
+    if (item.meta?.supporting && !(item.name in expected)) problems.push(`${item.name}: marked meta.supporting but no item is named to use it`);
+  }
+  return problems;
+}
+
+/**
  * Theme Brief items (`theme-brief-<theme>-<slug>`) against their briefs, by `<theme>-<slug>`: each brief's
  * picks file, theme label and Markdown. An item ships one Markdown file into the app's ./docs/theme-briefs/,
  * titled and described as the brief is, with the meta neon-create lists briefs by.
@@ -209,9 +238,10 @@ export function themeBriefItemProblems(items, briefs) {
 export const SHADCN = 'shadcn@4.23.0';
 
 // The browser suite runs shadcn init from neon-base, then adds these: every
-// component, and the Theme Briefs, which no other item depends on.
+// component, and the Theme Briefs, which no other item depends on. Supporting
+// items come in through the components that use them, as in an app.
 export function browserSuiteItems(items) {
-  return items.filter((item) => item.type === 'registry:ui' || item.name.startsWith('theme-brief-')).map((item) => item.name);
+  return items.filter((item) => (item.type === 'registry:ui' && !item.meta?.supporting) || item.name.startsWith('theme-brief-')).map((item) => item.name);
 }
 
 // Items that neither neon-base nor the added items reach through
