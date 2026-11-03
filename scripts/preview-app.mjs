@@ -61,7 +61,10 @@ const previewArgs = ["--strictPort", ...(values.port ? ["--host", "127.0.0.1", "
 // Its own process group, so stopping it also stops the server npm started.
 const preview = spawn("npm", ["run", "preview", "--", ...previewArgs], { cwd: app, shell: windows, stdio: ["ignore", "pipe", "pipe"], detached: !windows });
 const stop = () => {
-  try { windows ? preview.kill() : process.kill(-preview.pid, "SIGTERM"); } catch {}
+  try {
+    if (windows) spawn("taskkill", ["/pid", String(preview.pid), "/T", "/F"], { stdio: "ignore" });
+    else process.kill(-preview.pid, "SIGTERM");
+  } catch {}
 };
 process.on("SIGINT", () => { stop(); process.exit(130); });
 process.on("SIGTERM", () => { stop(); process.exit(143); });
