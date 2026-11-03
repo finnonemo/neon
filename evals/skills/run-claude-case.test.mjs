@@ -4,7 +4,7 @@ import { spawnSync } from 'node:child_process';
 import { mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { ALLOWED_TOOLS, BROWSER_TOOLS, PERMISSION_NOTE, claudeArgs, pointAtRegistry, runFacts, serveRegistry } from './run-claude-case.mjs';
+import { ALLOWED_TOOLS, BROWSER_TOOLS, PERMISSION_NOTE, claudeArgs, pointAtRegistry, registryPreflight, resultWatcher, runFacts, serveRegistry } from './run-claude-case.mjs';
 
 const runner = join(import.meta.dirname, 'run-claude-case.mjs');
 
@@ -87,6 +87,30 @@ test('serveRegistry serves this checkout\'s registry built for its own URL', asy
   }
 });
 
+test('resultWatcher fires once on a result event, even split across chunks', () => {
+  const seen = [];
+  const feed = resultWatcher(event => seen.push(event.total_cost_usd));
+  feed(Buffer.from('{"type":"assistant"}\n{"type":"res'));
+  feed(Buffer.from('ult","total_cost_usd":1.5}\nnot json\n{"type":"result","total_cost_usd":2}\n'));
+  assert.deepEqual(seen, [1.5]);
+});
+
+test('registryPreflight warns when the pinned registry does not answer', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'neon-preflight-'));
+  try {
+    await mkdir(join(root, '.claude-plugin'));
+    await writeFile(join(root, '.claude-plugin/plugin.json'), '{"version":"9.9.9"}');
+    const asked = [];
+    const missing = await registryPreflight(root, async url => { asked.push(url); return { ok: false, status: 404 }; });
+    assert.match(asked[0], /neon--v9\.9\.9\/registry\/r\/neon-base\.json$/);
+    assert.match(missing, /404.*--serve-registry/);
+    assert.equal(await registryPreflight(root, async () => ({ ok: true })), null);
+    assert.match(await registryPreflight(root, async () => { throw new Error('offline'); }), /offline.*--serve-registry/);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
 test('pointAtRegistry points an existing app\'s @neon entry at the served registry and leaves other apps alone', async (t) => {
   const app = await mkdtemp(join(tmpdir(), 'neon-point-'));
   t.after(() => rm(app, { recursive: true, force: true }));
@@ -105,8 +129,14 @@ test('runFacts reads the model, cost and final report from a stream-json log', (
     { type: 'assistant', message: { content: [{ type: 'text', text: 'Working' }] } },
     { type: 'result', subtype: 'success', total_cost_usd: 0.4617, result: 'The header is navy.' },
   ].map(event => JSON.stringify(event)).join('\n');
-  assert.deepEqual(runFacts(`${jsonl}\nnot json\n`), { model: 'claude-opus-5-5', costUsd: 0.4617, report: 'The header is navy.' });
-  assert.deepEqual(runFacts(''), { model: null, costUsd: null, report: null });
+  assert.deepEqual(runFacts(`${jsonl}\nnot json\n`), { model: 'claude-opus-5-5', costUsd: 0.4617, report: 'The header is navy.', turns: 0, durationMs: 0 });
+  assert.deepEqual(runFacts(''), { model: null, costUsd: null, report: null, turns: null, durationMs: null });
+});
+
+test('runFacts takes cost from the last result, since total_cost_usd is cumulative, and adds up turns and duration', () => {
+  const jsonl = ['{"type":"result","total_cost_usd":2.73,"num_turns":74,"duration_ms":549648}', '{"type":"assistant"}', '{"type":"result","total_cost_usd":2.84,"num_turns":3,"duration_ms":8405}'].join('\n');
+  const { costUsd, turns, durationMs } = runFacts(jsonl);
+  assert.deepEqual({ costUsd, turns, durationMs }, { costUsd: 2.84, turns: 77, durationMs: 558053 });
 });
 
 // 3 November 2026: a TSV through `xargs -I` hit macOS's 255-byte limit, and
