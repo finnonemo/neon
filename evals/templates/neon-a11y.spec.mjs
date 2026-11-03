@@ -1,8 +1,9 @@
-// The Neon base's own accessibility: axe on both screens in both modes, tag
+// The Neon base's own accessibility: axe on every screen in both modes, tag
 // contrast, the segmented control's keyboard, focus return from the overlays
 // and the DatePicker's format. Runs on the neon target only.
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { expansionItems } from './expansion.mjs';
 
 test.skip(process.env.NEON_TARGET !== 'neon', 'The Neon base only');
 
@@ -11,7 +12,7 @@ const knownDark = (violation, mode) => mode === 'dark' && violation.id === 'colo
   ? violation.nodes.every((node) => node.target.join(' ').includes('[data-variant="destructive"]') || /data-variant="destructive"/.test(node.html))
   : false;
 
-for (const [layout, mode] of ['approval', 'extras'].flatMap((layout) => ['light', 'dark'].map((mode) => [layout, mode]))) {
+for (const [layout, mode] of ['approval', 'extras', 'expansion'].flatMap((layout) => ['light', 'dark'].map((mode) => [layout, mode]))) {
   test(`${layout} passes axe in ${mode}`, async ({ page }) => {
     await page.goto(`/?layout=${layout}${mode === 'dark' ? '&mode=dark' : ''}`);
     await page.evaluate(() => document.fonts.ready);
@@ -103,3 +104,6 @@ test.describe('in a Thai browser', () => {
     await expect(field).toBeFocused();
   });
 });
+
+// Each registry expansion item's behavior checks, from expansion/<item>.mjs.
+for (const item of expansionItems) if (item.a11y) test.describe(item.name, () => item.a11y({ test, expect }));

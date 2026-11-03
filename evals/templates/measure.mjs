@@ -12,6 +12,8 @@
 //   border top border width and color
 //   opacity the element's opacity times its ancestors', which disabled controls set
 // both: the Neon fixture mirrors the CDS markup, so one selector reads either.
+import { expansionItems } from './expansion.mjs';
+
 const both = (selector, check) => ({ cds: selector, neon: selector, check });
 const button = (n, check = ['font', 'color', 'bg', 'h', 'pad', 'radius']) => both(`[data-measure=actions] button:nth-of-type(${n})`, check);
 
@@ -165,6 +167,8 @@ export const screens = [
     },
     gaps: [],
   },
+  // The expansion screen: each registry expansion item's entries, from expansion/<item>.mjs.
+  ...expansionItems.flatMap((item) => item.screens ?? []),
 ];
 
 export const viewports = [{ width: 375, height: 812 }, { width: 1440, height: 900 }];
