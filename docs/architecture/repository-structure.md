@@ -11,7 +11,7 @@
 | `theme/` | maintainer | Canonical theme assets — the raw Figma token export (`theme/tokens/`), generated/resolved token files, CDS-tier adapters (`theme/cds/`), the CSS-variable tier (`theme/css/theme.css`), and the generator scripts (`theme/scripts/`) that produce the generated files from the raw tokens. One source of truth; `skills/INSTRUCTION.md` and the starter both trace back to it. |
 | `registry/` | maintainer | The Neon registry: shadcn/ui items for the Neon base (`registry.json` and its sources), built by `scripts/build-registry.mjs` into the tracked `registry/r/`, which pins every item URL to the release tag. `theme.css` is read from `theme/css/`, not copied. |
 | `templates/vitejs-cds/` | maintainer | Starter source — application wiring and layout patterns only, no tracked theme files of its own (assembled from `theme/cds/` at build time). |
-| `scripts/` | maintainer | Stable, public commands: the installer (`install.mjs`), the maintainer assembly CLI (`assemble-starter.mjs` + `scripts/lib/`), the browser probe runner skills use without a browser tool (`probe-page.mjs`), the warn-only source lint the shared verification checklist runs (`source-lint.mjs`, rules in `scripts/lib/source-rules.mjs` that the eval graders also import), the plugin packager (`package-plugin.mjs`), and the registry builder (`build-registry.mjs`, guards in `scripts/lib/registry.mjs`). |
+| `scripts/` | maintainer | Stable, public commands: the installer (`install.mjs`), the maintainer assembly CLI (`assemble-starter.mjs` + `scripts/lib/`), the browser probe runner skills use without a browser tool (`probe-page.mjs`), the warn-only source lint the shared verification checklist runs (`source-lint.mjs`, rules in `scripts/lib/source-rules.mjs` that the eval graders also import), the build-then-serve preview that waits for HTTP 200 (`preview-app.mjs`), the plugin packager (`package-plugin.mjs`), and the registry builder (`build-registry.mjs`, guards in `scripts/lib/registry.mjs`). |
 | `docs/` | maintainer | This directory — curated, tracked documentation about the repository itself (architecture). Not shipped in the distributed plugin. |
 | `evals/skills/` | maintainer | Skill scenarios and packaging regression checks, run with `node --test evals/skills/*.test.mjs`. |
 | `evals/templates/` | maintainer | Browser suite for the starter and the Neon base: assembles a disposable app (`--target neon` creates one with `shadcn init` from the local registry), builds it and runs Playwright layout, integration and CDS-match checks. Reports go to `.local/evals/templates/<target>/`. |
@@ -48,6 +48,12 @@ Preview the starter after editing canonical theme assets (pure filesystem assemb
 
 ```sh
 node scripts/assemble-starter.mjs /tmp/neon-preview && cd /tmp/neon-preview && npm install && npm run dev
+```
+
+Serve any app's production build and wait until it answers (it builds, starts `npm run preview`, and prints `Ready: <url>` after HTTP 200; run it in the background and wait for that line):
+
+```sh
+node scripts/preview-app.mjs <app-dir> [--port <n>]
 ```
 
 Start an app from the Neon base, or add Neon registry items to an app, from the registry pinned to this release (`shadcn init` / `shadcn add`):
