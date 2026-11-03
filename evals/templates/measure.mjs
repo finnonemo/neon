@@ -9,6 +9,8 @@
 //   h, w   rounded box size    pad     the four paddings
 //   radius rendered top-left radius, capped at half the box, so a 56px pill
 //          and a 9999px pill of the same height agree
+//   radii  all four corners the same way (top-left, top-right, bottom-right,
+//          bottom-left), for a box rounded on some sides only
 //   border top border width and color
 //   opacity the element's opacity times its ancestors', which disabled controls set
 // both: the Neon fixture mirrors the CDS markup, so one selector reads either.
@@ -231,6 +233,7 @@ export function measureInPage(targets) {
       color: rgb(text.color), bg: rgb(style.backgroundColor),
       pad: [style.paddingTop, style.paddingRight, style.paddingBottom, style.paddingLeft].map(px),
       radius: px(Math.min(parseFloat(style.borderTopLeftRadius), box.width / 2, box.height / 2)),
+      radii: ['TopLeft', 'TopRight', 'BottomRight', 'BottomLeft'].map((corner) => px(Math.min(parseFloat(style[`border${corner}Radius`]), box.width / 2, box.height / 2))),
       border: { width: px(style.borderTopWidth), color: rgb(style.borderTopColor) },
       opacity: Math.round(opacity(el) * 100) / 100,
     };
@@ -270,7 +273,7 @@ export function compare(actual, expected, tolerance = 1) {
         if (!ok) problems.push(`font.${part} ${got[part]} ≠ ${want[part]}`);
       }
     } else if (key === 'opacity') { if (Math.abs(got - want) > 0.02) problems.push(`opacity ${got} ≠ ${want}`); }
-    else if (key === 'pad') { if (!want.every((v, i) => near(got[i], v))) problems.push(`pad ${got} ≠ ${want}`); }
+    else if (key === 'pad' || key === 'radii') { if (!want.every((v, i) => near(got[i], v))) problems.push(`${key} ${got} ≠ ${want}`); }
     else if (key === 'border') {
       if (!near(got.width, want.width)) problems.push(`border.width ${got.width} ≠ ${want.width}`);
       else if (want.width > 0 && !sameColor(got.color, want.color)) problems.push(`border.color ${got.color} ≠ ${want.color}`);
