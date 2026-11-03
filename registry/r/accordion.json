@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "accordion",
+  "type": "registry:ui",
+  "title": "Accordion",
+  "dependencies": [
+    "radix-ui@^1.8.1",
+    "lucide-react@^1.66.0"
+  ],
+  "registryDependencies": [
+    "@neon/utils"
+  ],
+  "files": [
+    {
+      "path": "ui/accordion.tsx",
+      "content": "import * as React from \"react\"\nimport { Accordion as AccordionPrimitive } from \"radix-ui\"\nimport { ChevronDownIcon } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\n\n// The CDS Accordion: each header at least 82px, a headline title with 8px\n// above and below and 24px either side, and a 16px muted caret 16px after it\n// that points down when closed and up when open. The panel sits 16px under\n// its header with 24px at the sides and below. Items are split by a 1px\n// bgLine border, none after the last. Radix sets data-state, which\n// radix-nova's data-open: classes never match.\n// PROVISIONAL (#134): keyboard focus shows the Neon controls' 3px ring/50\n// ring, not CDS's 2px bgPrimary outline inset.\nfunction Accordion({ className, ...props }: React.ComponentProps<typeof AccordionPrimitive.Root>) {\n  return <AccordionPrimitive.Root data-slot=\"accordion\" className={cn(\"flex w-full flex-col\", className)} {...props} />\n}\n\nfunction AccordionItem({ className, ...props }: React.ComponentProps<typeof AccordionPrimitive.Item>) {\n  return <AccordionPrimitive.Item data-slot=\"accordion-item\" className={cn(\"border-border not-last:border-b\", className)} {...props} />\n}\n\nfunction AccordionTrigger({ className, children, ...props }: React.ComponentProps<typeof AccordionPrimitive.Trigger>) {\n  return (\n    <AccordionPrimitive.Header className=\"flex\">\n      <AccordionPrimitive.Trigger\n        data-slot=\"accordion-trigger\"\n        className={cn(\n          \"group/accordion-trigger flex min-h-[82px] flex-1 items-center gap-4 border border-transparent px-6 py-2 text-start text-headline text-foreground transition-colors outline-none disabled:pointer-events-none disabled:opacity-50\",\n          \"focus-visible:ring-[3px] focus-visible:ring-ring/50\",\n          className\n        )}\n        {...props}\n      >\n        <span data-slot=\"accordion-trigger-title\" className=\"flex-1\">\n          {children}\n        </span>\n        <ChevronDownIcon\n          aria-hidden\n          data-slot=\"accordion-trigger-icon\"\n          className=\"pointer-events-none size-4 shrink-0 text-muted-foreground transition-transform group-data-[state=open]/accordion-trigger:rotate-180\"\n        />\n      </AccordionPrimitive.Trigger>\n    </AccordionPrimitive.Header>\n  )\n}\n\nfunction AccordionContent({ className, children, ...props }: React.ComponentProps<typeof AccordionPrimitive.Content>) {\n  return (\n    <AccordionPrimitive.Content\n      data-slot=\"accordion-content\"\n      className=\"overflow-hidden data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down\"\n      {...props}\n    >\n      <div className={cn(\"px-6 pt-4 pb-6 [&_a]:underline [&_a]:underline-offset-3\", className)}>{children}</div>\n    </AccordionPrimitive.Content>\n  )\n}\n\nexport { Accordion, AccordionItem, AccordionTrigger, AccordionContent }\n",
+      "type": "registry:ui",
+      "target": "src/components/ui/accordion.tsx"
+    }
+  ]
+}
