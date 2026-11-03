@@ -13,6 +13,14 @@ Select checks for the employee's request; this is not a requirement to review ev
 
 Describe evidence as supplied versus independently observed. If only source is available, identify conditional risks as such instead of claiming a visible failure. Separate hypotheses needing reproduction from confirmed findings.
 
+## Checks by base
+
+Apply the checks of the app's [base](../../neon-audit/references/project-inspection.md#base), from source only, with no installer and no `shadcn add`.
+
+- **Neon base:** every file in `src/components/ui/` is a Neon item, not a stock shadcn one, and no source imports CDS. Text uses Neon type roles (`text-body`, `text-label1`), with no stock size such as `text-sm` and no weight utility beside a role. Colors use Neon role utilities, with no `dark:` class or stock palette utility. `cn` comes from `@/lib/utils`, not the bare `cn` package. Suggest fixes with Neon items and their props, per [Neon base](../../neon-create/references/neon-base.md). ADR 0006 keeps three Radix behaviors, and none is a finding: Select closes on a pick, the toast is announced politely, and an open Dialog hides its siblings with `aria-hidden` instead of setting `aria-modal`. Focus still returns to the trigger when an overlay closes.
+- **CDS:** check against [CDS integration](../../neon-create/references/cds-integration.md) and suggest CDS components, props or configuration, never a Neon item.
+- **Neither:** check brand roles through the app's CSS variables and the design contract, and suggest CSS fixes. Being off the Neon base is not a finding.
+
 ## Brand consistency
 
 Use the current design reference, not remembered values. Inspect the semantic role, not just a matching hex string: error/positive states and chart categories are not interchangeable decorative colors. Respect explicit colors-only scope and existing intentional structural dimensions. When a campaign page declares a reference design and Brand Intensity, judge it against that level and the Brand Floor in the design contract; reference colors at Reference-led are intended, not off-brand. On an immersive page, a white or other non-navy action with passing contrast, or a palette without navy or yellow, is not a finding. A CDS dependency or raw pixel value is not itself a review finding.
@@ -23,7 +31,7 @@ For color mapping disagreements, identify the documented rule and actual mapping
 
 ## Functional screen habits
 
-Generated Back Office and Product Feature screens repeat a few habits. On such a screen, name the habit in the finding, cite the visible evidence and give its Neon alternative as the fix. Names are CDS 9.26.1; confirm them in the installed types.
+Generated Back Office and Product Feature screens repeat a few habits. On such a screen, name the habit in the finding, cite the visible evidence and give its Neon alternative as the fix. Names are CDS 9.26.1; confirm them in the installed types. On the Neon base the same fixes use Neon items: `tag` for `Tag`, `list-row` for list rows, `table` for `Table` and `segmented-control` for a filter; read the installed file for their props.
 
 | Habit | Neon alternative |
 | --- | --- |
@@ -46,7 +54,7 @@ Single-width screenshots cannot establish responsive behavior. Inspect existing/
 
 ## Accessibility and interactions
 
-Where runtime evidence permits, check visible keyboard focus, logical order, accessible names for icon-only controls, label/error association, dialog focus/escape/return behavior, and access to the main task without a pointer. Measure foreground/background contrast with a suitable tool and actual colors before quoting a ratio. These checks do not constitute a comprehensive accessibility certification.
+Where runtime evidence permits, check visible keyboard focus, logical order, accessible names for icon-only controls, label/error association, dialog focus/escape/return behavior (on the Neon base, with the Radix behaviors in [checks by base](#checks-by-base)), and access to the main task without a pointer. Measure foreground/background contrast with a suitable tool and actual colors before quoting a ratio. These checks do not constitute a comprehensive accessibility certification.
 
 On a functional screen, check that the first screen answers the employee's main question. At 1440×900, or the viewport the employee names, the list or table answering it should be the most prominent and show its heading and at least three complete rows without scrolling, summaries above it should not repeat totals the list already carries or push its rows below the fold (a summary the employee asked for is not a finding, unless it pushes those rows below the fold), and the most frequent action should be visible in the title row or on its row, not only inside a menu. Report a miss as a usability finding: Medium by default, High only when the main action cannot be found. Its evidence names the viewport and what sits above the fold. Source alone, or a screenshot of unknown size, cannot show fold position; record it as a hypothesis instead. Under `composition: 'preserve'` the suggested fix is an observation for the owner, and the review still edits nothing.
 
