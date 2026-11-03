@@ -31,6 +31,8 @@ test('rejects a record with malformed frontmatter or no title', () => {
   assert.throws(() => parseRecord('---\nscenarios:\n  - request: x\n---\n\n# Case\n', 'records/case.md'), /records\/case.md:3/);
   assert.throws(() => parseRecord('---\nscenarios:\n  - request: x\n    observe: "unclosed\n---\n\n# Case\n', 'records/case.md'), /not a JSON string/);
   assert.throws(() => parseRecord('No title\n', 'records/case.md'), /no "# " title/);
+  // The README copies values verbatim, so a relative link would resolve from evals/skills/.
+  assert.throws(() => parseRecord('---\nscenarios:\n  - request: x\n    observe: See [other](other.md)\n---\n\n# Case\n', 'records/case.md'), /records\/case.md:4: .*Markdown link/);
 });
 
 test('rows follow record file names, so parallel additions land apart', () => {

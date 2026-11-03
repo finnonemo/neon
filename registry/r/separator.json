@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "separator",
+  "type": "registry:ui",
+  "title": "Separator",
+  "dependencies": [
+    "radix-ui@^1.8.1"
+  ],
+  "registryDependencies": [
+    "@neon/utils"
+  ],
+  "files": [
+    {
+      "path": "ui/separator.tsx",
+      "content": "import * as React from \"react\"\nimport { Separator as SeparatorPrimitive } from \"radix-ui\"\n\nimport { cn } from \"@/lib/utils\"\n\n// The CDS Divider: a 1px line in the bgLine role (--border), with no margin of\n// its own. Horizontal fills its container's width; vertical stretches to its\n// row's height. Decorative by default, so screen readers skip it; pass\n// decorative={false} for a semantic role=separator. Radix sets\n// data-orientation, which radix-nova's data-horizontal: classes never match.\nfunction Separator({\n  className,\n  orientation = \"horizontal\",\n  decorative = true,\n  ...props\n}: React.ComponentProps<typeof SeparatorPrimitive.Root>) {\n  return (\n    <SeparatorPrimitive.Root\n      data-slot=\"separator\"\n      decorative={decorative}\n      orientation={orientation}\n      className={cn(\n        \"shrink-0 bg-border data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:w-px data-[orientation=vertical]:self-stretch\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport { Separator }\n",
+      "type": "registry:ui",
+      "target": "src/components/ui/separator.tsx"
+    }
+  ]
+}

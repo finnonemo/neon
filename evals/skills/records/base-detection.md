@@ -62,13 +62,12 @@ Each prompt asked for no dev server; the review and audit prompts also said to e
 | `/neon:neon-redesign` header navy, colors only, on `order-desk` | Not run | Only `orders.css` changed, to CDS theme variables; the CDS `Button` that blends into the navy header goes to neon-create rather than being recolored; all five checks pass |
 | `/neon:neon-review` of `fund-watch-review` | Finds `text-sm`, the `dark:` class and the card's weights, but treats the card as a layout pattern and never as off-base; no Radix behavior flagged | Names the Neon base from `components.json`; finds the stock card as "not a Neon item", plus `text-sm` and `dark:bg-slate-800`; lists the Select, toast and `aria-hidden` behaviors as not findings; no file edited |
 | `/neon:neon-review` of `order-desk` and `shadcn-v4-app` | Not run | Names CDS and neither; CDS fixes use `Text`, `Box`, `Table` and `Tag`, and the shadcn fixes use CSS variables with "no Neon installation needed"; neither base is a finding; no file edited |
-| `/neon:neon-audit` of `three-apps` | Neon base and CDS right; sends plain shadcn to neon-create to install the Neon theme and change type and sizes | Names each base from its manifests; Neon base and CDS to neon-create, each on its own base; plain shadcn to neon-redesign through its CSS variables, with `@neon/` items only on request; edits nothing |
+| `/neon:neon-audit` of `three-apps` | Neon base and CDS right; sends plain shadcn to neon-create to install the Neon theme and change type and sizes | Read `project-inspection.md`; names each base from its manifests; Neon base and CDS to neon-create, each on its own base; plain shadcn to neon-redesign through its CSS variables, with `@neon/` items only on request; edits nothing |
 
 The revision changed the plain-shadcn audit path and the off-base review finding; the baseline already handled the Neon-base restyle. Gaps outside base detection, all unreported by the runs:
 
 - The CDS restyle scopes dark text to `.dark`, a class the CDS starter does not set.
 - The CDS restyle hard-codes one meta color as `rgb(...)`.
-- The revised audit read no reference file. Its SKILL.md alone carried the base rule.
 
 Limits:
 

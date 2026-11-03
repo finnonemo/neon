@@ -5,7 +5,7 @@ import { existsSync } from 'node:fs';
 import { mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { ALLOWED_TOOLS, BROWSER_TOOLS, PERMISSION_NOTE, assertBrowserTool, claudeArgs, serveRegistry } from './run-claude-case.mjs';
+import { ALLOWED_TOOLS, BROWSER_TOOLS, PERMISSION_NOTE, assertBrowserTool, claudeArgs, pointAtRegistry, registryPreflight, resultWatcher, runFacts, serveRegistry } from './run-claude-case.mjs';
 
 const runner = join(import.meta.dirname, 'run-claude-case.mjs');
 
@@ -111,5 +111,106 @@ test('serveRegistry serves this checkout\'s registry built for its own URL', asy
     assert.equal((await fetch(`${url}/missing.json`)).status, 404);
   } finally {
     await close();
+  }
+});
+
+test('resultWatcher fires once on a result event, even split across chunks', () => {
+  const seen = [];
+  const feed = resultWatcher(event => seen.push(event.total_cost_usd));
+  feed(Buffer.from('{"type":"assistant"}\n{"type":"res'));
+  feed(Buffer.from('ult","total_cost_usd":1.5}\nnot json\n{"type":"result","total_cost_usd":2}\n'));
+  assert.deepEqual(seen, [1.5]);
+});
+
+test('registryPreflight warns when the pinned registry does not answer', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'neon-preflight-'));
+  try {
+    await mkdir(join(root, '.claude-plugin'));
+    await writeFile(join(root, '.claude-plugin/plugin.json'), '{"version":"9.9.9"}');
+    const asked = [];
+    const missing = await registryPreflight(root, async url => { asked.push(url); return { ok: false, status: 404 }; });
+    assert.match(asked[0], /neon--v9\.9\.9\/registry\/r\/neon-base\.json$/);
+    assert.match(missing, /404.*--serve-registry/);
+    assert.equal(await registryPreflight(root, async () => ({ ok: true })), null);
+    assert.match(await registryPreflight(root, async () => { throw new Error('offline'); }), /offline.*--serve-registry/);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test('pointAtRegistry points an existing app\'s @neon entry at the served registry and leaves other apps alone', async (t) => {
+  const app = await mkdtemp(join(tmpdir(), 'neon-point-'));
+  t.after(() => rm(app, { recursive: true, force: true }));
+  assert.equal(pointAtRegistry(app, 'http://127.0.0.1:1/r'), false);
+  await writeFile(join(app, 'components.json'), `${JSON.stringify({ style: 'x', registries: { '@neon': 'https://old/r/{name}.json', '@other': 'o' } })}\n`);
+  assert.equal(pointAtRegistry(app, 'http://127.0.0.1:1/r'), true);
+  assert.deepEqual(JSON.parse(await readFile(join(app, 'components.json'), 'utf8')).registries, { '@neon': 'http://127.0.0.1:1/r/{name}.json', '@other': 'o' });
+  assert.equal(pointAtRegistry(app, 'http://127.0.0.1:1/r'), false);
+  await writeFile(join(app, 'components.json'), '{"style":"x"}\n');
+  assert.equal(pointAtRegistry(app, 'http://127.0.0.1:1/r'), false);
+});
+
+test('runFacts reads the model, cost and final report from a stream-json log', () => {
+  const jsonl = [
+    { type: 'system', subtype: 'init', model: 'claude-opus-5-5' },
+    { type: 'assistant', message: { content: [{ type: 'text', text: 'Working' }] } },
+    { type: 'result', subtype: 'success', total_cost_usd: 0.4617, result: 'The header is navy.' },
+  ].map(event => JSON.stringify(event)).join('\n');
+  assert.deepEqual(runFacts(`${jsonl}\nnot json\n`), { model: 'claude-opus-5-5', costUsd: 0.4617, report: 'The header is navy.', turns: 0, durationMs: 0 });
+  assert.deepEqual(runFacts(''), { model: null, costUsd: null, report: null, turns: null, durationMs: null });
+});
+
+test('runFacts takes cost from the last result, since total_cost_usd is cumulative, and adds up turns and duration', () => {
+  const jsonl = ['{"type":"result","total_cost_usd":2.73,"num_turns":74,"duration_ms":549648}', '{"type":"assistant"}', '{"type":"result","total_cost_usd":2.84,"num_turns":3,"duration_ms":8405}'].join('\n');
+  const { costUsd, turns, durationMs } = runFacts(jsonl);
+  assert.deepEqual({ costUsd, turns, durationMs }, { costUsd: 2.84, turns: 77, durationMs: 558053 });
+});
+
+// 3 November 2026: a TSV through `xargs -I` hit macOS's 255-byte limit, and
+// bash `read` collapsed an empty ref column, so five of eight runs never started.
+test('--cases runs each listed case with the shared options', async t => {
+  const root = await mkdtemp(join(tmpdir(), 'neon-claude-batch-'));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const fixture = join(root, 'app');
+  await mkdir(fixture);
+  await writeFile(join(fixture, 'index.html'), '<h1>Before</h1>\n');
+  await writeFile(join(fixture, 'package.json'), '{"name":"app","private":true}\n');
+  const plugin = join(root, 'pkg');
+  await mkdir(plugin);
+  const long = 'Make the header navy. '.repeat(20);
+  const cases = join(root, 'cases.json');
+  await writeFile(cases, JSON.stringify([
+    { case: 'a', fixture, prompt: long },
+    { case: 'b', fixture, prompt: 'Use port {port}', devPort: 5998, model: 'claude-opus-5-5' },
+  ]));
+  const run = spawnSync(process.execPath, [runner, '--cases', cases, '--parallel', '2', '--package', plugin, '--root', join(root, 'evals'), '--dry-run'], { encoding: 'utf8' });
+  assert.equal(run.status, 0, run.stderr);
+  assert.match(run.stdout, /^a: done$/m);
+  assert.match(run.stdout, /^b: done$/m);
+  assert.equal(await readFile(join(root, 'evals/a/prompt.txt'), 'utf8'), `${long}\n`);
+  assert.equal(await readFile(join(root, 'evals/b/prompt.txt'), 'utf8'), 'Use port 5998\n');
+  const summary = JSON.parse(await readFile(join(root, 'evals/b/summary.json'), 'utf8'));
+  assert.equal(summary.command[summary.command.indexOf('--model') + 1], 'claude-opus-5-5');
+});
+
+test('--cases checks every case before starting any', async t => {
+  const root = await mkdtemp(join(tmpdir(), 'neon-claude-batch-'));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const cases = join(root, 'cases.json');
+  await writeFile(join(root, 'package.json'), '{"name":"app","private":true}\n');
+  const empty = join(root, 'empty');
+  await mkdir(empty);
+  for (const [list, message] of [
+    [[{ case: 'a', fixture: root, prompt: 'p' }, { case: 'a', fixture: root, prompt: 'q' }], /Duplicate case: a/],
+    [[{ case: 'a', fixture: root, prompt: 'p' }, { case: 'b', fixture: root }], /Case b needs case, fixture and prompt/],
+    [[{ case: 'a', fixture: root, prompt: 'port {port}' }], /Case a names \{port\}; give it devPort/],
+    [[{ case: 'a', fixture: root, prompt: 'p', devPort: 5998 }, { case: 'b', fixture: root, prompt: 'q', devPort: 5998 }], /Duplicate dev port: 5998/],
+    [[{ case: 'a', fixture: root, prompt: 'p' }, { case: 'b', fixture: empty, prompt: 'q', devPort: 5998 }], /Case b: --dev-port needs a fixture with a package\.json/],
+  ]) {
+    await writeFile(cases, JSON.stringify(list));
+    const run = spawnSync(process.execPath, [runner, '--cases', cases, '--root', join(root, 'evals'), '--dry-run'], { encoding: 'utf8' });
+    assert.notEqual(run.status, 0);
+    assert.match(run.stderr, message);
+    assert.equal(spawnSync('ls', [join(root, 'evals')]).status === 0, false, 'no case directory was created');
   }
 });
