@@ -16,9 +16,10 @@
 //       observe: At 1440×900 the list and the add-request action are visible on load
 //   ---
 //
-// Values run to the end of the line. Quote one as a JSON string when it would
-// not be a plain YAML scalar (it contains ": " or " #", or starts with a quote,
-// backtick or other indicator). Rows are ordered by record file name, then by
+// Values run to the end of the line and hold no Markdown link: the README
+// copies them verbatim, where a link would resolve from evals/skills/. Quote
+// one as a JSON string when it would not be a plain YAML scalar (it contains
+// ": " or " #", or starts with a quote, backtick or other indicator). Rows are ordered by record file name, then by
 // their order in the file, so records added in parallel land apart.
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -42,6 +43,7 @@ export function formatValue(value) {
 function parseValue(raw, where) {
   const value = raw.trim();
   if (!value) throw new Error(`${where}: empty value`);
+  if (/\]\([^)]*\)/.test(value)) throw new Error(`${where}: a Markdown link would resolve from the README, not the record; name the target in words`);
   if (!value.startsWith('"')) return value;
   try {
     return JSON.parse(value);
