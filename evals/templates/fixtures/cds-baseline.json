@@ -586,6 +586,24 @@
     },
     "gaps": {}
   },
+  "expansion-progress@375-light": {
+    "elements": {
+      "progressTrack": {
+        "h": 4,
+        "w": 256,
+        "radius": 2,
+        "bg": "rgba(0, 0, 0, 0.05)"
+      },
+      "progressFill": {
+        "h": 4,
+        "radius": 2,
+        "bg": "rgb(1, 23, 43)"
+      }
+    },
+    "gaps": {
+      "progressFill→progressTrack": -154
+    }
+  },
   "expansion-separator@375-light": {
     "elements": {
       "separatorHorizontal": {
@@ -613,6 +631,31 @@
       "before→separatorVertical": 8,
       "separatorVertical→after": 8
     }
+  },
+  "expansion-spinner@375-light": {
+    "elements": {
+      "spinnerDefault": {
+        "h": 16,
+        "w": 16,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgb(242, 242, 242)"
+        },
+        "color": "rgba(0, 0, 0, 0.65)"
+      },
+      "spinnerLarge": {
+        "h": 40,
+        "w": 40,
+        "radius": 20,
+        "border": {
+          "width": 4,
+          "color": "rgb(242, 242, 242)"
+        },
+        "color": "rgba(0, 0, 0, 0.65)"
+      }
+    },
+    "gaps": {}
   },
   "approval@375-dark": {
     "elements": {
@@ -1201,6 +1244,24 @@
     },
     "gaps": {}
   },
+  "expansion-progress@375-dark": {
+    "elements": {
+      "progressTrack": {
+        "h": 4,
+        "w": 256,
+        "radius": 2,
+        "bg": "rgba(255, 255, 255, 0.15)"
+      },
+      "progressFill": {
+        "h": 4,
+        "radius": 2,
+        "bg": "rgb(65, 81, 96)"
+      }
+    },
+    "gaps": {
+      "progressFill→progressTrack": -154
+    }
+  },
   "expansion-separator@375-dark": {
     "elements": {
       "separatorHorizontal": {
@@ -1228,6 +1289,31 @@
       "before→separatorVertical": 8,
       "separatorVertical→after": 8
     }
+  },
+  "expansion-spinner@375-dark": {
+    "elements": {
+      "spinnerDefault": {
+        "h": 16,
+        "w": 16,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgb(26, 26, 26)"
+        },
+        "color": "rgba(255, 255, 255, 0.65)"
+      },
+      "spinnerLarge": {
+        "h": 40,
+        "w": 40,
+        "radius": 20,
+        "border": {
+          "width": 4,
+          "color": "rgb(26, 26, 26)"
+        },
+        "color": "rgba(255, 255, 255, 0.65)"
+      }
+    },
+    "gaps": {}
   },
   "approval@1440-light": {
     "elements": {
@@ -1816,6 +1902,24 @@
     },
     "gaps": {}
   },
+  "expansion-progress@1440-light": {
+    "elements": {
+      "progressTrack": {
+        "h": 4,
+        "w": 256,
+        "radius": 2,
+        "bg": "rgba(0, 0, 0, 0.05)"
+      },
+      "progressFill": {
+        "h": 4,
+        "radius": 2,
+        "bg": "rgb(1, 23, 43)"
+      }
+    },
+    "gaps": {
+      "progressFill→progressTrack": -154
+    }
+  },
   "expansion-separator@1440-light": {
     "elements": {
       "separatorHorizontal": {
@@ -1843,6 +1947,31 @@
       "before→separatorVertical": 8,
       "separatorVertical→after": 8
     }
+  },
+  "expansion-spinner@1440-light": {
+    "elements": {
+      "spinnerDefault": {
+        "h": 16,
+        "w": 16,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgb(242, 242, 242)"
+        },
+        "color": "rgba(0, 0, 0, 0.65)"
+      },
+      "spinnerLarge": {
+        "h": 40,
+        "w": 40,
+        "radius": 20,
+        "border": {
+          "width": 4,
+          "color": "rgb(242, 242, 242)"
+        },
+        "color": "rgba(0, 0, 0, 0.65)"
+      }
+    },
+    "gaps": {}
   },
   "approval@1440-dark": {
     "elements": {
@@ -2431,6 +2560,24 @@
     },
     "gaps": {}
   },
+  "expansion-progress@1440-dark": {
+    "elements": {
+      "progressTrack": {
+        "h": 4,
+        "w": 256,
+        "radius": 2,
+        "bg": "rgba(255, 255, 255, 0.15)"
+      },
+      "progressFill": {
+        "h": 4,
+        "radius": 2,
+        "bg": "rgb(65, 81, 96)"
+      }
+    },
+    "gaps": {
+      "progressFill→progressTrack": -154
+    }
+  },
   "expansion-separator@1440-dark": {
     "elements": {
       "separatorHorizontal": {
@@ -2458,5 +2605,30 @@
       "before→separatorVertical": 8,
       "separatorVertical→after": 8
     }
+  },
+  "expansion-spinner@1440-dark": {
+    "elements": {
+      "spinnerDefault": {
+        "h": 16,
+        "w": 16,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgb(26, 26, 26)"
+        },
+        "color": "rgba(255, 255, 255, 0.65)"
+      },
+      "spinnerLarge": {
+        "h": 40,
+        "w": 40,
+        "radius": 20,
+        "border": {
+          "width": 4,
+          "color": "rgb(26, 26, 26)"
+        },
+        "color": "rgba(255, 255, 255, 0.65)"
+      }
+    },
+    "gaps": {}
   }
 }
