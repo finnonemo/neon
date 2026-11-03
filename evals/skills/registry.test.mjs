@@ -101,11 +101,11 @@ test('the logo item ships the canonical SVGs with the Logo the layouts use, and 
   for (const name of ['logo', 'layouts']) assert.ok(base.registryDependencies.includes(`{{registry}}/${name}.json`), `the base pulls in ${name}`);
 });
 
-// Only the files that touch CDS components or providers are rewritten; the
-// layout logic is the starter's, byte for byte (#95).
-test('the layouts item carries the starter layout logic unchanged', () => {
+// Framework-free layout geometry stays shared. Pane views render each base's
+// own borders and are checked by the browser geometry baseline.
+test('the layouts item shares framework-free starter geometry and includes every layout', () => {
   const layouts = registryItem('layouts');
-  const unchanged = ['ContentView.tsx', 'InspectorView.tsx', 'layout.css', 'layoutPanes.ts', 'useBreakpointTier.ts'];
+  const unchanged = ['layout.css', 'layoutPanes.ts', 'useBreakpointTier.ts'];
   for (const name of unchanged) {
     assert.ok(layouts.files.some((file) => file.path === `layout/${name}` && file.target === `src/layout/${name}`), `layouts ships ${name}`);
     assert.equal(read(`registry/layout/${name}`), read(`templates/vitejs-cds/src/layout/${name}`), `registry/layout/${name} differs from the starter's`);

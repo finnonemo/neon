@@ -64,6 +64,6 @@ export function App() {
     : layout === "app" ? <AppShell {...props} />
     : layout === "content" ? <ContentLayout {...props} />
     : layout === "simple" ? <SimpleLayout {...props} />
-    : layout === "board" ? <MultiColumnLayout {...props} columns={[content]} />
+    : layout === "board" ? <MultiColumnLayout {...props} columns={[content, <div key="next">Next column</div>, <div key="done">Completed column</div>]} />
     : <ImmersiveLayout {...props} immersiveTheme={(params.get("theme") ?? undefined) as ImmersiveTheme | undefined} />
 }
