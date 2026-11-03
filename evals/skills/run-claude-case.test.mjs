@@ -131,6 +131,7 @@ test('--cases checks every case before starting any', async t => {
     [[{ case: 'a', fixture: root, prompt: 'p' }, { case: 'a', fixture: root, prompt: 'q' }], /Duplicate case: a/],
     [[{ case: 'a', fixture: root, prompt: 'p' }, { case: 'b', fixture: root }], /Case b needs case, fixture and prompt/],
     [[{ case: 'a', fixture: root, prompt: 'port {port}' }], /Case a names \{port\}; give it devPort/],
+    [[{ case: 'a', fixture: root, prompt: 'p', devPort: 5998 }, { case: 'b', fixture: root, prompt: 'q', devPort: 5998 }], /Duplicate dev port: 5998/],
   ]) {
     await writeFile(cases, JSON.stringify(list));
     const run = spawnSync(process.execPath, [runner, '--cases', cases, '--root', join(root, 'evals'), '--dry-run'], { encoding: 'utf8' });

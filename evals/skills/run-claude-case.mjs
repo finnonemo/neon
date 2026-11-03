@@ -246,9 +246,13 @@ async function main() {
     ...(cap === undefined ? {} : { cap: String(cap) }),
   }));
   const names = new Set();
+  const ports = new Set();
   for (const item of list) {
     if (names.has(item.case)) throw new Error(`Duplicate case: ${item.case}`);
     names.add(item.case);
+    // Parallel runs on one dev server would read each other's app.
+    if (ports.has(item['dev-port'])) throw new Error(`Duplicate dev port: ${item['dev-port']}`);
+    if (item['dev-port'] !== undefined) ports.add(item['dev-port']);
     checkCase(item);
   }
   // Each case runs in its own process: setup blocks on npm and git, which would
