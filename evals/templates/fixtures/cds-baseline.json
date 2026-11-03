@@ -873,6 +873,106 @@
       "errorBox→promotionalBox": 16
     }
   },
+  "expansion-button-group@375-light": {
+    "elements": {
+      "group": {
+        "h": 54,
+        "w": 320
+      },
+      "first": {
+        "h": 54,
+        "w": 129,
+        "radius": 27,
+        "border": {
+          "width": 0,
+          "color": "rgb(1, 23, 43)"
+        },
+        "bg": "rgb(1, 23, 43)",
+        "color": "rgb(255, 255, 255)",
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ]
+      },
+      "second": {
+        "h": 54,
+        "w": 137,
+        "radius": 27,
+        "border": {
+          "width": 0,
+          "color": "rgb(242, 242, 242)"
+        },
+        "bg": "rgb(242, 242, 242)",
+        "color": "rgba(0, 0, 0, 0.85)",
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ]
+      },
+      "stackedFirst": {
+        "h": 54,
+        "w": 256,
+        "radius": 27,
+        "border": {
+          "width": 0,
+          "color": "rgb(242, 242, 242)"
+        },
+        "bg": "rgb(242, 242, 242)",
+        "color": "rgba(0, 0, 0, 0.85)",
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ]
+      },
+      "stackedSecond": {
+        "h": 54,
+        "w": 256,
+        "radius": 27,
+        "border": {
+          "width": 0,
+          "color": "rgb(242, 242, 242)"
+        },
+        "bg": "rgb(242, 242, 242)",
+        "color": "rgba(0, 0, 0, 0.85)",
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ]
+      }
+    },
+    "gaps": {
+      "first→second": 8,
+      "stackedFirst→stackedSecond": 8
+    }
+  },
   "expansion-card@375-light": {
     "elements": {
       "card": {
@@ -1145,6 +1245,125 @@
       "startSlot→startInput": 0,
       "suffixInput→suffixText": 0,
       "buttonInput→buttonSlot": 0
+    }
+  },
+  "expansion-pagination@375-light": {
+    "elements": {
+      "bar": {
+        "h": 40,
+        "w": 320
+      },
+      "previous": {
+        "h": 40,
+        "w": 40,
+        "radius": 20,
+        "bg": "rgba(255, 255, 255, 0)",
+        "opacity": 0.5
+      },
+      "previousIcon": {
+        "h": 16,
+        "w": 16,
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "current": {
+        "h": 40,
+        "w": 40,
+        "radius": 20,
+        "border": {
+          "width": 0,
+          "color": "rgb(1, 23, 43)"
+        },
+        "bg": "rgb(1, 23, 43)",
+        "color": "rgb(255, 255, 255)",
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "pad": [
+          8,
+          16,
+          8,
+          16
+        ]
+      },
+      "page": {
+        "h": 40,
+        "w": 40,
+        "radius": 20,
+        "border": {
+          "width": 0,
+          "color": "rgba(255, 255, 255, 0)"
+        },
+        "bg": "rgba(255, 255, 255, 0)",
+        "color": "rgba(0, 0, 0, 0.85)",
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "pad": [
+          8,
+          16,
+          8,
+          16
+        ]
+      },
+      "third": {
+        "h": 40,
+        "w": 40
+      },
+      "ellipsis": {
+        "h": 22,
+        "w": 15,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(0, 0, 0, 0.65)"
+      },
+      "last": {
+        "h": 38,
+        "w": 52,
+        "radius": 19,
+        "border": {
+          "width": 0,
+          "color": "rgba(255, 255, 255, 0)"
+        },
+        "bg": "rgba(255, 255, 255, 0)",
+        "color": "rgba(0, 0, 0, 0.85)",
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "pad": [
+          8,
+          16,
+          8,
+          16
+        ]
+      },
+      "next": {
+        "h": 40,
+        "w": 40,
+        "radius": 20,
+        "bg": "rgba(255, 255, 255, 0)",
+        "opacity": 1
+      },
+      "nextIcon": {
+        "h": 16,
+        "w": 16,
+        "color": "rgba(0, 0, 0, 0.85)"
+      }
+    },
+    "gaps": {
+      "previous→current": 4,
+      "current→page": 4,
+      "third→ellipsis": 4,
+      "ellipsis→last": 4,
+      "last→next": 4
     }
   },
   "expansion-progress@375-light": {
@@ -2758,6 +2977,106 @@
       "errorBox→promotionalBox": 16
     }
   },
+  "expansion-button-group@375-dark": {
+    "elements": {
+      "group": {
+        "h": 54,
+        "w": 320
+      },
+      "first": {
+        "h": 54,
+        "w": 129,
+        "radius": 27,
+        "border": {
+          "width": 0,
+          "color": "rgb(65, 81, 96)"
+        },
+        "bg": "rgb(65, 81, 96)",
+        "color": "rgb(255, 255, 255)",
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ]
+      },
+      "second": {
+        "h": 54,
+        "w": 137,
+        "radius": 27,
+        "border": {
+          "width": 0,
+          "color": "rgb(26, 26, 26)"
+        },
+        "bg": "rgb(26, 26, 26)",
+        "color": "rgb(255, 255, 255)",
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ]
+      },
+      "stackedFirst": {
+        "h": 54,
+        "w": 256,
+        "radius": 27,
+        "border": {
+          "width": 0,
+          "color": "rgb(26, 26, 26)"
+        },
+        "bg": "rgb(26, 26, 26)",
+        "color": "rgb(255, 255, 255)",
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ]
+      },
+      "stackedSecond": {
+        "h": 54,
+        "w": 256,
+        "radius": 27,
+        "border": {
+          "width": 0,
+          "color": "rgb(26, 26, 26)"
+        },
+        "bg": "rgb(26, 26, 26)",
+        "color": "rgb(255, 255, 255)",
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ]
+      }
+    },
+    "gaps": {
+      "first→second": 8,
+      "stackedFirst→stackedSecond": 8
+    }
+  },
   "expansion-card@375-dark": {
     "elements": {
       "card": {
@@ -3030,6 +3349,125 @@
       "startSlot→startInput": 0,
       "suffixInput→suffixText": 0,
       "buttonInput→buttonSlot": 0
+    }
+  },
+  "expansion-pagination@375-dark": {
+    "elements": {
+      "bar": {
+        "h": 40,
+        "w": 320
+      },
+      "previous": {
+        "h": 40,
+        "w": 40,
+        "radius": 20,
+        "bg": "rgba(0, 0, 0, 0)",
+        "opacity": 0.5
+      },
+      "previousIcon": {
+        "h": 16,
+        "w": 16,
+        "color": "rgb(255, 255, 255)"
+      },
+      "current": {
+        "h": 40,
+        "w": 40,
+        "radius": 20,
+        "border": {
+          "width": 0,
+          "color": "rgb(65, 81, 96)"
+        },
+        "bg": "rgb(65, 81, 96)",
+        "color": "rgb(255, 255, 255)",
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "pad": [
+          8,
+          16,
+          8,
+          16
+        ]
+      },
+      "page": {
+        "h": 40,
+        "w": 40,
+        "radius": 20,
+        "border": {
+          "width": 0,
+          "color": "rgba(0, 0, 0, 0)"
+        },
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "rgb(255, 255, 255)",
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "pad": [
+          8,
+          16,
+          8,
+          16
+        ]
+      },
+      "third": {
+        "h": 40,
+        "w": 40
+      },
+      "ellipsis": {
+        "h": 22,
+        "w": 15,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(255, 255, 255, 0.65)"
+      },
+      "last": {
+        "h": 38,
+        "w": 52,
+        "radius": 19,
+        "border": {
+          "width": 0,
+          "color": "rgba(0, 0, 0, 0)"
+        },
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "rgb(255, 255, 255)",
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "pad": [
+          8,
+          16,
+          8,
+          16
+        ]
+      },
+      "next": {
+        "h": 40,
+        "w": 40,
+        "radius": 20,
+        "bg": "rgba(0, 0, 0, 0)",
+        "opacity": 1
+      },
+      "nextIcon": {
+        "h": 16,
+        "w": 16,
+        "color": "rgb(255, 255, 255)"
+      }
+    },
+    "gaps": {
+      "previous→current": 4,
+      "current→page": 4,
+      "third→ellipsis": 4,
+      "ellipsis→last": 4,
+      "last→next": 4
     }
   },
   "expansion-progress@375-dark": {
@@ -4643,6 +5081,106 @@
       "errorBox→promotionalBox": 16
     }
   },
+  "expansion-button-group@1440-light": {
+    "elements": {
+      "group": {
+        "h": 54,
+        "w": 320
+      },
+      "first": {
+        "h": 54,
+        "w": 129,
+        "radius": 27,
+        "border": {
+          "width": 0,
+          "color": "rgb(1, 23, 43)"
+        },
+        "bg": "rgb(1, 23, 43)",
+        "color": "rgb(255, 255, 255)",
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ]
+      },
+      "second": {
+        "h": 54,
+        "w": 137,
+        "radius": 27,
+        "border": {
+          "width": 0,
+          "color": "rgb(242, 242, 242)"
+        },
+        "bg": "rgb(242, 242, 242)",
+        "color": "rgba(0, 0, 0, 0.85)",
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ]
+      },
+      "stackedFirst": {
+        "h": 54,
+        "w": 256,
+        "radius": 27,
+        "border": {
+          "width": 0,
+          "color": "rgb(242, 242, 242)"
+        },
+        "bg": "rgb(242, 242, 242)",
+        "color": "rgba(0, 0, 0, 0.85)",
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ]
+      },
+      "stackedSecond": {
+        "h": 54,
+        "w": 256,
+        "radius": 27,
+        "border": {
+          "width": 0,
+          "color": "rgb(242, 242, 242)"
+        },
+        "bg": "rgb(242, 242, 242)",
+        "color": "rgba(0, 0, 0, 0.85)",
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ]
+      }
+    },
+    "gaps": {
+      "first→second": 8,
+      "stackedFirst→stackedSecond": 8
+    }
+  },
   "expansion-card@1440-light": {
     "elements": {
       "card": {
@@ -4915,6 +5453,125 @@
       "startSlot→startInput": 0,
       "suffixInput→suffixText": 0,
       "buttonInput→buttonSlot": 0
+    }
+  },
+  "expansion-pagination@1440-light": {
+    "elements": {
+      "bar": {
+        "h": 40,
+        "w": 320
+      },
+      "previous": {
+        "h": 40,
+        "w": 40,
+        "radius": 20,
+        "bg": "rgba(255, 255, 255, 0)",
+        "opacity": 0.5
+      },
+      "previousIcon": {
+        "h": 16,
+        "w": 16,
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "current": {
+        "h": 40,
+        "w": 40,
+        "radius": 20,
+        "border": {
+          "width": 0,
+          "color": "rgb(1, 23, 43)"
+        },
+        "bg": "rgb(1, 23, 43)",
+        "color": "rgb(255, 255, 255)",
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "pad": [
+          8,
+          16,
+          8,
+          16
+        ]
+      },
+      "page": {
+        "h": 40,
+        "w": 40,
+        "radius": 20,
+        "border": {
+          "width": 0,
+          "color": "rgba(255, 255, 255, 0)"
+        },
+        "bg": "rgba(255, 255, 255, 0)",
+        "color": "rgba(0, 0, 0, 0.85)",
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "pad": [
+          8,
+          16,
+          8,
+          16
+        ]
+      },
+      "third": {
+        "h": 40,
+        "w": 40
+      },
+      "ellipsis": {
+        "h": 22,
+        "w": 15,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(0, 0, 0, 0.65)"
+      },
+      "last": {
+        "h": 38,
+        "w": 52,
+        "radius": 19,
+        "border": {
+          "width": 0,
+          "color": "rgba(255, 255, 255, 0)"
+        },
+        "bg": "rgba(255, 255, 255, 0)",
+        "color": "rgba(0, 0, 0, 0.85)",
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "pad": [
+          8,
+          16,
+          8,
+          16
+        ]
+      },
+      "next": {
+        "h": 40,
+        "w": 40,
+        "radius": 20,
+        "bg": "rgba(255, 255, 255, 0)",
+        "opacity": 1
+      },
+      "nextIcon": {
+        "h": 16,
+        "w": 16,
+        "color": "rgba(0, 0, 0, 0.85)"
+      }
+    },
+    "gaps": {
+      "previous→current": 4,
+      "current→page": 4,
+      "third→ellipsis": 4,
+      "ellipsis→last": 4,
+      "last→next": 4
     }
   },
   "expansion-progress@1440-light": {
@@ -6528,6 +7185,106 @@
       "errorBox→promotionalBox": 16
     }
   },
+  "expansion-button-group@1440-dark": {
+    "elements": {
+      "group": {
+        "h": 54,
+        "w": 320
+      },
+      "first": {
+        "h": 54,
+        "w": 129,
+        "radius": 27,
+        "border": {
+          "width": 0,
+          "color": "rgb(65, 81, 96)"
+        },
+        "bg": "rgb(65, 81, 96)",
+        "color": "rgb(255, 255, 255)",
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ]
+      },
+      "second": {
+        "h": 54,
+        "w": 137,
+        "radius": 27,
+        "border": {
+          "width": 0,
+          "color": "rgb(26, 26, 26)"
+        },
+        "bg": "rgb(26, 26, 26)",
+        "color": "rgb(255, 255, 255)",
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ]
+      },
+      "stackedFirst": {
+        "h": 54,
+        "w": 256,
+        "radius": 27,
+        "border": {
+          "width": 0,
+          "color": "rgb(26, 26, 26)"
+        },
+        "bg": "rgb(26, 26, 26)",
+        "color": "rgb(255, 255, 255)",
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ]
+      },
+      "stackedSecond": {
+        "h": 54,
+        "w": 256,
+        "radius": 27,
+        "border": {
+          "width": 0,
+          "color": "rgb(26, 26, 26)"
+        },
+        "bg": "rgb(26, 26, 26)",
+        "color": "rgb(255, 255, 255)",
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ]
+      }
+    },
+    "gaps": {
+      "first→second": 8,
+      "stackedFirst→stackedSecond": 8
+    }
+  },
   "expansion-card@1440-dark": {
     "elements": {
       "card": {
@@ -6800,6 +7557,125 @@
       "startSlot→startInput": 0,
       "suffixInput→suffixText": 0,
       "buttonInput→buttonSlot": 0
+    }
+  },
+  "expansion-pagination@1440-dark": {
+    "elements": {
+      "bar": {
+        "h": 40,
+        "w": 320
+      },
+      "previous": {
+        "h": 40,
+        "w": 40,
+        "radius": 20,
+        "bg": "rgba(0, 0, 0, 0)",
+        "opacity": 0.5
+      },
+      "previousIcon": {
+        "h": 16,
+        "w": 16,
+        "color": "rgb(255, 255, 255)"
+      },
+      "current": {
+        "h": 40,
+        "w": 40,
+        "radius": 20,
+        "border": {
+          "width": 0,
+          "color": "rgb(65, 81, 96)"
+        },
+        "bg": "rgb(65, 81, 96)",
+        "color": "rgb(255, 255, 255)",
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "pad": [
+          8,
+          16,
+          8,
+          16
+        ]
+      },
+      "page": {
+        "h": 40,
+        "w": 40,
+        "radius": 20,
+        "border": {
+          "width": 0,
+          "color": "rgba(0, 0, 0, 0)"
+        },
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "rgb(255, 255, 255)",
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "pad": [
+          8,
+          16,
+          8,
+          16
+        ]
+      },
+      "third": {
+        "h": 40,
+        "w": 40
+      },
+      "ellipsis": {
+        "h": 22,
+        "w": 15,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(255, 255, 255, 0.65)"
+      },
+      "last": {
+        "h": 38,
+        "w": 52,
+        "radius": 19,
+        "border": {
+          "width": 0,
+          "color": "rgba(0, 0, 0, 0)"
+        },
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "rgb(255, 255, 255)",
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "pad": [
+          8,
+          16,
+          8,
+          16
+        ]
+      },
+      "next": {
+        "h": 40,
+        "w": 40,
+        "radius": 20,
+        "bg": "rgba(0, 0, 0, 0)",
+        "opacity": 1
+      },
+      "nextIcon": {
+        "h": 16,
+        "w": 16,
+        "color": "rgb(255, 255, 255)"
+      }
+    },
+    "gaps": {
+      "previous→current": 4,
+      "current→page": 4,
+      "third→ellipsis": 4,
+      "ellipsis→last": 4,
+      "last→next": 4
     }
   },
   "expansion-progress@1440-dark": {
