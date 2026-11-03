@@ -7,7 +7,7 @@ import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { expansionItem, expansionItems } from '../templates/expansion.mjs';
 import { loadImmersiveThemes, resolveColor } from '../../theme/scripts/generate-immersive-themes.mjs';
-import { BUILD_DIR, bareCnImports, browserSuiteItems, buildRegistry, darkClasses, missingTypeRoles, nextThemes, pinnedRegistryUrl, supportingProblems, tabsAsSegmented, themeBriefItemProblems, undeclaredSiblings, unmeasuredComponents, unpinnedUrls, unreachedItems, weightOverrides } from '../../scripts/lib/registry.mjs';
+import { BUILD_DIR, bareCnImports, browserSuiteItems, buildRegistry, darkClasses, unguardedItemRoles, missingTypeRoles, nextThemes, pinnedRegistryUrl, supportingProblems, tabsAsSegmented, themeBriefItemProblems, undeclaredSiblings, unmeasuredComponents, unpinnedUrls, unreachedItems, weightOverrides } from '../../scripts/lib/registry.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '../..');
 const read = (path) => readFileSync(join(root, path), 'utf8');
@@ -60,6 +60,14 @@ test('registry components use Neon roles, not dark: classes', () => {
   assert.deepEqual(darkClasses(sourceFiles('registry')), []);
   assert.equal(darkClasses([['ui/input.tsx', 'className="dark:bg-input/30 border-input"']]).length, 1);
   assert.deepEqual(darkClasses([['theme/neon.css', '@custom-variant dark (&:where([data-theme="dark"]));']]), [], 'CSS may define the variant');
+});
+
+test('a component reads a role named after itself only with a fallback', () => {
+  assert.deepEqual(unguardedItemRoles(sourceFiles('registry')), []);
+  assert.equal(unguardedItemRoles([['ui/sheet.tsx', 'className="border-(length:--sheet-border-width)"']]).length, 1);
+  assert.equal(unguardedItemRoles([['ui/sheet.tsx', 'style={{ width: "var(--sheet-width)" }}']]).length, 1);
+  assert.deepEqual(unguardedItemRoles([['ui/sheet.tsx', 'className="border-[length:var(--sheet-border-width,0px)]"']]), []);
+  assert.deepEqual(unguardedItemRoles([['ui/sheet.tsx', 'className="rounded-(--borderRadius-600)"']]), [], 'base theme roles need none');
 });
 
 test('every theme.css type role is a text utility cn keeps apart from text colors', () => {

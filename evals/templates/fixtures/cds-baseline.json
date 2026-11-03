@@ -619,6 +619,83 @@
       "firstSection→secondSection": 32
     }
   },
+  "expansion-alert-dialog-open@375-light": {
+    "elements": {
+      "alertOverlay": {
+        "bg": "rgba(0, 0, 0, 0.2)"
+      },
+      "alertCard": {
+        "w": 318,
+        "h": 238,
+        "radius": 8,
+        "bg": "rgb(255, 255, 255)"
+      },
+      "alertTitle": {
+        "font": {
+          "size": 20,
+          "lineHeight": 25,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "h": 54,
+        "w": 270
+      },
+      "alertBody": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.65)",
+        "h": 44,
+        "w": 270
+      },
+      "alertCancel": {
+        "h": 76,
+        "w": 131,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ],
+        "radius": 38,
+        "bg": "rgb(242, 242, 242)"
+      },
+      "alertAction": {
+        "h": 76,
+        "w": 131,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)",
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ],
+        "radius": 38,
+        "bg": "rgb(214, 8, 8)"
+      }
+    },
+    "gaps": {
+      "alertCard→alertTitle": -214,
+      "alertTitle→alertCard": -294,
+      "alertTitle→alertBody": 0,
+      "alertBody→alertCancel": 24,
+      "alertCancel→alertAction": 8,
+      "alertAction→alertCard": -222
+    }
+  },
   "expansion-field@375-light": {
     "elements": {
       "stack": {
@@ -998,6 +1075,256 @@
       "separatorHorizontal→below": 8,
       "before→separatorVertical": 8,
       "separatorVertical→after": 8
+    }
+  },
+  "expansion-sheet-bottom@375-light": {
+    "elements": {
+      "sheetOverlay": {
+        "bg": "rgba(0, 0, 0, 0.2)"
+      },
+      "sheet": {
+        "h": 134,
+        "w": 375,
+        "radii": [
+          32,
+          32,
+          0,
+          0
+        ],
+        "bg": "rgb(255, 255, 255)",
+        "border": {
+          "width": 0,
+          "color": "rgba(0, 0, 0, 0.85)"
+        }
+      },
+      "sheetHandle": {
+        "h": 4,
+        "w": 32,
+        "radius": 2,
+        "bg": "rgb(0, 0, 0)",
+        "opacity": 0.4
+      },
+      "sheetClose": null,
+      "sheetCloseIcon": null,
+      "sheetTitle": {
+        "font": {
+          "size": 20,
+          "lineHeight": 25,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "h": 25
+      },
+      "sheetBody": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "h": 66,
+        "w": 327
+      }
+    },
+    "gaps": {
+      "sheetOverlay→sheet": -375,
+      "sheet→sheetOverlay": -812,
+      "sheet→sheetTitle": -98,
+      "sheetBody→sheet": -351,
+      "sheet→sheetHandle": -118,
+      "sheetHandle→sheetTitle": 16,
+      "sheetClose→sheet": null,
+      "sheet→sheetClose": null,
+      "sheetTitle→sheetBody": 7
+    }
+  },
+  "expansion-sheet-top@375-light": {
+    "elements": {
+      "sheetOverlay": {
+        "bg": "rgba(0, 0, 0, 0.2)"
+      },
+      "sheet": {
+        "h": 129,
+        "w": 375,
+        "radii": [
+          0,
+          0,
+          32,
+          32
+        ],
+        "bg": "rgb(255, 255, 255)",
+        "border": {
+          "width": 0,
+          "color": "rgba(0, 0, 0, 0.85)"
+        }
+      },
+      "sheetHandle": null,
+      "sheetClose": {
+        "h": 40,
+        "w": 40,
+        "radius": 20,
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "sheetCloseIcon": {
+        "h": 16,
+        "w": 16
+      },
+      "sheetTitle": {
+        "font": {
+          "size": 20,
+          "lineHeight": 25,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "h": 25
+      },
+      "sheetBody": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "h": 66,
+        "w": 327
+      }
+    },
+    "gaps": {
+      "sheetOverlay→sheet": -375,
+      "sheet→sheetOverlay": -129,
+      "sheet→sheetTitle": -105,
+      "sheetBody→sheet": -351,
+      "sheet→sheetHandle": null,
+      "sheetHandle→sheetTitle": null,
+      "sheetClose→sheet": -351,
+      "sheet→sheetClose": -113,
+      "sheetTitle→sheetBody": 15
+    }
+  },
+  "expansion-sheet-left@375-light": {
+    "elements": {
+      "sheetOverlay": {
+        "bg": "rgba(0, 0, 0, 0.2)"
+      },
+      "sheet": {
+        "h": 812,
+        "w": 375,
+        "radii": [
+          0,
+          32,
+          32,
+          0
+        ],
+        "bg": "rgb(255, 255, 255)",
+        "border": {
+          "width": 0,
+          "color": "rgba(0, 0, 0, 0.85)"
+        }
+      },
+      "sheetHandle": null,
+      "sheetClose": {
+        "h": 40,
+        "w": 40,
+        "radius": 20,
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "sheetCloseIcon": {
+        "h": 16,
+        "w": 16
+      },
+      "sheetTitle": {
+        "font": {
+          "size": 20,
+          "lineHeight": 25,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "h": 25
+      },
+      "sheetBody": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "h": 66,
+        "w": 327
+      }
+    },
+    "gaps": {
+      "sheetOverlay→sheet": -375,
+      "sheet→sheetOverlay": -812,
+      "sheet→sheetTitle": -780,
+      "sheetBody→sheet": -351,
+      "sheet→sheetHandle": null,
+      "sheetHandle→sheetTitle": null,
+      "sheetClose→sheet": -363,
+      "sheet→sheetClose": -792,
+      "sheetTitle→sheetBody": 7
+    }
+  },
+  "expansion-sheet-right@375-light": {
+    "elements": {
+      "sheetOverlay": {
+        "bg": "rgba(0, 0, 0, 0.2)"
+      },
+      "sheet": {
+        "h": 812,
+        "w": 375,
+        "radii": [
+          32,
+          0,
+          0,
+          32
+        ],
+        "bg": "rgb(255, 255, 255)",
+        "border": {
+          "width": 0,
+          "color": "rgba(0, 0, 0, 0.85)"
+        }
+      },
+      "sheetHandle": null,
+      "sheetClose": {
+        "h": 40,
+        "w": 40,
+        "radius": 20,
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "sheetCloseIcon": {
+        "h": 16,
+        "w": 16
+      },
+      "sheetTitle": {
+        "font": {
+          "size": 20,
+          "lineHeight": 25,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "h": 25
+      },
+      "sheetBody": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "h": 66,
+        "w": 327
+      }
+    },
+    "gaps": {
+      "sheetOverlay→sheet": -375,
+      "sheet→sheetOverlay": -812,
+      "sheet→sheetTitle": -780,
+      "sheetBody→sheet": -351,
+      "sheet→sheetHandle": null,
+      "sheetHandle→sheetTitle": null,
+      "sheetClose→sheet": -363,
+      "sheet→sheetClose": -792,
+      "sheetTitle→sheetBody": 7
     }
   },
   "expansion-spinner@375-light": {
@@ -1949,6 +2276,83 @@
       "firstSection→secondSection": 32
     }
   },
+  "expansion-alert-dialog-open@375-dark": {
+    "elements": {
+      "alertOverlay": {
+        "bg": "rgba(0, 0, 0, 0.5)"
+      },
+      "alertCard": {
+        "w": 318,
+        "h": 238,
+        "radius": 8,
+        "bg": "rgb(51, 51, 51)"
+      },
+      "alertTitle": {
+        "font": {
+          "size": 20,
+          "lineHeight": 25,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)",
+        "h": 54,
+        "w": 270
+      },
+      "alertBody": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(255, 255, 255, 0.65)",
+        "h": 44,
+        "w": 270
+      },
+      "alertCancel": {
+        "h": 76,
+        "w": 131,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)",
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ],
+        "radius": 38,
+        "bg": "rgb(26, 26, 26)"
+      },
+      "alertAction": {
+        "h": 76,
+        "w": 131,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)",
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ],
+        "radius": 38,
+        "bg": "rgb(243, 9, 9)"
+      }
+    },
+    "gaps": {
+      "alertCard→alertTitle": -214,
+      "alertTitle→alertCard": -294,
+      "alertTitle→alertBody": 0,
+      "alertBody→alertCancel": 24,
+      "alertCancel→alertAction": 8,
+      "alertAction→alertCard": -222
+    }
+  },
   "expansion-field@375-dark": {
     "elements": {
       "stack": {
@@ -2328,6 +2732,256 @@
       "separatorHorizontal→below": 8,
       "before→separatorVertical": 8,
       "separatorVertical→after": 8
+    }
+  },
+  "expansion-sheet-bottom@375-dark": {
+    "elements": {
+      "sheetOverlay": {
+        "bg": "rgba(0, 0, 0, 0.5)"
+      },
+      "sheet": {
+        "h": 136,
+        "w": 375,
+        "radii": [
+          32,
+          32,
+          0,
+          0
+        ],
+        "bg": "rgb(51, 51, 51)",
+        "border": {
+          "width": 1,
+          "color": "rgba(255, 255, 255, 0.15)"
+        }
+      },
+      "sheetHandle": {
+        "h": 4,
+        "w": 32,
+        "radius": 2,
+        "bg": "rgb(255, 255, 255)",
+        "opacity": 0.4
+      },
+      "sheetClose": null,
+      "sheetCloseIcon": null,
+      "sheetTitle": {
+        "font": {
+          "size": 20,
+          "lineHeight": 25,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)",
+        "h": 25
+      },
+      "sheetBody": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)",
+        "h": 66,
+        "w": 325
+      }
+    },
+    "gaps": {
+      "sheetOverlay→sheet": -375,
+      "sheet→sheetOverlay": -812,
+      "sheet→sheetTitle": -99,
+      "sheetBody→sheet": -350,
+      "sheet→sheetHandle": -119,
+      "sheetHandle→sheetTitle": 16,
+      "sheetClose→sheet": null,
+      "sheet→sheetClose": null,
+      "sheetTitle→sheetBody": 7
+    }
+  },
+  "expansion-sheet-top@375-dark": {
+    "elements": {
+      "sheetOverlay": {
+        "bg": "rgba(0, 0, 0, 0.5)"
+      },
+      "sheet": {
+        "h": 131,
+        "w": 375,
+        "radii": [
+          0,
+          0,
+          32,
+          32
+        ],
+        "bg": "rgb(51, 51, 51)",
+        "border": {
+          "width": 1,
+          "color": "rgba(255, 255, 255, 0.15)"
+        }
+      },
+      "sheetHandle": null,
+      "sheetClose": {
+        "h": 40,
+        "w": 40,
+        "radius": 20,
+        "color": "rgb(255, 255, 255)"
+      },
+      "sheetCloseIcon": {
+        "h": 16,
+        "w": 16
+      },
+      "sheetTitle": {
+        "font": {
+          "size": 20,
+          "lineHeight": 25,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)",
+        "h": 25
+      },
+      "sheetBody": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)",
+        "h": 66,
+        "w": 325
+      }
+    },
+    "gaps": {
+      "sheetOverlay→sheet": -375,
+      "sheet→sheetOverlay": -131,
+      "sheet→sheetTitle": -106,
+      "sheetBody→sheet": -350,
+      "sheet→sheetHandle": null,
+      "sheetHandle→sheetTitle": null,
+      "sheetClose→sheet": -350,
+      "sheet→sheetClose": -114,
+      "sheetTitle→sheetBody": 15
+    }
+  },
+  "expansion-sheet-left@375-dark": {
+    "elements": {
+      "sheetOverlay": {
+        "bg": "rgba(0, 0, 0, 0.5)"
+      },
+      "sheet": {
+        "h": 812,
+        "w": 375,
+        "radii": [
+          0,
+          32,
+          32,
+          0
+        ],
+        "bg": "rgb(51, 51, 51)",
+        "border": {
+          "width": 1,
+          "color": "rgba(255, 255, 255, 0.15)"
+        }
+      },
+      "sheetHandle": null,
+      "sheetClose": {
+        "h": 40,
+        "w": 40,
+        "radius": 20,
+        "color": "rgb(255, 255, 255)"
+      },
+      "sheetCloseIcon": {
+        "h": 16,
+        "w": 16
+      },
+      "sheetTitle": {
+        "font": {
+          "size": 20,
+          "lineHeight": 25,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)",
+        "h": 25
+      },
+      "sheetBody": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)",
+        "h": 66,
+        "w": 325
+      }
+    },
+    "gaps": {
+      "sheetOverlay→sheet": -375,
+      "sheet→sheetOverlay": -812,
+      "sheet→sheetTitle": -779,
+      "sheetBody→sheet": -350,
+      "sheet→sheetHandle": null,
+      "sheetHandle→sheetTitle": null,
+      "sheetClose→sheet": -362,
+      "sheet→sheetClose": -791,
+      "sheetTitle→sheetBody": 7
+    }
+  },
+  "expansion-sheet-right@375-dark": {
+    "elements": {
+      "sheetOverlay": {
+        "bg": "rgba(0, 0, 0, 0.5)"
+      },
+      "sheet": {
+        "h": 812,
+        "w": 375,
+        "radii": [
+          32,
+          0,
+          0,
+          32
+        ],
+        "bg": "rgb(51, 51, 51)",
+        "border": {
+          "width": 1,
+          "color": "rgba(255, 255, 255, 0.15)"
+        }
+      },
+      "sheetHandle": null,
+      "sheetClose": {
+        "h": 40,
+        "w": 40,
+        "radius": 20,
+        "color": "rgb(255, 255, 255)"
+      },
+      "sheetCloseIcon": {
+        "h": 16,
+        "w": 16
+      },
+      "sheetTitle": {
+        "font": {
+          "size": 20,
+          "lineHeight": 25,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)",
+        "h": 25
+      },
+      "sheetBody": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)",
+        "h": 66,
+        "w": 325
+      }
+    },
+    "gaps": {
+      "sheetOverlay→sheet": -375,
+      "sheet→sheetOverlay": -812,
+      "sheet→sheetTitle": -779,
+      "sheetBody→sheet": -350,
+      "sheet→sheetHandle": null,
+      "sheetHandle→sheetTitle": null,
+      "sheetClose→sheet": -362,
+      "sheet→sheetClose": -791,
+      "sheetTitle→sheetBody": 7
     }
   },
   "expansion-spinner@375-dark": {
@@ -3279,6 +3933,83 @@
       "firstSection→secondSection": 32
     }
   },
+  "expansion-alert-dialog-open@1440-light": {
+    "elements": {
+      "alertOverlay": {
+        "bg": "rgba(0, 0, 0, 0.2)"
+      },
+      "alertCard": {
+        "w": 318,
+        "h": 238,
+        "radius": 8,
+        "bg": "rgb(255, 255, 255)"
+      },
+      "alertTitle": {
+        "font": {
+          "size": 20,
+          "lineHeight": 25,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "h": 54,
+        "w": 270
+      },
+      "alertBody": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.65)",
+        "h": 44,
+        "w": 270
+      },
+      "alertCancel": {
+        "h": 76,
+        "w": 131,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ],
+        "radius": 38,
+        "bg": "rgb(242, 242, 242)"
+      },
+      "alertAction": {
+        "h": 76,
+        "w": 131,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)",
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ],
+        "radius": 38,
+        "bg": "rgb(214, 8, 8)"
+      }
+    },
+    "gaps": {
+      "alertCard→alertTitle": -214,
+      "alertTitle→alertCard": -294,
+      "alertTitle→alertBody": 0,
+      "alertBody→alertCancel": 24,
+      "alertCancel→alertAction": 8,
+      "alertAction→alertCard": -222
+    }
+  },
   "expansion-field@1440-light": {
     "elements": {
       "stack": {
@@ -3658,6 +4389,256 @@
       "separatorHorizontal→below": 8,
       "before→separatorVertical": 8,
       "separatorVertical→after": 8
+    }
+  },
+  "expansion-sheet-bottom@1440-light": {
+    "elements": {
+      "sheetOverlay": {
+        "bg": "rgba(0, 0, 0, 0.2)"
+      },
+      "sheet": {
+        "h": 90,
+        "w": 1440,
+        "radii": [
+          32,
+          32,
+          0,
+          0
+        ],
+        "bg": "rgb(255, 255, 255)",
+        "border": {
+          "width": 0,
+          "color": "rgba(0, 0, 0, 0.85)"
+        }
+      },
+      "sheetHandle": {
+        "h": 4,
+        "w": 32,
+        "radius": 2,
+        "bg": "rgb(0, 0, 0)",
+        "opacity": 0.4
+      },
+      "sheetClose": null,
+      "sheetCloseIcon": null,
+      "sheetTitle": {
+        "font": {
+          "size": 20,
+          "lineHeight": 25,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "h": 25
+      },
+      "sheetBody": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "h": 22,
+        "w": 1126
+      }
+    },
+    "gaps": {
+      "sheetOverlay→sheet": -1440,
+      "sheet→sheetOverlay": -900,
+      "sheet→sheetTitle": -54,
+      "sheetBody→sheet": -1283,
+      "sheet→sheetHandle": -74,
+      "sheetHandle→sheetTitle": 16,
+      "sheetClose→sheet": null,
+      "sheet→sheetClose": null,
+      "sheetTitle→sheetBody": 7
+    }
+  },
+  "expansion-sheet-top@1440-light": {
+    "elements": {
+      "sheetOverlay": {
+        "bg": "rgba(0, 0, 0, 0.2)"
+      },
+      "sheet": {
+        "h": 85,
+        "w": 1440,
+        "radii": [
+          0,
+          0,
+          32,
+          32
+        ],
+        "bg": "rgb(255, 255, 255)",
+        "border": {
+          "width": 0,
+          "color": "rgba(0, 0, 0, 0.85)"
+        }
+      },
+      "sheetHandle": null,
+      "sheetClose": {
+        "h": 40,
+        "w": 40,
+        "radius": 20,
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "sheetCloseIcon": {
+        "h": 16,
+        "w": 16
+      },
+      "sheetTitle": {
+        "font": {
+          "size": 20,
+          "lineHeight": 25,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "h": 25
+      },
+      "sheetBody": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "h": 22,
+        "w": 1126
+      }
+    },
+    "gaps": {
+      "sheetOverlay→sheet": -1440,
+      "sheet→sheetOverlay": -85,
+      "sheet→sheetTitle": -61,
+      "sheetBody→sheet": -1283,
+      "sheet→sheetHandle": null,
+      "sheetHandle→sheetTitle": null,
+      "sheetClose→sheet": -1283,
+      "sheet→sheetClose": -69,
+      "sheetTitle→sheetBody": 15
+    }
+  },
+  "expansion-sheet-left@1440-light": {
+    "elements": {
+      "sheetOverlay": {
+        "bg": "rgba(0, 0, 0, 0.2)"
+      },
+      "sheet": {
+        "h": 900,
+        "w": 400,
+        "radii": [
+          0,
+          32,
+          32,
+          0
+        ],
+        "bg": "rgb(255, 255, 255)",
+        "border": {
+          "width": 0,
+          "color": "rgba(0, 0, 0, 0.85)"
+        }
+      },
+      "sheetHandle": null,
+      "sheetClose": {
+        "h": 40,
+        "w": 40,
+        "radius": 20,
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "sheetCloseIcon": {
+        "h": 16,
+        "w": 16
+      },
+      "sheetTitle": {
+        "font": {
+          "size": 20,
+          "lineHeight": 25,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "h": 25
+      },
+      "sheetBody": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "h": 66,
+        "w": 336
+      }
+    },
+    "gaps": {
+      "sheetOverlay→sheet": -1440,
+      "sheet→sheetOverlay": -900,
+      "sheet→sheetTitle": -868,
+      "sheetBody→sheet": -368,
+      "sheet→sheetHandle": null,
+      "sheetHandle→sheetTitle": null,
+      "sheetClose→sheet": -380,
+      "sheet→sheetClose": -880,
+      "sheetTitle→sheetBody": 7
+    }
+  },
+  "expansion-sheet-right@1440-light": {
+    "elements": {
+      "sheetOverlay": {
+        "bg": "rgba(0, 0, 0, 0.2)"
+      },
+      "sheet": {
+        "h": 900,
+        "w": 400,
+        "radii": [
+          32,
+          0,
+          0,
+          32
+        ],
+        "bg": "rgb(255, 255, 255)",
+        "border": {
+          "width": 0,
+          "color": "rgba(0, 0, 0, 0.85)"
+        }
+      },
+      "sheetHandle": null,
+      "sheetClose": {
+        "h": 40,
+        "w": 40,
+        "radius": 20,
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "sheetCloseIcon": {
+        "h": 16,
+        "w": 16
+      },
+      "sheetTitle": {
+        "font": {
+          "size": 20,
+          "lineHeight": 25,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "h": 25
+      },
+      "sheetBody": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "h": 66,
+        "w": 336
+      }
+    },
+    "gaps": {
+      "sheetOverlay→sheet": -400,
+      "sheet→sheetOverlay": -900,
+      "sheet→sheetTitle": -868,
+      "sheetBody→sheet": -368,
+      "sheet→sheetHandle": null,
+      "sheetHandle→sheetTitle": null,
+      "sheetClose→sheet": -380,
+      "sheet→sheetClose": -880,
+      "sheetTitle→sheetBody": 7
     }
   },
   "expansion-spinner@1440-light": {
@@ -4609,6 +5590,83 @@
       "firstSection→secondSection": 32
     }
   },
+  "expansion-alert-dialog-open@1440-dark": {
+    "elements": {
+      "alertOverlay": {
+        "bg": "rgba(0, 0, 0, 0.5)"
+      },
+      "alertCard": {
+        "w": 318,
+        "h": 238,
+        "radius": 8,
+        "bg": "rgb(51, 51, 51)"
+      },
+      "alertTitle": {
+        "font": {
+          "size": 20,
+          "lineHeight": 25,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)",
+        "h": 54,
+        "w": 270
+      },
+      "alertBody": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(255, 255, 255, 0.65)",
+        "h": 44,
+        "w": 270
+      },
+      "alertCancel": {
+        "h": 76,
+        "w": 131,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)",
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ],
+        "radius": 38,
+        "bg": "rgb(26, 26, 26)"
+      },
+      "alertAction": {
+        "h": 76,
+        "w": 131,
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)",
+        "pad": [
+          16,
+          32,
+          16,
+          32
+        ],
+        "radius": 38,
+        "bg": "rgb(243, 9, 9)"
+      }
+    },
+    "gaps": {
+      "alertCard→alertTitle": -214,
+      "alertTitle→alertCard": -294,
+      "alertTitle→alertBody": 0,
+      "alertBody→alertCancel": 24,
+      "alertCancel→alertAction": 8,
+      "alertAction→alertCard": -222
+    }
+  },
   "expansion-field@1440-dark": {
     "elements": {
       "stack": {
@@ -4988,6 +6046,256 @@
       "separatorHorizontal→below": 8,
       "before→separatorVertical": 8,
       "separatorVertical→after": 8
+    }
+  },
+  "expansion-sheet-bottom@1440-dark": {
+    "elements": {
+      "sheetOverlay": {
+        "bg": "rgba(0, 0, 0, 0.5)"
+      },
+      "sheet": {
+        "h": 92,
+        "w": 1440,
+        "radii": [
+          32,
+          32,
+          0,
+          0
+        ],
+        "bg": "rgb(51, 51, 51)",
+        "border": {
+          "width": 1,
+          "color": "rgba(255, 255, 255, 0.15)"
+        }
+      },
+      "sheetHandle": {
+        "h": 4,
+        "w": 32,
+        "radius": 2,
+        "bg": "rgb(255, 255, 255)",
+        "opacity": 0.4
+      },
+      "sheetClose": null,
+      "sheetCloseIcon": null,
+      "sheetTitle": {
+        "font": {
+          "size": 20,
+          "lineHeight": 25,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)",
+        "h": 25
+      },
+      "sheetBody": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)",
+        "h": 22,
+        "w": 1126
+      }
+    },
+    "gaps": {
+      "sheetOverlay→sheet": -1440,
+      "sheet→sheetOverlay": -900,
+      "sheet→sheetTitle": -55,
+      "sheetBody→sheet": -1283,
+      "sheet→sheetHandle": -75,
+      "sheetHandle→sheetTitle": 16,
+      "sheetClose→sheet": null,
+      "sheet→sheetClose": null,
+      "sheetTitle→sheetBody": 7
+    }
+  },
+  "expansion-sheet-top@1440-dark": {
+    "elements": {
+      "sheetOverlay": {
+        "bg": "rgba(0, 0, 0, 0.5)"
+      },
+      "sheet": {
+        "h": 87,
+        "w": 1440,
+        "radii": [
+          0,
+          0,
+          32,
+          32
+        ],
+        "bg": "rgb(51, 51, 51)",
+        "border": {
+          "width": 1,
+          "color": "rgba(255, 255, 255, 0.15)"
+        }
+      },
+      "sheetHandle": null,
+      "sheetClose": {
+        "h": 40,
+        "w": 40,
+        "radius": 20,
+        "color": "rgb(255, 255, 255)"
+      },
+      "sheetCloseIcon": {
+        "h": 16,
+        "w": 16
+      },
+      "sheetTitle": {
+        "font": {
+          "size": 20,
+          "lineHeight": 25,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)",
+        "h": 25
+      },
+      "sheetBody": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)",
+        "h": 22,
+        "w": 1126
+      }
+    },
+    "gaps": {
+      "sheetOverlay→sheet": -1440,
+      "sheet→sheetOverlay": -87,
+      "sheet→sheetTitle": -62,
+      "sheetBody→sheet": -1283,
+      "sheet→sheetHandle": null,
+      "sheetHandle→sheetTitle": null,
+      "sheetClose→sheet": -1283,
+      "sheet→sheetClose": -70,
+      "sheetTitle→sheetBody": 15
+    }
+  },
+  "expansion-sheet-left@1440-dark": {
+    "elements": {
+      "sheetOverlay": {
+        "bg": "rgba(0, 0, 0, 0.5)"
+      },
+      "sheet": {
+        "h": 900,
+        "w": 400,
+        "radii": [
+          0,
+          32,
+          32,
+          0
+        ],
+        "bg": "rgb(51, 51, 51)",
+        "border": {
+          "width": 1,
+          "color": "rgba(255, 255, 255, 0.15)"
+        }
+      },
+      "sheetHandle": null,
+      "sheetClose": {
+        "h": 40,
+        "w": 40,
+        "radius": 20,
+        "color": "rgb(255, 255, 255)"
+      },
+      "sheetCloseIcon": {
+        "h": 16,
+        "w": 16
+      },
+      "sheetTitle": {
+        "font": {
+          "size": 20,
+          "lineHeight": 25,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)",
+        "h": 25
+      },
+      "sheetBody": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)",
+        "h": 66,
+        "w": 334
+      }
+    },
+    "gaps": {
+      "sheetOverlay→sheet": -1440,
+      "sheet→sheetOverlay": -900,
+      "sheet→sheetTitle": -867,
+      "sheetBody→sheet": -367,
+      "sheet→sheetHandle": null,
+      "sheetHandle→sheetTitle": null,
+      "sheetClose→sheet": -379,
+      "sheet→sheetClose": -879,
+      "sheetTitle→sheetBody": 7
+    }
+  },
+  "expansion-sheet-right@1440-dark": {
+    "elements": {
+      "sheetOverlay": {
+        "bg": "rgba(0, 0, 0, 0.5)"
+      },
+      "sheet": {
+        "h": 900,
+        "w": 400,
+        "radii": [
+          32,
+          0,
+          0,
+          32
+        ],
+        "bg": "rgb(51, 51, 51)",
+        "border": {
+          "width": 1,
+          "color": "rgba(255, 255, 255, 0.15)"
+        }
+      },
+      "sheetHandle": null,
+      "sheetClose": {
+        "h": 40,
+        "w": 40,
+        "radius": 20,
+        "color": "rgb(255, 255, 255)"
+      },
+      "sheetCloseIcon": {
+        "h": 16,
+        "w": 16
+      },
+      "sheetTitle": {
+        "font": {
+          "size": 20,
+          "lineHeight": 25,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)",
+        "h": 25
+      },
+      "sheetBody": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)",
+        "h": 66,
+        "w": 334
+      }
+    },
+    "gaps": {
+      "sheetOverlay→sheet": -400,
+      "sheet→sheetOverlay": -900,
+      "sheet→sheetTitle": -867,
+      "sheetBody→sheet": -367,
+      "sheet→sheetHandle": null,
+      "sheetHandle→sheetTitle": null,
+      "sheetClose→sheet": -379,
+      "sheet→sheetClose": -879,
+      "sheetTitle→sheetBody": 7
     }
   },
   "expansion-spinner@1440-dark": {
