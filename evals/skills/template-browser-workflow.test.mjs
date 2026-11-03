@@ -25,6 +25,17 @@ test('template-browser runs on every pull request and filters browser paths in t
   assert.match(workflow, /run: node \.github\/scripts\/browser-changes\.mjs "\$BASE" "\$HEAD"/);
 });
 
+// Playwright clears its output folders per run, so a shared folder lets the
+// Neon run wipe the CDS report before upload.
+test('each browser target keeps its own report and CI checks both survive', async () => {
+  const config = await readFile(new URL('../templates/playwright.config.mjs', import.meta.url), 'utf8');
+  const workflow = await readFile(new URL('../../.github/workflows/template-browser.yml', import.meta.url), 'utf8');
+  assert.match(config, /resolve\('\.\.\/\.\.\/\.local\/evals\/templates', process\.env\.NEON_TARGET \?\? 'cds'\)/);
+  assert.match(workflow, /if: \$\{\{ !cancelled\(\) \}\}\n\s+run: npm test --prefix evals\/templates -- --target neon\n/);
+  const check = workflow.indexOf('test -f .local/evals/templates/cds/report/index.html && test -f .local/evals/templates/neon/report/index.html');
+  assert.ok(check > workflow.indexOf('--target neon') && check < workflow.indexOf('actions/upload-artifact'));
+});
+
 test('validate runs on merge groups for a merge queue', async () => {
   const workflow = await readFile(new URL('../../.github/workflows/validate.yml', import.meta.url), 'utf8');
   assert.match(workflow.slice(0, workflow.indexOf('permissions:')), /^  merge_group:$/m);

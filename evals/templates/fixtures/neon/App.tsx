@@ -15,6 +15,7 @@ import type { ActivePane } from "@/layout/ResponsivePanes"
 import type { NavItem } from "@/layout/navItems"
 import { Approval } from "./app/Approval"
 import { Extras } from "./app/Extras"
+import { Expansion } from "./app/Expansion"
 
 const params = new URLSearchParams(location.search)
 const layout = params.get("layout") ?? "app"
@@ -60,6 +61,7 @@ export function App() {
   }
   return layout === "approval" ? <Approval />
     : layout === "extras" ? <Extras />
+    : layout === "expansion" ? <Expansion />
     : layout === "logo" ? <main><Logo /><Logo tone="light" /></main>
     : layout === "app" ? <AppShell {...props} />
     : layout === "content" ? <ContentLayout {...props} />
