@@ -42,8 +42,8 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
   }
   for (const caseDirectory of cases) {
     const run = digest(parseRun(await readFile(join(caseDirectory, 'run.jsonl'), 'utf8')));
-    const cost = run.costUsd === null ? 'no result' : `$${run.costUsd.toFixed(2)}  ${run.results} result${run.results === 1 ? '' : 's'}`;
-    console.log(`${basename(caseDirectory)}  ${cost}`);
+    const cost = run.costUsd === null ? 'cost unknown' : `$${run.costUsd.toFixed(2)}`;
+    console.log(`${basename(caseDirectory)}  ${run.results ? `${cost}  ${run.results} result${run.results === 1 ? '' : 's'}` : 'no result'}`);
     for (const [tool, target] of run.steps) console.log(`  ${tool.padEnd(6)} ${indent(target, ' '.repeat(9))}`);
     if (run.result !== null) console.log(`  result\n    ${indent(run.result, '    ')}`);
   }

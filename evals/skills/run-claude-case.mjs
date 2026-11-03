@@ -13,8 +13,9 @@
 // from this checkout. It refuses to start, before copying anything, when
 // @playwright/test does not resolve from evals/templates (the browser tool needs
 // `npm ci --prefix evals/templates`; --dry-run skips this), or when --dev-port
-// names a fixture with no package.json. `{port}` in the prompt becomes --dev-port, where the app's
-// `npm run dev` is started before the run and stopped after it. The run is
+// names a fixture with no package.json. `{port}` in the prompt becomes
+// --dev-port, where the app's `npm run dev` is started before the run and
+// stopped after it. The run is
 // stopped at --cap seconds. summary.json carries check-run.mjs's result: every
 // denied command, and void when the run then reported the shell as blocked.
 // --serve-registry serves this checkout's Neon registry on localhost and sets
