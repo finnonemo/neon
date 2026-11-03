@@ -9,8 +9,6 @@ const input = ['h', 'pad', 'font', 'color'];
 
 export const screens = [
   {
-    name: 'expansion-input-group',
-    query: 'layout=expansion',
     targets: {
       startField: { cds: `${start} [data-testid=input-interactable-area]`, neon: `${start} [data-slot=input-group]`, check: field },
       startSlot: { cds: `${start} [data-testid=input-group-start-slot] > div`, neon: `${start} [data-slot=input-group-addon]`, check: ['h', 'w', 'pad'] },
@@ -35,9 +33,9 @@ export const screens = [
 
 // The adornments are part of one labelled control: clicking a start icon
 // focuses the input, and the end button is its own labelled button.
-export function a11y({ test, expect }) {
+export function a11y({ test, expect, gotoExpansion }) {
   test('an input group keeps its input labelled, focuses it from an addon, and labels its button', async ({ page }) => {
-    await page.goto('/?layout=expansion');
+    await gotoExpansion(page);
     const search = page.locator(start).getByRole('textbox', { name: 'ค้นหา / Search' });
     await page.locator(`${start} [data-slot=input-group-addon]`).click();
     await expect(search).toBeFocused();

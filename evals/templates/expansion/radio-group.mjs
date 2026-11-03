@@ -21,8 +21,6 @@ const disabledUnchecked = option(disabled, 2);
 
 export const screens = [
   {
-    name: 'expansion-radio-group',
-    query: 'layout=expansion',
     targets: {
       groupLabel: { cds: `${enabled} [role=radiogroup] > :first-child`, neon: `${enabled} p`, check: ['font', 'color'] },
       checkedRing: checked.ring,
@@ -49,9 +47,9 @@ export const screens = [
 
 // Radix's keyboard model: the arrow keys move focus and the choice together,
 // and a disabled group takes neither.
-export function a11y({ test, expect }) {
+export function a11y({ test, expect, gotoExpansion }) {
   test('a radio group is named by its label and the arrow keys move its choice', async ({ page }) => {
-    await page.goto('/?layout=expansion');
+    await gotoExpansion(page);
     const group = page.getByRole('radiogroup', { name: 'บัญชีรับเงิน / Payout' });
     const bank = group.getByRole('radio', { name: 'ธนาคาร / Bank' });
     const wallet = group.getByRole('radio', { name: 'วอลเล็ต / Wallet' });
