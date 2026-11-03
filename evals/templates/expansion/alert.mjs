@@ -52,21 +52,26 @@ export function a11y({ test, expect, gotoExpansion }) {
         for (const node of records.flatMap((record) => [...record.addedNodes])) {
           if (node.nodeType !== 1 || !node.querySelector('[data-slot=alert-title]') && !node.matches('[data-slot=alert]')) continue;
           const region = node.closest('[aria-live]') ?? node.querySelector('[aria-live]');
-          const insert = { live: region?.getAttribute('aria-live') ?? null, atInsert: region ? exposedText(region) : null, nextFrame: undefined };
+          const text = () => region ? exposedText(region) : null;
+          const insert = { live: region?.getAttribute('aria-live') ?? null, atInsert: text(), paintFrame: undefined, frameAfter: undefined };
           window.__alertInserts.push(insert);
-          requestAnimationFrame(() => { insert.nextFrame = region ? exposedText(region) : null; });
+          requestAnimationFrame(() => {
+            insert.paintFrame = text();
+            requestAnimationFrame(() => { insert.frameAfter = text(); });
+          });
         }
       }).observe(document.querySelector(selector), { childList: true, subtree: true });
     }, [at('alert-appears'), exposedText.toString()]);
 
     await hook.getByRole('button', { name: 'ส่งคำขอ / Submit' }).click();
     await expect(hook.locator('[data-slot=alert]')).toBeVisible();
-    await expect.poll(() => page.evaluate(() => window.__alertInserts.every((insert) => insert.nextFrame !== undefined))).toBe(true);
+    await expect.poll(() => page.evaluate(() => window.__alertInserts.every((insert) => insert.frameAfter !== undefined))).toBe(true);
     const inserts = await page.evaluate(() => window.__alertInserts);
     expect(inserts, 'the alert was inserted once').toHaveLength(1);
     expect(inserts[0].live, 'the alert sits in a polite live region').toBe('polite');
     expect(inserts[0].atInsert, 'the live region is silent when it appears').toBe('');
-    expect(inserts[0].nextFrame, 'the live region is still silent in the frame it is painted in').toBe('');
+    expect(inserts[0].paintFrame, 'the live region is still silent in the frame it is painted in').toBe('');
+    expect(inserts[0].frameAfter, 'and at the start of the frame after it').toBe('');
 
     const region = hook.locator('[data-slot=alert]');
     await expect.poll(() => region.evaluate((el, exposed) => new Function(`return (${exposed})`)()(el.closest('[aria-live]')), exposedText.toString()))
