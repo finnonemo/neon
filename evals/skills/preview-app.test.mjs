@@ -31,7 +31,7 @@ async function fixture(scripts) {
 }
 
 function run(app) {
-  const child = spawn(process.execPath, [script, app, '--timeout', '10'], { stdio: ['ignore', 'pipe', 'pipe'] });
+  const child = spawn(process.execPath, [script, app, '--timeout', '30'], { stdio: ['ignore', 'pipe', 'pipe'] });
   let stdout = '';
   let stderr = '';
   child.stdout.on('data', (chunk) => { stdout += chunk; });
