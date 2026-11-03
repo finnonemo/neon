@@ -29,3 +29,68 @@
   outline: 2px solid currentColor;
   outline-offset: -2px;
 }
+
+/* Workspace geometry is maintained separately from the raw breakpoint export.
+   Order history: hidden below 500, 64px rail below 1280, then 240px sidebar. */
+.neon-workspace-sidebar {
+  width: 64px;
+}
+
+.neon-workspace-sidebar > :first-child {
+  padding-inline: 8px;
+  justify-content: center;
+}
+
+.neon-sidebar-wordmark,
+.neon-workspace-sidebar .neon-sidebar-label {
+  display: none;
+}
+
+.neon-sidebar-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: safe center;
+}
+
+.neon-workspace-sidebar nav a {
+  min-height: 48px;
+  box-sizing: border-box;
+  justify-content: center;
+}
+
+/* Custom sidebar content remains reachable in rail mode as well. */
+.neon-workspace-sidebar .neon-sidebar-content {
+  overflow-wrap: anywhere;
+}
+
+.neon-pane-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  padding-block: 8px;
+}
+
+.neon-pane-heading {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.neon-pane-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+@media (min-width: 1280px) {
+  .neon-workspace-sidebar { width: 240px; }
+  .neon-workspace-sidebar > :first-child { justify-content: flex-start; padding-inline: 16px; }
+  .neon-sidebar-symbol { display: none; }
+  .neon-sidebar-wordmark,
+  .neon-workspace-sidebar .neon-sidebar-label { display: block; }
+  .neon-workspace-sidebar nav a { justify-content: flex-start; }
+}

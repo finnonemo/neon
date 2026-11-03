@@ -1,3 +1,4 @@
+import { Text } from "@coinbase/cds-web/typography";
 import { AppShell } from "../layout/AppShell";
 
 // AppShell's `navigation` prop (see ../layout/navItems.ts's `NavItem`)
@@ -11,6 +12,8 @@ import { AppShell } from "../layout/AppShell";
 export function App() {
   return (
     <AppShell
+      contentHeader={<Text font="headline">Workspace</Text>}
+      inspectorHeader={<Text font="headline">Details</Text>}
       sidebar={null}
       navigation={[]}
       content={<div>Content</div>}

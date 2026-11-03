@@ -1,4 +1,5 @@
 import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
+import { Box } from "@coinbase/cds-web/layout";
 import { Button } from "@coinbase/cds-web/buttons";
 import { ContentView } from "./ContentView";
 import { InspectorView } from "./InspectorView";
@@ -6,6 +7,11 @@ import { InspectorView } from "./InspectorView";
 export type ActivePane = "content" | "inspector";
 
 export interface PaneNavigationProps {
+  /** Context and app-owned actions in each pane's persistent 64px header. */
+  contentHeader?: ReactNode;
+  contentActions?: ReactNode;
+  inspectorHeader?: ReactNode;
+  inspectorActions?: ReactNode;
   /** Omit for internal pane state. Controlled callers must update this in onActivePaneChange. */
   activePane?: ActivePane;
   onActivePaneChange?: (pane: ActivePane) => void;
@@ -21,6 +27,7 @@ export interface PaneNavigationProps {
 export function ResponsivePanes({
   content, inspector, compact, contentWidth, inspectorWidth, capAt, contentCapAt,
   activePane, onActivePaneChange, paneLabels,
+  contentHeader, contentActions, inspectorHeader, inspectorActions,
 }: PaneNavigationProps & {
   content: ReactNode;
   inspector: ReactNode;
@@ -85,7 +92,7 @@ export function ResponsivePanes({
 
   return (
     <>
-      <section
+      <Box as="section" borderedEnd={!compact && inspectorWidth === undefined}
         ref={contentRef} tabIndex={-1} aria-label={labels.content}
         hidden={compact && current !== "content"}
         onFocusCapture={(event) => {
@@ -96,21 +103,28 @@ export function ResponsivePanes({
           width: compact ? undefined : contentWidth, flexShrink: 0, minWidth: 0, minHeight: 0, height: "100%",
           order: inspectorWidth === undefined ? 0 : 1 }}
       >
-        <ContentView width={compact ? "100%" : contentWidth ?? "100%"} capAt={compact ? undefined : contentCapAt} toolbar={contentToolbar}>
+        <ContentView width="100%" capAt={compact ? undefined : contentCapAt} toolbar={<div className="neon-pane-header">
+          <div className="neon-pane-heading">{contentHeader}</div>
+          <div className="neon-pane-actions">{contentActions}{contentToolbar}</div>
+        </div>}>
           {content}
         </ContentView>
-      </section>
-      <section
+      </Box>
+      <Box as="section" borderedEnd={!compact && inspectorWidth !== undefined}
         ref={inspectorRef} tabIndex={-1} aria-label={labels.inspector}
         hidden={compact && current !== "inspector"}
         style={{ display: compact && current !== "inspector" ? "none" : "flex",
           flex: compact || inspectorWidth === undefined ? 1 : undefined,
           width: compact ? undefined : inspectorWidth, flexShrink: 0, minWidth: 0, minHeight: 0, height: "100%" }}
       >
-        <InspectorView pane={{ capAt: compact ? undefined : capAt }} toolbar={inspectorToolbar}>
+        <InspectorView pane={{ capAt: compact ? undefined : capAt }} toolbar={<div className="neon-pane-header">
+          {inspectorToolbar}
+          <div className="neon-pane-heading">{inspectorHeader}</div>
+          <div className="neon-pane-actions">{inspectorActions}</div>
+        </div>}>
           {inspector}
         </InspectorView>
-      </section>
+      </Box>
     </>
   );
 }
