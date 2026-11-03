@@ -22,27 +22,32 @@ const HEADER_FOOTER_HEIGHT = 64
 
 export function Sidebar({
   width,
+  workspace = false,
   navigation = [],
   children,
 }: {
   width: number
+  workspace?: boolean
   navigation?: NavItem[]
   children: ReactNode
 }) {
   if (width === 0) return null
-  const isRail = width === 64
+  const isRail = !workspace && width === 64
 
   return (
-    <div style={{ width, flexShrink: 0, display: "flex", flexDirection: "column", height: "100%" }}>
+    <div className={cn("neon-sidebar border-e border-border", workspace && "neon-workspace-sidebar")} style={{ boxSizing: "border-box", width: workspace ? undefined : width, flexShrink: 0, display: "flex", flexDirection: "column", height: "100%" }}>
       <div
         style={{ height: HEADER_FOOTER_HEIGHT, flexShrink: 0 }}
-        className={cn("flex items-center", isRail ? "justify-center" : "justify-start ps-4")}
+        className={cn("flex items-center border-b border-border", isRail ? "justify-center" : "justify-start ps-4")}
       >
-        <Logo variant={isRail ? "icon" : "full"} />
+        {workspace ? <>
+          <span className="neon-sidebar-symbol"><Logo variant="icon" /></span>
+          <span className="neon-sidebar-wordmark"><Logo variant="full" /></span>
+        </> : <Logo variant={isRail ? "icon" : "full"} />}
       </div>
-      <div style={{ flex: 1, overflowY: "auto" }}>
+      <div className={workspace ? "neon-sidebar-body" : undefined} style={{ flex: 1, minHeight: 0, overflowY: "auto" }}>
         <SidebarNav items={navigation} isRail={isRail} />
-        {!isRail && children}
+        {!isRail && <div className="neon-sidebar-content">{children}</div>}
       </div>
       <div style={{ height: HEADER_FOOTER_HEIGHT, flexShrink: 0 }} />
     </div>

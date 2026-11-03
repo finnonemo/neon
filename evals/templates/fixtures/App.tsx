@@ -97,6 +97,9 @@ export function App() {
   const [clicked, setClicked] = useState(false);
   const content = <Content onSelect={(id) => { setSelected(id); setActivePane("inspector"); }} />;
   const props = {
+    contentHeader: <Text font="headline">พื้นที่ทำงาน / Workspace</Text>,
+    contentActions: <IconButton name="search" accessibilityLabel="Search workspace" onClick={() => document.querySelector<HTMLInputElement>('input')?.focus()} />,
+    inspectorHeader: <Text font="headline">รายละเอียด / Details</Text>,
     sidebar: null, navigation, content, inspector: <Details selected={selected} />,
     ...(params.has("uncontrolled") ? {} : { activePane, onActivePaneChange: setActivePane }),
     paneLabels: { content: "Content", inspector: "Details", viewDetails: "ดูรายละเอียด", backToContent: "กลับไปที่รายการ" },
@@ -117,7 +120,7 @@ export function App() {
       : layout === "app" ? <AppShell {...props} />
       : layout === "content" ? <ContentLayout {...props} />
       : layout === "simple" ? <SimpleLayout {...props} />
-      : layout === "board" ? <MultiColumnLayout {...props} columns={[content]} />
+      : layout === "board" ? <MultiColumnLayout {...props} columns={[content, <div key="next">Next column</div>, <div key="done">Completed column</div>]} />
       : <ImmersiveLayout {...props} />}
   </Provider>;
 }
