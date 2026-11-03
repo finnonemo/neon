@@ -32,3 +32,45 @@ export const screens = [{
     lastHeader: { ...header(3), check: [] },
   },
 }];
+
+// Each header is a button that says whether its panel is expanded and names
+// the panel it controls; Enter and Space open and close it, one item open at a
+// time, as in CDS. PROVISIONAL (#134): the focus ring is Neon's, so it is
+// checked for being shown rather than measured.
+export function a11y({ test, expect, gotoExpansion, keyboardFocus }) {
+  const trigger = (page, name) => page.locator(at).getByRole('button', { name });
+  const panelOf = async (page, button) => page.locator(`[id="${await button.getAttribute('aria-controls')}"]`);
+
+  test('an accordion header reached from the keyboard shows a focus indicator', async ({ page }) => {
+    await gotoExpansion(page);
+    const fees = trigger(page, 'ค่าธรรมเนียม / Fees');
+    const focus = await keyboardFocus(page, fees);
+    await expect(fees).toBeFocused();
+    expect(focus.focusVisible).toBe(true);
+    expect(focus.after, 'the focused header draws an indicator').not.toBe('');
+    expect(focus.after, 'the focused header looks different').not.toBe(focus.before);
+  });
+
+  test('Enter and Space open and close an item and expose its expanded state', async ({ page }) => {
+    await gotoExpansion(page);
+    const fees = trigger(page, 'ค่าธรรมเนียม / Fees');
+    const tax = trigger(page, 'ลดหย่อนภาษีกองทุน SSF และ RMF / Tax savings funds');
+    const feesPanel = await panelOf(page, fees);
+    await expect(fees).toHaveAttribute('aria-expanded', 'true');
+    await expect(feesPanel).toBeVisible();
+    await expect(page.getByRole('region', { name: 'ค่าธรรมเนียม / Fees' })).toHaveText('ไม่มีค่าธรรมเนียมการซื้อขาย / No trading fees');
+    await fees.focus();
+    await page.keyboard.press('Enter');
+    await expect(fees).toHaveAttribute('aria-expanded', 'false');
+    await expect(feesPanel).toBeHidden();
+    await page.keyboard.press('Space');
+    await expect(fees).toHaveAttribute('aria-expanded', 'true');
+    await expect(feesPanel).toBeVisible();
+    await tax.focus();
+    await page.keyboard.press('Space');
+    await expect(tax).toHaveAttribute('aria-expanded', 'true');
+    await expect(await panelOf(page, tax)).toHaveText('ลดหย่อนได้ตามเงื่อนไข / Deductible within limits');
+    await expect(fees, 'opening one item closes the other').toHaveAttribute('aria-expanded', 'false');
+    await expect(feesPanel).toBeHidden();
+  });
+}
