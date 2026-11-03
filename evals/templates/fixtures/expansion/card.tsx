@@ -1,7 +1,7 @@
 // card's Counterpart, CDS ContentCard (CDS Card is deprecated in 9.26.1 in its
 // favor): 24px radius, 16px padding and 16px between its parts. ContentCard
 // draws no surface or border of its own; this one is bordered on bgElevation1,
-// the surface Neon's card slot takes (PROVISIONAL, see registry/ui/card.tsx).
+// the surface Neon's card slot takes (PROVISIONAL (#206), see registry/ui/card.tsx).
 // The body's title is headline and its description label2 in fgMuted, with no
 // gap between them; CDS clamps them to 2 and 3 lines, so the Thai description
 // wraps to 2 or 3 lines here.

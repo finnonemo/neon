@@ -10,9 +10,9 @@ import { cn } from "@/lib/utils"
 // Not matched: CDS clamps the title to 2 lines and the description to 3 and
 // sets a 280–800px width range; Neon wraps the whole text and takes its
 // container's width.
-// PROVISIONAL (#SURFACE): ContentCard draws no surface; Neon's card takes the
+// PROVISIONAL (#206): ContentCard draws no surface; Neon's card takes the
 // card slot, bgElevation1, with a bgLine hairline (CDS's bordered Box).
-// PROVISIONAL (#PARTS): size="sm" (12px padding and gaps) and CardAction have
+// PROVISIONAL (#207): size="sm" (12px padding and gaps) and CardAction have
 // no Counterpart, and the footer drops shadcn's top border and fill.
 function Card({
   className,

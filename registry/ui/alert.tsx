@@ -14,12 +14,12 @@ import { cn } from "@/lib/utils"
 //   promotional    bgPrimaryWash   fgPrimary
 // Not matched: CDS clamps the title to 2 lines and the message to 3 and sets a
 // 320px minimum width; Neon wraps the whole text and takes its container's width.
-// PROVISIONAL (#WARN): fgWarning on bgWarningWash is 2.998:1 in light, under
+// PROVISIONAL (#203): fgWarning on bgWarningWash is 2.998:1 in light, under
 // the 3:1 non-text minimum, for the warning icon.
-// PROVISIONAL (#PROMO): informational and promotional differ only in fill, and
+// PROVISIONAL (#204): informational and promotional differ only in fill, and
 // those are nearly the same: Grey/5 and Navy/5 in light (1.01:1), Grey/90 and
 // Navy/100 in dark (1.04:1).
-// PROVISIONAL (#ACTION): AlertAction has no measured Counterpart; it sits top
+// PROVISIONAL (#205): AlertAction has no measured Counterpart; it sits top
 // right, where CDS puts a Banner's dismiss button.
 //
 // Announced politely: the alert is a polite, atomic status region (never

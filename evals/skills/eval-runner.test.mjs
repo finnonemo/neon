@@ -61,9 +61,9 @@ test('a Neon-base rebuild passes, including a Neon item the app tuned', () => {
 });
 
 test('a rebuild that adds a stock shadcn item fails', () => {
-  const card = { path: 'src/components/ui/card.tsx', source: 'import { cn } from "@/lib/utils"\nexport function Card() { return <div className={cn("rounded-xl border bg-card")} /> }\n' };
-  assert.deepEqual(neonBaseProblems(neonApp({ sources: [...neonApp().sources, card] })), [
-    'src/components/ui/card.tsx is not a Neon registry item; add @neon/<item> items only',
+  const hoverCard = { path: 'src/components/ui/hover-card.tsx', source: 'import { cn } from "@/lib/utils"\nexport function HoverCard() { return <div className={cn("rounded-xl border bg-popover")} /> }\n' };
+  assert.deepEqual(neonBaseProblems(neonApp({ sources: [...neonApp().sources, hoverCard] })), [
+    'src/components/ui/hover-card.tsx is not a Neon registry item; add @neon/<item> items only',
   ]);
   // Stock shadcn's own button, written over Neon's: its dark: class and weight utility give it away.
   const stock = neonApp().sources.map(file => file.path.endsWith('button.tsx') ? { ...file, source: 'import { cn } from "@/lib/utils"\nconst b = cn("font-medium dark:bg-input/30")\n' } : file);
