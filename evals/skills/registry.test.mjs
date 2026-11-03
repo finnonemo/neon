@@ -81,6 +81,20 @@ test('a segmented control is never built on Tabs', () => {
 
 const registryItem = (name) => JSON.parse(read('registry/registry.json')).items.find((item) => item.name === name);
 
+// An item that builds on another Neon item (input-group on button, input and
+// textarea) must pull it in, or shadcn add leaves a broken import or installs stock shadcn's.
+const undeclaredSiblings = (items, readFile) => items.filter((item) => item.type === 'registry:ui').flatMap((item) => item.files.flatMap((file) =>
+  [...readFile(file.path).matchAll(/from "@\/components\/ui\/([a-z-]+)"/g)].map((match) => match[1])
+    .filter((name) => !(item.registryDependencies ?? []).includes(`@neon/${name}`))
+    .map((name) => `${item.name} imports ${name} without @neon/${name}`)));
+
+test('every Neon component that imports another declares it as an @neon registry dependency', () => {
+  const { items } = JSON.parse(read('registry/registry.json'));
+  assert.deepEqual(undeclaredSiblings(items, (path) => read(join('registry', path))), []);
+  const item = { name: 'input-group', type: 'registry:ui', registryDependencies: ['@neon/utils', '@neon/button'], files: [{ path: 'ui/input-group.tsx' }] };
+  assert.deepEqual(undeclaredSiblings([item], () => 'import { Button } from "@/components/ui/button"\nimport { Input } from "@/components/ui/input"'), ['input-group imports input without @neon/input']);
+});
+
 test('the Finnomena logo SVGs are tracked once, in theme/logo/', () => {
   const tracked = execFileSync('git', ['ls-files', '*.svg'], { cwd: root, encoding: 'utf8' }).split('\n').filter((path) => /logo-finnomena/.test(path));
   assert.deepEqual(tracked.sort(), ['icon-dark', 'icon-light', 'text-dark', 'text-light'].map((v) => `theme/logo/logo-finnomena-${v}.svg`));
