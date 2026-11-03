@@ -156,6 +156,27 @@ export function themeBriefItemProblems(items, briefs) {
 
 export const SHADCN = 'shadcn@4.23.0';
 
+// The browser suite runs shadcn init from neon-base, then adds these: every
+// component, and the Theme Briefs, which no other item depends on.
+export function browserSuiteItems(items) {
+  return items.filter((item) => item.type === 'registry:ui' || item.name.startsWith('theme-brief-')).map((item) => item.name);
+}
+
+// Items that neither neon-base nor the added items reach through
+// registryDependencies, so none of their files land in the app.
+export function unreachedItems(items, added) {
+  const byName = new Map(items.map((item) => [item.name, item]));
+  const reached = new Set();
+  const visit = (name) => {
+    if (reached.has(name) || !byName.has(name)) return;
+    reached.add(name);
+    for (const dependency of byName.get(name).registryDependencies ?? []) visit(dependency.split('/').pop().replace(/\.json$/, ''));
+  };
+  for (const item of items.filter((item) => item.type === 'registry:base')) visit(item.name);
+  for (const name of added) visit(name);
+  return items.map((item) => item.name).filter((name) => !reached.has(name));
+}
+
 /**
  * The files the named items and their registry dependencies write, as
  * app-relative path → content. Items are fetched from `url` with
