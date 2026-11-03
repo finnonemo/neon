@@ -636,6 +636,46 @@
       ]
     },
     {
+      "name": "button-group",
+      "type": "registry:ui",
+      "title": "Button group",
+      "dependencies": [
+        "radix-ui@^1.8.1",
+        "class-variance-authority@^0.7.1"
+      ],
+      "registryDependencies": [
+        "@neon/utils",
+        "@neon/button",
+        "@neon/separator"
+      ],
+      "files": [
+        {
+          "path": "ui/button-group.tsx",
+          "type": "registry:ui",
+          "target": "src/components/ui/button-group.tsx"
+        }
+      ]
+    },
+    {
+      "name": "pagination",
+      "type": "registry:ui",
+      "title": "Pagination",
+      "dependencies": [
+        "lucide-react@^1.66.0"
+      ],
+      "registryDependencies": [
+        "@neon/utils",
+        "@neon/button"
+      ],
+      "files": [
+        {
+          "path": "ui/pagination.tsx",
+          "type": "registry:ui",
+          "target": "src/components/ui/pagination.tsx"
+        }
+      ]
+    },
+    {
       "name": "tabs",
       "type": "registry:ui",
       "title": "Tabs",

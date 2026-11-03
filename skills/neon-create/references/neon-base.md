@@ -12,7 +12,7 @@ node "<Neon root>/scripts/install.mjs" <app-dir> --add <item>...
 
 It adds each `@neon/<item>` with its dependencies. If the app has no `@neon` registry entry, it adds one for this release. It keeps Neon files the app has already tuned and checks that every file landed. Never run `shadcn add` with a stock item or another registry, and never install CDS. Where no Neon item fits, compose Neon items and plain elements styled with Neon roles, and report the gap.
 
-Items: `button`, `input`, `textarea`, `label`, `checkbox`, `avatar`, `tag`, `list-row`, `segmented-control`, `tooltip`, `sonner`, `popover`, `select`, `dropdown-menu`, `dialog`, `calendar`, `date-picker`, `table`, `separator`, `field`, `input-group`, `spinner`, `progress`, `switch`, `radio-group`, `toggle-group`, `alert-dialog`, `sheet`, `tabs`, `accordion`, `collapsible`, plus `logo`, `layouts` and `immersive-themes`. Each imports from `@/components/ui/<item>`. Inspect the installed file for its exports and props instead of assuming stock shadcn's.
+Items: `button`, `input`, `textarea`, `label`, `checkbox`, `avatar`, `tag`, `list-row`, `segmented-control`, `tooltip`, `sonner`, `popover`, `select`, `dropdown-menu`, `dialog`, `calendar`, `date-picker`, `table`, `separator`, `field`, `input-group`, `spinner`, `progress`, `switch`, `radio-group`, `toggle-group`, `alert-dialog`, `sheet`, `button-group`, `pagination`, `tabs`, `accordion`, `collapsible`, plus `logo`, `layouts` and `immersive-themes`. Each imports from `@/components/ui/<item>`. Inspect the installed file for its exports and props instead of assuming stock shadcn's.
 
 Use these Neon items in place of stock shadcn ones:
 
