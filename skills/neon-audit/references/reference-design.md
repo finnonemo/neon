@@ -1,6 +1,6 @@
 # Apply a reference design
 
-Read when the employee supplies a reference design, an outside style description such as a Refero Styles file, `./DESIGN.md` in their project or a screenshot of another product, for a campaign or landing page, or asks to move it toward or away from Finnomena. Levels and the Brand Floor are defined in the [design contract](../../INSTRUCTION.md#reference-designs-and-brand-intensity); this file covers how to apply them.
+Read when the employee supplies a reference design, an outside style description such as a Refero Styles file, `./DESIGN.md` in their project or a screenshot of another product, for a campaign or landing page, or asks to move it toward or away from Finnomena, and the file is not a Theme Brief by the [recognition rule](../../neon-create/references/theme-brief.md#recognise-a-brief). Levels and the Brand Floor are defined in the [design contract](../../INSTRUCTION.md#reference-designs-and-brand-intensity); this file covers how to apply them.
 
 ## Scope
 

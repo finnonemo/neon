@@ -4,7 +4,7 @@ import { spawnSync } from 'node:child_process';
 import { mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { ALLOWED_TOOLS, BROWSER_TOOLS, PERMISSION_NOTE, claudeArgs, runFacts, serveRegistry } from './run-claude-case.mjs';
+import { ALLOWED_TOOLS, BROWSER_TOOLS, PERMISSION_NOTE, claudeArgs, pointAtRegistry, runFacts, serveRegistry } from './run-claude-case.mjs';
 
 const runner = join(import.meta.dirname, 'run-claude-case.mjs');
 
@@ -85,6 +85,18 @@ test('serveRegistry serves this checkout\'s registry built for its own URL', asy
   } finally {
     await close();
   }
+});
+
+test('pointAtRegistry points an existing app\'s @neon entry at the served registry and leaves other apps alone', async (t) => {
+  const app = await mkdtemp(join(tmpdir(), 'neon-point-'));
+  t.after(() => rm(app, { recursive: true, force: true }));
+  assert.equal(pointAtRegistry(app, 'http://127.0.0.1:1/r'), false);
+  await writeFile(join(app, 'components.json'), `${JSON.stringify({ style: 'x', registries: { '@neon': 'https://old/r/{name}.json', '@other': 'o' } })}\n`);
+  assert.equal(pointAtRegistry(app, 'http://127.0.0.1:1/r'), true);
+  assert.deepEqual(JSON.parse(await readFile(join(app, 'components.json'), 'utf8')).registries, { '@neon': 'http://127.0.0.1:1/r/{name}.json', '@other': 'o' });
+  assert.equal(pointAtRegistry(app, 'http://127.0.0.1:1/r'), false);
+  await writeFile(join(app, 'components.json'), '{"style":"x"}\n');
+  assert.equal(pointAtRegistry(app, 'http://127.0.0.1:1/r'), false);
 });
 
 test('runFacts reads the model, cost and final report from a stream-json log', () => {

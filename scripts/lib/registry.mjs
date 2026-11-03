@@ -17,6 +17,18 @@ export async function pinnedRegistryUrl(root) {
   return `https://raw.githubusercontent.com/finnonemo/neon/neon--v${version}/${BUILD_DIR}`;
 }
 
+/** The base URL `install.mjs --new` and `--add` read: `registry`, then `env.NEON_REGISTRY_URL`, then the pinned release. */
+export async function neonRegistryUrl({ registry, env = process.env, root }) {
+  return registry ?? env.NEON_REGISTRY_URL ?? (await pinnedRegistryUrl(root));
+}
+
+/** Reads one registry file as JSON. */
+export async function fetchRegistryJson(url) {
+  const response = await fetch(url);
+  if (!response.ok) throw new Error(`${url} answered ${response.status}`);
+  return response.json();
+}
+
 /** Built files by name: one JSON per item plus registry.json, each ending in a newline. */
 export async function buildRegistry({ root, url }) {
   const source = await readFile(join(root, REGISTRY_DIR, 'registry.json'), 'utf8');
