@@ -4,7 +4,7 @@ import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'nod
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { diffTrees, isCapacityFailure, newEntries } from './run-codex-case.mjs';
-import { appStylesheetProblems, differingExports, leftoverUiLibraries, neonBaseCheck, neonBaseProblems, neonRegistryFiles, pairMockFiles, withEvalShots } from './grade-rebuild.mjs';
+import { appBase, appStylesheetProblems, differingExports, leftoverUiLibraries, neonBaseCheck, neonBaseProblems, neonRegistryFiles, pairMockFiles, withEvalShots } from './grade-rebuild.mjs';
 
 test('diffTrees reports packaged files the plugin cache lacks or changed', () => {
   const root = mkdtempSync(join(tmpdir(), 'neon-diff-'));
@@ -98,9 +98,9 @@ test('the Neon base check reads a rebuild against the real registry', async () =
     write('components.json', JSON.stringify({ registries: { '@neon': 'http://127.0.0.1:1/r/{name}.json' } }));
     write('package.json', JSON.stringify({ dependencies: { react: '19' } }));
     write('src/components/ui/button.tsx', files.get('src/components/ui/button.tsx'));
-    assert.deepEqual(await neonBaseCheck(app, files), []);
+    assert.deepEqual(neonBaseCheck(app, files), []);
     write('src/components/ui/accordion.tsx', readFileSync(new URL('./fixtures/shadcn-v4-app/src/components/ui/button.tsx', import.meta.url), 'utf8'));
-    assert.match((await neonBaseCheck(app, files)).join('\n'), /accordion\.tsx is not a Neon registry item/);
+    assert.match(neonBaseCheck(app, files).join('\n'), /accordion\.tsx is not a Neon registry item/);
     // The registry's own stylesheets set :root, body and theme attributes; only the app's own are graded.
     write('src/theme/neon.css', files.get('src/theme/neon.css'));
     write('src/layout/layout.css', files.get('src/layout/layout.css'));
@@ -124,4 +124,17 @@ test('eval-shots launch entry replaces itself and keeps other servers', () => {
   const updated = withEvalShots(launch);
   assert.deepEqual(updated.configurations.map(({ name, port }) => [name, port]), [['dev', 5173], ['eval-shots', 4793]]);
   assert.deepEqual(withEvalShots(undefined).configurations.map(({ name }) => name), ['eval-shots']);
+});
+
+test('appBase tells the Neon base, CDS and neither apart, and names a mixed app', () => {
+  const fixture = JSON.parse(readFileSync(new URL('./fixtures/shadcn-v4-app/components.json', import.meta.url), 'utf8'));
+  assert.equal(appBase(neonApp()), 'neon');
+  assert.equal(appBase({ packageJson: { dependencies: { '@coinbase/cds-web': '9' } } }), 'cds');
+  // A plain shadcn app (v0, Lovable) takes Neon items when asked, but is not on the Neon base.
+  assert.equal(appBase({ componentsJson: fixture, packageJson: { dependencies: { react: '19' } } }), 'neither');
+  assert.equal(appBase({ packageJson: {} }), 'neither');
+  // CDS is @coinbase/cds-web, as neon-create and project-inspection name it; icons alone are not a base.
+  assert.equal(appBase({ packageJson: { dependencies: { '@coinbase/cds-icons': '9' } } }), 'neither');
+  // One app never mixes the two, so the grader reports it rather than picking one.
+  assert.equal(appBase(neonApp({ packageJson: { dependencies: { '@coinbase/cds-web': '9' } } })), 'mixed');
 });
