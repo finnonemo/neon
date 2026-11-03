@@ -11,7 +11,8 @@ import { cn } from "@/lib/utils"
 // border. A start icon sits in 16px either side, as CDS InputIcon, and the
 // input then keeps only 4px of start padding. An end suffix is label1 in the
 // muted role with 16px after it; an end icon button is CDS's transparent
-// InputIconButton, 8px before and 4px after, in the fgPrimary role.
+// InputIconButton, 8px before and 4px after, in the fgPrimary role (read from
+// theme.css, since shadcn has no slot for it). The focus ring is Input's.
 function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div

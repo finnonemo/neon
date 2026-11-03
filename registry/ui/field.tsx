@@ -13,6 +13,8 @@ import { cn } from "@/lib/utils"
 // and error to the control yourself, as CDS does: give FieldDescription or
 // FieldError an id, and pass it to the control's aria-describedby with
 // aria-invalid. FieldError is role=alert, so it is announced when it appears.
+// PROVISIONAL (#195): the legend, title, separator and choice-card roles have
+// no part in the CDS input stack to match.
 function FieldSet({ className, ...props }: React.ComponentProps<"fieldset">) {
   return (
     <fieldset
@@ -26,6 +28,7 @@ function FieldSet({ className, ...props }: React.ComponentProps<"fieldset">) {
   )
 }
 
+// PROVISIONAL (#195): a legend is headline in fg; its label variant follows FieldLabel.
 function FieldLegend({
   className,
   variant = "legend",
@@ -98,6 +101,8 @@ function FieldContent({ className, ...props }: React.ComponentProps<"div">) {
   )
 }
 
+// As a choice card (a Field inside the label), PROVISIONAL (#195): the checked
+// border is bgPrimary, 2.57:1 on the page in dark.
 function FieldLabel({ className, ...props }: React.ComponentProps<typeof Label>) {
   return (
     <Label
@@ -114,6 +119,7 @@ function FieldLabel({ className, ...props }: React.ComponentProps<typeof Label>)
   )
 }
 
+// PROVISIONAL (#195): body in fg, as the Neon checkbox's label.
 function FieldTitle({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
