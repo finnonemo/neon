@@ -443,6 +443,42 @@
       ]
     },
     {
+      "name": "switch",
+      "type": "registry:ui",
+      "title": "Switch",
+      "dependencies": [
+        "radix-ui@^1.8.1"
+      ],
+      "registryDependencies": [
+        "@neon/utils"
+      ],
+      "files": [
+        {
+          "path": "ui/switch.tsx",
+          "type": "registry:ui",
+          "target": "src/components/ui/switch.tsx"
+        }
+      ]
+    },
+    {
+      "name": "radio-group",
+      "type": "registry:ui",
+      "title": "Radio group",
+      "dependencies": [
+        "radix-ui@^1.8.1"
+      ],
+      "registryDependencies": [
+        "@neon/utils"
+      ],
+      "files": [
+        {
+          "path": "ui/radio-group.tsx",
+          "type": "registry:ui",
+          "target": "src/components/ui/radio-group.tsx"
+        }
+      ]
+    },
+    {
       "name": "logo",
       "type": "registry:item",
       "title": "Finnomena logo",
