@@ -14,17 +14,20 @@
 //
 // <root>/<case>/ holds the app copy (a git repository with the fixture as its
 // first commit), the run inputs, run.jsonl, run.err, report.md (the run's final
-// reply) and summary.json, which adds the model the run used and its cost. The plugin
-// is packaged from --ref (a temporary worktree), taken from --package, or packaged
-// from this checkout. `{port}` in the prompt becomes --dev-port, where the app's
-// `npm run dev` is started before the run and stopped after it. The run is
-// stopped at --cap seconds. summary.json carries check-run.mjs's result: every
+// reply) and summary.json, which adds the model the run used, its cost, turns
+// and duration. The plugin is packaged from --ref (a temporary worktree), taken
+// from --package, or packaged from this checkout. `{port}` in the prompt becomes
+// --dev-port, where the app's `npm run dev` is started before the run and
+// stopped after it. The run is stopped at --cap seconds. summary.json carries check-run.mjs's result: every
 // denied command, and void when the run then reported the shell as blocked.
 // --serve-registry serves this checkout's Neon registry on localhost and sets
 // NEON_REGISTRY_URL for the run, so `install.mjs --new` and `--add` work
 // before the release is tagged, without the agent passing --registry. An
 // existing app's components.json @neon entry is pointed at the served registry
-// in a commit of its own, as an app on that release would have it.
+// in a commit of its own, as an app on that release would have it. Without
+// it, a package whose pinned registry does not answer gets a warning first.
+// The run ends RESULT_GRACE seconds after its first result event: a process it
+// left in the background, such as a dev server, would otherwise hold it to --cap.
 import { execFileSync, spawn } from 'node:child_process';
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
@@ -34,7 +37,7 @@ import { basename, join, resolve } from 'node:path';
 import { parseArgs } from 'node:util';
 import { pathToFileURL } from 'node:url';
 import { packagePlugin } from '../../scripts/package-plugin.mjs';
-import { buildRegistry } from '../../scripts/lib/registry.mjs';
+import { buildRegistry, pinnedRegistryUrl } from '../../scripts/lib/registry.mjs';
 import { checkRun } from './check-run.mjs';
 
 const repositoryRoot = resolve(import.meta.dirname, '../..');
@@ -66,14 +69,23 @@ export function claudeArgs({ plugin, mcpConfig, prompt, model }) {
   ];
 }
 
-// The model, cost and final reply a stream-json log records; null when absent.
+// The model, cost, turns, duration and final reply a stream-json log records;
+// null when absent. total_cost_usd is cumulative, so cost is the last result's;
+// turns and duration are per result, so they add up.
 export function runFacts(jsonl) {
-  const facts = { model: null, costUsd: null, report: null };
+  const facts = { model: null, costUsd: null, report: null, turns: null, durationMs: null };
   for (const line of jsonl.split('\n')) {
     let event;
     try { event = JSON.parse(line); } catch { continue; }
     if (event.type === 'system' && event.subtype === 'init') facts.model = event.model ?? facts.model;
-    if (event.type === 'result') Object.assign(facts, { costUsd: event.total_cost_usd ?? null, report: event.result ?? null });
+    if (event.type === 'result') {
+      Object.assign(facts, {
+        costUsd: event.total_cost_usd ?? null,
+        report: event.result ?? null,
+        turns: (facts.turns ?? 0) + (event.num_turns ?? 0),
+        durationMs: (facts.durationMs ?? 0) + (event.duration_ms ?? 0),
+      });
+    }
   }
   return facts;
 }
@@ -87,6 +99,40 @@ function packageAt(ref, destination) {
     return execFileSync('git', ['-C', checkout, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
   } finally {
     execFileSync('git', ['-C', repositoryRoot, 'worktree', 'remove', '--force', checkout]);
+  }
+}
+
+const RESULT_GRACE = 30;
+
+/** Calls onResult once, on the first stream-json `result` event in the chunks fed to it. */
+export function resultWatcher(onResult) {
+  let pending = '';
+  let fired = false;
+  return chunk => {
+    if (fired) return;
+    const lines = (pending + chunk).split('\n');
+    pending = lines.pop();
+    for (const line of lines) {
+      let event;
+      try { event = JSON.parse(line); } catch { continue; }
+      if (event?.type === 'result') {
+        fired = true;
+        onResult(event);
+        return;
+      }
+    }
+  };
+}
+
+/** A warning when the package's pinned registry does not answer, else null. */
+export async function registryPreflight(packageRoot, fetchImpl = fetch) {
+  const url = `${await pinnedRegistryUrl(packageRoot)}/neon-base.json`;
+  const hint = 'a run that creates an app or adds Neon items will fail at install; pass --serve-registry';
+  try {
+    const response = await fetchImpl(url, { method: 'HEAD' });
+    return response.ok ? null : `${url} answered ${response.status}: ${hint}.`;
+  } catch (error) {
+    return `${url} did not answer (${error.message}): ${hint}.`;
   }
 }
 
@@ -195,7 +241,8 @@ async function runCase(values) {
         if (pointAtRegistry(app, registry.url)) {
           execFileSync('git', ['-C', app, '-c', 'user.name=eval', '-c', 'user.email=eval@localhost', 'commit', '-qam', 'point @neon at the served registry']);
         }
-      }
+      } else if ((summary.registryWarning = await registryPreflight(summary.package))) console.error(`Warning: ${summary.registryWarning}`);
+      else delete summary.registryWarning;
       if (port) {
         server = spawn('npm', ['run', 'dev', '--', '--port', port, '--strictPort'], { cwd: app, detached: true, stdio: 'ignore' });
         if (!await waitFor(`http://localhost:${port}/`, 60)) throw new Error(`The dev server did not answer on port ${port} within 60s.`);
@@ -204,18 +251,25 @@ async function runCase(values) {
       const run = spawn('claude', args, { cwd: app, env, stdio: ['ignore', 'pipe', 'pipe'] });
       const out = [];
       const err = [];
-      run.stdout.on('data', chunk => out.push(chunk));
+      let grace;
+      const watch = resultWatcher(() => {
+        summary.endedOnResult = true;
+        grace = setTimeout(() => run.kill('SIGTERM'), RESULT_GRACE * 1000);
+      });
+      run.stdout.on('data', chunk => { out.push(chunk); watch(chunk); });
       run.stderr.on('data', chunk => err.push(chunk));
       const timer = setTimeout(() => { summary.stoppedAtCap = true; run.kill('SIGTERM'); }, summary.cap * 1000);
       summary.exitCode = await new Promise(done => run.on('close', done));
       clearTimeout(timer);
+      clearTimeout(grace);
       summary.endedAt = new Date().toISOString();
       summary.stoppedAtCap ??= false;
+      summary.endedOnResult ??= false;
       const jsonl = Buffer.concat(out).toString();
       writeFileSync(join(caseDirectory, 'run.jsonl'), jsonl);
       writeFileSync(join(caseDirectory, 'run.err'), Buffer.concat(err).toString());
-      const { model, costUsd, report } = runFacts(jsonl);
-      Object.assign(summary, { model: model ?? summary.model, costUsd }, checkRun(jsonl));
+      const { model, report, ...stats } = runFacts(jsonl);
+      Object.assign(summary, { model: model ?? summary.model, ...stats }, checkRun(jsonl));
       if (report !== null) writeFileSync(join(caseDirectory, 'report.md'), `${report}\n`);
       // Staged first, so files the run created appear in the patch.
       execFileSync('git', ['-C', app, 'add', '-A']);
