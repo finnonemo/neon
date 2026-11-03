@@ -443,6 +443,48 @@
       ]
     },
     {
+      "name": "field",
+      "type": "registry:ui",
+      "title": "Field",
+      "dependencies": [
+        "class-variance-authority@^0.7.1",
+        "lucide-react@^1.66.0"
+      ],
+      "registryDependencies": [
+        "@neon/utils",
+        "@neon/label",
+        "@neon/separator"
+      ],
+      "files": [
+        {
+          "path": "ui/field.tsx",
+          "type": "registry:ui",
+          "target": "src/components/ui/field.tsx"
+        }
+      ]
+    },
+    {
+      "name": "input-group",
+      "type": "registry:ui",
+      "title": "Input group",
+      "dependencies": [
+        "class-variance-authority@^0.7.1"
+      ],
+      "registryDependencies": [
+        "@neon/utils",
+        "@neon/button",
+        "@neon/input",
+        "@neon/textarea"
+      ],
+      "files": [
+        {
+          "path": "ui/input-group.tsx",
+          "type": "registry:ui",
+          "target": "src/components/ui/input-group.tsx"
+        }
+      ]
+    },
+    {
       "name": "logo",
       "type": "registry:item",
       "title": "Finnomena logo",

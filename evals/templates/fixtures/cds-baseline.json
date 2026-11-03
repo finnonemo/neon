@@ -586,6 +586,229 @@
     },
     "gaps": {}
   },
+  "expansion-field@375-light": {
+    "elements": {
+      "stack": {
+        "h": 152,
+        "w": 256
+      },
+      "label": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.65)",
+        "h": 28,
+        "pad": [
+          4,
+          0,
+          4,
+          0
+        ]
+      },
+      "control": {
+        "h": 56,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgba(91, 97, 110, 0.66)"
+        },
+        "bg": "rgb(255, 255, 255)"
+      },
+      "helperText": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.65)",
+        "h": 60
+      },
+      "errorStack": {
+        "h": 112
+      },
+      "errorLabel": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.65)"
+      },
+      "errorControl": {
+        "h": 56,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgb(214, 8, 8)"
+        },
+        "bg": "rgb(255, 255, 255)"
+      },
+      "errorText": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgb(214, 8, 8)",
+        "h": 20
+      },
+      "errorIcon": {
+        "h": 12,
+        "w": 16,
+        "pad": [
+          0,
+          4,
+          0,
+          0
+        ],
+        "color": "rgb(214, 8, 8)"
+      }
+    },
+    "gaps": {
+      "label→control": 4,
+      "control→helperText": 4,
+      "errorLabel→errorControl": 4,
+      "errorControl→errorText": 4
+    }
+  },
+  "expansion-input-group@375-light": {
+    "elements": {
+      "startField": {
+        "h": 56,
+        "w": 256,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgba(91, 97, 110, 0.66)"
+        },
+        "bg": "rgb(255, 255, 255)"
+      },
+      "startSlot": {
+        "h": 16,
+        "w": 48,
+        "pad": [
+          0,
+          16,
+          0,
+          16
+        ]
+      },
+      "startIcon": {
+        "h": 16,
+        "w": 16,
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "startInput": {
+        "h": 54,
+        "pad": [
+          16,
+          16,
+          16,
+          4
+        ],
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "suffixField": {
+        "h": 56,
+        "w": 256,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgba(91, 97, 110, 0.66)"
+        },
+        "bg": "rgb(255, 255, 255)"
+      },
+      "suffixInput": {
+        "h": 54,
+        "pad": [
+          16,
+          16,
+          16,
+          16
+        ],
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "suffixText": {
+        "w": 43,
+        "pad": [
+          0,
+          16,
+          0,
+          0
+        ],
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 600
+        },
+        "color": "rgba(0, 0, 0, 0.65)"
+      },
+      "buttonField": {
+        "h": 56,
+        "w": 256,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgba(91, 97, 110, 0.66)"
+        },
+        "bg": "rgb(255, 255, 255)"
+      },
+      "buttonInput": {
+        "h": 54,
+        "pad": [
+          16,
+          16,
+          16,
+          16
+        ],
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "buttonSlot": {
+        "h": 40,
+        "w": 52,
+        "pad": [
+          0,
+          4,
+          0,
+          8
+        ]
+      },
+      "endButton": {
+        "h": 40,
+        "w": 40,
+        "radius": 20,
+        "color": "rgb(1, 23, 43)",
+        "bg": "rgba(255, 255, 255, 0)"
+      },
+      "endIcon": {
+        "h": 16,
+        "w": 16,
+        "color": "rgb(1, 23, 43)"
+      }
+    },
+    "gaps": {
+      "startSlot→startInput": 0,
+      "suffixInput→suffixText": 0,
+      "buttonInput→buttonSlot": 0
+    }
+  },
   "expansion-separator@375-light": {
     "elements": {
       "separatorHorizontal": {
@@ -1200,6 +1423,229 @@
       }
     },
     "gaps": {}
+  },
+  "expansion-field@375-dark": {
+    "elements": {
+      "stack": {
+        "h": 152,
+        "w": 256
+      },
+      "label": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(255, 255, 255, 0.65)",
+        "h": 28,
+        "pad": [
+          4,
+          0,
+          4,
+          0
+        ]
+      },
+      "control": {
+        "h": 56,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgba(138, 145, 158, 0.66)"
+        },
+        "bg": "rgb(0, 0, 0)"
+      },
+      "helperText": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(255, 255, 255, 0.65)",
+        "h": 60
+      },
+      "errorStack": {
+        "h": 112
+      },
+      "errorLabel": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(255, 255, 255, 0.65)"
+      },
+      "errorControl": {
+        "h": 56,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgb(243, 9, 9)"
+        },
+        "bg": "rgb(0, 0, 0)"
+      },
+      "errorText": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgb(243, 9, 9)",
+        "h": 20
+      },
+      "errorIcon": {
+        "h": 12,
+        "w": 16,
+        "pad": [
+          0,
+          4,
+          0,
+          0
+        ],
+        "color": "rgb(243, 9, 9)"
+      }
+    },
+    "gaps": {
+      "label→control": 4,
+      "control→helperText": 4,
+      "errorLabel→errorControl": 4,
+      "errorControl→errorText": 4
+    }
+  },
+  "expansion-input-group@375-dark": {
+    "elements": {
+      "startField": {
+        "h": 56,
+        "w": 256,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgba(138, 145, 158, 0.66)"
+        },
+        "bg": "rgb(0, 0, 0)"
+      },
+      "startSlot": {
+        "h": 16,
+        "w": 48,
+        "pad": [
+          0,
+          16,
+          0,
+          16
+        ]
+      },
+      "startIcon": {
+        "h": 16,
+        "w": 16,
+        "color": "rgb(255, 255, 255)"
+      },
+      "startInput": {
+        "h": 54,
+        "pad": [
+          16,
+          16,
+          16,
+          4
+        ],
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)"
+      },
+      "suffixField": {
+        "h": 56,
+        "w": 256,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgba(138, 145, 158, 0.66)"
+        },
+        "bg": "rgb(0, 0, 0)"
+      },
+      "suffixInput": {
+        "h": 54,
+        "pad": [
+          16,
+          16,
+          16,
+          16
+        ],
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)"
+      },
+      "suffixText": {
+        "w": 43,
+        "pad": [
+          0,
+          16,
+          0,
+          0
+        ],
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 600
+        },
+        "color": "rgba(255, 255, 255, 0.65)"
+      },
+      "buttonField": {
+        "h": 56,
+        "w": 256,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgba(138, 145, 158, 0.66)"
+        },
+        "bg": "rgb(0, 0, 0)"
+      },
+      "buttonInput": {
+        "h": 54,
+        "pad": [
+          16,
+          16,
+          16,
+          16
+        ],
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)"
+      },
+      "buttonSlot": {
+        "h": 40,
+        "w": 52,
+        "pad": [
+          0,
+          4,
+          0,
+          8
+        ]
+      },
+      "endButton": {
+        "h": 40,
+        "w": 40,
+        "radius": 20,
+        "color": "rgb(230, 232, 234)",
+        "bg": "rgba(0, 0, 0, 0)"
+      },
+      "endIcon": {
+        "h": 16,
+        "w": 16,
+        "color": "rgb(230, 232, 234)"
+      }
+    },
+    "gaps": {
+      "startSlot→startInput": 0,
+      "suffixInput→suffixText": 0,
+      "buttonInput→buttonSlot": 0
+    }
   },
   "expansion-separator@375-dark": {
     "elements": {
@@ -1816,6 +2262,229 @@
     },
     "gaps": {}
   },
+  "expansion-field@1440-light": {
+    "elements": {
+      "stack": {
+        "h": 152,
+        "w": 256
+      },
+      "label": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.65)",
+        "h": 28,
+        "pad": [
+          4,
+          0,
+          4,
+          0
+        ]
+      },
+      "control": {
+        "h": 56,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgba(91, 97, 110, 0.66)"
+        },
+        "bg": "rgb(255, 255, 255)"
+      },
+      "helperText": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.65)",
+        "h": 60
+      },
+      "errorStack": {
+        "h": 112
+      },
+      "errorLabel": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.65)"
+      },
+      "errorControl": {
+        "h": 56,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgb(214, 8, 8)"
+        },
+        "bg": "rgb(255, 255, 255)"
+      },
+      "errorText": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgb(214, 8, 8)",
+        "h": 20
+      },
+      "errorIcon": {
+        "h": 12,
+        "w": 16,
+        "pad": [
+          0,
+          4,
+          0,
+          0
+        ],
+        "color": "rgb(214, 8, 8)"
+      }
+    },
+    "gaps": {
+      "label→control": 4,
+      "control→helperText": 4,
+      "errorLabel→errorControl": 4,
+      "errorControl→errorText": 4
+    }
+  },
+  "expansion-input-group@1440-light": {
+    "elements": {
+      "startField": {
+        "h": 56,
+        "w": 256,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgba(91, 97, 110, 0.66)"
+        },
+        "bg": "rgb(255, 255, 255)"
+      },
+      "startSlot": {
+        "h": 16,
+        "w": 48,
+        "pad": [
+          0,
+          16,
+          0,
+          16
+        ]
+      },
+      "startIcon": {
+        "h": 16,
+        "w": 16,
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "startInput": {
+        "h": 54,
+        "pad": [
+          16,
+          16,
+          16,
+          4
+        ],
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "suffixField": {
+        "h": 56,
+        "w": 256,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgba(91, 97, 110, 0.66)"
+        },
+        "bg": "rgb(255, 255, 255)"
+      },
+      "suffixInput": {
+        "h": 54,
+        "pad": [
+          16,
+          16,
+          16,
+          16
+        ],
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "suffixText": {
+        "w": 43,
+        "pad": [
+          0,
+          16,
+          0,
+          0
+        ],
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 600
+        },
+        "color": "rgba(0, 0, 0, 0.65)"
+      },
+      "buttonField": {
+        "h": 56,
+        "w": 256,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgba(91, 97, 110, 0.66)"
+        },
+        "bg": "rgb(255, 255, 255)"
+      },
+      "buttonInput": {
+        "h": 54,
+        "pad": [
+          16,
+          16,
+          16,
+          16
+        ],
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)"
+      },
+      "buttonSlot": {
+        "h": 40,
+        "w": 52,
+        "pad": [
+          0,
+          4,
+          0,
+          8
+        ]
+      },
+      "endButton": {
+        "h": 40,
+        "w": 40,
+        "radius": 20,
+        "color": "rgb(1, 23, 43)",
+        "bg": "rgba(255, 255, 255, 0)"
+      },
+      "endIcon": {
+        "h": 16,
+        "w": 16,
+        "color": "rgb(1, 23, 43)"
+      }
+    },
+    "gaps": {
+      "startSlot→startInput": 0,
+      "suffixInput→suffixText": 0,
+      "buttonInput→buttonSlot": 0
+    }
+  },
   "expansion-separator@1440-light": {
     "elements": {
       "separatorHorizontal": {
@@ -2430,6 +3099,229 @@
       }
     },
     "gaps": {}
+  },
+  "expansion-field@1440-dark": {
+    "elements": {
+      "stack": {
+        "h": 152,
+        "w": 256
+      },
+      "label": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(255, 255, 255, 0.65)",
+        "h": 28,
+        "pad": [
+          4,
+          0,
+          4,
+          0
+        ]
+      },
+      "control": {
+        "h": 56,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgba(138, 145, 158, 0.66)"
+        },
+        "bg": "rgb(0, 0, 0)"
+      },
+      "helperText": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(255, 255, 255, 0.65)",
+        "h": 60
+      },
+      "errorStack": {
+        "h": 112
+      },
+      "errorLabel": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(255, 255, 255, 0.65)"
+      },
+      "errorControl": {
+        "h": 56,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgb(243, 9, 9)"
+        },
+        "bg": "rgb(0, 0, 0)"
+      },
+      "errorText": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgb(243, 9, 9)",
+        "h": 20
+      },
+      "errorIcon": {
+        "h": 12,
+        "w": 16,
+        "pad": [
+          0,
+          4,
+          0,
+          0
+        ],
+        "color": "rgb(243, 9, 9)"
+      }
+    },
+    "gaps": {
+      "label→control": 4,
+      "control→helperText": 4,
+      "errorLabel→errorControl": 4,
+      "errorControl→errorText": 4
+    }
+  },
+  "expansion-input-group@1440-dark": {
+    "elements": {
+      "startField": {
+        "h": 56,
+        "w": 256,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgba(138, 145, 158, 0.66)"
+        },
+        "bg": "rgb(0, 0, 0)"
+      },
+      "startSlot": {
+        "h": 16,
+        "w": 48,
+        "pad": [
+          0,
+          16,
+          0,
+          16
+        ]
+      },
+      "startIcon": {
+        "h": 16,
+        "w": 16,
+        "color": "rgb(255, 255, 255)"
+      },
+      "startInput": {
+        "h": 54,
+        "pad": [
+          16,
+          16,
+          16,
+          4
+        ],
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)"
+      },
+      "suffixField": {
+        "h": 56,
+        "w": 256,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgba(138, 145, 158, 0.66)"
+        },
+        "bg": "rgb(0, 0, 0)"
+      },
+      "suffixInput": {
+        "h": 54,
+        "pad": [
+          16,
+          16,
+          16,
+          16
+        ],
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)"
+      },
+      "suffixText": {
+        "w": 43,
+        "pad": [
+          0,
+          16,
+          0,
+          0
+        ],
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 600
+        },
+        "color": "rgba(255, 255, 255, 0.65)"
+      },
+      "buttonField": {
+        "h": 56,
+        "w": 256,
+        "radius": 8,
+        "border": {
+          "width": 1,
+          "color": "rgba(138, 145, 158, 0.66)"
+        },
+        "bg": "rgb(0, 0, 0)"
+      },
+      "buttonInput": {
+        "h": 54,
+        "pad": [
+          16,
+          16,
+          16,
+          16
+        ],
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)"
+      },
+      "buttonSlot": {
+        "h": 40,
+        "w": 52,
+        "pad": [
+          0,
+          4,
+          0,
+          8
+        ]
+      },
+      "endButton": {
+        "h": 40,
+        "w": 40,
+        "radius": 20,
+        "color": "rgb(230, 232, 234)",
+        "bg": "rgba(0, 0, 0, 0)"
+      },
+      "endIcon": {
+        "h": 16,
+        "w": 16,
+        "color": "rgb(230, 232, 234)"
+      }
+    },
+    "gaps": {
+      "startSlot→startInput": 0,
+      "suffixInput→suffixText": 0,
+      "buttonInput→buttonSlot": 0
+    }
   },
   "expansion-separator@1440-dark": {
     "elements": {
