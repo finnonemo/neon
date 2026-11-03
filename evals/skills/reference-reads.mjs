@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Lists the skill files each Codex case read, from its run.jsonl. A command
+// Lists the skill files each Codex or Claude case read, from its run.jsonl. A command
 // can name a file without printing it (`rg -g`, a failed path) or read several
 // through brace expansion (`references/{rebuild,scaffold}.md`), so a name in a
 // command is not a read. Each file counts as read by the share of its lines
@@ -45,12 +45,29 @@ export function coverage(text, output) {
   return lines.filter(line => output.includes(line)).length / lines.length;
 }
 
+const resultText = content => (typeof content === 'string' ? content : (content ?? []).map(part => part.text ?? '').join('\n'));
+
+// Each command and its output: Codex logs both in one completed item; Claude
+// logs a Read or Bash tool_use and, in a later event, its tool_result.
+export function commandOutputs(events) {
+  const pending = new Map();
+  const commands = [];
+  for (const event of events) {
+    const item = event.item;
+    if (event.type === 'item.completed' && item?.type === 'command_execution') commands.push({ command: item.command, output: item.aggregated_output ?? '' });
+    for (const part of event.message?.content ?? []) {
+      if (part.type === 'tool_use' && part.name === 'Read') pending.set(part.id, part.input.file_path);
+      if (part.type === 'tool_use' && part.name === 'Bash') pending.set(part.id, part.input.command);
+      if (part.type === 'tool_result' && pending.has(part.tool_use_id)) commands.push({ command: pending.get(part.tool_use_id), output: resultText(part.content) });
+    }
+  }
+  return commands;
+}
+
 // Best coverage per skill file, keyed by its path below `skills/`.
 export async function referenceReads(events, read = path => readFile(path, 'utf8')) {
   const files = new Map();
-  for (const event of events) {
-    const item = event.item;
-    if (event.type !== 'item.completed' || item?.type !== 'command_execution') continue;
+  for (const item of commandOutputs(events)) {
     for (const path of skillPaths(item.command)) {
       const key = path.slice(path.lastIndexOf('skills/') + 'skills/'.length);
       // Prefer the copy the run installed; fall back to this repository's skills.
@@ -66,7 +83,7 @@ export async function referenceReads(events, read = path => readFile(path, 'utf8
           continue;
         }
       }
-      const share = coverage(text, item.aggregated_output ?? '');
+      const share = coverage(text, item.output);
       const entry = files.get(key) ?? { file: key, coverage: 0, commands: 0, source };
       entry.commands++;
       if (share > entry.coverage) Object.assign(entry, { coverage: share, source });
