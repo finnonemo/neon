@@ -66,7 +66,7 @@ test('the Neon base reference lists every Neon component item', async () => {
   const base = await readFile(`${references}neon-base.md`, 'utf8');
   const listed = base.match(/^Items: (.*)$/m)?.[1] ?? '';
   const names = [...listed.matchAll(/`([\w-]+)`/g)].map(match => match[1]).sort();
-  const shipped = items.filter(item => item.type === 'registry:ui' || ['logo', 'layouts', 'immersive-themes'].includes(item.name)).map(item => item.name).sort();
+  const shipped = items.filter(item => (item.type === 'registry:ui' && !item.meta?.supporting) || ['logo', 'layouts', 'immersive-themes'].includes(item.name)).map(item => item.name).sort();
   assert.deepEqual(names, shipped);
 });
 

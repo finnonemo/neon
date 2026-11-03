@@ -105,6 +105,10 @@
   --primary-disabled: color-mix(in srgb, var(--primary) 93.7%, var(--background));
   --secondary-disabled: color-mix(in srgb, var(--secondary) 75%, var(--background));
   --destructive-disabled: color-mix(in srgb, var(--destructive) 92%, var(--background));
+  /* CDS Tray is bordered (1px bgLine) in dark only, so a sheet's border
+   * width switches with the mode; a width, not light-dark(), which Tailwind's
+   * polyfill breaks under AppRoot's inline color-scheme. */
+  --sheet-border-width: 0px;
 }
 
 /* onColorLabel in dark: filled buttons take fg (white), as createTheme.ts does
@@ -121,6 +125,7 @@
     --tag-positive: var(--color-fgPositive);
     --tag-warning: var(--color-fgWarning);
     --tag-negative: rgb(251, 153, 153);
+    --sheet-border-width: 1px;
   }
 }
 :root[data-theme="dark"] {
@@ -131,6 +136,7 @@
   --tag-positive: var(--color-fgPositive);
   --tag-warning: var(--color-fgWarning);
   --tag-negative: rgb(251, 153, 153);
+  --sheet-border-width: 1px;
 }
 
 @layer base {

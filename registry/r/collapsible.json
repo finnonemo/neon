@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "collapsible",
+  "type": "registry:ui",
+  "title": "Collapsible",
+  "dependencies": [
+    "radix-ui@^1.8.1"
+  ],
+  "registryDependencies": [
+    "@neon/utils"
+  ],
+  "files": [
+    {
+      "path": "ui/collapsible.tsx",
+      "content": "import * as React from \"react\"\nimport { Collapsible as CollapsiblePrimitive } from \"radix-ui\"\n\nimport { cn } from \"@/lib/utils\"\n\n// The CDS Collapsible: a region with no padding or background of its own that\n// clips its content as it opens and closes. The trigger is the page's own\n// control (a Button, through asChild), so its look and focus ring are that\n// control's. Radix sets data-state, which radix-nova's data-open: classes\n// never match.\nfunction Collapsible({ ...props }: React.ComponentProps<typeof CollapsiblePrimitive.Root>) {\n  return <CollapsiblePrimitive.Root data-slot=\"collapsible\" {...props} />\n}\n\nfunction CollapsibleTrigger({ ...props }: React.ComponentProps<typeof CollapsiblePrimitive.CollapsibleTrigger>) {\n  return <CollapsiblePrimitive.CollapsibleTrigger data-slot=\"collapsible-trigger\" {...props} />\n}\n\nfunction CollapsibleContent({ className, ...props }: React.ComponentProps<typeof CollapsiblePrimitive.CollapsibleContent>) {\n  return (\n    <CollapsiblePrimitive.CollapsibleContent\n      data-slot=\"collapsible-content\"\n      className={cn(\n        \"overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport { Collapsible, CollapsibleTrigger, CollapsibleContent }\n",
+      "type": "registry:ui",
+      "target": "src/components/ui/collapsible.tsx"
+    }
+  ]
+}

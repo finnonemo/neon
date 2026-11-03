@@ -61,9 +61,9 @@ test('a Neon-base rebuild passes, including a Neon item the app tuned', () => {
 });
 
 test('a rebuild that adds a stock shadcn item fails', () => {
-  const card = { path: 'src/components/ui/card.tsx', source: 'import { cn } from "@/lib/utils"\nexport function Card() { return <div className={cn("rounded-xl border bg-card")} /> }\n' };
-  assert.deepEqual(neonBaseProblems(neonApp({ sources: [...neonApp().sources, card] })), [
-    'src/components/ui/card.tsx is not a Neon registry item; add @neon/<item> items only',
+  const hoverCard = { path: 'src/components/ui/hover-card.tsx', source: 'import { cn } from "@/lib/utils"\nexport function HoverCard() { return <div className={cn("rounded-xl border bg-popover")} /> }\n' };
+  assert.deepEqual(neonBaseProblems(neonApp({ sources: [...neonApp().sources, hoverCard] })), [
+    'src/components/ui/hover-card.tsx is not a Neon registry item; add @neon/<item> items only',
   ]);
   // Stock shadcn's own button, written over Neon's: its dark: class and weight utility give it away.
   const stock = neonApp().sources.map(file => file.path.endsWith('button.tsx') ? { ...file, source: 'import { cn } from "@/lib/utils"\nconst b = cn("font-medium dark:bg-input/30")\n' } : file);
@@ -99,8 +99,8 @@ test('the Neon base check reads a rebuild against the real registry', async () =
     write('package.json', JSON.stringify({ dependencies: { react: '19' } }));
     write('src/components/ui/button.tsx', files.get('src/components/ui/button.tsx'));
     assert.deepEqual(neonBaseCheck(app, files), []);
-    write('src/components/ui/accordion.tsx', readFileSync(new URL('./fixtures/shadcn-v4-app/src/components/ui/button.tsx', import.meta.url), 'utf8'));
-    assert.match(neonBaseCheck(app, files).join('\n'), /accordion\.tsx is not a Neon registry item/);
+    write('src/components/ui/command.tsx', readFileSync(new URL('./fixtures/shadcn-v4-app/src/components/ui/button.tsx', import.meta.url), 'utf8'));
+    assert.match(neonBaseCheck(app, files).join('\n'), /command\.tsx is not a Neon registry item/);
     // The registry's own stylesheets set :root, body and theme attributes; only the app's own are graded.
     write('src/theme/neon.css', files.get('src/theme/neon.css'));
     write('src/layout/layout.css', files.get('src/layout/layout.css'));

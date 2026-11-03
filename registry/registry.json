@@ -233,6 +233,45 @@
       ]
     },
     {
+      "name": "alert",
+      "type": "registry:ui",
+      "title": "Alert",
+      "dependencies": ["class-variance-authority@^0.7.1"],
+      "registryDependencies": ["@neon/utils"],
+      "files": [
+        { "path": "ui/alert.tsx", "type": "registry:ui", "target": "src/components/ui/alert.tsx" }
+      ]
+    },
+    {
+      "name": "card",
+      "type": "registry:ui",
+      "title": "Card",
+      "registryDependencies": ["@neon/utils"],
+      "files": [
+        { "path": "ui/card.tsx", "type": "registry:ui", "target": "src/components/ui/card.tsx" }
+      ]
+    },
+    {
+      "name": "alert-dialog",
+      "type": "registry:ui",
+      "title": "Alert dialog",
+      "dependencies": ["radix-ui@^1.8.1"],
+      "registryDependencies": ["@neon/utils", "@neon/button"],
+      "files": [
+        { "path": "ui/alert-dialog.tsx", "type": "registry:ui", "target": "src/components/ui/alert-dialog.tsx" }
+      ]
+    },
+    {
+      "name": "sheet",
+      "type": "registry:ui",
+      "title": "Sheet",
+      "dependencies": ["radix-ui@^1.8.1", "lucide-react@^1.66.0"],
+      "registryDependencies": ["@neon/utils", "@neon/button"],
+      "files": [
+        { "path": "ui/sheet.tsx", "type": "registry:ui", "target": "src/components/ui/sheet.tsx" }
+      ]
+    },
+    {
       "name": "spinner",
       "type": "registry:ui",
       "title": "Spinner",
@@ -289,6 +328,78 @@
       "registryDependencies": ["@neon/utils"],
       "files": [
         { "path": "ui/radio-group.tsx", "type": "registry:ui", "target": "src/components/ui/radio-group.tsx" }
+      ]
+    },
+    {
+      "name": "toggle-group",
+      "type": "registry:ui",
+      "title": "Toggle group",
+      "dependencies": ["radix-ui@^1.8.1", "class-variance-authority@^0.7.1"],
+      "registryDependencies": ["@neon/utils", "@neon/toggle"],
+      "files": [
+        { "path": "ui/toggle-group.tsx", "type": "registry:ui", "target": "src/components/ui/toggle-group.tsx" }
+      ]
+    },
+    {
+      "name": "toggle",
+      "type": "registry:ui",
+      "title": "Toggle",
+      "description": "Supporting item for toggle-group; not a component to choose on its own.",
+      "meta": { "supporting": true },
+      "dependencies": ["radix-ui@^1.8.1", "class-variance-authority@^0.7.1"],
+      "registryDependencies": ["@neon/utils"],
+      "files": [
+        { "path": "ui/toggle.tsx", "type": "registry:ui", "target": "src/components/ui/toggle.tsx" }
+      ]
+    },
+    {
+      "name": "button-group",
+      "type": "registry:ui",
+      "title": "Button group",
+      "dependencies": ["radix-ui@^1.8.1", "class-variance-authority@^0.7.1"],
+      "registryDependencies": ["@neon/utils", "@neon/button", "@neon/separator"],
+      "files": [
+        { "path": "ui/button-group.tsx", "type": "registry:ui", "target": "src/components/ui/button-group.tsx" }
+      ]
+    },
+    {
+      "name": "pagination",
+      "type": "registry:ui",
+      "title": "Pagination",
+      "dependencies": ["lucide-react@^1.66.0"],
+      "registryDependencies": ["@neon/utils", "@neon/button"],
+      "files": [
+        { "path": "ui/pagination.tsx", "type": "registry:ui", "target": "src/components/ui/pagination.tsx" }
+      ]
+    },
+    {
+      "name": "tabs",
+      "type": "registry:ui",
+      "title": "Tabs",
+      "dependencies": ["radix-ui@^1.8.1"],
+      "registryDependencies": ["@neon/utils"],
+      "files": [
+        { "path": "ui/tabs.tsx", "type": "registry:ui", "target": "src/components/ui/tabs.tsx" }
+      ]
+    },
+    {
+      "name": "accordion",
+      "type": "registry:ui",
+      "title": "Accordion",
+      "dependencies": ["radix-ui@^1.8.1", "lucide-react@^1.66.0"],
+      "registryDependencies": ["@neon/utils"],
+      "files": [
+        { "path": "ui/accordion.tsx", "type": "registry:ui", "target": "src/components/ui/accordion.tsx" }
+      ]
+    },
+    {
+      "name": "collapsible",
+      "type": "registry:ui",
+      "title": "Collapsible",
+      "dependencies": ["radix-ui@^1.8.1"],
+      "registryDependencies": ["@neon/utils"],
+      "files": [
+        { "path": "ui/collapsible.tsx", "type": "registry:ui", "target": "src/components/ui/collapsible.tsx" }
       ]
     },
     {
