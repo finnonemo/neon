@@ -99,8 +99,8 @@ test('the Neon base check reads a rebuild against the real registry', async () =
     write('package.json', JSON.stringify({ dependencies: { react: '19' } }));
     write('src/components/ui/button.tsx', files.get('src/components/ui/button.tsx'));
     assert.deepEqual(neonBaseCheck(app, files), []);
-    write('src/components/ui/carousel.tsx', readFileSync(new URL('./fixtures/shadcn-v4-app/src/components/ui/button.tsx', import.meta.url), 'utf8'));
-    assert.match(neonBaseCheck(app, files).join('\n'), /carousel\.tsx is not a Neon registry item/);
+    write('src/components/ui/command.tsx', readFileSync(new URL('./fixtures/shadcn-v4-app/src/components/ui/button.tsx', import.meta.url), 'utf8'));
+    assert.match(neonBaseCheck(app, files).join('\n'), /command\.tsx is not a Neon registry item/);
     // The registry's own stylesheets set :root, body and theme attributes; only the app's own are graded.
     write('src/theme/neon.css', files.get('src/theme/neon.css'));
     write('src/layout/layout.css', files.get('src/layout/layout.css'));

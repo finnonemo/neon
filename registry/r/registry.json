@@ -478,7 +478,7 @@
     {
       "name": "alert-dialog",
       "type": "registry:ui",
-      "title": "Alert Dialog",
+      "title": "Alert dialog",
       "dependencies": [
         "radix-ui@^1.8.1"
       ],
