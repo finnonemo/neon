@@ -23,4 +23,4 @@ The fixture covers both controlled and uncontrolled content/detail navigation, s
 
 `--keep` leaves the assembled app in the temporary directory and prints its path, so you can preview and screenshot it.
 
-Reports, screenshots and failure traces go to `.local/evals/templates/` in the repository and are uploaded by CI. Inspect screenshots for Thai/English wrapping and layout quality; successful assertions alone do not establish visual quality.
+Reports, screenshots and failure traces go to `.local/evals/templates/<target>/` (`cds` or `neon`) in the repository and are uploaded by CI. Inspect screenshots for Thai/English wrapping and layout quality; successful assertions alone do not establish visual quality.
