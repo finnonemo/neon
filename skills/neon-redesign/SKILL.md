@@ -1,6 +1,6 @@
 ---
 name: neon-redesign
-description: Use when restyling existing Finnomena or neon UI through CSS tokens without adopting CDS, including non-React apps, partial changes, pages restyled from a supplied reference design and explicitly requested layout or hierarchy redesign. Applies to established Finnomena intent. Use neon-create for CDS adoption.
+description: Use when restyling existing Finnomena or neon UI through CSS tokens or Neon role utilities, keeping the app on its base, including non-React apps, partial changes, pages restyled from a supplied reference design and explicitly requested layout or hierarchy redesign. Applies to established Finnomena intent. Use neon-create for new components, a rebuild or CDS component colors.
 ---
 
 # Restyle Finnomena UI
@@ -11,7 +11,7 @@ Apply Finnomena visual roles to existing UI while preserving its framework and p
 
 ## When to use
 
-Use for CSS styling or presentation redesign. Full CDS adoption, and color changes to CDS components in an app already on CDS (frozen), belong to [neon-create](../neon-create/SKILL.md). Review-only requests belong to [neon-review](../neon-review/SKILL.md).
+Use for CSS styling or presentation redesign. New components, a rebuild, and color changes to CDS components in an app already on CDS (frozen), belong to [neon-create](../neon-create/SKILL.md). Review-only requests belong to [neon-review](../neon-review/SKILL.md).
 
 ## Fast path
 
@@ -20,13 +20,16 @@ When target, scope and theme variables are known, begin with the affected styles
 ## Workflow
 
 1. Establish scope from the request and existing context. `colors` changes only colors; `visual-system` also covers brand typography, spacing and radius. Existing composition defaults to `preserve`; set `adapt` only for an explicit layout/hierarchy request. Conflicting instructions require clarification. Read the [shared contract](../neon-audit/references/workflow-contract.md) only if these decisions remain unresolved.
-2. Inventory the affected styles and shared consumers. Record existing behavior and a before view. Resolve Neon resources two levels above this skill's real directory; use the [design contract](../INSTRUCTION.md) for the relevant visual roles.
+2. Tell the app's [base](../neon-audit/references/project-inspection.md#base) from its manifests: Neon base, CDS or neither. Restyle keeps it: never add CDS, Neon items or another base. Inventory the affected styles and shared consumers. Record existing behavior and a before view. Resolve Neon resources two levels above this skill's real directory; use the [design contract](../INSTRUCTION.md) for the relevant visual roles.
 3. Map by meaning: primary action, selection, status and chart category are different jobs even if they share a hex value. Reuse matching tokens; preserve domain color meaning. Do not use a global replacement for a local request. Tailwind target (config, `@theme` or stock utilities such as `bg-slate-900`): read the [Tailwind mapping rules](references/style-migration.md#tailwind-mapping-rules) and the matching format section before mapping, including on the fast path.
 4. Update scoped tokens, then remaining component styles. For `adapt`, reorganize presentation within the named scope while retaining routes, handlers, service contracts, data meaning and access to essential actions. Do not adopt a new framework or component library to rearrange a page.
 5. Before reporting, read the [shared checklist](references/verification.md) and apply it, including on the fast path and for colors-only work: before/after appearance, preserved behavior and unrelated consumers for partial changes. Then run its [Look and fix](references/verification.md#look-and-fix) loop on your own screenshots, within scope.
 
 ## Conditional references
 
+- Neon base: restyle through Neon role utilities and Neon item props, per the styling rules in [Neon base](../neon-create/references/neon-base.md). `index.css`, `src/theme/` and Neon item files stay as installed; colors-only changes only color role utilities.
+- CDS: restyle the app's own CSS-styled UI through CSS tokens here; CDS component colors go to [neon-create](../neon-create/SKILL.md).
+- Neither: the CSS path below, plain shadcn included, with no Neon items.
 - Plain CSS/shadcn formats or mapping examples: relevant sections of [style migration](references/style-migration.md).
 - shadcn/ui on Tailwind v4 (v0, Lovable; `@theme inline` over `:root`/`.dark`): its [style migration format](references/style-migration.md#5-shadcn-style-on-tailwind-v4); edit values by role and pair in both modes.
 - Any supplied reference design or outside style file: [reference design](../neon-audit/references/reference-design.md).

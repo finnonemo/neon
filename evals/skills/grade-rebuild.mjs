@@ -48,16 +48,33 @@ export async function neonRegistryFiles(root = repositoryRoot) {
   return resolveItemFiles({ url: 'neon:', names, fetchJson: async url => JSON.parse(built.get(basename(url))) });
 }
 
+const cdsPackages = packageJson => ['dependencies', 'devDependencies'].flatMap(field => Object.keys(packageJson?.[field] ?? {})).filter(name => cdsPackage.test(name));
+
+const hasNeonRegistry = componentsJson => Boolean(componentsJson?.registries?.['@neon']);
+
+// The app's base, as project-inspection.md#base states it: an `@neon` registry
+// entry in components.json is the Neon base, `@coinbase/cds-web` is CDS, and an
+// app with both is mixed. A components.json without `@neon` is plain shadcn: neither.
+export function appBase({ componentsJson, packageJson }) {
+  const neon = hasNeonRegistry(componentsJson);
+  const cds = cdsPackages(packageJson).includes('@coinbase/cds-web');
+  return neon && cds ? 'mixed' : neon ? 'neon' : cds ? 'cds' : 'neither';
+}
+
+// components.json and package.json, each undefined when absent.
+export function appManifests(app) {
+  const read = name => (existsSync(join(app, name)) ? JSON.parse(readFileSync(join(app, name), 'utf8')) : undefined);
+  return { componentsJson: read('components.json'), packageJson: read('package.json') };
+}
+
 // What keeps a rebuild off the Neon base: no @neon registry in components.json,
 // CDS, or a ui file that is not a Neon item or carries stock shadcn's marks. A
 // Neon item the app tuned passes; its content is the app's.
 export function neonBaseProblems({ componentsJson, packageJson, sources, neonFiles }) {
   const problems = [];
   if (!componentsJson) problems.push('no components.json: the rebuild was not started from the Neon base');
-  else if (!componentsJson.registries?.['@neon']) problems.push('components.json has no @neon registry: the rebuild was not started from the Neon base');
-  for (const field of ['dependencies', 'devDependencies']) {
-    for (const name of Object.keys(packageJson[field] ?? {})) if (cdsPackage.test(name)) problems.push(`package.json: ${name} is CDS; a rebuild targets the Neon base`);
-  }
+  else if (!hasNeonRegistry(componentsJson)) problems.push('components.json has no @neon registry: the rebuild was not started from the Neon base');
+  for (const name of cdsPackages(packageJson)) problems.push(`package.json: ${name} is CDS; a rebuild targets the Neon base`);
   for (const { path, source } of sources) {
     for (const [, specifier] of source.matchAll(/(?:from\s*|import\s*\(?\s*)["']([^"']+)["']/g)) {
       if (cdsPackage.test(specifier)) problems.push(`${path} imports ${specifier}; a rebuild targets the Neon base`);
@@ -74,9 +91,9 @@ function appSources(app) {
   return sourceFiles(join(app, 'src'), /\.(m?[jt]sx?|s?css)$/).map(path => ({ path: path.slice(app.length + 1), source: readFileSync(path, 'utf8') }));
 }
 
-export async function neonBaseCheck(app, neonFiles) {
-  const read = name => (existsSync(join(app, name)) ? JSON.parse(readFileSync(join(app, name), 'utf8')) : undefined);
-  return neonBaseProblems({ componentsJson: read('components.json'), packageJson: read('package.json') ?? {}, sources: appSources(app), neonFiles });
+export function neonBaseCheck(app, neonFiles) {
+  const { componentsJson, packageJson } = appManifests(app);
+  return neonBaseProblems({ componentsJson, packageJson: packageJson ?? {}, sources: appSources(app), neonFiles });
 }
 
 // Stylesheet selectors in the app's own stylesheets; the registry's, unchanged, are left out.
@@ -146,7 +163,7 @@ async function grade({ source, rebuild }) {
   } else add('source unchanged', false, 'source is not a git repository, so changes cannot be checked');
 
   const neonFiles = await neonRegistryFiles();
-  const base = await neonBaseCheck(rebuild, neonFiles);
+  const base = neonBaseCheck(rebuild, neonFiles);
   add('Neon base and items only', base.length === 0, base.join('\n'));
 
   const styles = await appStylesheetProblems(rebuild, neonFiles);
