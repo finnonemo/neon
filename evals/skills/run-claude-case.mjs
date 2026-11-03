@@ -6,9 +6,15 @@
 //   node evals/skills/run-claude-case.mjs --fixture <app> --case <name> --prompt <text>
 //     [--ref <commit> | --package <dir>] [--dev-port <n>] [--model <id>]
 //     [--cap <seconds>] [--root .local/evals] [--serve-registry] [--dry-run]
+//   node evals/skills/run-claude-case.mjs --cases <cases.json> [--parallel <n>] [shared options]
+//
+// --cases takes a JSON list of { case, fixture, prompt, ref?, package?, devPort?,
+// model?, cap? }; a case's own fields win over the shared options. Every case is
+// checked before any starts, and at most --parallel (default 4) run at once.
 //
 // <root>/<case>/ holds the app copy (a git repository with the fixture as its
-// first commit), the run inputs, run.jsonl, run.err and summary.json. The plugin
+// first commit), the run inputs, run.jsonl, run.err, report.md (the run's final
+// reply) and summary.json, which adds the model the run used and its cost. The plugin
 // is packaged from --ref (a temporary worktree), taken from --package, or packaged
 // from this checkout. `{port}` in the prompt becomes --dev-port, where the app's
 // `npm run dev` is started before the run and stopped after it. The run is
@@ -58,6 +64,18 @@ export function claudeArgs({ plugin, mcpConfig, prompt, model }) {
     '--append-system-prompt', PERMISSION_NOTE,
     '--output-format', 'stream-json', '--verbose', prompt,
   ];
+}
+
+// The model, cost and final reply a stream-json log records; null when absent.
+export function runFacts(jsonl) {
+  const facts = { model: null, costUsd: null, report: null };
+  for (const line of jsonl.split('\n')) {
+    let event;
+    try { event = JSON.parse(line); } catch { continue; }
+    if (event.type === 'system' && event.subtype === 'init') facts.model = event.model ?? facts.model;
+    if (event.type === 'result') Object.assign(facts, { costUsd: event.total_cost_usd ?? null, report: event.result ?? null });
+  }
+  return facts;
 }
 
 function packageAt(ref, destination) {
@@ -119,31 +137,22 @@ function stopGroup(child) {
   try { process.kill(-child.pid, 'SIGTERM'); } catch { child.kill('SIGTERM'); }
 }
 
-async function main() {
-  const { values } = parseArgs({
-    options: {
-      fixture: { type: 'string' },
-      case: { type: 'string' },
-      prompt: { type: 'string' },
-      ref: { type: 'string' },
-      package: { type: 'string' },
-      'dev-port': { type: 'string' },
-      model: { type: 'string' },
-      cap: { type: 'string', default: '2700' },
-      root: { type: 'string', default: join(repositoryRoot, '.local/evals') },
-      'serve-registry': { type: 'boolean', default: false },
-      'dry-run': { type: 'boolean', default: false },
-    },
-  });
-  if (!values.fixture || !values.case || !values.prompt || (values.ref && values.package)) {
-    throw new Error('Usage: run-claude-case.mjs --fixture <app> --case <name> --prompt <text> [--ref <commit> | --package <dir>] [--dev-port <n>] [--model <id>] [--cap <seconds>] [--root <dir>] [--serve-registry] [--dry-run]');
-  }
-  const port = values['dev-port'];
-  if (values.prompt.includes('{port}') && !port) throw new Error('The prompt names {port}; pass --dev-port.');
+const usage = 'Usage: run-claude-case.mjs --fixture <app> --case <name> --prompt <text> [--ref <commit> | --package <dir>] [--dev-port <n>] [--model <id>] [--cap <seconds>] [--root <dir>] [--serve-registry] [--dry-run], or --cases <cases.json> [--parallel <n>]';
 
+// Throws before anything is copied, so a batch never starts half its cases.
+function checkCase(values) {
+  const name = values.case ?? '(unnamed)';
+  if (!values.fixture || !values.case || !values.prompt) throw new Error(values.cases ? `Case ${name} needs case, fixture and prompt.` : usage);
+  if (values.ref && values.package) throw new Error(`Case ${name} takes --ref or --package, not both.`);
+  if (values.prompt.includes('{port}') && !values['dev-port']) throw new Error(values.cases ? `Case ${values.case} names {port}; give it devPort.` : 'The prompt names {port}; pass --dev-port.');
+  const caseDirectory = join(resolve(values.root), values.case);
+  if (existsSync(caseDirectory)) throw new Error(`Case already exists: ${caseDirectory}`);
+}
+
+async function runCase(values) {
+  const port = values['dev-port'];
   const root = resolve(values.root);
   const caseDirectory = join(root, values.case);
-  if (existsSync(caseDirectory)) throw new Error(`Case already exists: ${caseDirectory}`);
   const app = join(caseDirectory, basename(resolve(values.fixture)));
   mkdirSync(caseDirectory, { recursive: true });
   execFileSync('rsync', ['-a', '--exclude', 'node_modules', '--exclude', '.git', '--exclude', 'dist', `${resolve(values.fixture)}/`, `${app}/`]);
@@ -205,7 +214,9 @@ async function main() {
       const jsonl = Buffer.concat(out).toString();
       writeFileSync(join(caseDirectory, 'run.jsonl'), jsonl);
       writeFileSync(join(caseDirectory, 'run.err'), Buffer.concat(err).toString());
-      Object.assign(summary, checkRun(jsonl));
+      const { model, costUsd, report } = runFacts(jsonl);
+      Object.assign(summary, { model: model ?? summary.model, costUsd }, checkRun(jsonl));
+      if (report !== null) writeFileSync(join(caseDirectory, 'report.md'), `${report}\n`);
       // Staged first, so files the run created appear in the patch.
       execFileSync('git', ['-C', app, 'add', '-A']);
       writeFileSync(join(caseDirectory, 'diff.patch'), execFileSync('git', ['-C', app, 'diff', '--cached', 'HEAD'], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }));
@@ -215,8 +226,71 @@ async function main() {
     }
   }
   writeFileSync(join(caseDirectory, 'summary.json'), `${JSON.stringify(summary, null, 2)}\n`);
-  console.log(JSON.stringify(summary, null, 2));
-  if (summary.exitCode) process.exitCode = 1;
+  return summary;
+}
+
+
+async function main() {
+  const { values } = parseArgs({
+    options: {
+      fixture: { type: 'string' },
+      case: { type: 'string' },
+      prompt: { type: 'string' },
+      ref: { type: 'string' },
+      package: { type: 'string' },
+      'dev-port': { type: 'string' },
+      model: { type: 'string' },
+      cap: { type: 'string', default: '2700' },
+      root: { type: 'string', default: join(repositoryRoot, '.local/evals') },
+      'serve-registry': { type: 'boolean', default: false },
+      'dry-run': { type: 'boolean', default: false },
+      cases: { type: 'string' },
+      parallel: { type: 'string', default: '4' },
+    },
+  });
+  if (!values.cases) {
+    checkCase(values);
+    const summary = await runCase(values);
+    console.log(JSON.stringify(summary, null, 2));
+    if (summary.exitCode) process.exitCode = 1;
+    return;
+  }
+  const { cases: _, parallel, ...shared } = values;
+  const list = JSON.parse(await readFile(resolve(values.cases), 'utf8')).map(({ devPort, cap, ...item }) => ({
+    ...shared, cases: values.cases, ...item,
+    ...(devPort === undefined ? {} : { 'dev-port': String(devPort) }),
+    ...(cap === undefined ? {} : { cap: String(cap) }),
+  }));
+  const names = new Set();
+  const ports = new Set();
+  for (const item of list) {
+    if (names.has(item.case)) throw new Error(`Duplicate case: ${item.case}`);
+    names.add(item.case);
+    // Parallel runs on one dev server would read each other's app.
+    if (ports.has(item['dev-port'])) throw new Error(`Duplicate dev port: ${item['dev-port']}`);
+    if (item['dev-port'] !== undefined) ports.add(item['dev-port']);
+    checkCase(item);
+  }
+  // Each case runs in its own process: setup blocks on npm and git, which would
+  // stall another case's registry server in this one.
+  const flags = item => Object.entries(item).flatMap(([key, value]) => {
+    if (key === 'cases' || value === undefined || value === false) return [];
+    return value === true ? [`--${key}`] : [`--${key}`, String(value)];
+  });
+  let next = 0;
+  const worker = async () => {
+    while (next < list.length) {
+      const item = list[next++];
+      const child = spawn(process.execPath, [import.meta.filename, ...flags(item)], { stdio: ['ignore', 'ignore', 'pipe'] });
+      const err = [];
+      child.stderr.on('data', chunk => err.push(chunk));
+      const code = await new Promise(done => child.on('close', done));
+      const reason = Buffer.concat(err).toString().trim().split('\n').at(-1);
+      console.log(`${item.case}: ${code ? `failed (exit ${code})${reason ? `, ${reason}` : ''}` : 'done'}`);
+      if (code) process.exitCode = 1;
+    }
+  };
+  await Promise.all(Array.from({ length: Math.max(1, Number(parallel)) }, worker));
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {

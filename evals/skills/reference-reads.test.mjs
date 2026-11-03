@@ -52,3 +52,27 @@ test('ignores commands outside the skills directory and started items', async ()
   ], read);
   assert.deepEqual(reads, []);
 });
+
+// Claude Code logs a Read call and its result as separate stream-json events.
+test('counts the skill files a Claude run read through Read and Bash', async () => {
+  const plugin = '/case/plugin/skills';
+  const claudeFiles = { [`${plugin}/neon-create/references/rebuild.md`]: files[`${home}/neon-create/references/rebuild.md`], [`${plugin}/neon-create/references/scaffold.md`]: files[`${home}/neon-create/references/scaffold.md`] };
+  const readClaude = async path => {
+    if (!(path in claudeFiles)) throw new Error(`ENOENT ${path}`);
+    return claudeFiles[path];
+  };
+  const use = (id, name, input) => ({ type: 'assistant', message: { content: [{ type: 'tool_use', id, name, input }] } });
+  const result = (id, content) => ({ type: 'user', message: { content: [{ type: 'tool_result', tool_use_id: id, content }] } });
+  const numbered = text => text.split('\n').map((line, index) => `${String(index + 1).padStart(6)}\t${line}`).join('\n');
+  const reads = await referenceReads([
+    use('r1', 'Read', { file_path: `${plugin}/neon-create/references/rebuild.md` }),
+    result('r1', numbered(claudeFiles[`${plugin}/neon-create/references/rebuild.md`])),
+    use('b1', 'Bash', { command: `ls ${plugin}/neon-create/references/scaffold.md` }),
+    result('b1', [{ type: 'text', text: `${plugin}/neon-create/references/scaffold.md` }]),
+    use('g1', 'Grep', { pattern: 'skills/' }),
+  ], readClaude);
+  assert.deepEqual(reads.map(entry => [entry.file, status(entry.coverage)]), [
+    ['neon-create/references/rebuild.md', 'read'],
+    ['neon-create/references/scaffold.md', 'named only'],
+  ]);
+});

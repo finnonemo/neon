@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "spinner",
+  "type": "registry:ui",
+  "title": "Spinner",
+  "registryDependencies": [
+    "@neon/utils"
+  ],
+  "files": [
+    {
+      "path": "ui/spinner.tsx",
+      "content": "import * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\n\n// The CDS Spinner: a ring drawn in em, so size scales it whole, as in CDS. It\n// is 10× size px wide with a 1.1× size border; the track (three sides) is\n// bgAlternate (the accent slot) and the bottom arc takes the text color,\n// fgMuted unless a text-* class recolors it. role=status with a visually\n// hidden label, so assistive tech announces it politely.\nfunction Spinner({\n  className,\n  size = 1.6,\n  label = \"Loading\",\n  style,\n  ...props\n}: Omit<React.ComponentProps<\"span\">, \"children\"> & {\n  /** CDS Spinner's size: the ring is 10× this many px wide (1.6 is 16px). */\n  size?: number\n  /** What assistive tech announces. */\n  label?: string\n}) {\n  return (\n    <span\n      data-slot=\"spinner\"\n      role=\"status\"\n      className={cn(\n        \"inline-block size-[10em] shrink-0 animate-spin rounded-full border-[1.1em] border-accent border-b-current text-muted-foreground\",\n        className\n      )}\n      style={{ fontSize: size, ...style }}\n      {...props}\n    >\n      <span className=\"sr-only\">{label}</span>\n    </span>\n  )\n}\n\nexport { Spinner }\n",
+      "type": "registry:ui",
+      "target": "src/components/ui/spinner.tsx"
+    }
+  ]
+}
