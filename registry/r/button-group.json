@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "button-group",
+  "type": "registry:ui",
+  "title": "Button group",
+  "dependencies": [
+    "radix-ui@^1.8.1",
+    "class-variance-authority@^0.7.1"
+  ],
+  "registryDependencies": [
+    "@neon/utils",
+    "@neon/button",
+    "@neon/separator"
+  ],
+  "files": [
+    {
+      "path": "ui/button-group.tsx",
+      "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { Slot } from \"radix-ui\"\n\nimport { Separator } from \"@/components/ui/separator\"\nimport { cn } from \"@/lib/utils\"\n\n// The CDS ButtonGroup: a row as wide as its container holding Neon Buttons\n// kept whole, each its own pill, 8px apart. CDS never joins them, so\n// radix-nova's squared inner corners and dropped borders are gone, as in\n// toggle-group. Horizontal keeps each button's own width and does not wrap;\n// vertical stretches every button to the group's width, as CDS's block\n// buttons do. A nested group is one more item 8px away.\nconst buttonGroupVariants = cva(\"group/button-group flex flex-nowrap gap-2 *:focus-visible:relative *:focus-visible:z-10 [&>input]:flex-1\", {\n  variants: {\n    orientation: {\n      horizontal: \"flex-row items-stretch\",\n      vertical: \"flex-col\",\n    },\n  },\n  defaultVariants: {\n    orientation: \"horizontal\",\n  },\n})\n\nfunction ButtonGroup({\n  className,\n  orientation = \"horizontal\",\n  ...props\n}: React.ComponentProps<\"div\"> & VariantProps<typeof buttonGroupVariants>) {\n  return (\n    <div\n      role=\"group\"\n      data-slot=\"button-group\"\n      data-orientation={orientation}\n      className={cn(buttonGroupVariants({ orientation }), className)}\n      {...props}\n    />\n  )\n}\n\n// PROVISIONAL (#208): CDS ButtonGroup holds buttons only. This text segment is\n// a pill as tall as its row, label1 in the secondary button's roles.\nfunction ButtonGroupText({\n  className,\n  asChild = false,\n  ...props\n}: React.ComponentProps<\"div\"> & {\n  asChild?: boolean\n}) {\n  const Comp = asChild ? Slot.Root : \"div\"\n\n  return (\n    <Comp\n      data-slot=\"button-group-text\"\n      className={cn(\n        \"flex items-center gap-2 rounded-full bg-secondary px-4 text-label1 text-secondary-foreground [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\n// PROVISIONAL (#208): CDS ButtonGroup has no divider. This is the Neon\n// separator (CDS Divider, bgLine), vertical by default, in the 8px gap.\nfunction ButtonGroupSeparator({ orientation = \"vertical\", ...props }: React.ComponentProps<typeof Separator>) {\n  return <Separator data-slot=\"button-group-separator\" orientation={orientation} {...props} />\n}\n\nexport { ButtonGroup, ButtonGroupSeparator, ButtonGroupText, buttonGroupVariants }\n",
+      "type": "registry:ui",
+      "target": "src/components/ui/button-group.tsx"
+    }
+  ]
+}
