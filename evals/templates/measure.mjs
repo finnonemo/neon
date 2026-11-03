@@ -168,7 +168,7 @@ export const screens = [
     gaps: [],
   },
   // The expansion screen: each registry expansion item's entries, from expansion/<item>.mjs.
-  ...expansionItems.flatMap((item) => item.screens ?? []),
+  ...expansionItems.flatMap((item) => item.screens),
 ];
 
 export const viewports = [{ width: 375, height: 812 }, { width: 1440, height: 900 }];

@@ -134,6 +134,27 @@ export function undeclaredSiblings(items, readFile) {
 }
 
 /**
+ * Components the CDS-match suite never measures (#164: no component without a
+ * Counterpart). A registry:ui item is measured when the approval or extras
+ * screen does (`screenMeasured`), when it only supports another item
+ * (meta.supporting), or when the expansion screen has its module with a screen
+ * and both fixtures. `expansion.screens(name)` counts the screens in
+ * evals/templates/expansion/<name>.mjs; `expansion.fixture(path)` says whether
+ * evals/templates/fixtures/<path> exists.
+ */
+export function unmeasuredComponents(items, screenMeasured, expansion) {
+  const problems = [];
+  for (const item of items) {
+    if (item.type !== 'registry:ui' || screenMeasured.includes(item.name) || item.meta?.supporting) continue;
+    if (!expansion.screens(item.name)) problems.push(`${item.name}: no screen in evals/templates/expansion/${item.name}.mjs`);
+    for (const path of [`expansion/${item.name}.tsx`, `neon/expansion/${item.name}.tsx`]) {
+      if (!expansion.fixture(path)) problems.push(`${item.name}: no evals/templates/fixtures/${path}`);
+    }
+  }
+  return problems;
+}
+
+/**
  * Theme Brief items (`theme-brief-<theme>-<slug>`) against their briefs, by `<theme>-<slug>`: each brief's
  * picks file, theme label and Markdown. An item ships one Markdown file into the app's ./docs/theme-briefs/,
  * titled and described as the brief is, with the meta neon-create lists briefs by.
