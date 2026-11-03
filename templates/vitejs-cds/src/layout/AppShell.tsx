@@ -24,14 +24,14 @@ export function AppShell({
 
   return (
     <Box background="bg" color="fg" font="body" className="neon-layout" data-bottom-nav={navigation.length > 0}>
-      <Sidebar width={sidebarWidth} navigation={navigation}>{sidebar}</Sidebar>
+      <Sidebar workspace width={sidebarWidth} navigation={navigation}>{sidebar}</Sidebar>
       <ResponsivePanes
         {...paneNavigation} content={content} inspector={inspector}
         compact={tier === "sm" || tier === "md"}
         contentWidth={pane.content === "hidden" ? undefined : pane.content}
         capAt={pane.inspector.capAt}
       />
-      <BottomNav navigation={navigation} />
+      <BottomNav workspace navigation={navigation} />
     </Box>
   );
 }

@@ -6,7 +6,7 @@ import { execFileSync } from 'node:child_process';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadImmersiveThemes, resolveColor } from '../../theme/scripts/generate-immersive-themes.mjs';
-import { BUILD_DIR, bareCnImports, buildRegistry, darkClasses, missingTypeRoles, nextThemes, pinnedRegistryUrl, tabsAsSegmented, themeBriefItemProblems, unpinnedUrls, weightOverrides } from '../../scripts/lib/registry.mjs';
+import { BUILD_DIR, bareCnImports, browserSuiteItems, buildRegistry, darkClasses, missingTypeRoles, nextThemes, pinnedRegistryUrl, tabsAsSegmented, themeBriefItemProblems, unpinnedUrls, unreachedItems, weightOverrides } from '../../scripts/lib/registry.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '../..');
 const read = (path) => readFileSync(join(root, path), 'utf8');
@@ -21,6 +21,14 @@ test('the tracked registry/r/ is a fresh pinned build', async () => {
   const tracked = readdirSync(join(root, BUILD_DIR)).sort();
   assert.deepEqual(tracked, [...built.keys()].sort(), 'registry/r/ holds exactly the built files; run node scripts/build-registry.mjs');
   for (const [name, content] of built) assert.equal(read(join(BUILD_DIR, name)), content, `registry/r/${name} is stale; run node scripts/build-registry.mjs`);
+});
+
+test('the browser suite installs every registry item', () => {
+  const { items } = JSON.parse(read('registry/registry.json'));
+  assert.deepEqual(unreachedItems(items, browserSuiteItems(items)), [], 'add the item kind to browserSuiteItems, or make neon-base depend on it');
+  const extra = { name: 'extra', type: 'registry:item', files: [] };
+  assert.deepEqual(unreachedItems([...items, extra], browserSuiteItems(items)), ['extra'], 'an item outside init and the additions is reported');
+  assert.deepEqual(unreachedItems([...items, extra, { name: 'needs-extra', type: 'registry:ui', registryDependencies: ['@neon/extra'], files: [] }], [...browserSuiteItems(items), 'needs-extra']), [], 'a dependency of an added item is reached');
 });
 
 test('two builds are byte-identical', async () => {
@@ -101,11 +109,11 @@ test('the logo item ships the canonical SVGs with the Logo the layouts use, and 
   for (const name of ['logo', 'layouts']) assert.ok(base.registryDependencies.includes(`{{registry}}/${name}.json`), `the base pulls in ${name}`);
 });
 
-// Only the files that touch CDS components or providers are rewritten; the
-// layout logic is the starter's, byte for byte (#95).
-test('the layouts item carries the starter layout logic unchanged', () => {
+// Framework-free layout geometry stays shared. Pane views render each base's
+// own borders and are checked by the browser geometry baseline.
+test('the layouts item shares framework-free starter geometry and includes every layout', () => {
   const layouts = registryItem('layouts');
-  const unchanged = ['ContentView.tsx', 'InspectorView.tsx', 'layout.css', 'layoutPanes.ts', 'useBreakpointTier.ts'];
+  const unchanged = ['layout.css', 'layoutPanes.ts', 'useBreakpointTier.ts'];
   for (const name of unchanged) {
     assert.ok(layouts.files.some((file) => file.path === `layout/${name}` && file.target === `src/layout/${name}`), `layouts ships ${name}`);
     assert.equal(read(`registry/layout/${name}`), read(`templates/vitejs-cds/src/layout/${name}`), `registry/layout/${name} differs from the starter's`);

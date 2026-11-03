@@ -4,13 +4,13 @@ import { useBreakpointTier } from "./useBreakpointTier"
 import type { NavItem } from "./navItems"
 
 // Icons take primary-foreground, the role for content on the primary fill, in both modes.
-export function BottomNav({ navigation = [] }: { navigation?: NavItem[] }) {
+export function BottomNav({ navigation = [], workspace = false }: { navigation?: NavItem[]; workspace?: boolean }) {
   const tier = useBreakpointTier()
   if (tier !== "sm" || navigation.length === 0) return null
 
   return (
     <nav
-      className="neon-bottom-nav fixed inset-x-0 bottom-0 z-10 flex items-center justify-around border-t bg-primary text-primary-foreground"
+      className={`neon-bottom-nav fixed inset-x-0 bottom-0 z-10 flex items-center justify-around border-t ${workspace ? "bg-background text-foreground" : "bg-primary text-primary-foreground"}`}
       aria-label="Primary navigation"
     >
       {navigation.map(({ icon: Icon, ...item }) => (

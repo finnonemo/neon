@@ -49,7 +49,7 @@ export function MultiColumnLayout({
       </Sidebar>
       <div style={{ display: "flex", flex: 1, minWidth: 0, height: "100%", overflowX: "auto" }}>
         {columns.map((column, i) => (
-          <ContentView key={i} width={COLUMN_WIDTH}>
+          <ContentView key={i} width={COLUMN_WIDTH} divider={i < columns.length - 1}>
             {column}
           </ContentView>
         ))}

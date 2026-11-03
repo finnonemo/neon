@@ -3,7 +3,7 @@
 // cds-match.spec.mjs and layout-match.spec.mjs measure one against the other.
 // The integration, on-color and spectrum routes exercise CDS only.
 import { useState } from "react"
-import { House, UserRound } from "lucide-react"
+import { House, UserRound, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { AppShell } from "@/layout/AppShell"
 import { ContentLayout } from "@/layout/ContentLayout"
@@ -51,6 +51,9 @@ export function App() {
   const [selected, setSelected] = useState<number | null>(null)
   const content = <Content onSelect={(id) => { setSelected(id); setActivePane("inspector") }} />
   const props = {
+    contentHeader: <span className="text-headline">พื้นที่ทำงาน / Workspace</span>,
+    contentActions: <Button variant="secondary" size="icon" aria-label="Search workspace" onClick={() => document.querySelector<HTMLInputElement>('input')?.focus()}><Search /></Button>,
+    inspectorHeader: <span className="text-headline">รายละเอียด / Details</span>,
     sidebar: null, navigation, content, inspector: <Details selected={selected} />,
     ...(params.has("uncontrolled") ? {} : { activePane, onActivePaneChange: setActivePane }),
     paneLabels: { content: "Content", inspector: "Details", viewDetails: "ดูรายละเอียด", backToContent: "กลับไปที่รายการ" },
@@ -61,6 +64,6 @@ export function App() {
     : layout === "app" ? <AppShell {...props} />
     : layout === "content" ? <ContentLayout {...props} />
     : layout === "simple" ? <SimpleLayout {...props} />
-    : layout === "board" ? <MultiColumnLayout {...props} columns={[content]} />
+    : layout === "board" ? <MultiColumnLayout {...props} columns={[content, <div key="next">Next column</div>, <div key="done">Completed column</div>]} />
     : <ImmersiveLayout {...props} immersiveTheme={(params.get("theme") ?? undefined) as ImmersiveTheme | undefined} />
 }

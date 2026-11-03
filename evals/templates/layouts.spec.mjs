@@ -81,13 +81,13 @@ for (const layout of ['app', 'content']) {
 // Figma's min and max frame for each desktop tier; sidebar widths come from theme/cds/breakpoints.config.ts.
 const desktopTiers = [[988, 64, 360], [1079, 64, 360], [1080, 240, 360], [1271, 240, 360], [1272, 320, 360], [1439, 320, 360], [1440, 360, 400], [1920, 360, 560], [2560, 360, 560]];
 for (const [layout, fixed, fill] of [['app', 'Content', 'Details'], ['content', 'Details', 'Content']]) {
-  test(`${layout}: desktop pane widths match the Figma frames`, async ({ page }) => {
+  test(`${layout}: desktop pane widths retain the fixed panes with workspace navigation`, async ({ page }) => {
     await page.setViewportSize({ width: 988, height: 900 });
     await page.goto(`/?layout=${layout}`);
     for (const [width, sidebar, pane] of desktopTiers) {
       await page.setViewportSize({ width, height: 900 });
       await expect(page.getByRole('region', { name: fixed, exact: true })).toHaveJSProperty('offsetWidth', pane);
-      await expect(page.getByRole('region', { name: fill, exact: true })).toHaveJSProperty('offsetWidth', width - sidebar - pane);
+      await expect(page.getByRole('region', { name: fill, exact: true })).toHaveJSProperty('offsetWidth', width - (width < 1280 ? 64 : 240) - pane);
     }
   });
 }
@@ -293,4 +293,65 @@ for (const width of [1919, 1920, 2560]) {
     expect(box.x).toBe((width - expected) / 2);
     await page.screenshot({ path: test.info().outputPath(`immersive-${width}.png`) });
   });
+}
+
+for (const layout of ['app', 'content']) {
+  test(`${layout}: workspace rail, sidebar and persistent header follow reference geometry`, async ({ page }) => {
+    await page.goto(`/?layout=${layout}`);
+    for (const width of [320, 375, 500, 768, 988, 1279, 1280, 1440, 1920]) {
+      await page.setViewportSize({ width, height: 900 });
+      const sidebar = page.locator('.neon-workspace-sidebar');
+      if (width < 500) await expect(sidebar).toHaveCount(0);
+      else {
+        await expect(sidebar).toHaveCSS('width', width < 1280 ? '64px' : '240px');
+        await expect(sidebar.getByRole('link', { name: 'รายการ / Requests' })).toBeVisible();
+        const label = sidebar.locator('.neon-sidebar-label').first();
+        if (width < 1280) await expect(label).toBeHidden();
+        else await expect(label).toBeVisible();
+      }
+      expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+      const header = page.getByText('พื้นที่ทำงาน / Workspace', { exact: true });
+      await expect(header).toBeVisible();
+      const before = await header.boundingBox();
+      await page.getByRole('button', { name: 'Final action', exact: true }).scrollIntoViewIfNeeded();
+      expect((await header.boundingBox()).y).toBe(before.y);
+      await page.getByRole('button', { name: 'Search workspace', exact: true }).click();
+      await expect(page.getByLabel('Filter', { exact: true })).toBeFocused();
+      if (width < 500) await expect(page.locator('.neon-bottom-nav')).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+      if ([320, 375, 768, 1440].includes(width)) await page.screenshot({ path: test.info().outputPath(`${layout}-workspace-${width}.png`) });
+    }
+    await page.screenshot({ path: test.info().outputPath(`${layout}-workspace-wide.png`) });
+  });
+}
+
+for (const mode of ['light', 'dark']) {
+  for (const layout of ['app', 'content', 'simple', 'board', 'immersive']) {
+    test(`${layout} ${mode}: dividers mark visible functional pane boundaries`, async ({ page }) => {
+      for (const width of [375, 1440]) {
+        await page.setViewportSize({ width, height: 900 });
+        await page.goto(`/?layout=${layout}&mode=${mode}`);
+        const sidebar = page.locator('.neon-sidebar');
+        if (width === 375 || layout === 'immersive') await expect(sidebar).toHaveCount(0);
+        else await expect(sidebar).toHaveCSS('border-inline-end-width', '1px');
+        for (const header of await page.locator('[data-pane-control]:visible').all()) {
+          await expect(header).toHaveCSS('border-bottom-width', layout === 'immersive' ? '0px' : '1px');
+        }
+        if (layout === 'app' || layout === 'content') {
+          const panes = await page.locator('.neon-layout > section:visible').evaluateAll(nodes => nodes
+            .sort((a, b) => a.getBoundingClientRect().x - b.getBoundingClientRect().x)
+            .map(el => getComputedStyle(el).borderInlineEndWidth));
+          expect(panes).toEqual(width === 375 ? ['0px'] : ['1px', '0px']);
+        }
+        if (layout === 'board') {
+          const borders = await page.locator('.neon-layout > div').filter({ has: page.locator('[data-pane-control]') }).last()
+            .evaluate(el => [...el.children].map(column => ({ width: column.getBoundingClientRect().width, border: getComputedStyle(column).borderInlineEndWidth })));
+          expect(borders.length).toBeGreaterThan(1);
+          borders.forEach((column, i) => {
+            expect(column.width).toBe(400);
+            expect(column.border).toBe(i === borders.length - 1 ? '0px' : '1px');
+          });
+        }
+      }
+    });
+  }
 }

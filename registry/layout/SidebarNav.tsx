@@ -24,7 +24,7 @@ export function SidebarNav({ items, isRail }: { items: NavItem[]; isRail: boolea
           className={cn("flex items-center gap-2 rounded-md p-2 text-foreground no-underline", isRail ? "justify-center" : "justify-start")}
         >
           <Icon className="size-6" />
-          {!isRail && <span>{item.label}</span>}
+          {!isRail && <span className="neon-sidebar-label">{item.label}</span>}
         </a>
       ))}
     </nav>
