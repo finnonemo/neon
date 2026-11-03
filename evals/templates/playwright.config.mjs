@@ -2,7 +2,9 @@ import { defineConfig } from '@playwright/test';
 import { join, resolve } from 'node:path';
 
 if (!process.env.NEON_TEST_APP) throw new Error('Run npm test to assemble the disposable app first.');
-const artifacts = resolve('../../.local/evals/templates');
+// One folder per target: Playwright clears its output and report folders at the
+// start of a run, so a shared folder would lose the first target's results.
+const artifacts = resolve('../../.local/evals/templates', process.env.NEON_TARGET ?? 'cds');
 export default defineConfig({
   testDir: '.',
   testMatch: '*.spec.mjs',
