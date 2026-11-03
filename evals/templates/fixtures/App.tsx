@@ -97,6 +97,9 @@ export function App() {
   const [clicked, setClicked] = useState(false);
   const content = <Content onSelect={(id) => { setSelected(id); setActivePane("inspector"); }} />;
   const props = {
+    contentHeader: <Text font="headline">พื้นที่ทำงาน / Workspace</Text>,
+    contentActions: <IconButton name="search" accessibilityLabel="Search workspace" onClick={() => document.querySelector<HTMLInputElement>('input')?.focus()} />,
+    inspectorHeader: <Text font="headline">รายละเอียด / Details</Text>,
     sidebar: null, navigation, content, inspector: <Details selected={selected} />,
     ...(params.has("uncontrolled") ? {} : { activePane, onActivePaneChange: setActivePane }),
     paneLabels: { content: "Content", inspector: "Details", viewDetails: "ดูรายละเอียด", backToContent: "กลับไปที่รายการ" },

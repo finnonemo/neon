@@ -23,14 +23,14 @@ export function ContentLayout({
 
   return (
     <div className="neon-layout bg-background font-sans text-body text-foreground" data-bottom-nav={navigation.length > 0}>
-      <Sidebar width={sidebarWidth} navigation={navigation}>{sidebar}</Sidebar>
+      <Sidebar workspace width={sidebarWidth} navigation={navigation}>{sidebar}</Sidebar>
       <ResponsivePanes
         {...paneNavigation} content={content} inspector={inspector}
         compact={tier === "sm" || tier === "md"}
         inspectorWidth={pane.inspector === "hidden" ? undefined : pane.inspector}
         contentCapAt={pane.content.capAt}
       />
-      <BottomNav navigation={navigation} />
+      <BottomNav workspace navigation={navigation} />
     </div>
   )
 }

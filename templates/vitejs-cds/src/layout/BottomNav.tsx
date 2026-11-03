@@ -6,10 +6,10 @@ import { Icon } from "@coinbase/cds-web/icons";
 import { useBreakpointTier } from "./useBreakpointTier";
 import type { NavItem } from "./navItems";
 
-export function BottomNav({ navigation = [] }: { navigation?: NavItem[] }) {
+export function BottomNav({ navigation = [], workspace = false }: { navigation?: NavItem[]; workspace?: boolean }) {
   const tier = useBreakpointTier();
   const { activeColorScheme } = useTheme();
-  const foreground = activeColorScheme === "dark" ? "fg" : "fgInverse";
+  const foreground = workspace || activeColorScheme === "dark" ? "fg" : "fgInverse";
   if (tier !== "sm" || navigation.length === 0) return null;
 
   return (
@@ -23,7 +23,7 @@ export function BottomNav({ navigation = [] }: { navigation?: NavItem[] }) {
       left={0}
       right={0}
       zIndex={10}
-      background="bgPrimary"
+      background={workspace ? "bg" : "bgPrimary"}
       borderedTop
       display="flex"
       alignItems="center"

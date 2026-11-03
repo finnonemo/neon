@@ -13,6 +13,9 @@
  * Content visible and Inspector `hidden="true"`). Pane visibility below
  * comes from Figma's own `hidden` attribute, not the token export.
  *
+ * AppShell and ContentLayout use the order-history sidebar widths in layout.css.
+ * Other layouts retain the exported sidebar widths below.
+ *
  * Sidebar width is NOT duplicated here — read it from
  * ../theme/breakpoints.config.ts's `sidebarWidth` field. Note: the raw
  * Figma frames for Content Layout and Multi-column Layout showed a

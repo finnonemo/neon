@@ -3,7 +3,9 @@
  * (nav rail) + Footer (64px, reserved). Width comes from
  * ../theme/breakpoints.config.ts's `sidebarWidth` per tier (0 = hidden,
  * 64 = icon-rail, >64 = full sidebar) — see AppShell.tsx for how the tier
- * is picked. These widths are structural pane geometry, not
+ * is picked. Three-pane workspace callers opt into CSS geometry (0/64/240px)
+ * from the order-history reference; other layouts keep the exported widths.
+ * These widths are structural pane geometry, not
  * color/spacing/radius, so they're read as plain numbers rather than routed
  * through neonTheme's style tokens.
  *
@@ -22,20 +24,24 @@ const HEADER_FOOTER_HEIGHT = 64;
 
 export function Sidebar({
   width,
+  workspace = false,
   navigation = [],
   children,
 }: {
   width: number;
+  /** Three-pane workspace chrome follows the live order-history reference. */
+  workspace?: boolean;
   navigation?: NavItem[];
   children: ReactNode;
 }) {
   if (width === 0) return null;
-  const isRail = width === 64;
+  const isRail = !workspace && width === 64;
 
   return (
-    <div
+    <Box borderedEnd
+      className={workspace ? "neon-sidebar neon-workspace-sidebar" : "neon-sidebar"}
       style={{
-        width,
+        width: workspace ? undefined : width,
         flexShrink: 0,
         display: "flex",
         flexDirection: "column",
@@ -43,19 +49,23 @@ export function Sidebar({
       }}
     >
       <Box
+        borderedBottom
         style={{ height: HEADER_FOOTER_HEIGHT, flexShrink: 0 }}
         display="flex"
         alignItems="center"
         justifyContent={isRail ? "center" : "flex-start"}
         paddingStart={isRail ? 0 : 2}
       >
-        <Logo variant={isRail ? "icon" : "full"} />
+        {workspace ? <>
+          <span className="neon-sidebar-symbol"><Logo variant="icon" /></span>
+          <span className="neon-sidebar-wordmark"><Logo variant="full" /></span>
+        </> : <Logo variant={isRail ? "icon" : "full"} />}
       </Box>
-      <div style={{ flex: 1, overflowY: "auto" }}>
+      <div className={workspace ? "neon-sidebar-body" : undefined} style={{ flex: 1, minHeight: 0, overflowY: "auto" }}>
         <SidebarNav items={navigation} isRail={isRail} />
-        {!isRail && children}
+        {!isRail && <div className="neon-sidebar-content">{children}</div>}
       </div>
       <div style={{ height: HEADER_FOOTER_HEIGHT, flexShrink: 0 }} />
-    </div>
+    </Box>
   );
 }

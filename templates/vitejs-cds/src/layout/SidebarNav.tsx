@@ -33,7 +33,7 @@ export function SidebarNav({ items, isRail }: { items: NavItem[]; isRail: boolea
           justifyContent={isRail ? "center" : "flex-start"}
         >
           <Icon name={item.icon} size="m" color="fg" />
-          {!isRail && <Text color="fg">{item.label}</Text>}
+          {!isRail && <Text className="neon-sidebar-label" color="fg">{item.label}</Text>}
         </Box>
       ))}
     </Box>
