@@ -87,7 +87,7 @@ export function neonBaseProblems({ componentsJson, packageJson, sources, neonFil
   return problems;
 }
 
-function appSources(app) {
+export function appSources(app) {
   return sourceFiles(join(app, 'src'), /\.(m?[jt]sx?|s?css)$/).map(path => ({ path: path.slice(app.length + 1), source: readFileSync(path, 'utf8') }));
 }
 
@@ -142,6 +142,19 @@ function run(command, args, cwd) {
   return { pass: result.status === 0, detail: result.status === 0 ? '' : output };
 }
 
+// The Neon base's tsconfig.json only references the app and node configs, so
+// `tsc --noEmit` on it checks nothing; build mode follows the references.
+export function typecheckAndBuild(app) {
+  const checks = [];
+  const tsconfig = join(app, 'tsconfig.json');
+  if (existsSync(tsconfig)) {
+    const references = /"references"\s*:/.test(readFileSync(tsconfig, 'utf8'));
+    checks.push({ name: 'typecheck', ...run('npx', ['--no-install', 'tsc', ...(references ? ['-b'] : ['--noEmit'])], app) });
+  }
+  checks.push({ name: 'build', ...run('npm', ['run', 'build', '--silent'], app) });
+  return checks;
+}
+
 // Bundles with the app's esbuild when it has one. Otherwise copies the file
 // alone and lets Node strip its types, which covers mock files whose only
 // imports are `import type`.
@@ -175,14 +188,7 @@ async function grade({ source, rebuild }) {
 
   if (packageJson.scripts?.test) checks.push({ name: 'tests', ...run('npm', ['test', '--silent'], rebuild) });
   else add('tests', false, 'no test script');
-  // The Neon base's tsconfig.json only references the app and node configs, so
-  // `tsc --noEmit` on it checks nothing; build mode follows the references.
-  const tsconfig = join(rebuild, 'tsconfig.json');
-  if (existsSync(tsconfig)) {
-    const references = /"references"\s*:/.test(readFileSync(tsconfig, 'utf8'));
-    checks.push({ name: 'typecheck', ...run('npx', ['--no-install', 'tsc', ...(references ? ['-b'] : ['--noEmit'])], rebuild) });
-  }
-  checks.push({ name: 'build', ...run('npm', ['run', 'build', '--silent'], rebuild) });
+  checks.push(...typecheckAndBuild(rebuild));
 
   // Vite 8 ships no esbuild, so try the source app's copy before Node.
   const esbuild = [rebuild, source].map(app => join(app, 'node_modules/.bin/esbuild')).find(existsSync);
