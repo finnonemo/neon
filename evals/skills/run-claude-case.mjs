@@ -16,9 +16,13 @@
 // first commit), the run inputs, run.jsonl, run.err, report.md (the run's final
 // reply) and summary.json, which adds the model the run used, its cost, turns
 // and duration. The plugin is packaged from --ref (a temporary worktree), taken
-// from --package, or packaged from this checkout. `{port}` in the prompt becomes
-// --dev-port, where the app's `npm run dev` is started before the run and
-// stopped after it. The run is stopped at --cap seconds. summary.json carries check-run.mjs's result: every
+// from --package, or packaged from this checkout. It refuses to start, before
+// copying anything, when @playwright/test does not resolve from evals/templates
+// (the browser tool needs `npm ci --prefix evals/templates`; --dry-run skips
+// this), or when --dev-port names a fixture with no package.json. `{port}` in
+// the prompt becomes --dev-port, where the app's `npm run dev` is started
+// before the run and stopped after it. The run is stopped at --cap seconds.
+// summary.json carries check-run.mjs's result: every
 // denied command, and void when the run then reported the shell as blocked.
 // --serve-registry serves this checkout's Neon registry on localhost and sets
 // NEON_REGISTRY_URL for the run, so `install.mjs --new` and `--add` work
@@ -32,6 +36,7 @@ import { execFileSync, spawn } from 'node:child_process';
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { createServer } from 'node:http';
+import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
 import { basename, join, resolve } from 'node:path';
 import { parseArgs } from 'node:util';
@@ -67,6 +72,15 @@ export function claudeArgs({ plugin, mcpConfig, prompt, model }) {
     '--append-system-prompt', PERMISSION_NOTE,
     '--output-format', 'stream-json', '--verbose', prompt,
   ];
+}
+
+/** Throws unless browser-mcp.mjs can load @playwright/test the way it does, from `templates`. */
+export function assertBrowserTool(templates = join(repositoryRoot, 'evals/templates')) {
+  try {
+    createRequire(join(templates, 'package.json')).resolve('@playwright/test');
+  } catch {
+    throw new Error('The browser tool needs @playwright/test, which does not resolve from evals/templates. Run `npm ci --prefix evals/templates` first.');
+  }
 }
 
 // The model, cost, turns, duration and final reply a stream-json log records;
@@ -191,6 +205,8 @@ function checkCase(values) {
   if (!values.fixture || !values.case || !values.prompt) throw new Error(values.cases ? `Case ${name} needs case, fixture and prompt.` : usage);
   if (values.ref && values.package) throw new Error(`Case ${name} takes --ref or --package, not both.`);
   if (values.prompt.includes('{port}') && !values['dev-port']) throw new Error(values.cases ? `Case ${values.case} names {port}; give it devPort.` : 'The prompt names {port}; pass --dev-port.');
+  // The dev server is the fixture's `npm run dev`; without it the run would wait 60s and fail.
+  if (values['dev-port'] && !existsSync(join(resolve(values.fixture), 'package.json'))) throw new Error(`${values.cases ? `Case ${values.case}: ` : ''}--dev-port needs a fixture with a package.json to run \`npm run dev\`.`);
   const caseDirectory = join(resolve(values.root), values.case);
   if (existsSync(caseDirectory)) throw new Error(`Case already exists: ${caseDirectory}`);
 }
@@ -302,6 +318,7 @@ async function main() {
       parallel: { type: 'string', default: '4' },
     },
   });
+  if (!values['dry-run']) assertBrowserTool();
   if (!values.cases) {
     checkCase(values);
     const summary = await runCase(values);
