@@ -10,9 +10,10 @@
  *
  * Usage: node scripts/preview-app.mjs <app dir> [--port <n>] [--timeout <seconds>]
  *
- * --port passes `--host 127.0.0.1 --port <n> --strictPort` to a Vite preview;
- * leave it out when the app's preview script already fixes the port.
- * --timeout bounds the wait for HTTP 200 after the preview starts, default 60.
+ * The preview always gets `--strictPort`, so a busy port fails instead of
+ * moving; --port also passes `--host 127.0.0.1 --port <n>` to a Vite preview.
+ * Leave it out when the app's preview script already fixes the port.
+ * --timeout bounds each wait, for the printed URL and then for HTTP 200, default 60.
  * Exits 2 on a usage error or an app directory that cannot be previewed, and 1
  * when the build fails, the preview exits or the page never answers.
  */
@@ -48,17 +49,19 @@ const missing = ["build", "preview"].filter((name) => !scripts[name]);
 if (missing.length) fail(`${manifest} has no ${missing.join(" or ")} script.`, 2);
 if (!existsSync(join(app, "node_modules"))) fail(`${app} has no node_modules; run npm ci there first.`, 2);
 
-const build = spawn("npm", ["run", "build"], { cwd: app, stdio: ["ignore", process.stderr, process.stderr] });
+const windows = process.platform === "win32";
+const build = spawn("npm", ["run", "build"], { cwd: app, shell: windows, stdio: ["ignore", process.stderr, process.stderr] });
 const built = await new Promise((done) => {
   build.on("error", () => done(false));
   build.on("exit", (code) => done(code === 0));
 });
 if (!built) fail("Build failed; no preview started.");
 
-const extra = values.port ? ["--", "--host", "127.0.0.1", "--port", values.port, "--strictPort"] : [];
-const preview = spawn("npm", ["run", "preview", ...extra], { cwd: app, stdio: ["ignore", "pipe", "pipe"], detached: true });
+const previewArgs = ["--strictPort", ...(values.port ? ["--host", "127.0.0.1", "--port", values.port] : [])];
+// Its own process group, so stopping it also stops the server npm started.
+const preview = spawn("npm", ["run", "preview", "--", ...previewArgs], { cwd: app, shell: windows, stdio: ["ignore", "pipe", "pipe"], detached: !windows });
 const stop = () => {
-  try { process.kill(-preview.pid, "SIGTERM"); } catch {}
+  try { windows ? preview.kill() : process.kill(-preview.pid, "SIGTERM"); } catch {}
 };
 process.on("SIGINT", () => { stop(); process.exit(130); });
 process.on("SIGTERM", () => { stop(); process.exit(143); });

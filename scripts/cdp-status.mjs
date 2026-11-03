@@ -16,9 +16,9 @@
  *            enabled from chrome://inspect); give REA the browser WebSocket URL.
  *   stale  — the port file names a port nothing listens on; debugging is off.
  *   off    — no port file; debugging was never enabled for this profile.
- * Enabling remote debugging is the user's decision; when nothing is live, say
- * so and ask. If REA's MCP discovery times out against a live endpoint, the
- * installed REA CLI takes the same endpoint.
+ * Enabling remote debugging is the user's decision; when nothing is reachable,
+ * say so and ask. When REA's MCP discovery times out against a reachable
+ * endpoint, the installed REA CLI takes the same endpoint.
  * Exits 0 when any profile is live or ws-only, 1 when none is, 2 on a usage error.
  */
 import { readFile } from "node:fs/promises";
@@ -69,24 +69,26 @@ function listening(port) {
 async function status(profile) {
   const file = join(profile, "DevToolsActivePort");
   const text = await readFile(file, "utf8").catch(() => null);
-  if (text === null) return { state: "off", line: `off     ${profile}: no DevToolsActivePort; remote debugging is not enabled.` };
+  if (text === null) return { state: "off", detail: `${profile}: no DevToolsActivePort; remote debugging is not enabled.` };
   const [port, path = ""] = text.split(/\r?\n/);
-  if (!/^\d+$/.test(port)) return { state: "stale", line: `stale   ${file}: unreadable port ${JSON.stringify(port)}.` };
+  if (!/^\d+$/.test(port)) return { state: "stale", detail: `${file}: unreadable port ${JSON.stringify(port)}.` };
   if (!(await listening(Number(port)))) {
-    return { state: "stale", line: `stale   ${profile}: DevToolsActivePort names port ${port}, but nothing listens; remote debugging is off.` };
+    return { state: "stale", detail: `${profile}: DevToolsActivePort names port ${port}, but nothing listens; remote debugging is off.` };
   }
   const socketUrl = `ws://127.0.0.1:${port}${path}`;
   const version = await fetch(`http://127.0.0.1:${port}/json/version`, { signal: AbortSignal.timeout(timeout) })
     .then((response) => (response.ok ? response.json() : null), () => null)
     .catch(() => null);
   if (version) {
-    return { state: "live", line: `live    ${profile}: http://127.0.0.1:${port} (${version.Browser ?? "unknown browser"}), browser WebSocket ${version.webSocketDebuggerUrl ?? socketUrl}` };
+    return { state: "live", detail: `${profile}: http://127.0.0.1:${port} (${version.Browser ?? "unknown browser"}), browser WebSocket ${version.webSocketDebuggerUrl ?? socketUrl}` };
   }
-  return { state: "ws-only", line: `ws-only ${profile}: port ${port} listens without /json/version; browser WebSocket ${socketUrl}` };
+  return { state: "ws-only", detail: `${profile}: port ${port} listens without /json/version; browser WebSocket ${socketUrl}` };
 }
 
 const results = await Promise.all((values["user-data-dir"] ?? defaultProfiles()).map(status));
-for (const { line } of results) console.log(line);
+for (const { state, detail } of results) console.log(`${state.padEnd(7)} ${detail}`);
 const reachable = results.some(({ state }) => state === "live" || state === "ws-only");
-if (!reachable) console.log("No CDP endpoint is reachable. Enabling remote debugging is the user's call; ask before any browser inspection.");
+console.log(reachable
+  ? "Give REA the reachable endpoint; if its MCP discovery times out, the installed REA CLI takes the same endpoint."
+  : "No CDP endpoint is reachable, for REA's MCP tools or its CLI. Enabling remote debugging is the user's call; ask before any browser inspection.");
 process.exit(reachable ? 0 : 1);

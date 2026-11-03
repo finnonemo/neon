@@ -56,6 +56,12 @@ Serve any app's production build and wait until it answers (it builds, starts `n
 node scripts/preview-app.mjs <app-dir> [--port <n>]
 ```
 
+Before an REA browser inspection, report whether Chrome exposes a DevTools endpoint (read-only; it never enables remote debugging):
+
+```sh
+node scripts/cdp-status.mjs
+```
+
 Start an app from the Neon base, or add Neon registry items to an app, from the registry pinned to this release (`shadcn init` / `shadcn add`):
 
 ```sh

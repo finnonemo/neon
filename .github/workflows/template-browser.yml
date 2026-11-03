@@ -57,7 +57,7 @@ jobs:
       # It runs even when the CDS target failed, so both results are uploaded.
       - if: ${{ !cancelled() }}
         run: npm test --prefix evals/templates -- --target neon
-      # Each target writes its own report; both must be present to upload.
+      # Each target writes its own report folder; fail unless both reports exist.
       - if: ${{ !cancelled() }}
         run: test -f .local/evals/templates/cds/report/index.html && test -f .local/evals/templates/neon/report/index.html
       - uses: actions/upload-artifact@v4
