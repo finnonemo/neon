@@ -373,6 +373,36 @@
       ]
     },
     {
+      "name": "tabs",
+      "type": "registry:ui",
+      "title": "Tabs",
+      "dependencies": ["radix-ui@^1.8.1"],
+      "registryDependencies": ["@neon/utils"],
+      "files": [
+        { "path": "ui/tabs.tsx", "type": "registry:ui", "target": "src/components/ui/tabs.tsx" }
+      ]
+    },
+    {
+      "name": "accordion",
+      "type": "registry:ui",
+      "title": "Accordion",
+      "dependencies": ["radix-ui@^1.8.1", "lucide-react@^1.66.0"],
+      "registryDependencies": ["@neon/utils"],
+      "files": [
+        { "path": "ui/accordion.tsx", "type": "registry:ui", "target": "src/components/ui/accordion.tsx" }
+      ]
+    },
+    {
+      "name": "collapsible",
+      "type": "registry:ui",
+      "title": "Collapsible",
+      "dependencies": ["radix-ui@^1.8.1"],
+      "registryDependencies": ["@neon/utils"],
+      "files": [
+        { "path": "ui/collapsible.tsx", "type": "registry:ui", "target": "src/components/ui/collapsible.tsx" }
+      ]
+    },
+    {
       "name": "logo",
       "type": "registry:item",
       "title": "Finnomena logo",
