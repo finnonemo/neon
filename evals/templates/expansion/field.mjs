@@ -29,10 +29,11 @@ export const screens = [
   },
 ];
 
-// The helper and the error describe their control, the error state is
-// invalid and announced, and long Thai helper text wraps inside the field.
+// The item, not the fixture, ties the label, the helper and the error to the
+// control: the error state is invalid and announced, an input group's input
+// is described too, and long Thai helper text wraps inside the field.
 export function a11y({ test, expect, gotoExpansion }) {
-  test('a field describes its control with the helper, and an error is invalid and announced', async ({ page }) => {
+  test('a field labels its control and describes it with the helper, and an error is invalid and announced', async ({ page }) => {
     await gotoExpansion(page);
     const helperField = page.locator(helper);
     const name = helperField.getByRole('textbox', { name: 'ชื่อบัญชี / Account name' });
@@ -45,6 +46,11 @@ export function a11y({ test, expect, gotoExpansion }) {
     const alert = errorField.getByRole('alert');
     await expect(alert).toHaveText('รูปแบบอีเมลไม่ถูกต้อง / Invalid email');
     await expect(email).toHaveAccessibleDescription('รูปแบบอีเมลไม่ถูกต้อง / Invalid email');
+
+    const requester = page.locator('[data-measure=field-input-group]').getByRole('textbox', { name: 'ผู้ขอ / Requester' });
+    await expect(requester).toHaveAttribute('data-slot', 'input-group-control');
+    await expect(requester).toHaveAccessibleDescription('ค้นหาด้วยชื่อหรืออีเมล / Search by name or email');
+    await expect(requester).not.toHaveAttribute('aria-invalid', 'true');
   });
 
   test('long Thai helper text wraps inside the field without overflow', async ({ page }) => {
