@@ -2,14 +2,14 @@
 //   node run.mjs [playwright args]                 the CDS starter (default)
 //   node run.mjs --target neon [playwright args]   the Neon base, from this checkout's registry
 //   --keep leaves the assembled app in place and prints its path, for screenshots.
-import { mkdtemp, readFile, readdir, writeFile, copyFile, rm, mkdir } from 'node:fs/promises';
+import { mkdtemp, readFile, readdir, writeFile, copyFile, cp, rm, mkdir } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import { tmpdir } from 'node:os';
 import { join, relative, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawn } from 'node:child_process';
 import { assembleStarter } from '../../scripts/lib/assemble-starter.mjs';
-import { SHADCN, bareCnImports, buildRegistry } from '../../scripts/lib/registry.mjs';
+import { SHADCN, bareCnImports, browserSuiteItems, buildRegistry } from '../../scripts/lib/registry.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, '../..');
@@ -34,9 +34,11 @@ async function assembleCds() {
   // Build the shipped app before adding any test-only fixtures.
   await run('npm', ['run', 'build'], app);
   await mkdir(join(app, 'src/app/shared'), { recursive: true });
-  for (const file of ['App.tsx', 'Approval.tsx', 'Extras.tsx', 'shared/data.ts']) {
+  for (const file of ['App.tsx', 'Approval.tsx', 'Extras.tsx', 'Expansion.tsx', 'Hook.tsx', 'shared/data.ts']) {
     await copyFile(join(here, 'fixtures', file), join(app, 'src/app', file));
   }
+  // The expansion screen's sections: one file per item, copied whole.
+  await cp(join(here, 'fixtures/expansion'), join(app, 'src/app/expansion'), { recursive: true });
   await copyFile(join(root, 'theme/examples/app-entry.tsx'), join(app, 'src/app/IntegrationRoot.tsx'));
   const mainPath = join(app, 'src/main.tsx');
   let main = await readFile(mainPath, 'utf8');
@@ -67,8 +69,7 @@ async function assembleNeon() {
     ({ items } = JSON.parse(await readFile(join(work, 'registry/r/registry.json'), 'utf8')));
     await run('npx', ['--yes', SHADCN, 'init', '-t', 'vite', '-b', 'radix', '-n', 'app', '--no-monorepo', `${url}/neon-base.json`], work);
     // The vite template appends shadcn's stock button and a theme provider.
-    // Theme Brief items add only their Markdown, to docs/theme-briefs.
-    const components = items.filter((item) => item.type === 'registry:ui' || item.name.startsWith('theme-brief-')).map((item) => `@neon/${item.name}`);
+    const components = browserSuiteItems(items).map((name) => `@neon/${name}`);
     await run('npx', ['--yes', SHADCN, 'add', ...components, '--overwrite', '-y'], app);
     await rm(join(app, 'src/components/theme-provider.tsx'), { force: true });
   } finally {
@@ -92,7 +93,8 @@ async function assembleNeon() {
   // Fixtures: App.tsx routes the screens; the rest sit beside AppRoot.
   await mkdir(join(app, 'src/app/shared'), { recursive: true });
   await copyFile(join(here, 'fixtures/neon/App.tsx'), join(app, 'src/App.tsx'));
-  for (const file of ['Approval.tsx', 'Extras.tsx', 'Hook.tsx']) await copyFile(join(here, 'fixtures/neon', file), join(app, 'src/app', file));
+  for (const file of ['Approval.tsx', 'Extras.tsx', 'Expansion.tsx', 'Hook.tsx']) await copyFile(join(here, 'fixtures/neon', file), join(app, 'src/app', file));
+  await cp(join(here, 'fixtures/neon/expansion'), join(app, 'src/app/expansion'), { recursive: true });
   await copyFile(join(here, 'fixtures/shared/data.ts'), join(app, 'src/app/shared/data.ts'));
   const mainPath = join(app, 'src/main.tsx');
   const main = await readFile(mainPath, 'utf8');

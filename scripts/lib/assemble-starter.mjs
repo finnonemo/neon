@@ -42,7 +42,9 @@ async function validateDestination(sourceRoot, destination) {
   const resolvedDest = resolve(destination);
 
   const destRel = relative(resolvedSource, resolvedDest);
-  if (destRel === "" || (!destRel.startsWith("..") && !isAbsolute(destRel))) {
+  // The checkout's gitignored .local/ holds disposable apps and eval fixtures.
+  const inLocal = /^\.local[\\/]./.test(destRel);
+  if (destRel === "" || (!inLocal && !destRel.startsWith("..") && !isAbsolute(destRel))) {
     throw new Error(`assembleStarter: destination is inside the source tree: ${resolvedDest}`);
   }
 
