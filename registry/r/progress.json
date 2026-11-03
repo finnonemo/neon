@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "progress",
+  "type": "registry:ui",
+  "title": "Progress",
+  "dependencies": [
+    "radix-ui@^1.8.1"
+  ],
+  "registryDependencies": [
+    "@neon/utils"
+  ],
+  "files": [
+    {
+      "path": "ui/progress.tsx",
+      "content": "import * as React from \"react\"\nimport { Progress as ProgressPrimitive } from \"radix-ui\"\n\nimport { cn } from \"@/lib/utils\"\n\n// The CDS ProgressBar at its default (normal) weight: a 4px bgLine track and a\n// bgPrimary fill, both fully rounded. The fill is track-wide and slides in from\n// the left, as CDS's does. value runs 0–100 (CDS's progress is 0–1); Radix\n// exposes it as aria-valuenow, so give the bar a name with aria-label or\n// aria-labelledby.\nfunction Progress({\n  className,\n  value,\n  ...props\n}: React.ComponentProps<typeof ProgressPrimitive.Root>) {\n  return (\n    <ProgressPrimitive.Root\n      data-slot=\"progress\"\n      value={value}\n      className={cn(\n        \"relative flex h-1 w-full items-center overflow-x-hidden rounded-full bg-border\",\n        className\n      )}\n      {...props}\n    >\n      <ProgressPrimitive.Indicator\n        data-slot=\"progress-indicator\"\n        className=\"size-full flex-1 rounded-full bg-primary transition-all\"\n        style={{ transform: `translateX(-${100 - (value || 0)}%)` }}\n      />\n    </ProgressPrimitive.Root>\n  )\n}\n\nexport { Progress }\n",
+      "type": "registry:ui",
+      "target": "src/components/ui/progress.tsx"
+    }
+  ]
+}

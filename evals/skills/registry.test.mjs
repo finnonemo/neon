@@ -1,12 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { execFileSync } from 'node:child_process';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { expansionItem, expansionItems } from '../templates/expansion.mjs';
 import { loadImmersiveThemes, resolveColor } from '../../theme/scripts/generate-immersive-themes.mjs';
-import { BUILD_DIR, bareCnImports, browserSuiteItems, buildRegistry, darkClasses, missingTypeRoles, nextThemes, pinnedRegistryUrl, tabsAsSegmented, themeBriefItemProblems, unpinnedUrls, unreachedItems, weightOverrides } from '../../scripts/lib/registry.mjs';
+import { BUILD_DIR, bareCnImports, browserSuiteItems, buildRegistry, darkClasses, missingTypeRoles, nextThemes, pinnedRegistryUrl, tabsAsSegmented, themeBriefItemProblems, undeclaredSiblings, unmeasuredComponents, unpinnedUrls, unreachedItems, weightOverrides } from '../../scripts/lib/registry.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '../..');
 const read = (path) => readFileSync(join(root, path), 'utf8');
@@ -88,6 +89,54 @@ test('a segmented control is never built on Tabs', () => {
 });
 
 const registryItem = (name) => JSON.parse(read('registry/registry.json')).items.find((item) => item.name === name);
+
+// An item that builds on another Neon item (input-group on button, input and
+// textarea; the base's AppRoot on sonner and tooltip) must pull it in, or
+// shadcn add leaves a broken import or installs stock shadcn's.
+test('every registry item that imports a Neon component declares it as a registry dependency', () => {
+  const { items } = JSON.parse(read('registry/registry.json'));
+  assert.deepEqual(undeclaredSiblings(items, (path) => read(join('registry', path))), []);
+  const item = (type, registryDependencies) => ({ name: 'input-group', type, registryDependencies, files: [{ path: 'ui/input-group.tsx' }] });
+  const source = (quote) => `import { Button } from ${quote}@/components/ui/button${quote}\nimport { Input } from ${quote}@/components/ui/input${quote}`;
+  assert.deepEqual(undeclaredSiblings([item('registry:ui', ['@neon/utils', '@neon/button'])], () => source('"')), ['input-group imports input without declaring it']);
+  assert.deepEqual(undeclaredSiblings([item('registry:ui', ['@neon/utils', '@neon/button'])], () => source("'")), ['input-group imports input without declaring it'], 'single-quoted imports count');
+  assert.deepEqual(undeclaredSiblings([item('registry:item', ['@neon/button'])], () => source("'")), ['input-group imports input without declaring it'], 'every item type is checked, not only components');
+  assert.deepEqual(undeclaredSiblings([item('registry:base', ['{{registry}}/button.json', '{{registry}}/input.json'])], () => source("'")), [], 'a {{registry}} URL dependency declares the item');
+});
+
+// The components the approval and extras screens measure. Every later
+// component is measured on the expansion screen (#164), unless it only
+// supports another item (meta.supporting).
+const SCREEN_MEASURED = ['button', 'input', 'textarea', 'label', 'checkbox', 'avatar', 'tag', 'list-row', 'segmented-control', 'tooltip', 'sonner', 'popover', 'select', 'dropdown-menu', 'dialog', 'calendar', 'date-picker', 'table'];
+
+test('every Neon component is measured against its Counterpart', () => {
+  const { items } = JSON.parse(read('registry/registry.json'));
+  const expansion = {
+    screens: (name) => expansionItems.find((item) => item.name === name)?.screens.length ?? 0,
+    fixture: (path) => existsSync(join(root, 'evals/templates/fixtures', path)),
+  };
+  assert.deepEqual(unmeasuredComponents(items, SCREEN_MEASURED, expansion), []);
+
+  const combobox = { name: 'combobox', type: 'registry:ui', files: [] };
+  const fake = (screens, fixtures) => ({ screens: (name) => screens[name] ?? 0, fixture: (path) => fixtures.includes(path) });
+  const both = ['expansion/combobox.tsx', 'neon/expansion/combobox.tsx'];
+  assert.deepEqual(unmeasuredComponents([combobox], [], fake({ combobox: 1 }, both)), []);
+  assert.deepEqual(unmeasuredComponents([combobox], [], fake({}, both)), ['combobox: no screen in evals/templates/expansion/combobox.mjs']);
+  assert.deepEqual(unmeasuredComponents([combobox], [], fake({ combobox: 1 }, [both[0]])), ['combobox: no evals/templates/fixtures/neon/expansion/combobox.tsx']);
+  assert.deepEqual(unmeasuredComponents([combobox], [], fake({ combobox: 1 }, [both[1]])), ['combobox: no evals/templates/fixtures/expansion/combobox.tsx']);
+  assert.deepEqual(unmeasuredComponents([combobox], ['combobox'], fake({}, [])), [], 'a component the approval or extras screen measures');
+  assert.deepEqual(unmeasuredComponents([{ ...combobox, meta: { supporting: true } }], [], fake({}, [])), [], 'a supporting component');
+  assert.deepEqual(unmeasuredComponents([{ ...combobox, type: 'registry:item' }], [], fake({}, [])), [], 'not a component');
+});
+
+test('an expansion module without a screen fails loudly, and its screens take the expansion defaults', () => {
+  assert.throws(() => expansionItem('combobox', {}), /expansion\/combobox\.mjs exports no screens/);
+  assert.throws(() => expansionItem('combobox', { screens: [] }), /exports no screens/);
+  const [screen] = expansionItem('combobox', { screens: [{ targets: {}, gaps: [] }] }).screens;
+  assert.deepEqual([screen.name, screen.query], ['expansion-combobox', 'layout=expansion']);
+  const [open] = expansionItem('combobox', { screens: [{ name: 'expansion-combobox-open', targets: {}, gaps: [] }] }).screens;
+  assert.equal(open.name, 'expansion-combobox-open', 'an entry may name itself');
+});
 
 test('the Finnomena logo SVGs are tracked once, in theme/logo/', () => {
   const tracked = execFileSync('git', ['ls-files', '*.svg'], { cwd: root, encoding: 'utf8' }).split('\n').filter((path) => /logo-finnomena/.test(path));

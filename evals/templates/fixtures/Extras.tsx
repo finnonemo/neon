@@ -1,6 +1,6 @@
 // The extras screen measured for the CDS baseline: Select, DatePicker, Tooltip,
 // Table with a row menu, Dialog and toast. Hooks are display: contents.
-import { useState, type ReactNode } from "react";
+import { useState } from "react";
 import { Box, HStack, VStack } from "@coinbase/cds-web/layout";
 import { Button, IconButton } from "@coinbase/cds-web/buttons";
 import { Text } from "@coinbase/cds-web/typography";
@@ -11,10 +11,8 @@ import { Checkbox, SelectOption, TextInput } from "@coinbase/cds-web/controls";
 import { Modal, ModalBody, ModalFooter, ModalHeader, Tooltip } from "@coinbase/cds-web/overlays";
 import { useToast } from "@coinbase/cds-web/overlays/useToast";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "@coinbase/cds-web/tables";
+import { Hook } from "./Hook";
 import { requests, statusLabel, types } from "./shared/data";
-
-const Hook = ({ name, children }: { name: string; children: ReactNode }) =>
-  <div data-measure={name} style={{ display: "contents" }}>{children}</div>;
 
 export function Extras() {
   const [type, setType] = useState<string | null>(null);
