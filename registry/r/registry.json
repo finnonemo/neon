@@ -425,6 +425,24 @@
       ]
     },
     {
+      "name": "separator",
+      "type": "registry:ui",
+      "title": "Separator",
+      "dependencies": [
+        "radix-ui@^1.8.1"
+      ],
+      "registryDependencies": [
+        "@neon/utils"
+      ],
+      "files": [
+        {
+          "path": "ui/separator.tsx",
+          "type": "registry:ui",
+          "target": "src/components/ui/separator.tsx"
+        }
+      ]
+    },
+    {
       "name": "logo",
       "type": "registry:item",
       "title": "Finnomena logo",
