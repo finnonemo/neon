@@ -7,8 +7,6 @@ const line = ['h', 'w', 'bg', 'border'];
 
 export const screens = [
   {
-    name: 'expansion-separator',
-    query: 'layout=expansion',
     targets: {
       separatorHorizontal: { cds: `${horizontal} hr`, neon: `${horizontal} [data-slot=separator]`, check: line },
       separatorVertical: { cds: `${vertical} hr`, neon: `${vertical} [data-slot=separator]`, check: line },
@@ -29,13 +27,13 @@ export const screens = [
 ];
 
 // CDS Divider is always role=separator; Neon's is decorative unless marked semantic.
-export function a11y({ test, expect }) {
+export function a11y({ test, expect, gotoExpansion }) {
   test('a separator is decorative by default and a separator only when marked semantic', async ({ page }) => {
-    await page.goto('/?layout=expansion');
+    await gotoExpansion(page);
     const section = page.locator('[data-measure=separator]');
     await expect(section.locator('[data-slot=separator]')).toHaveCount(2);
     await expect(section.getByRole('separator')).toHaveCount(1);
-    await expect(page.locator('[data-measure=separator-horizontal]').getByRole('separator')).toHaveCount(0);
-    await expect(page.locator('[data-measure=separator-vertical]').getByRole('separator')).toHaveAttribute('aria-orientation', 'vertical');
+    await expect(page.locator(horizontal).getByRole('separator')).toHaveCount(0);
+    await expect(page.locator(vertical).getByRole('separator')).toHaveAttribute('aria-orientation', 'vertical');
   });
 }

@@ -7,8 +7,6 @@ const spinner = (hook) => ({ cds: `[data-measure=${hook}] [role=status]`, neon: 
 
 export const screens = [
   {
-    name: 'expansion-spinner',
-    query: 'layout=expansion',
     targets: {
       spinnerDefault: spinner('spinner-default'),
       spinnerLarge: spinner('spinner-large'),
@@ -17,17 +15,17 @@ export const screens = [
   },
 ];
 
-export function a11y({ test, expect }) {
+export function a11y({ test, expect, gotoExpansion }) {
   test('a spinner is a polite loading status that reads its label', async ({ page }) => {
-    await page.goto('/?layout=expansion');
+    await gotoExpansion(page);
     const statuses = page.locator('[data-measure=spinner]').getByRole('status');
     await expect(statuses).toHaveCount(2);
     for (const status of await statuses.all()) await expect(status).toHaveText('กำลังโหลด / Loading');
   });
 
   test('the spinner arc draws in its text color over a bgAlternate track', async ({ page }) => {
-    await page.goto('/?layout=expansion');
-    const colors = await page.locator('[data-measure=spinner-large] [data-slot=spinner]').evaluate((el) => {
+    await gotoExpansion(page);
+    const colors = await page.locator(spinner('spinner-large').neon).evaluate((el) => {
       const style = getComputedStyle(el);
       return { arc: style.borderBottomColor, text: style.color, track: [style.borderTopColor, style.borderRightColor, style.borderLeftColor] };
     });

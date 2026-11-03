@@ -9,8 +9,6 @@ const text = ['font', 'color', 'h'];
 
 export const screens = [
   {
-    name: 'expansion-field',
-    query: 'layout=expansion',
     targets: {
       stack: { cds: `${helper} > div`, neon: `${helper} [data-slot=field]`, check: ['h', 'w'] },
       label: { cds: `${helper} [data-testid=field-helper-label]`, neon: `${helper} [data-slot=field-label]`, check: [...text, 'pad'] },
@@ -31,11 +29,12 @@ export const screens = [
   },
 ];
 
-// The helper and the error describe their control, the error state is
-// invalid and announced, and long Thai helper text wraps inside the field.
-export function a11y({ test, expect }) {
-  test('a field describes its control with the helper, and an error is invalid and announced', async ({ page }) => {
-    await page.goto('/?layout=expansion');
+// The item, not the fixture, ties the label, the helper and the error to the
+// control: the error state is invalid and announced, an input group's input
+// is described too, and long Thai helper text wraps inside the field.
+export function a11y({ test, expect, gotoExpansion }) {
+  test('a field labels its control and describes it with the helper, and an error is invalid and announced', async ({ page }) => {
+    await gotoExpansion(page);
     const helperField = page.locator(helper);
     const name = helperField.getByRole('textbox', { name: 'ชื่อบัญชี / Account name' });
     await expect(name).toHaveAccessibleDescription(await helperField.locator('[data-slot=field-description]').innerText());
@@ -47,12 +46,17 @@ export function a11y({ test, expect }) {
     const alert = errorField.getByRole('alert');
     await expect(alert).toHaveText('รูปแบบอีเมลไม่ถูกต้อง / Invalid email');
     await expect(email).toHaveAccessibleDescription('รูปแบบอีเมลไม่ถูกต้อง / Invalid email');
+
+    const requester = page.locator('[data-measure=field-input-group]').getByRole('textbox', { name: 'ผู้ขอ / Requester' });
+    await expect(requester).toHaveAttribute('data-slot', 'input-group-control');
+    await expect(requester).toHaveAccessibleDescription('ค้นหาด้วยชื่อหรืออีเมล / Search by name or email');
+    await expect(requester).not.toHaveAttribute('aria-invalid', 'true');
   });
 
   test('long Thai helper text wraps inside the field without overflow', async ({ page }) => {
     for (const width of [375, 1440]) {
       await page.setViewportSize({ width, height: 900 });
-      await page.goto('/?layout=expansion');
+      await gotoExpansion(page);
       await page.evaluate(() => document.fonts.ready);
       const measured = await page.locator(`${helper} [data-slot=field-description]`).evaluate((el) => ({
         lines: Math.round(el.getBoundingClientRect().height / parseFloat(getComputedStyle(el).lineHeight)),

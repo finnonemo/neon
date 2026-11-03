@@ -16,6 +16,7 @@ import { expansionItems } from './expansion.mjs';
 
 const both = (selector, check) => ({ cds: selector, neon: selector, check });
 const button = (n, check = ['font', 'color', 'bg', 'h', 'pad', 'radius']) => both(`[data-measure=actions] button:nth-of-type(${n})`, check);
+const expansionSection = (n) => `:has(> [data-measure=title]) > section:nth-of-type(${n})`;
 
 export const screens = [
   {
@@ -167,8 +168,29 @@ export const screens = [
     },
     gaps: [],
   },
-  // The expansion screen: each registry expansion item's entries, from expansion/<item>.mjs.
-  ...expansionItems.flatMap((item) => item.screens ?? []),
+  // The expansion screen itself: its title, padding, the gap between sections
+  // and within one (heading → the item's own markup, past its display: contents hook).
+  {
+    name: 'expansion',
+    query: 'layout=expansion',
+    targets: {
+      title: both('[data-measure=title] h1', ['font', 'color']),
+      screen: both(':has(> [data-measure=title])', ['pad']),
+      sectionHeading: both(`${expansionSection(1)} > h2`, ['font', 'color']),
+    },
+    extraTargets: {
+      firstSection: both(expansionSection(1), []),
+      sectionContent: both(`${expansionSection(1)} > [data-measure] > :first-child`, []),
+      secondSection: both(expansionSection(2), []),
+    },
+    gaps: [
+      ['title', 'firstSection', 'y'],
+      ['sectionHeading', 'sectionContent', 'y'],
+      ['firstSection', 'secondSection', 'y'],
+    ],
+  },
+  // Each registry expansion item's entries, from expansion/<item>.mjs.
+  ...expansionItems.flatMap((item) => item.screens),
 ];
 
 export const viewports = [{ width: 375, height: 812 }, { width: 1440, height: 900 }];
