@@ -9,7 +9,7 @@ import { join, relative, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawn } from 'node:child_process';
 import { assembleStarter } from '../../scripts/lib/assemble-starter.mjs';
-import { SHADCN, bareCnImports, buildRegistry } from '../../scripts/lib/registry.mjs';
+import { SHADCN, bareCnImports, browserSuiteItems, buildRegistry } from '../../scripts/lib/registry.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, '../..');
@@ -67,8 +67,7 @@ async function assembleNeon() {
     ({ items } = JSON.parse(await readFile(join(work, 'registry/r/registry.json'), 'utf8')));
     await run('npx', ['--yes', SHADCN, 'init', '-t', 'vite', '-b', 'radix', '-n', 'app', '--no-monorepo', `${url}/neon-base.json`], work);
     // The vite template appends shadcn's stock button and a theme provider.
-    // Theme Brief items add only their Markdown, to docs/theme-briefs.
-    const components = items.filter((item) => item.type === 'registry:ui' || item.name.startsWith('theme-brief-')).map((item) => `@neon/${item.name}`);
+    const components = browserSuiteItems(items).map((name) => `@neon/${name}`);
     await run('npx', ['--yes', SHADCN, 'add', ...components, '--overwrite', '-y'], app);
     await rm(join(app, 'src/components/theme-provider.tsx'), { force: true });
   } finally {
