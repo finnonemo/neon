@@ -16,7 +16,7 @@ Run `node "<Neon root>/scripts/theme-brief.mjs" match <file>` on every style fil
 
 ## Use a recognised brief
 
-- Briefs target the Neon base. In an app already on CDS, or one without React, say so and offer a new Neon-base app or a theme-only page.
+- Briefs target the Neon base. In an app already on CDS by the [Base](../../neon-audit/references/project-inspection.md#base) rule, or one without React, say so and offer a new Neon-base app or a theme-only page.
 - Record the item name as `themeBrief` in `NeonContext`, and leave `referenceDesign` and `brandIntensity` unset. Offer no Brand Intensity dial.
 - The page's Immersive Theme is the brief's: pass it as `ImmersiveLayout`'s `immersiveTheme`.
 - Colors and type come from the installed Neon theme and Immersive Themes CSS, never from hex values or font names in the Markdown.
