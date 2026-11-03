@@ -25,6 +25,6 @@ The expansion screen (`?layout=expansion`) holds the registry expansion items (#
 
 `--keep` leaves the assembled app in the temporary directory and prints its path, so you can preview and screenshot it.
 
-The production preview listens on port 4178. Set `NEON_TEMPLATE_PORT` to run several suites at once, one port each (the preview uses `--strictPort`, so a taken port fails rather than sharing a server): `NEON_TEMPLATE_PORT=4179 node run.mjs --target neon`. Runs from one checkout still share `.local/evals/templates/`.
+The production preview listens on port 4178. Set `NEON_TEMPLATE_PORT` to run several suites at once, one port each (the preview uses `--strictPort`, so a taken port fails rather than sharing a server): `NEON_TEMPLATE_PORT=4179 node run.mjs --target neon`. Runs of one target from one checkout still share its report folder.
 
-Reports, screenshots and failure traces go to `.local/evals/templates/` in the repository and are uploaded by CI. Inspect screenshots for Thai/English wrapping and layout quality; successful assertions alone do not establish visual quality.
+Reports, screenshots and failure traces go to `.local/evals/templates/<target>/` (`cds` or `neon`) in the repository and are uploaded by CI. Inspect screenshots for Thai/English wrapping and layout quality; successful assertions alone do not establish visual quality.
