@@ -22,12 +22,14 @@
 // denied command, and void when the run then reported the shell as blocked.
 // --serve-registry serves this checkout's Neon registry on localhost and sets
 // NEON_REGISTRY_URL for the run, so `install.mjs --new` and `--add` work
-// before the release is tagged, without the agent passing --registry. Without
+// before the release is tagged, without the agent passing --registry. An
+// existing app's components.json @neon entry is pointed at the served registry
+// in a commit of its own, as an app on that release would have it. Without
 // it, a package whose pinned registry does not answer gets a warning first.
 // The run ends RESULT_GRACE seconds after its first result event: a process it
 // left in the background, such as a dev server, would otherwise hold it to --cap.
 import { execFileSync, spawn } from 'node:child_process';
-import { existsSync, mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import { tmpdir } from 'node:os';
@@ -157,6 +159,17 @@ export async function serveRegistry() {
   return { url, close };
 }
 
+/** Points an app's components.json @neon entry, if it has one, at `url`. Returns whether it changed. */
+export function pointAtRegistry(app, url) {
+  const path = join(app, 'components.json');
+  if (!existsSync(path)) return false;
+  const config = JSON.parse(readFileSync(path, 'utf8'));
+  const entry = `${url}/{name}.json`;
+  if (config.registries?.['@neon'] === undefined || config.registries['@neon'] === entry) return false;
+  writeFileSync(path, `${JSON.stringify({ ...config, registries: { ...config.registries, '@neon': entry } }, null, 2)}\n`);
+  return true;
+}
+
 async function waitFor(url, seconds) {
   for (let second = 0; second < seconds; second++) {
     try { if ((await fetch(url)).ok) return true; } catch {}
@@ -225,6 +238,9 @@ async function runCase(values) {
       if (values['serve-registry']) {
         registry = await serveRegistry();
         env.NEON_REGISTRY_URL = summary.registry = registry.url;
+        if (pointAtRegistry(app, registry.url)) {
+          execFileSync('git', ['-C', app, '-c', 'user.name=eval', '-c', 'user.email=eval@localhost', 'commit', '-qam', 'point @neon at the served registry']);
+        }
       } else if ((summary.registryWarning = await registryPreflight(summary.package))) console.error(`Warning: ${summary.registryWarning}`);
       else delete summary.registryWarning;
       if (port) {

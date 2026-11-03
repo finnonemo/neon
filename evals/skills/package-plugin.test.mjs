@@ -89,3 +89,16 @@ test('missing required payload fails before writing destination', async () => {
   await assert.rejects(packagePlugin({ sourceRoot, destination }));
   assert.deepEqual(await readdir(destination), []);
 });
+
+test('distribution ships the Theme Brief CLI neon-create runs, and it runs from the package', async () => {
+  const destination = await mkdtemp(join(tmpdir(), 'neon-package-test-'));
+  await packagePlugin({ destination });
+  const reference = await readFile(join(destination, 'skills/neon-create/references/theme-brief.md'), 'utf8');
+  assert.ok(reference.includes('<Neon root>/scripts/theme-brief.mjs'), 'theme-brief.md must run the CLI');
+  const file = join(destination, 'DESIGN.md');
+  await writeFile(file, '# Lumora — Style Reference\n');
+  // The pinned URL needs plugin.json, which the package carries.
+  const run = spawnSync(process.execPath, [join(destination, 'scripts/theme-brief.mjs'), 'match', file], { encoding: 'utf8' });
+  assert.equal(run.status, 0, run.stderr);
+  assert.match(run.stdout, /^Reference Design: it has no Theme Brief header/);
+});

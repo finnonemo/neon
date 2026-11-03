@@ -30,7 +30,8 @@ If the app already has a working Finnomena theme, on the Neon base or on CDS, st
 - New project: [scaffold and layout](references/scaffold.md). Never scaffold over a nonempty app.
 - Explicit rebuild of an existing React app: [rebuild](references/rebuild.md), into a new directory on the Neon base.
 - Components, styling or an added item in a new, Neon-base or shadcn app: [Neon base](references/neon-base.md).
-- Any supplied reference design or outside style file: [reference design](../neon-audit/references/reference-design.md).
+- A Campaign Page with no Reference Design, or a file headed `… — Theme Brief`: [Theme Briefs](references/theme-brief.md).
+- Any supplied reference design or outside style file that is not a recognised Theme Brief: [reference design](../neon-audit/references/reference-design.md).
 - Writing sections for a new or rebuilt Campaign Page: [campaign content](references/campaign-content.md).
 - Components, theme, provider or dependency changes in an app already on CDS: [CDS integration](references/cds-integration.md). Preserve customized files and theme-mode ownership.
 - Complex feature states, mock figures or a comparison table on a functional screen, or existing-app integration: [new UI workflow](references/new-ui-workflow.md).

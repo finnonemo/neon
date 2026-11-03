@@ -44,7 +44,7 @@ import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 import { CDS_FILES, CSS_FILE } from "./assets.mjs";
 import { assertSupportedOverride, choosePackageManager, dependencyCommand } from "./package-manager.mjs";
-import { SHADCN, pinnedRegistryUrl, resolveItemFiles } from "./registry.mjs";
+import { SHADCN, fetchRegistryJson, neonRegistryUrl, resolveItemFiles } from "./registry.mjs";
 
 const DEFAULT_SOURCE_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const DEFAULT_THEME_DIR = "src/theme";
@@ -97,7 +97,7 @@ export async function install({
   try {
     const neon = { sourceRoot, starterDir: join(sourceRoot, "templates", "vitejs-cds") };
     const options = { target: resolve(target), themeDir, packageManager, skipInstall, runCommand, registry, fetchJson, log };
-    const neonRegistry = { ...options, registry: registry ?? env.NEON_REGISTRY_URL };
+    const neonRegistry = { ...options, env };
     if (mode === "new") return await installNew(neon, neonRegistry);
     if (mode === "add") return await installAdd(neon, { ...neonRegistry, items });
     // Shape-check an explicit override before any mode-specific work, so it
@@ -112,12 +112,12 @@ export async function install({
   }
 }
 
-async function installNew(neon, { target, themeDir, packageManager, skipInstall, runCommand, registry, fetchJson }) {
+async function installNew(neon, { target, themeDir, packageManager, skipInstall, runCommand, registry, env, fetchJson }) {
   // shadcn init installs as it creates, with the manager it detects, and the
   // base imports its theme from src/theme, so these would be silently ignored.
   refuseShadcnOptions("--new: shadcn init creates the Neon base app as it ships", { themeDir, packageManager, skipInstall });
   if (existsSync(target) && readdirSync(target).length > 0) throw new Error(`New: destination is not empty: ${target}`);
-  const url = registry ?? (await pinnedRegistryUrl(neon.sourceRoot));
+  const url = await neonRegistryUrl({ registry, env, root: neon.sourceRoot });
   const files = await resolveItemFiles({ url, names: ["neon-base"], fetchJson });
 
   // Vite refuses an existing destination, even an empty one, so an empty one
@@ -138,7 +138,7 @@ async function installNew(neon, { target, themeDir, packageManager, skipInstall,
   return result({ mode: "new", destination: target, dependenciesInstalled: true });
 }
 
-async function installAdd(neon, { target, items, themeDir, packageManager, skipInstall, runCommand, registry, fetchJson, log }) {
+async function installAdd(neon, { target, items, themeDir, packageManager, skipInstall, runCommand, registry, env, fetchJson, log }) {
   // shadcn add installs as it adds, with the manager the app's lockfile names,
   // and writes each item where the item targets it.
   refuseShadcnOptions("--add: shadcn add installs each item as the registry has it", { themeDir, packageManager, skipInstall });
@@ -147,7 +147,7 @@ async function installAdd(neon, { target, items, themeDir, packageManager, skipI
   if (!existsSync(configPath)) {
     throw new Error(`No components.json at ${configPath}: --add needs an app shadcn manages. Start one with --new, or use --css-only.`);
   }
-  const url = registry ?? (await pinnedRegistryUrl(neon.sourceRoot));
+  const url = await neonRegistryUrl({ registry, env, root: neon.sourceRoot });
   const config = JSON.parse(readFileSync(configPath, "utf8"));
   const neonRegistry = `${url}/{name}.json`;
   const current = config.registries?.["@neon"];
@@ -246,12 +246,6 @@ function assertLanded(app, files, kept = new Map()) {
 }
 
 /** The default fetchJson: one registry item from the pinned release. */
-async function fetchRegistryJson(url) {
-  const response = await fetch(url);
-  if (!response.ok) throw new Error(`${url} answered ${response.status}`);
-  return response.json();
-}
-
 function result(fields) {
   return {
     destination: null,
