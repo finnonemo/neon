@@ -10,8 +10,9 @@ import { cn } from "@/lib/utils"
 // right sheets are min(400px, 100vw) wide and full height. The open edge's
 // two corners round to 32px. Like Tray it sits on the dialog's overlay and
 // surface (bgOverlay, bgElevation2) and is bordered in bgLine in dark only
-// (--sheet-border-width). A bottom sheet's header shows CDS's HandleBar,
-// which is its close button; the other sides show an X instead. Radix closes
+// (the --sheet-border-width role, 0px when an older theme lacks it). A
+// bottom sheet's header shows CDS's HandleBar, which is its close button;
+// the other sides show an X instead. Radix closes
 // it on Escape or an overlay click and returns focus to the trigger; there is
 // no drag to dismiss.
 type Side = "top" | "right" | "bottom" | "left"
@@ -64,7 +65,7 @@ function SheetContent({
         data-slot="sheet-content"
         data-side={side}
         className={cn(
-          "fixed z-50 flex flex-col items-center overflow-hidden border-(length:--sheet-border-width) border-border bg-popover text-body text-popover-foreground shadow-[0_8px_24px_rgba(0,0,0,0.12)] outline-none",
+          "fixed z-50 flex flex-col items-center overflow-hidden border-[length:var(--sheet-border-width,0px)] border-border bg-popover text-body text-popover-foreground shadow-[0_8px_24px_rgba(0,0,0,0.12)] outline-none",
           "data-[state=open]:animate-in data-[state=open]:duration-300 data-[state=closed]:animate-out data-[state=closed]:duration-300",
           sides[side],
           className

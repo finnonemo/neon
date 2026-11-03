@@ -59,6 +59,20 @@ export function bareCnImports(files) {
 }
 
 /** dark: classes in component source. Neon roles switch with data-theme, so a dark: class is stock shadcn's own opinion. */
+// A component reads a role named after itself (--sheet-border-width) only
+// with a fallback: shadcn add @neon/<item> does not pull the theme, so an app
+// whose neon.css predates the role would get border-width's initial "medium".
+export function unguardedItemRoles(files) {
+  const problems = [];
+  for (const [path, content] of files) {
+    const item = path.match(/(?:^|\/)ui\/([\w-]+)\.tsx$/)?.[1];
+    if (!item) continue;
+    const role = new RegExp(`(?:var\\(|\\((?:\\w+:)?)(--${item}-[\\w-]+)\\)`, 'g');
+    for (const match of content.matchAll(role)) problems.push(`${path} reads ${match[1]} without a fallback; write var(${match[1]},<value>)`);
+  }
+  return problems;
+}
+
 export function darkClasses(files) {
   const problems = [];
   for (const [path, content] of files) {
