@@ -10,7 +10,10 @@
 // <root>/<case>/ holds the app copy (a git repository with the fixture as its
 // first commit), the run inputs, run.jsonl, run.err and summary.json. The plugin
 // is packaged from --ref (a temporary worktree), taken from --package, or packaged
-// from this checkout. `{port}` in the prompt becomes --dev-port, where the app's
+// from this checkout. It refuses to start, before copying anything, when
+// @playwright/test does not resolve from evals/templates (the browser tool needs
+// `npm ci --prefix evals/templates`; --dry-run skips this), or when --dev-port
+// names a fixture with no package.json. `{port}` in the prompt becomes --dev-port, where the app's
 // `npm run dev` is started before the run and stopped after it. The run is
 // stopped at --cap seconds. summary.json carries check-run.mjs's result: every
 // denied command, and void when the run then reported the shell as blocked.
@@ -21,6 +24,7 @@ import { execFileSync, spawn } from 'node:child_process';
 import { existsSync, mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { createServer } from 'node:http';
+import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
 import { basename, join, resolve } from 'node:path';
 import { parseArgs } from 'node:util';
@@ -56,6 +60,15 @@ export function claudeArgs({ plugin, mcpConfig, prompt, model }) {
     '--append-system-prompt', PERMISSION_NOTE,
     '--output-format', 'stream-json', '--verbose', prompt,
   ];
+}
+
+/** Throws unless browser-mcp.mjs can load @playwright/test the way it does, from `templates`. */
+export function assertBrowserTool(templates = join(repositoryRoot, 'evals/templates')) {
+  try {
+    createRequire(join(templates, 'package.json')).resolve('@playwright/test');
+  } catch {
+    throw new Error('The browser tool needs @playwright/test, which does not resolve from evals/templates. Run `npm ci --prefix evals/templates` first.');
+  }
 }
 
 function packageAt(ref, destination) {
@@ -127,6 +140,9 @@ async function main() {
   }
   const port = values['dev-port'];
   if (values.prompt.includes('{port}') && !port) throw new Error('The prompt names {port}; pass --dev-port.');
+  // The dev server is the fixture's `npm run dev`; without it the run would wait 60s and fail.
+  if (port && !existsSync(join(resolve(values.fixture), 'package.json'))) throw new Error('--dev-port needs a fixture with a package.json to run `npm run dev`.');
+  if (!values['dry-run']) assertBrowserTool();
 
   const root = resolve(values.root);
   const caseDirectory = join(root, values.case);

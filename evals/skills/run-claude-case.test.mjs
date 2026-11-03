@@ -1,10 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
+import { existsSync } from 'node:fs';
 import { mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { ALLOWED_TOOLS, BROWSER_TOOLS, PERMISSION_NOTE, claudeArgs, serveRegistry } from './run-claude-case.mjs';
+import { ALLOWED_TOOLS, BROWSER_TOOLS, PERMISSION_NOTE, assertBrowserTool, claudeArgs, serveRegistry } from './run-claude-case.mjs';
 
 const runner = join(import.meta.dirname, 'run-claude-case.mjs');
 
@@ -49,6 +50,7 @@ test('a dry run copies the fixture into a fresh repository and writes the run in
   const fixture = join(root, 'fixture', 'app');
   await mkdir(join(fixture, 'node_modules'), { recursive: true });
   await writeFile(join(fixture, 'index.html'), '<h1>Before</h1>\n');
+  await writeFile(join(fixture, 'package.json'), '{"name":"app","private":true}\n');
   const plugin = join(root, 'pkg');
   await mkdir(plugin);
   const run = spawnSync(process.execPath, [runner, '--fixture', fixture, '--case', 'c1', '--prompt', 'Use port {port}', '--dev-port', '5999', '--package', plugin, '--root', join(root, 'evals'), '--dry-run'], { encoding: 'utf8' });
@@ -63,7 +65,7 @@ test('a dry run copies the fixture into a fresh repository and writes the run in
   const log = spawnSync('git', ['-C', join(caseDirectory, 'app'), 'log', '--oneline'], { encoding: 'utf8' });
   assert.match(log.stdout, /before/);
   const files = spawnSync('git', ['-C', join(caseDirectory, 'app'), 'ls-files'], { encoding: 'utf8' });
-  assert.equal(files.stdout, 'index.html\n');
+  assert.equal(files.stdout, 'index.html\npackage.json\n');
   const again = spawnSync(process.execPath, [runner, '--fixture', fixture, '--case', 'c1', '--prompt', 'p', '--package', plugin, '--root', join(root, 'evals'), '--dry-run'], { encoding: 'utf8' });
   assert.notEqual(again.status, 0);
   assert.match(again.stderr, /Case already exists/);
@@ -73,6 +75,31 @@ test('a prompt naming {port} needs --dev-port', () => {
   const run = spawnSync(process.execPath, [runner, '--fixture', '.', '--case', 'x', '--prompt', 'port {port}', '--dry-run'], { encoding: 'utf8' });
   assert.notEqual(run.status, 0);
   assert.match(run.stderr, /pass --dev-port/);
+});
+
+test('--dev-port on a fixture without package.json fails before the copy', async t => {
+  const root = await mkdtemp(join(tmpdir(), 'neon-claude-case-'));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const fixture = join(root, 'empty');
+  await mkdir(fixture);
+  await writeFile(join(fixture, 'brief.md'), '# Brief\n');
+  const run = spawnSync(process.execPath, [runner, '--fixture', fixture, '--case', 'c1', '--prompt', 'p', '--dev-port', '5999', '--package', root, '--root', join(root, 'evals'), '--dry-run'], { encoding: 'utf8' });
+  assert.notEqual(run.status, 0);
+  assert.match(run.stderr, /--dev-port needs a fixture with a package\.json/);
+  assert.ok(!existsSync(join(root, 'evals', 'c1')), 'no case directory was created');
+});
+
+// All eight #123 runs started without evals/templates installed, so none had a working browser tool.
+test('the browser tool check names the install command until @playwright/test resolves', async t => {
+  const templates = await mkdtemp(join(tmpdir(), 'neon-templates-'));
+  t.after(() => rm(templates, { recursive: true, force: true }));
+  await writeFile(join(templates, 'package.json'), '{"name":"templates","private":true}\n');
+  assert.throws(() => assertBrowserTool(templates), error => error.message.includes('npm ci --prefix evals/templates'));
+  const playwright = join(templates, 'node_modules/@playwright/test');
+  await mkdir(playwright, { recursive: true });
+  await writeFile(join(playwright, 'package.json'), '{"name":"@playwright/test","main":"index.js"}\n');
+  await writeFile(join(playwright, 'index.js'), 'module.exports = {};\n');
+  assert.doesNotThrow(() => assertBrowserTool(templates));
 });
 
 test('serveRegistry serves this checkout\'s registry built for its own URL', async () => {
