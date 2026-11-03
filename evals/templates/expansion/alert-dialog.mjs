@@ -40,7 +40,10 @@ export function a11y({ test, expect, gotoExpansion }) {
     const alert = page.getByRole('alertdialog', { name: title });
     await expect(alert).toBeVisible();
     await expect(alert).toHaveAccessibleDescription("บัญชีนี้จะถูกลบและไม่สามารถกู้คืนได้ / This can't be undone.");
-    await expect(page.locator('main')).toHaveAttribute('aria-hidden', 'true');
+    // Radix hides all but the dialog and the page's live regions (aria-hidden
+    // keeps [aria-live] audible, such as alert's), so the page's controls,
+    // not necessarily main, leave the accessibility tree.
+    await expect(trigger(page), 'the page behind the dialog is hidden').toHaveCount(0);
   });
 
   test('an alert dialog stays open on an overlay click and returns focus to its trigger after Cancel, the action and Escape', async ({ page }) => {

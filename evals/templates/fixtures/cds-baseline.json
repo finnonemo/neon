@@ -696,6 +696,183 @@
       "alertAction→alertCard": -222
     }
   },
+  "expansion-alert@375-light": {
+    "elements": {
+      "informationalBox": {
+        "h": 96,
+        "w": 320,
+        "pad": [
+          16,
+          16,
+          16,
+          16
+        ],
+        "radius": 16,
+        "bg": "rgb(242, 242, 242)",
+        "border": {
+          "width": 0,
+          "color": "rgba(0, 0, 0, 0.85)"
+        }
+      },
+      "informationalIcon": {
+        "h": 16,
+        "w": 16,
+        "color": "rgb(1, 23, 43)"
+      },
+      "informationalTitle": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 600
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "h": 20
+      },
+      "informationalMessage": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "h": 40
+      },
+      "warningBox": {
+        "h": 116,
+        "w": 320,
+        "pad": [
+          16,
+          16,
+          16,
+          16
+        ],
+        "radius": 16,
+        "bg": "rgb(254, 247, 243)",
+        "border": {
+          "width": 0,
+          "color": "rgba(0, 0, 0, 0.85)"
+        }
+      },
+      "warningIcon": {
+        "h": 16,
+        "w": 16,
+        "color": "rgb(242, 100, 20)"
+      },
+      "warningTitle": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 600
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "h": 20
+      },
+      "warningMessage": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "h": 60
+      },
+      "errorBox": {
+        "h": 96,
+        "w": 320,
+        "pad": [
+          16,
+          16,
+          16,
+          16
+        ],
+        "radius": 16,
+        "bg": "rgb(255, 245, 245)",
+        "border": {
+          "width": 0,
+          "color": "rgba(0, 0, 0, 0.85)"
+        }
+      },
+      "errorIcon": {
+        "h": 16,
+        "w": 16,
+        "color": "rgb(214, 8, 8)"
+      },
+      "errorTitle": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 600
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "h": 20
+      },
+      "errorMessage": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "h": 40
+      },
+      "promotionalBox": {
+        "h": 96,
+        "w": 320,
+        "pad": [
+          16,
+          16,
+          16,
+          16
+        ],
+        "radius": 16,
+        "bg": "rgb(242, 243, 244)",
+        "border": {
+          "width": 0,
+          "color": "rgba(0, 0, 0, 0.85)"
+        }
+      },
+      "promotionalIcon": {
+        "h": 16,
+        "w": 16,
+        "color": "rgb(1, 23, 43)"
+      },
+      "promotionalTitle": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 600
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "h": 20
+      },
+      "promotionalMessage": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "h": 40
+      }
+    },
+    "gaps": {
+      "informationalIcon→informationalTitle": 12,
+      "informationalTitle→informationalIcon": -18,
+      "informationalTitle→informationalMessage": 4,
+      "warningIcon→warningTitle": 12,
+      "warningTitle→warningIcon": -18,
+      "warningTitle→warningMessage": 4,
+      "errorIcon→errorTitle": 12,
+      "errorTitle→errorIcon": -18,
+      "errorTitle→errorMessage": 4,
+      "promotionalIcon→promotionalTitle": 12,
+      "promotionalTitle→promotionalIcon": -18,
+      "promotionalTitle→promotionalMessage": 4,
+      "informationalBox→warningBox": 16,
+      "warningBox→errorBox": 16,
+      "errorBox→promotionalBox": 16
+    }
+  },
   "expansion-button-group@375-light": {
     "elements": {
       "group": {
@@ -794,6 +971,57 @@
     "gaps": {
       "first→second": 8,
       "stackedFirst→stackedSecond": 8
+    }
+  },
+  "expansion-card@375-light": {
+    "elements": {
+      "card": {
+        "w": 320,
+        "pad": [
+          16,
+          16,
+          16,
+          16
+        ],
+        "radius": 24,
+        "bg": "rgb(255, 255, 255)",
+        "border": {
+          "width": 1,
+          "color": "rgba(0, 0, 0, 0.05)"
+        }
+      },
+      "title": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "h": 22
+      },
+      "description": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.65)",
+        "h": 40
+      },
+      "content": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "h": 22
+      }
+    },
+    "gaps": {
+      "title→description": 0,
+      "header→content": 16,
+      "content→footer": 16
     }
   },
   "expansion-field@375-light": {
@@ -2572,6 +2800,183 @@
       "alertAction→alertCard": -222
     }
   },
+  "expansion-alert@375-dark": {
+    "elements": {
+      "informationalBox": {
+        "h": 96,
+        "w": 320,
+        "pad": [
+          16,
+          16,
+          16,
+          16
+        ],
+        "radius": 16,
+        "bg": "rgb(26, 26, 26)",
+        "border": {
+          "width": 0,
+          "color": "rgb(255, 255, 255)"
+        }
+      },
+      "informationalIcon": {
+        "h": 16,
+        "w": 16,
+        "color": "rgb(230, 232, 234)"
+      },
+      "informationalTitle": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 600
+        },
+        "color": "rgb(255, 255, 255)",
+        "h": 20
+      },
+      "informationalMessage": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)",
+        "h": 40
+      },
+      "warningBox": {
+        "h": 116,
+        "w": 320,
+        "pad": [
+          16,
+          16,
+          16,
+          16
+        ],
+        "radius": 16,
+        "bg": "rgb(51, 13, 0)",
+        "border": {
+          "width": 0,
+          "color": "rgb(255, 255, 255)"
+        }
+      },
+      "warningIcon": {
+        "h": 16,
+        "w": 16,
+        "color": "rgb(242, 100, 20)"
+      },
+      "warningTitle": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 600
+        },
+        "color": "rgb(255, 255, 255)",
+        "h": 20
+      },
+      "warningMessage": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)",
+        "h": 60
+      },
+      "errorBox": {
+        "h": 96,
+        "w": 320,
+        "pad": [
+          16,
+          16,
+          16,
+          16
+        ],
+        "radius": 16,
+        "bg": "rgb(51, 0, 4)",
+        "border": {
+          "width": 0,
+          "color": "rgb(255, 255, 255)"
+        }
+      },
+      "errorIcon": {
+        "h": 16,
+        "w": 16,
+        "color": "rgb(243, 9, 9)"
+      },
+      "errorTitle": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 600
+        },
+        "color": "rgb(255, 255, 255)",
+        "h": 20
+      },
+      "errorMessage": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)",
+        "h": 40
+      },
+      "promotionalBox": {
+        "h": 96,
+        "w": 320,
+        "pad": [
+          16,
+          16,
+          16,
+          16
+        ],
+        "radius": 16,
+        "bg": "rgb(1, 23, 43)",
+        "border": {
+          "width": 0,
+          "color": "rgb(255, 255, 255)"
+        }
+      },
+      "promotionalIcon": {
+        "h": 16,
+        "w": 16,
+        "color": "rgb(230, 232, 234)"
+      },
+      "promotionalTitle": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 600
+        },
+        "color": "rgb(255, 255, 255)",
+        "h": 20
+      },
+      "promotionalMessage": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)",
+        "h": 40
+      }
+    },
+    "gaps": {
+      "informationalIcon→informationalTitle": 12,
+      "informationalTitle→informationalIcon": -18,
+      "informationalTitle→informationalMessage": 4,
+      "warningIcon→warningTitle": 12,
+      "warningTitle→warningIcon": -18,
+      "warningTitle→warningMessage": 4,
+      "errorIcon→errorTitle": 12,
+      "errorTitle→errorIcon": -18,
+      "errorTitle→errorMessage": 4,
+      "promotionalIcon→promotionalTitle": 12,
+      "promotionalTitle→promotionalIcon": -18,
+      "promotionalTitle→promotionalMessage": 4,
+      "informationalBox→warningBox": 16,
+      "warningBox→errorBox": 16,
+      "errorBox→promotionalBox": 16
+    }
+  },
   "expansion-button-group@375-dark": {
     "elements": {
       "group": {
@@ -2670,6 +3075,57 @@
     "gaps": {
       "first→second": 8,
       "stackedFirst→stackedSecond": 8
+    }
+  },
+  "expansion-card@375-dark": {
+    "elements": {
+      "card": {
+        "w": 320,
+        "pad": [
+          16,
+          16,
+          16,
+          16
+        ],
+        "radius": 24,
+        "bg": "rgb(26, 26, 26)",
+        "border": {
+          "width": 1,
+          "color": "rgba(255, 255, 255, 0.15)"
+        }
+      },
+      "title": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)",
+        "h": 22
+      },
+      "description": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(255, 255, 255, 0.65)",
+        "h": 40
+      },
+      "content": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)",
+        "h": 22
+      }
+    },
+    "gaps": {
+      "title→description": 0,
+      "header→content": 16,
+      "content→footer": 16
     }
   },
   "expansion-field@375-dark": {
@@ -4448,6 +4904,183 @@
       "alertAction→alertCard": -222
     }
   },
+  "expansion-alert@1440-light": {
+    "elements": {
+      "informationalBox": {
+        "h": 96,
+        "w": 320,
+        "pad": [
+          16,
+          16,
+          16,
+          16
+        ],
+        "radius": 16,
+        "bg": "rgb(242, 242, 242)",
+        "border": {
+          "width": 0,
+          "color": "rgba(0, 0, 0, 0.85)"
+        }
+      },
+      "informationalIcon": {
+        "h": 16,
+        "w": 16,
+        "color": "rgb(1, 23, 43)"
+      },
+      "informationalTitle": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 600
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "h": 20
+      },
+      "informationalMessage": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "h": 40
+      },
+      "warningBox": {
+        "h": 116,
+        "w": 320,
+        "pad": [
+          16,
+          16,
+          16,
+          16
+        ],
+        "radius": 16,
+        "bg": "rgb(254, 247, 243)",
+        "border": {
+          "width": 0,
+          "color": "rgba(0, 0, 0, 0.85)"
+        }
+      },
+      "warningIcon": {
+        "h": 16,
+        "w": 16,
+        "color": "rgb(242, 100, 20)"
+      },
+      "warningTitle": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 600
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "h": 20
+      },
+      "warningMessage": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "h": 60
+      },
+      "errorBox": {
+        "h": 96,
+        "w": 320,
+        "pad": [
+          16,
+          16,
+          16,
+          16
+        ],
+        "radius": 16,
+        "bg": "rgb(255, 245, 245)",
+        "border": {
+          "width": 0,
+          "color": "rgba(0, 0, 0, 0.85)"
+        }
+      },
+      "errorIcon": {
+        "h": 16,
+        "w": 16,
+        "color": "rgb(214, 8, 8)"
+      },
+      "errorTitle": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 600
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "h": 20
+      },
+      "errorMessage": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "h": 40
+      },
+      "promotionalBox": {
+        "h": 96,
+        "w": 320,
+        "pad": [
+          16,
+          16,
+          16,
+          16
+        ],
+        "radius": 16,
+        "bg": "rgb(242, 243, 244)",
+        "border": {
+          "width": 0,
+          "color": "rgba(0, 0, 0, 0.85)"
+        }
+      },
+      "promotionalIcon": {
+        "h": 16,
+        "w": 16,
+        "color": "rgb(1, 23, 43)"
+      },
+      "promotionalTitle": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 600
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "h": 20
+      },
+      "promotionalMessage": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "h": 40
+      }
+    },
+    "gaps": {
+      "informationalIcon→informationalTitle": 12,
+      "informationalTitle→informationalIcon": -18,
+      "informationalTitle→informationalMessage": 4,
+      "warningIcon→warningTitle": 12,
+      "warningTitle→warningIcon": -18,
+      "warningTitle→warningMessage": 4,
+      "errorIcon→errorTitle": 12,
+      "errorTitle→errorIcon": -18,
+      "errorTitle→errorMessage": 4,
+      "promotionalIcon→promotionalTitle": 12,
+      "promotionalTitle→promotionalIcon": -18,
+      "promotionalTitle→promotionalMessage": 4,
+      "informationalBox→warningBox": 16,
+      "warningBox→errorBox": 16,
+      "errorBox→promotionalBox": 16
+    }
+  },
   "expansion-button-group@1440-light": {
     "elements": {
       "group": {
@@ -4546,6 +5179,57 @@
     "gaps": {
       "first→second": 8,
       "stackedFirst→stackedSecond": 8
+    }
+  },
+  "expansion-card@1440-light": {
+    "elements": {
+      "card": {
+        "w": 320,
+        "pad": [
+          16,
+          16,
+          16,
+          16
+        ],
+        "radius": 24,
+        "bg": "rgb(255, 255, 255)",
+        "border": {
+          "width": 1,
+          "color": "rgba(0, 0, 0, 0.05)"
+        }
+      },
+      "title": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "h": 22
+      },
+      "description": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.65)",
+        "h": 40
+      },
+      "content": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgba(0, 0, 0, 0.85)",
+        "h": 22
+      }
+    },
+    "gaps": {
+      "title→description": 0,
+      "header→content": 16,
+      "content→footer": 16
     }
   },
   "expansion-field@1440-light": {
@@ -6324,6 +7008,183 @@
       "alertAction→alertCard": -222
     }
   },
+  "expansion-alert@1440-dark": {
+    "elements": {
+      "informationalBox": {
+        "h": 96,
+        "w": 320,
+        "pad": [
+          16,
+          16,
+          16,
+          16
+        ],
+        "radius": 16,
+        "bg": "rgb(26, 26, 26)",
+        "border": {
+          "width": 0,
+          "color": "rgb(255, 255, 255)"
+        }
+      },
+      "informationalIcon": {
+        "h": 16,
+        "w": 16,
+        "color": "rgb(230, 232, 234)"
+      },
+      "informationalTitle": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 600
+        },
+        "color": "rgb(255, 255, 255)",
+        "h": 20
+      },
+      "informationalMessage": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)",
+        "h": 40
+      },
+      "warningBox": {
+        "h": 116,
+        "w": 320,
+        "pad": [
+          16,
+          16,
+          16,
+          16
+        ],
+        "radius": 16,
+        "bg": "rgb(51, 13, 0)",
+        "border": {
+          "width": 0,
+          "color": "rgb(255, 255, 255)"
+        }
+      },
+      "warningIcon": {
+        "h": 16,
+        "w": 16,
+        "color": "rgb(242, 100, 20)"
+      },
+      "warningTitle": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 600
+        },
+        "color": "rgb(255, 255, 255)",
+        "h": 20
+      },
+      "warningMessage": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)",
+        "h": 60
+      },
+      "errorBox": {
+        "h": 96,
+        "w": 320,
+        "pad": [
+          16,
+          16,
+          16,
+          16
+        ],
+        "radius": 16,
+        "bg": "rgb(51, 0, 4)",
+        "border": {
+          "width": 0,
+          "color": "rgb(255, 255, 255)"
+        }
+      },
+      "errorIcon": {
+        "h": 16,
+        "w": 16,
+        "color": "rgb(243, 9, 9)"
+      },
+      "errorTitle": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 600
+        },
+        "color": "rgb(255, 255, 255)",
+        "h": 20
+      },
+      "errorMessage": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)",
+        "h": 40
+      },
+      "promotionalBox": {
+        "h": 96,
+        "w": 320,
+        "pad": [
+          16,
+          16,
+          16,
+          16
+        ],
+        "radius": 16,
+        "bg": "rgb(1, 23, 43)",
+        "border": {
+          "width": 0,
+          "color": "rgb(255, 255, 255)"
+        }
+      },
+      "promotionalIcon": {
+        "h": 16,
+        "w": 16,
+        "color": "rgb(230, 232, 234)"
+      },
+      "promotionalTitle": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 600
+        },
+        "color": "rgb(255, 255, 255)",
+        "h": 20
+      },
+      "promotionalMessage": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)",
+        "h": 40
+      }
+    },
+    "gaps": {
+      "informationalIcon→informationalTitle": 12,
+      "informationalTitle→informationalIcon": -18,
+      "informationalTitle→informationalMessage": 4,
+      "warningIcon→warningTitle": 12,
+      "warningTitle→warningIcon": -18,
+      "warningTitle→warningMessage": 4,
+      "errorIcon→errorTitle": 12,
+      "errorTitle→errorIcon": -18,
+      "errorTitle→errorMessage": 4,
+      "promotionalIcon→promotionalTitle": 12,
+      "promotionalTitle→promotionalIcon": -18,
+      "promotionalTitle→promotionalMessage": 4,
+      "informationalBox→warningBox": 16,
+      "warningBox→errorBox": 16,
+      "errorBox→promotionalBox": 16
+    }
+  },
   "expansion-button-group@1440-dark": {
     "elements": {
       "group": {
@@ -6422,6 +7283,57 @@
     "gaps": {
       "first→second": 8,
       "stackedFirst→stackedSecond": 8
+    }
+  },
+  "expansion-card@1440-dark": {
+    "elements": {
+      "card": {
+        "w": 320,
+        "pad": [
+          16,
+          16,
+          16,
+          16
+        ],
+        "radius": 24,
+        "bg": "rgb(26, 26, 26)",
+        "border": {
+          "width": 1,
+          "color": "rgba(255, 255, 255, 0.15)"
+        }
+      },
+      "title": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 500
+        },
+        "color": "rgb(255, 255, 255)",
+        "h": 22
+      },
+      "description": {
+        "font": {
+          "size": 14,
+          "lineHeight": 20,
+          "weight": 400
+        },
+        "color": "rgba(255, 255, 255, 0.65)",
+        "h": 40
+      },
+      "content": {
+        "font": {
+          "size": 17,
+          "lineHeight": 22,
+          "weight": 400
+        },
+        "color": "rgb(255, 255, 255)",
+        "h": 22
+      }
+    },
+    "gaps": {
+      "title→description": 0,
+      "header→content": 16,
+      "content→footer": 16
     }
   },
   "expansion-field@1440-dark": {

@@ -132,11 +132,12 @@ test('restyle grader passes a Neon-base restyle through role utilities, Radix ov
 });
 
 test('restyle grader fails a Neon-base restyle that edits the theme, adds CDS or a stock item', () => {
-  const stock = 'import { cn } from "@/lib/utils"\nexport const Card = () => <div className={cn("font-medium dark:bg-input/30")} />\n';
+  // hover-card is a stock shadcn item with no Counterpart, so not a Neon item.
+  const stock = 'import { cn } from "@/lib/utils"\nexport const HoverCard = () => <div className={cn("font-medium dark:bg-input/30")} />\n';
   const { root, source, result } = apps(neonApp(), neonApp({
     'package.json': JSON.stringify({ dependencies: { react: '19', '@coinbase/cds-web': '9' } }),
     'src/theme/neon.css': `${neonFiles.get('src/theme/neon.css')}\n:root { --primary: #001e61; }\n`,
-    'src/components/ui/card.tsx': stock,
+    'src/components/ui/hover-card.tsx': stock,
   }));
   try {
     const checks = grade({ source, result, build: false, neonFiles });
@@ -152,7 +153,7 @@ test('restyle grader fails a Neon-base restyle that edits the theme, adds CDS or
     const detail = name => checks.find(check => check.name === name).detail;
     assert.equal(detail('base kept'), 'neon → mixed');
     assert.equal(detail('theme and manifests unchanged'), 'package.json (changed)\nsrc/theme/neon.css (changed)');
-    assert.match(detail('Neon base and items only'), /card\.tsx is not a Neon registry item/);
+    assert.match(detail('Neon base and items only'), /hover-card\.tsx is not a Neon registry item/);
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
