@@ -462,6 +462,26 @@
       ]
     },
     {
+      "name": "sheet",
+      "type": "registry:ui",
+      "title": "Sheet",
+      "dependencies": [
+        "radix-ui@^1.8.1",
+        "lucide-react@^1.66.0"
+      ],
+      "registryDependencies": [
+        "@neon/utils",
+        "@neon/button"
+      ],
+      "files": [
+        {
+          "path": "ui/sheet.tsx",
+          "type": "registry:ui",
+          "target": "src/components/ui/sheet.tsx"
+        }
+      ]
+    },
+    {
       "name": "spinner",
       "type": "registry:ui",
       "title": "Spinner",
