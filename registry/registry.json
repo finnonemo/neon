@@ -233,6 +233,25 @@
       ]
     },
     {
+      "name": "alert",
+      "type": "registry:ui",
+      "title": "Alert",
+      "dependencies": ["class-variance-authority@^0.7.1"],
+      "registryDependencies": ["@neon/utils"],
+      "files": [
+        { "path": "ui/alert.tsx", "type": "registry:ui", "target": "src/components/ui/alert.tsx" }
+      ]
+    },
+    {
+      "name": "card",
+      "type": "registry:ui",
+      "title": "Card",
+      "registryDependencies": ["@neon/utils"],
+      "files": [
+        { "path": "ui/card.tsx", "type": "registry:ui", "target": "src/components/ui/card.tsx" }
+      ]
+    },
+    {
       "name": "alert-dialog",
       "type": "registry:ui",
       "title": "Alert Dialog",
