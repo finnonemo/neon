@@ -1,5 +1,7 @@
 # New work is built on shadcn/ui, matched to CDS
 
+> Status: Partly superseded by [ADR 0009](0009-neon-matches-core-not-cds.md) on 2026-11-12: the look and the sizing requirement now follow Core, not CDS. The shadcn base, the registry and the CDS freeze stand.
+
 Neon's base for new work moves from CDS to shadcn/ui on Tailwind v4, with Radix primitives and React 19, and Neon is distributed as a shadcn registry. A new app starts with `shadcn init` from Neon's base item, and an existing app takes Neon's items with `shadcn add`. The installer keeps only CSS-only, for apps without React or Tailwind.
 
 The look must match CDS. Theming, sizing and spacing come from the same Neon roles and type scale the CDS starter uses. Behavior follows Radix, and it changes only where it would be less accessible than CDS.

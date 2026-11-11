@@ -1,5 +1,7 @@
 # The Neon registry grows only by components with a CDS Counterpart
 
+> Status: Superseded by [ADR 0009](0009-neon-matches-core-not-cds.md) on 2026-11-12: Neon matches Core, and a new item needs an approved Core Counterpart.
+
 A new Neon component must have a Counterpart in CDS 9.26.1, so there is a CDS look to tune it to and measure it against (ADR 0006). The next set is the 21 shadcn components that have one: switch, radio-group, field, input-group, separator, spinner, progress, tabs, accordion, collapsible, alert, alert-dialog, sheet, toggle-group, button-group, pagination, card, sidebar, navigation-menu, carousel and chart. They ship in three batches, with one Neon release per batch.
 
 shadcn components with no Counterpart, such as breadcrumb, command, slider and the chat items, are not added: Neon has nothing to match them to, and tuning them needs a design owner's decision. CDS components with no shadcn equivalent, such as Chip, CheckboxCell, Stepper and the dot indicators, are not added either, because each would need its behavior designed from scratch. Each is considered on its own when an app needs it.
