@@ -1,0 +1,310 @@
+{
+"component": "Tabs",
+"sets": [
+{
+  "name": "Tabs",
+  "axes": [
+    {
+      "name": "Width",
+      "values": [
+        "Fixed",
+        "Intrinsic"
+      ]
+    },
+    {
+      "name": "Style",
+      "values": [
+        "Underline",
+        "Pill"
+      ]
+    },
+    {
+      "name": "Size",
+      "values": [
+        "Medium",
+        "Small"
+      ]
+    },
+    {
+      "name": "Type",
+      "values": [
+        "Text + Icon",
+        "Icon only"
+      ]
+    }
+  ],
+  "exclude": [
+    "{{Style=Pill}}{{Width=Fixed}}",
+    "{{Style=Underline}}{{Size=Small}}",
+    "{{Type=Icon only}}{{Width=Fixed}}"
+  ],
+  "properties": [
+    {
+      "name": "Tabs",
+      "type": "SLOT"
+    }
+  ],
+  "variables": {
+    "Tabs/Container/Fixed/Layout horizontal": "Fill container",
+    "Tabs/Container/Fixed/Layout vertical": "Hug contents",
+    "Tabs/Container/Fixed/Gap horizontal": 0,
+    "Tabs/Container/Fixed/Padding left": 0,
+    "Tabs/Container/Fixed/Padding right": 0,
+    "Tabs/Track/Fixed/Layout height": 1,
+    "Tabs/Container/Intrinsic/Layout horizontal": "Fill container",
+    "Tabs/Container/Intrinsic/Layout vertical": "Hug contents",
+    "Tabs/Container/Intrinsic/Gap horizontal": 0,
+    "Tabs/Container/Intrinsic/Padding left": 0,
+    "Tabs/Container/Intrinsic/Padding right": 0,
+    "Tabs/Track/Intrinsic/Layout height": 1,
+    "Tabs/Container/Pill/Medium/Gap horizontal": 8,
+    "Tabs/Container/Pill/Medium/Padding left": 16,
+    "Tabs/Container/Pill/Medium/Padding right": 16,
+    "Tabs/Container/Pill/Small/Gap horizontal": 8,
+    "Tabs/Container/Pill/Small/Padding left": 16,
+    "Tabs/Container/Pill/Small/Padding right": 16
+  },
+  "bindings": [
+    {"layer":"Container / Track","property":"height","when":"{{Width=*}}","value":"Components/Tabs/Track/{{Width=*}}/Layout height"},
+    {"layer":"Container / Track","property":"fills.0","when":"{{Width=*}}{{Style=*}}{{Size=*}}{{Type=*}}","value":"Theme/Border/border-subtle"},
+    {"layer":"Container / Track","property":"fills.0","when":"{{Style=Pill}}","value":"Theme/Transparent"},
+    {"layer":"Container / Tabs","property":"layoutSizingHorizontal","when":"{{Width=Fixed}}","value":"FILL","literal":true},
+    {"layer":"Container / Tabs","property":"layoutSizingHorizontal","when":"{{Width=Intrinsic}}","value":"HUG","literal":true},
+    {"layer":"Container / Tabs","property":"itemSpacing","when":"{{Width=*}}","value":"Components/Tabs/Container/{{Width=*}}/Gap horizontal"},
+    {"layer":"Container / Tabs","property":"itemSpacing","when":"{{Style=Pill}}{{Size=*}}","value":"Components/Tabs/Container/Pill/{{Size=*}}/Gap horizontal"},
+    {"layer":"Container / Tabs","property":"paddingLeft","when":"{{Width=*}}","value":"Components/Tabs/Container/{{Width=*}}/Padding left"},
+    {"layer":"Container / Tabs","property":"paddingLeft","when":"{{Style=Pill}}{{Size=*}}","value":"Components/Tabs/Container/Pill/{{Size=*}}/Padding left"},
+    {"layer":"Container / Tabs","property":"paddingRight","when":"{{Width=*}}","value":"Components/Tabs/Container/{{Width=*}}/Padding right"},
+    {"layer":"Container / Tabs","property":"paddingRight","when":"{{Style=Pill}}{{Size=*}}","value":"Components/Tabs/Container/Pill/{{Size=*}}/Padding right"},
+    {"layer":"Container / Tabs / Tab 1","property":"componentProperties.Width","when":"{{Width=*}}","value":"{{Width=*}}"},
+    {"layer":"Container / Tabs / Tab 1","property":"componentProperties.Style","when":"{{Style=*}}","value":"{{Style=*}}"},
+    {"layer":"Container / Tabs / Tab 1","property":"componentProperties.Size","when":"{{Size=*}}","value":"{{Size=*}}"},
+    {"layer":"Container / Tabs / Tab 1","property":"componentProperties.Type","when":"{{Type=*}}","value":"{{Type=*}}"},
+    {"layer":"Container / Tabs / Tab 1","property":"componentProperties.Selected","when":"{{Width=*}}{{Style=*}}{{Size=*}}{{Type=*}}","value":"True","literal":true},
+    {"layer":"Container / Tabs / Tab 1","property":"componentProperties.State","when":"{{Width=*}}{{Style=*}}{{Size=*}}{{Type=*}}","value":"Enabled","literal":true},
+    {"layer":"Container / Tabs / Tab 1","property":"layoutSizingHorizontal","when":"{{Width=Fixed}}","value":"FILL","literal":true},
+    {"layer":"Container / Tabs / Tab 1","property":"layoutSizingHorizontal","when":"{{Width=Intrinsic}}","value":"HUG","literal":true},
+    {"layer":"Container / Tabs / Tab 2","property":"componentProperties.Width","when":"{{Width=*}}","value":"{{Width=*}}"},
+    {"layer":"Container / Tabs / Tab 2","property":"componentProperties.Style","when":"{{Style=*}}","value":"{{Style=*}}"},
+    {"layer":"Container / Tabs / Tab 2","property":"componentProperties.Size","when":"{{Size=*}}","value":"{{Size=*}}"},
+    {"layer":"Container / Tabs / Tab 2","property":"componentProperties.Type","when":"{{Type=*}}","value":"{{Type=*}}"},
+    {"layer":"Container / Tabs / Tab 2","property":"componentProperties.Selected","when":"{{Width=*}}{{Style=*}}{{Size=*}}{{Type=*}}","value":"False","literal":true},
+    {"layer":"Container / Tabs / Tab 2","property":"componentProperties.State","when":"{{Width=*}}{{Style=*}}{{Size=*}}{{Type=*}}","value":"Enabled","literal":true},
+    {"layer":"Container / Tabs / Tab 2","property":"layoutSizingHorizontal","when":"{{Width=Fixed}}","value":"FILL","literal":true},
+    {"layer":"Container / Tabs / Tab 2","property":"layoutSizingHorizontal","when":"{{Width=Intrinsic}}","value":"HUG","literal":true},
+    {"layer":"Container / Tabs / Tab 3","property":"componentProperties.Width","when":"{{Width=*}}","value":"{{Width=*}}"},
+    {"layer":"Container / Tabs / Tab 3","property":"componentProperties.Style","when":"{{Style=*}}","value":"{{Style=*}}"},
+    {"layer":"Container / Tabs / Tab 3","property":"componentProperties.Size","when":"{{Size=*}}","value":"{{Size=*}}"},
+    {"layer":"Container / Tabs / Tab 3","property":"componentProperties.Type","when":"{{Type=*}}","value":"{{Type=*}}"},
+    {"layer":"Container / Tabs / Tab 3","property":"componentProperties.Selected","when":"{{Width=*}}{{Style=*}}{{Size=*}}{{Type=*}}","value":"False","literal":true},
+    {"layer":"Container / Tabs / Tab 3","property":"componentProperties.State","when":"{{Width=*}}{{Style=*}}{{Size=*}}{{Type=*}}","value":"Enabled","literal":true},
+    {"layer":"Container / Tabs / Tab 3","property":"layoutSizingHorizontal","when":"{{Width=Fixed}}","value":"FILL","literal":true},
+    {"layer":"Container / Tabs / Tab 3","property":"layoutSizingHorizontal","when":"{{Width=Intrinsic}}","value":"HUG","literal":true}
+  ]
+},
+{
+  "name": "_Tab",
+  "axes": [
+    {
+      "name": "Width",
+      "values": [
+        "Fixed",
+        "Intrinsic"
+      ]
+    },
+    {
+      "name": "Style",
+      "values": [
+        "Underline",
+        "Pill"
+      ]
+    },
+    {
+      "name": "Size",
+      "values": [
+        "Medium",
+        "Small"
+      ]
+    },
+    {
+      "name": "Type",
+      "values": [
+        "Text + Icon",
+        "Icon only"
+      ]
+    },
+    {
+      "name": "Selected",
+      "values": [
+        "False",
+        "True"
+      ]
+    },
+    {
+      "name": "State",
+      "values": [
+        "Enabled",
+        "Active",
+        "Focus",
+        "Disabled",
+        "Skeleton"
+      ]
+    }
+  ],
+  "exclude": [
+    "{{Style=Pill}}{{Width=Fixed}}",
+    "{{Style=Underline}}{{Size=Small}}",
+    "{{Type=Icon only}}{{Width=Fixed}}",
+    "{{State=Skeleton}}{{Selected=True}}"
+  ],
+  "properties": [
+    {
+      "name": "Label",
+      "type": "TEXT",
+      "default": "Overview"
+    },
+    {
+      "name": "Icon",
+      "type": "BOOLEAN",
+      "default": false
+    },
+    {
+      "name": "Badge",
+      "type": "BOOLEAN",
+      "default": false
+    }
+  ],
+  "variables": {
+    "Tabs/Content/Fixed/Layout horizontal": "Fill container",
+    "Tabs/Content/Fixed/Layout vertical": "Hug contents",
+    "Tabs/Content/Fixed/Padding left": 16,
+    "Tabs/Content/Fixed/Padding right": 16,
+    "Tabs/Content/Fixed/Padding top": 12,
+    "Tabs/Content/Fixed/Padding bottom": 12,
+    "Tabs/Content/Fixed/Gap horizontal": 8,
+    "Tabs/Content/Fixed/Stroke weight": 2,
+    "Tabs/Line/Fixed/Layout height": 2,
+    "Tabs/Label/Fixed/Type token": "$subhead",
+    "Tabs/Label/Fixed/Type emphasis": "Regular",
+    "Tabs/Label/Fixed/Align horizontal": "Center",
+    "Tabs/Label/Fixed/Align vertical": "Center",
+    "Tabs/Label/Fixed/Decoration": "-",
+    "Tabs/Content/Intrinsic/Layout horizontal": "Hug contents",
+    "Tabs/Content/Intrinsic/Layout vertical": "Hug contents",
+    "Tabs/Content/Intrinsic/Padding left": 16,
+    "Tabs/Content/Intrinsic/Padding right": 16,
+    "Tabs/Content/Intrinsic/Padding top": 12,
+    "Tabs/Content/Intrinsic/Padding bottom": 12,
+    "Tabs/Content/Intrinsic/Gap horizontal": 8,
+    "Tabs/Content/Intrinsic/Stroke weight": 2,
+    "Tabs/Line/Intrinsic/Layout height": 2,
+    "Tabs/Label/Intrinsic/Type token": "$subhead",
+    "Tabs/Label/Intrinsic/Type emphasis": "Regular",
+    "Tabs/Label/Intrinsic/Align horizontal": "Center",
+    "Tabs/Label/Intrinsic/Align vertical": "Center",
+    "Tabs/Label/Intrinsic/Decoration": "-",
+    "Tabs/Icon/Medium/Type token": "fa-sharp fa-solid/Medium",
+    "Tabs/Container/Pill/Medium/Radius": 200,
+    "Tabs/Content/Pill/Medium/Layout min-height": 48,
+    "Tabs/Content/Pill/Medium/Padding left": 24,
+    "Tabs/Content/Pill/Medium/Padding right": 24,
+    "Tabs/Content/Pill/Medium/Padding top": 0,
+    "Tabs/Content/Pill/Medium/Padding bottom": 0,
+    "Tabs/Content/Pill/Medium/Gap horizontal": 8,
+    "Tabs/Content/Pill/Medium/Stroke weight": 2,
+    "Tabs/Content/Pill/Medium/Radius": 200,
+    "Tabs/Container/Pill/Small/Radius": 200,
+    "Tabs/Content/Pill/Small/Layout min-height": 36,
+    "Tabs/Content/Pill/Small/Padding left": 16,
+    "Tabs/Content/Pill/Small/Padding right": 16,
+    "Tabs/Content/Pill/Small/Padding top": 0,
+    "Tabs/Content/Pill/Small/Padding bottom": 0,
+    "Tabs/Content/Pill/Small/Gap horizontal": 8,
+    "Tabs/Content/Pill/Small/Stroke weight": 2,
+    "Tabs/Content/Pill/Small/Radius": 200,
+    "Tabs/Content/Icon only/Medium/Layout min-width": 48,
+    "Tabs/Content/Icon only/Medium/Padding left": 0,
+    "Tabs/Content/Icon only/Medium/Padding right": 0,
+    "Tabs/Content/Icon only/Small/Layout min-width": 36,
+    "Tabs/Content/Icon only/Small/Padding left": 0,
+    "Tabs/Content/Icon only/Small/Padding right": 0,
+    "Tabs/Bar/Text + Icon/Layout width": 80,
+    "Tabs/Bar/Text + Icon/Layout height": 8,
+    "Tabs/Bar/Text + Icon/Radius": 0,
+    "Tabs/Bar/Text + Icon/Padding top": 8,
+    "Tabs/Bar/Text + Icon/Padding bottom": 8,
+    "Tabs/Bar/Icon only/Layout width": 24,
+    "Tabs/Bar/Icon only/Layout height": 8,
+    "Tabs/Bar/Icon only/Radius": 0,
+    "Tabs/Bar/Icon only/Padding top": 8,
+    "Tabs/Bar/Icon only/Padding bottom": 8
+  },
+  "bindings": [
+    {"layer":"(root)","property":"minWidth","when":"{{State=*}}","value":"Components/Interactive/Medium/Interactive min-height"},
+    {"layer":"(root)","property":"minHeight","when":"{{State=*}}","value":"Components/Interactive/Medium/Interactive min-height"},
+    {"layer":"(root)","property":"layoutSizingHorizontal","when":"{{Width=Fixed}}","value":"FIXED","literal":true},
+    {"layer":"(root)","property":"layoutSizingHorizontal","when":"{{Width=Intrinsic}}","value":"HUG","literal":true},
+    {"layer":"(root)","property":"width","when":"{{Width=Fixed}}","value":"125","literal":true},
+    {"layer":"Container","property":"layoutSizingHorizontal","when":"{{Width=Fixed}}","value":"FILL","literal":true},
+    {"layer":"Container","property":"layoutSizingHorizontal","when":"{{Width=Intrinsic}}","value":"HUG","literal":true},
+    {"layer":"Container","property":"cornerRadius","when":"{{Style=Pill}}","value":"Components/Tabs/Container/Pill/{{Size=*}}/Radius"},
+    {"layer":"Container","property":"fills.0","when":"{{State=*}}","value":"Theme/Transparent"},
+    {"layer":"Container","property":"fills.0","when":"{{State=Active}}","value":"Theme/Layer/layer-active-01"},
+    {"layer":"Container","property":"fills.0","when":"{{Style=Pill}}{{Selected=True}}","value":"Theme/Button/button-secondary"},
+    {"layer":"Container","property":"fills.0","when":"{{Style=Pill}}{{Selected=True}}{{State=Disabled}}","value":"Theme/Button/button-disabled"},
+    {"layer":"Container / Content","property":"layoutSizingHorizontal","when":"{{Width=Fixed}}","value":"FILL","literal":true},
+    {"layer":"Container / Content","property":"layoutSizingHorizontal","when":"{{Width=Intrinsic}}","value":"HUG","literal":true},
+    {"layer":"Container / Content","property":"minHeight","when":"{{Style=Pill}}","value":"Components/Tabs/Content/Pill/{{Size=*}}/Layout min-height"},
+    {"layer":"Container / Content","property":"minWidth","when":"{{Type=Icon only}}{{Size=*}}","value":"Components/Tabs/Content/Icon only/{{Size=*}}/Layout min-width"},
+    {"layer":"Container / Content","property":"cornerRadius","when":"{{Style=Pill}}","value":"Components/Tabs/Content/Pill/{{Size=*}}/Radius"},
+    {"layer":"Container / Content","property":"paddingLeft","when":"{{Width=*}}","value":"Components/Tabs/Content/{{Width=*}}/Padding left"},
+    {"layer":"Container / Content","property":"paddingLeft","when":"{{Style=Pill}}","value":"Components/Tabs/Content/Pill/{{Size=*}}/Padding left"},
+    {"layer":"Container / Content","property":"paddingLeft","when":"{{Type=Icon only}}{{Size=*}}","value":"Components/Tabs/Content/Icon only/{{Size=*}}/Padding left"},
+    {"layer":"Container / Content","property":"paddingRight","when":"{{Width=*}}","value":"Components/Tabs/Content/{{Width=*}}/Padding right"},
+    {"layer":"Container / Content","property":"paddingRight","when":"{{Style=Pill}}","value":"Components/Tabs/Content/Pill/{{Size=*}}/Padding right"},
+    {"layer":"Container / Content","property":"paddingRight","when":"{{Type=Icon only}}{{Size=*}}","value":"Components/Tabs/Content/Icon only/{{Size=*}}/Padding right"},
+    {"layer":"Container / Content","property":"paddingTop","when":"{{Width=*}}","value":"Components/Tabs/Content/{{Width=*}}/Padding top"},
+    {"layer":"Container / Content","property":"paddingTop","when":"{{Style=Pill}}","value":"Components/Tabs/Content/Pill/{{Size=*}}/Padding top"},
+    {"layer":"Container / Content","property":"paddingBottom","when":"{{Width=*}}","value":"Components/Tabs/Content/{{Width=*}}/Padding bottom"},
+    {"layer":"Container / Content","property":"paddingBottom","when":"{{Style=Pill}}","value":"Components/Tabs/Content/Pill/{{Size=*}}/Padding bottom"},
+    {"layer":"Container / Content","property":"itemSpacing","when":"{{Width=*}}","value":"Components/Tabs/Content/{{Width=*}}/Gap horizontal"},
+    {"layer":"Container / Content","property":"itemSpacing","when":"{{Style=Pill}}","value":"Components/Tabs/Content/Pill/{{Size=*}}/Gap horizontal"},
+    {"layer":"Container / Content","property":"strokeWeight","when":"{{Width=*}}","value":"Components/Tabs/Content/{{Width=*}}/Stroke weight"},
+    {"layer":"Container / Content","property":"strokeWeight","when":"{{Style=Pill}}","value":"Components/Tabs/Content/Pill/{{Size=*}}/Stroke weight"},
+    {"layer":"Container / Content","property":"strokes.0","when":"{{State=*}}","value":"Theme/Transparent"},
+    {"layer":"Container / Content","property":"strokes.0","when":"{{State=Focus}}","value":"Theme/Focus/focus"},
+    {"layer":"Container / Content / Icon","property":"visible","when":"{{Type=Icon only}}","value":"true","literal":true},
+    {"layer":"Container / Content / Icon","property":"visible","when":"{{State=Skeleton}}","value":"false","literal":true},
+    {"layer":"Container / Content / Icon","property":"textStyleId","when":"{{State=*}}","value":"fa-sharp fa-solid/Medium"},
+    {"layer":"Container / Content / Icon","property":"fills.0","when":"{{State=*}}","value":"Theme/Icon/icon-secondary"},
+    {"layer":"Container / Content / Icon","property":"fills.0","when":"{{Selected=True}}","value":"Theme/Icon/icon-primary"},
+    {"layer":"Container / Content / Icon","property":"fills.0","when":"{{Style=Pill}}{{Selected=False}}{{State=Active}}","value":"Theme/Icon/icon-primary"},
+    {"layer":"Container / Content / Icon","property":"fills.0","when":"{{State=Disabled}}","value":"Theme/Icon/icon-disabled"},
+    {"layer":"Container / Content / Label","property":"visible","when":"{{State=*}}","value":"true","literal":true},
+    {"layer":"Container / Content / Label","property":"visible","when":"{{Type=Icon only}}","value":"false","literal":true},
+    {"layer":"Container / Content / Label","property":"visible","when":"{{State=Skeleton}}","value":"false","literal":true},
+    {"layer":"Container / Content / Label","property":"textStyleId","when":"{{State=*}}","value":"Body/Subheadline"},
+    {"layer":"Container / Content / Label","property":"textAutoResize","when":"{{State=*}}","value":"WIDTH_AND_HEIGHT","literal":true},
+    {"layer":"Container / Content / Label","property":"fills.0","when":"{{State=*}}","value":"Theme/Text/text-secondary"},
+    {"layer":"Container / Content / Label","property":"fills.0","when":"{{Selected=True}}","value":"Theme/Text/text-primary"},
+    {"layer":"Container / Content / Label","property":"fills.0","when":"{{Style=Pill}}{{Selected=False}}{{State=Active}}","value":"Theme/Text/text-primary"},
+    {"layer":"Container / Content / Label","property":"fills.0","when":"{{State=Disabled}}","value":"Theme/Text/text-disabled"},
+    {"layer":"Container / Content / Badge","property":"visible","when":"{{State=Skeleton}}","value":"false","literal":true},
+    {"layer":"Container / Content / Badge","property":"componentProperties.Content","when":"{{State=*}}","value":"Count","literal":true},
+    {"layer":"Container / Content / Skeleton","property":"visible","when":"{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Content / Skeleton","property":"visible","when":"{{State=Skeleton}}","value":"true","literal":true},
+    {"layer":"Container / Content / Skeleton","property":"paddingTop","when":"{{Type=*}}","value":"Components/Tabs/Bar/{{Type=*}}/Padding top"},
+    {"layer":"Container / Content / Skeleton","property":"paddingBottom","when":"{{Type=*}}","value":"Components/Tabs/Bar/{{Type=*}}/Padding bottom"},
+    {"layer":"Container / Content / Skeleton / Label line","property":"width","when":"{{Type=*}}","value":"Components/Tabs/Bar/{{Type=*}}/Layout width"},
+    {"layer":"Container / Content / Skeleton / Label line","property":"height","when":"{{Type=*}}","value":"Components/Tabs/Bar/{{Type=*}}/Layout height"},
+    {"layer":"Container / Content / Skeleton / Label line","property":"cornerRadius","when":"{{Type=*}}","value":"Components/Tabs/Bar/{{Type=*}}/Radius"},
+    {"layer":"Container / Content / Skeleton / Label line","property":"fills.0","when":"{{State=*}}","value":"Theme/Skeleton/skeleton-background"},
+    {"layer":"Container / Line","property":"height","when":"{{Width=*}}","value":"Components/Tabs/Line/{{Width=*}}/Layout height"},
+    {"layer":"Container / Line","property":"fills.0","when":"{{State=*}}","value":"Theme/Transparent"},
+    {"layer":"Container / Line","property":"fills.0","when":"{{Selected=True}}","value":"Theme/Border/border-strong"},
+    {"layer":"Container / Line","property":"fills.0","when":"{{Selected=True}}{{State=Disabled}}","value":"Theme/Border/border-disabled"},
+    {"layer":"Container / Line","property":"fills.0","when":"{{Style=Pill}}","value":"Theme/Transparent"}
+  ]
+}
+]
+}

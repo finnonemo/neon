@@ -1,0 +1,73 @@
+{
+"component": "Badge",
+"sets": [
+{
+  "name": "Badge",
+  "axes": [
+    {
+      "name": "Content",
+      "values": [
+        "Count",
+        "Dot"
+      ]
+    }
+  ],
+  "exclude": [],
+  "properties": [
+    {
+      "name": "Number",
+      "type": "TEXT",
+      "default": "1"
+    }
+  ],
+  "variables": {
+    "Badge/Container/Count/Layout horizontal": "Hug contents",
+    "Badge/Container/Count/Layout vertical": "Hug contents",
+    "Badge/Container/Count/Layout min-width": 20,
+    "Badge/Container/Count/Layout min-height": 20,
+    "Badge/Container/Count/Padding left": 4,
+    "Badge/Container/Count/Padding right": 4,
+    "Badge/Container/Count/Padding top": 0,
+    "Badge/Container/Count/Padding bottom": 0,
+    "Badge/Container/Count/Radius": 200,
+    "Badge/Container/Dot/Layout horizontal": "Hug contents",
+    "Badge/Container/Dot/Layout vertical": "Hug contents",
+    "Badge/Container/Dot/Layout min-width": 8,
+    "Badge/Container/Dot/Layout min-height": 8,
+    "Badge/Container/Dot/Padding left": 0,
+    "Badge/Container/Dot/Padding right": 0,
+    "Badge/Container/Dot/Padding top": 0,
+    "Badge/Container/Dot/Padding bottom": 0,
+    "Badge/Container/Dot/Radius": 200,
+    "Badge/Label/Count/Type token": "$caption1",
+    "Badge/Label/Count/Type emphasis": "Regular",
+    "Badge/Label/Count/Align horizontal": "Center",
+    "Badge/Label/Count/Align vertical": "Center",
+    "Badge/Label/Count/Decoration": "-",
+    "Badge/Label/Dot/Type token": "$caption1",
+    "Badge/Label/Dot/Type emphasis": "Regular",
+    "Badge/Label/Dot/Align horizontal": "Center",
+    "Badge/Label/Dot/Align vertical": "Center",
+    "Badge/Label/Dot/Decoration": "-"
+  },
+  "bindings": [
+    {"layer":"Container","property":"layoutSizingHorizontal","when":"{{Content=*}}","value":"HUG","literal":true},
+    {"layer":"Container","property":"layoutSizingVertical","when":"{{Content=*}}","value":"HUG","literal":true},
+    {"layer":"Container","property":"primaryAxisAlignItems","when":"{{Content=*}}","value":"CENTER","literal":true},
+    {"layer":"Container","property":"counterAxisAlignItems","when":"{{Content=*}}","value":"CENTER","literal":true},
+    {"layer":"Container","property":"minWidth","when":"{{Content=*}}","value":"Components/Badge/Container/{{Content=*}}/Layout min-width"},
+    {"layer":"Container","property":"minHeight","when":"{{Content=*}}","value":"Components/Badge/Container/{{Content=*}}/Layout min-height"},
+    {"layer":"Container","property":"paddingLeft","when":"{{Content=*}}","value":"Components/Badge/Container/{{Content=*}}/Padding left"},
+    {"layer":"Container","property":"paddingRight","when":"{{Content=*}}","value":"Components/Badge/Container/{{Content=*}}/Padding right"},
+    {"layer":"Container","property":"paddingTop","when":"{{Content=*}}","value":"Components/Badge/Container/{{Content=*}}/Padding top"},
+    {"layer":"Container","property":"paddingBottom","when":"{{Content=*}}","value":"Components/Badge/Container/{{Content=*}}/Padding bottom"},
+    {"layer":"Container","property":"cornerRadius","when":"{{Content=*}}","value":"Components/Badge/Container/{{Content=*}}/Radius"},
+    {"layer":"Container","property":"fills.0","when":"{{Content=*}}","value":"Theme/Miscellaneous/interactive"},
+    {"layer":"Container / Label","property":"visible","when":"{{Content=*}}","value":"true","literal":true},
+    {"layer":"Container / Label","property":"visible","when":"{{Content=Dot}}","value":"false","literal":true},
+    {"layer":"Container / Label","property":"textStyleId","when":"{{Content=*}}","value":"Utility/Caption 1"},
+    {"layer":"Container / Label","property":"fills.0","when":"{{Content=Count}}","value":"Theme/Text/text-inverse"}
+  ]
+}
+]
+}

@@ -1,0 +1,203 @@
+{
+"component": "Progress bar",
+"sets": [
+{
+  "name": "Progress bar",
+  "axes": [
+    {
+      "name": "Status",
+      "values": [
+        "Active",
+        "Success",
+        "Error"
+      ]
+    },
+    {
+      "name": "Progress",
+      "values": [
+        "50%",
+        "0%",
+        "25%",
+        "75%",
+        "100%",
+        "Indeterminate"
+      ]
+    },
+    {
+      "name": "Alignment",
+      "values": [
+        "Default",
+        "Inline",
+        "Indent"
+      ]
+    },
+    {
+      "name": "Size",
+      "values": [
+        "Medium",
+        "Small",
+        "Large"
+      ]
+    }
+  ],
+  "exclude": [
+    "{{Status=Success, Error}}{{Progress=0%, 25%, 50%, 75%, Indeterminate}}"
+  ],
+  "properties": [
+    {
+      "name": "Label",
+      "type": "BOOLEAN",
+      "default": true
+    },
+    {
+      "name": "Label text",
+      "type": "TEXT",
+      "default": "Uploading…"
+    },
+    {
+      "name": "Value text",
+      "type": "TEXT",
+      "default": "50%"
+    },
+    {
+      "name": "Helper",
+      "type": "BOOLEAN",
+      "default": true
+    },
+    {
+      "name": "Helper text",
+      "type": "TEXT",
+      "default": "2 of 4 files"
+    },
+    {
+      "name": "Success text",
+      "type": "TEXT",
+      "default": "Upload complete"
+    },
+    {
+      "name": "Error text",
+      "type": "TEXT",
+      "default": "Upload failed. Try again."
+    }
+  ],
+  "variables": {
+    "Progress bar/Container/Medium/Gap vertical": 8,
+    "Progress bar/Header/Medium/Gap horizontal": 8,
+    "Progress bar/Container/Medium/Gap horizontal": 16,
+    "Progress bar/Header/Medium/Padding left": 16,
+    "Progress bar/Track/Medium/Layout height": 4,
+    "Progress bar/Track/Medium/Radius": 0,
+    "Progress bar/Indicator/Medium/Layout height": 4,
+    "Progress bar/Indicator/Medium/Radius": 0,
+    "Progress bar/Container/Small/Gap vertical": 8,
+    "Progress bar/Header/Small/Gap horizontal": 8,
+    "Progress bar/Container/Small/Gap horizontal": 16,
+    "Progress bar/Header/Small/Padding left": 16,
+    "Progress bar/Track/Small/Layout height": 2,
+    "Progress bar/Track/Small/Radius": 0,
+    "Progress bar/Indicator/Small/Layout height": 2,
+    "Progress bar/Indicator/Small/Radius": 0,
+    "Progress bar/Container/Large/Gap vertical": 8,
+    "Progress bar/Header/Large/Gap horizontal": 8,
+    "Progress bar/Container/Large/Gap horizontal": 16,
+    "Progress bar/Header/Large/Padding left": 16,
+    "Progress bar/Track/Large/Layout height": 8,
+    "Progress bar/Track/Large/Radius": 0,
+    "Progress bar/Indicator/Large/Layout height": 8,
+    "Progress bar/Indicator/Large/Radius": 0,
+    "Progress bar/Label/Label/Type token": "$subhead",
+    "Progress bar/Label/Label/Type emphasis": "Regular",
+    "Progress bar/Label/Label/Align horizontal": "Left",
+    "Progress bar/Label/Label/Align vertical": "Top",
+    "Progress bar/Label/Label/Decoration": "-",
+    "Progress bar/Label/Value/Type token": "$subhead",
+    "Progress bar/Label/Value/Type emphasis": "Regular",
+    "Progress bar/Label/Value/Align horizontal": "Right",
+    "Progress bar/Label/Value/Align vertical": "Top",
+    "Progress bar/Label/Value/Decoration": "-",
+    "Progress bar/Label/Helper/Type token": "$subhead",
+    "Progress bar/Label/Helper/Type emphasis": "Regular",
+    "Progress bar/Label/Helper/Align horizontal": "Left",
+    "Progress bar/Label/Helper/Align vertical": "Top",
+    "Progress bar/Label/Helper/Decoration": "-",
+    "Progress bar/Label/Success/Type token": "$subhead",
+    "Progress bar/Label/Success/Type emphasis": "Regular",
+    "Progress bar/Label/Success/Align horizontal": "Left",
+    "Progress bar/Label/Success/Align vertical": "Top",
+    "Progress bar/Label/Success/Decoration": "-",
+    "Progress bar/Label/Error/Type token": "$subhead",
+    "Progress bar/Label/Error/Type emphasis": "Regular",
+    "Progress bar/Label/Error/Align horizontal": "Left",
+    "Progress bar/Label/Error/Align vertical": "Top",
+    "Progress bar/Label/Error/Decoration": "-",
+    "Progress bar/Icon/Medium/Type token": "fa-sharp fa-solid/Medium"
+  },
+  "bindings": [
+    {"layer":"Container","property":"layoutMode","when":"{{Status=*}}","value":"VERTICAL","literal":true},
+    {"layer":"Container","property":"layoutMode","when":"{{Alignment=Inline}}","value":"HORIZONTAL","literal":true},
+    {"layer":"Container","property":"layoutSizingHorizontal","when":"{{Status=*}}","value":"FILL","literal":true},
+    {"layer":"Container","property":"layoutSizingVertical","when":"{{Status=*}}","value":"HUG","literal":true},
+    {"layer":"Container","property":"counterAxisAlignItems","when":"{{Status=*}}","value":"MIN","literal":true},
+    {"layer":"Container","property":"counterAxisAlignItems","when":"{{Alignment=Inline}}","value":"CENTER","literal":true},
+    {"layer":"Container","property":"itemSpacing","when":"{{Status=*}}","value":"Components/Progress bar/Container/{{Size=*}}/Gap vertical"},
+    {"layer":"Container","property":"itemSpacing","when":"{{Alignment=Inline}}","value":"Components/Progress bar/Container/{{Size=*}}/Gap horizontal"},
+    {"layer":"Container / Header / Label","property":"layoutSizingHorizontal","when":"{{Status=*}}","value":"FILL","literal":true},
+    {"layer":"Container / Header / Label","property":"layoutSizingHorizontal","when":"{{Alignment=Inline}}","value":"HUG","literal":true},
+    {"layer":"Container / Header / Label","property":"textStyleId","when":"{{Status=*}}","value":"Body/Subheadline"},
+    {"layer":"Container / Header / Label","property":"fills.0","when":"{{Status=*}}","value":"Theme/Text/text-primary"},
+    {"layer":"Container / Header / Value","property":"visible","when":"{{Status=*}}","value":"true","literal":true},
+    {"layer":"Container / Header / Value","property":"visible","when":"{{Progress=Indeterminate}}","value":"false","literal":true},
+    {"layer":"Container / Header / Value","property":"textStyleId","when":"{{Status=*}}","value":"Body/Subheadline"},
+    {"layer":"Container / Header / Value","property":"fills.0","when":"{{Status=*}}","value":"Theme/Text/text-secondary"},
+    {"layer":"Container / Header","property":"layoutSizingHorizontal","when":"{{Status=*}}","value":"FILL","literal":true},
+    {"layer":"Container / Header","property":"layoutSizingHorizontal","when":"{{Alignment=Inline}}","value":"HUG","literal":true},
+    {"layer":"Container / Header","property":"layoutSizingVertical","when":"{{Status=*}}","value":"HUG","literal":true},
+    {"layer":"Container / Header","property":"itemSpacing","when":"{{Status=*}}","value":"Components/Progress bar/Header/{{Size=*}}/Gap horizontal"},
+    {"layer":"Container / Header","property":"paddingLeft","when":"{{Alignment=Indent}}","value":"Components/Progress bar/Header/{{Size=*}}/Padding left"},
+    {"layer":"Container / Header / circle-check","property":"visible","when":"{{Status=*}}","value":"false","literal":true},
+    {"layer":"Container / Header / circle-check","property":"visible","when":"{{Status=Success}}","value":"true","literal":true},
+    {"layer":"Container / Header / circle-check","property":"componentProperties.Size","when":"{{Status=Success}}","value":"Medium"},
+    {"layer":"Container / Header / circle-check / Color","property":"fills.0","when":"{{Status=Success}}","value":"Theme/Support/support-success"},
+    {"layer":"Container / Header / circle-exclamation","property":"visible","when":"{{Status=*}}","value":"false","literal":true},
+    {"layer":"Container / Header / circle-exclamation","property":"visible","when":"{{Status=Error}}","value":"true","literal":true},
+    {"layer":"Container / Header / circle-exclamation","property":"componentProperties.Size","when":"{{Status=Error}}","value":"Medium"},
+    {"layer":"Container / Header / circle-exclamation / Color","property":"fills.0","when":"{{Status=Error}}","value":"Theme/Support/support-error"},
+    {"layer":"Container / Track","property":"layoutSizingHorizontal","when":"{{Status=*}}","value":"FILL","literal":true},
+    {"layer":"Container / Track","property":"layoutSizingVertical","when":"{{Status=*}}","value":"FIXED","literal":true},
+    {"layer":"Container / Track","property":"height","when":"{{Status=*}}","value":"Components/Progress bar/Track/{{Size=*}}/Layout height"},
+    {"layer":"Container / Track","property":"cornerRadius","when":"{{Status=*}}","value":"Components/Progress bar/Track/{{Size=*}}/Radius"},
+    {"layer":"Container / Track","property":"fills.0","when":"{{Status=*}}","value":"Theme/Layer/layer-03"},
+    {"layer":"Container / Track / Indicator","property":"visible","when":"{{Status=*}}","value":"true","literal":true},
+    {"layer":"Container / Track / Indicator","property":"visible","when":"{{Progress=0%, Indeterminate}}","value":"false","literal":true},
+    {"layer":"Container / Track / Indicator","property":"width","when":"{{Progress=50%}}","value":0.5,"literal":true},
+    {"layer":"Container / Track / Indicator","property":"width","when":"{{Progress=25%}}","value":0.25,"literal":true},
+    {"layer":"Container / Track / Indicator","property":"width","when":"{{Progress=75%}}","value":0.75,"literal":true},
+    {"layer":"Container / Track / Indicator","property":"width","when":"{{Progress=100%}}","value":1,"literal":true},
+    {"layer":"Container / Track / Indicator","property":"height","when":"{{Status=*}}","value":"Components/Progress bar/Indicator/{{Size=*}}/Layout height"},
+    {"layer":"Container / Track / Indicator","property":"cornerRadius","when":"{{Status=*}}","value":"Components/Progress bar/Indicator/{{Size=*}}/Radius"},
+    {"layer":"Container / Track / Indicator","property":"fills.0","when":"{{Status=Active}}","value":"Theme/Support/support-info"},
+    {"layer":"Container / Track / Indicator","property":"fills.0","when":"{{Status=Success}}","value":"Theme/Support/support-success"},
+    {"layer":"Container / Track / Indicator","property":"fills.0","when":"{{Status=Error}}","value":"Theme/Support/support-error"},
+    {"layer":"Container / Track / Segment","property":"visible","when":"{{Status=*}}","value":"false","literal":true},
+    {"layer":"Container / Track / Segment","property":"visible","when":"{{Progress=Indeterminate}}","value":"true","literal":true},
+    {"layer":"Container / Message","property":"visible","when":"{{Status=*}}","value":"true","literal":true},
+    {"layer":"Container / Message","property":"visible","when":"{{Alignment=Inline}}","value":"false","literal":true},
+    {"layer":"Container / Message","property":"layoutSizingHorizontal","when":"{{Status=*}}","value":"FILL","literal":true},
+    {"layer":"Container / Message","property":"layoutSizingVertical","when":"{{Status=*}}","value":"HUG","literal":true},
+    {"layer":"Container / Message","property":"paddingLeft","when":"{{Alignment=Indent}}","value":"Components/Progress bar/Header/{{Size=*}}/Padding left"},
+    {"layer":"Container / Message / Helper text","property":"visible","when":"{{Status=*}}","value":"false","literal":true},
+    {"layer":"Container / Message / Helper text","property":"visible","when":"{{Status=Active}}","value":"true","literal":true},
+    {"layer":"Container / Message / Helper text","property":"textStyleId","when":"{{Status=Active}}","value":"Body/Subheadline"},
+    {"layer":"Container / Message / Helper text","property":"fills.0","when":"{{Status=Active}}","value":"Theme/Text/text-helper"},
+    {"layer":"Container / Message / Success text","property":"visible","when":"{{Status=*}}","value":"false","literal":true},
+    {"layer":"Container / Message / Success text","property":"visible","when":"{{Status=Success}}","value":"true","literal":true},
+    {"layer":"Container / Message / Success text","property":"textStyleId","when":"{{Status=Success}}","value":"Body/Subheadline"},
+    {"layer":"Container / Message / Success text","property":"fills.0","when":"{{Status=Success}}","value":"Theme/Text/text-helper"},
+    {"layer":"Container / Message / Error text","property":"visible","when":"{{Status=*}}","value":"false","literal":true},
+    {"layer":"Container / Message / Error text","property":"visible","when":"{{Status=Error}}","value":"true","literal":true},
+    {"layer":"Container / Message / Error text","property":"textStyleId","when":"{{Status=Error}}","value":"Body/Subheadline"},
+    {"layer":"Container / Message / Error text","property":"fills.0","when":"{{Status=Error}}","value":"Theme/Text/text-negative"}
+  ]
+}
+]
+}

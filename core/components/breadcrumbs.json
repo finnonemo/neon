@@ -1,0 +1,232 @@
+{
+"component": "Breadcrumbs",
+"sets": [
+{
+  "name": "Breadcrumbs",
+  "axes": [],
+  "exclude": [],
+  "properties": [
+    {
+      "name": "Item 1",
+      "type": "BOOLEAN",
+      "default": true
+    },
+    {
+      "name": "Item 2",
+      "type": "BOOLEAN",
+      "default": true
+    },
+    {
+      "name": "Item 3",
+      "type": "BOOLEAN",
+      "default": true
+    },
+    {
+      "name": "Item 4",
+      "type": "BOOLEAN",
+      "default": false
+    },
+    {
+      "name": "Item 5",
+      "type": "BOOLEAN",
+      "default": false
+    },
+    {
+      "name": "Item 6",
+      "type": "BOOLEAN",
+      "default": false
+    },
+    {
+      "name": "Item 7",
+      "type": "BOOLEAN",
+      "default": false
+    },
+    {
+      "name": "Current",
+      "type": "BOOLEAN",
+      "default": true
+    }
+  ],
+  "variables": {
+    "Breadcrumbs/Breadcrumb wrapper/Default/Layout horizontal": "Hug contents",
+    "Breadcrumbs/Breadcrumb wrapper/Default/Layout vertical": "Hug contents",
+    "Breadcrumbs/Breadcrumb wrapper/Default/Gap horizontal": 8
+  },
+  "bindings": [
+    {"layer":"Breadcrumb wrapper","property":"layoutSizingHorizontal","when":"","value":"HUG","literal":true},
+    {"layer":"Breadcrumb wrapper","property":"layoutSizingVertical","when":"","value":"HUG","literal":true},
+    {"layer":"Breadcrumb wrapper","property":"itemSpacing","when":"","value":"Components/Breadcrumbs/Breadcrumb wrapper/Default/Gap horizontal"},
+    {"layer":"Breadcrumb wrapper","property":"counterAxisAlignItems","when":"","value":"CENTER","literal":true},
+    {"layer":"Breadcrumb wrapper / Item 1","property":"componentProperties.Type","when":"","value":"Link","literal":true},
+    {"layer":"Breadcrumb wrapper / Item 1","property":"componentProperties.State","when":"","value":"Enabled","literal":true},
+    {"layer":"Breadcrumb wrapper / Item 2","property":"componentProperties.Type","when":"","value":"Link","literal":true},
+    {"layer":"Breadcrumb wrapper / Item 2","property":"componentProperties.State","when":"","value":"Enabled","literal":true},
+    {"layer":"Breadcrumb wrapper / Item 3","property":"componentProperties.Type","when":"","value":"Link","literal":true},
+    {"layer":"Breadcrumb wrapper / Item 3","property":"componentProperties.State","when":"","value":"Enabled","literal":true},
+    {"layer":"Breadcrumb wrapper / Item 4","property":"componentProperties.Type","when":"","value":"Link","literal":true},
+    {"layer":"Breadcrumb wrapper / Item 4","property":"componentProperties.State","when":"","value":"Enabled","literal":true},
+    {"layer":"Breadcrumb wrapper / Item 5","property":"componentProperties.Type","when":"","value":"Link","literal":true},
+    {"layer":"Breadcrumb wrapper / Item 5","property":"componentProperties.State","when":"","value":"Enabled","literal":true},
+    {"layer":"Breadcrumb wrapper / Item 6","property":"componentProperties.Type","when":"","value":"Link","literal":true},
+    {"layer":"Breadcrumb wrapper / Item 6","property":"componentProperties.State","when":"","value":"Enabled","literal":true},
+    {"layer":"Breadcrumb wrapper / Item 7","property":"componentProperties.Type","when":"","value":"Link","literal":true},
+    {"layer":"Breadcrumb wrapper / Item 7","property":"componentProperties.State","when":"","value":"Enabled","literal":true},
+    {"layer":"Breadcrumb wrapper / Current","property":"componentProperties.Type","when":"","value":"Link","literal":true},
+    {"layer":"Breadcrumb wrapper / Current","property":"componentProperties.State","when":"","value":"Current","literal":true}
+  ]
+},
+{
+  "name": "_Breadcrumb item",
+  "axes": [
+    {
+      "name": "Type",
+      "values": [
+        "Link",
+        "Overflow"
+      ]
+    },
+    {
+      "name": "State",
+      "values": [
+        "Enabled",
+        "Hover",
+        "Focus",
+        "Active",
+        "Current",
+        "Skeleton"
+      ]
+    }
+  ],
+  "exclude": [
+    "{{Type=Overflow}}{{State=Current, Skeleton}}"
+  ],
+  "properties": [
+    {
+      "name": "Label",
+      "type": "TEXT",
+      "default": "Breadcrumb"
+    },
+    {
+      "name": "Current label",
+      "type": "TEXT",
+      "default": "Current page"
+    },
+    {
+      "name": "Separator",
+      "type": "BOOLEAN",
+      "default": true
+    }
+  ],
+  "variables": {
+    "Breadcrumb item/Breadcrumb/Link/Layout horizontal": "Hug contents",
+    "Breadcrumb item/Breadcrumb/Link/Layout vertical": "Hug contents",
+    "Breadcrumb item/Breadcrumb/Link/Gap horizontal": 8,
+    "Breadcrumb item/Breadcrumb/Overflow/Layout horizontal": "Hug contents",
+    "Breadcrumb item/Breadcrumb/Overflow/Layout vertical": "Hug contents",
+    "Breadcrumb item/Breadcrumb/Overflow/Gap horizontal": 8,
+    "Breadcrumb item/Text/Link/Layout horizontal": "Hug contents",
+    "Breadcrumb item/Text/Link/Layout vertical": "Hug contents",
+    "Breadcrumb item/Text/Link/Layout min-height": 32,
+    "Breadcrumb item/Text/Link/Padding top": 4,
+    "Breadcrumb item/Text/Link/Padding bottom": 4,
+    "Breadcrumb item/Text/Link/Padding left": 2,
+    "Breadcrumb item/Text/Link/Padding right": 2,
+    "Breadcrumb item/Text/Link/Radius": 8,
+    "Breadcrumb item/Overflow/Overflow/Layout horizontal": "Hug contents",
+    "Breadcrumb item/Overflow/Overflow/Layout vertical": "Hug contents",
+    "Breadcrumb item/Overflow/Overflow/Layout min-height": 32,
+    "Breadcrumb item/Overflow/Overflow/Padding top": 4,
+    "Breadcrumb item/Overflow/Overflow/Padding bottom": 4,
+    "Breadcrumb item/Overflow/Overflow/Padding left": 8,
+    "Breadcrumb item/Overflow/Overflow/Padding right": 8,
+    "Breadcrumb item/Overflow/Overflow/Radius": 8,
+    "Breadcrumb item/Label/Link/Type token": "$subhead",
+    "Breadcrumb item/Label/Link/Type emphasis": "Regular",
+    "Breadcrumb item/Label/Link/Align horizontal": "Left",
+    "Breadcrumb item/Label/Link/Align vertical": "Center",
+    "Breadcrumb item/Label/Link/Decoration": "Underline",
+    "Breadcrumb item/Label/Current/Type token": "$subhead",
+    "Breadcrumb item/Label/Current/Type emphasis": "Regular",
+    "Breadcrumb item/Label/Current/Align horizontal": "Left",
+    "Breadcrumb item/Label/Current/Align vertical": "Center",
+    "Breadcrumb item/Label/Current/Decoration": "-",
+    "Breadcrumb item/Label/Separator/Type token": "$subhead",
+    "Breadcrumb item/Label/Separator/Type emphasis": "Regular",
+    "Breadcrumb item/Label/Separator/Align horizontal": "Left",
+    "Breadcrumb item/Label/Separator/Align vertical": "Center",
+    "Breadcrumb item/Label/Separator/Decoration": "-",
+    "Breadcrumb item/Icon/Medium/Type token": "fa-sharp fa-solid/Medium",
+    "Breadcrumb item/Bar/Link/Layout width": 80,
+    "Breadcrumb item/Bar/Link/Layout height": 8,
+    "Breadcrumb item/Bar/Current/Layout width": 80,
+    "Breadcrumb item/Bar/Current/Layout height": 8
+  },
+  "bindings": [
+    {"layer":"(root)","property":"minWidth","when":"{{Type=*}}{{State=*}}","value":"Components/Interactive/Small/Interactive min-height"},
+    {"layer":"(root)","property":"minHeight","when":"{{Type=*}}{{State=*}}","value":"Components/Interactive/Small/Interactive min-height"},
+    {"layer":"(root)","property":"primaryAxisAlignItems","when":"{{Type=*}}{{State=*}}","value":"CENTER","literal":true},
+    {"layer":"(root)","property":"counterAxisAlignItems","when":"{{Type=*}}{{State=*}}","value":"CENTER","literal":true},
+    {"layer":"Breadcrumb","property":"itemSpacing","when":"{{Type=*}}{{State=*}}","value":"Components/Breadcrumb item/Breadcrumb/{{Type=*}}/Gap horizontal"},
+    {"layer":"Breadcrumb / Text","property":"visible","when":"{{Type=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Breadcrumb / Text","property":"visible","when":"{{Type=Link}}{{State=!Skeleton}}","value":"true","literal":true},
+    {"layer":"Breadcrumb / Text","property":"layoutSizingVertical","when":"{{Type=Link}}{{State=*}}","value":"HUG","literal":true},
+    {"layer":"Breadcrumb / Text","property":"minHeight","when":"{{Type=Link}}{{State=*}}","value":"Components/Breadcrumb item/Text/{{Type=*}}/Layout min-height"},
+    {"layer":"Breadcrumb / Text","property":"paddingTop","when":"{{Type=Link}}{{State=*}}","value":"Components/Breadcrumb item/Text/{{Type=*}}/Padding top"},
+    {"layer":"Breadcrumb / Text","property":"paddingBottom","when":"{{Type=Link}}{{State=*}}","value":"Components/Breadcrumb item/Text/{{Type=*}}/Padding bottom"},
+    {"layer":"Breadcrumb / Text","property":"paddingLeft","when":"{{Type=Link}}{{State=*}}","value":"Components/Breadcrumb item/Text/{{Type=*}}/Padding left"},
+    {"layer":"Breadcrumb / Text","property":"paddingRight","when":"{{Type=Link}}{{State=*}}","value":"Components/Breadcrumb item/Text/{{Type=*}}/Padding right"},
+    {"layer":"Breadcrumb / Text","property":"cornerRadius","when":"{{Type=Link}}{{State=*}}","value":"Components/Breadcrumb item/Text/{{Type=*}}/Radius"},
+    {"layer":"Breadcrumb / Text","property":"fills.0","when":"{{Type=*}}{{State=*}}","value":"Theme/Transparent"},
+    {"layer":"Breadcrumb / Text","property":"fills.0","when":"{{Type=*}}{{State=Hover}}","value":"Theme/Layer/layer-hover-01"},
+    {"layer":"Breadcrumb / Text","property":"fills.0","when":"{{Type=*}}{{State=Active}}","value":"Theme/Layer/layer-active-01"},
+    {"layer":"Breadcrumb / Text","property":"strokes.0","when":"{{Type=*}}{{State=!Focus}}","value":"none","literal":true},
+    {"layer":"Breadcrumb / Text","property":"strokes.0","when":"{{Type=*}}{{State=Focus}}","value":"Theme/Focus/focus"},
+    {"layer":"Breadcrumb / Text / Label","property":"visible","when":"{{Type=*}}{{State=*}}","value":"true","literal":true},
+    {"layer":"Breadcrumb / Text / Label","property":"visible","when":"{{Type=*}}{{State=Current}}","value":"false","literal":true},
+    {"layer":"Breadcrumb / Text / Label","property":"textStyleId","when":"{{Type=*}}{{State=*}}","value":"Body/Subheadline"},
+    {"layer":"Breadcrumb / Text / Label","property":"textDecoration","when":"{{Type=*}}{{State=*}}","value":"UNDERLINE","literal":true},
+    {"layer":"Breadcrumb / Text / Label","property":"fills.0","when":"{{Type=*}}{{State=*}}","value":"Theme/Text/text-primary"},
+    {"layer":"Breadcrumb / Text / Label","property":"textAutoResize","when":"{{Type=*}}{{State=*}}","value":"WIDTH_AND_HEIGHT","literal":true},
+    {"layer":"Breadcrumb / Text / Current","property":"visible","when":"{{Type=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Breadcrumb / Text / Current","property":"visible","when":"{{Type=*}}{{State=Current}}","value":"true","literal":true},
+    {"layer":"Breadcrumb / Text / Current","property":"textStyleId","when":"{{Type=*}}{{State=*}}","value":"Body/Subheadline"},
+    {"layer":"Breadcrumb / Text / Current","property":"textDecoration","when":"{{Type=*}}{{State=*}}","value":"NONE","literal":true},
+    {"layer":"Breadcrumb / Text / Current","property":"fills.0","when":"{{Type=*}}{{State=*}}","value":"Theme/Text/text-primary"},
+    {"layer":"Breadcrumb / Text / Current","property":"textAutoResize","when":"{{Type=*}}{{State=*}}","value":"WIDTH_AND_HEIGHT","literal":true},
+    {"layer":"Breadcrumb / Text / Current","property":"textTruncation","when":"{{Type=*}}{{State=*}}","value":"ENDING","literal":true},
+    {"layer":"Breadcrumb / Text / Current","property":"maxLines","when":"{{Type=*}}{{State=*}}","value":"1","literal":true},
+    {"layer":"Breadcrumb / Overflow","property":"visible","when":"{{Type=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Breadcrumb / Overflow","property":"visible","when":"{{Type=Overflow}}{{State=*}}","value":"true","literal":true},
+    {"layer":"Breadcrumb / Overflow","property":"layoutSizingVertical","when":"{{Type=Overflow}}{{State=*}}","value":"HUG","literal":true},
+    {"layer":"Breadcrumb / Overflow","property":"minHeight","when":"{{Type=Overflow}}{{State=*}}","value":"Components/Breadcrumb item/Overflow/{{Type=*}}/Layout min-height"},
+    {"layer":"Breadcrumb / Overflow","property":"paddingTop","when":"{{Type=Overflow}}{{State=*}}","value":"Components/Breadcrumb item/Overflow/{{Type=*}}/Padding top"},
+    {"layer":"Breadcrumb / Overflow","property":"paddingBottom","when":"{{Type=Overflow}}{{State=*}}","value":"Components/Breadcrumb item/Overflow/{{Type=*}}/Padding bottom"},
+    {"layer":"Breadcrumb / Overflow","property":"paddingLeft","when":"{{Type=Overflow}}{{State=*}}","value":"Components/Breadcrumb item/Overflow/{{Type=*}}/Padding left"},
+    {"layer":"Breadcrumb / Overflow","property":"paddingRight","when":"{{Type=Overflow}}{{State=*}}","value":"Components/Breadcrumb item/Overflow/{{Type=*}}/Padding right"},
+    {"layer":"Breadcrumb / Overflow","property":"cornerRadius","when":"{{Type=Overflow}}{{State=*}}","value":"Components/Breadcrumb item/Overflow/{{Type=*}}/Radius"},
+    {"layer":"Breadcrumb / Overflow","property":"fills.0","when":"{{Type=*}}{{State=*}}","value":"Theme/Transparent"},
+    {"layer":"Breadcrumb / Overflow","property":"fills.0","when":"{{Type=*}}{{State=Hover}}","value":"Theme/Layer/layer-hover-01"},
+    {"layer":"Breadcrumb / Overflow","property":"fills.0","when":"{{Type=*}}{{State=Active}}","value":"Theme/Layer/layer-active-01"},
+    {"layer":"Breadcrumb / Overflow","property":"strokes.0","when":"{{Type=*}}{{State=!Focus}}","value":"none","literal":true},
+    {"layer":"Breadcrumb / Overflow","property":"strokes.0","when":"{{Type=*}}{{State=Focus}}","value":"Theme/Focus/focus"},
+    {"layer":"Breadcrumb / Overflow / Icon margin / Icon","property":"characters","when":"{{Type=*}}{{State=*}}","value":"ellipsis","literal":true},
+    {"layer":"Breadcrumb / Overflow / Icon margin / Icon","property":"textStyleId","when":"{{Type=*}}{{State=*}}","value":"fa-sharp fa-solid/Medium"},
+    {"layer":"Breadcrumb / Overflow / Icon margin / Icon","property":"fills.0","when":"{{Type=*}}{{State=*}}","value":"Theme/Icon/icon-primary"},
+    {"layer":"Breadcrumb / Overflow / Icon margin / Icon","property":"textAutoResize","when":"{{Type=*}}{{State=*}}","value":"WIDTH_AND_HEIGHT","literal":true},
+    {"layer":"Breadcrumb / Skeleton","property":"visible","when":"{{Type=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Breadcrumb / Skeleton","property":"visible","when":"{{Type=*}}{{State=Skeleton}}","value":"true","literal":true},
+    {"layer":"Breadcrumb / Skeleton / Bar","property":"width","when":"{{Type=Link}}{{State=Skeleton}}","value":"Components/Breadcrumb item/Bar/{{Type=*}}/Layout width"},
+    {"layer":"Breadcrumb / Skeleton / Bar","property":"height","when":"{{Type=Link}}{{State=Skeleton}}","value":"Components/Breadcrumb item/Bar/{{Type=*}}/Layout height"},
+    {"layer":"Breadcrumb / Skeleton / Bar","property":"cornerRadius","when":"{{Type=*}}{{State=*}}","value":"0","literal":true},
+    {"layer":"Breadcrumb / Skeleton / Bar","property":"fills.0","when":"{{Type=*}}{{State=*}}","value":"Theme/Skeleton/skeleton-background"},
+    {"layer":"Breadcrumb / Separator","property":"visible","when":"{{Type=*}}{{State=*}}","value":"true","literal":true},
+    {"layer":"Breadcrumb / Separator","property":"visible","when":"{{Type=*}}{{State=Current}}","value":"false","literal":true},
+    {"layer":"Breadcrumb / Separator","property":"characters","when":"{{Type=*}}{{State=*}}","value":"/","literal":true},
+    {"layer":"Breadcrumb / Separator","property":"textStyleId","when":"{{Type=*}}{{State=*}}","value":"Body/Subheadline"},
+    {"layer":"Breadcrumb / Separator","property":"textDecoration","when":"{{Type=*}}{{State=*}}","value":"NONE","literal":true},
+    {"layer":"Breadcrumb / Separator","property":"fills.0","when":"{{Type=*}}{{State=*}}","value":"Theme/Text/text-primary"},
+    {"layer":"Breadcrumb / Separator","property":"textAutoResize","when":"{{Type=*}}{{State=*}}","value":"WIDTH_AND_HEIGHT","literal":true}
+  ]
+}
+]
+}

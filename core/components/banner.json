@@ -1,0 +1,659 @@
+{
+"component": "In-line banner",
+"sets": [
+{
+  "name": "In-line banner",
+  "axes": [
+    {
+      "name": "Status",
+      "values": [
+        "Success",
+        "Warning",
+        "Error",
+        "Info",
+        "Caution major",
+        "Caution minor"
+      ]
+    },
+    {
+      "name": "Hierarchy",
+      "values": [
+        "Primary",
+        "Secondary"
+      ]
+    },
+    {
+      "name": "Artwork",
+      "values": [
+        "Badge",
+        "Icon",
+        "None"
+      ]
+    },
+    {
+      "name": "Action",
+      "values": [
+        "None",
+        "Icon Button",
+        "Button",
+        "2 Icon Buttons",
+        "Toggle"
+      ]
+    }
+  ],
+  "exclude": [],
+  "properties": [
+    {
+      "name": "Title",
+      "type": "BOOLEAN",
+      "default": true
+    },
+    {
+      "name": "Description",
+      "type": "BOOLEAN",
+      "default": true
+    },
+    {
+      "name": "Title text",
+      "type": "TEXT",
+      "default": "Title"
+    },
+    {
+      "name": "Description text",
+      "type": "TEXT",
+      "default": "Description"
+    }
+  ],
+  "variables": {
+    "Component/Element/Text/Type emphasis": "Regular",
+    "Banner/In-line/Container/None/Layout horizontal": "Fill container",
+    "Banner/In-line/Container/None/Layout vertical": "Hug contents",
+    "Banner/In-line/Container/None/Layout min-height": 80,
+    "Banner/In-line/Container/None/Gap horizontal": 16,
+    "Banner/In-line/Container/None/Padding left": 16,
+    "Banner/In-line/Container/None/Padding right": 16,
+    "Banner/In-line/Container/None/Padding top": 16,
+    "Banner/In-line/Container/None/Padding bottom": 16,
+    "Banner/In-line/Container/None/Radius": 16,
+    "Banner/In-line/Container/None/Stroke weight": 1,
+    "Banner/In-line/Container/Icon Button/Layout horizontal": "Fill container",
+    "Banner/In-line/Container/Icon Button/Layout vertical": "Hug contents",
+    "Banner/In-line/Container/Icon Button/Layout min-height": 80,
+    "Banner/In-line/Container/Icon Button/Gap horizontal": 16,
+    "Banner/In-line/Container/Icon Button/Padding left": 16,
+    "Banner/In-line/Container/Icon Button/Padding right": 0,
+    "Banner/In-line/Container/Icon Button/Padding top": 16,
+    "Banner/In-line/Container/Icon Button/Padding bottom": 16,
+    "Banner/In-line/Container/Icon Button/Radius": 16,
+    "Banner/In-line/Container/Icon Button/Stroke weight": 1,
+    "Banner/In-line/Container/Button/Layout horizontal": "Fill container",
+    "Banner/In-line/Container/Button/Layout vertical": "Hug contents",
+    "Banner/In-line/Container/Button/Layout min-height": 80,
+    "Banner/In-line/Container/Button/Gap horizontal": 16,
+    "Banner/In-line/Container/Button/Padding left": 16,
+    "Banner/In-line/Container/Button/Padding right": 16,
+    "Banner/In-line/Container/Button/Padding top": 16,
+    "Banner/In-line/Container/Button/Padding bottom": 16,
+    "Banner/In-line/Container/Button/Radius": 16,
+    "Banner/In-line/Container/Button/Stroke weight": 1,
+    "Banner/In-line/Container/2 Icon Buttons/Layout horizontal": "Fill container",
+    "Banner/In-line/Container/2 Icon Buttons/Layout vertical": "Hug contents",
+    "Banner/In-line/Container/2 Icon Buttons/Layout min-height": 80,
+    "Banner/In-line/Container/2 Icon Buttons/Gap horizontal": 16,
+    "Banner/In-line/Container/2 Icon Buttons/Padding left": 16,
+    "Banner/In-line/Container/2 Icon Buttons/Padding right": 10,
+    "Banner/In-line/Container/2 Icon Buttons/Padding top": 16,
+    "Banner/In-line/Container/2 Icon Buttons/Padding bottom": 16,
+    "Banner/In-line/Container/2 Icon Buttons/Radius": 16,
+    "Banner/In-line/Container/2 Icon Buttons/Stroke weight": 1,
+    "Banner/In-line/Container/Toggle/Layout horizontal": "Fill container",
+    "Banner/In-line/Container/Toggle/Layout vertical": "Hug contents",
+    "Banner/In-line/Container/Toggle/Layout min-height": 80,
+    "Banner/In-line/Container/Toggle/Gap horizontal": 16,
+    "Banner/In-line/Container/Toggle/Padding left": 16,
+    "Banner/In-line/Container/Toggle/Padding right": 16,
+    "Banner/In-line/Container/Toggle/Padding top": 16,
+    "Banner/In-line/Container/Toggle/Padding bottom": 16,
+    "Banner/In-line/Container/Toggle/Radius": 16,
+    "Banner/In-line/Container/Toggle/Stroke weight": 1,
+    "Banner/In-line/Icon/3XLarge/Type token": "fa-sharp fa-solid/3XLarge",
+    "Banner/In-line/Icon/Large/Type token": "fa-sharp fa-solid/Large",
+    "Banner/In-line/Label/Title/Type token": "$subhead",
+    "Banner/In-line/Label/Title/Type emphasis": "Strong",
+    "Banner/In-line/Label/Title/Align horizontal": "Left",
+    "Banner/In-line/Label/Title/Align vertical": "Center",
+    "Banner/In-line/Label/Title/Decoration": "-",
+    "Banner/In-line/Label/Description/Type token": "$subhead",
+    "Banner/In-line/Label/Description/Type emphasis": "Regular",
+    "Banner/In-line/Label/Description/Align horizontal": "Left",
+    "Banner/In-line/Label/Description/Align vertical": "Center",
+    "Banner/In-line/Label/Description/Decoration": "-",
+    "Banner/Success/Primary/background": {
+      "light": {
+        "ref": "Notifications/notification-success-background",
+        "hex": "#E6FDF0FF"
+      },
+      "dark": {
+        "ref": "Notifications/notification-success-background",
+        "hex": "#00E76B26"
+      }
+    },
+    "Banner/Success/Primary/border": {
+      "light": {
+        "ref": "Notifications/notification-success-background",
+        "hex": "#E6FDF0FF"
+      },
+      "dark": {
+        "ref": "Green/0A",
+        "hex": "#00E76B00"
+      }
+    },
+    "Banner/Success/Primary/text": {
+      "light": {
+        "ref": "Text/text-primary",
+        "hex": "#000000D9"
+      },
+      "dark": {
+        "ref": "Text/text-primary",
+        "hex": "#FFFFFFFF"
+      }
+    },
+    "Banner/Success/Primary/icon": {
+      "light": {
+        "ref": "Icon/icon-primary",
+        "hex": "#000000D9"
+      },
+      "dark": {
+        "ref": "Icon/icon-primary",
+        "hex": "#FFFFFFFF"
+      }
+    },
+    "Banner/Success/Secondary/background": {
+      "light": {
+        "ref": "Background/background-primary",
+        "hex": "#FFFFFFFF"
+      },
+      "dark": {
+        "ref": "Background/background-primary",
+        "hex": "#000000FF"
+      }
+    },
+    "Banner/Success/Secondary/border": {
+      "light": {
+        "ref": "Border/border-subtle",
+        "hex": "#0000001F"
+      },
+      "dark": {
+        "ref": "Border/border-subtle",
+        "hex": "#FFFFFF2E"
+      }
+    },
+    "Banner/Success/Secondary/text": {
+      "light": {
+        "ref": "Text/text-primary",
+        "hex": "#000000D9"
+      },
+      "dark": {
+        "ref": "Text/text-primary",
+        "hex": "#FFFFFFFF"
+      }
+    },
+    "Banner/Success/Secondary/icon": {
+      "light": {
+        "ref": "Support/support-success",
+        "hex": "#009646FF"
+      },
+      "dark": {
+        "ref": "Support/support-success",
+        "hex": "#00C45BFF"
+      }
+    },
+    "Banner/Warning/Primary/background": {
+      "light": {
+        "ref": "Notifications/notification-warning-background",
+        "hex": "#FEF7F3FF"
+      },
+      "dark": {
+        "ref": "Notifications/notification-warning-background",
+        "hex": "#F2641426"
+      }
+    },
+    "Banner/Warning/Primary/border": {
+      "light": {
+        "ref": "Notifications/notification-warning-background",
+        "hex": "#FEF7F3FF"
+      },
+      "dark": {
+        "ref": "Orange/0A",
+        "hex": "#F2641400"
+      }
+    },
+    "Banner/Warning/Primary/text": {
+      "light": {
+        "ref": "Text/text-primary",
+        "hex": "#000000D9"
+      },
+      "dark": {
+        "ref": "Text/text-primary",
+        "hex": "#FFFFFFFF"
+      }
+    },
+    "Banner/Warning/Primary/icon": {
+      "light": {
+        "ref": "Icon/icon-primary",
+        "hex": "#000000D9"
+      },
+      "dark": {
+        "ref": "Icon/icon-primary",
+        "hex": "#FFFFFFFF"
+      }
+    },
+    "Banner/Warning/Secondary/background": {
+      "light": {
+        "ref": "Background/background-primary",
+        "hex": "#FFFFFFFF"
+      },
+      "dark": {
+        "ref": "Background/background-primary",
+        "hex": "#000000FF"
+      }
+    },
+    "Banner/Warning/Secondary/border": {
+      "light": {
+        "ref": "Border/border-subtle",
+        "hex": "#0000001F"
+      },
+      "dark": {
+        "ref": "Border/border-subtle",
+        "hex": "#FFFFFF2E"
+      }
+    },
+    "Banner/Warning/Secondary/text": {
+      "light": {
+        "ref": "Text/text-primary",
+        "hex": "#000000D9"
+      },
+      "dark": {
+        "ref": "Text/text-primary",
+        "hex": "#FFFFFFFF"
+      }
+    },
+    "Banner/Warning/Secondary/icon": {
+      "light": {
+        "ref": "Support/support-warning",
+        "hex": "#D3540CFF"
+      },
+      "dark": {
+        "ref": "Support/support-warning",
+        "hex": "#F26414FF"
+      }
+    },
+    "Banner/Error/Primary/background": {
+      "light": {
+        "ref": "Notifications/notification-error-background",
+        "hex": "#FFF5F5FF"
+      },
+      "dark": {
+        "ref": "Notifications/notification-error-background",
+        "hex": "#F7323226"
+      }
+    },
+    "Banner/Error/Primary/border": {
+      "light": {
+        "ref": "Notifications/notification-error-background",
+        "hex": "#FFF5F5FF"
+      },
+      "dark": {
+        "ref": "Red/0A",
+        "hex": "#F7323200"
+      }
+    },
+    "Banner/Error/Primary/text": {
+      "light": {
+        "ref": "Text/text-primary",
+        "hex": "#000000D9"
+      },
+      "dark": {
+        "ref": "Text/text-primary",
+        "hex": "#FFFFFFFF"
+      }
+    },
+    "Banner/Error/Primary/icon": {
+      "light": {
+        "ref": "Icon/icon-primary",
+        "hex": "#000000D9"
+      },
+      "dark": {
+        "ref": "Icon/icon-primary",
+        "hex": "#FFFFFFFF"
+      }
+    },
+    "Banner/Error/Secondary/background": {
+      "light": {
+        "ref": "Background/background-primary",
+        "hex": "#FFFFFFFF"
+      },
+      "dark": {
+        "ref": "Background/background-primary",
+        "hex": "#000000FF"
+      }
+    },
+    "Banner/Error/Secondary/border": {
+      "light": {
+        "ref": "Border/border-subtle",
+        "hex": "#0000001F"
+      },
+      "dark": {
+        "ref": "Border/border-subtle",
+        "hex": "#FFFFFF2E"
+      }
+    },
+    "Banner/Error/Secondary/text": {
+      "light": {
+        "ref": "Text/text-primary",
+        "hex": "#000000D9"
+      },
+      "dark": {
+        "ref": "Text/text-primary",
+        "hex": "#FFFFFFFF"
+      }
+    },
+    "Banner/Error/Secondary/icon": {
+      "light": {
+        "ref": "Support/support-error",
+        "hex": "#D60808FF"
+      },
+      "dark": {
+        "ref": "Support/support-error",
+        "hex": "#F30909FF"
+      }
+    },
+    "Banner/Info/Primary/background": {
+      "light": {
+        "ref": "Notifications/notification-info-background",
+        "hex": "#F3F3FEFF"
+      },
+      "dark": {
+        "ref": "Notifications/notification-info-background",
+        "hex": "#1817E740"
+      }
+    },
+    "Banner/Info/Primary/border": {
+      "light": {
+        "ref": "Notifications/notification-info-background",
+        "hex": "#F3F3FEFF"
+      },
+      "dark": {
+        "ref": "Indigo/0A",
+        "hex": "#1817E700"
+      }
+    },
+    "Banner/Info/Primary/text": {
+      "light": {
+        "ref": "Text/text-primary",
+        "hex": "#000000D9"
+      },
+      "dark": {
+        "ref": "Text/text-primary",
+        "hex": "#FFFFFFFF"
+      }
+    },
+    "Banner/Info/Primary/icon": {
+      "light": {
+        "ref": "Icon/icon-primary",
+        "hex": "#000000D9"
+      },
+      "dark": {
+        "ref": "Icon/icon-primary",
+        "hex": "#FFFFFFFF"
+      }
+    },
+    "Banner/Info/Secondary/background": {
+      "light": {
+        "ref": "Background/background-primary",
+        "hex": "#FFFFFFFF"
+      },
+      "dark": {
+        "ref": "Background/background-primary",
+        "hex": "#000000FF"
+      }
+    },
+    "Banner/Info/Secondary/border": {
+      "light": {
+        "ref": "Border/border-subtle",
+        "hex": "#0000001F"
+      },
+      "dark": {
+        "ref": "Border/border-subtle",
+        "hex": "#FFFFFF2E"
+      }
+    },
+    "Banner/Info/Secondary/text": {
+      "light": {
+        "ref": "Text/text-primary",
+        "hex": "#000000D9"
+      },
+      "dark": {
+        "ref": "Text/text-primary",
+        "hex": "#FFFFFFFF"
+      }
+    },
+    "Banner/Info/Secondary/icon": {
+      "light": {
+        "ref": "Support/support-info",
+        "hex": "#1817E7FF"
+      },
+      "dark": {
+        "ref": "Support/support-info",
+        "hex": "#8C8BF3FF"
+      }
+    },
+    "Banner/Caution major/Primary/background": {
+      "light": {
+        "ref": "Notifications/notification-caution-major-background",
+        "hex": "#EBECEEFF"
+      },
+      "dark": {
+        "ref": "Notifications/notification-caution-major-background",
+        "hex": "#A6BFCC26"
+      }
+    },
+    "Banner/Caution major/Primary/border": {
+      "light": {
+        "ref": "Notifications/notification-caution-major-background",
+        "hex": "#EBECEEFF"
+      },
+      "dark": {
+        "ref": "White/0",
+        "hex": "#FFFFFF00"
+      }
+    },
+    "Banner/Caution major/Primary/text": {
+      "light": {
+        "ref": "Text/text-primary",
+        "hex": "#000000D9"
+      },
+      "dark": {
+        "ref": "Text/text-primary",
+        "hex": "#FFFFFFFF"
+      }
+    },
+    "Banner/Caution major/Primary/icon": {
+      "light": {
+        "ref": "Icon/icon-primary",
+        "hex": "#000000D9"
+      },
+      "dark": {
+        "ref": "Icon/icon-primary",
+        "hex": "#FFFFFFFF"
+      }
+    },
+    "Banner/Caution major/Secondary/background": {
+      "light": {
+        "ref": "Background/background-primary",
+        "hex": "#FFFFFFFF"
+      },
+      "dark": {
+        "ref": "Background/background-primary",
+        "hex": "#000000FF"
+      }
+    },
+    "Banner/Caution major/Secondary/border": {
+      "light": {
+        "ref": "Border/border-subtle",
+        "hex": "#0000001F"
+      },
+      "dark": {
+        "ref": "Border/border-subtle",
+        "hex": "#FFFFFF2E"
+      }
+    },
+    "Banner/Caution major/Secondary/text": {
+      "light": {
+        "ref": "Text/text-primary",
+        "hex": "#000000D9"
+      },
+      "dark": {
+        "ref": "Text/text-primary",
+        "hex": "#FFFFFFFF"
+      }
+    },
+    "Banner/Caution major/Secondary/icon": {
+      "light": {
+        "ref": "Support/support-caution-major",
+        "hex": "#000B16FF"
+      },
+      "dark": {
+        "ref": "Support/support-caution-major",
+        "hex": "#A6AEB5FF"
+      }
+    },
+    "Banner/Caution minor/Primary/background": {
+      "light": {
+        "ref": "Notifications/notification-caution-minor-background",
+        "hex": "#F7F8F9FF"
+      },
+      "dark": {
+        "ref": "Notifications/notification-caution-minor-background",
+        "hex": "#A6BFCC14"
+      }
+    },
+    "Banner/Caution minor/Primary/border": {
+      "light": {
+        "ref": "Notifications/notification-caution-minor-background",
+        "hex": "#F7F8F9FF"
+      },
+      "dark": {
+        "ref": "White/0",
+        "hex": "#FFFFFF00"
+      }
+    },
+    "Banner/Caution minor/Primary/text": {
+      "light": {
+        "ref": "Text/text-primary",
+        "hex": "#000000D9"
+      },
+      "dark": {
+        "ref": "Text/text-primary",
+        "hex": "#FFFFFFFF"
+      }
+    },
+    "Banner/Caution minor/Primary/icon": {
+      "light": {
+        "ref": "Icon/icon-primary",
+        "hex": "#000000D9"
+      },
+      "dark": {
+        "ref": "Icon/icon-primary",
+        "hex": "#FFFFFFFF"
+      }
+    },
+    "Banner/Caution minor/Secondary/background": {
+      "light": {
+        "ref": "Background/background-primary",
+        "hex": "#FFFFFFFF"
+      },
+      "dark": {
+        "ref": "Background/background-primary",
+        "hex": "#000000FF"
+      }
+    },
+    "Banner/Caution minor/Secondary/border": {
+      "light": {
+        "ref": "Border/border-subtle",
+        "hex": "#0000001F"
+      },
+      "dark": {
+        "ref": "Border/border-subtle",
+        "hex": "#FFFFFF2E"
+      }
+    },
+    "Banner/Caution minor/Secondary/text": {
+      "light": {
+        "ref": "Text/text-primary",
+        "hex": "#000000D9"
+      },
+      "dark": {
+        "ref": "Text/text-primary",
+        "hex": "#FFFFFFFF"
+      }
+    },
+    "Banner/Caution minor/Secondary/icon": {
+      "light": {
+        "ref": "Navy/150",
+        "hex": "#000B16FF"
+      },
+      "dark": {
+        "ref": "Support/support-caution-minor",
+        "hex": "#808B95FF"
+      }
+    }
+  },
+  "bindings": [
+    {"layer":"Container","property":"fills.0","when":"{{Status=*}}","value":"Theme/Banner/{{Status=*}}/{{Hierarchy=*}}/background"},
+    {"layer":"Container","property":"strokes.0","when":"{{Status=*}}","value":"Theme/Banner/{{Status=*}}/{{Hierarchy=*}}/border"},
+    {"layer":"Container","property":"strokeWeight","when":"{{Status=*}}","value":"Components/Banner/In-line/Container/{{Action=*}}/Stroke weight"},
+    {"layer":"Container","property":"minHeight","when":"{{Status=*}}","value":"Components/Banner/In-line/Container/{{Action=*}}/Layout min-height"},
+    {"layer":"Container","property":"itemSpacing","when":"{{Status=*}}","value":"Components/Banner/In-line/Container/{{Action=*}}/Gap horizontal"},
+    {"layer":"Container","property":"paddingLeft","when":"{{Status=*}}","value":"Components/Banner/In-line/Container/{{Action=*}}/Padding left"},
+    {"layer":"Container","property":"paddingRight","when":"{{Status=*}}","value":"Components/Banner/In-line/Container/{{Action=*}}/Padding right"},
+    {"layer":"Container","property":"paddingTop","when":"{{Status=*}}","value":"Components/Banner/In-line/Container/{{Action=*}}/Padding top"},
+    {"layer":"Container","property":"paddingBottom","when":"{{Status=*}}","value":"Components/Banner/In-line/Container/{{Action=*}}/Padding bottom"},
+    {"layer":"Container","property":"cornerRadius","when":"{{Status=*}}","value":"Components/Banner/In-line/Container/{{Action=*}}/Radius"},
+    {"layer":"Container / Leading Icon","property":"visible","when":"{{Status=*}}","value":"true","literal":true},
+    {"layer":"Container / Leading Icon","property":"visible","when":"{{Artwork=None}}","value":"false","literal":true},
+    {"layer":"Container / Leading Icon","property":"textStyleId","when":"{{Artwork=Badge}}","value":"fa-sharp fa-solid/3XLarge"},
+    {"layer":"Container / Leading Icon","property":"textStyleId","when":"{{Artwork=Icon}}","value":"fa-sharp fa-solid/Large"},
+    {"layer":"Container / Leading Icon","property":"characters","when":"{{Status=Success}}","value":"circle-check","literal":true},
+    {"layer":"Container / Leading Icon","property":"characters","when":"{{Status=Warning}}","value":"triangle-exclamation","literal":true},
+    {"layer":"Container / Leading Icon","property":"characters","when":"{{Status=Error}}","value":"circle-exclamation","literal":true},
+    {"layer":"Container / Leading Icon","property":"characters","when":"{{Status=Info}}","value":"circle-info","literal":true},
+    {"layer":"Container / Leading Icon","property":"characters","when":"{{Status=Caution major}}","value":"circle-check","literal":true},
+    {"layer":"Container / Leading Icon","property":"characters","when":"{{Status=Caution minor}}","value":"circle-check","literal":true},
+    {"layer":"Container / Leading Icon","property":"fills.0","when":"{{Status=*}}","value":"Theme/Banner/{{Status=*}}/{{Hierarchy=*}}/icon"},
+    {"layer":"Container / Title and Description / Title","property":"fills.0","when":"{{Status=*}}","value":"Theme/Banner/{{Status=*}}/{{Hierarchy=*}}/text"},
+    {"layer":"Container / Title and Description / Description","property":"fills.0","when":"{{Status=*}}","value":"Theme/Banner/{{Status=*}}/{{Hierarchy=*}}/text"},
+    {"layer":"Container / Icon button","property":"visible","when":"{{Status=*}}","value":"true","literal":true},
+    {"layer":"Container / Icon button","property":"visible","when":"{{Action=None, Button, 2 Icon Buttons, Toggle}}","value":"false","literal":true},
+    {"layer":"Container / Icon button","property":"componentProperties.Hierarchy","when":"{{Action=Icon Button}}","value":"Tertiary","literal":true},
+    {"layer":"Container / Icon button","property":"componentProperties.Type","when":"{{Action=Icon Button}}","value":"Default","literal":true},
+    {"layer":"Container / Button","property":"visible","when":"{{Status=*}}","value":"true","literal":true},
+    {"layer":"Container / Button","property":"visible","when":"{{Action=None, Icon Button, 2 Icon Buttons, Toggle}}","value":"false","literal":true},
+    {"layer":"Container / Button","property":"componentProperties.Hierarchy","when":"{{Action=Button}}","value":"Secondary","literal":true},
+    {"layer":"Container / Button","property":"componentProperties.Type","when":"{{Action=Button}}","value":"Default","literal":true},
+    {"layer":"Container / Action","property":"visible","when":"{{Status=*}}","value":"true","literal":true},
+    {"layer":"Container / Action","property":"visible","when":"{{Action=None, Icon Button, Button, 2 Icon Buttons}}","value":"false","literal":true},
+    {"layer":"Container / Action","property":"paddingTop","when":"{{Action=Toggle}}","value":"0","literal":true},
+    {"layer":"Container / Action","property":"paddingBottom","when":"{{Action=Toggle}}","value":"0","literal":true},
+    {"layer":"Container / Action","property":"itemSpacing","when":"{{Action=Toggle}}","value":"0","literal":true},
+    {"layer":"Container / Icon Buttons","property":"visible","when":"{{Status=*}}","value":"true","literal":true},
+    {"layer":"Container / Icon Buttons","property":"visible","when":"{{Action=None, Icon Button, Button, Toggle}}","value":"false","literal":true},
+    {"layer":"Container / Icon Buttons / Icon button","property":"componentProperties.Hierarchy","when":"{{Action=2 Icon Buttons}}","value":"Secondary","literal":true},
+    {"layer":"Container / Icon Buttons / Icon button","property":"componentProperties.Type","when":"{{Action=2 Icon Buttons}}","value":"Default","literal":true},
+    {"layer":"Container / Action / Toggle","property":"visible","when":"{{Status=*}}","value":"false","literal":true},
+    {"layer":"Container / Action / Toggle","property":"visible","when":"{{Action=Toggle}}","value":"true","literal":true},
+    {"layer":"Container / Action / Toggle","property":"componentProperties.Style","when":"{{Action=Toggle}}","value":"Toggle only","literal":true}
+  ]
+}
+]
+}

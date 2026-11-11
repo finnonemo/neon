@@ -8,6 +8,7 @@ import { checkMarkdownLinks } from './lib/markdown-links.mjs';
 import { checkPlainTextReferences, referenceFiles } from './lib/plain-text-references.mjs';
 import { checkAdrNumbers } from './lib/adr-numbers.mjs';
 import { checkMarkdownEncoding, checkSkillMetadata, checkStepReads } from './lib/skill-files.mjs';
+import { checkCoreSnapshot, registryItems, SNAPSHOT_DIR } from './lib/core-snapshot.mjs';
 
 const sourceRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 // Ignored paths are local or generated, so naming them in prose is expected.
@@ -37,7 +38,9 @@ async function check(root, { includeReadme = false } = {}) {
     await checkStepReads(join(root, skill, 'SKILL.md'));
   }
   await checkCodexManifest(root);
-  const files = [...await markdownFiles(join(root, 'skills'))];
+  // The registry does not ship, so only the source tree can say which items the index must cover.
+  await checkCoreSnapshot(join(root, SNAPSHOT_DIR), includeReadme ? { items: await registryItems(root) } : {});
+  const files = [...await markdownFiles(join(root, 'skills')), ...await markdownFiles(join(root, SNAPSHOT_DIR))];
   if (includeReadme) files.push(join(root, 'README.md'));
   for (const file of files) {
     await checkMarkdownEncoding(file);
@@ -62,4 +65,4 @@ await packagePlugin({ sourceRoot, destination });
 await check(destination);
 // Everything in the packaged artifact ships, including theme and starter Markdown.
 for (const file of await markdownFiles(destination)) await checkMarkdownEncoding(file);
-console.log('Skill metadata, Markdown encoding, resource links and ADR numbers pass in source and packaged artifact.');
+console.log('Skill metadata, Markdown encoding, resource links, the Core snapshot and ADR numbers pass in source and packaged artifact.');

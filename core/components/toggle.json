@@ -1,0 +1,145 @@
+{
+"component": "Toggle",
+"sets": [
+{
+  "name": "Toggle",
+  "axes": [
+    {
+      "name": "Style",
+      "values": [
+        "Default",
+        "Toggle only"
+      ]
+    },
+    {
+      "name": "State",
+      "values": [
+        "Enabled",
+        "Pressed",
+        "Disabled",
+        "Read-only",
+        "Skeleton"
+      ]
+    },
+    {
+      "name": "Toggled",
+      "values": [
+        "True",
+        "False"
+      ]
+    }
+  ],
+  "exclude": [],
+  "properties": [
+    {
+      "name": "Title",
+      "type": "BOOLEAN",
+      "default": true
+    },
+    {
+      "name": "Label",
+      "type": "BOOLEAN",
+      "default": true
+    },
+    {
+      "name": "Title Text",
+      "type": "TEXT",
+      "default": "Title"
+    },
+    {
+      "name": "Label Text",
+      "type": "TEXT",
+      "default": "Label"
+    }
+  ],
+  "variables": {
+    "Toggle/Track/True/Layout horizontal": "Fixed",
+    "Toggle/Track/True/Layout vertical": "Hug contents",
+    "Toggle/Track/True/Layout width": 64,
+    "Toggle/Track/True/Gap horizontal": 8,
+    "Toggle/Track/True/Padding left": 2,
+    "Toggle/Track/True/Padding right": 2,
+    "Toggle/Track/True/Padding top": 2,
+    "Toggle/Track/True/Padding bottom": 2,
+    "Toggle/Track/True/Radius": 200,
+    "Toggle/Track/True/Stroke weight": 1,
+    "Toggle/Thumb/True/Layout horizontal": "Fixed",
+    "Toggle/Thumb/True/Layout vertical": "Fixed",
+    "Toggle/Thumb/True/Layout width": 38,
+    "Toggle/Thumb/True/Layout height": 24,
+    "Toggle/Thumb/True/Radius": 200,
+    "Toggle/Track/False/Layout horizontal": "Fixed",
+    "Toggle/Track/False/Layout vertical": "Hug contents",
+    "Toggle/Track/False/Layout width": 48,
+    "Toggle/Track/False/Gap horizontal": 8,
+    "Toggle/Track/False/Padding left": 3,
+    "Toggle/Track/False/Padding right": 3,
+    "Toggle/Track/False/Padding top": 3,
+    "Toggle/Track/False/Padding bottom": 3,
+    "Toggle/Track/False/Radius": 200,
+    "Toggle/Track/False/Stroke weight": 1,
+    "Toggle/Thumb/False/Layout horizontal": "Fixed",
+    "Toggle/Thumb/False/Layout vertical": "Fixed",
+    "Toggle/Thumb/False/Layout width": 18,
+    "Toggle/Thumb/False/Layout height": 18,
+    "Toggle/Thumb/False/Radius": 200,
+    "Toggle/Label/Title/Type token": "$headline",
+    "Toggle/Label/Title/Type emphasis": "Regular",
+    "Toggle/Label/Title/Align horizontal": "Left",
+    "Toggle/Label/Title/Align vertical": "Top",
+    "Toggle/Label/Title/Decoration": "-",
+    "Toggle/Label/Value/Type token": "$subhead",
+    "Toggle/Label/Value/Type emphasis": "Strong",
+    "Toggle/Label/Value/Align horizontal": "Left",
+    "Toggle/Label/Value/Align vertical": "Top",
+    "Toggle/Label/Value/Decoration": "-"
+  },
+  "bindings": [
+    {"layer":"(root)","property":"minWidth","when":"{{Style=*}}","value":"Components/Interactive/Medium/Interactive min-height"},
+    {"layer":"(root)","property":"minHeight","when":"{{Style=*}}","value":"Components/Interactive/Medium/Interactive min-height"},
+    {"layer":"(root)","property":"primaryAxisAlignItems","when":"{{Style=*}}","value":"CENTER","literal":true},
+    {"layer":"(root)","property":"counterAxisAlignItems","when":"{{Style=*}}","value":"CENTER","literal":true},
+    {"layer":"Container / Title","property":"textStyleId","when":"{{Style=Default}}{{State=Enabled, Pressed, Disabled, Read-only}}","value":"Headings/Headline"},
+    {"layer":"Container / Title","property":"fills.0","when":"{{Style=Default}}{{State=Enabled, Pressed, Disabled, Read-only}}","value":"Theme/Text/text-secondary"},
+    {"layer":"Container / Title","property":"fills.0","when":"{{Style=Default}}{{State=Disabled}}","value":"Theme/Text/text-disabled"},
+    {"layer":"Container / Toggle + Value / Detail","property":"textStyleId","when":"{{Style=Default}}{{State=Enabled, Pressed, Disabled, Read-only}}","value":"Body/Subheadline"},
+    {"layer":"Container / Toggle + Value / Detail","property":"fills.0","when":"{{Style=Default}}{{State=Enabled, Pressed, Disabled, Read-only}}","value":"Theme/Text/text-primary"},
+    {"layer":"Container / Toggle + Value / Detail","property":"fills.0","when":"{{Style=Default}}{{State=Disabled}}","value":"Theme/Text/text-disabled"},
+    {"layer":"Container / Toggle + Value / _Toggle Item","property":"componentProperties.State","when":"{{Style=Default}}{{State=Enabled, Pressed, Disabled, Read-only}}","value":"Enabled"},
+    {"layer":"Container / Toggle + Value / _Toggle Item","property":"componentProperties.State","when":"{{Style=Default}}{{State=Read-only}}","value":"Read-only"},
+    {"layer":"Container / Toggle + Value / _Toggle Item / Container","property":"primaryAxisAlignItems","when":"{{Style=Default}}{{State=Enabled, Pressed, Disabled, Read-only}}{{Toggled=False}}","value":"MIN","literal":true},
+    {"layer":"Container / Toggle + Value / _Toggle Item / Container","property":"primaryAxisAlignItems","when":"{{Style=Default}}{{State=Enabled, Pressed, Disabled, Read-only}}{{Toggled=True}}","value":"MAX","literal":true},
+    {"layer":"Container / Toggle + Value / _Toggle Item / Container","property":"fills.0","when":"{{Style=Default}}{{State=Enabled, Pressed}}{{Toggled=False}}","value":"Theme/Miscellaneous/toggle-off"},
+    {"layer":"Container / Toggle + Value / _Toggle Item / Container","property":"fills.0","when":"{{Style=Default}}{{State=Enabled, Pressed}}{{Toggled=True}}","value":"Theme/Support/support-success"},
+    {"layer":"Container / Toggle + Value / _Toggle Item / Container","property":"fills.0","when":"{{Style=Default}}{{State=Disabled}}","value":"Theme/Button/button-disabled"},
+    {"layer":"Container / Toggle + Value / _Toggle Item / Container","property":"strokes.0","when":"{{Style=Default}}{{State=Read-only}}","value":"Theme/Border/border-subtle"},
+    {"layer":"Container / Toggle + Value / _Toggle Item / Container / _Toggle Switch","property":"componentProperties.Disabled","when":"{{Style=Default}}{{State=Enabled, Pressed, Disabled, Read-only}}","value":"False"},
+    {"layer":"Container / Toggle + Value / _Toggle Item / Container / _Toggle Switch","property":"componentProperties.Disabled","when":"{{Style=Default}}{{State=Disabled}}","value":"True"},
+    {"layer":"Container / Toggle + Value / _Toggle Item / Container / _Toggle Switch","property":"width","when":"{{Style=Default}}{{State=Disabled}}","value":"Components/Toggle/Thumb/{{iOS=*}}/Layout width"},
+    {"layer":"Container / Toggle + Value / _Toggle Item / Container / _Toggle Switch","property":"height","when":"{{Style=Default}}{{State=Disabled}}","value":"Components/Toggle/Thumb/{{iOS=*}}/Layout height"},
+    {"layer":"Container / Toggle + Value / _Toggle Item / Container / _Toggle Switch","property":"cornerRadius","when":"{{Style=Default}}{{State=Disabled}}","value":"Components/Toggle/Thumb/{{iOS=*}}/Radius"},
+    {"layer":"Container / Toggle + Value / _Toggle Item / Container / _Toggle Switch","property":"fills.0","when":"{{Style=Default}}{{State=Enabled, Pressed}}","value":"Theme/Icon/icon-on-color"},
+    {"layer":"Container / Toggle + Value / _Toggle Item / Container / _Toggle Switch","property":"fills.0","when":"{{Style=Default}}{{State=Disabled}}","value":"Theme/Icon/icon-on-color-disabled"},
+    {"layer":"Container / Toggle + Value / _Toggle Item / Container / _Toggle Switch","property":"fills.0","when":"{{Style=Default}}{{State=Read-only}}","value":"Theme/Icon/icon-primary"},
+    {"layer":"Container / _Toggle Item","property":"componentProperties.State","when":"{{Style=Toggle only}}{{State=Enabled, Pressed, Disabled, Read-only}}","value":"Enabled"},
+    {"layer":"Container / _Toggle Item","property":"componentProperties.State","when":"{{Style=Toggle only}}{{State=Read-only}}","value":"Read-only"},
+    {"layer":"Container / _Toggle Item / Container","property":"primaryAxisAlignItems","when":"{{Style=Toggle only}}{{State=Enabled, Pressed, Disabled, Read-only}}{{Toggled=False}}","value":"MIN","literal":true},
+    {"layer":"Container / _Toggle Item / Container","property":"primaryAxisAlignItems","when":"{{Style=Toggle only}}{{State=Enabled, Pressed, Disabled, Read-only}}{{Toggled=True}}","value":"MAX","literal":true},
+    {"layer":"Container / _Toggle Item / Container","property":"fills.0","when":"{{Style=Toggle only}}{{State=Enabled, Pressed}}{{Toggled=False}}","value":"Theme/Miscellaneous/toggle-off"},
+    {"layer":"Container / _Toggle Item / Container","property":"fills.0","when":"{{Style=Toggle only}}{{State=Enabled, Pressed}}{{Toggled=True}}","value":"Theme/Support/support-success"},
+    {"layer":"Container / _Toggle Item / Container","property":"fills.0","when":"{{Style=Toggle only}}{{State=Disabled}}","value":"Theme/Button/button-disabled"},
+    {"layer":"Container / _Toggle Item / Container","property":"strokes.0","when":"{{Style=Toggle only}}{{State=Read-only}}","value":"Theme/Border/border-subtle"},
+    {"layer":"Container / _Toggle Item / Container / _Toggle Switch","property":"componentProperties.Disabled","when":"{{Style=Toggle only}}{{State=Enabled, Pressed, Disabled, Read-only}}","value":"False"},
+    {"layer":"Container / _Toggle Item / Container / _Toggle Switch","property":"componentProperties.Disabled","when":"{{Style=Toggle only}}{{State=Disabled}}","value":"True"},
+    {"layer":"Container / _Toggle Item / Container / _Toggle Switch","property":"width","when":"{{Style=Toggle only}}{{State=Disabled}}","value":"Components/Toggle/Thumb/{{iOS=*}}/Layout width"},
+    {"layer":"Container / _Toggle Item / Container / _Toggle Switch","property":"height","when":"{{Style=Toggle only}}{{State=Disabled}}","value":"Components/Toggle/Thumb/{{iOS=*}}/Layout height"},
+    {"layer":"Container / _Toggle Item / Container / _Toggle Switch","property":"cornerRadius","when":"{{Style=Toggle only}}{{State=Disabled}}","value":"Components/Toggle/Thumb/{{iOS=*}}/Radius"},
+    {"layer":"Container / _Toggle Item / Container / _Toggle Switch","property":"fills.0","when":"{{Style=Toggle only}}{{State=Enabled, Pressed}}","value":"Theme/Icon/icon-on-color"},
+    {"layer":"Container / _Toggle Item / Container / _Toggle Switch","property":"fills.0","when":"{{Style=Toggle only}}{{State=Disabled}}","value":"Theme/Icon/icon-on-color-disabled"},
+    {"layer":"Container / _Toggle Item / Container / _Toggle Switch","property":"fills.0","when":"{{Style=Toggle only}}{{State=Read-only}}","value":"Theme/Icon/icon-primary"},
+    {"layer":"Container / _Toggle Skeleton Item / _Toggle Switch","property":"fills.0","when":"{{State=Skeleton}}","value":"Theme/Skeleton/skeleton-element"},
+    {"layer":"Container / _Toggle Skeleton Item / Skeleton","property":"fills.0","when":"{{State=Skeleton}}","value":"Theme/Skeleton/skeleton-element"}
+  ]
+}
+]
+}

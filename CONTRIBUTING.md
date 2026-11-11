@@ -29,6 +29,14 @@ node theme/scripts/generate-breakpoints-config.mjs
 
 Review the resulting diff and unresolved-token report. Color mapping is hand-maintained; the CSS adapter must be updated separately using the method in its header. Do not automatically replace missing mappings with guesses. Before naming the Neon registry items a token change affects, list them with `node scripts/registry-consumers.mjs <token>`.
 
+The Core snapshot in `core/` is compiled, never edited: a rule or value changes in Core, and which Core doc an item matches changes in `registry/core-counterparts.json`. Then re-sync from a Core checkout whose docs are committed:
+
+```sh
+node scripts/sync-core.mjs --from <Core checkout>
+```
+
+The sync fails when a registry item has no entry in the Counterpart table, when an entry names a Core doc that is a draft, deprecated or missing, and when a spec aliases a Scale step Core states no number for. `validate` fails when a file under `core/` differs from what the sync recorded. Review the snapshot's diff as Core's change, and say in the pull request which Core commit it moved to.
+
 The registry's built items in `registry/r/` carry a copy of every file they install, the CSS adapter included. After changing `registry/` or a file an item copies, rebuild them with `node scripts/build-registry.mjs`; `validate` fails on a stale build.
 
 For registry, template or theme changes, run `node scripts/smoke-new-app.mjs`. It builds the registry, serves it locally, creates an app with the New install mode, adds an item and a Theme Brief with Add, and builds the app, once outside any repository and once under `.local/smoke/`. Then inspect the affected UI; `node scripts/preview-app.mjs <app dir>` serves a build and prints `Ready: <url>` only once it answers. Check relevant light/dark modes, narrow/wide layouts, Thai/English labels, keyboard interactions and task states. Record actual evidence, including blocked checks.

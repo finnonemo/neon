@@ -1,0 +1,454 @@
+{
+"component": "Pagination",
+"sets": [
+{
+  "name": "Pagination",
+  "axes": [
+    {
+      "name": "Type",
+      "values": [
+        "Numbered",
+        "Overflow"
+      ]
+    },
+    {
+      "name": "Size",
+      "values": [
+        "Medium",
+        "Small"
+      ]
+    },
+    {
+      "name": "State",
+      "values": [
+        "Default",
+        "Skeleton"
+      ]
+    }
+  ],
+  "exclude": [],
+  "properties": [
+    {
+      "name": "Show Previous",
+      "type": "BOOLEAN",
+      "default": true
+    },
+    {
+      "name": "Pages",
+      "type": "SLOT"
+    },
+    {
+      "name": "Dividers",
+      "type": "BOOLEAN",
+      "default": true
+    },
+    {
+      "name": "Rows label",
+      "type": "TEXT",
+      "default": "Rows per page:"
+    },
+    {
+      "name": "Range",
+      "type": "TEXT",
+      "default": "1–10 of 100 items"
+    },
+    {
+      "name": "Total pages",
+      "type": "TEXT",
+      "default": "of 10 pages"
+    }
+  ],
+  "variables": {
+    "Pagination/Container/Medium/Layout horizontal": "Fill container",
+    "Pagination/Container/Medium/Layout vertical": "Hug contents",
+    "Pagination/Container/Medium/Layout min-height": 56,
+    "Pagination/Container/Medium/Padding left": 16,
+    "Pagination/Container/Medium/Padding right": 16,
+    "Pagination/Container/Medium/Gap horizontal": 16,
+    "Pagination/Label/Medium/Type token": "Body/Callout",
+    "Pagination/Label/Medium/Type emphasis": "Regular",
+    "Pagination/Label/Medium/Align horizontal": "Left",
+    "Pagination/Label/Medium/Align vertical": "Center",
+    "Pagination/Label/Medium/Decoration": "-",
+    "Pagination/Container/Small/Layout horizontal": "Fill container",
+    "Pagination/Container/Small/Layout vertical": "Hug contents",
+    "Pagination/Container/Small/Layout min-height": 48,
+    "Pagination/Container/Small/Padding left": 16,
+    "Pagination/Container/Small/Padding right": 16,
+    "Pagination/Container/Small/Gap horizontal": 8,
+    "Pagination/Label/Small/Type token": "Body/Subheadline",
+    "Pagination/Label/Small/Type emphasis": "Regular",
+    "Pagination/Label/Small/Align horizontal": "Left",
+    "Pagination/Label/Small/Align vertical": "Center",
+    "Pagination/Label/Small/Decoration": "-"
+  },
+  "bindings": [
+    {"layer":"(root)","property":"minHeight","when":"{{Size=*}}","value":"Components/Pagination/Container/{{Size=*}}/Layout min-height"},
+    {"layer":"Container","property":"layoutSizingHorizontal","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"FILL","literal":true},
+    {"layer":"Container","property":"layoutSizingVertical","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"HUG","literal":true},
+    {"layer":"Container","property":"minHeight","when":"{{Size=*}}","value":"Components/Pagination/Container/{{Size=*}}/Layout min-height"},
+    {"layer":"Container","property":"paddingLeft","when":"{{Size=*}}","value":"Components/Pagination/Container/{{Size=*}}/Padding left"},
+    {"layer":"Container","property":"paddingRight","when":"{{Size=*}}","value":"Components/Pagination/Container/{{Size=*}}/Padding right"},
+    {"layer":"Container","property":"itemSpacing","when":"{{Size=*}}","value":"Components/Pagination/Container/{{Size=*}}/Gap horizontal"},
+    {"layer":"Container","property":"primaryAxisAlignItems","when":"{{Type=Numbered}}","value":"CENTER","literal":true},
+    {"layer":"Container","property":"primaryAxisAlignItems","when":"{{Type=Overflow}}","value":"SPACE_BETWEEN","literal":true},
+    {"layer":"Container","property":"counterAxisAlignItems","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"CENTER","literal":true},
+    {"layer":"Container","property":"fills.0","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Theme/Layer/layer-01"},
+    {"layer":"Container","property":"strokes.0","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Theme/Border/border-subtle"},
+    {"layer":"Container / Previous","property":"visible","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Previous","property":"visible","when":"{{Type=Numbered}}{{State=Default}}","value":"true","literal":true},
+    {"layer":"Container / Previous","property":"componentProperties.Hierarchy","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Tertiary","literal":true},
+    {"layer":"Container / Previous","property":"componentProperties.Type","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Default","literal":true},
+    {"layer":"Container / Previous","property":"componentProperties.Size","when":"{{Size=Medium}}","value":"Medium","literal":true},
+    {"layer":"Container / Previous","property":"componentProperties.Size","when":"{{Size=Small}}","value":"Small","literal":true},
+    {"layer":"Container / Previous","property":"componentProperties.State","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Enabled","literal":true},
+    {"layer":"Container / Pages","property":"visible","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Pages","property":"visible","when":"{{Type=Numbered}}{{State=Default}}","value":"true","literal":true},
+    {"layer":"Container / Pages / Item 1","property":"componentProperties.Size","when":"{{Size=Medium}}","value":"Medium","literal":true},
+    {"layer":"Container / Pages / Item 1","property":"componentProperties.Size","when":"{{Size=Small}}","value":"Small","literal":true},
+    {"layer":"Container / Pages / Item 2","property":"componentProperties.Size","when":"{{Size=Medium}}","value":"Medium","literal":true},
+    {"layer":"Container / Pages / Item 2","property":"componentProperties.Size","when":"{{Size=Small}}","value":"Small","literal":true},
+    {"layer":"Container / Pages / Item 3","property":"componentProperties.Size","when":"{{Size=Medium}}","value":"Medium","literal":true},
+    {"layer":"Container / Pages / Item 3","property":"componentProperties.Size","when":"{{Size=Small}}","value":"Small","literal":true},
+    {"layer":"Container / Pages / Item 4","property":"componentProperties.Size","when":"{{Size=Medium}}","value":"Medium","literal":true},
+    {"layer":"Container / Pages / Item 4","property":"componentProperties.Size","when":"{{Size=Small}}","value":"Small","literal":true},
+    {"layer":"Container / Pages / Item 5","property":"componentProperties.Size","when":"{{Size=Medium}}","value":"Medium","literal":true},
+    {"layer":"Container / Pages / Item 5","property":"componentProperties.Size","when":"{{Size=Small}}","value":"Small","literal":true},
+    {"layer":"Container / Pages / Item 6","property":"componentProperties.Size","when":"{{Size=Medium}}","value":"Medium","literal":true},
+    {"layer":"Container / Pages / Item 6","property":"componentProperties.Size","when":"{{Size=Small}}","value":"Small","literal":true},
+    {"layer":"Container / Pages / Item 7","property":"componentProperties.Size","when":"{{Size=Medium}}","value":"Medium","literal":true},
+    {"layer":"Container / Pages / Item 7","property":"componentProperties.Size","when":"{{Size=Small}}","value":"Small","literal":true},
+    {"layer":"Container / Next","property":"visible","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Next","property":"visible","when":"{{Type=Numbered}}{{State=Default}}","value":"true","literal":true},
+    {"layer":"Container / Next","property":"componentProperties.Hierarchy","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Tertiary","literal":true},
+    {"layer":"Container / Next","property":"componentProperties.Type","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Default","literal":true},
+    {"layer":"Container / Next","property":"componentProperties.Size","when":"{{Size=Medium}}","value":"Medium","literal":true},
+    {"layer":"Container / Next","property":"componentProperties.Size","when":"{{Size=Small}}","value":"Small","literal":true},
+    {"layer":"Container / Next","property":"componentProperties.State","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Enabled","literal":true},
+    {"layer":"Container / Rows per page","property":"visible","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Rows per page","property":"visible","when":"{{Type=Overflow}}{{State=Default}}","value":"true","literal":true},
+    {"layer":"Container / Rows per page / Rows label","property":"visible","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Rows per page / Rows label","property":"visible","when":"{{Type=Overflow}}{{State=Default}}","value":"true","literal":true},
+    {"layer":"Container / Rows per page / Rows label","property":"textStyleId","when":"{{Size=Medium}}","value":"Body/Callout"},
+    {"layer":"Container / Rows per page / Rows label","property":"textStyleId","when":"{{Size=Small}}","value":"Body/Subheadline"},
+    {"layer":"Container / Rows per page / Rows label","property":"fills.0","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Theme/Text/text-primary"},
+    {"layer":"Container / Rows per page / Rows label","property":"textAutoResize","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"WIDTH_AND_HEIGHT","literal":true},
+    {"layer":"Container / Rows per page / Rows select","property":"visible","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Rows per page / Rows select","property":"visible","when":"{{Type=Overflow}}{{State=Default}}","value":"true","literal":true},
+    {"layer":"Container / Rows per page / Rows select","property":"componentProperties.State","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Enabled","literal":true},
+    {"layer":"Container / Rows per page / Rows select","property":"componentProperties.Size","when":"{{Size=Medium}}","value":"Medium","literal":true},
+    {"layer":"Container / Rows per page / Rows select","property":"componentProperties.Size","when":"{{Size=Small}}","value":"Small","literal":true},
+    {"layer":"Container / Rows per page / Rows select","property":"componentProperties.Show Title","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Rows per page / Rows select","property":"componentProperties.Show Detail","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Divider 1","property":"visible","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Divider 1","property":"visible","when":"{{Type=Overflow}}{{State=Default}}","value":"true","literal":true},
+    {"layer":"Container / Divider 1","property":"fills.0","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Theme/Border/border-subtle"},
+    {"layer":"Container / Divider 2","property":"visible","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Divider 2","property":"visible","when":"{{Type=Overflow}}{{State=Default}}","value":"true","literal":true},
+    {"layer":"Container / Divider 2","property":"fills.0","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Theme/Border/border-subtle"},
+    {"layer":"Container / Divider 3","property":"visible","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Divider 3","property":"visible","when":"{{Type=Overflow}}{{State=Default}}","value":"true","literal":true},
+    {"layer":"Container / Divider 3","property":"fills.0","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Theme/Border/border-subtle"},
+    {"layer":"Container / Range","property":"visible","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Range","property":"visible","when":"{{Type=Overflow}}{{State=Default}}","value":"true","literal":true},
+    {"layer":"Container / Range","property":"textStyleId","when":"{{Size=Medium}}","value":"Body/Callout"},
+    {"layer":"Container / Range","property":"textStyleId","when":"{{Size=Small}}","value":"Body/Subheadline"},
+    {"layer":"Container / Range","property":"fills.0","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Theme/Text/text-secondary"},
+    {"layer":"Container / Range","property":"textAutoResize","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"WIDTH_AND_HEIGHT","literal":true},
+    {"layer":"Container / Page","property":"visible","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Page","property":"visible","when":"{{Type=Overflow}}{{State=Default}}","value":"true","literal":true},
+    {"layer":"Container / Page / Page select","property":"visible","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Page / Page select","property":"visible","when":"{{Type=Overflow}}{{State=Default}}","value":"true","literal":true},
+    {"layer":"Container / Page / Page select","property":"componentProperties.State","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Enabled","literal":true},
+    {"layer":"Container / Page / Page select","property":"componentProperties.Size","when":"{{Size=Medium}}","value":"Medium","literal":true},
+    {"layer":"Container / Page / Page select","property":"componentProperties.Size","when":"{{Size=Small}}","value":"Small","literal":true},
+    {"layer":"Container / Page / Page select","property":"componentProperties.Show Title","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Page / Page select","property":"componentProperties.Show Detail","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Page / Total pages","property":"visible","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Page / Total pages","property":"visible","when":"{{Type=Overflow}}{{State=Default}}","value":"true","literal":true},
+    {"layer":"Container / Page / Total pages","property":"textStyleId","when":"{{Size=Medium}}","value":"Body/Callout"},
+    {"layer":"Container / Page / Total pages","property":"textStyleId","when":"{{Size=Small}}","value":"Body/Subheadline"},
+    {"layer":"Container / Page / Total pages","property":"fills.0","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Theme/Text/text-primary"},
+    {"layer":"Container / Page / Total pages","property":"textAutoResize","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"WIDTH_AND_HEIGHT","literal":true},
+    {"layer":"Container / Nav","property":"visible","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Nav","property":"visible","when":"{{Type=Overflow}}{{State=Default}}","value":"true","literal":true},
+    {"layer":"Container / Nav / Previous button","property":"visible","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Nav / Previous button","property":"visible","when":"{{Type=Overflow}}{{State=Default}}","value":"true","literal":true},
+    {"layer":"Container / Nav / Previous button","property":"componentProperties.Hierarchy","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Tertiary","literal":true},
+    {"layer":"Container / Nav / Previous button","property":"componentProperties.Type","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Default","literal":true},
+    {"layer":"Container / Nav / Previous button","property":"componentProperties.Size","when":"{{Size=Medium}}","value":"Medium","literal":true},
+    {"layer":"Container / Nav / Previous button","property":"componentProperties.Size","when":"{{Size=Small}}","value":"Small","literal":true},
+    {"layer":"Container / Nav / Previous button","property":"componentProperties.State","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Enabled","literal":true},
+    {"layer":"Container / Nav / Previous button","property":"componentProperties.Leading Icon","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Nav / Previous button","property":"componentProperties.Trailing Icon","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Nav / Next button","property":"visible","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Nav / Next button","property":"visible","when":"{{Type=Overflow}}{{State=Default}}","value":"true","literal":true},
+    {"layer":"Container / Nav / Next button","property":"componentProperties.Hierarchy","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Tertiary","literal":true},
+    {"layer":"Container / Nav / Next button","property":"componentProperties.Type","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Default","literal":true},
+    {"layer":"Container / Nav / Next button","property":"componentProperties.Size","when":"{{Size=Medium}}","value":"Medium","literal":true},
+    {"layer":"Container / Nav / Next button","property":"componentProperties.Size","when":"{{Size=Small}}","value":"Small","literal":true},
+    {"layer":"Container / Nav / Next button","property":"componentProperties.State","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Enabled","literal":true},
+    {"layer":"Container / Nav / Next button","property":"componentProperties.Leading Icon","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Nav / Next button","property":"componentProperties.Trailing Icon","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Skeleton","property":"visible","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Skeleton","property":"visible","when":"{{State=Skeleton}}","value":"true","literal":true},
+    {"layer":"Container / Skeleton / Bar start","property":"fills.0","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Theme/Skeleton/skeleton-background"},
+    {"layer":"Container / Skeleton / Bar middle","property":"fills.0","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Theme/Skeleton/skeleton-background"},
+    {"layer":"Container / Skeleton / Bar end","property":"fills.0","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Theme/Skeleton/skeleton-background"}
+  ]
+},
+{
+  "name": "_Pagination item",
+  "axes": [
+    {
+      "name": "Kind",
+      "values": [
+        "Page",
+        "Ellipsis"
+      ]
+    },
+    {
+      "name": "Selected",
+      "values": [
+        "False",
+        "True"
+      ]
+    },
+    {
+      "name": "State",
+      "values": [
+        "Enabled",
+        "Hover",
+        "Pressed",
+        "Focus",
+        "Disabled"
+      ]
+    },
+    {
+      "name": "Size",
+      "values": [
+        "Medium",
+        "Small"
+      ]
+    }
+  ],
+  "exclude": [
+    "{{Kind=Ellipsis}}{{Selected=True}}"
+  ],
+  "properties": [
+    {
+      "name": "Label",
+      "type": "TEXT",
+      "default": "1"
+    }
+  ],
+  "variables": {
+    "Pagination item/Container/Medium/Layout horizontal": "Hug contents",
+    "Pagination item/Container/Medium/Layout vertical": "Hug contents",
+    "Pagination item/Container/Medium/Layout min-width": 36,
+    "Pagination item/Container/Medium/Layout min-height": 36,
+    "Pagination item/Container/Medium/Padding left": 0,
+    "Pagination item/Container/Medium/Padding right": 0,
+    "Pagination item/Container/Medium/Padding top": 0,
+    "Pagination item/Container/Medium/Padding bottom": 0,
+    "Pagination item/Container/Medium/Radius": 8,
+    "Pagination item/Container/Medium/Stroke weight": 2,
+    "Pagination item/Label/Medium/Type token": "Body/Callout",
+    "Pagination item/Label/Medium/Type emphasis": "Regular",
+    "Pagination item/Label/Medium/Align horizontal": "Center",
+    "Pagination item/Label/Medium/Align vertical": "Center",
+    "Pagination item/Label/Medium/Decoration": "-",
+    "Pagination item/Icon/Medium/Type token": "fa-sharp fa-solid/Medium",
+    "Pagination item/Container/Small/Layout horizontal": "Hug contents",
+    "Pagination item/Container/Small/Layout vertical": "Hug contents",
+    "Pagination item/Container/Small/Layout min-width": 36,
+    "Pagination item/Container/Small/Layout min-height": 36,
+    "Pagination item/Container/Small/Padding left": 0,
+    "Pagination item/Container/Small/Padding right": 0,
+    "Pagination item/Container/Small/Padding top": 0,
+    "Pagination item/Container/Small/Padding bottom": 0,
+    "Pagination item/Container/Small/Radius": 8,
+    "Pagination item/Container/Small/Stroke weight": 2,
+    "Pagination item/Label/Small/Type token": "Body/Subheadline",
+    "Pagination item/Label/Small/Type emphasis": "Regular",
+    "Pagination item/Label/Small/Align horizontal": "Center",
+    "Pagination item/Label/Small/Align vertical": "Center",
+    "Pagination item/Label/Small/Decoration": "-",
+    "Pagination item/Icon/Small/Type token": "fa-sharp fa-solid/Small"
+  },
+  "bindings": [
+    {"layer":"(root)","property":"minWidth","when":"{{Size=*}}","value":"Components/Interactive/{{Size=*}}/Interactive min-height"},
+    {"layer":"(root)","property":"minHeight","when":"{{Size=*}}","value":"Components/Interactive/{{Size=*}}/Interactive min-height"},
+    {"layer":"(root)","property":"primaryAxisAlignItems","when":"{{Kind=*}}{{Selected=*}}{{State=*}}{{Size=*}}","value":"CENTER","literal":true},
+    {"layer":"(root)","property":"counterAxisAlignItems","when":"{{Kind=*}}{{Selected=*}}{{State=*}}{{Size=*}}","value":"CENTER","literal":true},
+    {"layer":"Container","property":"layoutSizingHorizontal","when":"{{Kind=*}}{{Selected=*}}{{State=*}}{{Size=*}}","value":"HUG","literal":true},
+    {"layer":"Container","property":"layoutSizingVertical","when":"{{Kind=*}}{{Selected=*}}{{State=*}}{{Size=*}}","value":"HUG","literal":true},
+    {"layer":"Container","property":"minWidth","when":"{{Size=*}}","value":"Components/Pagination item/Container/{{Size=*}}/Layout min-width"},
+    {"layer":"Container","property":"minHeight","when":"{{Size=*}}","value":"Components/Pagination item/Container/{{Size=*}}/Layout min-height"},
+    {"layer":"Container","property":"paddingLeft","when":"{{Size=*}}","value":"Components/Pagination item/Container/{{Size=*}}/Padding left"},
+    {"layer":"Container","property":"paddingRight","when":"{{Size=*}}","value":"Components/Pagination item/Container/{{Size=*}}/Padding right"},
+    {"layer":"Container","property":"paddingTop","when":"{{Size=*}}","value":"Components/Pagination item/Container/{{Size=*}}/Padding top"},
+    {"layer":"Container","property":"paddingBottom","when":"{{Size=*}}","value":"Components/Pagination item/Container/{{Size=*}}/Padding bottom"},
+    {"layer":"Container","property":"cornerRadius","when":"{{Size=*}}","value":"Components/Pagination item/Container/{{Size=*}}/Radius"},
+    {"layer":"Container","property":"strokeWeight","when":"{{State=Focus}}{{Size=*}}","value":"Components/Pagination item/Container/{{Size=*}}/Stroke weight"},
+    {"layer":"Container","property":"fills.0","when":"{{Selected=False}}{{State=Enabled, Focus, Disabled}}","value":"Theme/Transparent"},
+    {"layer":"Container","property":"fills.0","when":"{{Selected=False}}{{State=Hover}}","value":"Theme/Layer/layer-hover-01"},
+    {"layer":"Container","property":"fills.0","when":"{{Selected=False}}{{State=Pressed}}","value":"Theme/Layer/layer-active-01"},
+    {"layer":"Container","property":"fills.0","when":"{{Selected=True}}{{State=Enabled, Hover, Pressed, Focus}}","value":"Theme/Background/background-inverse"},
+    {"layer":"Container","property":"fills.0","when":"{{Selected=True}}{{State=Disabled}}","value":"Theme/Layer/layer-active-01"},
+    {"layer":"Container","property":"strokes.0","when":"{{State=!Focus}}","value":"none","literal":true},
+    {"layer":"Container","property":"strokes.0","when":"{{State=Focus}}","value":"Theme/Focus/focus"},
+    {"layer":"Container / Label","property":"visible","when":"{{Kind=*}}{{Selected=*}}{{State=*}}{{Size=*}}","value":"false","literal":true},
+    {"layer":"Container / Label","property":"visible","when":"{{Kind=Page}}","value":"true","literal":true},
+    {"layer":"Container / Label","property":"textStyleId","when":"{{Size=Medium}}","value":"Body/Callout"},
+    {"layer":"Container / Label","property":"textStyleId","when":"{{Size=Small}}","value":"Body/Subheadline"},
+    {"layer":"Container / Label","property":"explicitMode.Type Emphasis","when":"{{Kind=*}}{{Selected=*}}{{State=*}}{{Size=*}}","value":"none","literal":true},
+    {"layer":"Container / Label","property":"explicitMode.Type Emphasis","when":"{{Selected=True}}","value":"Strong","literal":true},
+    {"layer":"Container / Label","property":"fills.0","when":"{{Selected=False}}{{State=!Disabled}}","value":"Theme/Text/text-primary"},
+    {"layer":"Container / Label","property":"fills.0","when":"{{Selected=True}}{{State=!Disabled}}","value":"Theme/Text/text-inverse"},
+    {"layer":"Container / Label","property":"fills.0","when":"{{State=Disabled}}","value":"Theme/Text/text-disabled"},
+    {"layer":"Container / Label","property":"textAutoResize","when":"{{Kind=*}}{{Selected=*}}{{State=*}}{{Size=*}}","value":"WIDTH_AND_HEIGHT","literal":true},
+    {"layer":"Container / Icon","property":"visible","when":"{{Kind=*}}{{Selected=*}}{{State=*}}{{Size=*}}","value":"false","literal":true},
+    {"layer":"Container / Icon","property":"visible","when":"{{Kind=Ellipsis}}","value":"true","literal":true},
+    {"layer":"Container / Icon","property":"characters","when":"{{Kind=*}}{{Selected=*}}{{State=*}}{{Size=*}}","value":"ellipsis","literal":true},
+    {"layer":"Container / Icon","property":"textStyleId","when":"{{Size=Medium}}","value":"fa-sharp fa-solid/Medium"},
+    {"layer":"Container / Icon","property":"textStyleId","when":"{{Size=Small}}","value":"fa-sharp fa-solid/Small"},
+    {"layer":"Container / Icon","property":"fills.0","when":"{{Selected=False}}{{State=!Disabled}}","value":"Theme/Text/text-primary"},
+    {"layer":"Container / Icon","property":"fills.0","when":"{{Selected=True}}{{State=!Disabled}}","value":"Theme/Text/text-inverse"},
+    {"layer":"Container / Icon","property":"fills.0","when":"{{State=Disabled}}","value":"Theme/Text/text-disabled"},
+    {"layer":"Container / Icon","property":"textAutoResize","when":"{{Kind=*}}{{Selected=*}}{{State=*}}{{Size=*}}","value":"WIDTH_AND_HEIGHT","literal":true}
+  ]
+},
+{
+  "name": "Table toolbar",
+  "axes": [
+    {
+      "name": "Type",
+      "values": [
+        "Default",
+        "Batch actions"
+      ]
+    },
+    {
+      "name": "Size",
+      "values": [
+        "Medium",
+        "Small"
+      ]
+    },
+    {
+      "name": "State",
+      "values": [
+        "Default",
+        "Skeleton"
+      ]
+    }
+  ],
+  "exclude": [],
+  "properties": [
+    {
+      "name": "Show Search",
+      "type": "BOOLEAN",
+      "default": true
+    },
+    {
+      "name": "Actions",
+      "type": "SLOT"
+    },
+    {
+      "name": "Show Primary action",
+      "type": "BOOLEAN",
+      "default": true
+    },
+    {
+      "name": "Count",
+      "type": "TEXT",
+      "default": "1 item selected"
+    },
+    {
+      "name": "Batch actions",
+      "type": "SLOT"
+    }
+  ],
+  "variables": {
+    "Table toolbar/Container/Medium/Layout horizontal": "Fill container",
+    "Table toolbar/Container/Medium/Layout vertical": "Hug contents",
+    "Table toolbar/Container/Medium/Layout min-height": 56,
+    "Table toolbar/Container/Medium/Padding left": 16,
+    "Table toolbar/Container/Medium/Padding right": 16,
+    "Table toolbar/Container/Medium/Gap horizontal": 8,
+    "Table toolbar/Label/Medium/Type token": "Body/Callout",
+    "Table toolbar/Label/Medium/Type emphasis": "Regular",
+    "Table toolbar/Label/Medium/Align horizontal": "Left",
+    "Table toolbar/Label/Medium/Align vertical": "Center",
+    "Table toolbar/Label/Medium/Decoration": "-",
+    "Table toolbar/Container/Small/Layout horizontal": "Fill container",
+    "Table toolbar/Container/Small/Layout vertical": "Hug contents",
+    "Table toolbar/Container/Small/Layout min-height": 48,
+    "Table toolbar/Container/Small/Padding left": 16,
+    "Table toolbar/Container/Small/Padding right": 16,
+    "Table toolbar/Container/Small/Gap horizontal": 8,
+    "Table toolbar/Label/Small/Type token": "Body/Subheadline",
+    "Table toolbar/Label/Small/Type emphasis": "Regular",
+    "Table toolbar/Label/Small/Align horizontal": "Left",
+    "Table toolbar/Label/Small/Align vertical": "Center",
+    "Table toolbar/Label/Small/Decoration": "-"
+  },
+  "bindings": [
+    {"layer":"(root)","property":"minHeight","when":"{{Size=*}}","value":"Components/Table toolbar/Container/{{Size=*}}/Layout min-height"},
+    {"layer":"Container","property":"layoutSizingHorizontal","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"FILL","literal":true},
+    {"layer":"Container","property":"layoutSizingVertical","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"HUG","literal":true},
+    {"layer":"Container","property":"minHeight","when":"{{Size=*}}","value":"Components/Table toolbar/Container/{{Size=*}}/Layout min-height"},
+    {"layer":"Container","property":"paddingLeft","when":"{{Size=*}}","value":"Components/Table toolbar/Container/{{Size=*}}/Padding left"},
+    {"layer":"Container","property":"paddingRight","when":"{{Size=*}}","value":"Components/Table toolbar/Container/{{Size=*}}/Padding right"},
+    {"layer":"Container","property":"itemSpacing","when":"{{Size=*}}","value":"Components/Table toolbar/Container/{{Size=*}}/Gap horizontal"},
+    {"layer":"Container","property":"counterAxisAlignItems","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"CENTER","literal":true},
+    {"layer":"Container","property":"fills.0","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Theme/Layer/layer-01"},
+    {"layer":"Container","property":"fills.0","when":"{{Type=Batch actions}}{{State=Default}}","value":"Theme/Background/background-inverse"},
+    {"layer":"Container","property":"strokes.0","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Theme/Border/border-subtle"},
+    {"layer":"Container","property":"strokes.0","when":"{{Type=Batch actions}}{{State=Default}}","value":"none","literal":true},
+    {"layer":"Container / Search","property":"visible","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Search","property":"visible","when":"{{Type=Default}}{{State=Default}}","value":"true","literal":true},
+    {"layer":"Container / Search","property":"layoutSizingHorizontal","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"FILL","literal":true},
+    {"layer":"Container / Search","property":"componentProperties.Text filled","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"False","literal":true},
+    {"layer":"Container / Search","property":"componentProperties.State","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Enabled","literal":true},
+    {"layer":"Container / Search","property":"componentProperties.Size","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Small","literal":true},
+    {"layer":"Container / Actions","property":"visible","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Actions","property":"visible","when":"{{Type=Default}}{{State=Default}}","value":"true","literal":true},
+    {"layer":"Container / Primary","property":"visible","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Primary","property":"visible","when":"{{Type=Default}}{{State=Default}}","value":"true","literal":true},
+    {"layer":"Container / Primary","property":"componentProperties.Hierarchy","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Secondary","literal":true},
+    {"layer":"Container / Primary","property":"componentProperties.Type","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Default","literal":true},
+    {"layer":"Container / Primary","property":"componentProperties.Size","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Small","literal":true},
+    {"layer":"Container / Primary","property":"componentProperties.State","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Enabled","literal":true},
+    {"layer":"Container / Primary","property":"componentProperties.Leading Icon","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Primary","property":"componentProperties.Trailing Icon","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Count","property":"visible","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Count","property":"visible","when":"{{Type=Batch actions}}{{State=Default}}","value":"true","literal":true},
+    {"layer":"Container / Count","property":"layoutSizingHorizontal","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"FILL","literal":true},
+    {"layer":"Container / Count","property":"textStyleId","when":"{{Size=Medium}}","value":"Body/Callout"},
+    {"layer":"Container / Count","property":"textStyleId","when":"{{Size=Small}}","value":"Body/Subheadline"},
+    {"layer":"Container / Count","property":"fills.0","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Theme/Text/text-inverse"},
+    {"layer":"Container / Count","property":"textAutoResize","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"HEIGHT","literal":true},
+    {"layer":"Container / Batch actions","property":"visible","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Batch actions","property":"visible","when":"{{Type=Batch actions}}{{State=Default}}","value":"true","literal":true},
+    {"layer":"Container / Divider","property":"visible","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Divider","property":"visible","when":"{{Type=Batch actions}}{{State=Default}}","value":"true","literal":true},
+    {"layer":"Container / Divider","property":"fills.0","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Theme/Border/border-inverse"},
+    {"layer":"Container / Cancel","property":"visible","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Cancel","property":"visible","when":"{{Type=Batch actions}}{{State=Default}}","value":"true","literal":true},
+    {"layer":"Container / Cancel","property":"componentProperties.Hierarchy","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Tertiary","literal":true},
+    {"layer":"Container / Cancel","property":"componentProperties.Type","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Inverse","literal":true},
+    {"layer":"Container / Cancel","property":"componentProperties.Size","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Small","literal":true},
+    {"layer":"Container / Cancel","property":"componentProperties.State","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Enabled","literal":true},
+    {"layer":"Container / Cancel","property":"componentProperties.Leading Icon","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Cancel","property":"componentProperties.Trailing Icon","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Skeleton","property":"visible","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Skeleton","property":"visible","when":"{{State=Skeleton}}","value":"true","literal":true},
+    {"layer":"Container / Skeleton / Bar search","property":"fills.0","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Theme/Skeleton/skeleton-background"},
+    {"layer":"Container / Skeleton / Bar action","property":"fills.0","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Theme/Skeleton/skeleton-background"},
+    {"layer":"Container / Skeleton / Bar primary","property":"fills.0","when":"{{Type=*}}{{Size=*}}{{State=*}}","value":"Theme/Skeleton/skeleton-background"}
+  ]
+}
+]
+}

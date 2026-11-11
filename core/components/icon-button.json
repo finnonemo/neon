@@ -1,0 +1,166 @@
+{
+"component": "Icon button",
+"sets": [
+{
+  "name": "Icon button",
+  "axes": [
+    {
+      "name": "Hierarchy",
+      "values": [
+        "Primary",
+        "Secondary",
+        "Tertiary"
+      ]
+    },
+    {
+      "name": "Type",
+      "values": [
+        "Default",
+        "Brand",
+        "Danger",
+        "Inverse"
+      ]
+    },
+    {
+      "name": "Size",
+      "values": [
+        "XSmall",
+        "Small",
+        "Medium",
+        "Large",
+        "XLarge"
+      ]
+    },
+    {
+      "name": "State",
+      "values": [
+        "Enabled",
+        "Hover",
+        "Focus",
+        "Active",
+        "Disabled",
+        "Loading",
+        "Skeleton"
+      ]
+    }
+  ],
+  "exclude": [
+    "{{Hierarchy=Secondary, Tertiary}}{{Type=Brand}}",
+    "{{Hierarchy=Tertiary}}{{Type=Danger}}"
+  ],
+  "properties": [
+    {
+      "name": "Icon Text",
+      "type": "TEXT",
+      "default": "add"
+    }
+  ],
+  "variables": {
+    "Icon button/Container/XSmall/Layout width": 28,
+    "Icon button/Container/XSmall/Layout height": 28,
+    "Icon button/Container/XSmall/Gap horizontal": 0,
+    "Icon button/Container/XSmall/Padding left": 0,
+    "Icon button/Container/XSmall/Padding right": 0,
+    "Icon button/Container/XSmall/Padding top": 0,
+    "Icon button/Container/XSmall/Padding bottom": 0,
+    "Icon button/Container/XSmall/Radius": 200,
+    "Icon button/Container/Small/Layout width": 36,
+    "Icon button/Container/Small/Layout height": 36,
+    "Icon button/Container/Small/Gap horizontal": 0,
+    "Icon button/Container/Small/Padding left": 0,
+    "Icon button/Container/Small/Padding right": 0,
+    "Icon button/Container/Small/Padding top": 0,
+    "Icon button/Container/Small/Padding bottom": 0,
+    "Icon button/Container/Small/Radius": 200,
+    "Icon button/Container/Medium/Layout width": 48,
+    "Icon button/Container/Medium/Layout height": 48,
+    "Icon button/Container/Medium/Gap horizontal": 0,
+    "Icon button/Container/Medium/Padding left": 0,
+    "Icon button/Container/Medium/Padding right": 0,
+    "Icon button/Container/Medium/Padding top": 0,
+    "Icon button/Container/Medium/Padding bottom": 0,
+    "Icon button/Container/Medium/Radius": 200,
+    "Icon button/Container/Large/Layout width": 56,
+    "Icon button/Container/Large/Layout height": 56,
+    "Icon button/Container/Large/Gap horizontal": 0,
+    "Icon button/Container/Large/Padding left": 0,
+    "Icon button/Container/Large/Padding right": 0,
+    "Icon button/Container/Large/Padding top": 0,
+    "Icon button/Container/Large/Padding bottom": 0,
+    "Icon button/Container/Large/Radius": 200,
+    "Icon button/Container/XLarge/Layout width": 64,
+    "Icon button/Container/XLarge/Layout height": 64,
+    "Icon button/Container/XLarge/Gap horizontal": 0,
+    "Icon button/Container/XLarge/Padding left": 0,
+    "Icon button/Container/XLarge/Padding right": 0,
+    "Icon button/Container/XLarge/Padding top": 0,
+    "Icon button/Container/XLarge/Padding bottom": 0,
+    "Icon button/Container/XLarge/Radius": 200,
+    "Icon button/Icon/Small/Type token": "fa-sharp fa-solid/Small",
+    "Icon button/Icon/Medium/Type token": "fa-sharp fa-solid/Medium",
+    "Icon button/Icon/Large/Type token": "fa-sharp fa-solid/Large",
+    "Icon button/Icon/XLarge/Type token": "fa-sharp fa-solid/XLarge",
+    "Icon button/Icon/2XLarge/Type token": "fa-sharp fa-solid/2XLarge"
+  },
+  "bindings": [
+    {"layer":"(root)","property":"minWidth","when":"{{Size=*}}","value":"Components/Interactive/{{Size=*}}/Interactive min-height"},
+    {"layer":"(root)","property":"minHeight","when":"{{Size=*}}","value":"Components/Interactive/{{Size=*}}/Interactive min-height"},
+    {"layer":"(root)","property":"primaryAxisAlignItems","when":"{{Size=*}}","value":"CENTER","literal":true},
+    {"layer":"(root)","property":"counterAxisAlignItems","when":"{{Size=*}}","value":"CENTER","literal":true},
+    {"layer":"Container","property":"width","when":"{{Size=*}}","value":"Components/Icon button/Container/{{Size=*}}/Layout width"},
+    {"layer":"Container","property":"height","when":"{{Size=*}}","value":"Components/Icon button/Container/{{Size=*}}/Layout height"},
+    {"layer":"Container","property":"paddingLeft","when":"{{Size=*}}","value":"Components/Icon button/Container/{{Size=*}}/Padding left"},
+    {"layer":"Container","property":"paddingRight","when":"{{Size=*}}","value":"Components/Icon button/Container/{{Size=*}}/Padding right"},
+    {"layer":"Container","property":"paddingTop","when":"{{Size=*}}","value":"Components/Icon button/Container/{{Size=*}}/Padding top"},
+    {"layer":"Container","property":"paddingBottom","when":"{{Size=*}}","value":"Components/Icon button/Container/{{Size=*}}/Padding bottom"},
+    {"layer":"Container","property":"itemSpacing","when":"{{Size=*}}","value":"Components/Icon button/Container/{{Size=*}}/Gap horizontal"},
+    {"layer":"Container","property":"cornerRadius","when":"{{Size=*}}","value":"Components/Icon button/Container/{{Size=*}}/Radius"},
+    {"layer":"Container","property":"fills.0","when":"{{Hierarchy=Primary}}{{Type=Default}}{{State=Enabled, Loading}}","value":"Theme/Button/button-primary"},
+    {"layer":"Container","property":"fills.0","when":"{{Hierarchy=Primary}}{{Type=Default}}{{State=Hover, Focus}}","value":"Theme/Button/button-primary-hover"},
+    {"layer":"Container","property":"fills.0","when":"{{Hierarchy=Primary}}{{Type=Default}}{{State=Active}}","value":"Theme/Button/button-primary-active"},
+    {"layer":"Container","property":"fills.0","when":"{{Hierarchy=Primary}}{{Type=Brand}}{{State=Enabled, Loading}}","value":"Theme/Button/button-highlight"},
+    {"layer":"Container","property":"fills.0","when":"{{Hierarchy=Primary}}{{Type=Brand}}{{State=Hover, Focus}}","value":"Theme/Button/button-highlight-hover"},
+    {"layer":"Container","property":"fills.0","when":"{{Hierarchy=Primary}}{{Type=Brand}}{{State=Active}}","value":"Theme/Button/button-highlight-active"},
+    {"layer":"Container","property":"fills.0","when":"{{Hierarchy=Primary}}{{Type=Danger}}{{State=Enabled, Loading}}","value":"Theme/Button/button-danger"},
+    {"layer":"Container","property":"fills.0","when":"{{Hierarchy=Primary}}{{Type=Danger}}{{State=Hover, Focus}}","value":"Theme/Button/button-danger-hover"},
+    {"layer":"Container","property":"fills.0","when":"{{Hierarchy=Primary}}{{Type=Danger}}{{State=Active}}","value":"Theme/Button/button-danger-active"},
+    {"layer":"Container","property":"fills.0","when":"{{Hierarchy=Secondary}}{{Type=Default, Danger}}{{State=Enabled, Loading}}","value":"Theme/Button/button-secondary"},
+    {"layer":"Container","property":"fills.0","when":"{{Hierarchy=Secondary}}{{Type=Default, Danger}}{{State=Hover, Focus}}","value":"Theme/Button/button-secondary-hover"},
+    {"layer":"Container","property":"fills.0","when":"{{Hierarchy=Secondary}}{{Type=Default, Danger}}{{State=Active}}","value":"Theme/Button/button-secondary-active"},
+    {"layer":"Container","property":"fills.0","when":"{{Hierarchy=Primary, Secondary}}{{State=Disabled}}","value":"Theme/Button/button-disabled"},
+    {"layer":"Container","property":"fills.0","when":"{{Hierarchy=Tertiary}}{{State=Hover, Focus}}","value":"Theme/Button/button-secondary-hover"},
+    {"layer":"Container","property":"fills.0","when":"{{Hierarchy=Tertiary}}{{State=Active}}","value":"Theme/Button/button-secondary-active"},
+    {"layer":"Container","property":"fills.0","when":"{{State=Skeleton}}","value":"Theme/Skeleton/skeleton-element"},
+    {"layer":"Container","property":"fills.0","when":"{{Hierarchy=Tertiary}}{{Type=Inverse}}{{State=Hover, Focus}}","value":"Theme/Button/button-tertiary-inverse-hover"},
+    {"layer":"Container","property":"fills.0","when":"{{Hierarchy=Tertiary}}{{Type=Inverse}}{{State=Active}}","value":"Theme/Button/button-tertiary-inverse-active"},
+    {"layer":"Container","property":"fills.0","when":"{{Hierarchy=Primary}}{{Type=Inverse}}{{State=Enabled, Loading}}","value":"Theme/Button/button-inverse"},
+    {"layer":"Container","property":"fills.0","when":"{{Hierarchy=Primary}}{{Type=Inverse}}{{State=Hover, Focus}}","value":"Theme/Button/button-inverse-hover"},
+    {"layer":"Container","property":"fills.0","when":"{{Hierarchy=Primary}}{{Type=Inverse}}{{State=Active}}","value":"Theme/Button/button-inverse-active"},
+    {"layer":"Container","property":"fills.0","when":"{{Hierarchy=Secondary}}{{Type=Inverse}}{{State=Enabled, Loading}}","value":"Theme/Button/button-secondary-inverse"},
+    {"layer":"Container","property":"fills.0","when":"{{Hierarchy=Secondary}}{{Type=Inverse}}{{State=Hover, Focus}}","value":"Theme/Button/button-secondary-inverse-hover"},
+    {"layer":"Container","property":"fills.0","when":"{{Hierarchy=Secondary}}{{Type=Inverse}}{{State=Active}}","value":"Theme/Button/button-secondary-inverse-active"},
+    {"layer":"Container","property":"fills.0","when":"{{Hierarchy=Primary}}{{Type=Inverse}}{{State=Disabled}}","value":"Theme/Button/button-inverse-disabled"},
+    {"layer":"Container","property":"fills.0","when":"{{Hierarchy=Primary, Tertiary}}{{Type=Inverse}}{{State=Skeleton}}","value":"Theme/Skeleton/skeleton-element-inverse"},
+    {"layer":"Container","property":"strokes.0","when":"{{State=Focus}}","value":"Theme/Focus/focus"},
+    {"layer":"Container","property":"strokes.0","when":"{{Hierarchy=Tertiary}}{{Type=Inverse}}{{State=Focus}}","value":"Theme/Focus/focus-inverse"},
+    {"layer":"Container","property":"strokes.0","when":"{{Hierarchy=Secondary}}{{Type=Inverse}}{{State=Enabled, Hover, Active, Loading}}","value":"Theme/Border/border-subtle"},
+    {"layer":"Container / Icon","property":"textStyleId","when":"{{Size=XSmall}}{{State=Enabled, Hover, Focus, Active, Disabled}}","value":"fa-sharp fa-solid/Small"},
+    {"layer":"Container / Icon","property":"textStyleId","when":"{{Size=Small}}{{State=Enabled, Hover, Focus, Active, Disabled}}","value":"fa-sharp fa-solid/Medium"},
+    {"layer":"Container / Icon","property":"textStyleId","when":"{{Size=Medium}}{{State=Enabled, Hover, Focus, Active, Disabled}}","value":"fa-sharp fa-solid/Large"},
+    {"layer":"Container / Icon","property":"textStyleId","when":"{{Size=Large}}{{State=Enabled, Hover, Focus, Active, Disabled}}","value":"fa-sharp fa-solid/XLarge"},
+    {"layer":"Container / Icon","property":"textStyleId","when":"{{Size=XLarge}}{{State=Enabled, Hover, Focus, Active, Disabled}}","value":"fa-sharp fa-solid/2XLarge"},
+    {"layer":"Container / Icon","property":"fills.0","when":"{{Hierarchy=Primary}}{{Type=Default}}{{State=Enabled, Hover, Focus, Active}}","value":"Theme/Icon/icon-on-color"},
+    {"layer":"Container / Icon","property":"fills.0","when":"{{Hierarchy=Primary}}{{Type=Danger}}{{State=Enabled, Hover, Focus, Active}}","value":"Theme/Icon/icon-on-color"},
+    {"layer":"Container / Icon","property":"fills.0","when":"{{Hierarchy=Primary}}{{Type=Brand}}{{State=Enabled, Hover, Focus, Active}}","value":"Theme/Icon/icon-on-brand"},
+    {"layer":"Container / Icon","property":"fills.0","when":"{{Hierarchy=Secondary, Tertiary}}{{Type=Default}}{{State=Enabled, Hover, Focus, Active}}","value":"Theme/Icon/icon-primary"},
+    {"layer":"Container / Icon","property":"fills.0","when":"{{Hierarchy=Secondary}}{{Type=Danger}}{{State=Enabled, Hover, Focus, Active}}","value":"Theme/Icon/icon-negative"},
+    {"layer":"Container / Icon","property":"fills.0","when":"{{State=Disabled}}","value":"Theme/Icon/icon-disabled"},
+    {"layer":"Container / Icon","property":"fills.0","when":"{{Hierarchy=Tertiary}}{{Type=Inverse}}{{State=Enabled, Hover, Focus, Active}}","value":"Theme/Icon/icon-inverse"},
+    {"layer":"Container / Icon","property":"fills.0","when":"{{Hierarchy=Primary, Secondary}}{{Type=Inverse}}{{State=Enabled, Hover, Focus, Active}}","value":"Theme/Icon/icon-primary"},
+    {"layer":"Container / Icon","property":"fills.0","when":"{{Hierarchy=Primary, Tertiary}}{{Type=Inverse}}{{State=Disabled}}","value":"Theme/Icon/icon-inverse-disabled"},
+    {"layer":"Container / _Loading","property":"componentProperties.Size","when":"{{State=Loading}}","value":"Medium"},
+    {"layer":"Container / _Loading / Container / Indicator","property":"strokes.0","when":"{{Hierarchy=Tertiary}}{{Type=Inverse}}{{State=Loading}}","value":"Theme/Icon/icon-inverse"}
+  ]
+}
+]
+}

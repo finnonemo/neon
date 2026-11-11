@@ -1,0 +1,316 @@
+{
+"component": "Accordion",
+"sets": [
+{
+  "name": "Accordion",
+  "axes": [
+    {
+      "name": "Size",
+      "values": [
+        "Medium",
+        "Small",
+        "Large"
+      ]
+    },
+    {
+      "name": "Leading",
+      "values": [
+        "None",
+        "Small",
+        "Medium",
+        "Large",
+        "Custom"
+      ]
+    },
+    {
+      "name": "Expanded",
+      "values": [
+        "False",
+        "True"
+      ]
+    },
+    {
+      "name": "State",
+      "values": [
+        "Enabled",
+        "Active",
+        "Focus",
+        "Disabled",
+        "Skeleton"
+      ]
+    }
+  ],
+  "exclude": [],
+  "properties": [
+    {
+      "name": "Content",
+      "type": "SLOT"
+    },
+    {
+      "name": "Bottom border",
+      "type": "BOOLEAN",
+      "default": true
+    }
+  ],
+  "variables": {
+    "Accordion/Container/Default/Layout horizontal": "Fill container",
+    "Accordion/Container/Default/Layout vertical": "Hug contents",
+    "Accordion/Container/Default/Gap vertical": 0,
+    "Accordion/Line/Default/Layout horizontal": "Fill container",
+    "Accordion/Line/Default/Layout vertical": "Fixed",
+    "Accordion/Line/Default/Layout height": 1
+  },
+  "bindings": [
+    {"layer":"Container","property":"itemSpacing","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Components/Accordion/Container/Default/Gap vertical"},
+    {"layer":"Container","property":"layoutSizingHorizontal","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"FILL","literal":true},
+    {"layer":"Container","property":"layoutSizingVertical","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"HUG","literal":true},
+    {"layer":"Container / Header","property":"isExposedInstance","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"true","literal":true},
+    {"layer":"Container / Header","property":"componentProperties.Size","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"{{Size=*}}"},
+    {"layer":"Container / Header","property":"componentProperties.Leading","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"{{Leading=*}}"},
+    {"layer":"Container / Header","property":"componentProperties.Expanded","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"{{Expanded=*}}"},
+    {"layer":"Container / Header","property":"componentProperties.State","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"{{State=*}}"},
+    {"layer":"Container / Header","property":"layoutSizingHorizontal","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"FILL","literal":true},
+    {"layer":"Container / Header","property":"layoutSizingVertical","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"HUG","literal":true},
+    {"layer":"Container / Content","property":"visible","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Content","property":"visible","when":"{{Size=*}}{{Leading=*}}{{Expanded=True}}{{State=*}}","value":"true","literal":true},
+    {"layer":"Container / Content","property":"layoutSizingHorizontal","when":"{{Size=*}}{{Leading=*}}{{Expanded=True}}{{State=*}}","value":"FILL","literal":true},
+    {"layer":"Container / Content","property":"layoutSizingVertical","when":"{{Size=*}}{{Leading=*}}{{Expanded=True}}{{State=*}}","value":"HUG","literal":true}
+  ]
+},
+{
+  "name": "_Accordion header",
+  "axes": [
+    {
+      "name": "Size",
+      "values": [
+        "Medium",
+        "Small",
+        "Large"
+      ]
+    },
+    {
+      "name": "Leading",
+      "values": [
+        "None",
+        "Small",
+        "Medium",
+        "Large",
+        "Custom"
+      ]
+    },
+    {
+      "name": "Expanded",
+      "values": [
+        "False",
+        "True"
+      ]
+    },
+    {
+      "name": "State",
+      "values": [
+        "Enabled",
+        "Active",
+        "Focus",
+        "Disabled",
+        "Skeleton"
+      ]
+    }
+  ],
+  "exclude": [],
+  "properties": [
+    {
+      "name": "Title text",
+      "type": "TEXT",
+      "default": "Title"
+    },
+    {
+      "name": "Subtitle text",
+      "type": "TEXT",
+      "default": "Subtitle"
+    },
+    {
+      "name": "Subtitle",
+      "type": "BOOLEAN",
+      "default": true
+    },
+    {
+      "name": "Value text",
+      "type": "TEXT",
+      "default": "Value"
+    },
+    {
+      "name": "Value",
+      "type": "BOOLEAN",
+      "default": true
+    },
+    {
+      "name": "Value icon",
+      "type": "BOOLEAN",
+      "default": false
+    }
+  ],
+  "variables": {
+    "Accordion header/Container/Medium/Layout horizontal": "Fill container",
+    "Accordion header/Container/Medium/Layout vertical": "Hug contents",
+    "Accordion header/Container/Medium/Gap horizontal": 8,
+    "Accordion header/Container/Medium/Gap vertical": 0,
+    "Accordion header/Container/Medium/Padding left": 8,
+    "Accordion header/Container/Medium/Padding right": 8,
+    "Accordion header/Container/Medium/Padding top": 14,
+    "Accordion header/Container/Medium/Padding bottom": 14,
+    "Accordion header/Container/Medium/Radius": 12,
+    "Accordion header/Container/Medium/Stroke weight": 2,
+    "Accordion header/Container/Medium/Layout min-height": 56,
+    "Accordion header/Container/Small/Layout horizontal": "Fill container",
+    "Accordion header/Container/Small/Layout vertical": "Hug contents",
+    "Accordion header/Container/Small/Gap horizontal": 8,
+    "Accordion header/Container/Small/Gap vertical": 0,
+    "Accordion header/Container/Small/Padding left": 8,
+    "Accordion header/Container/Small/Padding right": 8,
+    "Accordion header/Container/Small/Padding top": 12,
+    "Accordion header/Container/Small/Padding bottom": 12,
+    "Accordion header/Container/Small/Radius": 12,
+    "Accordion header/Container/Small/Stroke weight": 2,
+    "Accordion header/Container/Small/Layout min-height": 48,
+    "Accordion header/Container/Large/Layout horizontal": "Fill container",
+    "Accordion header/Container/Large/Layout vertical": "Hug contents",
+    "Accordion header/Container/Large/Gap horizontal": 8,
+    "Accordion header/Container/Large/Gap vertical": 0,
+    "Accordion header/Container/Large/Padding left": 8,
+    "Accordion header/Container/Large/Padding right": 8,
+    "Accordion header/Container/Large/Padding top": 14,
+    "Accordion header/Container/Large/Padding bottom": 14,
+    "Accordion header/Container/Large/Radius": 12,
+    "Accordion header/Container/Large/Stroke weight": 2,
+    "Accordion header/Container/Large/Layout min-height": 72,
+    "Accordion header/Right content/Default/Gap horizontal": 8,
+    "Accordion header/Value/Default/Gap horizontal": 4,
+    "Accordion header/Label/Label/Type token": "$headline",
+    "Accordion header/Label/Label/Type emphasis": "Regular",
+    "Accordion header/Label/Label/Align horizontal": "Left",
+    "Accordion header/Label/Label/Align vertical": "Top",
+    "Accordion header/Label/Label/Decoration": "-",
+    "Accordion header/Label/Subtitle/Type token": "$footnote",
+    "Accordion header/Label/Subtitle/Type emphasis": "Regular",
+    "Accordion header/Label/Subtitle/Align horizontal": "Left",
+    "Accordion header/Label/Subtitle/Align vertical": "Top",
+    "Accordion header/Label/Subtitle/Decoration": "-",
+    "Accordion header/Label/Value/Type token": "$body",
+    "Accordion header/Label/Value/Type emphasis": "Regular",
+    "Accordion header/Label/Value/Align horizontal": "Right",
+    "Accordion header/Label/Value/Align vertical": "Center",
+    "Accordion header/Label/Value/Decoration": "-",
+    "Accordion header/Icon/Large/Type token": "fa-sharp fa-solid/Large",
+    "Accordion header/Icon/Large/Layout width": 24,
+    "Accordion header/Icon/Large/Layout height": 24,
+    "Accordion header/Icon/2XLarge/Type token": "fa-sharp fa-solid/2XLarge",
+    "Accordion header/Icon/2XLarge/Layout width": 36,
+    "Accordion header/Icon/2XLarge/Layout height": 36,
+    "Accordion header/Leading/Small/Layout width": 20,
+    "Accordion header/Leading/Small/Layout height": 20,
+    "Accordion header/Leading/Medium/Layout width": 24,
+    "Accordion header/Leading/Medium/Layout height": 24,
+    "Accordion header/Leading/Large/Layout width": 36,
+    "Accordion header/Leading/Large/Layout height": 36,
+    "Accordion header/Bar/Default/Layout width": 80,
+    "Accordion header/Bar/Default/Layout height": 8,
+    "Accordion header/Bar/Default/Radius": 0
+  },
+  "bindings": [
+    {"layer":"(root)","property":"minWidth","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Components/Interactive/{{Size=*}}/Interactive min-height"},
+    {"layer":"Container","property":"itemSpacing","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Components/Accordion header/Container/{{Size=*}}/Gap vertical"},
+    {"layer":"Container","property":"paddingLeft","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Components/Accordion header/Container/{{Size=*}}/Padding left"},
+    {"layer":"Container","property":"paddingRight","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Components/Accordion header/Container/{{Size=*}}/Padding right"},
+    {"layer":"Container","property":"cornerRadius","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Components/Accordion header/Container/{{Size=*}}/Radius"},
+    {"layer":"Container / Main table cell","property":"fills.0","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Theme/Layer/layer-01"},
+    {"layer":"Container / Main table cell","property":"fills.0","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=Active}}","value":"Theme/Layer/layer-active-01"},
+    {"layer":"Container / Main table cell","property":"strokes.0","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Theme/Transparent"},
+    {"layer":"Container / Main table cell","property":"strokes.0","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=Focus}}","value":"Theme/Focus/focus"},
+    {"layer":"Container / Main table cell","property":"strokeWeight","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Components/Accordion header/Container/{{Size=*}}/Stroke weight"},
+    {"layer":"Container / Main table cell","property":"cornerRadius","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Components/Accordion header/Container/{{Size=*}}/Radius"},
+    {"layer":"Container / Main table cell","property":"paddingLeft","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Components/Accordion header/Container/{{Size=*}}/Padding left"},
+    {"layer":"Container / Main table cell","property":"paddingRight","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Components/Accordion header/Container/{{Size=*}}/Padding right"},
+    {"layer":"Container / Main table cell","property":"itemSpacing","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Components/Accordion header/Container/{{Size=*}}/Gap horizontal"},
+    {"layer":"Container / Main table cell","property":"minHeight","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Components/Interactive/{{Size=*}}/Interactive min-height"},
+    {"layer":"Container / Main table cell","property":"counterAxisAlignItems","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"CENTER","literal":true},
+    {"layer":"Container / Main table cell / Leading","property":"visible","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"true","literal":true},
+    {"layer":"Container / Main table cell / Leading","property":"visible","when":"{{Leading=None}}","value":"false","literal":true},
+    {"layer":"Container / Main table cell / Leading","property":"layoutSizingVertical","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"HUG","literal":true},
+    {"layer":"Container / Main table cell / Leading","property":"paddingTop","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"0","literal":true},
+    {"layer":"Container / Main table cell / Leading","property":"paddingBottom","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"0","literal":true},
+    {"layer":"Container / Main table cell / Leading / Icon","property":"visible","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Main table cell / Leading / Icon","property":"visible","when":"{{Leading=Small, Medium, Large}}","value":"true","literal":true},
+    {"layer":"Container / Main table cell / Leading / Icon","property":"opacity","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"1","literal":true},
+    {"layer":"Container / Main table cell / Leading / Icon","property":"opacity","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=Skeleton}}","value":"0","literal":true},
+    {"layer":"Container / Main table cell / Leading / Icon","property":"textStyleId","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"fa-sharp fa-solid/Large"},
+    {"layer":"Container / Main table cell / Leading / Icon","property":"textStyleId","when":"{{Leading=Small}}","value":"fa-sharp fa-solid/Small"},
+    {"layer":"Container / Main table cell / Leading / Icon","property":"textStyleId","when":"{{Leading=Large}}","value":"fa-sharp fa-solid/2XLarge"},
+    {"layer":"Container / Main table cell / Leading / Icon","property":"fills.0","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Theme/Icon/icon-primary"},
+    {"layer":"Container / Main table cell / Leading / Icon","property":"fills.0","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=Disabled}}","value":"Theme/Icon/icon-disabled"},
+    {"layer":"Container / Main table cell / Leading / Icon","property":"width","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Components/Accordion header/Leading/Medium/Layout width"},
+    {"layer":"Container / Main table cell / Leading / Icon","property":"width","when":"{{Leading=Small, Medium, Large}}","value":"Components/Accordion header/Leading/{{Leading=*}}/Layout width"},
+    {"layer":"Container / Main table cell / Leading / Icon","property":"height","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Components/Accordion header/Leading/Medium/Layout height"},
+    {"layer":"Container / Main table cell / Leading / Icon","property":"height","when":"{{Leading=Small, Medium, Large}}","value":"Components/Accordion header/Leading/{{Leading=*}}/Layout height"},
+    {"layer":"Container / Main table cell / Leading / Artwork","property":"visible","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Main table cell / Leading / Artwork","property":"visible","when":"{{Leading=Custom}}","value":"true","literal":true},
+    {"layer":"Container / Main table cell / Leading / Artwork","property":"opacity","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"1","literal":true},
+    {"layer":"Container / Main table cell / Leading / Artwork","property":"opacity","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=Skeleton}}","value":"0","literal":true},
+    {"layer":"Container / Main table cell / Label + Subtitle","property":"layoutMode","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"VERTICAL","literal":true},
+    {"layer":"Container / Main table cell / Label + Subtitle","property":"itemSpacing","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"0","literal":true},
+    {"layer":"Container / Main table cell / Label + Subtitle","property":"primaryAxisAlignItems","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"CENTER","literal":true},
+    {"layer":"Container / Main table cell / Label + Subtitle","property":"minHeight","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Components/Accordion header/Container/{{Size=*}}/Layout min-height"},
+    {"layer":"Container / Main table cell / Label + Subtitle","property":"visible","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"true","literal":true},
+    {"layer":"Container / Main table cell / Label + Subtitle","property":"visible","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=Skeleton}}","value":"false","literal":true},
+    {"layer":"Container / Main table cell / Label + Subtitle","property":"paddingTop","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Components/Accordion header/Container/{{Size=*}}/Padding top"},
+    {"layer":"Container / Main table cell / Label + Subtitle","property":"paddingBottom","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Components/Accordion header/Container/{{Size=*}}/Padding bottom"},
+    {"layer":"Container / Main table cell / Label + Subtitle / Label","property":"textStyleId","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Headings/Headline"},
+    {"layer":"Container / Main table cell / Label + Subtitle / Label","property":"fills.0","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Theme/Text/text-primary"},
+    {"layer":"Container / Main table cell / Label + Subtitle / Label","property":"fills.0","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=Disabled}}","value":"Theme/Text/text-disabled"},
+    {"layer":"Container / Main table cell / Label + Subtitle / Subtitle","property":"visible","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Main table cell / Label + Subtitle / Subtitle","property":"visible","when":"{{Size=Large}}","value":"true","literal":true},
+    {"layer":"Container / Main table cell / Label + Subtitle / Subtitle","property":"textStyleId","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Utility/Footnote"},
+    {"layer":"Container / Main table cell / Label + Subtitle / Subtitle","property":"fills.0","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Theme/Text/text-secondary"},
+    {"layer":"Container / Main table cell / Label + Subtitle / Subtitle","property":"fills.0","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=Disabled}}","value":"Theme/Text/text-disabled"},
+    {"layer":"Container / Main table cell / Skeleton","property":"visible","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Main table cell / Skeleton","property":"visible","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=Skeleton}}","value":"true","literal":true},
+    {"layer":"Container / Main table cell / Skeleton","property":"minHeight","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Components/Accordion header/Container/{{Size=*}}/Layout min-height"},
+    {"layer":"Container / Main table cell / Skeleton","property":"paddingTop","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Components/Accordion header/Container/{{Size=*}}/Padding top"},
+    {"layer":"Container / Main table cell / Skeleton","property":"paddingBottom","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Components/Accordion header/Container/{{Size=*}}/Padding bottom"},
+    {"layer":"Container / Main table cell / Skeleton / Label line","property":"visible","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Main table cell / Skeleton / Label line","property":"visible","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=Skeleton}}","value":"true","literal":true},
+    {"layer":"Container / Main table cell / Skeleton / Label line","property":"fills.0","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Theme/Skeleton/skeleton-background"},
+    {"layer":"Container / Main table cell / Skeleton / Label line","property":"width","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Components/Accordion header/Bar/Default/Layout width"},
+    {"layer":"Container / Main table cell / Skeleton / Label line","property":"height","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Components/Accordion header/Bar/Default/Layout height"},
+    {"layer":"Container / Main table cell / Skeleton / Label line","property":"cornerRadius","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Components/Accordion header/Bar/Default/Radius"},
+    {"layer":"Container / Main table cell / Right content","property":"visible","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"true","literal":true},
+    {"layer":"Container / Main table cell / Right content","property":"visible","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=Skeleton}}","value":"false","literal":true},
+    {"layer":"Container / Main table cell / Right content","property":"itemSpacing","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Components/Accordion header/Right content/Default/Gap horizontal"},
+    {"layer":"Container / Main table cell / Right content","property":"minHeight","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Components/Interactive/{{Size=*}}/Interactive min-height"},
+    {"layer":"Container / Main table cell / Right content","property":"counterAxisAlignItems","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"CENTER","literal":true},
+    {"layer":"Container / Main table cell / Right content / Value","property":"itemSpacing","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Components/Accordion header/Value/Default/Gap horizontal"},
+    {"layer":"Container / Main table cell / Right content / Value","property":"counterAxisAlignItems","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"CENTER","literal":true},
+    {"layer":"Container / Main table cell / Right content / Value / Value icon","property":"width","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Components/Accordion header/Icon/Large/Layout width"},
+    {"layer":"Container / Main table cell / Right content / Value / Value icon","property":"height","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Components/Accordion header/Icon/Large/Layout height"},
+    {"layer":"Container / Main table cell / Right content / Value / Value icon / Icon","property":"textStyleId","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"fa-sharp fa-solid/Large"},
+    {"layer":"Container / Main table cell / Right content / Value / Value icon / Icon","property":"fills.0","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Theme/Icon/icon-secondary"},
+    {"layer":"Container / Main table cell / Right content / Value / Value icon / Icon","property":"fills.0","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=Disabled}}","value":"Theme/Icon/icon-disabled"},
+    {"layer":"Container / Main table cell / Right content / Value / Value icon / Icon","property":"textAutoResize","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"WIDTH_AND_HEIGHT","literal":true},
+    {"layer":"Container / Main table cell / Right content / Value / Value","property":"textStyleId","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Body/Body"},
+    {"layer":"Container / Main table cell / Right content / Value / Value","property":"fills.0","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Theme/Text/text-primary"},
+    {"layer":"Container / Main table cell / Right content / Value / Value","property":"fills.0","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=Disabled}}","value":"Theme/Text/text-disabled"},
+    {"layer":"Container / Main table cell / Right content / Value / Value","property":"textAlignHorizontal","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"RIGHT","literal":true},
+    {"layer":"Container / Main table cell / Right content / Value / Value","property":"textAutoResize","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"WIDTH_AND_HEIGHT","literal":true},
+    {"layer":"Container / Main table cell / Right content / Value / Value","property":"textTruncation","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"ENDING","literal":true},
+    {"layer":"Container / Main table cell / Right content / Value / Value","property":"maxLines","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"1","literal":true},
+    {"layer":"Container / Main table cell / Right content / Icon box","property":"width","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Components/Accordion header/Icon/Large/Layout width"},
+    {"layer":"Container / Main table cell / Right content / Icon box","property":"height","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Components/Accordion header/Icon/Large/Layout height"},
+    {"layer":"Container / Main table cell / Right content / Icon box / Icon","property":"characters","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"angle-down","literal":true},
+    {"layer":"Container / Main table cell / Right content / Icon box / Icon","property":"characters","when":"{{Expanded=True}}{{State=*}}","value":"angle-up","literal":true},
+    {"layer":"Container / Main table cell / Right content / Icon box / Icon","property":"textStyleId","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"fa-sharp fa-solid/Large"},
+    {"layer":"Container / Main table cell / Right content / Icon box / Icon","property":"fills.0","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"Theme/Icon/icon-secondary"},
+    {"layer":"Container / Main table cell / Right content / Icon box / Icon","property":"fills.0","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=Disabled}}","value":"Theme/Icon/icon-disabled"},
+    {"layer":"Container / Main table cell / Right content / Icon box / Icon","property":"textAutoResize","when":"{{Size=*}}{{Leading=*}}{{Expanded=*}}{{State=*}}","value":"WIDTH_AND_HEIGHT","literal":true}
+  ]
+}
+]
+}

@@ -1,0 +1,137 @@
+{
+"component": "Link",
+"sets": [
+{
+  "name": "Link",
+  "axes": [
+    {
+      "name": "Style",
+      "values": [
+        "Highlight",
+        "Primary"
+      ]
+    },
+    {
+      "name": "State",
+      "values": [
+        "Enabled",
+        "Hover",
+        "Focus",
+        "Active",
+        "Visited",
+        "Disabled"
+      ]
+    },
+    {
+      "name": "Size",
+      "values": [
+        "Large",
+        "Medium",
+        "Small"
+      ]
+    }
+  ],
+  "exclude": [],
+  "properties": [
+    {
+      "name": "Label",
+      "type": "TEXT",
+      "default": "Link"
+    },
+    {
+      "name": "Trailing icon",
+      "type": "BOOLEAN",
+      "default": true
+    }
+  ],
+  "variables": {
+    "Link/Container/Large/Layout horizontal": "Hug contents",
+    "Link/Container/Large/Layout vertical": "Fixed",
+    "Link/Container/Large/Layout width": 0,
+    "Link/Container/Large/Layout height": 36,
+    "Link/Container/Large/Gap horizontal": 8,
+    "Link/Container/Large/Padding left": 2,
+    "Link/Container/Large/Padding right": 2,
+    "Link/Container/Large/Padding top": 6,
+    "Link/Container/Large/Padding bottom": 6,
+    "Link/Container/Large/Radius": 8,
+    "Link/Icon/Large/Style": "fa-solid",
+    "Link/Icon/Large/Size": "large",
+    "Link/Label/Large/Type token": "$body",
+    "Link/Label/Large/Align horizontal": "Center",
+    "Link/Label/Large/Align vertical": "Center",
+    "Link/Label/Large/Decoration": "-",
+    "Link/Container/Medium/Layout horizontal": "Hug contents",
+    "Link/Container/Medium/Layout vertical": "Fixed",
+    "Link/Container/Medium/Layout width": 0,
+    "Link/Container/Medium/Layout height": 32,
+    "Link/Container/Medium/Gap horizontal": 8,
+    "Link/Container/Medium/Padding left": 2,
+    "Link/Container/Medium/Padding right": 2,
+    "Link/Container/Medium/Padding top": 4,
+    "Link/Container/Medium/Padding bottom": 4,
+    "Link/Container/Medium/Radius": 8,
+    "Link/Icon/Medium/Style": "fa-solid",
+    "Link/Icon/Medium/Size": "medium",
+    "Link/Label/Medium/Type token": "$subhead",
+    "Link/Label/Medium/Align horizontal": "Center",
+    "Link/Label/Medium/Align vertical": "Center",
+    "Link/Label/Medium/Decoration": "-",
+    "Link/Container/Small/Layout horizontal": "Hug contents",
+    "Link/Container/Small/Layout vertical": "Fixed",
+    "Link/Container/Small/Layout width": 28,
+    "Link/Container/Small/Layout height": 28,
+    "Link/Container/Small/Gap horizontal": 8,
+    "Link/Container/Small/Padding left": 2,
+    "Link/Container/Small/Padding right": 2,
+    "Link/Container/Small/Padding top": 4,
+    "Link/Container/Small/Padding bottom": 4,
+    "Link/Container/Small/Radius": 8,
+    "Link/Icon/Small/Style": "fa-solid",
+    "Link/Icon/Small/Size": "small",
+    "Link/Label/Small/Type token": "$footnote",
+    "Link/Label/Small/Align horizontal": "Center",
+    "Link/Label/Small/Align vertical": "Center",
+    "Link/Label/Small/Decoration": "-"
+  },
+  "bindings": [
+    {"layer":"(root)","property":"minWidth","when":"{{Style=*}}{{State=*}}{{Size=*}}","value":"Components/Interactive/Medium/Interactive min-height"},
+    {"layer":"(root)","property":"minHeight","when":"{{Style=*}}{{State=*}}{{Size=*}}","value":"Components/Interactive/Medium/Interactive min-height"},
+    {"layer":"(root)","property":"primaryAxisAlignItems","when":"{{Style=*}}{{State=*}}{{Size=*}}","value":"CENTER","literal":true},
+    {"layer":"(root)","property":"counterAxisAlignItems","when":"{{Style=*}}{{State=*}}{{Size=*}}","value":"CENTER","literal":true},
+    {"layer":"Container","property":"height","when":"{{Style=*}}{{State=*}}{{Size=*}}","value":"Components/Link/Container/{{Size=*}}/Layout height"},
+    {"layer":"Container","property":"paddingLeft","when":"{{Style=*}}{{State=*}}{{Size=*}}","value":"Components/Link/Container/{{Size=*}}/Padding left"},
+    {"layer":"Container","property":"paddingRight","when":"{{Style=*}}{{State=*}}{{Size=*}}","value":"Components/Link/Container/{{Size=*}}/Padding right"},
+    {"layer":"Container","property":"paddingTop","when":"{{Style=*}}{{State=*}}{{Size=*}}","value":"Components/Link/Container/{{Size=*}}/Padding top"},
+    {"layer":"Container","property":"paddingBottom","when":"{{Style=*}}{{State=*}}{{Size=*}}","value":"Components/Link/Container/{{Size=*}}/Padding bottom"},
+    {"layer":"Container","property":"itemSpacing","when":"{{Style=*}}{{State=*}}{{Size=*}}","value":"Components/Link/Container/{{Size=*}}/Gap horizontal"},
+    {"layer":"Container","property":"cornerRadius","when":"{{Style=*}}{{State=*}}{{Size=*}}","value":"Components/Link/Container/{{Size=*}}/Radius"},
+    {"layer":"Container","property":"fills.0","when":"{{Style=*}}{{State=*}}{{Size=*}}","value":"Theme/Transparent"},
+    {"layer":"Container","property":"fills.0","when":"{{Style=Primary}}{{State=Hover}}{{Size=*}}","value":"Theme/Layer/layer-hover-01"},
+    {"layer":"Container","property":"fills.0","when":"{{Style=*}}{{State=Active}}{{Size=*}}","value":"Theme/Layer/layer-active-01"},
+    {"layer":"Container","property":"strokes.0","when":"{{Style=*}}{{State=Focus}}{{Size=*}}","value":"Theme/Focus/focus"},
+    {"layer":"Container / Link","property":"textStyleId","when":"{{Style=*}}{{State=*}}{{Size=Large}}","value":"Body/Body"},
+    {"layer":"Container / Link","property":"textStyleId","when":"{{Style=*}}{{State=*}}{{Size=Medium}}","value":"Body/Subheadline"},
+    {"layer":"Container / Link","property":"textStyleId","when":"{{Style=*}}{{State=*}}{{Size=Small}}","value":"Utility/Footnote"},
+    {"layer":"Container / Link","property":"textDecoration","when":"{{Style=*}}{{State=*}}{{Size=*}}","value":"NONE","literal":true},
+    {"layer":"Container / Link","property":"fills.0","when":"{{Style=Highlight}}{{State=Enabled, Focus}}{{Size=*}}","value":"Theme/Link/link-primary"},
+    {"layer":"Container / Link","property":"fills.0","when":"{{Style=Highlight}}{{State=Hover}}{{Size=*}}","value":"Theme/Link/link-primary-hover"},
+    {"layer":"Container / Link","property":"fills.0","when":"{{Style=Primary}}{{State=Enabled, Hover, Focus}}{{Size=*}}","value":"Theme/Text/text-primary"},
+    {"layer":"Container / Link","property":"fills.0","when":"{{Style=Primary}}{{State=Active}}{{Size=*}}","value":"Theme/Text/text-primary"},
+    {"layer":"Container / Link","property":"fills.0","when":"{{Style=Highlight}}{{State=Active}}{{Size=*}}","value":"Theme/Link/link-primary-hover"},
+    {"layer":"Container / Link","property":"fills.0","when":"{{Style=*}}{{State=Visited}}{{Size=*}}","value":"Theme/Link/link-visted"},
+    {"layer":"Container / Link","property":"fills.0","when":"{{Style=*}}{{State=Disabled}}{{Size=*}}","value":"Theme/Text/text-disabled"},
+    {"layer":"Container / Trailing Icon","property":"textStyleId","when":"{{Style=*}}{{State=*}}{{Size=Large}}","value":"fa-sharp fa-solid/Large"},
+    {"layer":"Container / Trailing Icon","property":"textStyleId","when":"{{Style=*}}{{State=*}}{{Size=Medium}}","value":"fa-sharp fa-solid/Medium"},
+    {"layer":"Container / Trailing Icon","property":"textStyleId","when":"{{Style=*}}{{State=*}}{{Size=Small}}","value":"fa-sharp fa-solid/Small"},
+    {"layer":"Container / Trailing Icon","property":"fills.0","when":"{{Style=Highlight}}{{State=Enabled, Focus}}{{Size=*}}","value":"Theme/Link/link-primary"},
+    {"layer":"Container / Trailing Icon","property":"fills.0","when":"{{Style=Highlight}}{{State=Hover}}{{Size=*}}","value":"Theme/Link/link-primary-hover"},
+    {"layer":"Container / Trailing Icon","property":"fills.0","when":"{{Style=Primary}}{{State=Enabled, Hover, Focus}}{{Size=*}}","value":"Theme/Text/text-primary"},
+    {"layer":"Container / Trailing Icon","property":"fills.0","when":"{{Style=Primary}}{{State=Active}}{{Size=*}}","value":"Theme/Text/text-primary"},
+    {"layer":"Container / Trailing Icon","property":"fills.0","when":"{{Style=Highlight}}{{State=Active}}{{Size=*}}","value":"Theme/Link/link-primary-hover"},
+    {"layer":"Container / Trailing Icon","property":"fills.0","when":"{{Style=*}}{{State=Visited}}{{Size=*}}","value":"Theme/Link/link-visted"},
+    {"layer":"Container / Trailing Icon","property":"fills.0","when":"{{Style=*}}{{State=Disabled}}{{Size=*}}","value":"Theme/Text/text-disabled"}
+  ]
+}
+]
+}

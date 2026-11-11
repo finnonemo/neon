@@ -1,0 +1,605 @@
+{
+"component": "Table",
+"sets": [
+{
+  "name": "Table",
+  "axes": [],
+  "exclude": [],
+  "properties": [
+    {
+      "name": "Rows",
+      "type": "SLOT"
+    }
+  ],
+  "variables": {
+    "Table/Container/Default/Layout horizontal": "Fill container",
+    "Table/Container/Default/Layout vertical": "Hug contents",
+    "Table/Container/Default/Gap vertical": 0
+  },
+  "bindings": [
+    {"layer":"Rows","property":"itemSpacing","when":"","value":"Components/Table/Container/Default/Gap vertical"},
+    {"layer":"Rows / Row 1","property":"componentProperties.Type","when":"","value":"Header","literal":true},
+    {"layer":"Rows / Row 1","property":"componentProperties.Size","when":"","value":"Medium","literal":true},
+    {"layer":"Rows / Row 1","property":"componentProperties.State","when":"","value":"Enabled","literal":true},
+    {"layer":"Rows / Row 1","property":"layoutSizingHorizontal","when":"","value":"FILL","literal":true},
+    {"layer":"Rows / Row 2","property":"componentProperties.Type","when":"","value":"Body","literal":true},
+    {"layer":"Rows / Row 2","property":"componentProperties.Size","when":"","value":"Medium","literal":true},
+    {"layer":"Rows / Row 2","property":"componentProperties.State","when":"","value":"Enabled","literal":true},
+    {"layer":"Rows / Row 2","property":"layoutSizingHorizontal","when":"","value":"FILL","literal":true},
+    {"layer":"Rows / Row 3","property":"componentProperties.Type","when":"","value":"Body","literal":true},
+    {"layer":"Rows / Row 3","property":"componentProperties.Size","when":"","value":"Medium","literal":true},
+    {"layer":"Rows / Row 3","property":"componentProperties.State","when":"","value":"Enabled","literal":true},
+    {"layer":"Rows / Row 3","property":"layoutSizingHorizontal","when":"","value":"FILL","literal":true},
+    {"layer":"Rows / Row 4","property":"componentProperties.Type","when":"","value":"Body","literal":true},
+    {"layer":"Rows / Row 4","property":"componentProperties.Size","when":"","value":"Medium","literal":true},
+    {"layer":"Rows / Row 4","property":"componentProperties.State","when":"","value":"Enabled","literal":true},
+    {"layer":"Rows / Row 4","property":"layoutSizingHorizontal","when":"","value":"FILL","literal":true},
+    {"layer":"Rows / Row 5","property":"componentProperties.Type","when":"","value":"Body","literal":true},
+    {"layer":"Rows / Row 5","property":"componentProperties.Size","when":"","value":"Medium","literal":true},
+    {"layer":"Rows / Row 5","property":"componentProperties.State","when":"","value":"Enabled","literal":true},
+    {"layer":"Rows / Row 5","property":"layoutSizingHorizontal","when":"","value":"FILL","literal":true}
+  ]
+},
+{
+  "name": "Table cell",
+  "axes": [
+    {
+      "name": "Type",
+      "values": [
+        "Text",
+        "Number",
+        "Tag",
+        "Badge",
+        "Avatar",
+        "Icon",
+        "Button",
+        "Input"
+      ]
+    },
+    {
+      "name": "Size",
+      "values": [
+        "Medium",
+        "Small",
+        "Large"
+      ]
+    },
+    {
+      "name": "Alignment",
+      "values": [
+        "Left",
+        "Right"
+      ]
+    },
+    {
+      "name": "Vertical alignment",
+      "values": [
+        "Center",
+        "Top"
+      ]
+    },
+    {
+      "name": "State",
+      "values": [
+        "Enabled",
+        "Focus",
+        "Disabled"
+      ]
+    }
+  ],
+  "exclude": [
+    "{{Type=Tag, Badge, Avatar, Icon, Button, Input}}{{Alignment=Right}}"
+  ],
+  "properties": [
+    {
+      "name": "Label",
+      "type": "TEXT",
+      "default": "Cell text"
+    },
+    {
+      "name": "Second line text",
+      "type": "TEXT",
+      "default": "Second line"
+    },
+    {
+      "name": "Text",
+      "type": "BOOLEAN",
+      "default": true
+    },
+    {
+      "name": "Second line",
+      "type": "BOOLEAN",
+      "default": false
+    },
+    {
+      "name": "Show Leading",
+      "type": "BOOLEAN",
+      "default": false
+    },
+    {
+      "name": "Show Trailing",
+      "type": "BOOLEAN",
+      "default": false
+    }
+  ],
+  "variables": {
+    "Table cell/Container/Medium/Layout horizontal": "Fill container",
+    "Table cell/Container/Medium/Layout vertical": "Hug contents",
+    "Table cell/Container/Medium/Layout min-height": 56,
+    "Table cell/Container/Medium/Padding left": 8,
+    "Table cell/Container/Medium/Padding right": 8,
+    "Table cell/Container/Medium/Padding top": 14,
+    "Table cell/Container/Medium/Padding bottom": 14,
+    "Table cell/Container/Medium/Gap horizontal": 8,
+    "Table cell/Container/Small/Layout horizontal": "Fill container",
+    "Table cell/Container/Small/Layout vertical": "Hug contents",
+    "Table cell/Container/Small/Layout min-height": 48,
+    "Table cell/Container/Small/Padding left": 8,
+    "Table cell/Container/Small/Padding right": 8,
+    "Table cell/Container/Small/Padding top": 12,
+    "Table cell/Container/Small/Padding bottom": 12,
+    "Table cell/Container/Small/Gap horizontal": 8,
+    "Table cell/Container/Large/Layout horizontal": "Fill container",
+    "Table cell/Container/Large/Layout vertical": "Hug contents",
+    "Table cell/Container/Large/Layout min-height": 72,
+    "Table cell/Container/Large/Padding left": 8,
+    "Table cell/Container/Large/Padding right": 8,
+    "Table cell/Container/Large/Padding top": 14,
+    "Table cell/Container/Large/Padding bottom": 14,
+    "Table cell/Container/Large/Gap horizontal": 8,
+    "Table cell/Content/Medium/Padding top": 4,
+    "Table cell/Content/Medium/Padding bottom": 4,
+    "Table cell/Content/Small/Padding top": 0,
+    "Table cell/Content/Small/Padding bottom": 0,
+    "Table cell/Content/Large/Padding top": 12,
+    "Table cell/Content/Large/Padding bottom": 12,
+    "Table cell/Icon/Small/Type token": "fa-sharp fa-solid/Small",
+    "Table cell/Icon/Small/Layout width": 20,
+    "Table cell/Label/Default/Type token": "$body",
+    "Table cell/Label/Default/Gap vertical": 0,
+    "Table cell/Second line/Default/Type token": "$footnote"
+  },
+  "bindings": [
+    {"layer":"(root)","property":"strokes.0","when":"{{Size=*}}","value":"Theme/Transparent"},
+    {"layer":"(root)","property":"strokes.0","when":"{{State=Focus}}","value":"Theme/Focus/focus"},
+    {"layer":"(root)","property":"primaryAxisAlignItems","when":"{{Size=*}}","value":"CENTER","literal":true},
+    {"layer":"(root)","property":"primaryAxisAlignItems","when":"{{Vertical alignment=Top}}","value":"MIN","literal":true},
+    {"layer":"Container","property":"minHeight","when":"{{Size=*}}","value":"Components/Table cell/Container/{{Size=*}}/Layout min-height"},
+    {"layer":"Container","property":"paddingLeft","when":"{{Size=*}}","value":"Components/Table cell/Container/{{Size=*}}/Padding left"},
+    {"layer":"Container","property":"paddingRight","when":"{{Size=*}}","value":"Components/Table cell/Container/{{Size=*}}/Padding right"},
+    {"layer":"Container","property":"paddingTop","when":"{{Size=*}}","value":"Components/Table cell/Container/{{Size=*}}/Padding top"},
+    {"layer":"Container","property":"paddingTop","when":"{{Type=Number, Button, Input}}","value":"Components/Table cell/Content/{{Size=*}}/Padding top"},
+    {"layer":"Container","property":"paddingBottom","when":"{{Size=*}}","value":"Components/Table cell/Container/{{Size=*}}/Padding bottom"},
+    {"layer":"Container","property":"paddingBottom","when":"{{Type=Number, Button, Input}}","value":"Components/Table cell/Content/{{Size=*}}/Padding bottom"},
+    {"layer":"Container","property":"itemSpacing","when":"{{Size=*}}","value":"Components/Table cell/Container/{{Size=*}}/Gap horizontal"},
+    {"layer":"Container","property":"counterAxisAlignItems","when":"{{Size=*}}","value":"CENTER","literal":true},
+    {"layer":"Container","property":"counterAxisAlignItems","when":"{{Vertical alignment=Top}}","value":"MIN","literal":true},
+    {"layer":"Container","property":"primaryAxisAlignItems","when":"{{Size=*}}","value":"MIN","literal":true},
+    {"layer":"Container","property":"primaryAxisAlignItems","when":"{{Alignment=Right}}","value":"MAX","literal":true},
+    {"layer":"Container / Leading","property":"visible","when":"{{Size=*}}","value":"false","literal":true},
+    {"layer":"Container / Leading","property":"visible","when":"{{Type=Avatar, Icon}}","value":"true","literal":true},
+    {"layer":"Container / Leading","property":"layoutSizingHorizontal","when":"{{Size=*}}","value":"HUG","literal":true},
+    {"layer":"Container / Leading","property":"layoutSizingVertical","when":"{{Size=*}}","value":"HUG","literal":true},
+    {"layer":"Container / Leading / Avatar","property":"isExposedInstance","when":"{{Size=*}}","value":"true","literal":true},
+    {"layer":"Container / Leading / Avatar","property":"visible","when":"{{Size=*}}","value":"false","literal":true},
+    {"layer":"Container / Leading / Avatar","property":"visible","when":"{{Type=Avatar}}","value":"true","literal":true},
+    {"layer":"Container / Leading / Avatar","property":"componentProperties.Size","when":"{{Size=*}}","value":"2XSmall","literal":true},
+    {"layer":"Container / Leading / Avatar","property":"componentProperties.Artwork","when":"{{Size=*}}","value":"Initials","literal":true},
+    {"layer":"Container / Leading / Avatar","property":"componentProperties.Color","when":"{{Size=*}}","value":"Default","literal":true},
+    {"layer":"Container / Leading / Icon","property":"visible","when":"{{Size=*}}","value":"false","literal":true},
+    {"layer":"Container / Leading / Icon","property":"visible","when":"{{Type=Icon, Text}}","value":"true","literal":true},
+    {"layer":"Container / Leading / Icon","property":"textStyleId","when":"{{Size=*}}","value":"fa-sharp fa-solid/Small"},
+    {"layer":"Container / Leading / Icon","property":"fills.0","when":"{{Size=*}}","value":"Theme/Icon/icon-secondary"},
+    {"layer":"Container / Leading / Icon","property":"fills.0","when":"{{State=Disabled}}","value":"Theme/Icon/icon-disabled"},
+    {"layer":"Container / Leading / Icon","property":"width","when":"{{Size=*}}","value":"Components/Table cell/Icon/Small/Layout width"},
+    {"layer":"Container / Leading / Icon","property":"characters","when":"{{Size=*}}","value":"circle-info","literal":true},
+    {"layer":"Container / Text","property":"visible","when":"{{Size=*}}","value":"true","literal":true},
+    {"layer":"Container / Text","property":"visible","when":"{{Type=Number, Tag, Button, Input}}","value":"false","literal":true},
+    {"layer":"Container / Text","property":"layoutSizingHorizontal","when":"{{Size=*}}","value":"FILL","literal":true},
+    {"layer":"Container / Text","property":"itemSpacing","when":"{{Size=*}}","value":"Components/Table cell/Label/Default/Gap vertical"},
+    {"layer":"Container / Text / Label","property":"textStyleId","when":"{{Size=*}}","value":"Body/Body"},
+    {"layer":"Container / Text / Label","property":"fills.0","when":"{{Size=*}}","value":"Theme/Text/text-primary"},
+    {"layer":"Container / Text / Label","property":"fills.0","when":"{{State=Disabled}}","value":"Theme/Text/text-disabled"},
+    {"layer":"Container / Text / Label","property":"layoutSizingHorizontal","when":"{{Size=*}}","value":"FILL","literal":true},
+    {"layer":"Container / Text / Label","property":"textAutoResize","when":"{{Size=*}}","value":"HEIGHT","literal":true},
+    {"layer":"Container / Text / Label","property":"textAlignHorizontal","when":"{{Size=*}}","value":"LEFT","literal":true},
+    {"layer":"Container / Text / Label","property":"textAlignHorizontal","when":"{{Alignment=Right}}","value":"RIGHT","literal":true},
+    {"layer":"Container / Text / Second line","property":"visible","when":"{{Size=*}}","value":"false","literal":true},
+    {"layer":"Container / Text / Second line","property":"textStyleId","when":"{{Size=*}}","value":"Utility/Footnote"},
+    {"layer":"Container / Text / Second line","property":"fills.0","when":"{{Size=*}}","value":"Theme/Text/text-secondary"},
+    {"layer":"Container / Text / Second line","property":"fills.0","when":"{{State=Disabled}}","value":"Theme/Text/text-disabled"},
+    {"layer":"Container / Text / Second line","property":"layoutSizingHorizontal","when":"{{Size=*}}","value":"FILL","literal":true},
+    {"layer":"Container / Text / Second line","property":"textAutoResize","when":"{{Size=*}}","value":"HEIGHT","literal":true},
+    {"layer":"Container / Text / Second line","property":"textAlignHorizontal","when":"{{Size=*}}","value":"LEFT","literal":true},
+    {"layer":"Container / Text / Second line","property":"textAlignHorizontal","when":"{{Alignment=Right}}","value":"RIGHT","literal":true},
+    {"layer":"Container / Trailing","property":"visible","when":"{{Size=*}}","value":"true","literal":true},
+    {"layer":"Container / Trailing","property":"visible","when":"{{Type=Text, Avatar, Icon}}","value":"false","literal":true},
+    {"layer":"Container / Trailing","property":"layoutSizingHorizontal","when":"{{Size=*}}","value":"HUG","literal":true},
+    {"layer":"Container / Trailing","property":"layoutSizingHorizontal","when":"{{Type=Number, Input}}","value":"FILL","literal":true},
+    {"layer":"Container / Trailing","property":"layoutSizingVertical","when":"{{Size=*}}","value":"HUG","literal":true},
+    {"layer":"Container / Trailing / Tag","property":"isExposedInstance","when":"{{Size=*}}","value":"true","literal":true},
+    {"layer":"Container / Trailing / Tag","property":"visible","when":"{{Size=*}}","value":"false","literal":true},
+    {"layer":"Container / Trailing / Tag","property":"visible","when":"{{Type=Text, Tag}}","value":"true","literal":true},
+    {"layer":"Container / Trailing / Tag","property":"componentProperties.Size","when":"{{Size=*}}","value":"Small","literal":true},
+    {"layer":"Container / Trailing / Tag","property":"componentProperties.State","when":"{{Size=*}}","value":"Enabled","literal":true},
+    {"layer":"Container / Trailing / Value","property":"isExposedInstance","when":"{{Size=*}}","value":"true","literal":true},
+    {"layer":"Container / Trailing / Value","property":"visible","when":"{{Size=*}}","value":"false","literal":true},
+    {"layer":"Container / Trailing / Value","property":"visible","when":"{{Type=Number}}","value":"true","literal":true},
+    {"layer":"Container / Trailing / Value","property":"componentProperties.Text style","when":"{{Size=*}}","value":"Body","literal":true},
+    {"layer":"Container / Trailing / Value","property":"componentProperties.Unit","when":"{{Size=*}}","value":"Baht","literal":true},
+    {"layer":"Container / Trailing / Value","property":"componentProperties.Change","when":"{{Size=*}}","value":"None","literal":true},
+    {"layer":"Container / Trailing / Value","property":"componentProperties.State","when":"{{Size=*}}","value":"Enabled","literal":true},
+    {"layer":"Container / Trailing / Value","property":"componentProperties.State","when":"{{State=Disabled}}","value":"Disabled","literal":true},
+    {"layer":"Container / Trailing / Value","property":"layoutSizingHorizontal","when":"{{Size=*}}","value":"FILL","literal":true},
+    {"layer":"Container / Trailing / Value","property":"counterAxisAlignItems","when":"{{Size=*}}","value":"MIN","literal":true},
+    {"layer":"Container / Trailing / Value","property":"counterAxisAlignItems","when":"{{Alignment=Right}}","value":"MAX","literal":true},
+    {"layer":"Container / Trailing / Badge","property":"isExposedInstance","when":"{{Size=*}}","value":"true","literal":true},
+    {"layer":"Container / Trailing / Badge","property":"visible","when":"{{Size=*}}","value":"false","literal":true},
+    {"layer":"Container / Trailing / Badge","property":"visible","when":"{{Type=Badge}}","value":"true","literal":true},
+    {"layer":"Container / Trailing / Badge","property":"componentProperties.Content","when":"{{Size=*}}","value":"Count","literal":true},
+    {"layer":"Container / Trailing / Button","property":"isExposedInstance","when":"{{Size=*}}","value":"true","literal":true},
+    {"layer":"Container / Trailing / Button","property":"visible","when":"{{Size=*}}","value":"false","literal":true},
+    {"layer":"Container / Trailing / Button","property":"visible","when":"{{Type=Button}}","value":"true","literal":true},
+    {"layer":"Container / Trailing / Button","property":"componentProperties.Hierarchy","when":"{{Size=*}}","value":"Tertiary","literal":true},
+    {"layer":"Container / Trailing / Button","property":"componentProperties.Type","when":"{{Size=*}}","value":"Default","literal":true},
+    {"layer":"Container / Trailing / Button","property":"componentProperties.Size","when":"{{Size=*}}","value":"XSmall","literal":true},
+    {"layer":"Container / Trailing / Button","property":"componentProperties.State","when":"{{Size=*}}","value":"Enabled","literal":true},
+    {"layer":"Container / Trailing / Button","property":"componentProperties.State","when":"{{State=Disabled}}","value":"Disabled","literal":true},
+    {"layer":"Container / Trailing / Field","property":"isExposedInstance","when":"{{Size=*}}","value":"true","literal":true},
+    {"layer":"Container / Trailing / Field","property":"visible","when":"{{Size=*}}","value":"false","literal":true},
+    {"layer":"Container / Trailing / Field","property":"visible","when":"{{Type=Input}}","value":"true","literal":true},
+    {"layer":"Container / Trailing / Field","property":"componentProperties.Size","when":"{{Size=*}}","value":"Small","literal":true},
+    {"layer":"Container / Trailing / Field","property":"componentProperties.State","when":"{{Size=*}}","value":"Enabled","literal":true},
+    {"layer":"Container / Trailing / Field","property":"componentProperties.State","when":"{{State=Disabled}}","value":"Disabled","literal":true},
+    {"layer":"Container / Trailing / Field","property":"layoutSizingHorizontal","when":"{{Size=*}}","value":"FILL","literal":true}
+  ]
+},
+{
+  "name": "Table expanded row",
+  "axes": [],
+  "exclude": [],
+  "properties": [
+    {
+      "name": "Content",
+      "type": "SLOT"
+    },
+    {
+      "name": "Divider",
+      "type": "BOOLEAN",
+      "default": true
+    }
+  ],
+  "variables": {
+    "Table expanded row/Container/Default/Layout horizontal": "Fill container",
+    "Table expanded row/Container/Default/Layout vertical": "Hug contents",
+    "Table expanded row/Container/Default/Padding left": 16,
+    "Table expanded row/Container/Default/Padding right": 16,
+    "Table expanded row/Container/Default/Padding top": 0,
+    "Table expanded row/Container/Default/Padding bottom": 16,
+    "Table expanded row/Line/Default/Layout horizontal": "Fill container",
+    "Table expanded row/Line/Default/Layout vertical": "Fixed",
+    "Table expanded row/Line/Default/Layout height": 1
+  },
+  "bindings": [
+    {"layer":"(root)","property":"paddingLeft","when":"","value":"Components/Table expanded row/Container/Default/Padding left"},
+    {"layer":"(root)","property":"paddingRight","when":"","value":"Components/Table expanded row/Container/Default/Padding right"},
+    {"layer":"(root)","property":"paddingTop","when":"","value":"Components/Table expanded row/Container/Default/Padding top"},
+    {"layer":"(root)","property":"paddingBottom","when":"","value":"Components/Table expanded row/Container/Default/Padding bottom"},
+    {"layer":"Content","property":"layoutSizingHorizontal","when":"","value":"FILL","literal":true},
+    {"layer":"Content","property":"layoutSizingVertical","when":"","value":"HUG","literal":true},
+    {"layer":"Content / Text","property":"textStyleId","when":"","value":"Body/Body"},
+    {"layer":"Content / Text","property":"fills.0","when":"","value":"Theme/Text/text-secondary"},
+    {"layer":"Content / Text","property":"layoutSizingHorizontal","when":"","value":"FILL","literal":true},
+    {"layer":"Content / Text","property":"textAutoResize","when":"","value":"HEIGHT","literal":true},
+    {"layer":"Content / Text","property":"textAlignHorizontal","when":"","value":"LEFT","literal":true}
+  ]
+},
+{
+  "name": "Table header cell",
+  "axes": [
+    {
+      "name": "Size",
+      "values": [
+        "Medium",
+        "Small",
+        "Large"
+      ]
+    },
+    {
+      "name": "Alignment",
+      "values": [
+        "Left",
+        "Right"
+      ]
+    },
+    {
+      "name": "Sorted",
+      "values": [
+        "None",
+        "Ascending",
+        "Descending"
+      ]
+    },
+    {
+      "name": "State",
+      "values": [
+        "Enabled",
+        "Focus"
+      ]
+    }
+  ],
+  "exclude": [],
+  "properties": [
+    {
+      "name": "Label",
+      "type": "TEXT",
+      "default": "Header"
+    },
+    {
+      "name": "Sortable",
+      "type": "BOOLEAN",
+      "default": false
+    }
+  ],
+  "variables": {
+    "Table header cell/Container/Medium/Layout horizontal": "Fill container",
+    "Table header cell/Container/Medium/Layout vertical": "Hug contents",
+    "Table header cell/Container/Medium/Layout min-height": 56,
+    "Table header cell/Container/Medium/Padding left": 8,
+    "Table header cell/Container/Medium/Padding right": 8,
+    "Table header cell/Container/Medium/Padding top": 14,
+    "Table header cell/Container/Medium/Padding bottom": 14,
+    "Table header cell/Container/Medium/Gap horizontal": 4,
+    "Table header cell/Container/Small/Layout horizontal": "Fill container",
+    "Table header cell/Container/Small/Layout vertical": "Hug contents",
+    "Table header cell/Container/Small/Layout min-height": 48,
+    "Table header cell/Container/Small/Padding left": 8,
+    "Table header cell/Container/Small/Padding right": 8,
+    "Table header cell/Container/Small/Padding top": 12,
+    "Table header cell/Container/Small/Padding bottom": 12,
+    "Table header cell/Container/Small/Gap horizontal": 4,
+    "Table header cell/Container/Large/Layout horizontal": "Fill container",
+    "Table header cell/Container/Large/Layout vertical": "Hug contents",
+    "Table header cell/Container/Large/Layout min-height": 72,
+    "Table header cell/Container/Large/Padding left": 8,
+    "Table header cell/Container/Large/Padding right": 8,
+    "Table header cell/Container/Large/Padding top": 14,
+    "Table header cell/Container/Large/Padding bottom": 14,
+    "Table header cell/Container/Large/Gap horizontal": 4,
+    "Table header cell/Label/Default/Type token": "$footnote",
+    "Table header cell/Label/Default/Type emphasis": "Strong",
+    "Table header cell/Icon/Small/Type token": "fa-sharp fa-solid/Small",
+    "Table header cell/Icon/Small/Layout width": 20
+  },
+  "bindings": [
+    {"layer":"(root)","property":"minWidth","when":"{{Size=*}}","value":"Components/Interactive/{{Size=*}}/Interactive min-height"},
+    {"layer":"(root)","property":"minHeight","when":"{{Size=*}}","value":"Components/Interactive/{{Size=*}}/Interactive min-height"},
+    {"layer":"(root)","property":"strokes.0","when":"{{Size=*}}","value":"Theme/Transparent"},
+    {"layer":"(root)","property":"strokes.0","when":"{{State=Focus}}","value":"Theme/Focus/focus"},
+    {"layer":"Container","property":"minHeight","when":"{{Size=*}}","value":"Components/Table header cell/Container/{{Size=*}}/Layout min-height"},
+    {"layer":"Container","property":"paddingLeft","when":"{{Size=*}}","value":"Components/Table header cell/Container/{{Size=*}}/Padding left"},
+    {"layer":"Container","property":"paddingRight","when":"{{Size=*}}","value":"Components/Table header cell/Container/{{Size=*}}/Padding right"},
+    {"layer":"Container","property":"paddingTop","when":"{{Size=*}}","value":"Components/Table header cell/Container/{{Size=*}}/Padding top"},
+    {"layer":"Container","property":"paddingBottom","when":"{{Size=*}}","value":"Components/Table header cell/Container/{{Size=*}}/Padding bottom"},
+    {"layer":"Container","property":"itemSpacing","when":"{{Size=*}}","value":"Components/Table header cell/Container/{{Size=*}}/Gap horizontal"},
+    {"layer":"Container","property":"counterAxisAlignItems","when":"{{Size=*}}","value":"CENTER","literal":true},
+    {"layer":"Container","property":"primaryAxisAlignItems","when":"{{Size=*}}","value":"MIN","literal":true},
+    {"layer":"Container","property":"primaryAxisAlignItems","when":"{{Alignment=Right}}","value":"MAX","literal":true},
+    {"layer":"Container / Label","property":"textStyleId","when":"{{Size=*}}","value":"Utility/Footnote"},
+    {"layer":"Container / Label","property":"explicitMode.Type Emphasis","when":"{{Size=*}}","value":"Strong","literal":true},
+    {"layer":"Container / Label","property":"fills.0","when":"{{Size=*}}","value":"Theme/Text/text-secondary"},
+    {"layer":"Container / Label","property":"layoutSizingHorizontal","when":"{{Size=*}}","value":"FILL","literal":true},
+    {"layer":"Container / Label","property":"textAutoResize","when":"{{Size=*}}","value":"HEIGHT","literal":true},
+    {"layer":"Container / Label","property":"textAlignHorizontal","when":"{{Size=*}}","value":"LEFT","literal":true},
+    {"layer":"Container / Label","property":"textAlignHorizontal","when":"{{Alignment=Right}}","value":"RIGHT","literal":true},
+    {"layer":"Container / Icon","property":"visible","when":"{{Size=*}}","value":"true","literal":true},
+    {"layer":"Container / Icon","property":"visible","when":"{{Sorted=None}}","value":"false","literal":true},
+    {"layer":"Container / Icon","property":"textStyleId","when":"{{Size=*}}","value":"fa-sharp fa-solid/Small"},
+    {"layer":"Container / Icon","property":"fills.0","when":"{{Size=*}}","value":"Theme/Icon/icon-secondary"},
+    {"layer":"Container / Icon","property":"width","when":"{{Size=*}}","value":"Components/Table header cell/Icon/Small/Layout width"},
+    {"layer":"Container / Icon","property":"characters","when":"{{Sorted=None}}","value":"arrow-up-arrow-down","literal":true},
+    {"layer":"Container / Icon","property":"characters","when":"{{Sorted=Ascending}}","value":"arrow-up","literal":true},
+    {"layer":"Container / Icon","property":"characters","when":"{{Sorted=Descending}}","value":"arrow-down","literal":true}
+  ]
+},
+{
+  "name": "Table row",
+  "axes": [
+    {
+      "name": "Type",
+      "values": [
+        "Body",
+        "Header"
+      ]
+    },
+    {
+      "name": "Size",
+      "values": [
+        "Medium",
+        "Small",
+        "Large"
+      ]
+    },
+    {
+      "name": "Selection",
+      "values": [
+        "None",
+        "Checkbox",
+        "Radio"
+      ]
+    },
+    {
+      "name": "Expansion",
+      "values": [
+        "None",
+        "Collapsed",
+        "Expanded"
+      ]
+    },
+    {
+      "name": "State",
+      "values": [
+        "Enabled",
+        "Hover"
+      ]
+    }
+  ],
+  "exclude": [
+    "{{Type=Header}}{{State=Hover}}"
+  ],
+  "properties": [
+    {
+      "name": "Cells",
+      "type": "SLOT"
+    },
+    {
+      "name": "Zebra",
+      "type": "BOOLEAN",
+      "default": false
+    },
+    {
+      "name": "Selected",
+      "type": "BOOLEAN",
+      "default": false
+    },
+    {
+      "name": "Margins",
+      "type": "BOOLEAN",
+      "default": true
+    },
+    {
+      "name": "Margins",
+      "type": "BOOLEAN",
+      "default": true
+    },
+    {
+      "name": "Divider",
+      "type": "BOOLEAN",
+      "default": true
+    }
+  ],
+  "variables": {
+    "Table row/Container/Medium/Layout horizontal": "Fill container",
+    "Table row/Container/Medium/Layout vertical": "Hug contents",
+    "Table row/Container/Medium/Layout min-height": 56,
+    "Table row/Container/Medium/Padding left": 8,
+    "Table row/Container/Medium/Padding right": 8,
+    "Table row/Container/Medium/Gap horizontal": 0,
+    "Table row/Container/Small/Layout horizontal": "Fill container",
+    "Table row/Container/Small/Layout vertical": "Hug contents",
+    "Table row/Container/Small/Layout min-height": 48,
+    "Table row/Container/Small/Padding left": 8,
+    "Table row/Container/Small/Padding right": 8,
+    "Table row/Container/Small/Gap horizontal": 0,
+    "Table row/Container/Large/Layout horizontal": "Fill container",
+    "Table row/Container/Large/Layout vertical": "Hug contents",
+    "Table row/Container/Large/Layout min-height": 72,
+    "Table row/Container/Large/Padding left": 8,
+    "Table row/Container/Large/Padding right": 8,
+    "Table row/Container/Large/Gap horizontal": 0,
+    "Table row/Leading/Default/Layout horizontal": "Hug contents",
+    "Table row/Leading/Default/Layout vertical": "Hug contents",
+    "Table row/Leading/Default/Layout min-width": 48,
+    "Table row/Leading/Default/Layout min-height": 48,
+    "Table row/Leading/Default/Gap horizontal": 0,
+    "Table row/Line/Default/Layout horizontal": "Fill container",
+    "Table row/Line/Default/Layout vertical": "Fixed",
+    "Table row/Line/Default/Layout height": 1
+  },
+  "bindings": [
+    {"layer":"(root)","property":"fills.0","when":"{{Size=*}}","value":"none","literal":true},
+    {"layer":"(root)","property":"fills.0","when":"{{Type=Header}}","value":"Theme/Layer/layer-02"},
+    {"layer":"(root)","property":"fills.0","when":"{{Type=Body}}{{State=Hover}}","value":"Theme/Layer/layer-hover-01"},
+    {"layer":"Background","property":"visible","when":"{{Size=*}}","value":"false","literal":true},
+    {"layer":"Background","property":"fills.0","when":"{{Size=*}}","value":"Theme/Layer/layer-02"},
+    {"layer":"Background","property":"fills.0","when":"{{State=Hover}}","value":"Theme/Transparent"},
+    {"layer":"Selected","property":"visible","when":"{{Size=*}}","value":"false","literal":true},
+    {"layer":"Selected","property":"fills.0","when":"{{Size=*}}","value":"Theme/Layer/layer-selected-01"},
+    {"layer":"Margin left","property":"width","when":"{{Size=*}}","value":"Components/Table row/Container/{{Size=*}}/Padding left"},
+    {"layer":"Margin left","property":"layoutSizingVertical","when":"{{Size=*}}","value":"FILL","literal":true},
+    {"layer":"Margin right","property":"width","when":"{{Size=*}}","value":"Components/Table row/Container/{{Size=*}}/Padding right"},
+    {"layer":"Margin right","property":"layoutSizingVertical","when":"{{Size=*}}","value":"FILL","literal":true},
+    {"layer":"Leading","property":"visible","when":"{{Size=*}}","value":"true","literal":true},
+    {"layer":"Leading","property":"visible","when":"{{Selection=None}}{{Expansion=None}}","value":"false","literal":true},
+    {"layer":"Leading","property":"itemSpacing","when":"{{Size=*}}","value":"Components/Table row/Leading/Default/Gap horizontal"},
+    {"layer":"Leading","property":"minWidth","when":"{{Size=*}}","value":"Components/Table row/Leading/Default/Layout min-width"},
+    {"layer":"Leading","property":"minHeight","when":"{{Size=*}}","value":"Components/Table row/Leading/Default/Layout min-height"},
+    {"layer":"Leading / Expand","property":"visible","when":"{{Size=*}}","value":"false","literal":true},
+    {"layer":"Leading / Expand","property":"visible","when":"{{Expansion=Collapsed, Expanded}}","value":"true","literal":true},
+    {"layer":"Leading / Expand","property":"componentProperties.Hierarchy","when":"{{Size=*}}","value":"Tertiary","literal":true},
+    {"layer":"Leading / Expand","property":"componentProperties.Type","when":"{{Size=*}}","value":"Default","literal":true},
+    {"layer":"Leading / Expand","property":"componentProperties.Size","when":"{{Size=*}}","value":"Small","literal":true},
+    {"layer":"Leading / Expand","property":"componentProperties.State","when":"{{Size=*}}","value":"Enabled","literal":true},
+    {"layer":"Leading / Expand","property":"componentProperties.Icon Text","when":"{{Size=*}}","value":"chevron-down","literal":true},
+    {"layer":"Leading / Expand","property":"componentProperties.Icon Text","when":"{{Expansion=Expanded}}","value":"chevron-up","literal":true},
+    {"layer":"Leading / Checkbox","property":"visible","when":"{{Size=*}}","value":"false","literal":true},
+    {"layer":"Leading / Checkbox","property":"visible","when":"{{Selection=Checkbox}}","value":"true","literal":true},
+    {"layer":"Leading / Checkbox","property":"componentProperties.Type","when":"{{Size=*}}","value":"Icon only","literal":true},
+    {"layer":"Leading / Checkbox","property":"componentProperties.State","when":"{{Size=*}}","value":"Enabled","literal":true},
+    {"layer":"Leading / Checkbox","property":"componentProperties.Selection","when":"{{Size=*}}","value":"Unchecked","literal":true},
+    {"layer":"Leading / Radio","property":"visible","when":"{{Size=*}}","value":"false","literal":true},
+    {"layer":"Leading / Radio","property":"visible","when":"{{Type=Body}}{{Selection=Radio}}","value":"true","literal":true},
+    {"layer":"Leading / Radio","property":"componentProperties.Type","when":"{{Size=*}}","value":"Icon only","literal":true},
+    {"layer":"Leading / Radio","property":"componentProperties.State","when":"{{Size=*}}","value":"Enabled","literal":true},
+    {"layer":"Leading / Radio","property":"componentProperties.Selection","when":"{{Size=*}}","value":"Unselected","literal":true},
+    {"layer":"Cells","property":"minHeight","when":"{{Size=*}}","value":"Components/Table row/Container/{{Size=*}}/Layout min-height"},
+    {"layer":"Cells","property":"paddingLeft","when":"{{Size=*}}","value":"0","literal":true},
+    {"layer":"Cells","property":"paddingRight","when":"{{Size=*}}","value":"0","literal":true},
+    {"layer":"Cells","property":"itemSpacing","when":"{{Size=*}}","value":"Components/Table row/Container/{{Size=*}}/Gap horizontal"},
+    {"layer":"Cells","property":"layoutSizingHorizontal","when":"{{Size=*}}","value":"FILL","literal":true},
+    {"layer":"Cells / Cell 1","property":"visible","when":"{{Size=*}}","value":"true","literal":true},
+    {"layer":"Cells / Cell 1","property":"visible","when":"{{Type=Header}}","value":"false","literal":true},
+    {"layer":"Cells / Cell 1","property":"componentProperties.Size","when":"{{Size=*}}","value":"{{Size=*}}"},
+    {"layer":"Cells / Cell 1","property":"componentProperties.State","when":"{{Size=*}}","value":"Enabled","literal":true},
+    {"layer":"Cells / Cell 1","property":"layoutSizingHorizontal","when":"{{Size=*}}","value":"FILL","literal":true},
+    {"layer":"Cells / Cell 1","property":"layoutSizingVertical","when":"{{Size=*}}","value":"FILL","literal":true},
+    {"layer":"Cells / Cell 2","property":"visible","when":"{{Size=*}}","value":"true","literal":true},
+    {"layer":"Cells / Cell 2","property":"visible","when":"{{Type=Header}}","value":"false","literal":true},
+    {"layer":"Cells / Cell 2","property":"componentProperties.Size","when":"{{Size=*}}","value":"{{Size=*}}"},
+    {"layer":"Cells / Cell 2","property":"componentProperties.State","when":"{{Size=*}}","value":"Enabled","literal":true},
+    {"layer":"Cells / Cell 2","property":"layoutSizingHorizontal","when":"{{Size=*}}","value":"FILL","literal":true},
+    {"layer":"Cells / Cell 2","property":"layoutSizingVertical","when":"{{Size=*}}","value":"FILL","literal":true},
+    {"layer":"Cells / Cell 3","property":"visible","when":"{{Size=*}}","value":"true","literal":true},
+    {"layer":"Cells / Cell 3","property":"visible","when":"{{Type=Header}}","value":"false","literal":true},
+    {"layer":"Cells / Cell 3","property":"componentProperties.Size","when":"{{Size=*}}","value":"{{Size=*}}"},
+    {"layer":"Cells / Cell 3","property":"componentProperties.State","when":"{{Size=*}}","value":"Enabled","literal":true},
+    {"layer":"Cells / Cell 3","property":"layoutSizingHorizontal","when":"{{Size=*}}","value":"FILL","literal":true},
+    {"layer":"Cells / Cell 3","property":"layoutSizingVertical","when":"{{Size=*}}","value":"FILL","literal":true},
+    {"layer":"Cells / Cell 4","property":"visible","when":"{{Size=*}}","value":"true","literal":true},
+    {"layer":"Cells / Cell 4","property":"visible","when":"{{Type=Header}}","value":"false","literal":true},
+    {"layer":"Cells / Cell 4","property":"componentProperties.Size","when":"{{Size=*}}","value":"{{Size=*}}"},
+    {"layer":"Cells / Cell 4","property":"componentProperties.State","when":"{{Size=*}}","value":"Enabled","literal":true},
+    {"layer":"Cells / Cell 4","property":"layoutSizingHorizontal","when":"{{Size=*}}","value":"FILL","literal":true},
+    {"layer":"Cells / Cell 4","property":"layoutSizingVertical","when":"{{Size=*}}","value":"FILL","literal":true},
+    {"layer":"Cells / Header 1","property":"visible","when":"{{Size=*}}","value":"false","literal":true},
+    {"layer":"Cells / Header 1","property":"visible","when":"{{Type=Header}}","value":"true","literal":true},
+    {"layer":"Cells / Header 1","property":"componentProperties.Size","when":"{{Size=*}}","value":"{{Size=*}}"},
+    {"layer":"Cells / Header 1","property":"componentProperties.State","when":"{{Size=*}}","value":"Enabled","literal":true},
+    {"layer":"Cells / Header 1","property":"componentProperties.Sorted","when":"{{Size=*}}","value":"None","literal":true},
+    {"layer":"Cells / Header 1","property":"layoutSizingHorizontal","when":"{{Size=*}}","value":"FILL","literal":true},
+    {"layer":"Cells / Header 1","property":"layoutSizingVertical","when":"{{Size=*}}","value":"FILL","literal":true},
+    {"layer":"Cells / Header 2","property":"visible","when":"{{Size=*}}","value":"false","literal":true},
+    {"layer":"Cells / Header 2","property":"visible","when":"{{Type=Header}}","value":"true","literal":true},
+    {"layer":"Cells / Header 2","property":"componentProperties.Size","when":"{{Size=*}}","value":"{{Size=*}}"},
+    {"layer":"Cells / Header 2","property":"componentProperties.State","when":"{{Size=*}}","value":"Enabled","literal":true},
+    {"layer":"Cells / Header 2","property":"componentProperties.Sorted","when":"{{Size=*}}","value":"None","literal":true},
+    {"layer":"Cells / Header 2","property":"layoutSizingHorizontal","when":"{{Size=*}}","value":"FILL","literal":true},
+    {"layer":"Cells / Header 2","property":"layoutSizingVertical","when":"{{Size=*}}","value":"FILL","literal":true},
+    {"layer":"Cells / Header 3","property":"visible","when":"{{Size=*}}","value":"false","literal":true},
+    {"layer":"Cells / Header 3","property":"visible","when":"{{Type=Header}}","value":"true","literal":true},
+    {"layer":"Cells / Header 3","property":"componentProperties.Size","when":"{{Size=*}}","value":"{{Size=*}}"},
+    {"layer":"Cells / Header 3","property":"componentProperties.State","when":"{{Size=*}}","value":"Enabled","literal":true},
+    {"layer":"Cells / Header 3","property":"componentProperties.Sorted","when":"{{Size=*}}","value":"None","literal":true},
+    {"layer":"Cells / Header 3","property":"layoutSizingHorizontal","when":"{{Size=*}}","value":"FILL","literal":true},
+    {"layer":"Cells / Header 3","property":"layoutSizingVertical","when":"{{Size=*}}","value":"FILL","literal":true},
+    {"layer":"Cells / Header 4","property":"visible","when":"{{Size=*}}","value":"false","literal":true},
+    {"layer":"Cells / Header 4","property":"visible","when":"{{Type=Header}}","value":"true","literal":true},
+    {"layer":"Cells / Header 4","property":"componentProperties.Size","when":"{{Size=*}}","value":"{{Size=*}}"},
+    {"layer":"Cells / Header 4","property":"componentProperties.State","when":"{{Size=*}}","value":"Enabled","literal":true},
+    {"layer":"Cells / Header 4","property":"componentProperties.Sorted","when":"{{Size=*}}","value":"None","literal":true},
+    {"layer":"Cells / Header 4","property":"layoutSizingHorizontal","when":"{{Size=*}}","value":"FILL","literal":true},
+    {"layer":"Cells / Header 4","property":"layoutSizingVertical","when":"{{Size=*}}","value":"FILL","literal":true}
+  ]
+}
+]
+}
