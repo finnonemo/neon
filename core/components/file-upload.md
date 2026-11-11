@@ -27,7 +27,7 @@ File upload (variant root)       Fill × Hug, no fill, no padding, no min size (
       └─ _File media item        State=Uploading (default content)
 ```
 
-- One Slot per `List` value: any number of files). The set's values don't depend on it.
+- One Slot per `List` value: `File list` of `_File item`s, `Media list` of `_File media item`s (Variant axes "Slot or axis": any number of files). The set's values don't depend on it.
 - The constraints sit in the zone, as on the E-KYC screen, so `Detail` under the zone carries only the error, as Text field's does. A file's own error goes on its `_File item`, not here.
 - Title and Detail are Text field's, under the same layer names and tokens, so a form of fields and an upload reads as one form. `Description` is Carbon's (`Desc. text`) and the screen's second line.
 - The `Zone` boolean lets a one-document slot hide the zone once its file is in (Q10).
@@ -90,16 +90,16 @@ _File media item (variant root)  80 × 80, VERTICAL, no fill
 
 | Axis | Values (default first) | Drives |
 | --- | --- | --- |
-| `State` | Enabled · Uploading · Drag over · Disabled · Error · Skeleton | Uploading: `List=Single` only; the zone shows in the Preview's place with the Progress bar and Cancel in place of the Prompt, Helper Text and Button. Drag over: Disabled: text and the Button disabled, the zone's fill unchanged. Error: the Detail line shows with its glyph. Skeleton: bars in place of the Title and the zone, Detail and list hidden |
-| `List` | Item · Media · Single | Item: `File list` of rows; Media: Single: one picked image in the zone's place, the `Preview`, no Drag over |
+| `State` | Enabled · Uploading · Drag over · Disabled · Error · Skeleton | Uploading: `List=Single` only; the zone shows in the Preview's place with the Progress bar and Cancel in place of the Prompt, Helper Text and Button. Drag over: the zone fills `Field/field-hover`; the Prompt, "Drop the file to upload" in `Text/text-primary`, shows on every zone. Disabled: text and the Button disabled, the zone's fill unchanged. Error: the Detail line shows with its glyph. Skeleton: bars in place of the Title and the zone, Detail and list hidden |
+| `List` | Item · Media · Single | Item: `File list` of rows; Media: `Media list` of tiles, wrapping; Single: one picked image in the zone's place, the `Preview`, no Drag over |
 
-Grid (Grid order): rows `State`; columns `List` (Item, Media, Single) × `iOS` (False, True) (owner, 2026-11-05: "มันควรเป็น ios=false แล้วตามด้วย column ios=true"); `MANUAL`; a Fill grid: the set Fixed 2198, columns FLEX, roots Fill × Hug. `_File item`: rows `State`, columns `Type` × `iOS` (7 × 4). `_File media item`: rows `State`, columns `iOS` (6 × 2). Ids for `grid-args.mjs`:
+Grid (Grid order): rows `State`; columns `List` (Item, Media, Single) × `iOS` (False, True) (owner, 2026-11-05: "มันควรเป็น ios=false แล้วตามด้วย column ios=true"); 6 × 6, gaps 20, 6 holes (Uploading × Item and Media, Drag over × Single) since (5 × 6 with 2 holes from , 5 × 4 with none from , 9 × 4 with 10 holes before); `MANUAL`; a Fill grid: the set Fixed 2198, columns FLEX, roots Fill × Hug. `_File item`: rows `State`, columns `Type` × `iOS` (7 × 4). `_File media item`: rows `State`, columns `iOS` (6 × 2). Ids for `grid-args.mjs`: set `File upload`, set `_File item`, set `_File media item`.
 
 Properties: `Title` (BOOLEAN, on), `Description` (BOOLEAN, off), `Zone` (BOOLEAN, on), `File list` (BOOLEAN, on), `Title text` = "Name-change certificate", `Description text` = "(Bank account name matching the new full name)", `Helper text` = "Files up to 5 MB" and "(.jpg / .jpeg, .png, .pdf)" on a second line, `Error text` = "Please upload a document"; the nested Button exposed for its label.
 
 The screen breaks its constraints line with a U+2028 line separator. The generator writes a plain `\n`: U+2028 in a `use_figma` result breaks the MCP stream.
 
-6 States × 3 `List` × 2 looks, less Drag over × Single and Uploading × Item and Media = **30 variants** (28 before , 20 before , 26 with `Platform` before ).
+6 States × 3 `List` × 2 looks, less Drag over × Single and Uploading × Item and Media = **30 variants** (28 before , 20 before , 26 with `Platform` before).
 
 ### `_File item`
 
@@ -109,7 +109,7 @@ The screen breaks its constraints line with a U+2028 line separator. The generat
 | `Artwork` | Image · Icon | Image: the picked image fills the tile. Icon: the File icon for a file with no preview, in the tile (Standard) or bare before the name (Compact). Only Uploaded, Uploading (Icon: the plain `file` glyph), Success, Focus and Disabled differ; every variant is duplicated so switching State or Type keeps it (owner: "All 28 → 56") |
 | `State` | Uploaded · Uploading · Success · Focus · Error · Disabled · Skeleton | see the tree above. Skeleton is Base's Preloading |
 
-Properties: `File name` = "name-change-certificate.pdf", `File size` = "1.2 MB", `Uploading text` = "Uploading…", `Success text` = "Upload successful", `Error text` = "Upload failed". The file's image is the Artwork Image's fill; the file type for a file with no preview is the exposed File icon's Icon Text (`file-pdf`, `file-lines`, `file`).
+Properties: `File name` = "name-change-certificate.pdf", `File size` = "1.2 MB", `Uploading text` = "Uploading…", `Success text` = "Upload successful", `Error text` = "Upload failed". The file's image is the Artwork Image's fill; the file type for a file with no preview is the exposed File icon's Icon Text (`file-pdf`, `file-lines`, `file`). **56 variants** (14 before , 28 before the `Artwork` axis), grid Artwork × State rows (Image above Icon), Type × iOS columns (Standard left of Compact), 14 × 4.
 
 ### `_File media item`
 
@@ -117,7 +117,7 @@ Properties: `File name` = "name-change-certificate.pdf", `File size` = "1.2 MB",
 | --- | --- | --- |
 | `State` | Uploaded · Uploading · Focus · Error · Disabled · Skeleton | see its tree above |
 
-No properties: the image is the Image layer's fill.
+No properties: the image is the Image layer's fill. **12 variants** (6 before), State rows × iOS columns.
 
 ## Component variables and Theme tokens
 
@@ -158,13 +158,13 @@ Templates: `Components/File upload/<Group>/{{State=*}}/<Property>`, `Components/
 | `Text/text-disabled` | all text, Disabled (the zone's on `Field/field`) | 3.18–3.36 | 3.51–4.47 | exempt: disabled (WCAG 1.4.3) |
 | `Support/support-error` | item Error stroke, Error glyphs | 4.81–5.39 | 4.02–4.85 | `non-text` |
 | `Icon/icon-positive` | item Success check (Base's green), on `layer-01` | 3.85 | 7.50 | `non-text` |
-| `Icon/icon-negative` | item and media Error glyph, on `layer-01` | 8.53 (`Red/145` since 2026-11-09; was 5.39) | 8.39 (`Red/50` since 2026-11-09; 5.87 on `Red/75`, 4.02 before) | `non-text` |
+| `Icon/icon-negative` | item and media Error glyph, on `layer-01` | 8.53 (`Red/145` since 2026-11-09) | 8.39 (`Red/50` since 2026-11-09; 5.87 on `Red/75`, 4.02 before) | `non-text` |
 | `Focus/focus` | item and media Focus outline (Base's `borderAccent`), on `layer-01` | 4.35 | 4.00 | `non-text` |
 | `Support/support-error` | Artwork Error outline, on `notification-error-background` | 5.04 | 3.06–4.36 | `non-text` |
 | `Notifications/notification-error-background` | Artwork Error fill (Base's `backgroundLightNegative`) | — | — | decorative: the outline, glyph and text carry Error |
 | `Icon/icon-secondary` | File icon | 6.73–7.00 | 7.22–8.63 | `non-text` |
 | `Field/field` | Zone fill (Base's `#f3f3f3`), against the page | 1.23–1.24 | 1.27–1.46 | decorative: the Helper Text and the Button identify the zone (Q5) |
-| `Field/field-hover` | Zone fill, Drag over, against the page | 1.29 | 1.39–1.60 | decorative |
+| `Field/field-hover` | Zone fill, Drag over, against the page | 1.29 | 1.39–1.60 | decorative: the drag itself is the cue |
 | `Layer/layer-01` | `_File item` fill (Base's `backgroundPrimary`) | — | — | the surface the texts pair with (Q7) |
 | `Layer/layer-02` | empty Artwork tile, media tile under the image | — | — | decorative |
 | `Layer/layer-01` | media `Backplate` under Remove; empty media tile on Uploading and Error (Base's `backgroundPrimary`) | — | — | decorative: the button and the outline carry it |
@@ -193,7 +193,7 @@ The Button's `plus` and the Icon buttons' `trash` and `arrows-rotate` are those 
 | --- | --- | --- | --- |
 | `Title` | `Body/Callout` (Text field Medium's Title) | wraps | `Title text` |
 | `Description` | `Body/Subheadline` | wraps | `Description text` |
-| `Prompt` | `Body/Callout` | wraps, centred | none |
+| `Prompt` | `Body/Callout` | wraps, centred | none: a literal |
 | `Helper Text` (in the zone) | `Body/Subheadline` | wraps, centred, never truncates | `Helper text` |
 | `Error message` | `Body/Subheadline` | wraps, never truncates | `Error text` |
 | `_File item` `Label` (file name) | `Headings/Headline` (a row's Label block title) | one line, `ENDING`, `maxLines` 1 | `File name` |
@@ -225,11 +225,11 @@ Add the row to Motion and haptics' per-component table when the set is built. Th
 ## Accessibility
 
 - [ ] 1. Text pairs pass 4.5:1 on the Base surfaces and `layer-01` in both modes (table above; the lowest is `text-negative` 4.81 on `background-secondary`, Light).
-- [ ] 2. Error stroke and glyphs pass 3:1 (`support-error` Dark 4.02 on `layer-01` is the lowest). The zone's fill is decorative;
-- [ ] 3. The zone is identified by its texts and Button, not by its fill. the drag itself is the cue, and the drop handler announces the target (H2).
-- [ ] 4. An error is a glyph, a stroke and a message, never the red alone. Uploading is a progress bar plus "Uploading…".
+- [ ] 2. Error stroke and glyphs pass 3:1 (`support-error` Dark 4.02 on `layer-01` is the lowest). The zone's fill is decorative; it has no stroke.
+- [ ] 3. The zone is identified by its texts and Button, not by its fill. Drag over is told by the fill only since (1.29–1.60 against the page): the drag itself is the cue, and the drop handler announces the target (H2).
+- [ ] 4. An error is a glyph, a stroke and a message, never the red alone. Uploading is a progress bar plus "Uploading…". Drag over changes only the fill.
 - [x] 5. `_File item` State=Focus draws its own 2 `Focus/focus` outline (3 until #810, now `Sizing/focus-ring`) on the item (4.35 Light, 4.00 Dark on the page, past 3:1). The zone's Focus ring is the nested Button's; Remove and Retry keep their Icon button's.
-- [ ] 6. Title, Description, Helper and errors wrap; the file name stays one line and truncates; the row grows.
+- [ ] 6. the file name stays one line and truncates; the row grows.
 - [ ] 7. Smallest text 15.
 - [ ] 8. Motion table above.
 - [ ] 9. Role, name, states and focus order:
@@ -256,7 +256,7 @@ The `Usage` frame shows, with Thai copy:
   - no camera capture tile (a Tile or Pattern);
   - no Base File drop-style zone that turns into a progress bar on `List=Item` or `Media` (a file's progress is on its `_File item` or `_File media item`); on `List=Single` it does, `State=Uploading`;
   - no red Progress bar for a failed file (Progress bar has no Status);
-  - it lost Hover and Active);
+  - no fill override on the zone's Button (it lost Hover and Active); a white Button is its own variant.
 
 ### Hierarchy
 
@@ -264,8 +264,8 @@ Which `Hierarchy` and `Type` its nested buttons take, and why. The rules (1–6)
 
 | Part · slot | Pin | Rule | Agrees |
 | --- | --- | --- | --- |
-| File upload `Zone/Button` |  | [H6](../hierarchy.md): `Primary · Inverse` is a white surface look (Uber File upload's white button on its grey zone) and doesn't count toward rule 1 | yes (FU1) |
-| File upload `Zone/Cancel` (`Uploading`) |  | [H6](../hierarchy.md): the white surface look may carry a way out | yes (FU2) |
+| File upload `Zone/Button` | Button `Primary · Inverse · Small` (`Secondary · Default` when `State=Disabled`), `plus` "Upload document" | [H6](../hierarchy.md): `Primary · Inverse` is a white surface look (Uber File upload's white button on its grey zone) and doesn't count toward rule 1 | yes (FU1) |
+| File upload `Zone/Cancel` (`Uploading`) | Button `Primary · Inverse · Small`, "Cancel" | [H6](../hierarchy.md): the white surface look may carry a way out | yes (FU2) |
 | File item `Container/Action/Remove`, `Retry` | Icon button `Secondary`, Small (`trash`, `arrows-rotate`) | rule 3, H3: an Icon button in a row | yes |
 | File media item `Container/Remove` | Icon button `Secondary · Small`, `trash`, on a Backplate disc | H3; the Backplate keeps it visible over the image | yes |
 
@@ -273,5 +273,5 @@ Which `Hierarchy` and `Type` its nested buttons take, and why. The rules (1–6)
 
 |  | Call | Recommendation | Status |
 | --- | --- | --- | --- |
-| FU1 | **The zone Button on `Primary · Inverse`.** But it counts toward rule 1, and E-KYC has two upload zones and a Button dock on one screen: three Primaries. Toolbar - Top's white Icon buttons have the same cause (toolbars.md TB1). | Say that `Primary · Inverse` is Uber's Background safe look and doesn't take the screen's main action, so it doesn't count toward rule 1. That needs a new call in hierarchy.md from the owner (became H6). Option: `Secondary · Default`, rule 3, and drop the white look | decided by the owner 2026-11-09 ("Surface look, not counted"): H6 |
-| FU2 | **Cancel on `Primary · Inverse`.** "Cancel" during upload is a way out. | `Tertiary · Default` (rule 4); `Tertiary · Inverse` if the zone keeps a dark fill | decided by the owner 2026-11-09 ("Surface look, not counted"): H6 |
+| FU1 | **The zone Button on `Primary · Inverse`.** The owner asked for a white button, and Primary · Inverse is the white look. But it counts toward rule 1, and E-KYC has two upload zones and a Button dock on one screen: three Primaries. Toolbar - Top's white Icon buttons have the same cause (toolbars.md TB1). | Say that `Primary · Inverse` is Uber's Background safe look and doesn't take the screen's main action, so it doesn't count toward rule 1. That needs a new call in hierarchy.md from the owner (became H6). Option: `Secondary · Default`, rule 3, and drop the white look | decided by the owner 2026-11-09 ("Surface look, not counted"): H6; stays as built |
+| FU2 | **Cancel on `Primary · Inverse`.** "Cancel" during upload is a way out. | `Tertiary · Default` (rule 4); `Tertiary · Inverse` if the zone keeps a dark fill | decided by the owner 2026-11-09 ("Surface look, not counted"): H6; stays as built |

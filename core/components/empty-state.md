@@ -4,7 +4,7 @@
 
 ## Anatomy and layer tree
 
-Carbon's tree (illustration, a heading-and-description frame, the action), with Base's numbers. Large is the first build unchanged.
+Carbon's tree (illustration, a heading-and-description frame, the action), with Base's numbers. adds Carbon's `Size` (R2–R4) and makes the artwork a part (R5 (a)); Large is the first build unchanged.
 
 ```
 Empty state (variant root)      Fill × Hug, no fill, no padding, not interactive; VERTICAL
@@ -46,7 +46,7 @@ Properties: `Artwork` (BOOLEAN, on), `Title text` (TEXT, "No orders yet"), `Desc
 
 ## Component variables and Theme tokens
 
-nothing varies by `iOS`):
+`Components`, Tag's three-level shape, keyed by `Size` (nothing varies by `iOS`):
 
 | Group | Keyed by | Properties | Values |
 | --- | --- | --- | --- |
@@ -56,7 +56,7 @@ nothing varies by `iOS`):
 | `Empty state/Label/<Size> description` | Size and role | the same five | Large `$callout`, Medium `$subhead`; `Regular`, `Center`, `Top`, `-`. None on Small |
 | `Empty state/Icon/<step>` | Icon step | Type token | `fa-sharp fa-solid/5XLarge`, `4XLarge`, `3XLarge`: the part's (empty-state-artwork.spec.json) |
 
-Templates: `Components/Empty state/<Group>/<Size>/<Property>`. `Content` is Tile's Element word for a frame of text. 52 variables in this spec (Container 8 per Size, Content 1 per Size, Label 5 × 5) and 3 in the part's.
+Templates: `Components/Empty state/<Group>/<Size>/<Property>`. `Content` is Tile's Element word for a frame of text. 52 variables in this spec (Container 8 per Size, Content 1 per Size, Label 5 × 5) and 3 in the part's. renamed the first build's `Container/Default`, `Content/Default`, `Label/Title` and `Label/Description` in place to their Large keys (18), and added the rest.
 
 `Theme`: Carbon binds `Text/text-primary` on the title and the description, and Base's ContentPrimary agrees. No Component-scoped token (ADR 0001):
 
@@ -71,7 +71,7 @@ Contrast (`contrast.mjs`, 2026-11-06), lowest across the Base surfaces: `text-pr
 ## Icon records
 
 - `Empty state/Icon/5XLarge/Type token = fa-sharp fa-solid/5XLarge` (60/80), `Empty state/Icon/4XLarge/Type token = fa-sharp fa-solid/4XLarge` (48/64) and `Empty state/Icon/3XLarge/Type token = fa-sharp fa-solid/3XLarge` (34/40), on the part's `Artwork` at Size Large, Medium and Small (R3, R4, R5 (a)). Standalone artwork, so no paired text style (Icons). The records keep Empty state's prefix, as `_Toggletip caret`'s keep Toggletip's.
-- The glyph is a TEXT property (`Artwork text`), so a Pattern swaps it by typing a ligature: Those are the Patterns' picks, not this set's.
+- Those are the Patterns' picks, not this set's.
 - The layer hugs its glyph. Glyph widths vary (`triangle-exclamation` runs wider than `circle-check`), but the layer is centred alone on its line, so a fixed width buys nothing.
 - No Base two-tone badge: Font Awesome has no badge shapes, and hand-drawn vectors are banned (structure.md). Solid `circle-*` glyphs (`circle-check`, `circle-exclamation`, `circle-info`, `circle-question`, `circle-xmark`) carry their own disc;
 
@@ -109,7 +109,7 @@ None (#162). Base's fade from a Progress circle to the Empty state is a screen t
 - [x] 3. N/A: not a field.
 - [x] 4. Nothing is shown by colour alone: one neutral colour on every case (Q4), and the copy says what happened.
 - [x] 5. The Focus ring is the Button's, outside its Container, on `iOS=False`. Usage shows it once.
-- [ ] 6. `docs/agents/reflow-check.js` on the set after the build, with Thai copy in a 375 column. The text wraps and the root grows taller; the Button's label stays on one line.
+- [ ] 6. The text wraps and the root grows taller; the Button's label stays on one line.
 - [x] 7. No text under 11: 16 is the smallest of its own; the Button's Small label is the Button's.
 - [x] 8. Motion: None, above.
 - [ ] 9. Role, name, states and order (Base's VoiceOver spec; to confirm with engineering):
@@ -127,7 +127,7 @@ None (#162). Base's fade from a Progress circle to the Empty state is a screen t
 - **Don't** use it while content loads (Skeleton), for feedback after an action (Snackbar), or beside content that is still there (a Contextual banner). An account's `MAINTENANCE` status card is a Contextual banner or a Tile Pattern, not this.
 - **Placement**: centred in the empty region, both ways. On a phone it fills the width (36 in from each side); a web Pattern caps it (Base's 472 or 536).
 - **Copy** (Base's Content guidance, in Thai): a short title that says why it's empty, not a question; one or two sentences on what will show and how; a Button only when there's a clear next step ("ซื้อกองทุน", "ลองใหม่", "กลับหน้าหลัก"). The 5xx page turns the Button off.
-- Light and Dark columns of Thai samples, each with an English note: the Don'ts listed under them. The samples set only component properties and text (`usage-overrides.js`: no gaps).
+- the Don'ts listed under them. The samples set only component properties and text (`usage-overrides.js`: no gaps).
 
 ### Hierarchy
 

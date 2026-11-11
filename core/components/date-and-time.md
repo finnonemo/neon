@@ -49,16 +49,16 @@ _Day (root)                        Fixed 48 × 48 (`Sizing/hit-target`), centred
 
 ## Axes
 
-| Set | Axes (default first) | Variants |
-| --- | --- | --- |
-| `Date and time - Collapsed` | `Mode` Date and Time · Date · Time × `State` Default · Selected × `iOS` True · False | 3 × 2 × 2 = **12** |
-| `Date and time - Pickers` | `Style` Inline · Compact × `Mode` Date · Date and Time · Range × `iOS` True · False | 2 × 3 × 2 = **12** |
-| `_Day` | `State` Default · Current · Selected · Current and Selected · Disabled · Null · Range start · In range · Range end × `iOS` True · False | 9 × 2 = **18** |
-| `_Week` | none | **1** |
+| Set | Axes (default first) |
+| --- | --- |
+| `Date and time - Collapsed` | `Mode` Date and Time · Date · Time × `State` Default · Selected |
+| `Date and time - Pickers` | `Style` Inline · Compact × `Mode` Date · Date and Time · Range |
+| `_Day` | `State` Default · Current · Selected · Current and Selected · Disabled · Null · Range start · In range · Range end |
+| `_Week` | none |
 
 - `Mode` is the map's call (D1): the kit's `Show date` / `Show time` booleans become one axis, so both can't be off.
 - The kit's Default order is kept within each axis; `Inline` first because it is the one a list uses (Examples shows both). `iOS` is last, `True` first (ADR 0005).
-- Properties: one `Date` holds Thai day-month-year order]. A nested instance's text can't be linked to a parent TEXT property, so the build exposes them instead of the TEXT `Date` / `Time` this proposal named. Pickers: TEXT `Month` ("November 2026"), BOOLEAN `Show Week 6`, the Time row's List item exposed. `_Day`: TEXT `Date`.
+- Properties: Collapsed's Buttons `Date` ("17 Nov 2026") and `Time` are exposed instances, edited through each Button's own `Label Text` [kit `Month`, `Year`, `Time`: one `Date` holds Thai day-month-year order]. A nested instance's text can't be linked to a parent TEXT property, so the build exposes them instead of the TEXT `Date` / `Time` this proposal named. Pickers: TEXT `Month` ("November 2026"), BOOLEAN `Show Week 6`, the Time row's List item exposed. `_Day`: TEXT `Date`.
 - No width axis (ADR 0013).
 
 ## Component variables and Theme tokens
@@ -73,8 +73,8 @@ Colours map each kit paint to an existing Theme token; no new token. Distances f
 | 2 | Day number, month title | `Labels/Primary` `000000` / `FFFFFF` | `Text/text-primary` (`Black/85A` · `White/100`) | 38 / 0 | black / `text-primary` | `Black/100`: no text token on it; every Core text on `text-primary` |
 | 3 | Weekday labels | `Labels/Tertiary` `3C3C43` 30% / `EBEBF5` 30% | `Text/text-secondary` (`Black/65A` · `White/65A`) (D7) | — | — / `text-primary` | `Text/text-tertiary` (`Black/20A` · `White/25A`, Δ 6.8 / 6.1) is the kit's match, but about 1.6:1: fails item 1 |
 | 4 | Today number; today dot (`iOS=False`) | `Accents/Blue` `0088FF` / `0091FF` | `Link/link-primary` (`Indigo/100` · `Indigo/50`) | 50+ / 53 (no Indigo step is near) | — / `link-primary` | `Blue/125` (Δ 17 / 14): no token on it. Our palette has no system tint, as Tab Bar's approved call (2026-11-08) |
-| 5 |  | `Accents/Blue` 10% | `Miscellaneous/highlight` (`Indigo/10A` · `Indigo/25A`) | — | — / `highlight` (in-range) | the tint of row 4 |
-| 6 | Selected disc; Current and Selected disc (`iOS=False` | `Labels/Primary` (Selected), `Accents/Blue` (Current and Selected) | `Layer/layer-selected-inverse` (`Grey/100` · `Grey/0`) (D6, changed 2026-11-09) | 0 | Uber black / Carbon `button-primary` | `Button/button-primary` (`Navy/100` · `Navy/75`), Carbon's: 2.13:1 on `layer-01` in Dark, fails item 2 |
+| 5 | Today disc | `Accents/Blue` 10% | `Miscellaneous/highlight` (`Indigo/10A` · `Indigo/25A`) | — | — / `highlight` (in-range) | the tint of row 4 |
+| 6 | Selected disc; Current and Selected disc (`iOS=False`) | `Labels/Primary` (Selected), `Accents/Blue` (Current and Selected) | `Layer/layer-selected-inverse` (`Grey/100` · `Grey/0`) (D6, changed 2026-11-09) | 0 | Uber black / Carbon `button-primary` | `Button/button-primary` (`Navy/100` · `Navy/75`), Carbon's: 2.13:1 on `layer-01` in Dark, fails item 2 |
 | 7 | Selected number | `Backgrounds/Primary` `FFFFFF` / `000000` | `Text/text-inverse` (`White/100` · `Black/85A`) (D6, changed 2026-11-09) | 0 / — | white / `text-on-color` | `Text/text-on-color`, paired with row 6's runner-up |
 | 8 | Disabled day | none in the kit | `Text/text-disabled` (`Black/45A` · `White/45A`) | — | `#A6A6A6` / `text-disabled` | — |
 | 9 | Month disclosure chevron | `Accents/Blue` | `Miscellaneous/interactive` (`Indigo/75` · `Indigo/50`) | — | — | `link-primary`: the chevron is a control glyph, not a link |
@@ -114,29 +114,28 @@ Our local Typography styles (Localisation), the same in both looks. Dates and ti
 
 | Transition | Token | Reduced form | Haptic |
 | --- | --- | --- | --- |
-| open, change month, select a day | System | System | System |
 | `iOS=False`: the selected disc moves to the tapped day | `fast-01 · standard` (the architecture's row) | instant | None |
 | `iOS=False`: previous / next month | `moderate-01 · standard`, a crossfade of the grid | instant | None |
 | `iOS=False`: Compact opens under its Collapsed button / closes | `fast-02 · entrance` / `fast-01 · exit` | crossfade | None |
 
 ## Accessibility
 
-- [x] 1. Pairs 2, 3, 4 and 7 on their backgrounds in both modes (`contrast.mjs`, 2026-11-09, Light / Dark): `text-primary` on `layer-01` 15.13 / 17.40; `text-secondary` (weekdays, D7) 7.00 / 7.93; `link-primary` (today) 9.07 / 5.89, and 7.45 / 5.52 on its `highlight` disc; `text-inverse` on `layer-selected-inverse` (the Selected number) 21.00 / 15.13. `text-inverse` on `link-primary` 9.07 / 6.10, the disc on `layer-01` 9.07 / 5.89. `text-primary` on `button-secondary` over `layer-01` 12.82 / 12.08; Selected is Button's `State=Active`, `text-primary` on `button-secondary-active`: Button's own pair. `text-disabled` 3.36 / 4.47, exempt (disabled). The month chevron's `interactive` 5.59 / 5.89.
+- [x] 1. Pairs 2, 3, 4 and 7 on their backgrounds in both modes (`contrast.mjs`, 2026-11-09, Light / Dark): `text-primary` on `layer-01` 15.13 / 17.40; `text-secondary` (weekdays, D7) 7.00 / 7.93; `link-primary` (today) 9.07 / 5.89, and 7.45 / 5.52 on its `highlight` disc; `text-inverse` on `layer-selected-inverse` (the Selected number) 21.00 / 15.13. Selected is Button's `State=Active`, `text-primary` on `button-secondary-active`: Button's own pair. `text-disabled` 3.36 / 4.47, exempt (disabled). The month chevron's `interactive` 5.59 / 5.89.
 - [x] 2. The today dot on `layer-01` passes (`link-primary` 9.07 / 5.89); the Selected disc (`layer-selected-inverse`) 21.00 / 17.40 (2026-11-09). It was `button-primary`, 2.13:1 in Dark, until the owner took D6's runner-up. the number's colour and the system's own marking carry today there.
 - [x] 3. N/A: no field. Collapsed's Buttons are Button Secondary, a filled capsule with a label.
-- [x] 4. Selected is a filled disc, not hue alone; Disabled days are also skipped by focus and announced. Collapsed `State=Selected` is shown by the open picker beside it, and announced Expanded (D2).
-- [x] 5. Focus ring: each `_Day` cell takes Core's Focus ring outside its 36 Mark (`iOS=False`); the Buttons and Icon buttons bring their own. the `Mark` takes `Layer/layer-hover-01`, Carbon's token.
-- [x] 6. the Calendar and Weekdays are pinned to `Large` (D9), so their hits are the check's long phrase in fixed one- and two-letter labels. Left to the nested components:
+- [x] 4. Selected is a filled disc, not hue alone; today is a dot (`iOS=False`) or a disc as well as colour; Disabled days are also skipped by focus and announced. Collapsed `State=Selected` is shown by the open picker beside it, and announced Expanded (D2).
+- [x] 5. Focus ring: each `_Day` cell takes Core's Focus ring outside its 36 Mark (`iOS=False`); the Buttons and Icon buttons bring their own. Hover, web only, is a note for code and no `State`: the `Mark` takes `Layer/layer-hover-01`, Carbon's token.
+- [x] 6. the Calendar and Weekdays are pinned to `Large` (D9), so their hits are the check's long phrase in fixed one- and two-letter labels.
 - [x] 7. No text under 11 pt: the smallest is Footnote 13.
 - [x] 8. Motion names System and the `iOS=False` tokens, reduced forms and haptic.
 - [x] 9. Role, name, states and order:
 
-|  |  | Android (`iOS=False`) | Web (`iOS=False`) |
-| --- | --- | --- | --- |
-| Role | `UIDatePicker` `.compact` / `.inline`: Collapsed's dates are buttons; days are buttons in the calendar; the month title a button |  | Collapsed: `button` with `aria-haspopup="dialog"`; Compact: `role="dialog"` `aria-modal="true"`; the month a `grid` of `gridcell` buttons, as the APG date picker dialog |
-| Accessible name | the full date, "วันอังคารที่ 17 พฤศจิกายน 2569", not "17" | the same | each day's `aria-label` the full date; the dialog labelled by the month heading; arrows "เดือนก่อนหน้า" / "เดือนถัดไป" |
-| Announced states | Selected; today; Dimmed (Disabled); Collapsed's date Expanded while its picker is open | Selected, today, disabled | `aria-selected`, `aria-current="date"` on today, `aria-disabled`; the month heading `aria-live="polite"` |
-| Focus order | Collapsed's Date, then Time; in the picker: Month, Previous, Next, the selected day (else today), the Time row | the same; Back closes | the selected day (else today) first; arrows move by day, Page Up / Down by month, Home / End to the week's ends, Enter picks, Esc closes and returns focus to the Collapsed button |
+|  | Android (`iOS=False`) | Web (`iOS=False`) |
+| --- | --- | --- |
+| Role | `DatePicker` | Collapsed: `button` with `aria-haspopup="dialog"`; Compact: `role="dialog"` `aria-modal="true"`; the month a `grid` of `gridcell` buttons, as the APG date picker dialog |
+| Accessible name | the same | each day's `aria-label` the full date; the dialog labelled by the month heading; arrows "เดือนก่อนหน้า" / "เดือนถัดไป" |
+| Announced states | Selected, today, disabled | `aria-selected`, `aria-current="date"` on today, `aria-disabled`; the month heading `aria-live="polite"` |
+| Focus order | the same; Back closes | the selected day (else today) first; arrows move by day, Page Up / Down by month, Home / End to the week's ends, Enter picks, Esc closes and returns focus to the Collapsed button |
 
 ## Usage
 

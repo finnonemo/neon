@@ -62,7 +62,7 @@ Grid rows Type, Selection, Expansion, State; columns Size. Properties: SLOT `Cel
 
 | Axis | Values (default first) | Drives |
 | --- | --- | --- |
-| `Type` | Text · Number · Tag · Badge · Avatar · Icon · Button · Input |  |
+| `Type` | Text · Number · Tag · Badge · Avatar · Icon · Button · Input | Which of Leading, Text and Trailing show and their part (R2) |
 | `Size` | Medium · Small · Large | Min height 56 · 48 · 72 and padding top / bottom 14 · 12 · 14, as Detail row's (detail-row.md, Decisions 3 and 14) |
 | `Alignment` | Left · Right | The Container's horizontal align, the Label's text align and Value's own align. Right is for figures (Decision 15); Text and Number only |
 | `Vertical alignment` | Center · Top | The Container's counter-axis align |
@@ -145,7 +145,7 @@ Theme: the Semantic tokens Carbon binds, by our names (Carbon structure). No `Ta
 - [x] 3. N/A: no field.
 - [ ] 4. Sorted shows by the glyph, not colour.
 - [ ] 5. The Focus stroke is inside the cell, as Carbon's: cells abut, so a ring outside would sit on the neighbour (Decision 17).
-- [ ] 6. Reflow: Labels wrap and rows grow; a table wider than the screen scrolls sideways (Regular width).
+- [ ] 6. Labels wrap and rows grow; a table wider than the screen scrolls sideways (Regular width).
 - [x] 7. The smallest text is Footnote, 13.
 - [x] 8. Motion above.
 - [ ] 9. Role, accessible name, announced states and focus order:

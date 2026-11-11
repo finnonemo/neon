@@ -92,7 +92,7 @@ Link and Icon button draw their own.
 | `Title` | `$title2` · `$title3` · `$headline` by `Hierarchy` | wraps, never truncates | `Title text` |
 | `Description` | `$subhead` | wraps | `Description text` |
 | `Disclosure › Detail` | `$body` | one short word or figure; Hug, so a long one pushes the Title narrower | `Detail text` |
-| `_Column label › Label` | `$footnote` (13/20, the Thai floor for wrapping) | wraps, never truncates | `Label text` |
+| `_Column label › Label` | `$footnote` (13/20, the Thai floor for wrapping) |  | `Label text` |
 
 ## Hit target and Skeleton
 
@@ -111,7 +111,6 @@ None.
 - [x] 3. N/A: not a field.
 - [ ] 4. Disclosure's expanded / collapsed state (the kit's Open and Closed) is not drawn: question 9.
 - [ ] 5. Link and Icon button draw their own Focus ring; a tappable Disclosure needs one from the Pattern (question 9).
-- [ ] 6. the Title and labels wrap and the heading grows;
 - [x] 7. Footnote 13 is the smallest.
 - [x] 8. Motion: None.
 - [ ] 9. Role, name and order:
@@ -151,7 +150,7 @@ A heading's `Hierarchy` is how prominent the heading is, not how important an ac
 - **Sibling headings take one `Hierarchy`.** Headings over similar content use the same value (Uber Don't: no inconsistent custom text styles across section headings with similar content).
 - **Nest by stepping down one value.** A section inside a Primary section takes Secondary, and one inside that takes Tertiary. A screen needn't use all three. *Recommendation*, from the iOS kit's three tiers. No source states the step.
 - **Several Primaries on one screen are fine**, one per main section. [Rule 1](../hierarchy.md) counts actions, not headings ([H5](../hierarchy.md)): a heading's `Hierarchy` is visual emphasis.
-- **The order holds at every text size.** keep the relative hierarchy when people change text size). Accessibility item 6 checks the reflow. Primary and Secondary are Strong because Apple's bold trait adds a level of hierarchy.
+- **The order holds at every text size.** Accessibility item 6 checks the reflow. Primary and Secondary are Strong because Apple's bold trait adds a level of hierarchy.
 - **Title copy**: descriptive, so people can find what they need (Uber, When to use). *Recommendation*: a noun or short noun phrase that names the group, with no ending punctuation. That is Apple's rule for column headings (Lists and tables), carried over to titles. The `_Column label`s follow Apple's rule directly. Title-style capitals apply to English copy only.
 
 #### Nested parts

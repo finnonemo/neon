@@ -147,11 +147,14 @@
   },
   "toggle": {
     "counterpart": null,
+    "supporting": true,
     "why": "Supporting item: toggle-group is built from it."
   },
   "button-group": {
-    "counterpart": null,
-    "why": "Core has no joined group of Buttons. Its Button dock stacks or splits whole Buttons at the bottom of a screen."
+    "counterpart": "Button",
+    "doc": "components/button.md",
+    "values": "components/button.json",
+    "why": "Each button in the group matches Button. Core has no joined group of Buttons: its Button dock stacks or splits whole Buttons at the bottom of a screen."
   },
   "pagination": {
     "counterpart": "Pagination",

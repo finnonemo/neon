@@ -29,6 +29,8 @@ Contextual Banner (288 wide, Hug)
          └─ Toggle                     Toggle only, Enabled, Toggled=True, iOS = variant's; Hug × Hug (64 × 48 | 48 × 48)
 ```
 
+Since #129 (2026-11-02) both looks hold one `Toggle` (Style=Toggle only) where `Toggle - Switch` and `Toggle` Style=Default, Fill × 24 (iOS=False) were, and the action instances take their main's min size.
+
 Every variant holds both buttons and the Icon Button, hidden unless its `Action` shows them. Only the 72 Toggle variants hold a toggle, the one that matches their `iOS`; the other variants' hidden `Toggle` was deleted when the iOS axis was added.
 
 ## `Components` variables
@@ -47,7 +49,6 @@ Shared with In-line Banner, nothing new: every color binds `Theme/Banner/{{Statu
 
 ## Usage
 
-- `Call to action` (Info, Badge, `Action=Button`) and `Setting` (`Action=Toggle`).
 - Use a Contextual banner where In-line banner's uses apply but the action needs a full line under the message: a long button label, two stacked buttons, or a Badge on top. This is Uber's layout for long labels, where "the button drops to the next line below the message" (Usage, Wrapping and truncation).
 - The rest is as for [In-line banner](banner.md): what to use it for and not, one at a time, inset, under three lines (Uber, Usage and Content).
 
@@ -86,4 +87,4 @@ Since CB5 (owner, 2026-11-09) the spec pins each action's `Hierarchy` and `Type`
 | CB2 | **`2 Buttons` is Secondary + Secondary.** Uber allows one action. [Rule 2](../hierarchy.md) gives the preferred action the louder Hierarchy. Rule 4 makes a way out Tertiary, and Button's Pairs never use Secondary + Secondary for a main action and its way out. H4's Related pair (Primary + Secondary) would put a Primary in the banner (rule 1). | Make `Button 2` Tertiary · Default · Small, so the pair is Secondary + Tertiary: the action, then "Not now" or "Dismiss". Uber gives no second action to follow, so this is a recommendation. Run `usage.js` on `2 Buttons` first: if a screen uses two equal actions, record it before changing the set. | decided by the owner 2026-11-09 ("Leave as is"): `2 Buttons` stays Secondary + Secondary, beyond Uber's one-action rule and against rule 2 and Button's Pairs. Core usage that day (`usage.js`): `2 Buttons` 0, `Toggle` 2, all on the Audit, Banners and Drafts pages. |
 | CB3 | **Toggle has no Uber source.** Uber's Banner has no toggle Layout, and its one action is a button. | Keep it. The owner approved the `Setting` sample on 2026-11-07. A Toggle is a control, not an action, so the Hierarchy rules don't apply to it. | decided by the owner 2026-11-09 ("Leave as is"): `Toggle` stays. |
 | CB4 | **Buttons on colors**, the same as [BN3](banner.md). The nested Button and Button 2 keep `Type=Default` on `button-secondary`; Uber tints them to the banner's background. The label contrast numbers there hold here too (same tokens; `iOS=False` only). | Decide it with BN3. | decided by the owner 2026-11-09 (as recommended, with BN3): `Type=Default` kept. Done 2026-11-09: `contextual-banner.gen.mjs`'s `contrast` checks `text-primary` on `button-secondary` (rest, hover, active) for `Button` and `2 Buttons`, and the close icon, over the Container fill, `iOS=False`. Lint passes. |
-| CB5 | **The spec doesn't pin the nested `Hierarchy` or `Type`.** `contextual-banner.spec.json` sets only `iOS` (and the Toggle's `Style`). | Add constant `componentProperties.Hierarchy` and `Type` rules for `Icon button`, `Button` and `Button 2` in `contextual-banner.gen.mjs`, after CB2 is decided. | decided by the owner 2026-11-09 (as recommended). Done 2026-11-09: `Icon button` Tertiary, `Button` and `Button 2` Secondary (CB2 left as is), all `Type=Default`; 360 checked, 0 mismatches. |
+| CB5 | **The spec doesn't pin the nested `Hierarchy` or `Type`.** `contextual-banner.spec.json` sets only `iOS` (and the Toggle's `Style`). | Add constant `componentProperties.Hierarchy` and `Type` rules for `Icon button`, `Button` and `Button 2` in `contextual-banner.gen.mjs`, after CB2 is decided. | decided by the owner 2026-11-09 (as recommended). Done 2026-11-09: `Icon button` Tertiary, `Button` and `Button 2` Secondary (CB2 left as is), all `Type=Default` |

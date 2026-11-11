@@ -8,7 +8,8 @@
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
-import { syncCore, registryItems, SNAPSHOT_DIR, COUNTERPARTS_FILE } from './lib/core-snapshot.mjs';
+import { syncCore, SNAPSHOT_DIR, COUNTERPARTS_FILE } from './lib/core-snapshot.mjs';
+import { registryComponents } from './lib/registry.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const flag = process.argv.indexOf('--from');
@@ -18,13 +19,15 @@ if (!from) {
   process.exit(2);
 }
 try {
-  const { commit, files } = await syncCore({
+  const { commit, files, leftOut } = await syncCore({
     from: resolve(from),
     out: resolve(root, SNAPSHOT_DIR),
-    items: await registryItems(root),
+    items: await registryComponents(root),
     counterparts: JSON.parse(await readFile(resolve(root, COUNTERPARTS_FILE), 'utf8')),
   });
   console.log(`Wrote ${files.length} files to ${SNAPSHOT_DIR}/ from Core ${commit}.`);
+  const byStatus = Object.groupBy(Object.keys(leftOut), name => leftOut[name]);
+  for (const [status, names] of Object.entries(byStatus)) console.log(`Left out, ${status}: ${names.join(', ')}.`);
 } catch (error) {
   console.error(error.message);
   process.exit(1);

@@ -26,13 +26,12 @@ _Accordion header (variant root)    Fill × Hug, no fill, no padding, min width 
          └─ Icon box                Fixed 24 × 24, centred › Icon: TEXT, fa-sharp fa-solid/Large, icon-secondary; angle-down (Expanded=False) / angle-up (True)
 ```
 
-- **Row**: the Row as Checkbox Full-bleed draws it. Small's one Headline line makes 48 (12 + 24 + 12), Medium's 52 rises to 56, Large's title and Subtitle make 72 (14 + 24 + 20 + 14). The row's 8 sides plus the Container's 8 put the title 16 in.
+- **Row**: the Row as Checkbox Full-bleed draws it. By Size, the Label block pads 12 · 14 · 14 and holds 48 · 56 · 72: Small's one Headline line makes 48 (12 + 24 + 12), Medium's 52 rises to 56, Large's title and Subtitle make 72 (14 + 24 + 20 + 14). The row's 8 sides plus the Container's 8 put the title 16 in.
   - Container has no top or bottom padding (owner, 2026-11-02). It has no Divider; `Bottom border` belongs to the public set.
 - **Header layer names**: `_Accordion header` keeps List item's names (`Main table cell`, `Label + Subtitle`, `Right content`). Carbon names this row only by its item.
-- **Label block**: Large only). The Skeleton bar is `Label line`. The spec declares these as `labelBlock`.
-- **Summary**:
+- **Label block**: frame `Label + Subtitle`, title `Label`, description `Subtitle` (`$footnote`, Large only). The Skeleton bar is `Label line`. The spec declares these as `labelBlock`.
   - `Value` and the chevron sit in `Right content`, so the title takes the remaining width and wraps.
-  - The summary is text, not a nested Value instance. Port's right sides are a date, a status with an icon, a masked card number and an amount: all one line, some with an icon.
+  - The summary is text, not a nested Value instance. Port's right sides are a date, a status with an icon, a masked card number and an amount: all one line, some with an icon. sets it in Body, as a Content row's List item `Detail`.
   - An amount in the summary stays plain text. The figure styling of Core's Value is the content rows' job (Assumptions).
 - **Expanded**: the public set shows `Content` and pins the header's chevron up. Collapsed hides `Content`. `Bottom border` follows `Content` when it shows.
 
@@ -42,25 +41,25 @@ _Accordion header (variant root)    Fill × Hug, no fill, no padding, min width 
 
 | Axis | Values (default first) | Drives |
 | --- | --- | --- |
-| `Size` | Medium · Small · Large | the height, 56 · 48 · 72, and the Hit target, 48 · 48 · 56 |
-| `Leading` | None · Small · Medium · Large · Custom |  |
+| `Size` | Medium · Small · Large | the height, 56 · 48 · 72, and the Hit target, 48 · 48 · 56; Large shows the `Subtitle` |
+| `Leading` | None · Small · Medium · Large · Custom | the leading glyph and its box, 20 · 24 · 36, or on Custom the `Leading artwork` |
 | `Expanded` | False · True | the chevron glyph: `angle-down` · `angle-up` |
 | `State` | Enabled · Active · Focus · Disabled · Skeleton | the row's fill (Active), stroke (Focus), text and icon colours (Disabled); `Skeleton` in place of `Label + Subtitle` and `Right content` |
 
-Properties: TEXT `Title text` ("Title") and `Value text` ("Value"), the same placeholder names as List item's. BOOLEAN `Value` (on) and `Value icon` (off). On Large only, TEXT `Subtitle text` ("Subtitle") and BOOLEAN `Subtitle` (on, not linked on Skeleton). The `Value icon` glyph is its layer's text, not an instance swap, as List item's leading icon. 3 × 5 × 2 × 5 = **150 variants**. Grid: columns Size (Large first) × Expanded, rows Leading › State.
+Properties: TEXT `Title text` ("Title") and `Value text` ("Value"), the same placeholder names as List item's. BOOLEAN `Value` (on) and `Value icon` (off). On Large only, TEXT `Subtitle text` ("Subtitle") and BOOLEAN `Subtitle` (on, not linked on Skeleton). The `Value icon` glyph is its layer's text, not an instance swap, as List item's leading icon. INSTANCE_SWAP `Leading artwork` (default `_List item image`, List item's 9 preferred values) on the Custom variants' `Artwork`, added by hand after each build (R3 (a)). 3 × 5 × 2 × 5 = **150 variants**. Grid: columns Size (Large first) × Expanded, rows Leading › State.
 
 `Accordion` (public set):
 
 | Axis | Values (default first) | Drives |
 | --- | --- | --- |
-| `Size` | Medium · Small · Large | the Content rows stay `Size=Small` (R4) |
-| `Leading` | None · Small · Medium · Large · Custom |  |
+| `Size` | Medium · Small · Large | pins the header's `Size`; the Content rows stay `Size=Small` (R4) |
+| `Leading` | None · Small · Medium · Large · Custom | pins the header's `Leading` |
 | `Expanded` | False · True | whether `Content` shows; pins the header's `Expanded` |
 | `State` | Enabled · Active · Focus · Disabled · Skeleton | pins the header's `State`; the content is the designer's |
 
 Properties: BOOLEAN `Bottom border` (on), SLOT `Content`, and the header's `Title text`, `Value text`, `Value`, `Value icon`, `Subtitle`, `Subtitle text` and `Leading artwork`. These reach the public set as the nested instance's exposed properties, so a designer sets them on the Accordion. 3 × 5 × 2 × 5 = **150 variants**. Grid: the header's.
 
-- Table's and Detail row's values and heights. Port's one header height, 48, is Small's.
+- **`Size`**: Table's and Detail row's values and heights. Port's one header height, 48, is Small's.
 - **No `iOS` axis**: Q3.
 - **`Expanded` order**: False comes first because Base's default view is collapsed (Assumptions). The map writes it as `True / False`.
 
@@ -70,13 +69,13 @@ Properties: BOOLEAN `Bottom border` (on), SLOT `Content`, and the header's `Titl
 
 | Group | Keyed by | Properties | Values |
 | --- | --- | --- | --- |
-| `Accordion header/Container/<Size>` |  | Layout horizontal, Layout vertical, Gap horizontal, Gap vertical, Padding left / right · top / bottom, Radius, Stroke weight, Layout min-height | `Fill container`, `Hug contents`, 8 (`Spacing/spacing-03 = 8`), 0 (`Spacing/spacing-00 = 0`), 8 (`spacing-03`) · Small 12 (`Spacing/spacing-04 = 12`), Medium and Large 14 (raw), `Radius/12px (radius-md) = 12`, 2 (`Sizing/focus-ring = 2`), Small 48 (`Sizing/hit-target = 48`) · Medium 56 · Large 72 (raw) |
+| `Accordion header/Container/<Size>` | Size | Layout horizontal, Layout vertical, Gap horizontal, Gap vertical, Padding left / right · top / bottom, Radius, Stroke weight, Layout min-height | `Fill container`, `Hug contents`, 8 (`Spacing/spacing-03 = 8`), 0 (`Spacing/spacing-00 = 0`), 8 (`spacing-03`) · Small 12 (`Spacing/spacing-04 = 12`), Medium and Large 14 (raw), `Radius/12px (radius-md) = 12`, 2 (`Sizing/focus-ring = 2`), Small 48 (`Sizing/hit-target = 48`) · Medium 56 · Large 72 (raw) |
 | `Accordion header/Right content/Default` | none varies | Gap horizontal | 8 (`spacing-03`) |
 | `Accordion header/Value/Default` | none varies | Gap horizontal | 4 (`Spacing/spacing-02 = 4`) |
-| `Accordion header/Label/Label`, `/Subtitle`, `/Value` | role | Type token, Type emphasis, Align horizontal, Align vertical, Decoration |  |
+| `Accordion header/Label/Label`, `/Subtitle`, `/Value` | role | Type token, Type emphasis, Align horizontal, Align vertical, Decoration | `$headline` · `$footnote` · `$body`, `Regular`, `Left` · `Left` · `Right`, `Top` · `Top` · `Center`, `-` |
 | `Accordion header/Icon/Large` | Icon step | Type token, Layout width, Layout height |  |
-| `Accordion header/Icon/2XLarge` |  | Type token, Layout width, Layout height |  |
-| `Accordion header/Leading/Small`, `/Medium`, `/Large` |  | Layout width, Layout height |  |
+| `Accordion header/Icon/2XLarge` | Icon step | Type token, Layout width, Layout height |  |
+| `Accordion header/Leading/Small`, `/Medium`, `/Large` | Leading size | Layout width, Layout height |  |
 | `Accordion header/Bar/Default` | none varies | Layout width, Layout height, Radius | 80, 8 (raw), `Radius/None (radius-0) = 0` |
 | `Accordion/Container/Default` | none varies | Layout horizontal, Layout vertical, Gap vertical | `Fill container`, `Hug contents`, 0 (`spacing-00`) |
 | `Accordion/Line/Default` | none varies | Layout horizontal, Layout vertical, Layout height | `Fill container`, `Fixed`, 1 (raw) |
@@ -100,8 +99,6 @@ Properties: BOOLEAN `Bottom border` (on), SLOT `Content`, and the header's `Titl
 | Label line | Skeleton | `Skeleton/skeleton-background` |  |
 | Bottom border | every state | `Border/border-subtle` | `background-primary` |
 
-**Contrast list**:
-
 - Label, Subtitle and Value on `layer-01` and `layer-active-01`, in both modes.
 - The chevron at 3:1 on the same backgrounds: it carries the expanded state, beside the announced state.
 - The `Value icon` at 3:1 where it carries status, as Port's clock and xmark.
@@ -112,11 +109,11 @@ Properties: BOOLEAN `Bottom border` (on), SLOT `Content`, and the header's `Titl
 - **Chevron**: `Accordion header/Icon/Large/Type token = fa-sharp fa-solid/Large`. It sits beside the Headline title, which pairs with Large (17) (Icons).
   - The glyph is `angle-down` (`Expanded=False`) and `angle-up` (`True`), solid (Q4).
   - It sits in a fixed 24 × 24 `Icon box`, so the swap doesn't move the summary. This is #109's fixed-width rule where glyphs swap.
-- `Accordion header/Icon/Large/Type token = fa-sharp fa-solid/Large`. It sits beside Body, which pairs with Large (17/24), as List item's `Detail icon`.
-  - Its box is 24 × 24 on `Accordion header/Icon/Large/*`, the chevron's.
+- **Value icon**: `Accordion header/Icon/Large/Type token = fa-sharp fa-solid/Large`. It sits beside Body, which pairs with Large (17/24), as List item's `Detail icon`.
+  - Its box is 24 × 24 on `Accordion header/Icon/Large/*`, the chevron's. It was Small in a 16 box before .
   - The glyph is the designer's, e.g. `clock`, `circle-xmark` or `credit-card`; the default is `clock`.
   - It is solid, colour `icon-secondary`. A status colour belongs to a Pattern (Assumptions).
-- List item's. Small `fa-sharp fa-solid/Small` in 20, Medium `/Large` in 24, Large `/2XLarge` in 36; default `heart`, the designer's glyph; `icon-primary`, `icon-disabled` on Disabled; decorative, the title carries the meaning.
+- **Leading glyph**: List item's. Small `fa-sharp fa-solid/Small` in 20, Medium `/Large` in 24, Large `/2XLarge` in 36; default `heart`, the designer's glyph; `icon-primary`, `icon-disabled` on Disabled; decorative, the title carries the meaning.
 
 ## Text styles, wrapping and truncation
 
@@ -124,7 +121,7 @@ Properties: BOOLEAN `Bottom border` (on), SLOT `Content`, and the header's `Titl
 | --- | --- | --- | --- |
 | `Label` | `Headings/Headline` (`$headline`, 17/24 Medium) | wraps, no line limit | `Title text` |
 | `Subtitle` | `Utility/Footnote` (`$footnote`, 13/20) | wraps, no line limit; Large only | `Subtitle text` |
-| `Value` | `Body/Body` (`$body`, 17/24 | one line; truncates `ENDING`, `maxLines` 1, except a date or an amount, which never truncates | `Value text` |
+| `Value` | `Body/Body` (`$body`, 17/24) | one line; truncates `ENDING`, `maxLines` 1, except a date or an amount, which never truncates | `Value text` |
 
 - **Width**: the title fills and wraps. The summary hugs and pushes the title.
 - **Thai floors**: the title at 17 and the summary at 13 on one line pass the floors (12 on one line, 13 where it wraps).
@@ -137,6 +134,7 @@ Properties: BOOLEAN `Bottom border` (on), SLOT `Content`, and the header's `Titl
   - The Content Slot's parts bring their own targets.
 - **Skeleton**: `State=Skeleton`, the same on both looks.
   - On the header, `Label + Subtitle` and `Right content` hide and `Skeleton` › `Label line` shows, as tall as the Size's row (48 · 56 · 72).
+  - The leading glyph and artwork keep their space at opacity 0 (R5).
   - `Expanded=True, State=Skeleton` shows the Content Slot as the designer fills it, e.g. List items in `State=Skeleton`.
 
 ## Motion
@@ -155,7 +153,7 @@ Movement from Motion and haptics, the owner's D6 (ads-tokens.md § 5), edited in
 - [x] 3. Not a field.
 - [x] 4. The expanded state shows in the chevron glyph and in the content itself, and is announced. The Active fill only adds to the pressed state.
 - [ ] 5. Focus ring: the Row's 2 stroke inside the row, which the Row rule puts inside the Container's 8 sides, as on List item and Checkbox Full-bleed. To check on the base.
-- [ ] 6. the title wraps and the header grows. The summary keeps one line;
+- [ ] 6. The summary keeps one line;
 - [x] 7. No text under 11: Footnote 13 is the smallest.
 - [x] 8. Motion part above.
 - [ ] 9. Role, name, states:
@@ -167,7 +165,7 @@ Movement from Motion and haptics, the owner's D6 (ads-tokens.md § 5), edited in
 | Announced states | `aria-expanded`, `aria-disabled` |
 | Focus order | same; Enter and Space toggle, Tab enters the content |
 
-- a List item in the Slot with no action renders as text in code, not a button, so a screen reader doesn't announce a read-only value as a button.
+- **Rows that do nothing** (R4): a List item in the Slot with no action renders as text in code, not a button, so a screen reader doesn't announce a read-only value as a button.
 
 ## Usage
 
@@ -177,16 +175,15 @@ Movement from Motion and haptics, the owner's D6 (ads-tokens.md § 5), edited in
   - `วันที่` with a date.
   - `การชำระเงิน` with `•••• 1234` and `credit-card`.
   - `มูลค่า` with `250,000.00 ฿`.
-  - The `มูลค่า` Accordion is expanded over three `Size=Small` List items: The last Accordion has `Bottom border` off.
+  - The `มูลค่า` Accordion is expanded over three `Size=Small` List items: two `Trailing=Label` rows, then the total `ยอดรวม` as a plain `Trailing=Value` row, no Bold (R3 (a)). The last Accordion has `Bottom border` off.
 - **Surface**: a stack sits on `background-primary`. On `background-secondary`, put the stack on a `background-primary` surface first: there the header's `layer-01` row would read as a pill above content with no fill (Inventory).
 - **Default open**: collapsed by default. At most the first Accordion of a stack opens by default, and never all of them (Base).
 - **Focus ring**: shown once, on a collapsed header.
 - **Skeleton**: a stack in `State=Skeleton`.
-- **Don't**:
   - Put Accordions in a Grouped list or a Tile.
   - Use one for a row that goes to another screen: that's List item with its `angle-right` `Chevron`.
   - Use a right-pointing chevron (`angle-right`, `chevron-right`) as the indicator: it reads as going to another screen. The indicator is `angle-down` · `angle-up` (Base).
   - Hide a blocking error or essential information in one (Base).
   - Make the content scroll inside the panel.
-  - Put Detail rows in the Content Slot:
+  - Put Detail rows in the Content Slot: use List items.
   - Use one where most panels must be opened anyway: show the content.

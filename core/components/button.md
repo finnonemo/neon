@@ -83,12 +83,12 @@ Pairs (the spec's `contrast` list): Label (text) and Leading Icon (non-text) on 
 
 | Layer | Text style (XSmall · Small · Medium · M (Expr.) · Large · L (Expr.)) | Lines | Text property |
 | --- | --- | --- | --- |
-| `Label` | `Utility/Footnote` · `Body/Subheadline` × 3 · `Body/Body` × 2 | wraps at 200 (or the Fill column's width), centred, never cut (Localisation | `Label Text` |
+| `Label` | `Utility/Footnote` · `Body/Subheadline` × 3 · `Body/Body` × 2 | wraps at 200 (or the Fill column's width), centred, never cut (Localisation) | `Label Text` |
 | `Leading Icon` · `Trailing Icon` | the icon step above | one glyph | `L. Icon Text` · `T. Icon Text` |
 
 ## Hit target and Skeleton
 
-- **Hit target**: `Interactive/<Size>` on the Root, Container centred (ADR 0003), both sets. XSmall (28) and Small (36) overflow to 48. Every banner action is now 48 tall (was 36), so Contextual banner variants grew 160 → 184 and 216 → 240.
+- **Hit target**: `Interactive/<Size>` on the Root, Container centred (ADR 0003), both sets. XSmall (28) and Small (36) overflow to 48. Every banner action is now 48 tall, so Contextual banner variants grew 160 → 184 and 216 → 240.
 - **Skeleton**: `State=Skeleton`, the Container in `skeleton-element`, same on both looks.
 
 ## Motion
@@ -103,7 +103,7 @@ Pairs (the spec's `contrast` list): Label (text) and Leading Icon (non-text) on 
 
 Item 5 is open: the nine-point criterion of #126 is not met.
 
-- [x] 1. Text pairs: Danger on Secondary passes in both sets since 2026-11-09 ([H2](../hierarchy.md)): `text-negative` moved to `Red/145` · `Red/50`, so `text-negative` on `button-secondary` / `-hover` / `-active` is 6.19 / 5.91 / 5.56:1 Light and 5.00 / 4.55 / 4.55:1 Dark (was 3.91 / 3.74 / 3.51 and 3.49 / 3.18 / 3.18 on `Red/125` · `Red/75`; issues.md, Fixed). Every pair passes the contrast lint (`check-specs.sh`) with no known defect left; the spec's `contrast` `knownDefects` entry (#126) is gone. It composites the tokens' alpha (the translucent Secondary fills over each Base surface). Limit:
+- [x] 1. Text pairs: Danger on Secondary passes in both sets since 2026-11-09 ([H2](../hierarchy.md)): `text-negative` moved to `Red/145` · `Red/50`, so `text-negative` on `button-secondary` / `-hover` / `-active` is 6.19 / 5.91 / 5.56:1 Light and 5.00 / 4.55 / 4.55:1 Dark (issues.md, Fixed). Every pair passes the contrast lint (`check-specs.sh`) with no known defect left; the spec's `contrast` `knownDefects` entry (#126) is gone. It composites the tokens' alpha (the translucent Secondary fills over each Base surface).
 - [x] 2. Non-text: the Danger Secondary icon (`icon-negative`, `Red/145` · `Red/50` since 2026-11-09, with the label) is 6.19 / 5.91 / 5.56:1 Light and 5.00 / 4.55 / 4.55:1 Dark (Dark was 3.49 / 3.18 / 3.18 on `Red/75`, 2.40 / 2.18 / 2.18 on `Red/115`). Other icons and the Focus stroke pass.
 - [x] 3. N/A: not a field.
 - [x] 4. No state by colour alone: Disabled dims label and icons, Loading shows a spinner, Skeleton drops the content, Focus adds a stroke.
@@ -127,14 +127,14 @@ Item 5 is open: the nine-point criterion of #126 is not met.
 - Which `Hierarchy` and `Type` to pick, pairs and the destructive flow: Hierarchy below.
 - Brand only on Primary. Danger for a destructive action: Secondary Danger at the entry point, Primary Danger only on the confirmation step ([H2](../hierarchy.md), owner 2026-11-09; replaces "prefer Primary Danger until the contrast issue is fixed"). Secondary Danger passes contrast since 2026-11-09 (Accessibility item 1).
 - Expressive for a fixed 256 action; a full-width button is the nester's Fill.
-- Tertiary Inverse only on `Background/background-inverse` (Snackbar), for a single quiet action or Close; Primary Inverse there for a filled call (, P2).
+- Tertiary Inverse only on `Background/background-inverse` (Snackbar), for a single quiet action or Close; Primary Inverse there for a filled call (P2).
 - Primary and Secondary Inverse are also the white buttons over maps, photos and headers; Toolbars, Tab bars and Segmented controls use them on `iOS=False`. Primary Inverse on `iOS=False` carries the effect style `Elevation/Button inverse` (Elevation). In Dark both are dark grey (`Grey/90`, `Grey/80`), following `background-secondary` and `background-tertiary`.
 
 ### Hierarchy
 
 What each `Hierarchy` and `Type` is for. The words, the rules every component keeps and the owner's calls H1–H4 are in [hierarchy.md](../hierarchy.md); this section adds Button's own. Sources: Uber Base [Button, Usage](https://base.uber.com/6d2425e9f/p/756216-button/b/336373) and [Content](https://base.uber.com/6d2425e9f/p/756216-button/b/49b497), Apple HIG [Buttons](https://developer.apple.com/design/human-interface-guidelines/buttons), read 2026-11-09.
 
-Covers `Button`, `Icon button` and `Rect button`. All three have `Hierarchy` Primary · Secondary · Tertiary and `Type` Default · Brand · Danger (· Inverse on Button and Icon button).
+Covers `Button`, `Icon button` and `Rect button`. All three have `Hierarchy` Primary · Secondary · Tertiary and `Type` Default · Brand · Danger (Inverse on Button and Icon button).
 
 | `Hierarchy` | Use for | Don't | Label (Uber Content) | Apple role |
 | --- | --- | --- | --- | --- |

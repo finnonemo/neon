@@ -68,6 +68,7 @@ Button (variant root)
 |---|---|---|
 | \`Button/Container/<Size>\` | Padding left, Radius | 16 (\`→Spacing/spacing-05\`), \`→Radius/Round (radius-round)\` |
 | \`Button/button-glow\` | Light | →\`Navy/100\` |
+| \`Button/Container/Round\` | Radius | 200 (Capsule) |
 
 ## \`iOS\` handling and pass-down
 
@@ -165,11 +166,17 @@ const HIERARCHY = `# Hierarchy — what each value is for
 
 | Component | Values | Doc | Open |
 |---|---|---|---|
-| Button | Primary · Secondary | [button.md](components/button.md#hierarchy) | none: pins verified on \`989:11332\` 2026-11-10 |
+| Button | Primary · Secondary | [button.md](components/button.md#hierarchy) | none: BN1 decided 2026-11-09; pins verified on \`989:11332\` 2026-11-10 |
 | Sidebar | Header on Secondary | [sidebar.md](components/sidebar.md#hierarchy) | |
+`;
+// Core states each control size's Hit target in the decision that put it on the Root.
+const HIT_TARGET_ADR = `# Hit target on the Root
+
+A control's Root carries its Hit target as min width and min height, bound to \`Interactive/<Size>/Interactive min-height\` (XSmall 48, Small 48, Medium 48, Large 56, XLarge 64). Container sits centred inside it.
 `;
 const CORE_FILES = {
   'GLOSSARY.md': GLOSSARY,
+  'docs/adr/0003-hit-target-on-root.md': HIT_TARGET_ADR,
   'docs/architecture.md': ARCHITECTURE,
   'docs/hierarchy.md': HIERARCHY,
   'docs/theme/theme.json': JSON.stringify(THEME),
@@ -211,7 +218,8 @@ async function synced(t, { files, items = ITEMS, counterparts = COUNTERPARTS, un
   for (const [path, content] of Object.entries(uncommitted)) await writeFile(join(from, path), content);
   const out = join(await mkdtemp(join(tmpdir(), 'neon-snapshot-')), 'core');
   t.after(() => rm(dirname(out), { recursive: true, force: true }));
-  const result = await syncCore({ from, out, items, counterparts });
+  // The registry's components, none of them a Supporting item unless a test says so.
+  const result = await syncCore({ from, out, items: items.map(item => (typeof item === 'string' ? { name: item, supporting: false } : item)), counterparts });
   const read = path => readFile(join(out, path), 'utf8');
   const json = async path => JSON.parse(await read(path));
   return { from, out, result, read, json };
@@ -336,7 +344,7 @@ test('the hierarchy rules come along, without rows for docs the snapshot leaves 
   const { read } = await synced(t);
   const hierarchy = await read('hierarchy.md');
   assert.ok(hierarchy.includes('1. **One Primary per context.**'), hierarchy);
-  assert.ok(hierarchy.includes('| Button | Primary · Secondary | [button.md](components/button.md) | none |'), hierarchy);
+  assert.ok(hierarchy.includes('| Button | Primary · Secondary | [button.md](components/button.md) | none: BN1 decided 2026-11-09 |'), hierarchy);
   assert.doesNotMatch(hierarchy, /Sidebar/);
 });
 
@@ -357,6 +365,132 @@ test('sync refuses a Counterpart table that misses a registry item, names a stal
   await assert.rejects(synced(t, { counterparts: { ...COUNTERPARTS, card: { core: null } } }), /card.*why/s);
 });
 
+// Toggle draws differently in each look, so its spec keys variables by the look and its doc sets the two side by side.
+const TOGGLE_DOC = `# Toggle — proposal
+
+> Status: Approved 2026-11-02 by the owner.
+
+## Axes
+
+| Set | Axes (default first) | Variants |
+|---|---|---|
+| \`Toggle\` | \`State\` Enabled · Disabled (kit: \`Mode\`, dropped) × \`iOS\` True · False; Pressed at \`iOS=True\` only | 2 × 2 = **4** |
+| \`Toggle - iPad\` | \`iOS\` True · False | **2** |
+
+## Component variables and Theme tokens
+
+| Group | Keyed by | Properties | True | False |
+|---|---|---|---|---|
+| \`Toggle/Track/<iOS>\` | \`iOS\` | Layout width | 64 | 48 |
+| | | Radius | \`Round (radius-round)\` | same |
+| \`Toggle/Container/<Type>\` | \`Type\` | Gap | Inset: 8 | Full-bleed: 12 (Revision 2; was 16) |
+
+| | \`iOS=True\` (the kit's) | \`iOS=False\` (web) |
+|---|---|---|
+| Fill | glass | \`Field/field\` |
+
+## Usage
+
+- **Label block**: title \`Label\`, description \`Subtitle\` (\`$footnote\`, Revision 1 R2 (a): Large only). Min size 20, 20 (→ \`Dynamic Type/Footnote/Line height\`: 20 / 28 / 48).
+- **Summary**: the Liquid Glass tint.
+`;
+const TOGGLE_SPEC = {
+  componentSet: { name: 'Toggle' },
+  axes: [{ name: 'State', values: ['Enabled', 'Disabled'] }, { name: 'iOS', values: ['True', 'False'] }],
+  layers: [
+    { layerPath: [], automations: { minHeight: [{ condition: '{{State=*}}', value: 'Components/Interactive/Medium/Interactive min-height' }] } },
+    { layerPath: ['Track'], automations: {
+      cornerRadius: [
+        { condition: '{{iOS=True}}', value: 'Components/Toggle/Track/Medium/Radius (iOS)' },
+        { condition: '{{iOS=False}}', value: 'Components/Toggle/Track/Medium/Radius' },
+      ],
+      'componentProperties.iOS#12:3': [{ condition: '{{iOS=*}}', value: '{{iOS=*}}' }],
+    } },
+  ],
+  nested: [{ name: '_Toggle Item', axes: [{ name: 'iOS', values: ['True', 'False'] }], layers: [
+    { layerPath: ['Thumb'], automations: { width: [{ condition: '{{iOS=*}}', value: 'Components/Toggle/Thumb/{{iOS=*}}/Layout width' }] } },
+  ] }],
+  variables: [
+    { collection: 'Components', name: 'Toggle/Thumb/True/Layout width', type: 'FLOAT', value: 38 },
+    { collection: 'Components', name: 'Toggle/Thumb/True/Layout horizontal', type: 'STRING', value: 'Fixed' },
+    { collection: 'Components', name: 'Toggle/Thumb/False/Layout width', type: 'FLOAT', value: 18 },
+    { collection: 'Components', name: 'Toggle/Thumb/False/Layout horizontal', type: 'STRING', value: 'Fixed' },
+    { collection: 'Components', name: 'Toggle/Track/Medium/Radius', type: 'FLOAT', value: '→Radius/Round (radius-round)' },
+    { collection: 'Components', name: 'Toggle/Track/Medium/Radius (iOS)', type: 'FLOAT', value: 100 },
+    { collection: 'Components', name: 'Toggle/Track/Medium/Layout horizontal', type: 'STRING', value: 'Fill' },
+  ],
+};
+const WITH_TOGGLE = { ...CORE_FILES, 'docs/components/toggle.md': TOGGLE_DOC, 'docs/components/toggle.spec.json': JSON.stringify(TOGGLE_SPEC) };
+
+test('a spec keyed by the look keeps the iOS=False variables, and brings in the Hit target its Root binds', async t => {
+  const { json } = await synced(t, { files: WITH_TOGGLE });
+  const { sets: [toggle, item] } = await json('components/toggle.json');
+  // An unbound record goes with its group: Thumb/True is the native look's, Track/Medium is both looks'.
+  assert.deepEqual(toggle.variables, {
+    'Toggle/Thumb/False/Layout width': 18,
+    'Toggle/Thumb/False/Layout horizontal': 'Fixed',
+    'Toggle/Track/Medium/Radius': 200,
+    'Toggle/Track/Medium/Layout horizontal': 'Fill',
+    'Interactive/Medium/Interactive min-height': 48,
+  });
+  assert.deepEqual(toggle.bindings, [
+    { layer: '(root)', property: 'minHeight', when: '{{State=*}}', value: 'Components/Interactive/Medium/Interactive min-height' },
+    { layer: 'Track', property: 'cornerRadius', when: '', value: 'Components/Toggle/Track/Medium/Radius' },
+  ]);
+  // A set nested in the component is compiled too, with the variables its bindings reach.
+  assert.deepEqual(item, {
+    name: '_Toggle Item', axes: [], exclude: [], properties: [],
+    variables: { 'Toggle/Thumb/False/Layout width': 18 },
+    bindings: [{ layer: 'Thumb', property: 'width', when: '', value: 'Components/Toggle/Thumb/False/Layout width' }],
+  });
+});
+
+test('sync refuses a binding to a variable no Core spec records', async t => {
+  const spec = { ...TOGGLE_SPEC, variables: TOGGLE_SPEC.variables.filter(variable => !variable.name.startsWith('Toggle/Thumb/False/')) };
+  await assert.rejects(synced(t, { files: { ...WITH_TOGGLE, 'docs/components/toggle.spec.json': JSON.stringify(spec) } }),
+    /toggle\.spec\.json.*Thumb.*Toggle\/Thumb\/False\/Layout width.*no Core spec records/s);
+});
+
+test('a doc that sets the two looks side by side keeps the web one, and never cuts a sentence open', async t => {
+  const { read } = await synced(t, { files: WITH_TOGGLE });
+  const doc = await read('components/toggle.md');
+  for (const kept of [
+    // The look is not a web axis, and Figma's variant count counts both looks.
+    '| Set | Axes (default first) |\n| --- | --- |\n| `Toggle` | `State` Enabled · Disabled (kit: `Mode`, dropped) |\n',
+    // Rows keyed by the look keep their False value ("same" is the True one); other rows keep both.
+    '| Group | Keyed by | Properties | Values |',
+    '| `Toggle/Track/<iOS>` | `iOS` | Layout width | 48 |',
+    '|  |  | Radius | `Round (radius-round)` |',
+    '| `Toggle/Container/<Type>` | `Type` | Gap | Inset: 8; Full-bleed: 12 |',
+    '|  | `iOS=False` (web) |\n| --- | --- |\n| Fill | `Field/field` |',
+    // A Revision citation goes and its rule stays; a native-only parenthetical goes whole.
+    '- **Label block**: title `Label`, description `Subtitle` (`$footnote`, Large only). Min size 20, 20.',
+  ]) assert.ok(doc.includes(kept), `missing: ${kept}\n${doc}`);
+  for (const dropped of ['Variants', 'iPad', 'Summary', '64', 'glass', 'was 16']) assert.ok(!doc.includes(dropped), `${dropped} is not a web rule\n${doc}`);
+});
+
+test('a doc whose Status says neither approved nor built is left out, and named', async t => {
+  const files = { ...CORE_FILES, 'docs/components/tile.md': '# Tile — proposal\n\n> Status: Proposed 2026-11-12, waiting on the owner.\n\n## Usage\n\n- A proposed rule.\n' };
+  const { out, result } = await synced(t, { files });
+  assert.deepEqual(result.leftOut, { checkbox: 'draft', sidebar: 'deprecated', tile: 'unread' });
+  assert.ok(!(await readdir(join(out, 'components'))).includes('tile.md'));
+  await assert.rejects(synced(t, { files, counterparts: { ...COUNTERPARTS, card: { core: 'tile' } } }), /card.*tile.*neither approved nor built/s);
+});
+
+test('a Supporting item has no Counterpart of its own, and the index says it is one', async t => {
+  const items = [...ITEMS, { name: 'toggle', supporting: true }];
+  const none = { core: null, why: 'toggle-group is built from it.' };
+  const { json } = await synced(t, { items, counterparts: { ...COUNTERPARTS, toggle: none } });
+  assert.deepEqual((await json('index.json')).toggle, { counterpart: null, supporting: true, why: none.why });
+  await assert.rejects(synced(t, { items, counterparts: { ...COUNTERPARTS, toggle: { core: 'button' } } }), /toggle is a Supporting item.*button/s);
+});
+
+test('sync writes nothing when a compiled file would still hold what the snapshot leaves out', async t => {
+  const spec = { ...BUTTON_SPEC, variables: [...BUTTON_SPEC.variables, { collection: 'Components', name: 'Button/Source', type: 'STRING', value: 'node 299:16756' }] };
+  await assert.rejects(synced(t, { files: { ...CORE_FILES, 'docs/components/button.spec.json': JSON.stringify(spec) } }),
+    /nothing was written.*components\/button\.json would hold a Figma link or node id.*299:16756/s);
+});
+
 async function snapshotFiles(directory, prefix = '') {
   const entries = await readdir(join(directory, prefix), { withFileTypes: true });
   const nested = await Promise.all(entries.map(entry => entry.isDirectory() ? snapshotFiles(directory, `${prefix}${entry.name}/`) : [`${prefix}${entry.name}`]));
@@ -364,12 +498,12 @@ async function snapshotFiles(directory, prefix = '') {
 }
 
 test('nothing in the snapshot carries an alias, a Figma id, the iOS=True look, a Revision or Dynamic Type', async t => {
-  const { out, read } = await synced(t);
+  const { out, read } = await synced(t, { files: WITH_TOGGLE });
   // The manifest holds the Core commit and each file's hash, which are hex by nature.
   for (const file of (await snapshotFiles(out)).filter(file => file !== 'snapshot.json')) {
     const content = await read(file);
     for (const pattern of [...NATIVE_ONLY, /→`?(Spacing|Sizing|Radius|Dynamic Type)\//, /nodeId/]) assert.doesNotMatch(content, pattern, file);
-    if (file.endsWith('.json')) assert.doesNotMatch(content, /→/, file);
+    if (file.endsWith('.json')) assert.doesNotMatch(content, /→|\{\{iOS|\/True\/|\(iOS\)/, file);
   }
 });
 
@@ -384,6 +518,13 @@ test('the repository check refuses a snapshot file edited by hand', async t => {
   const { out, read } = await synced(t);
   await writeFile(join(out, 'components/button.md'), `${await read('components/button.md')}\n- Brand on Secondary is fine.\n`);
   await assert.rejects(checkCoreSnapshot(out, { items: ITEMS }), /components\/button\.md.*does not match.*sync-core/s);
+});
+
+test('the repository check refuses a manifest edited by hand: the commit it names is the one compiled', async t => {
+  const { out, read } = await synced(t);
+  const manifest = JSON.parse(await read('snapshot.json'));
+  await writeFile(join(out, 'snapshot.json'), `${JSON.stringify({ ...manifest, core: { ...manifest.core, commit: '0'.repeat(40) } }, null, 2)}\n`);
+  await assert.rejects(checkCoreSnapshot(out, { items: ITEMS }), /snapshot\.json does not match what the sync wrote/);
 });
 
 test('the repository check refuses an index entry that points at a missing doc', async t => {

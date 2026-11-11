@@ -130,8 +130,7 @@ Choosing a row fires no haptic from Select (Motion and haptics: `Selection` is S
 - [ ] 2. Meaningful non-text parts pass 3:1: the Chevron on both fills (`icon-primary` on `field`), the strokes, the Status and Detail glyphs. The contrast lint, after the spec.
 - [x] 3. The field is identified by more than its fill: the Title above, the value or prompt inside, the Chevron, and a stroke on Focus, Active and Error (Filled fields).
 - [x] 4. No state by colour alone: open turns the Chevron up and adds the stroke; Error and Success carry a glyph and a message; Incomplete / Complete a glyph; Loading a spinner; Disabled dims; Read-only drops the Chevron and keeps its outline.
-- [x] 5. The Focus ring sits outside the Field:
-- [x] 6. Active, Error and Loading at each Size, a long unspaced Thai value and a stacked-mark case, 343 wide. The value stays one line and ends in "…" before the Status glyph and the Chevron. The Title, helper and error text wrap and grow the variant (Error Small with marks: 148 → 212 → 386). Nothing sits outside its box and nothing clips.
+- [x] 6. The value stays one line and ends in "…" before the Status glyph and the Chevron. The Title, helper and error text wrap and grow the variant (Error Small with marks: 148 → 212 → 386). Nothing sits outside its box and nothing clips.
 - [x] 7. No text under 11 pt: the smallest is Subheadline.
 - [x] 8. The Motion part names each transition.
 - [x] 9. Role, name, states and focus order:

@@ -32,6 +32,8 @@ Banner (VERTICAL, padding 0, no fill)
       └─ Toggle                    Style=Toggle only, Enabled, Toggled=True, iOS = variant's; Hug × Hug (64 × 48 | 48 × 48)
 ```
 
+Since #129 (2026-11-02) both looks hold one `Toggle` (Style=Toggle only) where `Toggle - Switch` and `Toggle` Style=Default (iOS=False) were, and the action instances take their main's min size.
+
 Container owns all vertical padding; Title and Description has none, so a one-line banner is 16 + 48 + 16 = 80 and long descriptions grow it instead of clipping.
 
 The live set holds only each variant's own action layer (see Open), so a Toggle variant has one of the two toggles, not both.
@@ -57,7 +59,6 @@ Raw values, mode `Value`, `ALL_SCOPES`, like the rest of the collection. Shaped 
 
 ## Usage
 
-- `Form validation` (Error, Primary, no action) and `Statuses` (Secondary Info, Success and Warning, each with the close button).
 - Use an In-line banner for a message about the state of one page or feature, at the top of the page or next to the content it is about: form validation, inline callouts, Warning, Success and Failure states (Uber, Usage).
 - Don't use it for an app-wide system message (Uber's System banner; we have none), or for short-lived feedback after an action, such as "Copied": use a [Snackbar](snackbar.md) (Uber, Usage).
 - Show one at a time. When several fields have errors, put them all in one banner at the top or bottom of the form (Uber, Usage).
@@ -66,7 +67,7 @@ Raw values, mode `Value`, `ALL_SCOPES`, like the rest of the collection. Shaped 
 
 ### Hierarchy
 
-This section says what each `Hierarchy` value is for. The shared vocabulary, the rules every component follows and the owner's calls H1–H4 are in [hierarchy.md](../hierarchy.md). The nested buttons follow Button's rules in [button.md › Hierarchy](button.md). The matched Uber page is **Banner**: Message card was checked and set aside (Sources). Apple has no banner component.
+This section says what each `Hierarchy` value is for. The shared vocabulary, the rules every component follows and the owner's calls H1–H4 are in [hierarchy.md](../hierarchy.md). The nested buttons follow Button's rules in [button.md › Hierarchy](button.md). Message card was checked and set aside (Sources). Apple has no banner component.
 
 Uber's rule: a banner's Hierarchy follows "the message's severity", with "high and low-contrast color combinations" (Usage, Hierarchy). Uber's two values look different from ours. Uber's High is a solid Status fill with white text (black on Warning). Uber's Low is a light Status tint with black text. Our Primary is the light tint, and our Secondary is neutral (BN1).
 
@@ -110,4 +111,4 @@ Since BN4 (owner, 2026-11-09) the spec pins each action's `Hierarchy` and `Type`
 | BN1 | **Uber's High has no match.** Uber's Banner has `Hierarchy` High (a solid Status fill: Accent `#276EF1`, Negative `#DE1135`, Positive `#0E8345`, Warning `#F6BC2F` with black text) and Low (a light Status tint: `#EFF4FE`, `#FFF0EE`, `#EAF6ED`, `#FDF2DC`). Our Primary is Uber's Low look. Our Secondary (white with a border) isn't in Uber. No value of ours is Uber's solid High. | Keep our two values, using Primary for the messages that need action and Secondary for passive ones (the tables above). Add a solid High only when a product screen needs one. Add a row to hierarchy.md's "Words in the sources" table: Uber Banner High · Low → none · Primary. | decided by the owner 2026-11-09 (as recommended): keep our two values, a solid High only when a product screen needs one. The hierarchy.md row is the orchestrator's. |
 | BN2 | **More than one action.** Uber: "Banners support up to a single action", a Secondary pill button or a Tertiary icon button. Ours also has `2 Icon Buttons` and `Toggle`. | Prefer `Button` or `Icon Button`. Before deciding, run `usage.js` to count the `2 Icon Buttons` and `Toggle` variants in use. Deprecate the ones nothing uses, and keep the rest for the screens that need them. | decided by the owner 2026-11-09 ("Leave as is"): `2 Icon Buttons` and `Toggle` stay, beyond Uber's one-action rule. Core usage that day (`usage.js`): `2 Icon Buttons` 0, `Button` 0, `Toggle` 1, all on the Audit, Banners and Drafts pages. |
 | BN3 | **Buttons on colors.** In Uber, "button color tokens are customized per their background color token": a Low banner's Secondary button is a deeper tint of the banner (Accent `#DEE9FE` on `#EFF4FE`). Ours stays `Type=Default` on `button-secondary`. Contrast still passes for the label (`text-primary` on `button-secondary` over each Primary banner background): 11.2–12.2:1 Light, 11.8–14.5:1 Dark, computed from `theme.json` on 2026-11-09. That check covers `iOS=False` only | Keep `Type=Default`, with no banner-specific button Type. Add the nested action label to the banner specs' `contrast` list so the lint checks it. | decided by the owner 2026-11-09 (as recommended): `Type=Default` kept. Done 2026-11-09: `banner.gen.mjs`'s `contrast` checks `text-primary` and `icon-primary` on `button-secondary` (rest, hover, active) over the Container fill, and the close icon on the Container, `iOS=False`. Lint passes |
-| BN4 | **The spec doesn't pin the nested `Hierarchy` or `Type`.** `banner.spec.json` sets only `iOS` (and the Toggle's `Style`), so verify wouldn't catch a nested button changed to Primary. | Add constant `componentProperties.Hierarchy` and `Type` rules for `Icon button`, `Button` and `Icon Buttons/Icon button` in `banner.gen.mjs`, with the values the table above gives. | decided by the owner 2026-11-09 (as recommended). Done 2026-11-09 in `banner.gen.mjs`; 360 checked, 0 mismatches, and the second `Icon Buttons/Icon button`, which the rule doesn't reach, checked by hand. |
+| BN4 | **The spec doesn't pin the nested `Hierarchy` or `Type`.** `banner.spec.json` sets only `iOS` (and the Toggle's `Style`), so verify wouldn't catch a nested button changed to Primary. | Add constant `componentProperties.Hierarchy` and `Type` rules for `Icon button`, `Button` and `Icon Buttons/Icon button` in `banner.gen.mjs`, with the values the table above gives. | decided by the owner 2026-11-09 (as recommended). Done 2026-11-09 in `banner.gen.mjs` |

@@ -106,7 +106,7 @@ A figure that updates (a live NAV, a recalculated total) swaps its text with no 
 - [x] 3. N/A: not a field.
 - [x] 4. A Change figure always shows its sign, so colour is never the only cue (Numbers and dates, C2); Empty is `--`, not a colour.
 - [x] 5. N/A: not interactive.
-- [ ] 6. Value hugs and never clips; Checked with `reflow-check.js` after the build.
+- [ ] 6. Checked with `reflow-check.js` after the build.
 - [x] 7. Smallest step Footnote 13.
 - [x] 8. Motion: None.
 - [ ] 9. Role, name, states:

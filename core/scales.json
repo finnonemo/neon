@@ -23,10 +23,10 @@
   "Sizing/stroke-selected": 2,
   "Sizing/stroke-field": 3,
   "Sizing/focus-ring": 2,
+  "Radius/radius-round": 200,
   "Radius/radius-0": 0,
   "Radius/radius-lg": 16,
   "Radius/radius-md": 12,
-  "Radius/radius-round": 200,
   "Radius/radius-sm": 8,
   "Radius/radius-xs": 4
 }

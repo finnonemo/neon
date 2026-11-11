@@ -37,7 +37,7 @@ List item (variant root)        Fill × Hug, no fill, no padding; min width Inte
                                 none on Active or Focus (BOOLEAN `Bottom border`, on)
 ```
 
-`List item` holds Detail icon, Detail, Values, Disclosure, Pop-up, Button, Picker and the four accessories; `List item control` holds Toggle, Checkbox, Radio and Stepper. Every nested instance takes `State` Disabled on the row's Disabled and Enabled otherwise.
+`Right content`'s parts (R1), each shown on its `Trailing` value. `List item` holds Detail icon, Detail, Values, Disclosure, Pop-up, Button, Picker and the four accessories; `List item control` holds Toggle, Checkbox, Radio and Stepper. Every nested instance takes `State` Disabled on the row's Disabled and Enabled otherwise. (drew these in the Item `_List item control`, with `Type` for `Trailing`.)
 
 ```
 Right content
@@ -66,41 +66,41 @@ Right content
 ```
 
 - The row, its padding, gap, radius, states and Divider are Checkbox Full-bleed's, so a List item and a Checkbox row share their sides, row, line and states in one list; their titles differ in weight (List item `Headings/Headline`, Checkbox `Body/Body`). The text starts 16 in (8 + 8), or 48 beside a 24 leading icon. Its heights are List item's own (owner, 2026-11-03; two lines 72 on 2026-11-05, Table cell Large's height): one line 56 (Checkbox's row stays 48), two lines 72 (14 + Headline 24 + Footnote 20 + 14), with the leading part and the trailing control centred on the row, as iOS's subtitle cell.
-- the title takes `Headings/Headline` as a row's title (Label block), the Subtitle `Utility/Footnote` (`labelBlock.descriptionType`, owner 2026-11-03).
+- `Label + Subtitle` and `Label line` follow the Label block rule under the Table cell's names (in `List item`, `Label` and `Subtitle` each sit in a Fill row, , R2); the title takes `Headings/Headline` as a row's title (Label block), the Subtitle `Utility/Footnote` (`labelBlock.descriptionType`, owner 2026-11-03).
 - The nested Toggle, Checkbox and Radio show the state; the row takes the tap.
 - A plain list of checkboxes is Checkbox `Type=Full-bleed`, `Alignment=Right`, not List items: `Trailing=Checkbox` is for a row that needs a leading part, a Chevron or a Detail beside its box (owner, 2026-11-02).
 - Swipe actions are an Item, `_List item swipe actions`, out of this doc (Calls).
-- the row centres it, so a 36 artwork (`Leading=Large`, or a 36 part in `Custom`) leaves a one-line row at 56 and a two-line row at 72.
-- a plain, detail or navigating row is `List item`, a row with a Toggle, Checkbox, Radio or Stepper is `List item control`, a row to reorder is `Draggable list`.
-- the edit control first in the row, on all three sets; Selection in an editing list is the edit control's Selected or Unselected.
+- `Leading` has no padding of its own (R3): the row centres it, so a 36 artwork (`Leading=Large`, or a 36 part in `Custom`) leaves a one-line row at 56 and a two-line row at 72. In `Leading=Custom`'s swap, a rounded photo is `_List item image` (R1), a round one Avatar `Artwork=Image`, and a symbol on a filled circle Avatar `Artwork=Icon` (R2).
+- The trailing part is the set's `Trailing` axis (R2): a plain, detail or navigating row is `List item`, a row with a Toggle, Checkbox, Radio or Stepper is `List item control`, a row to reorder is `Draggable list`.
+- `Edit control` and the Grabber are an editing list's (R4 and R6): the edit control first in the row, on all three sets; the Grabber last, in `Draggable list` only (R3). Selection in an editing list is the edit control's Selected or Unselected.
 
 ## Axes
 
 | Axis | Values (default first) | Drives |
 | --- | --- | --- |
-| `Size` | Medium · Small | `Container/<Size>`: Medium one line 56, two lines 72; On all three sets |
-| `Leading` | None · Small · Medium · Large · Custom | whether `Leading` shows |
-| `Trailing` | `List item`: None · Label · Value · Disclosure · Pop-up · Button · Picker - Date · Picker - Time · Picker - Date and Time. `List item control`: Toggle · Checkbox · Radio · Stepper. `Draggable list` has none |  |
-| `State` | Enabled · Active · Focus · Disabled · Skeleton | the row's fill (Active) and stroke (Focus), text and icon colours (Disabled), `Skeleton` in place of `Label + Subtitle` and `Right content`; the Divider hides on Active and Focus. |
+| `Size` | Medium · Small | `Container/<Size>`: Medium one line 56, two lines 72; Small one line 48, its parts padded 12 · 0, with `Subtitle`, `Second value`, `Subtitle value` and `Change` hidden and unlinked (R2–R4). On all three sets |
+| `Leading` | None · Small · Medium · Large · Custom | whether `Leading` shows; Small, Medium and Large the glyph's step and box (20, 24, 36), Custom the `Artwork` swap (R1) |
+| `Trailing` | `List item`: None · Label · Value · Disclosure · Pop-up · Button · Picker - Date · Picker - Time · Picker - Date and Time. `List item control`: Toggle · Checkbox · Radio · Stepper. `Draggable list` has none | which of `Right content`'s parts shows (R1, R2) |
+| `State` | Enabled · Active · Focus · Disabled · Skeleton | the row's fill (Active) and stroke (Focus), text and icon colours (Disabled), `Skeleton` in place of `Label + Subtitle` and `Right content`; the Divider hides on Active and Focus. All five on each set (R4) |
 
-Properties on all three sets: TEXT `Label text` ("Title"), `Subtitle text` ("Subtitle"): placeholder names, not mock Thai copy (owner, 2026-11-03); BOOLEAN `Subtitle` (on: a fresh row is two lines, 72; owner, 2026-11-03, 72 since 2026-11-05), `Bottom border` (on), `Edit control` (off; INSTANCE_SWAP `Leading artwork` (`Leading=Custom`, default `_List item image`). The leading glyph is the `Icon` layer's text, not an instance swap. The `Grabber` BOOLEAN is gone:
+Properties on all three sets: TEXT `Label text` ("Title"), `Subtitle text` ("Subtitle"): placeholder names, not mock Thai copy (owner, 2026-11-03); BOOLEAN `Subtitle` (on: a fresh row is two lines, 72; owner, 2026-11-03, 72 since 2026-11-05), `Bottom border` (on), `Edit control` (off), `Subtitle value` (off, Medium, not Skeleton; , R3); INSTANCE_SWAP `Leading artwork` (`Leading=Custom`, default `_List item image`). The leading glyph is the `Icon` layer's text, not an instance swap. The `Grabber` BOOLEAN is gone: the Grabber is `Draggable list` (R3).
 
-`List item` adds TEXT `Detail text` ("Detail", `Trailing=Label · Disclosure`), `Pop-up text` ("Option"); BOOLEAN `Chevron`, `Symbol`, `Info`, `Checkmark` (all off, beside None · Label · Value), `Second value` (off, `Trailing=Value`), `Change` (off, Medium, `Trailing=Value`; The pickers' date and time are each exposed Button's `Label Text`, set from the instance's panel.
+`List item` adds TEXT `Detail text` ("Detail", `Trailing=Label · Disclosure`), `Pop-up text` ("Option"); BOOLEAN `Chevron`, `Symbol`, `Info`, `Checkmark` (all off, beside None · Label · Value), `Second value` (off, `Trailing=Value`), `Change` (off, Medium, `Trailing=Value`; , R5), `Detail icon` (off, `Trailing=Label`), `Title icon` (off, not Skeleton) and `Subtitle button` (off, Medium, not Skeleton; , R3, R6). `Value`, `Second value`, `Change value`, `Change percent` and `Subtitle value` are exposed, so a designer sets each one's `Change`, `Unit` and `Percent` from the row's panel (R2). The pickers' date and time are each exposed Button's `Label Text`, set from the instance's panel.
 
-| Set | Axes | Variants | Grid |
-| --- | --- | --- | --- |
-| `List item` | `Size` 2 × `Leading` 5 × `Trailing` 9 × `State` 5 × `iOS` 2 | **900** | 20 columns (`Size` › `Leading` › `iOS` False · True) by 45 rows (`Trailing` › `State`) |
-| `List item control` | `Size` 2 × `Leading` 5 × `Trailing` 4 × `State` 5 × `iOS` 2 | **400** | 20 by 20 |
-| `Draggable list` | `Size` 2 × `Leading` 5 × `State` 5 × `iOS` 2 | **100** | 20 by 5 (`State`) |
+| Set | Axes | Grid |
+| --- | --- | --- |
+| `List item` | `Size` 2 × `Leading` 5 × `Trailing` 9 × `State` 5 × `iOS` 2 | 20 columns (`Size` › `Leading` › `iOS` False · True) by 45 rows (`Trailing` › `State`) |
+| `List item control` | `Size` 2 × `Leading` 5 × `Trailing` 4 × `State` 5 × `iOS` 2 | 20 by 20 |
+| `Draggable list` | `Size` 2 × `Leading` 5 × `State` 5 × `iOS` 2 | 20 by 5 (`State`) |
 
-"trailing เพิ่ม column ให้เท่ากับ ios … แต่ไม่ต้องสร้าง item", so each is drawn in the row, no new Item):
+The `Trailing` values Disclosure to the Pickers ('s, after Radio) are the iOS kit's `_Trailing` types, appended so the first 180 variants kept their ids (owner, 2026-11-03: "trailing เพิ่ม column ให้เท่ากับ ios … แต่ไม่ต้องสร้าง item", so each is drawn in the row, no new Item):
 
 - **Disclosure**: the Detail, then an `angle-right` in `Icon/icon-secondary` (owner, 2026-11-03: "เปลี่ยน angle-right เป็น icon-secondary"); its own layer, so `Chevron` stays the row's navigation.
 - **Pop-up**: the chosen option and an up-down glyph, as iOS's pop-up button.
 - **Button**: Core's Link, Primary, Large (owner: "Link ของ Core").
 - **Stepper**: two Tertiary Small Icon buttons with a line between, as Core's Stepper (owner: "Icon button สองตัว").
 - **Picker - Date · Time · Date and Time**: three values as iOS's (owner: "3 ค่าแบบ iOS"), each date or time a Core Button, Secondary, Small (owner, 2026-11-03: "เปลี่ยน Picker date time เป็น button secondary small"), in place of the first grey capsules.
-- "เพิ่ม star", "Layer Symbol ใหม่", colour `Link/link-primary`); the "angle right" of that request is the existing `Chevron`.
+- **Symbol**, a star in `Link/link-primary` after the Detail, from the iOS kit Row (owner: "เพิ่ม star", "Layer Symbol ใหม่", colour `Link/link-primary`); the "angle right" of that request is the existing `Chevron`.
 - **Info** and **Checkmark**, iOS's Default accessories (owner: "เพิ่มทั้งสอง"). The owner's option tied them to Label; they show beside None · Label · Value, the cells where Symbol and Chevron show, so a row with no trailing text can take a checkmark.
 
 ## Component variables and Theme tokens
@@ -109,19 +109,19 @@ Properties on all three sets: TEXT `Label text` ("Title"), `Subtitle text` ("Sub
 
 | Group | Keyed by | Properties | Values |
 | --- | --- | --- | --- |
-| `List item/Container/Medium`, `/Small` | `Size` | Layout horizontal, Layout vertical, Gap horizontal, Gap vertical, Padding left / right · top / bottom, Radius, Stroke weight, Layout min-height | `Fill container`, `Hug contents`, 8 (`Spacing/spacing-03 = 8`), 0 (`Spacing/spacing-00 = 0`), 8 (`spacing-03`) · 14 (raw, off the Spacing scale), `Radius/12px (radius-md) = 12`, 2 (`Sizing/focus-ring = 2`), 56 (raw). Small: top / bottom 12 (`Spacing/spacing-04 = 12`), min height 48 (`Sizing/hit-target = 48`). |
-| `List item/Leading/Small`, `/Medium`, `/Large` | `Leading` | Layout width, Layout height | the Icon's box. None and Custom keep Medium's on the hidden glyph |
+| `List item/Container/Medium`, `/Small` | `Size` | Layout horizontal, Layout vertical, Gap horizontal, Gap vertical, Padding left / right · top / bottom, Radius, Stroke weight, Layout min-height | `Fill container`, `Hug contents`, 8 (`Spacing/spacing-03 = 8`), 0 (`Spacing/spacing-00 = 0`), 8 (`spacing-03`) · 14 (raw, off the Spacing scale), `Radius/12px (radius-md) = 12`, 2 (`Sizing/focus-ring = 2`), 56 (raw). Small: top / bottom 12 (`Spacing/spacing-04 = 12`), min height 48 (`Sizing/hit-target = 48`). `Medium` was `Container/Default` before |
+| `List item/Leading/Small`, `/Medium`, `/Large` | `Leading` | Layout width, Layout height | `Medium` was `Leading/Default` before ; None and Custom keep Medium's on the hidden glyph |
 | `List item/Icon/Small`, `/Large`, `/2XLarge` | Icon step | Type token | `fa-sharp fa-solid/Small` · `/Large` · `/2XLarge` |
 | `List item/Label/Label`, `/Subtitle`, `/Detail` | role | Type token, Type emphasis, Align horizontal, Align vertical, Decoration | `$headline` · `$footnote` · `$body`, `Regular`, `Left` (Detail `Right`), `Top`, `-`. `Detail` is `List item`'s |
-| `List item/Title/Default`, `/Subtitle/Default` | none varies | Layout horizontal, Layout vertical, Gap horizontal | `Fill container`, `Hug contents`; Title 4 (`Spacing/spacing-02 = 4`), Subtitle 0 (`Spacing/spacing-00 = 0`): `Subtitle button`'s height binds `Footnote/Line height`; `Title icon` reuses `List item/Icon/Large` |
+| `List item/Title/Default`, `/Subtitle/Default` | none varies | Layout horizontal, Layout vertical, Gap horizontal | `Fill container`, `Hug contents`; Title 4 (`Spacing/spacing-02 = 4`), Subtitle 0 (`Spacing/spacing-00 = 0`): `Title` and `Subtitle row` (R12). `Subtitle button`'s height binds `Footnote/Line height`; `Title icon` reuses `List item/Icon/Large` |
 | `List item/Right content/Default` | none varies | Gap horizontal | 16 (`Spacing/spacing-05 = 16`): `Right content` |
 | `List item/Field/Default` | none varies | Gap horizontal | 8 (`spacing-03`): between the pickers' Buttons |
 | `List item/Line/Default` | none varies | Layout horizontal, Layout vertical, Layout height | `Fill container`, `Fixed`, 1 (raw) |
 | `List item/Bar/Default` | none varies | Layout width, Layout height, Radius | 80, 8 (raw), `Radius/None (radius-0) = 0` |
 | `List item/Icon/Large` | Icon step | Layout width, Layout height |  |
-| `List item/Artwork/Image` | none varies | Layout width, Layout height, Radius | 36, 36 (raw), `Radius/8px (radius-sm) = 8` |
+| `List item/Artwork/Image` | none varies | Layout width, Layout height, Radius | 36, 36 (raw), `Radius/8px (radius-sm) = 8`: `_List item image` |
 
-As on Checkbox: `Padding left / right` is both Container's side margin and the row's inset; `Radius` and `Stroke weight` bind on Container and the row. The Root's min width and the row's min height bind the shared `Interactive/Medium/Interactive min-height` (ADR 0003, row components amendment).
+As on Checkbox: `Padding left / right` is both Container's side margin and the row's inset; `Padding top / bottom` sits on `Label + Subtitle`, `Skeleton` and the control's `Values` (`Leading` is literal 0 since , R3), and `Layout min-height` on `Label + Subtitle`, `Skeleton` and the control's Container; the three sets share the `List item/*` variables (`variablePrefix` `List item`, , R6), so none was renamed; `Radius` and `Stroke weight` bind on Container and the row. The Root's min width and the row's min height bind the shared `Interactive/Medium/Interactive min-height` (ADR 0003, row components amendment).
 
 `Theme`: the Semantic tokens Checkbox's row and Carbon's Table cell bind; none minted.
 
@@ -133,7 +133,7 @@ As on Checkbox: `Padding left / right` is both Container's side margin and the r
 | Label | Enabled, Active, Focus · Disabled | `Text/text-primary` · `Text/text-disabled` | `layer-01`, `layer-active-01` |
 | Subtitle, Detail | Enabled, Active, Focus · Disabled | `Text/text-secondary` · `Text/text-disabled` | same |
 | Leading icon | Enabled, Active, Focus · Disabled | `Icon/icon-primary` · `Icon/icon-disabled` | same |
-| Title icon | Enabled, Active, Focus · Disabled | `Icon/icon-primary` · `Icon/icon-disabled` |  |
+| Title icon | Enabled, Active, Focus · Disabled | `Icon/icon-primary` · `Icon/icon-disabled` | same (R4) |
 | Chevron, Pop-up icon | Enabled, Active, Focus · Disabled | `Icon/icon-secondary` · `Icon/icon-disabled` | same |
 | Disclosure | Enabled, Active, Focus · Disabled | `Icon/icon-secondary` · `Icon/icon-disabled` | as the Chevron |
 | Symbol, Info, Checkmark | Enabled, Active, Focus · Disabled | `Link/link-primary` · `Icon/icon-disabled` | same |
@@ -143,13 +143,13 @@ As on Checkbox: `Padding left / right` is both Container's side margin and the r
 | Edit control glyph (`_List item edit control`) | Remove · Add · Selected · Unselected · Disabled | `Support/support-error` · `Support/support-success` · `Icon/icon-primary` · `Icon/icon-secondary` · `Icon/icon-disabled` | `layer-01` |
 | Grip | Enabled, Active, Focus · Disabled | `Icon/icon-secondary` · `Icon/icon-disabled` | `layer-01`, `layer-active-01` |
 
-Contrast list: Label, Subtitle and Detail on `layer-01` and `layer-active-01`; the leading icon and Chevron at 3:1 where they carry meaning (the Chevron does: it says the row navigates);
+Contrast list: Label, Subtitle and Detail on `layer-01` and `layer-active-01`; the leading icon and Chevron at 3:1 where they carry meaning (the Chevron does: it says the row navigates); the edit control's glyphs and the Grip at 3:1 (R8).
 
 ## Icon records
 
 - `List item/Icon/Large/Type token = fa-sharp fa-solid/Large`: the leading icon and the Chevron are beside Body-size text, so both take Large (17) (Icons).
 - The leading icon sits centred in a 24 × 24 box, the size of Checkbox's Box, so glyph widths don't move the text. The Chevron is always `angle-right`; it needs no fixed width. The trailing glyphs take Large too: Disclosure `angle-right`, Pop-up `angles-up-down`, Symbol `star`, Info `circle-info`, Checkmark `check`. Symbol and Info are outlined, `fa-sharp fa-regular/Large` (owner, 2026-11-03); the rest are solid.
-- the edit control is `circle-minus` (Remove) or `circle-plus` (Add), solid, 24 box, the same on both `iOS` values; `circle-check` (Selected, solid) or `circle` (Unselected, `fa-sharp fa-regular/Large`), as Checkbox's `square-check` and `square`. a Font Awesome glyph on both, not the kit's `_Grabber`, which can't be imported into Core (owner, 2026-11-05: "FA glyph on both").
+- the edit control is `circle-minus` (Remove) or `circle-plus` (Add), solid, 24 box, the same on both `iOS` values; `circle-check` (Selected, solid) or `circle` (Unselected, `fa-sharp fa-regular/Large`), as Checkbox's `square-check` and `square`.
 
 ## Text styles, wrapping and truncation
 
@@ -163,7 +163,7 @@ Contrast list: Label, Subtitle and Detail on `layer-01` and `layer-active-01`; t
 ## Hit target and Skeleton
 
 - **Hit target**: `Interactive/Medium` (48), the min height on `Main table cell` (`hitTargetLayer`) and the min width on the Root, as Checkbox's row (ADR 0003, row components amendment). The nested Toggle, Checkbox and Radio keep their 48 Roots inside the row but take no tap of their own: one target, the row (ADR 0003). The Stepper's Icon buttons, the Link and the pickers' Buttons are different: each is its own target, so a row with them is not tappable as a whole (Assumptions).
-- the edit control is its own target, its Root min 48 × 48 (`Interactive/Medium`); the Grabber frame is min 48 × 48 too, bound to the same variable, and starts a drag, not a tap.
+- **Edit control and Grabber**: the edit control is its own target, its Root min 48 × 48 (`Interactive/Medium`); the Grabber frame is min 48 × 48 too, bound to the same variable, and starts a drag, not a tap.
 - **Skeleton**: `State=Skeleton`. `Label + Subtitle` and `Right content` hide and `Skeleton` shows, centred; Leading keeps its frame and its Icon or Artwork goes to opacity 0; `Edit control` and Draggable list's `Grabber` go to opacity 0, so they keep their width. Same on both looks.
 
 ## Motion
@@ -172,16 +172,15 @@ Contrast list: Label, Subtitle and Detail on `layer-01` and `layer-active-01`; t
 | --- | --- | --- | --- |
 | Active fill in and out | `fast-01 · standard` | kept (colour only) | None |
 | Trailing Toggle, Checkbox, Radio | their own | their own | their own |
-| Reorder (`Draggable list`) | the system's; `iOS=False`: the row lifts and follows the pointer, the others slide `moderate-01 · standard` | nothing slides; the row drops in place | system's on iOS; None on Android + web |
+| Reorder (`Draggable list`) | `iOS=False`: the row lifts and follows the pointer, the others slide `moderate-01 · standard` | nothing slides; the row drops in place | system's on iOS; None on Android + web |
 
 ## Accessibility
 
 - [ ] 1. Label, Subtitle, Detail pass on `layer-01` and `layer-active-01`, both modes (contrast lint).
-- [ ] 2. The Chevron passes 3:1; the leading icon is decorative beside the Label. `support-error` 5.39 · 4.02, `support-success` 3.85 · 7.5, `icon-secondary` (the Chevron and the Grip, 65%) 6.98 · 7.92; all pass 3:1 (1.4.11). Open until `layer-active-01` is read too.
+- [ ] 2. The Chevron passes 3:1; the leading icon is decorative beside the Label. on `layer-01`, Light · Dark (read 2026-11-05): `support-error` 5.39 · 4.02, `support-success` 3.85 · 7.5, `icon-secondary` (the Chevron and the Grip, 65%) 6.98 · 7.92; all pass 3:1 (1.4.11). Open until `layer-active-01` is read too.
 - [x] 3. N/A: not a field.
 - [x] 4. Active is a fill change but isn't a state that lasts; a selected row shows its Checkbox or Radio, not only a fill.
 - [x] 5. Focus is a `State` value, a stroke 2 inside the row (`Focus/focus`), as Checkbox Full-bleed's (Carbon's row ring), not a ring outside the Container.
-- [ ] 6. at AX sizes the trailing part goes under the text (Calls).
 - [x] 7. Smallest text is Subheadline 15.
 - [x] 8. Motion part above.
 - [ ] 9. Role, name, states:
@@ -194,24 +193,25 @@ Contrast list: Label, Subtitle and Detail on `layer-01` and `layer-active-01`; t
 | Focus order | same |
 | Reorder | Move up and Move down buttons in the row's menu (WCAG 2.5.7) |
 
-- a row with `Title icon` is a menu button (iOS `Menu`, button trait, a hint such as "Shows plans"; Android `Button`, its `contentDescription` ending "menu"; web `<button aria-haspopup="menu" aria-expanded>`); the glyph is decorative. `Subtitle button` is its own stop after the row, named from what it copies ("Copy Port ID"), and confirms with a [Snackbar](snackbar.md) "Copied", announced. Focus order: row, copy button, next row. At most one glyph per line.
-- everywhere since Detail row's deprecation, 2026-11-09): a List item with no action, such as a term and its detail on an order screen, keeps the Hit target, Active and Focus in Figma, but code renders it as text, not a button or link: no button role, not a focus stop, so a screen reader doesn't announce a read-only value as a button.
+- **Title icon and Subtitle button** (R13): a row with `Title icon` is a menu button (iOS `Menu`, button trait, a hint such as "Shows plans"; Android `Button`, its `contentDescription` ending "menu"; web `<button aria-haspopup="menu" aria-expanded>`); the glyph is decorative. `Subtitle button` is its own stop after the row, named from what it copies ("Copy Port ID"), and confirms with a [Snackbar](snackbar.md) "Copied", announced. Focus order: row, copy button, next row. At most one glyph per line.
+- **Rows that do nothing** (Accordion , R4; everywhere since Detail row's deprecation, 2026-11-09): a List item with no action, such as a term and its detail on an order screen, keeps the Hit target, Active and Focus in Figma, but code renders it as text, not a button or link: no button role, not a focus stop, so a screen reader doesn't announce a read-only value as a button.
 
 ## Usage
 
 - A settings list on the page (List items stacked, no container): `การแจ้งเตือน` › with a Chevron, `รับข่าวสารทางอีเมล` with a Toggle, `ภาษา` with Detail `ไทย` and a Chevron.
 - A bank account to pick: `List item control` `Leading=Custom` with a Brand mark swapped in, account name and number as Label and Subtitle, `Trailing=Radio`; the last row's `Bottom border` off.
 - A holding row: fund name and AMC as Label and Subtitle, `Trailing=Value` with the percent below.
-- `Leading=Small` with the `square` glyph in the fund's Categorical colour, the fund name as Label, `Subtitle value` on with the allocation % (Change=None, grey), `Change` on with the change in ฿ over the change in %, and the balance as Value. Turn `Change` on only where names are short: beside it the name gets about 90–106 on a 375 screen and wraps (R7).
-- `Leading=Small` with the `square` glyph, its fill bound on the instance to the Domain set token the chart slice uses (`Chart/Asset allocation/equity`, not a raw Primitive), the slice name as Label, `Trailing=Value` with the exposed Value at `Unit=Percent`, `Change=None`. `Size=Small` beside a chart, one row per slice in the chart's order, a folded slice last on `Chart/chart-other`, the last row's `Bottom border` off. `Chevron` only when the row opens the slice; a legend that does nothing is text in code. A chart with no Domain set binds `Chart/chart-categorical-01` upward in sequence. The Holdings rows bind `-01` to `-03` the same way.
-- `Trailing=Value` with the exposed Value set to `Unit=Percent` or `Baht` and `Change=Positive` or `Negative`; a balance over a change: `Second value` on, set the same way.
+- The Holdings list: `Leading=Small` with the `square` glyph in the fund's Categorical colour, the fund name as Label, `Subtitle value` on with the allocation % (Change=None, grey), `Change` on with the change in ฿ over the change in %, and the balance as Value. Turn `Change` on only where names are short: beside it the name gets about 90–106 on a 375 screen and wraps (R7).
+- A chart legend row: `Leading=Small` with the `square` glyph, its fill bound on the instance to the Domain set token the chart slice uses (`Chart/Asset allocation/equity`, not a raw Primitive), the slice name as Label, `Trailing=Value` with the exposed Value at `Unit=Percent`, `Change=None`. `Size=Small` beside a chart, one row per slice in the chart's order, a folded slice last on `Chart/chart-other`, the last row's `Bottom border` off. `Chevron` only when the row opens the slice; a legend that does nothing is text in code. A chart with no Domain set binds `Chart/chart-categorical-01` upward in sequence. The Holdings rows bind `-01` to `-03` the same way.
+- One change figure: `Trailing=Value` with the exposed Value set to `Unit=Percent` or `Baht` and `Change=Positive` or `Negative`; a balance over a change: `Second value` on, set the same way.
 - Subtitle or Subtitle value, not both: `Subtitle value` is a figure under the name (an allocation, grey; a return, green or red), `Subtitle` is text. With both on, both show.
-- Port's Plan header, `Leading=Custom` with the plan's mark, the plan name as Label with `Title icon` on (the row opens the plan menu), the Product as Subtitle with `Subtitle button` on to copy the ID, `Trailing=None`. The glyph and the button sit at the text column's end (R2(a)). The Subtitle's text is Port's call (R11).
+- A plan switcher: Port's Plan header, `Leading=Custom` with the plan's mark, the plan name as Label with `Title icon` on (the row opens the plan menu), the Product as Subtitle with `Subtitle button` on to copy the ID, `Trailing=None`. The glyph and the button sit at the text column's end (R2(a)). The Subtitle's text is Port's call (R11).
+- One row per `Leading` value.
 - Both looks for `List item control` `Trailing=Toggle`; Focus once; Skeleton rows; a List item under a Checkbox row, to show they stack.
-- saved accounts with `Edit control` Remove on each row, and an Add row at the end; a multi-select edit list (pick messages to delete) with Selected or Unselected on each row.
+- An edit list: saved accounts with `Edit control` Remove on each row, and an Add row at the end; a multi-select edit list (pick messages to delete) with Selected or Unselected on each row.
 - A reorder list: watchlist funds as `Draggable list` rows, Move up and Move down in each row's actions.
 - Image rows: a fund with `Leading=Custom` (`_List item image`), one line 56 and two lines 72; a person with Avatar `Small` `Artwork=Image` swapped in.
-- Accordion's Content as `Size=Small` List items, and a statement list of one-line rows, `Trailing=Value`. A row that needs a Subtitle or a Second value is Medium.
+- A dense list at 48: Accordion's Content as `Size=Small` List items, and a statement list of one-line rows, `Trailing=Value`. A row that needs a Subtitle or a Second value is Medium.
 - A list of sliders (brightness, volume, text size) is not List item rows: stack [Slider](slider.md) `Type=Full-bleed`, the last row's `Bottom border` off (Slider's `Full-bleed list` sample).
 - Not for a form's consent box: that is Checkbox `Type=Inset`. Not for a plain list of checkboxes: that is Checkbox `Type=Full-bleed`, `Alignment=Right`. A static term and its detail is a List item with no action (Detail row, deprecated 2026-11-09): `Trailing=Label`, `Value` or `Button`, and a total a plain `Trailing=Value` row.
 
@@ -223,7 +223,7 @@ Which `Hierarchy` and `Type` its nested buttons take, and why. The rules (1–6)
 | --- | --- | --- | --- |
 | List item, `Picker` Date and Time | Button `Secondary · Default · Small` (owner, 2026-11-03) | rule 3; Uber List item: a separate tap target takes the grey background | yes |
 | List item, `Trailing=Button` | a `Link`, Primary Large; not a Button | out of scope | n/a |
-| List item, `Subtitle button` |  | [H3](../hierarchy.md): the row is a container (LI1) | yes |
+| List item, `Subtitle button` | Icon button `Tertiary · Default · XSmall` (R8) | [H3](../hierarchy.md): the row is a container (LI1) | yes |
 | List item control, Stepper `Decrement`, `Increment` | Icon button `Tertiary · Small`, a divider between, no capsule | [H3](../hierarchy.md), amended: the list row and the Stepper's field are containers | yes (LI1) |
 
 - With one action, the whole row is the tap target and no button is drawn (Uber List item).

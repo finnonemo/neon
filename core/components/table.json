@@ -369,7 +369,12 @@
     "Table header cell/Label/Default/Type token": "$footnote",
     "Table header cell/Label/Default/Type emphasis": "Strong",
     "Table header cell/Icon/Small/Type token": "fa-sharp fa-solid/Small",
-    "Table header cell/Icon/Small/Layout width": 20
+    "Table header cell/Icon/Small/Layout width": 20,
+    "Interactive/XSmall/Interactive min-height": 48,
+    "Interactive/Small/Interactive min-height": 48,
+    "Interactive/Medium/Interactive min-height": 48,
+    "Interactive/Large/Interactive min-height": 56,
+    "Interactive/XLarge/Interactive min-height": 64
   },
   "bindings": [
     {"layer":"(root)","property":"minWidth","when":"{{Size=*}}","value":"Components/Interactive/{{Size=*}}/Interactive min-height"},

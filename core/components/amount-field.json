@@ -183,7 +183,8 @@
     "Amount field/Bar/Title 1/Layout width": 80,
     "Amount field/Bar/Title 1/Layout height": 16,
     "Amount field/Bar/Title 1/Radius": 0,
-    "Amount field/Icon/Medium/Type token": "fa-sharp fa-solid/Medium"
+    "Amount field/Icon/Medium/Type token": "fa-sharp fa-solid/Medium",
+    "Interactive/Medium/Interactive min-height": 48
   },
   "bindings": [
     {"layer":"(root)","property":"layoutSizingVertical","when":"{{State=*}}","value":"HUG","literal":true},

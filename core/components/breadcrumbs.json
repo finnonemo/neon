@@ -159,7 +159,8 @@
     "Breadcrumb item/Bar/Link/Layout width": 80,
     "Breadcrumb item/Bar/Link/Layout height": 8,
     "Breadcrumb item/Bar/Current/Layout width": 80,
-    "Breadcrumb item/Bar/Current/Layout height": 8
+    "Breadcrumb item/Bar/Current/Layout height": 8,
+    "Interactive/Small/Interactive min-height": 48
   },
   "bindings": [
     {"layer":"(root)","property":"minWidth","when":"{{Type=*}}{{State=*}}","value":"Components/Interactive/Small/Interactive min-height"},

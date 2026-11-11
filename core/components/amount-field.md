@@ -41,10 +41,10 @@ Amount field (variant root)       Fill × Hug, no fill, no padding, min width an
 
 `Text style` keeps Value's axis name and value names, so a read-only hero at the same step is `Value` with the same `Text style` ([value.md](value.md)). Value's Body, Subheadline and Footnote steps are not here: the map gives this set Title 1, Large Title and one Display step.
 
-`State` has no `Success` and no `Read-only` ( R1, R2): a valid amount shows no mark, and a read-only amount is a Value, or Text field's `State=Read-only` in a boxed form field (Amount entry).
+`State` has no `Success` and no `Read-only` (R1, R2): a valid amount shows no mark, and a read-only amount is a Value, or Text field's `State=Read-only` in a boxed form field (Amount entry).
 
 Properties:
-- BOOLEAN `Label` (default True), `Description` (default False), `Show Suggestion row` (default True), `Helper` (default True; linked to `Detail` on Enabled, Focus, Active and Disabled, never on Error, where `Detail` is the error message: ). `Show Suggestion row` is named apart from the Slot, which the #388 SLOT name lint requires.
+- BOOLEAN `Label` (default True), `Description` (default False), `Show Suggestion row` (default True), `Helper` (default True; linked to `Detail` on Enabled, Focus, Active and Disabled, never on Error, where `Detail` is the error message:). `Show Suggestion row` is named apart from the Slot, which the #388 SLOT name lint requires.
 - TEXT `Label text` (`Amount`), `Description text` (`Minimum 1,000 ฿`), `Input text` (`10,000`), `Placeholder text` (`0`), `Helper text` (`Helper text`): English defaults (Localisation).
 - SLOT `Suggestion row`.
 - The nested `_Unit suffix`'s `Unit` shows on the instance panel.
@@ -136,7 +136,6 @@ The first row is the map's (Motion and haptics) and #156's.
 - [x] 3. It has no box by design (Amount entry): the Label, the placeholder `0` and the unit identify it, and the cursor shows on Active.
 - [x] 4. Error adds the Error glyph and the message, not only colour (Q4). Disabled dims every part. Focus is a stroke, not a colour.
 - [x] 5. The Focus ring is the Amount frame's 2 px `Focus/focus` stroke around the amount, radius 8, the map's ring, not a fill. The Buttons carry their own.
-- [ ] 6. Q7 decides what gives way.
 - [x] 7. Smallest text is Subheadline (15).
 - [x] 8. The Motion section names each transition's token, reduced form and haptic.
 - [ ] 9. Role, accessible name, announced states and focus order:
@@ -157,6 +156,6 @@ The page's `Usage` frame shows:
 - The Focus ring once, around the amount (`State=Focus`).
 - `Align=Start` at Large Title in a sheet, under a Segmented control (`บาท` · `หน่วย`) where the user must choose the unit.
 - Error: `ขั้นต่ำ 1,000 บาท` as the Error message, digits still `text-primary`.
-- a required amount among optional fields says so in the Label, spelled out (`(required)`, Thai `(จำเป็น)`), never in the Description or the Helper. An order screen's only field carries no marker. No asterisk.
-- `0` and only `0`, shown whenever the field is empty, Focus and Active too. The minimum is the Description, the unit is `_Unit suffix`; never an instruction in the placeholder.
+- Required: a required amount among optional fields says so in the Label, spelled out (`(required)`, Thai `(จำเป็น)`), never in the Description or the Helper. An order screen's only field carries no marker. No asterisk.
+- Placeholder: `0` and only `0`, shown whenever the field is empty, Focus and Active too. The minimum is the Description, the unit is `_Unit suffix`; never an instruction in the placeholder.
 - Don't: a boxed amount in a form row (use Text field with `Unit`); a fixed amount on a review screen (use Value at the same `Text style`); a sparkle or Suggested look (dropped by the map).

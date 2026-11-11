@@ -71,7 +71,8 @@
     "Sliding button/Label/Disabled/Align horizontal": "Center",
     "Sliding button/Label/Disabled/Align vertical": "Top",
     "Sliding button/Label/Disabled/Decoration": "-",
-    "Sliding button/Icon/Large/Type token": "fa-sharp fa-solid/Large"
+    "Sliding button/Icon/Large/Type token": "fa-sharp fa-solid/Large",
+    "Interactive/Large/Interactive min-height": 56
   },
   "bindings": [
     {"layer":"(root)","property":"minWidth","when":"{{State=*}}","value":"Components/Interactive/Large/Interactive min-height"},

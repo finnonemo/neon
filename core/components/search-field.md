@@ -66,7 +66,7 @@ Components/Interactive/{{Size=*}}/Interactive min-height
 Theme/<Semantic token>                 one rule per token, over the States (and iOS) that bind it
 ```
 
-`Theme`: no `Search field/*` tokens. Each rule binds the Semantic token Text field binds for that role and state (Carbon's Text input tokens with Base's look), plus Carbon's Search tokens for the two glyphs. Carbon's Search-only bindings (`field-02`, `layer-active-01`, `border-interactive`, `icon-on-color-disabled`) map to the tokens Text field already uses. `←` is the Enabled value; a blank cell binds nothing. The fill and stroke columns are `iOS=False` only; The engine binds a paint and never adds or removes one, so where a cell has no fill or stroke the paint binds `Theme/Transparent` (`White/0`, unused before Search field):
+`Theme`: no `Search field/*` tokens. Each rule binds the Semantic token Text field binds for that role and state (Carbon's Text input tokens with Base's look), plus Carbon's Search tokens for the two glyphs. Carbon's Search-only bindings (`field-02`, `layer-active-01`, `border-interactive`, `icon-on-color-disabled`) map to the tokens Text field already uses. `←` is the Enabled value; a blank cell binds nothing. The fill and stroke columns are `iOS=False` only;
 
 | State | Field fill | Field stroke | Title | Value | Placeholder | Helper | Magnifier | Clear |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -96,7 +96,6 @@ Button does the same ([button.md](button.md), Accessibility). It is checked on a
 
 `Search field/Icon/<Step>/Type token = fa-sharp fa-solid/<Step>`. Beside text, the step follows the input text (Icons): Large → Large (17), Medium and Small → Medium (15), as on Text field.
 
-- **Magnifier**:
 - **Clear**: `circle-xmark`, the filled circle-x Base draws.
 - **`_Loading`**: Medium (24) on Large, Small (20) otherwise, as Text field.
 - `Status` holds either Clear or the spinner, never both, and is not fixed-width. Text overflow fills the rest, so the shift is only in what the placeholder can show.
@@ -112,8 +111,6 @@ Text field's styles per Size ([text-field.md](text-field.md)):
 | `Placeholder text` | as Input text | one line: Fill, auto height, `ENDING`, `maxLines` 1 | none yet |
 | `Helper Text` | `Body/Subheadline` | wraps, never truncates | none yet |
 
-placeholder `ค้นหากองทุน หุ้น หรือ ETF`, which truncates on Small at 375.
-
 ## Hit target and Skeleton
 
 - **Hit target**: on the Root, `Interactive/<Size>/Interactive min-height` (48 · 48 · 56), with Container centred, as on Password field (ADR 0003). A tap anywhere focuses the field. Clear is a glyph inside it and has no target of its own: call 2.
@@ -128,25 +125,22 @@ Motion and haptics, the field row:
 | Stroke 3 on Focus and Active (`iOS=False`) | `fast-01 · standard` | kept | None |
 | Pressed fill (`iOS=False`) | `fast-01 · standard` | kept (colour only) | None |
 | Clear appearing with the first character | `fast-01 · standard` (fade) | instant | None |
-|  | System | System | None |
 | Skeleton | the Skeleton's own | static shape, no shimmer | None |
 
 The issue and the map's table say "stroke 2 on Focus"; Text field is 3 since 2026-11-01 (call 3).
 
 ## Accessibility
 
-- [ ] 1. Text pairs: `iOS=False` passes the contrast lint (`check-specs.sh`, 2026-11-02). The lint checks `iOS=False` only, as for Button.
+- [ ] 1. Text pairs: `iOS=False` passes the contrast lint (`check-specs.sh`, 2026-11-02). Button and Icon button share the gap, so it is a system follow-up, not this set's to fix. The lint checks `iOS=False` only, as for Button.
 - [ ] 2. Non-text: on `iOS=False` the magnifier, Clear and the Focus / Active stroke pass the contrast lint (2026-11-02).
 - [x] 3. Identified by more than its fill: the magnifier at 3:1 (Filled fields), the placeholder, and the optional Title.
 - [x] 4. No state by colour alone: Active shows the cursor (and Clear once filled), Focus the stroke, Loading a spinner, Disabled the dimmed text and glyph, Skeleton its shape.
-- [x] 5. 2 px `Focus/focus`, 4 outside, radius 12 (8 + 4). `State=Focus` is the focused field, not the keyboard ring.
-- [ ] 6. the Field hugs its text above its min height, and nothing is clipped. **A long value overflows**: `Input text` is Hug, auto width (the owner's 2026-11-02 call for Text field, #206), so Figma doesn't truncate it. code still cuts it to one line. Placeholder text is Fill and truncates.
+- [x] 5. `State=Focus` is the focused field, not the keyboard ring.
+- [ ] 6. **A long value overflows**: `Input text` is Hug, auto width (the owner's 2026-11-02 call for Text field, #206), so Figma doesn't truncate it. code still cuts it to one line. Placeholder text is Fill and truncates.
 
   | Mode | Variant (Large · Medium · Small) | Field (L · M · S) | Clipped |
   | --- | --- | --- | --- |
   | `Large` | 120 · 112 · 100 | 56 · 48 · 36 | none |
-  |  | 140 · 128 · 116 | 56 · 48 · 36 | none |
-  |  | 234 · 234 · 230 | 58 · 58 · 58 | none; a long value overflows under Clear |
 
 Checked on Active, Loading and Enabled at each Size, both looks, filled and empty, with `ปั๋ง ผู้ใหญ่ ฎู ฟุ้ง` and `แบบประเมินความเสี่ยงของคุณหมดอายุ`.
 - [x] 7. No text under 11 pt: the smallest is Subheadline.
@@ -164,7 +158,7 @@ Checked on Active, Loading and Enabled at each Size, both looks, filled and empt
 
 - Both looks side by side, with Thai copy: Enabled empty, and Active with a value, the cursor and Clear.
 - The Focus ring once, on `iOS=False`.
-- Light and Dark columns at Medium.
+- Built: Light and Dark columns at Medium.
 - Search at the top of a list or a screen. The magnifier is the label, so `Label` stays off unless the search sits in a form.
 - Not for entering a value that is then validated: that's a [Text field](text-field.md). Not for picking from a fixed list: that's Select.
 - Cancel (iOS) and Back (Android) belong to the screen's toolbar or header, beside the field, not in it (call 6).

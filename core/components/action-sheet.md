@@ -27,9 +27,6 @@ The `_Buttons` capsules are 48 already (`Size=Medium`); the sheet's other sizes 
 
 ## Axes
 
-| Axis | Values (default first) | Drives |
-| --- | --- | --- |
-
 - The kit's set has no variant axis; `iOS` is the only one, `True` first (ADR 0005). No width axis (ADR 0013).
 - Properties: TEXT `Title`, `Message`; BOOLEAN `Show message`, `Show Cancel`; SLOT `Actions`; the `Cancel` Button's `Label Text` exposed. The kit's names are kept, `Show message` as the kit writes it (Alert's `Show Message` is the Alert's own).
 - The choices are open-ended, so they are a Slot, not an axis (Variant axes: "a Slot when the content is open-ended … and the component's values don't depend on it").
@@ -38,7 +35,7 @@ The `_Buttons` capsules are 48 already (`Size=Medium`); the sheet's other sizes 
 
 ## Component variables and Theme tokens
 
-No new `Components` variable, as [Alert](alert.md). The sheet's own sizes stay raw as the kit's: The values on a Scale step bind it: 8 `spacing-03`, 24 `spacing-06`, `iOS=False`'s radius `16px (radius-lg)`. The Button brings its own variables. No `Action Sheet/…` group: it would hold only raw kit values, which Alert, Sheet and Menu left unbound too.
+No new `Components` variable, as [Alert](alert.md). The values on a Scale step bind it: 8 `spacing-03`, 24 `spacing-06`, `iOS=False`'s radius `16px (radius-lg)`. The Button brings its own variables. No `Action Sheet/…` group: it would hold only raw kit values, which Alert, Sheet and Menu left unbound too.
 
 Colours map every kit paint the sheet owns to an existing Theme token; no new token, none of Carbon's Action sheet rows needed (ios-carbon-map.md: "a destructive action uses `text-negative`").
 
@@ -64,7 +61,7 @@ None: the kit's sheet draws no glyph; Carbon's row icon and checkbox stay out (Q
 | `Title` | `Headings/Headline` (17, kit 17 Semibold) | wraps, no limit (Localisation: content text) | `Title` |
 | `Message` | `Body/Body` (17) | wraps, no limit | `Message` |
 
-The Button labels are Button's: A choice's label that is long wraps in its full-width Button; it isn't cut.
+The Button labels are Button's: a control label is one line, and since [Button ](button.md) wraps at the column's width with the container growing. A choice's label that is long wraps in its full-width Button; it isn't cut.
 
 ## Hit target and Skeleton
 
@@ -75,7 +72,6 @@ The Button labels are Button's: A choice's label that is long wraps in its full-
 
 | Transition | Token | Reduced form | Haptic |
 | --- | --- | --- | --- |
-| present, dismiss | System | System | System |
 | `iOS=False`: slides up from the bottom edge | `slow-01 · entrance · slide-full` | crossfade | None |
 | `iOS=False`: the scrim dims in behind it | `slow-02 · entrance` | crossfade | None |
 | `iOS=False`: dismisses, sliding down; the scrim fades with it | `moderate-02 · exit · slide-full` | crossfade | None |
@@ -89,23 +85,23 @@ From Motion and haptics' `Sheet, Action Sheet iOS=False` row. `slide-full` is th
 - [x] 3. N/A: no field.
 - [x] 4. A destructive choice is named by its label as well as red (`Type=Danger`); the sheet's modal state is the system's or the web's, not the scrim's colour alone.
 - [x] 5. The Focus ring is the Buttons' own, outside each (`iOS=False`); the sheet itself takes no focus.
-- [x] 6. Reflow: `counts` {}, nothing overflows or clips; both variants grow 574 → 790 → 1678 as the Message and the Buttons' labels wrap (2026-11-11).
+- [x] 6. both variants grow 574 → 790 → 1678 as the Message and the Buttons' labels wrap (2026-11-11).
 - [x] 7. No text under 17.
 - [x] 8. Motion names System and the `iOS=False` tokens, reduced forms and haptic.
 - [x] 9. Role, name, states and order:
 
-|  |  | Android (`iOS=False`) | Web (`iOS=False`) |
-| --- | --- | --- | --- |
-| Role | an action sheet (`UIAlertController`, `.actionSheet` style), modal; each choice a button | `ModalBottomSheet` (Compose) holding a list of buttons | `role="dialog"`, `aria-modal="true"`; each choice a `button` |
-| Accessible name | the `Title`; the `Message` read after it | the same | `aria-labelledby` the Title, `aria-describedby` the Message |
-| Announced states | none of its own; a destructive choice reads its label | the same | the same |
-| Focus order | Title, Message, the choices in reading order, then Cancel; a two-finger scrub (escape) and a tap outside cancel | the same; Back dismisses | focus to the first choice, else to Cancel in a destructive sheet; Tab trapped; Esc and the scrim are Cancel; the page behind doesn't scroll; focus returns to the trigger |
+|  | Android (`iOS=False`) | Web (`iOS=False`) |
+| --- | --- | --- |
+| Role | `ModalBottomSheet` (Compose) holding a list of buttons | `role="dialog"`, `aria-modal="true"`; each choice a `button` |
+| Accessible name | the same | `aria-labelledby` the Title, `aria-describedby` the Message |
+| Announced states | the same | the same |
+| Focus order | the same; Back dismisses | focus to the first choice, else to Cancel in a destructive sheet; Tab trapped; Esc and the scrim are Cancel; the page behind doesn't scroll; focus returns to the trigger |
 
 A sheet keeps an explicit Cancel; the scrim, Esc and swipe-down are supplemental (Uber, Sheet and Dialog). `Show Cancel` off is for a sheet that has another explicit dismiss (an iPad popover, where a tap outside is the system's cancel).
 
 ## Usage
 
-- Page `Action Sheets` (new, between `Accordions` and `Alerts`, from the `Templates` clone): the set in Components; no Items.
+- Page `Action Sheets` (new, between `Accordions` and `Alerts`, from the `Templates` clone): the set in Components; no Items. A base in its set frame on 🚧 Drafts waits for the owner before the set is built (`build-component` step 1).
 - Samples in Light and Dark columns, Thai copy as instance overrides, over a screen with the `Miscellaneous/overlay` scrim:
   - A destructive choice, both looks (Mail's draft): "ทิ้งร่างนี้?", `Show message` off, "บันทึกร่าง" (Secondary), "ลบร่าง" (`Type=Danger`, Primary), Cancel "แก้ไขต่อ" (keep editing).
   - Source chooser, no destructive choice, so no Primary, `Show message` off: "เลือกแหล่งที่มา", "ถ่ายรูป" · "เลือกจากคลังภาพ" · "เลือกไฟล์" (the File upload Pattern, [file-upload.md](file-upload.md)), "ยกเลิก".

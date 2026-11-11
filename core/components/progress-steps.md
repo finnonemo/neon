@@ -14,7 +14,7 @@ _Progress step (variant root)   Fill × Hug, no fill, no padding
       └─ Optional label         Body/Subheadline 15/24, Fill × Hug, wraps; BOOLEAN `Optional label`
 ```
 
-Skeleton swaps `Text` for `Skeleton` (VERTICAL, Fill × Hug, padding top 14, bottom spacing-07 (32)) › `Step label line` (80 × 8, `Skeleton/skeleton-background`), the Label block's bar (structure.md). The 14 centres the bar on the marker; the 32 keeps a Line's length between skeleton steps. The Marker stays, filled `skeleton-background`, empty. padding 38 · 38 on Standard, 20 · 20 on Compact, so the bar sits centred on the row's height.)
+Skeleton swaps `Text` for `Skeleton` (VERTICAL, Fill × Hug, padding top 14, bottom spacing-07 (32)) › `Step label line` (80 × 8, `Skeleton/skeleton-background`), the Label block's bar (structure.md). The 14 centres the bar on the marker; the 32 keeps a Line's length between skeleton steps. The Marker stays, filled `skeleton-background`, empty. (Reversed by padding 38 · 38 on Standard, 20 · 20 on Compact, so the bar sits centred on the row's height.)
 
 Horizontal step (`Direction=Horizontal`), form B:
 
@@ -43,7 +43,7 @@ Progress steps (variant root)   Fill × Hug, no fill, no padding
 
 - **Carbon's structure, and one departure.** The layer names, the single `State` axis, the `Optional label` BOOLEAN and the Skeleton bar are Carbon's. Carbon draws the line as the item root's left or top stroke, beside a 16 icon. Under a 36 marker a stroke can't sit centred, so the line is a layer in a `Path` column, as Base and v2 draw it. Carbon's `Min-width` / `Min-height` spacers aren't drawn: the step is Fill in its set, and the Text's padding gives the height.
 - Steps is a Slot (figma-instances.md). Its default content is four `_Progress step` instances, numbered 1–4, with their `State` and text pinned per Direction, as Segmented control's three default items. A designer sets `State`, `Number` and the texts on each item, and turns the end lines off.
-- it would add a `Segment` tree and a Label block on the set.
+- Horizontal A (segments + the current step's label, the map's form) is in 's frame for Q1; it would add a `Segment` tree and a Label block on the set.
 
 ## Axes
 
@@ -54,7 +54,7 @@ Progress steps (variant root)   Fill × Hug, no fill, no padding
 | `Direction` | Vertical · Horizontal | the tree above |
 | `State` | Incomplete · Current · Completed · Error · Disabled · Skeleton | Marker fill and content, Line colour, Step label and Optional label colour; Skeleton's bar |
 
-Properties: `Number` TEXT (the marker's), `Step label` TEXT, `Optional label` TEXT and BOOLEAN, `Path line` BOOLEAN (Vertical), `Line start` and `Line end` BOOLEAN (Horizontal). 2 × 6 = **12 variants**. `Size`, `Artwork` and `Trailing` on Vertical, `Top line` and `Bottom line`, 282 variants; . `Size` and `Artwork` on Horizontal too, 330 variants; . `Direction` is Vertical · Vertical reverse · Horizontal, Vertical reverse on `Trailing=None` only, 384 variants; .)
+Properties: `Number` TEXT (the marker's), `Step label` TEXT, `Optional label` TEXT and BOOLEAN, `Path line` BOOLEAN (Vertical), `Line start` and `Line end` BOOLEAN (Horizontal). 2 × 6 = **12 variants**. (Reversed by `Size`, `Artwork` and `Trailing` on Vertical, `Top line` and `Bottom line`, 282 variants; . Reversed again by `Size` and `Artwork` on Horizontal too, 330 variants; . Reversed again by `Direction` is Vertical · Vertical reverse · Horizontal, Vertical reverse on `Trailing=None` only, 384 variants; .)
 
 `Progress steps`:
 
@@ -62,14 +62,14 @@ Properties: `Number` TEXT (the marker's), `Step label` TEXT, `Optional label` TE
 | --- | --- | --- |
 | `Direction` | Vertical · Horizontal | the Steps' layout and which `_Progress step` Direction its default items are |
 
-Properties: `Steps` SLOT. **2 variants**. `Sublayout`, 3 variants; `Size` × `Artwork` from the item, 18 variants; `Direction` gains Vertical reverse, 27 variants; .)
+Properties: `Steps` SLOT. **2 variants**. (Reversed by `Sublayout`, 3 variants; reversed again by `Size` × `Artwork` from the item, 18 variants; reversed again by `Direction` gains Vertical reverse, 27 variants; .)
 
 - `State` is Carbon's axis name and value list (Carbon's `Completed`, not v11 docs' "Complete"; `Error`, not "Invalid"). The Inventory keeps `Status` for a feedback message's kind, and Core's other sets use `State` for Enabled · Disabled · Skeleton, which this list contains (Q5).
 - **Disabled**: a step that can't be reached now (an order that was cancelled before it). **Skeleton**: the steps while an order's status loads, IC's Loading.
 
 ## Component variables and Theme tokens
 
-`Components`, Tag's three-level shape keyed by `Direction` (no `Size` axis).
+`Components`, Tag's three-level shape keyed by `Direction` (no `Size` axis). (Reversed by the variables built are in , with 's third `Container` key.)
 
 | Group | Keyed by | Properties | Values (Vertical · Horizontal) |
 | --- | --- | --- | --- |
@@ -90,17 +90,17 @@ Templates: `Components/Progress step/<Group>/{{Direction=*}}/<Property>`, `Compo
 
 | Theme token | Where | Paired with |
 | --- | --- | --- |
-| `Miscellaneous/interactive` | Completed and Current Marker fill; Line after Completed; Horizontal `Line start` on Completed, Current and Error | `Border/border-strong`, Navy/100 · White/100, 16.31–18.12 Light, 15.13–21.00 Dark) |
+| `Miscellaneous/interactive` | Completed and Current Marker fill; Line after Completed; Horizontal `Line start` on Completed, Current and Error | `non-text`, on the Base surfaces (Progress circle measured 4.99–5.59 Light, 5.12–7.10 Dark) (reversed by the build, 2026-11-06: `Border/border-strong`, Navy/100 · White/100, 16.31–18.12 Light, 15.13–21.00 Dark) |
 | `Support/support-error` | Error Marker fill | `non-text`, on the Base surfaces |
 | `Layer/layer-03` | Incomplete and Disabled Marker fill; every other Line | exception, as Progress bar's Track (1.10–1.23 Light since `Navy/10`, 2026-11-11; 1.46–2.03 Dark): the Number and the Step label carry the meaning (Q8) |
-| `Text/text-on-color` | Number on a filled Marker | `text`, on `interactive`: `Text/text-inverse`, White/100 · Black/85A, on `border-strong`: 18.12 Light, 15.13 Dark) |
-| `Icon/icon-on-color` | Icon (check, cross) on a filled Marker | `non-text`, on `interactive` and `support-error`: Error only; Completed's check is `Icon/icon-inverse` on `border-strong`, 18.12 Light, 15.13 Dark) |
+| `Text/text-on-color` | Number on a filled Marker | `text`, on `interactive`: to measure (reversed by the build, 2026-11-06: `Text/text-inverse`, White/100 · Black/85A, on `border-strong`: 18.12 Light, 15.13 Dark) |
+| `Icon/icon-on-color` | Icon (check, cross) on a filled Marker | `non-text`, on `interactive` and `support-error`: to measure (reversed by the build, 2026-11-06: Error only; Completed's check is `Icon/icon-inverse` on `border-strong`, 18.12 Light, 15.13 Dark) |
 | `Text/text-primary` | Step label | `text`, on the Base surfaces |
 | `Text/text-secondary` | Incomplete Number, Optional label | `text`; Incomplete Number on `layer-03`: to measure |
 | `Text/text-disabled` | Disabled Number, Step label and Optional label | none: disabled text is exempt |
 | `Skeleton/skeleton-background` | Skeleton Marker and `Step label line` | none |
 
-Base draws Completed and Current black. Carbon binds `interactive` there, Progress circle binds `interactive`, and the memory rule is to bind the Semantic token Carbon binds, so the bases use Indigo, not black. The black would be `Background/background-inverse` (Grey/100 · Grey/0) with `Text/text-inverse` on it (Q8). the owner asked for Navy to match Base's black, so Completed and Current bind `Border/border-strong` (Navy/100 in Light, White/100 in Dark, as Base's black flips to white), with `text-inverse` and `icon-inverse` on it.)
+Base draws Completed and Current black. Carbon binds `interactive` there, Progress circle binds `interactive`, and the memory rule is to bind the Semantic token Carbon binds, so the bases use Indigo, not black. The black would be `Background/background-inverse` (Grey/100 · Grey/0) with `Text/text-inverse` on it (Q8). (Reversed by the build, 2026-11-06: the owner asked for Navy to match Base's black, so Completed and Current bind `Border/border-strong` (Navy/100 in Light, White/100 in Dark, as Base's black flips to white), with `text-inverse` and `icon-inverse` on it.)
 
 ## Icon records
 
@@ -109,8 +109,8 @@ Base draws Completed and Current black. Carbon binds `interactive` there, Progre
 | State | Marker fill | Content | Colour |
 | --- | --- | --- | --- |
 | Incomplete | `layer-03` | Number | `text-secondary` |
-| Current | `border-strong`) | Number | `text-on-color` (`text-inverse`) |
-| Completed | `border-strong`) | `check` | `icon-on-color` (`icon-inverse`) |
+| Current | `interactive` (reversed by the build, 2026-11-06: `border-strong`) | Number | `text-on-color` (`text-inverse`) |
+| Completed | `interactive` (reversed by the build, 2026-11-06: `border-strong`) | `check` | `icon-on-color` (`icon-inverse`) |
 | Error | `support-error` | `xmark` | `icon-on-color` |
 | Disabled | `layer-03` | Number | `text-disabled` |
 | Skeleton | `skeleton-background` | none | – |
@@ -121,7 +121,7 @@ Base draws Completed and Current black. Carbon binds `interactive` there, Progre
 | --- | --- | --- | --- |
 | `Number` | `Body/Subheadline` 15/24 | one; 1–9 | `Number` |
 | `Step label` (Vertical) | `Body/Callout` 16/24 | wraps | `Step label` |
-| `Optional label` (Vertical) | `Body/Subheadline` 15/24 | wraps; a date ("5 พ.ย. | `Optional label` |
+| `Optional label` (Vertical) | `Body/Subheadline` 15/24 | wraps; a date or an expected time | `Optional label` |
 | `Step label` (Horizontal) | `Utility/Footnote` 13/20 | wraps under its marker | `Step label` |
 | `Optional label` (Horizontal) | `Utility/Caption 1` 12/18 | wraps | `Optional label` |
 
@@ -160,7 +160,7 @@ Nothing truncates. Horizontal's labels share the row: four steps in 343 leave ab
 ## Usage
 
 - Vertical: an order's status in full (Port's Toggletip, Investment Call's order page): 3 to 5 steps, a date or an expected time in each Optional label.
-- Vertical reverse: the same steps read from the newest down, as an order history or timeline:
+- Vertical reverse: the same steps read from the newest down, as an order history or timeline: step 1 at the bottom.
 - Horizontal: the same status compact, short Step labels ("สั่งซื้อ", "ตัดเงิน", "ยืนยันราคา", "ได้รับหน่วย"), no Optional label.
 - Error: the failed step says what happened and what to do ("ตัดเงินไม่สำเร็จ / ยอดเงินในบัญชีไม่พอ ลองสั่งซื้ออีกครั้ง"); the steps after it stay Incomplete.
 - Skeleton while the order's status loads; a list that failed to load is the Pattern's error with its retry, not an Error step.

@@ -58,8 +58,8 @@ Properties:
 | `Navigation/Layout` (STRING) | `Breakpoint` | SM `Bottom`; MD and wider `Sidebar` | `Layout` |
 | `Navigation/Expanded` (BOOLEAN) | `Breakpoint` | SM, MD, LG False (the 64 rail); XL and wider True, as `Sidebar View width` | `Expanded` |
 | `iOS` (BOOLEAN) | `Platform` (new; modes iOS · Android · Web) | True · False · False | `iOS` |
-| `Window inset top` (FLOAT) | `Presentation` (modes Full Screen · Window, ) | 0 · 10 | `Layout=Top`'s `Container` `paddingTop` |
-| `Sidebar inset` (FLOAT) | `Presentation` | 0 · 8 | the floating Sidebar's root `Container` padding, 4 sides (no template pins `Window` now |
+| `Window inset top` (FLOAT) | `Presentation` (modes Full Screen · Window,) | 0 · 10 | `Layout=Top`'s `Container` `paddingTop` |
+| `Sidebar inset` (FLOAT) | `Presentation` | 0 · 8 | the floating Sidebar's root `Container` padding, 4 sides (no template pins `Window` now: the iPad Window is docked, Screen templates) |
 | `Sidebar radius` (FLOAT) | `Presentation` | 0 · 34 | the floating Sidebar `BG`'s two layers' radii |
 | `Sidebar scrim` (BOOLEAN) | `Presentation` | True · False | the floating Sidebar `Overlay`'s `visible` |
 | `Safe area left` · `Safe area right` (FLOAT) | `Safe area` (new; modes None · Landscape) | 0 · 62 | the floating Sidebar `Bar`'s `paddingLeft` (right not bound yet) |
@@ -85,10 +85,8 @@ New in `Components`:
 | Variable | Value | Bound on |
 | --- | --- | --- |
 | `Navigation/Container/Rail/Padding right` | 24, raw (the 48 bar at x 12 of the kit's 84 `Vertical Bar`, as the kit's three rail poses; 14 until R5) | the overlay Container, `Layout=Rail` (N5) |
-| `Navigation/Platter/Rail Minimized/Padding top` · `right` · `bottom` · `left` ( R3) | `Spacing/spacing-00` (0) | the Minimized platter, `Layout=Rail` |
-|  | `Spacing/spacing-00` (0) | the Search frame, `Layout=Rail` |
 
-they were `spacing-02` (4) until then.
+`Navigation/Platter/Rail/Padding top` and `bottom` are a raw 6 now (the Tab platter,), `left` and `right` `Spacing/spacing-00`; they were `spacing-02` (4) until then.
 
 The Sidebar `Bar`'s width binds `Layout`'s `Sidebar View width` (not a `Components` variable). New `Breakpoint` and `Platform` variables: Modes, above.
 
@@ -96,7 +94,7 @@ Contrast pairs are the four sets', unchanged (tab-bar.md, sidebar.md Accessibili
 
 ## Icon records
 
-As the four sets: `fa-sharp fa-solid/Large` on Bottom and Rail items and buttons, `fa-sharp fa-regular/Medium` on Top's symbol buttons, `fa-sharp fa-regular/Large` on Sidebar items with `fa-solid` on `Selected=True`. Top's text items draw no glyph; Rail draws no title. Default glyphs:
+As the four sets: `fa-sharp fa-solid/Large` on Bottom and Rail items and buttons, `fa-sharp fa-regular/Medium` on Top's symbol buttons, `fa-sharp fa-regular/Large` on Sidebar items with `fa-solid` on `Selected=True`. Top's text items draw no glyph; Rail draws no title.
 
 ## Text styles, wrapping and truncation
 
@@ -117,7 +115,7 @@ One `Title` property, where Tab Bar's parts called it `Label`: the property is w
 
 ## Motion
 
-System. `iOS=False`: Sidebar's (selection `fast-01 · standard`; `Expanded` `moderate-01 · standard`, instant under reduced motion) and Tab Bar's (selection `fast-01 · standard`, instant under reduced motion). No haptic. A Layout change is a breakpoint change, not a transition.
+`iOS=False`: Sidebar's (selection `fast-01 · standard`; `Expanded` `moderate-01 · standard`, instant under reduced motion) and Tab Bar's (selection `fast-01 · standard`, instant under reduced motion). No haptic. A Layout change is a breakpoint change, not a transition.
 
 ## Accessibility
 
@@ -126,7 +124,7 @@ System. `iOS=False`: Sidebar's (selection `fast-01 · standard`; `Expanded` `mod
 - [x] 3. N/A: no field.
 - [x] 4. Selected shows by the selection fill, the solid glyph and the announced state.
 - [x] 5. Focus (`iOS=False`): Sidebar items' `State=Focus`. Bottom, Rail and Top items have none, as Tab Bar today (N9).
-- [ ] 6. Reflow: `reflow-check` with Thai copy (Build log, #623, #684): Rail draws no title.
+- [ ] 6. Rail draws no title.
 - [x] 7. Smallest text: `Caption 2` 11 on Bottom.
 - [x] 8. Motion: above.
 - [x] 9. Role, name, states, order:
@@ -141,7 +139,7 @@ System. `iOS=False`: Sidebar's (selection `fast-01 · standard`; `Expanded` `mod
 ## Usage
 
 - Page `Navigations` (new, A-Z in `❖ Component`), from the `Templates` page's frames; the three parts in Items.
-- one bound instance in a `Screen 402` frame pinned SM · iOS (Bottom), then a clone of it with its frame switched to MD · iOS (Sidebar), so the page shows the menu carried across (a clone, since a bound instance switches only when its frame's mode changes); iPad 834 with `Layout=Top`; Duo with `Layout=Rail`; Web XL (Sidebar 240) and Web SM.
+- iPad 834 with `Layout=Top`; Duo with `Layout=Rail`; Web XL (Sidebar 240) and Web SM.
 - A note: set the frame's `Breakpoint` and `Platform` modes, not `Layout`; override `Layout` only on iPad (Top) and Duo (Rail).
 - Bottom and Rail exist only at `Expanded=False`: don't set `Layout` to Bottom or Rail by hand at XL or wider, where `Expanded` resolves true and no variant matches (owner, 2026-11-11).
 - iPhone Duo's side bar (Apple's [Designing for iPhone Duo](https://developer.apple.com/design/human-interface-guidelines/designing-for-iphone-duo), read 2026-11-11): when the `Vertical Bar` has no room for both the toolbar's items and the Rail, a navigation-focused screen (the default) sends toolbar items to the overflow menu and keeps the Rail; a task-focused one (a form, an editor) minimises the Rail, `Layout=Rail` `Minimized=True`, and keeps the toolbar. Set every Rail item's `Title` though Rail hides it: overflow and expanded forms show it. The toolbar's item order and overflow: toolbars.md.

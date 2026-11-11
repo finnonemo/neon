@@ -77,6 +77,6 @@ None.
 
 ## Usage
 
-- digits at `Headings/Title 1` and a `_Unit suffix` instance with **Expose nested instance** on and its text style set to the digits'.
+- The page's `Usage` frame holds `_Unit suffix host sample`: digits at `Headings/Title 1` and a `_Unit suffix` instance with **Expose nested instance** on and its text style set to the digits'. Its four instances switch `Unit` (Baht, Units, Percent) and `State` (Disabled) from the host instance's panel.
 - A host lays the suffix next to the digits with baseline alignment, gap 0: the suffix draws its own gap.
 - Hosts pin `State` from their own `State`; designers pick only `Unit`.

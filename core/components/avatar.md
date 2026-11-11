@@ -79,7 +79,7 @@ Templates: `Components/Avatar/Container/{{Size=*}}/<Property>`, `Components/Avat
 | `Text/text-on-color` | →`White/100` | →`White/100` | `Avatar/background` (Label) |
 | `Icon/icon-on-color` | →`White/100` | →`White/100` | `Avatar/background` (Icon, decorative) |
 | `Background/background-primary` | →`Grey/0` | →`Grey/100` | the Badge ring: under the Dot, over `Avatar/background` |
-| `Tag/<C>/Primary/background` (Tag's, reused) | Red/135 · Blue/155 · Purple/120 · Green/150 · Light Grey/150 · Orange/130 | same |  |
+| `Tag/<C>/Primary/background` (Tag's, reused) | Red/135 · Blue/155 · Purple/120 · Green/150 · Light Grey/150 · Orange/130 | same | Container's fill at `Color=<C>`, under `text-on-color` / `icon-on-color` |
 
 Container's `fills.0` has one rule per colour: `{{Color=Default}}` → `Theme/Avatar/background`, and `{{Color=<C>}}` → `Theme/Tag/<C>/Primary/background` for each of the six, named in full (lint's `token-path` refuses a `{{Color=*}}` placeholder in another scope's token). A Tag fill retuned later changes the Avatar with it.
 
@@ -130,7 +130,7 @@ The spec's contrast list: Label `text` on `[Container]` where `{{Artwork=Initial
 - [x] 3. N/A: not a field.
 - [x] 4. A Badge never carries meaning alone: the host's accessible name says it ("Kiattisak, new message").
 - [x] 5. N/A: not interactive, no Focus ring.
-- [ ] 6. Reflow: checked with `docs/agents/reflow-check.js` after the build. Unpinned, Label would outgrow its circle:
+- [ ] 6. checked with `docs/agents/reflow-check.js` after the build.
 - [x] 7. 12 pt (Caption 1), over 11.
 - [x] 8. Motion: None, haptic None.
 - [x] 9. Hidden from assistive tech; the person's name beside it is read once:

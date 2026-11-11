@@ -158,8 +158,8 @@ Stepping fires no haptic (Motion and haptics: `Selection` is Segmented control's
 - [x] 2. Meaningful non-text parts pass 3:1: the button glyphs (`icon-primary` on `field`: 11.30 Light · 10.37 Dark), the strokes, the Status and Detail glyphs. The contrast lint, after the spec (passes).
 - [x] 3. The field is identified by more than its fill: the Title above, the figure inside, the minus and plus, and a stroke on Focus, Active and Error (Filled fields).
 - [x] 4. No state by colour alone: Error, Success and Warning carry a glyph and a message; Incomplete / Complete a glyph; Loading a spinner; Disabled dims; Read-only drops the buttons and keeps its outline. A button at its limit is Disabled, and the platform announces that, so the dimming isn't the only cue.
-- [x] 5. The Focus ring sits outside the Field: Each button's own keyboard ring is Icon button's.
-- [x] 6. Active, Error and Loading at each Size, Warning Large, and Error Small with marks; `1,000,000` + `Unit=Units`, a long Thai Title and helper, 343 wide. The Field grows; Title and Detail wrap (Error Large 120 → 208 → 448). One accepted overflow:
+- [x] 5. Each button's own keyboard ring is Icon button's.
+- [x] 6. `1,000,000` + `Unit=Units`, a long Thai Title and helper, 343 wide. The Field grows; Title and Detail wrap (Error Large 120 → 208 → 448).
 - [x] 7. No text under 11 pt: the smallest is Subheadline (the unit follows the value).
 - [x] 8. The Motion part names each transition.
 - [x] 9. Role, name, states and focus order:

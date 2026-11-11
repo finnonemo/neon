@@ -166,8 +166,6 @@
     "Tile/Artwork/Custom/Radius": 8,
     "Tile/Toggle/False/Layout width": 48,
     "Tile/Toggle/False/Layout height": 28,
-    "Tile/Toggle/True/Layout width": 64,
-    "Tile/Toggle/True/Layout height": 28,
     "Tile/Label/Title/Type token": "$headline",
     "Tile/Label/Title/Type emphasis": "Regular",
     "Tile/Label/Title/Align horizontal": "Left",
@@ -199,7 +197,8 @@
     "Tile/Bar/Default/Padding top": 8,
     "Tile/Bar/Default/Padding bottom": 8,
     "Tile/Focus ring/Default/Stroke weight": 2,
-    "Tile/Focus ring/Default/Radius": 20
+    "Tile/Focus ring/Default/Radius": 20,
+    "Interactive/Medium/Interactive min-height": 48
   },
   "bindings": [
     {"layer":"(root)","property":"minWidth","when":"","value":"Components/Interactive/Medium/Interactive min-height"},
@@ -284,9 +283,9 @@
     {"layer":"Container / Content / Content top / Content trailing","property":"layoutSizingVertical","when":"","value":"FIXED","literal":true},
     {"layer":"Container / Content / Content top / Content trailing","property":"layoutSizingVertical","when":"{{Trailing content=Label}}","value":"HUG","literal":true},
     {"layer":"Container / Content / Content top / Content trailing","property":"width","when":"{{Trailing content=Badge, Chevron, Checkbox, Radio}}","value":"Components/Tile/Icon/Large/Layout width"},
-    {"layer":"Container / Content / Content top / Content trailing","property":"width","when":"{{Trailing content=Toggle}}","value":"Components/Tile/Toggle/{{iOS=*}}/Layout width"},
+    {"layer":"Container / Content / Content top / Content trailing","property":"width","when":"{{Trailing content=Toggle}}","value":"Components/Tile/Toggle/False/Layout width"},
     {"layer":"Container / Content / Content top / Content trailing","property":"height","when":"{{Trailing content=Badge, Chevron, Checkbox, Radio}}","value":"Components/Tile/Icon/Large/Layout height"},
-    {"layer":"Container / Content / Content top / Content trailing","property":"height","when":"{{Trailing content=Toggle}}","value":"Components/Tile/Toggle/{{iOS=*}}/Layout height"},
+    {"layer":"Container / Content / Content top / Content trailing","property":"height","when":"{{Trailing content=Toggle}}","value":"Components/Tile/Toggle/False/Layout height"},
     {"layer":"Container / Content / Content top / Content trailing / Trailing labels","property":"visible","when":"","value":"false","literal":true},
     {"layer":"Container / Content / Content top / Content trailing / Trailing labels","property":"visible","when":"{{Trailing content=Label}}","value":"true","literal":true},
     {"layer":"Container / Content / Content top / Content trailing / Trailing labels","property":"visible","when":"{{State=Skeleton}}","value":"false","literal":true},

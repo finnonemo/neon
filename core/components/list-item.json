@@ -199,7 +199,12 @@
     "List item/Line/Default/Layout height": 1,
     "List item/Bar/Default/Layout width": 80,
     "List item/Bar/Default/Layout height": 8,
-    "List item/Bar/Default/Radius": 0
+    "List item/Bar/Default/Radius": 0,
+    "Interactive/XSmall/Interactive min-height": 48,
+    "Interactive/Small/Interactive min-height": 48,
+    "Interactive/Medium/Interactive min-height": 48,
+    "Interactive/Large/Interactive min-height": 56,
+    "Interactive/XLarge/Interactive min-height": 64
   },
   "bindings": [
     {"layer":"(root)","property":"minWidth","when":"{{State=*}}","value":"Components/Interactive/{{Size=*}}/Interactive min-height"},
@@ -516,7 +521,12 @@
     "List item/Line/Default/Layout height": 1,
     "List item/Bar/Default/Layout width": 80,
     "List item/Bar/Default/Layout height": 8,
-    "List item/Bar/Default/Radius": 0
+    "List item/Bar/Default/Radius": 0,
+    "Interactive/XSmall/Interactive min-height": 48,
+    "Interactive/Small/Interactive min-height": 48,
+    "Interactive/Medium/Interactive min-height": 48,
+    "Interactive/Large/Interactive min-height": 56,
+    "Interactive/XLarge/Interactive min-height": 64
   },
   "bindings": [
     {"layer":"(root)","property":"minWidth","when":"{{State=*}}","value":"Components/Interactive/{{Size=*}}/Interactive min-height"},
@@ -731,7 +741,12 @@
     "List item/Line/Default/Layout height": 1,
     "List item/Bar/Default/Layout width": 80,
     "List item/Bar/Default/Layout height": 8,
-    "List item/Bar/Default/Radius": 0
+    "List item/Bar/Default/Radius": 0,
+    "Interactive/XSmall/Interactive min-height": 48,
+    "Interactive/Small/Interactive min-height": 48,
+    "Interactive/Medium/Interactive min-height": 48,
+    "Interactive/Large/Interactive min-height": 56,
+    "Interactive/XLarge/Interactive min-height": 64
   },
   "bindings": [
     {"layer":"(root)","property":"minWidth","when":"{{State=*}}","value":"Components/Interactive/{{Size=*}}/Interactive min-height"},
@@ -871,7 +886,8 @@
   "properties": [],
   "variables": {
     "List item/Icon/Large/Layout width": 24,
-    "List item/Icon/Large/Layout height": 24
+    "List item/Icon/Large/Layout height": 24,
+    "Interactive/Medium/Interactive min-height": 48
   },
   "bindings": [
     {"layer":"(root)","property":"minWidth","when":"{{Type=*}}{{State=*}}","value":"Components/Interactive/Medium/Interactive min-height"},

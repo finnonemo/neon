@@ -39,7 +39,7 @@ The kit's 52-tall field rows and its 19 under them go through the Size table: Te
 
 ## Component variables and Theme tokens
 
-No new `Components` variable. The alert's own sizes stay raw as the kit's: The values on a Scale step bind it: 8 `spacing-03`, 24 `spacing-06`, `iOS=False`'s radius `16px (radius-lg)`. Button and Text field bring their own variables. No `Alert/…` group: it would hold only raw kit values, which Sheet and Menu left unbound too.
+No new `Components` variable. The values on a Scale step bind it: 8 `spacing-03`, 24 `spacing-06`, `iOS=False`'s radius `16px (radius-lg)`. Button and Text field bring their own variables. No `Alert/…` group: it would hold only raw kit values, which Sheet and Menu left unbound too.
 
 Colours map every kit paint the alert owns to an existing Theme token; no new token. The buttons' and fields' paints are Button's and Text field's own.
 
@@ -76,7 +76,6 @@ The Button labels and Text field values are theirs: a control label is one line 
 
 | Transition | Token | Reduced form | Haptic |
 | --- | --- | --- | --- |
-| present, dismiss | System | System | System |
 | `iOS=False`: appears, fading in and scaling up | `moderate-02 · entrance · scale-in` | crossfade | None |
 | `iOS=False`: the scrim dims in behind it | `slow-02 · entrance` | crossfade | None |
 | `iOS=False`: dismisses, fading out and scaling down; the scrim fades with it | `moderate-01 · exit · scale-in` | crossfade | None |
@@ -92,17 +91,17 @@ Movement from Motion and haptics, the owner's D6 (ads-tokens.md § 5), edited in
 - [x] 3. The fields are Text field, identified by more than their fill.
 - [x] 4. A destructive action is named by its label as well as red (`Type=Danger`); the alert's modal state is the system's or the web's, not the scrim's colour alone.
 - [x] 5. The Focus ring is the Buttons' and Text fields' own, outside each (`iOS=False`); the alert itself takes no focus.
-- [x] 6. **Reflows** since Button's . `reflow-check.js` (`84e87b06`, 2026-11-10, `Show Text Field` on, Thai copy, 343): `counts` {}; Title, Message, the fields and the Buttons' labels wrap and the alert grows: at large sizes use Stacked (iOS does it itself; elsewhere the Pattern picks it). The Text field's placeholder truncates with "…", the field's own behaviour.
+- [x] 6. **Reflows** since Button's . `reflow-check.js` (`84e87b06`, 2026-11-10, `Show Text Field` on, Thai copy, 343): `counts` {}; The Text field's placeholder truncates with "…", the field's own behaviour.
 - [x] 7. No text under 17.
 - [x] 8. Motion names System and the `iOS=False` tokens, reduced forms and haptic.
 - [x] 9. Role, name, states and order:
 
-|  |  | Android (`iOS=False`) | Web (`iOS=False`) |
-| --- | --- | --- | --- |
-| Role | an alert (`UIAlertController`, `.alert` style), modal; each action a button | `AlertDialog` (Compose); each action a `TextButton` / `Button` | `role="alertdialog"`, `aria-modal="true"` |
-| Accessible name | the `Title`; the `Message` read after it | the same | `aria-labelledby` the Title, `aria-describedby` the Message |
-| Announced states | none of its own; the destructive action reads its label | the same | the same |
-| Focus order | Title, Message, fields, then the actions in reading order; a two-finger scrub (escape) cancels | the same; Back dismisses (the Dismiss action) | focus to the first field, else to the Dismiss action in a destructive alert, else to Preferred; Tab trapped; Esc is Dismiss; a click on the scrim does nothing (an `alertdialog` needs an answer); the page behind doesn't scroll; focus returns to the trigger |
+|  | Android (`iOS=False`) | Web (`iOS=False`) |
+| --- | --- | --- |
+| Role | `AlertDialog` (Compose); each action a `TextButton` / `Button` | `role="alertdialog"`, `aria-modal="true"` |
+| Accessible name | the same | `aria-labelledby` the Title, `aria-describedby` the Message |
+| Announced states | the same | the same |
+| Focus order | the same; Back dismisses (the Dismiss action) | focus to the first field, else to the Dismiss action in a destructive alert, else to Preferred; Tab trapped; Esc is Dismiss; a click on the scrim does nothing (an `alertdialog` needs an answer); the page behind doesn't scroll; focus returns to the trigger |
 
 ## Usage
 

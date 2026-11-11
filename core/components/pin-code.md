@@ -131,8 +131,8 @@ Items 1, 2 and 6 were checked on the built set on 2026-11-02. The rest are settl
 - [x] 2. Non-text parts pass 3:1: the contrast lint passes. These are the Focus (`Focus/focus`), Active (`border-strong`), Error and Success strokes, and the Detail glyphs.
 - [x] 3. Identified by more than its fill. The Title is above. Each empty cell shows `○` at placeholder contrast and each typed cell a `●`. The current cell has stroke 3 (Filled fields).
 - [x] 4. No state by colour alone. Error and Success carry a glyph and a message. Loading has a spinner, Disabled dimmed text, and the current cell its cursor and stroke.
-- [x] 5. The Focus ring sits outside the `Field` row. 2 px `Focus/focus`, 2 px gap, radius 12 around the row. `State=Focus` is editing, not keyboard focus, as in Text field.
-- [x] 6. 6 Enabled, 4 Error and 6 Active per size, long Thai copy). The rows keep 308 and 204 wide and every cell stays 48 wide. Title and Detail wrap inside the row's width; nothing clips. Heights (6 Enabled / 4 Error / 6 Active): Thai below-base marks in the Detail sit 1, 2 and 5 px below Subheadline's line box at the three sizes: a Typography line-height matter Text field shares, not fixed here (Build log).
+- [x] 5. The Focus ring sits outside the `Field` row. `State=Focus` is editing, not keyboard focus, as in Text field.
+- [x] 6. The rows keep 308 and 204 wide and every cell stays 48 wide. Title and Detail wrap inside the row's width; nothing clips. Thai below-base marks in the Detail sit 1, 2 and 5 px below Subheadline's line box at the three sizes: a Typography line-height matter Text field shares, not fixed here (Build log).
 - [x] 7. No text under 11 pt: the smallest is Subheadline.
 - [x] 8. The Motion part names each transition.
 - [x] 9. Role, name, states and focus order: one control, one focus stop.

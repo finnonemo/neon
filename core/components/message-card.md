@@ -107,7 +107,7 @@ None of its own. The Tertiary CTA's arrow is the nested Button's `Trailing Icon`
 | --- | --- | --- | --- |
 | `Heading` | `Headings/Title 3` (20/28 Bold) | wraps, no `maxLines` | `Heading text` |
 | `Paragraph` | `Body/Subheadline` (15/24) | wraps, no `maxLines` | `Paragraph text` |
-| Button label | the Button's (Small) | **keep it short**: up to about 170 wide at the label size, or it runs over a Trailing artwork (MC9) | the Button's `Label Text` |
+| Button label | the Button's (Small) | hugs, wraps past 200 (the Button's rule,); **keep it short**: up to about 170 wide at the label size, or it runs over a Trailing artwork (MC9) | the Button's `Label Text` |
 
 Uber: heading and paragraph wrap and are not truncated. CDS caps them at 2 and 3 lines; a Carousel Pattern that needs equal heights sets its own.
 
@@ -130,11 +130,11 @@ Tokens from Motion and haptics: `fast-01` a state change in place, `fast-02` a f
 ## Accessibility
 
 - [x] 1. Every text layer passes on its Style's fill and on Active, both modes: 11.74:1 or more (table above); the contrast lint passes on the spec, checking only the Theme mode a layer pins (Light and Dark: Light, MC2). `lint.mjs` ok on the spec.
-- [x] 2. Meaningful non-text parts: the Focus ring (as Tile's). The stroke and the fills are decorative. The nested Button and Icon button bring their own; checked in the first `--only` build batch, 5.34:1 (Build log).
+- [x] 2. Meaningful non-text parts: the Focus ring (as Tile's). The stroke and the fills are decorative. The nested Button and Icon button bring their own;
 - [x] 3. N/A: not a field.
 - [x] 4. No state shown by colour alone: Active is a press, shown while the finger is down; Focus is the ring; Skeleton is shape.
 - [x] 5. `State=Focus`: the ring sits outside the Container, at −4, radius 20, on the Root (not pinned to Light, so it follows the page). structure-check accepts its bounds (`overflow: ['Focus ring']`) on all 72 Focus variants.
-- [ ] 6. **Reflow fails in two places** (`reflow-check.js` `84e87b06`, 2026-11-10, 343 wide, Thai stress copy, `Dismiss` on, six cases over both Artworks and the three Layouts). (a) On `Artwork=Trailing` with a button, `Actions` runs out of `Content` at every size, Large included: it runs over the artwork. Accepted by MC9: the Button hugs and CTA labels stay short (Text styles below). Icon button's own item 6 ([icon-button.md](icon-button.md)), the owner's call there. Text wraps and the card grows otherwise:
+- [ ] 6. **Reflow fails in two places** (`reflow-check.js` `84e87b06`, 2026-11-10, 343 wide, Thai stress copy, `Dismiss` on, six cases over both Artworks and the three Layouts). (a) On `Artwork=Trailing` with a button, `Actions` runs out of `Content` at every size, Large included: Content is 223 wide, and a Button Small whose Label reaches its 200 cap (Button) is 232 (Secondary) or wider (Tertiary, with its arrow); it runs over the artwork. Accepted by MC9: the Button hugs and CTA labels stay short (Text styles below).
 - [x] 7. Smallest text is Subheadline 15; the Button Small label is the Button's.
 - [x] 8. Motion part above.
 - [x] 9. Role, name, states:

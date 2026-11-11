@@ -50,7 +50,7 @@ Properties: `Label` (TEXT), `Icon` (BOOLEAN, off), `Badge` (BOOLEAN, off). 2 × 
 | `Style` | Underline · Pill | the Track's fill (Pill: `Transparent`), the Tabs frame's gap (Pill: 8) and the default content's `Style` |
 | `Size` | Medium · Small | the default content's `Size`; Pill only |
 
-Properties: Figma refuses to expose instances inside a Slot, so a designer selects a tab in the Slot to set its Label, Icon and Badge. Pill is Intrinsic only and Underline Medium only, as on `_Tab`: Underline Fixed, Underline Intrinsic, Pill Medium, Pill Small = **4 variants**, one a row. The slot's variables (its gap) sit under `Tabs/Container`.
+Properties: the SLOT `Tabs` on the inner frame, made by hand and listed in the spec since #357. Figma refuses to expose instances inside a Slot, so a designer selects a tab in the Slot to set its Label, Icon and Badge. Pill is Intrinsic only and Underline Medium only, as on `_Tab`: Underline Fixed, Underline Intrinsic, Pill Medium, Pill Small = **4 variants**, one a row. The slot's variables (its gap) sit under `Tabs/Container`.
 
 `Width` sits on `_Tab` too: Slot content isn't pinned (Variant axes), so a designer sets each `_Tab`'s `Width` to match the bar's.
 
@@ -136,7 +136,7 @@ Segmented control differs on purpose (`moderate-01 · standard`, crossfade, `Sel
 - [x] 3. N/A: not a field.
 - [ ] 4. Selection is shown by the indicator's shape and the label's colour, and announced as Selected; Disabled by colour and announced as dimmed.
 - [ ] 5. Focus is a `State` value, a 2 px `Focus/focus` stroke inside Content, as List item and Checkbox Full-bleed (Carbon's), not a ring outside: at gap 0 a ring outside would cross the neighbouring tabs (see Calls).
-- [ ] 6. tabs grow taller; Intrinsic scrolls; Fixed may not fit (see Calls).
+- [ ] 6. Intrinsic scrolls; Fixed may not fit (see Calls).
 - [ ] 7. 15 pt (Subheadline), over 11.
 - [x] 8. Motion: `fast-01 · standard`, reduced instant, haptic None.
 - [ ] 9. Role, name, states and focus order:

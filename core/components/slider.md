@@ -42,9 +42,9 @@ Slider (variant root)          Fill × Hug, no fill, no padding
 | Axis | Values (default first) | Drives |
 | --- | --- | --- |
 | `Layout` | Single · Range | one Thumb on the Indicator, or Range's Fill with a Thumb at each end (R1) |
-| `Type` | Inset · Full-bleed | the bare control, or the filled row for a list: the list's group owns the radius), a bottom Divider (R6) |
+| `Type` | Inset · Full-bleed | the bare control, or the filled row for a list: Container `layer-01`, padding 12 · 0, square corners (the list's group owns the radius), a bottom Divider (R6) |
 | `Ends` | Icon · Text | what `Min` and `Max` show: the Icons glyphs or the figures "0" and "100" (R3) |
-| `State` | Enabled · Pressed · Disabled · Skeleton | colours; Pressed is Carbon's Active and the kit's Pressed: Skeleton is bars and the Track in `skeleton-element` (R4) |
+| `State` | Enabled · Pressed · Disabled · Skeleton | colours; Skeleton is bars and the Track in `skeleton-element` (R4) |
 
 Focus is not a `State` value: the Focus ring is shown once in Usage (Visuals).
 
@@ -56,22 +56,22 @@ The value isn't an axis: the kit's five `Value` variants differ only in the fill
 
 `Components`, Tag's three-level shape (structure.md). Track, Indicator, Thumb, Tick and Rail are keyed by `iOS`, as Toggle's Track and Thumb are; Container by `Type`; Header, Field and Pin by the one `Size`, `Medium`; the Skeleton bars by role.
 
-| Group | Keyed by | Properties | True | False |
-| --- | --- | --- | --- | --- |
-| `Slider/Container/<Type>` | `Type` | Gap vertical, Padding top, bottom, left, right, Radius | Inset: `spacing-03` (8), `spacing-00` all round, `None` | Full-bleed: was `12px (radius-md)`) |
-| `Slider/Header/Medium` | `Size` | Gap horizontal, Padding left, Padding right | `spacing-03` (8), `spacing-05` (16) each side |  |
-| `Slider/Rail/<iOS>` | `iOS` | Gap horizontal, Padding left, Padding right | 28 (raw: the kit's 12 plus the 16 its Stack insets the track by), `spacing-05` (16, owner's base edit; the 38 Thumb overhangs it by 3 at 0% and 100%) | `spacing-05` (16, Base's), `spacing-05` |
-| `Slider/Track/<iOS>` | `iOS` | Layout height, Radius | 6 (raw, off-scale), `Round (radius-round)` | `spacing-02` (4), `Round (radius-round)` |
-| `Slider/Indicator/<iOS>` | `iOS` | Layout height, Radius | the Track's | the Track's |
-| `Slider/Thumb/<iOS>` | `iOS` | Layout width, Layout height, Radius | 38 (raw) × `spacing-06` (24), `Round` | `spacing-06` × `spacing-06` (24 × 24), `Round` |
-| `Slider/Tick/<iOS>` | `iOS` | Layout width, Layout height, Radius | `spacing-02` × `spacing-02` (4 × 4), `Round` | same |
-| `Slider/Field/Medium` | `Size` | Padding left, Padding right, Radius | `spacing-04` (12) each side, `8px (radius-sm)` |  |
-| `Slider/Pin/Medium` | `Size` | Padding top, bottom, left, right, Radius | `spacing-03` (8) top and bottom, `spacing-04` (12) left and right, `Round` |  |
-| `Slider/Bar/<Title · End>` | role | Layout width, Layout height, Radius | Title 40 (raw) × `spacing-03` (8), End `spacing-05` (16) × `spacing-03`; `None` |  |
-| `Slider/Label/<Title · Value · End · Input · Pin>` | role | Type token, Type emphasis, Align horizontal, Align vertical, Decoration | Title `$headline` Left; Value `$subhead` Right; End `$subhead`, Input `$body`, Pin `$subhead` Center; all Regular, Top, `-` |  |
-| `Slider/Icon/Medium` | icon step | Type token | the Min and Max glyphs' step |  |
+| Group | Keyed by | Properties | Values |
+| --- | --- | --- | --- |
+| `Slider/Container/<Type>` | `Type` | Gap vertical, Padding top, bottom, left, right, Radius | Inset: `spacing-03` (8), `spacing-00` all round, `None`; Full-bleed: `spacing-03`, `spacing-04` (12) top and bottom, `spacing-00` left and right, `None` |
+| `Slider/Header/Medium` | `Size` | Gap horizontal, Padding left, Padding right | `spacing-03` (8), `spacing-05` (16) each side |
+| `Slider/Rail/<iOS>` | `iOS` | Gap horizontal, Padding left, Padding right | `spacing-05` (16, Base's), `spacing-05` |
+| `Slider/Track/<iOS>` | `iOS` | Layout height, Radius | `spacing-02` (4), `Round (radius-round)` |
+| `Slider/Indicator/<iOS>` | `iOS` | Layout height, Radius | the Track's |
+| `Slider/Thumb/<iOS>` | `iOS` | Layout width, Layout height, Radius | `spacing-06` × `spacing-06` (24 × 24), `Round` |
+| `Slider/Tick/<iOS>` | `iOS` | Layout width, Layout height, Radius | `spacing-02` × `spacing-02` (4 × 4), `Round` |
+| `Slider/Field/Medium` | `Size` | Padding left, Padding right, Radius | `spacing-04` (12) each side, `8px (radius-sm)` |
+| `Slider/Pin/Medium` | `Size` | Padding top, bottom, left, right, Radius | `spacing-03` (8) top and bottom, `spacing-04` (12) left and right, `Round` |
+| `Slider/Bar/<Title · End>` | role | Layout width, Layout height, Radius | Title 40 (raw) × `spacing-03` (8), End `spacing-05` (16) × `spacing-03`; `None` |
+| `Slider/Label/<Title · Value · End · Input · Pin>` | role | Type token, Type emphasis, Align horizontal, Align vertical, Decoration | Title `$headline` Left; Value `$subhead` Right; End `$subhead`, Input `$body`, Pin `$subhead` Center; all Regular, Top, `-` |
+| `Slider/Icon/Medium` | icon step | Type token | the Min and Max glyphs' step |
 
-6 × 2 + 3 + (3 + 2 + 2 + 3 + 3) × 2 + 3 + 5 + 3 × 2 = 55 FLOAT, 5 × 5 + 1 = 26 STRING: **81 `Components` variables** in the spec (39 at the first build). `Rail`, `Tick` (Q9) and `Pin` (R5) are group words in the lint's list. The Rail's min height and the inputs' min width and height bind `Interactive/Medium/Interactive min-height` (48). The Indicator's, Lower's and Fill's widths are the set's unbound numbers, as in Progress bar.
+6 × 2 + 3 + (3 + 2 + 2 + 3 + 3) × 2 + 3 + 5 + 3 × 2 = 55 FLOAT, 5 × 5 + 1 = 26 STRING: **81 `Components` variables** in the spec (39 at the first build). `Container/Medium/Gap vertical` (the first build's) and `Field/Medium/Layout width` (45, until the input went Hug) were unbound in Figma and removed with (R3). `Rail`, `Tick` (Q9) and `Pin` (R5) are group words in the lint's list. The Rail's min height and the inputs' min width and height bind `Interactive/Medium/Interactive min-height` (48). The Indicator's, Lower's and Fill's widths are the set's unbound numbers, as in Progress bar.
 
 Templates: `Components/Slider/<Group>/{{iOS=*}}/<Property>`, `Components/Slider/Container/{{Type=*}}/<Property>`, `Components/Slider/<Group>/Medium/<Property>`, `Components/Slider/<Bar · Label>/<role>/<Property>`, `Components/Interactive/Medium/Interactive min-height`.
 
@@ -82,8 +82,6 @@ Templates: `Components/Slider/<Group>/{{iOS=*}}/<Property>`, `Components/Slider/
 | Track, both looks | `Layer/layer-03` | `Layer/layer-03` | `Layer/layer-03` |
 | Indicator, `iOS=False` | `Icon/icon-primary` | `Miscellaneous/interactive` | `Border/border-disabled` |
 | Thumb, `iOS=False` | `Icon/icon-primary` | `Miscellaneous/interactive` | `Border/border-disabled` |
-|  | `Support/support-info` | `Support/support-info` | `Border/border-disabled` |
-|  | `Icon/icon-on-color`, the kit's two shadows |  | `Icon/icon-on-color` |
 | Ticks | `Icon/icon-secondary` | same | `Icon/icon-disabled` |
 | Min / Max icon | `Icon/icon-secondary` | same | `Icon/icon-disabled` |
 | Title | `Text/text-primary` | same | `Text/text-disabled` |
@@ -139,7 +137,6 @@ On Skeleton the Track, the Value text, the Title skeleton and the Min and Max bl
 | --- | --- | --- | --- |
 | The Thumb follows the finger; the Indicator grows with it | none: it tracks the drag | kept: it is the user's own movement | `Impact` on each step crossed, where the slider has steps (Q2); a continuous slider fires `Impact` at its minimum and maximum only |
 | Pressed: `iOS=False` colours change | `fast-01 · standard` | kept (colour only) | None |
-| Pressed | iOS: system (Q7); else `fast-01 · standard` | crossfade, no scale | None |
 | A tap on the Track: the Thumb jumps to the value | `moderate-01 · standard` | instant | `Impact` on arrival |
 
 This adds `Impact` to Motion and haptics, amended in this PR: an `Impact` row in its haptics table, a Slider row in its per-component table, and its "No Impact in Core" lines. Where iOS draws the slider (Q7), the system's motion and haptics stand instead.
@@ -151,7 +148,7 @@ This adds `Impact` to Motion and haptics, amended in this PR: an `Impact` row in
 - [x] 3. N/A: not a field.
 - [ ] 4. Not by colour alone: the Value text (Header on by default) carries the amount, and the Thumb's position shows it; Disabled dims the Title too.
 - [x] 5. The Focus ring (2, `Focus/focus`) on `iOS=False`, around the Thumb, the part that takes focus (Q8). Shown once in Usage: `Focus ring` sample, Light and Dark, a 32 ring 2 out from the 24 Thumb, centred on it.
-- [x] 6. the Title wraps, the Value stays one line, the Rail keeps 48 and the Thumb its size (Build log, 2026-11-08 page). In code, at AX sizes the Value may move under the Title.
+- [x] 6. In code, at AX sizes the Value may move under the Title.
 - [ ] 7. Smallest text 15 (Subheadline).
 - [ ] 8. Motion part above: each transition's token, Reduced form and haptic.
 - [ ] 9. Role, name, states and focus order:
@@ -166,6 +163,8 @@ This adds `Impact` to Motion and haptics, amended in this PR: an `Impact` row in
 Behaviour rules for developers: the value is clamped to its range; it starts at the leading edge and mirrors in RTL; the Hit target is the whole 48 Rail, not only the Thumb; a haptic always pairs with the Thumb's movement.
 
 ## Usage
+
+The `Usage` frame shows, with Thai copy, both looks:
 
 - A setting with a title and a value ("ระดับเสียง", "50").
 - Range ("ช่วงราคา", 20–80).

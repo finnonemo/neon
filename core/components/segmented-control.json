@@ -37,7 +37,6 @@
     "Segmented control/Container/Medium/Padding top": 6,
     "Segmented control/Container/Medium/Padding bottom": 6,
     "Segmented control/Container/Medium/Gap horizontal": 0,
-    "Segmented control/Container/Medium/Radius": 200,
     "Segmented control/Container/Small/Layout horizontal": "Fill container",
     "Segmented control/Container/Small/Layout vertical": "Hug contents",
     "Segmented control/Container/Small/Layout min-height": 36,
@@ -46,7 +45,6 @@
     "Segmented control/Container/Small/Padding top": 4,
     "Segmented control/Container/Small/Padding bottom": 4,
     "Segmented control/Container/Small/Gap horizontal": 0,
-    "Segmented control/Container/Small/Radius": 200,
     "Segmented control/Container/Large/Layout horizontal": "Fill container",
     "Segmented control/Container/Large/Layout vertical": "Hug contents",
     "Segmented control/Container/Large/Layout min-height": 56,
@@ -55,7 +53,11 @@
     "Segmented control/Container/Large/Padding top": 4,
     "Segmented control/Container/Large/Padding bottom": 4,
     "Segmented control/Container/Large/Gap horizontal": 0,
-    "Segmented control/Container/Large/Radius": 200
+    "Interactive/XSmall/Interactive min-height": 48,
+    "Interactive/Small/Interactive min-height": 48,
+    "Interactive/Medium/Interactive min-height": 48,
+    "Interactive/Large/Interactive min-height": 56,
+    "Interactive/XLarge/Interactive min-height": 64
   },
   "bindings": [
     {"layer":"(root)","property":"minWidth","when":"{{Size=*}}","value":"Components/Interactive/{{Size=*}}/Interactive min-height"},
@@ -136,7 +138,6 @@
     "Segmented control/Item/Medium/Padding right": 8,
     "Segmented control/Item/Medium/Padding top": 0,
     "Segmented control/Item/Medium/Padding bottom": 0,
-    "Segmented control/Item/Medium/Radius": 200,
     "Segmented control/Item/Medium/Stroke weight": 2,
     "Segmented control/Item/Small/Layout horizontal": "Fill container",
     "Segmented control/Item/Small/Layout vertical": "Hug contents",
@@ -145,7 +146,6 @@
     "Segmented control/Item/Small/Padding right": 2,
     "Segmented control/Item/Small/Padding top": 0,
     "Segmented control/Item/Small/Padding bottom": 0,
-    "Segmented control/Item/Small/Radius": 200,
     "Segmented control/Item/Small/Stroke weight": 2,
     "Segmented control/Item/Large/Layout horizontal": "Fill container",
     "Segmented control/Item/Large/Layout vertical": "Hug contents",
@@ -154,7 +154,6 @@
     "Segmented control/Item/Large/Padding right": 8,
     "Segmented control/Item/Large/Padding top": 0,
     "Segmented control/Item/Large/Padding bottom": 0,
-    "Segmented control/Item/Large/Radius": 200,
     "Segmented control/Item/Large/Stroke weight": 2
   },
   "bindings": [

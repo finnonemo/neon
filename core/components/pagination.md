@@ -38,8 +38,6 @@ Page items are a Slot because the pages shown change with the total (Uber has ei
 
 ## Axes
 
-**`Pagination`**
-
 | Axis | Values (default first) | Drives |
 | --- | --- | --- |
 | `Type` | Numbered · Overflow | which Container parts show |
@@ -47,8 +45,6 @@ Page items are a Slot because the pages shown change with the total (Uber has ei
 | `State` | Default · Skeleton | Skeleton replaces the parts with bars (P4) |
 
 Properties: BOOLEANs `Show Previous` (Numbered, on), `Dividers` (Overflow, on); the exposed nested Select values and Button states. 2 × 2 × 2 = **8 variants**.
-
-**`_Pagination item`**
 
 | Axis | Values | Drives |
 | --- | --- | --- |
@@ -58,8 +54,6 @@ Properties: BOOLEANs `Show Previous` (Numbered, on), `Dividers` (Overflow, on); 
 | `Size` | Medium · Small | label text style |
 
 Page 2 × 5 + Ellipsis 5 = 15, × 2 Sizes = **30 variants**.
-
-**`Table toolbar`**
 
 | Axis | Values | Drives |
 | --- | --- | --- |
@@ -136,7 +130,7 @@ Thai floors 12 on one line and 13 where it wraps: both Sizes' styles are 15 and 
 - [x] 3. N/A: no field of its own (the Select nested is a field and brings its own cue).
 - [ ] 4. The selected page is the fill and the heavier weight, and `aria-current`, not colour alone.
 - [ ] 5. The Focus ring sits outside the 36 Container, inside the 48 target (`iOS=False`).
-- [ ] 6. Overflow wraps its groups, Numbered's Slot wraps; nothing clipped.
+- [ ] 6. nothing clipped.
 - [x] 7. The smallest text is 15.
 - [x] 8. Motion above: None.
 - [ ] 9. Role, accessible name, announced states and focus order:
@@ -154,7 +148,7 @@ Thai floors 12 on one line and 13 where it wraps: both Sizes' styles are 15 and 
 - Numbered under a list or a gallery whose pages the reader jumps between (up to about ten pages); Overflow under a Table with a total and a rows-per-page choice. Many pages and no choice of rows: Overflow without Rows per page (hide the group), not Numbered with a long Slot.
 - Previous is hidden on page 1 in Numbered; in Overflow Previous and Next are Disabled at the ends (Uber's `Substate` First · Last).
 - At 375 Numbered shows five items (1 2 3 … 10); Overflow wraps its groups.
-- Thai copy; a Table (Medium, Selection on, one row Selected) with `Table toolbar` Default above, the `Table toolbar` Batch actions case, and Overflow as the footer; Numbered at 375; the Focus ring once.
+- a Table (Medium, Selection on, one row Selected) with `Table toolbar` Default above, the `Table toolbar` Batch actions case, and Overflow as the footer; Numbered at 375; the Focus ring once.
 
 ### Hierarchy
 

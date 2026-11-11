@@ -16,7 +16,7 @@ Segmented control (variant root)     Fill × Hug, no fill, no padding; min heigh
 
 - **Equal widths by layout**: `Segments` is Fill and every item is Fill wide, so the widths are equal and come from the track, not from the labels. The item's side padding is only the floor where the labels nearly fill a segment (call 9).
 - **Selected indicator**: in Figma it is the selected item's own fill. The slide between segments happens in code (call 12, Motion).
-- The Slot defaults to three items: the first is `Selected=True`, and the labels are `Option 1`, `Option 2` and `Option 3` (English defaults, owner 2026-11-04;
+- The Slot defaults to three items: the first is `Selected=True`, and the labels are `Option 1`, `Option 2` and `Option 3` (English defaults, owner 2026-11-04).
 - `Segments` is a Slot (`Segments#1907:0`, seen 2026-11-05), made by hand after the first build. Since #357 the spec lists it (SLOT `Segments`), so `build` links it and `verify` checks it (12 of 12 linked, read 2026-11-05). Its settings have `allowPreferredValuesOnly` on and no preferred values, so whether a designer can insert `_Segmented control item` from the UI is to be checked: the Item may need to be its preferred value (call 7 expects designers to add Items).
 
 ## Axes
@@ -25,44 +25,43 @@ Segmented control (variant root)     Fill × Hug, no fill, no padding; min heigh
 
 | Axis | Values (default first) | Drives |
 | --- | --- | --- |
-| `Size` | Medium · Small · Large (call 3 | Container min height 48 · 36 · 56 and padding 6 · 4 · 4, the Root's Hit target |
-| `State` | call 8 reversed) | track fill; Disabled is the root at opacity 0.5 over the Enabled look (U2); Skeleton hides `Segments` |
+| `Size` | Medium · Small · Large (call 3; Large added last by , V5, first on the grid) | Container min height 48 · 36 · 56 and padding 6 · 4 · 4, the Root's Hit target |
+| `State` | Enabled · Disabled · Skeleton (call 8 reversed) | track fill; Disabled is the root at opacity 0.5 over the Enabled look (U2); Skeleton hides `Segments` |
 
-Properties: SLOT `Segments`, added by hand.
+Properties: SLOT `Segments`, added by hand. 3 × 3 × 2 = **18 variants** (12 before , 8 before).
 
 `_Segmented control item` (private):
 
 | Axis | Values (default first) | Drives |
 | --- | --- | --- |
 | `Selected` | False · True | the indicator fill and the label colour |
-| `State` |  | the press and hover fills, the Focus stroke, the disabled colours |
-| `Size` |  | side padding and min height; the label is `Body/Subheadline` on Medium and Small, `Body/Body` on Large (V4) |
+| `State` | Enabled · Pressed · Focus · Disabled · Hover (W8) | the press and hover fills, the Focus stroke, the disabled colours |
+| `Size` | Medium · Small · Large | side padding and min height; the label is `Body/Subheadline` on Medium and Small, `Body/Body` on Large (V4) |
 
-Properties: TEXT `Label`. The set pins its three default Items' `Size` and `iOS` to its own. A designer sets both on each Item they add, since Slot content isn't pinned (call 7, R1).
+Properties: TEXT `Label`. 2 × 5 × 3 × 2 = **60 variants** (48 before , 32 before , 16 before). The set pins its three default Items' `Size` and `iOS` to its own. A designer sets both on each Item they add, since Slot content isn't pinned (call 7, R1).
 
 - There is no Error or Loading state: a segmented control picks between values that are always valid.
 - There are no booleans. The number of segments is the number of Items in the Slot (call 1).
 
 ## Component variables and Theme tokens
 
-`Components`, in Tag's three-level shape. Every value aliases a Scale step but two raw ones: the Item's min height was raw before).
+`Components`, in Tag's three-level shape. Every value aliases a Scale step but two raw ones: Medium's track padding 6 and the Item's stroke weight (the Item's min height was raw before).
 
 | Group | Keyed by | Properties | Values (Medium · Small · Large) |
 | --- | --- | --- | --- |
 | `Segmented control/Container/<Size>` | `Size` | Layout horizontal, Layout vertical | `Fill container`, `Hug contents` |
 |  |  | Layout min-height | `Sizing/control-medium` · `control-small` · `control-large` (48 · 36 · 56) |
-|  |  | Padding left / right / top / bottom | 6 raw · `Spacing/spacing-02` · `spacing-02` (6 · 4 · 4): `spacing-01` 2, the kit's inset, before) |
+|  |  | Padding left / right / top / bottom | 6 raw · `Spacing/spacing-02` · `spacing-02` (6 · 4 · 4): the track less the pill, halved (V3; `spacing-01` 2, the kit's inset, before) |
 |  |  | Gap horizontal | `Spacing/spacing-00` (0), as the Toolbars' frame; the kit's 4 costs nine segments 32 px (call 9) |
 |  |  | Radius | `iOS=False` binds `Radius/12px (radius-md)` directly (W3) |
 | `Segmented control/Item/<Size>` | `Size` (the Item's) | Padding left / right | `Spacing/spacing-03` · `spacing-01` · `spacing-03` (8 · 2 · 8) (call 9, V4) |
 |  |  | Layout horizontal, Layout vertical | `Fill container`, `Hug contents` |
-|  |  | Layout min-height | `Sizing/control-small` · `control-xsmall` · `control-medium` (36 · 28 · 48): 44 · 32 raw before) |
+|  |  | Layout min-height | `Sizing/control-small` · `control-xsmall` · `control-medium` (36 · 28 · 48): the pill snaps to a Sizing step first (44 · 32 raw before) |
 |  |  | Padding top / bottom | `Spacing/spacing-00` |
 |  |  | Radius | `iOS=False` binds `Radius/8px (radius-sm)` directly (W3) |
 |  |  | Stroke weight | 2 (`Sizing/focus-ring = 2`): the Focus ring (call 11), as Text field's Read-only stroke, and the `iOS=False` selected outline (W5) |
 
-- `segmented-control.spec.json` and `segmented-control-item.spec.json` (`variablePrefix: 'Segmented control'`).
-- The Item is Hug tall with a min height, not Fill × Fill as first proposed:
+- That is 9 × 3 + 9 × 3 = **54** variables (36 before), in two specs: `segmented-control.spec.json` and `segmented-control-item.spec.json` (`variablePrefix: 'Segmented control'`).
 - `Item` is a new group name. Lint's allowed groups get `Item`, with a comment (`skills/build-component/scripts/lint.mjs`).
 - The Root's min size binds the shared `Interactive/<Size>/Interactive min-height` (48 · 48 · 56), as Button and Search field do.
 - The Item's variables are bound on `_Segmented control item` and keyed by its own `Size`, from its own spec (`segmented-control-item.spec.json`), as `_PIN cell` is PIN code's.
@@ -76,14 +75,14 @@ Components/Interactive/{{Size=*}}/Interactive min-height
 Theme/<Semantic token>                one rule per token, over the axis values that bind it
 ```
 
-`Theme`: there are no `Segmented control/*` tokens. Each rule binds a Semantic token. Carbon's selected pair, `Layer/layer-selected-inverse` with `Text/text-inverse`, is **1.38:1 Light · 1.34:1 Dark** in our Theme. `layer-selected-inverse` is `Navy/15A`, a light tint, not Carbon's dark fill. Where a paint draws nothing, it binds `Theme/Transparent`, as on Search field.
+`Theme`: there are no `Segmented control/*` tokens. Each rule binds a Semantic token. Carbon's selected pair, `Layer/layer-selected-inverse` with `Text/text-inverse`, is **1.38:1 Light · 1.34:1 Dark** in our Theme. `layer-selected-inverse` is `Navy/15A`, a light tint, not Carbon's dark fill. So the indicator took CDS's role (`bgInverse`, `fgInverse`), `Background/background-inverse` with `Text/text-inverse` (call 4), until made it `Miscellaneous/segmented-control-selected` with `Text/text-primary` (S1, S3). Where a paint draws nothing, it binds `Theme/Transparent`, as on Search field.
 
 Track (`Segmented control › Container`):
 
-| `State` | `iOS=False` |  |
-| --- | --- | --- |
-| Enabled | `Button/button-secondary` |  |
-| Skeleton | `Skeleton/skeleton-background` | `Skeleton/skeleton-background` |
+| `State` | `iOS=False` |
+| --- | --- |
+| Enabled | `Button/button-secondary` |
+| Skeleton | `Skeleton/skeleton-background` |
 
 Item (`_Segmented control item › Container` fill, its stroke, `Label`), `iOS=False` since .
 
@@ -108,14 +107,12 @@ Contrast (the spec's `contrast` list). The figures were computed 2026-11-04 from
 | --- | --- | --- |
 | `Label` `text-secondary` on the track `button-secondary` (`iOS=False`) | text | 6.16 · 5.46 |
 | `Label` `text-primary` on `layer-active-01` over the track (Pressed) | text | 10.31 · 7.23 |
-|  | text | 15.13 · 21.00 |
-|  | non-text | 14.66 · 16.48 |
 | Tile `background-primary` against the track | decorative: the outline marks the selection | 1.24 · 1.27 |
 | Focus stroke `Focus/focus` | focus ring | the lint's |
 | The track | decorative | the labels carry it |
 | Disabled | disabled | none |
 
-Rejected indicators, against the same track: `Layer/layer-selected-02` (the Toolbars' part) is **1.16 · 1.43**, and a white thumb, `Layer/layer-01` (the kit's look), is **1.24 · 1.06**. Both fail the 3:1 that a state indicator needs (Accessibility). the `border-strong` outline passes 3:1 and marks the selection.
+Rejected indicators, against the same track: `Layer/layer-selected-02` (the Toolbars' part) is **1.16 · 1.43**, and a white thumb, `Layer/layer-01` (the kit's look), is **1.24 · 1.06**. Both fail the 3:1 that a state indicator needs (Accessibility). took a white pill anyway (`segmented-control-selected`, S1), at the owner's word, as an exception (S5). retired S5 on `iOS=False`: the `border-strong` outline passes 3:1 and marks the selection.
 
 `text-primary` on the `segmented-control-selected` pill is 15.13 · 7.20 and on the track 13.33 · 16.48. The pill against the track is 1.18 · 2.29, under 3:1: the owner accepted it as the kit's own (R3), so the spec lists it as decorative. The Strong label and the shadow mark the selection.
 
@@ -127,7 +124,7 @@ None. The segments are text only (call 2), so there is no `Segmented control/Ico
 
 | Layer | Text style (Medium · Small) | Lines | Text property |
 | --- | --- | --- | --- |
-| `Label` (Item) | `Body/Subheadline` · `Body/Subheadline`, Type Emphasis Regular unselected | In Figma Fill × Hug, `HEIGHT`, centred, with no `maxLines` (T1) | `Label` |
+| `Label` (Item) | `Body/Subheadline` · `Body/Subheadline`, Type Emphasis Regular unselected | one line at standard sizes, up to two at AX sizes, never truncated (call 16,). In Figma Fill × Hug, `HEIGHT`, centred, with no `maxLines` (T1) | `Label` |
 
 - The kit truncates `ENDING`. Ours doesn't: copy that doesn't fit at 375 is a copy problem, or a sign that Tabs fit better (call 9). At AX sizes, a label that would need a third line switches the control to a Select (T3, T4).
 - `Body/Subheadline` matches the Toolbars' part and Button's Small and Medium labels ([button.md](button.md)).
@@ -144,7 +141,7 @@ The widths were shaped with HarfBuzz on Finnomena Trek 1.002 OTFs, with SF's tra
 | `1 วัน 1 สัปดาห์ 1 เดือน 3 เดือน 6 เดือน YTD 1 ปี 3 ปี ทั้งหมด` | `Utility/Footnote` 13 Regular | 47.0 (`1 สัปดาห์`) | −4.7: doesn't fit at any size |
 | the same | `Body/Subheadline` 15 Regular | 53.3 | −7.8 |
 
-Spelled-out Thai labels don't fit: they sum to 323 at Subheadline before any padding. Latin abbreviations are within the Thai rules: Caption 2 and up hold Latin abbreviations (Localisation). With the kit's gap 4, a segment drops to 34.1 and the room per side to 1.8, which is why the gap is 0.
+So the nine fit at 375 as Latin abbreviations on `Size=Small`. Spelled-out Thai labels don't fit: they sum to 323 at Subheadline before any padding. Latin abbreviations are within the Thai rules: Caption 2 and up hold Latin abbreviations (Localisation). With the kit's gap 4, a segment drops to 34.1 and the room per side to 1.8, which is why the gap is 0.
 
 ## Hit target and Skeleton
 
@@ -164,17 +161,17 @@ Motion and haptics, the Segmented control row, made specific:
 | Skeleton | the Skeleton's own | static shape, no shimmer | None |
 
 - In Figma the indicator is each Item's `Selected` fill, and nothing moves (call 12).
-- Nothing else moves.
-- kept under Reduced motion, no haptic.
+- on `iOS=False` the outline does. Nothing else moves.
+- Hover (`State=Hover`,) fades in at `fast-01 · standard`, as Pressed; kept under Reduced motion, no haptic.
 
 ## Accessibility
 
-- [ ] 1. Text pairs: `iOS=False` and the selected pair on both looks pass (contrast table); The lint is to be run on the spec. `text-primary` 15.13 · 7.20 on the pill and 13.33 · 16.48 on the track.
-- [ ] 2. Non-text: the owner's accepted exception (R3, 2026-11-05), as the kit's own pill; the Strong label and the shadow mark the selection. The Focus stroke is to be confirmed by the lint.
+- [ ] 1. Text pairs: `iOS=False` and the selected pair on both looks pass (contrast table); since the `iOS=False` selected label is `text-primary` on the pill, 15.13 · 7.23. The lint is to be run on the spec.
+- [ ] 2. Non-text: on `iOS=False` the selected segment's 2 `border-strong` outline is 14.66 · 16.48 against `button-secondary`, so S5 retires there (the lint checks it as a non-text pair). the Strong label and the shadow mark the selection. The Focus stroke is to be confirmed by the lint.
 - [x] 3. A field is identified by more than its fill: N/A, it isn't a field. The segments carry their own labels.
-- [x] 4. Not by colour alone: Focus draws a stroke, and Skeleton is its shape.
-- [x] 5. Focus ring: a 2 `Focus/focus` stroke inside the focused segment, on the Item (call 11), not outside the Container. the first segment `Selected=True, State=Focus`.
-- [x] 6. answered by , wrap then switch. `รายวัน` 98, `ทั้งหมด` 105, `รายเดือน` 132 in 97 · 109). `counts {}`, nothing overflows or clips. Medium 100 · 196 · 524, Small 100 · 196 · 472. past T4's two lines at every size, so in code it is a copy problem at standard sizes and the switch case at AX sizes. Still to confirm in code: Thai breaks between words. `counts {}`. Large 128 · 260 · 680, Medium 108 · 204 · 532, Small 104 · 200 · 476.
+- [x] 4. Not by colour alone: on `iOS=False` the selected segment is outlined (14.66 · 16.48). A disabled segment (the Item's `State=Disabled`) dims its label, and a disabled control (the set's `State=Disabled`,) dims the whole control to 50%, as the kit's; Focus draws a stroke, and Skeleton is its shape.
+- [x] 5. Focus ring: a 2 `Focus/focus` stroke inside the focused segment, on the Item (call 11), not outside the Container.
+- [x] 6. The check's long unspaced phrase takes 4 · 6 · 10 lines: past T4's two lines at every size, so in code it is a copy problem at standard sizes and the switch case at AX sizes. Still to confirm in code: Thai breaks between words.
 - [x] 7. No text under 11 pt: the smallest is Subheadline (15).
 - [x] 8. The Motion part names each transition's token, Reduced-motion form and haptic.
 - [x] 9. Role, accessible name, announced states and focus order:

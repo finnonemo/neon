@@ -113,7 +113,7 @@ The draw-in is an app behaviour, not a Figma variant. Haptics are the architectu
 - [ ] 3. N/A: not a field.
 - [x] 4. **No meaning by colour alone**: the green and red mean gain and loss only beside text. The chart's accessible name states the change in words and a sign, and the host's header value carries the sign, an arrow and the percentage (Q5). A chart in `Neutral` is not "no change" by colour; the name says so.
 - [ ] 5. To check once built: the Plot is one focus stop (the period selector has its own, in reading order after it), with Focus ring on the Plot's outline.
-- [ ] 6. the readout and axis labels grow in height and the plot keeps its height;
+- [ ] 6. Segmented control's own switch at AX sizes applies to the selector ([segmented-control.md](segmented-control.md)).
 - [x] 7. No text under 11 pt: the smallest label is 12.
 - [x] 8. Motion table above.
 - [ ] 9. Role, accessible name, announced states:

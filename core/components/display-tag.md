@@ -69,7 +69,7 @@ Matched to Uber Base's Tag on 2026-11-02 (Light; Uber has no Dark here), then ev
 - Before this pass, Primary fills were `<C>/100` with a `<C>/10` label (Light Grey `Navy/100`; Indigo `Indigo/100` with `Indigo/10`).
 - Uber's Light fills, for reference: grey `#727272`, green `#0e8345`, blue `#276ef1`, red `#de1135`, orange `#c54600`.
 - The hover steps drop 4–10 L\*. The palette spacing is uneven, so Orange and Light Grey drop the most.
-- Light Grey's Dark label stayed `/100` (`/115` was 4.01:1 on its Dark tint) until #721: Light Grey, Green and Blue's Dark labels went one step lighter (`Light Grey/75`, `Green/110`, `Blue/120`, 2026-11-10) so they pass 4.5:1 on Selection Tag's Dark Hover fill too. At rest here: 6.45, 5.75 and 5.40:1 (was 5.40, 5.11 and 5.04) over `layer-02`, the lowest Base surface.
+- Light Grey's Dark label stayed `/100` (`/115` was 4.01:1 on its Dark tint) until #721: Light Grey, Green and Blue's Dark labels went one step lighter (`Light Grey/75`, `Green/110`, `Blue/120`, 2026-11-10) so they pass 4.5:1 on Selection Tag's Dark Hover fill too. At rest here: 6.45, 5.75 and 5.40:1 over `layer-02`, the lowest Base surface.
 
 Kept, with why:
 - **Yellow** stays a light chip: a `Yellow/100` fill with a `Yellow/185` label, a `Yellow/160` Secondary label and a `Yellow/185` Tertiary label (the nearest passing step). At L\* ~42, Yellow turns olive. Uber's amber `#f6bc2f` has no near step in our lemon Yellow.
@@ -124,7 +124,7 @@ None: a static label.
   | Small | 76 × 24 | 101 × 34 | 160 × 56 |
   | XSmall | 68 × 20 | 93 × 30 | 151 × 50 |
 
-The new Container uses min-height and hugs, so it grows instead (the owner's call).
+The live set's Fixed height clipped here. The new Container uses min-height and hugs, so it grows instead (the owner's call).
 - [x] 7. No text under 11 pt: Caption 1 (12) is the smallest.
 - [x] 8. Motion: None.
 - [x] 9. Role, name, states and focus order:

@@ -24,7 +24,7 @@ Snackbar (variant root)        Fill × Hug, no fill, no padding, VERTICAL
 
 - **Height**: 16 + 24 + 16 = 56 for one line, Uber's. The 48 Button and Icon button sit inside it. Copy that wraps grows the Snackbar 24 a line.
 - **Right padding**: 16 at Action=None, 4 next to the buttons, Uber's.
-- **Gaps**: The button's own 48 box supplies the inset, as Icon button does on In-line banner.
+- **Gaps**: 16 between icon and text (the Container's 8 plus `Leading`'s right padding 8), 8 between text and button, Uber's. The button's own 48 box supplies the inset, as Icon button does on In-line banner.
 - **Top-aligned leading**: on a wrapped message the icon stays by the first line, as Carbon's does. The buttons stay centred.
 - **Shadow**: the effect is the map's raw values until an `Elevation/Floating` style exists (Calls).
 
@@ -34,10 +34,10 @@ Snackbar (variant root)        Fill × Hug, no fill, no padding, VERTICAL
 | --- | --- | --- |
 | `Leading` | Icon · None · Loading | which of `Icon`, `Loading` or nothing shows (Q2) |
 | `Status` | Info · Success · Warning · Error | the glyph and its colour; the announcement (Accessibility). Only Info at Leading=None and Loading |
-| `Action` | None · Button | Button brings Close |
+| `Action` | None · Button | which buttons show, Container padding right (Q3,): Button brings Close |
 
 - **Sparse**: Leading=Icon takes all four Statuses; None and Loading take Info only, since nothing on the surface shows a Status there. As Button's Brand cells, the other combinations are not built.
-- **Count**: 36 before).
+- **Count**: (4 + 1 + 1) × 2 × 2 = **24 variants** (36 before).
 - **Properties**: TEXT `Description text` ("Message"); the Button's `Label Text` ("Undo") reaches the set as the nested instance's exposed property. The glyph is the `Icon` layer's text, as List item's leading icon, so `Failure` and `Deleted` are a glyph change, not a Status (Q2).
 - **Grid order**: rows by `Leading` × `Status` (Icon Info … Icon Error, None, Loading), columns `Action` × `iOS`, False before True in each pair (Grid order).
 
@@ -48,9 +48,9 @@ Snackbar (variant root)        Fill × Hug, no fill, no padding, VERTICAL
 | Group | Keyed by | Properties | Values |
 | --- | --- | --- | --- |
 | `Snackbar/Container/<Action>` | `Action` | Layout horizontal, Layout vertical, Min height, Gap horizontal, Padding left, Padding right, Padding top / bottom, Radius | `Fill container`, `Hug contents`, 56 (raw), 8 (`Spacing/spacing-03 = 8`), 16 (`Spacing/spacing-05 = 16`), None 16 (`spacing-05`) · Button 4 (`Spacing/spacing-02 = 4`), 0 (`Spacing/spacing-00 = 0`), `Radius/16px (radius-lg) = 16` |
-| `Snackbar/Leading/Default` | none varies | Padding top / bottom, Padding right |  |
+| `Snackbar/Leading/Default` | none varies | Padding top / bottom, Padding right | 16 (`spacing-05`), 8 (`Spacing/spacing-03 = 8`,) |
 | `Snackbar/Text/Default` | none varies | Layout horizontal, Padding top / bottom, Gap vertical | `Fill container`, 16 (`spacing-05`), 0 (`spacing-00`) |
-| `Snackbar/Label/Description` | role | Type token, Type emphasis, Align horizontal, Align vertical, Decoration |  |
+| `Snackbar/Label/Description` | role | Type token, Type emphasis, Align horizontal, Align vertical, Decoration | `$callout`, `Regular`, `Left`, `Top`, `-` |
 | `Snackbar/Icon/Medium` | Icon step | Type token, Layout width, Layout height | `fa-sharp fa-solid/Medium`, 24, 24 (the Icon box) |
 
 - **Template**: `Components/Snackbar/Container/{{Action=*}}/<Property>`. The other groups are `Default`.
@@ -96,7 +96,7 @@ Snackbar (variant root)        Fill × Hug, no fill, no padding, VERTICAL
 
 | Layer | Text style | Lines | Text property |
 | --- | --- | --- | --- |
-| `Description` | `Body/Callout` (`$callout`, 16/24 Regular, Uber's Paragraph Medium 16 | wraps, no line limit | `Description text` |
+| `Description` | `Body/Callout` (`$callout`, 16/24 Regular, Uber's Paragraph Medium 16) | wraps, no line limit | `Description text` |
 | Action label | the Button's (Medium) | one line | `Label Text` |
 
 - **One text line, no title**: Uber, v2 Snackbar and every Port toast carry one message (Q6).
@@ -119,8 +119,10 @@ Snackbar (variant root)        Fill × Hug, no fill, no padding, VERTICAL
 
 - **Haptic**: none on appearing. An outcome's `Success` or `Error` haptic is the Pattern's.
 - **Movement**: `slide-full`, the Snackbar's own height up from the bottom edge, with its fade. Movement from Motion and haptics, the owner's D6 (ads-tokens.md § 5), edited in place at the owner's word ("Edit directly", #811, 2026-11-11).
-- **Direction**: from the bottom edge, where a Pattern places it (Usage):
-- Core's motion is Carbon's six durations and productive easings, the longest `slow-02`, 700 ms (Motion). On iOS `moderate-02` stands for a `.smooth` spring.
+- **Direction**: from the bottom edge, where a Pattern places it (Usage): the Finnomena apps show it above the Tab bar or Button dock, so Uber's top placement is not taken.
+- **Not Uber's 1000 ms quintic ease-out**: Core's motion is Carbon's six durations and productive easings, the longest `slow-02`, 700 ms (Motion). On iOS `moderate-02` stands for a `.smooth` spring.
+
+**Time on screen** (Q4,), timing under WCAG 2.2.1, not motion:
 
 | Action | Leaves | Who can keep it |
 | --- | --- | --- |
@@ -137,7 +139,7 @@ Snackbar (variant root)        Fill × Hug, no fill, no padding, VERTICAL
 - [x] 3. Not a field.
 - [x] 4. Status is never colour alone: a glyph per Status and the message say it.
 - [ ] 5. Focus ring: the nested Button's and Icon button's own, `iOS=False` only, in `focus-inverse` on `Type=Inverse` (Q9; `focus` would be 4.83 / 4.35). To check on the base.
-- [ ] 6. the message wraps and the Snackbar grows; the Button label stays on one line.
+- [ ] 6. the Button label stays on one line.
 - [x] 7. No text under 11: Callout 16 is the smallest.
 - [x] 8. Motion part above, with time on screen.
 - [ ] 9. Role, name, states:
@@ -151,11 +153,12 @@ Snackbar (variant root)        Fill × Hug, no fill, no padding, VERTICAL
 
 ## Usage
 
-- **Placement**: A Pattern places it; the placement isn't an axis.
+- **Placement**: one Snackbar at a time, at the bottom, 16 from each side, above a Tab bar or a Button dock, where the Finnomena apps show it. A Pattern places it; the placement isn't an axis.
 - **Use it** only after a user action, for feedback, an acknowledgement or a follow-up (Uber).
   - It sits over the content and follows the user forward and back through navigation.
   - One at a time: the next waits until the current one leaves. A Loading Snackbar is the one that is replaced, by its outcome, as soon as it lands.
   - It leaves on a swipe (phone), its action, Close or its timer.
+- **Content** (Uber's rules in Thai):
   - Brief: one or two lines.
   - Specific: name what the user just did. "ทำรายการไม่ได้" names nothing; "ส่งคำสั่งซื้อไม่สำเร็จ" does.
   - Declarative: it reports what happened. Never a question.
@@ -169,10 +172,8 @@ Snackbar (variant root)        Fill × Hug, no fill, no padding, VERTICAL
   - `Status=Info, Action=Button`: `เพิ่มกองทุนในรายการโปรดแล้ว`, action `ดูรายการ`.
   - `Leading=Loading, Action=Button`: `กำลังส่งคำสั่งซื้อ`, action `ยกเลิก`, replaced by `ส่งคำสั่งซื้อแล้ว` (Success) when it lands.
   - Port's `มี 2 แผนที่มีคำแนะนำจากที่ปรึกษา` is not a Snackbar: no user action prompts it. It is an In-line banner or a Contextual banner.
-- **Both looks**:
 - **Focus ring**: shown once, on the Close of an `iOS=False` Button Snackbar.
-- Success with no action, Error with `ลองอีกครั้ง`, the same on `iOS=False`, Undo (`Leading=None`, `เลิกทำ`), `ดูรายการ`, Loading with `ยกเลิก` above its Success outcome, and Close in Focus on `iOS=False`; the Don'ts listed under them, with the Error one added 2026-11-06. The samples set only component properties and text (`usage-overrides.js`: no gaps). A Thai message carries zero-width spaces between words (`เพิ่ม​กองทุน​ใน​รายการโปรด​แล้ว`), since Figma breaks unspaced Thai at any letter.
-- **Don't**:
+- the Don'ts listed under them, with the Error one added 2026-11-06. The samples set only component properties and text (`usage-overrides.js`: no gaps). A Thai message carries zero-width spaces between words (`เพิ่ม​กองทุน​ใน​รายการโปรด​แล้ว`), since Figma breaks unspaced Thai at any letter.
   - Stack Snackbars. The next one waits until the current one leaves.
   - Show one the user didn't cause: not system-prompted, not engagement or promotion ("ลองฟีเจอร์ใหม่"), not critical or emergency messages. Those are a banner or a Dialog: a timed message can't carry what a user must read.
   - Colour it by Status. It stays grey; colour is a banner's.

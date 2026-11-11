@@ -259,7 +259,8 @@
   "variables": {
     "Toggletip/Definition/Container/Default/Stroke weight": 2,
     "Toggletip/Definition/Line/Default/Stroke weight": 1,
-    "Toggletip/Definition/Label/Term/Type token": "$subhead"
+    "Toggletip/Definition/Label/Term/Type token": "$subhead",
+    "Interactive/Medium/Interactive min-height": 48
   },
   "bindings": [
     {"layer":"(root)","property":"layoutMode","when":"{{State=*}}","value":"VERTICAL","literal":true},

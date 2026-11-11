@@ -15,8 +15,8 @@
     "core": "button"
   },
   "button-group": {
-    "core": null,
-    "why": "Core has no joined group of Buttons. Its Button dock stacks or splits whole Buttons at the bottom of a screen."
+    "core": "button",
+    "why": "Each button in the group matches Button. Core has no joined group of Buttons: its Button dock stacks or splits whole Buttons at the bottom of a screen."
   },
   "calendar": {
     "core": null,

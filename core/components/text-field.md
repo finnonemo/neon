@@ -115,14 +115,12 @@ Height growth from #115's Thai line heights: 114 · 105 · 92 → **120 · 112 �
 - [x] 2. Meaningful non-text parts pass 3:1: the Focus / Active / Error / Success stroke, the Status and Detail glyphs. Incomplete and Complete glyphs use `text-negative` / `text-positive` because `icon-negative` (Dark 2.55:1) and `icon-positive` (Light 2.80:1) miss 3:1 on the Field (issues.md).
 - [x] 3. The field is identified by more than its fill: the Title above, placeholder or value inside, stroke 2 on Focus, Active and Error (Filled fields).
 - [x] 4. No state by colour alone: Error and Success carry a glyph and a message, Incomplete / Warning / Complete a glyph, Loading a spinner, Disabled the dimmed text, Read-only its outline.
-- [x] 5. The Focus ring sits outside the Field: It is a 2 px `Focus/focus` stroke 4 outside the Field (a 2 px gap), radius 12 (8 + 4), around a filled `State=Enabled` field with Thai copy. `State=Focus` is editing, not keyboard focus.
-- [x] 6. nothing clipped. The Field hugs its value above its min height. A long placeholder ends in "…" on one line. A long value no longer does in Figma: `Input text` is Hug, auto width since the owner's 2026-11-02 call, so it runs on past the Field (code still cuts it to one line).
+- [x] 5. It is a 2 px `Focus/focus` stroke 4 outside the Field (a 2 px gap), radius 12 (8 + 4), around a filled `State=Enabled` field with Thai copy. `State=Focus` is editing, not keyboard focus.
+- [x] 6. The Field hugs its value above its min height. A long placeholder ends in "…" on one line. A long value no longer does in Figma: `Input text` is Hug, auto width since the owner's 2026-11-02 call, so it runs on past the Field (code still cuts it to one line).
 
   | Mode | Variant (Large · Medium · Small, Active) | Field (L · M · S) | Value line (L · M · S) | Action glyph box | Clipped |
   | --- | --- | --- | --- | --- | --- |
   | `Large` | 120 · 112 · 100 | 56 · 48 · 36 | 24 · 24 · 24 | 24 | none |
-  |  | 140 · 128 · 116 | 56 · 48 · 36 | 36 · 32 · 32 | 34 | none |
-  |  | 180 · 180 · 172 | 56 · 56 · 52 | 56 · 56 · 52 | 58 | none |
 
 Checked on Active, Error and Loading at each Size, plus Small Active with a long Thai value and Small Enabled with a long placeholder (both truncated then, when `Input text` was Fill). Nothing clips it: Field, slot and Item have clip off. A screenshot of the check frame shows the glyph's ink inside the Field; the ink bounds weren't measured.
 - [x] 7. No text under 11 pt: the smallest is Subheadline.

@@ -35,7 +35,7 @@ Tooltip (variant root)         Hug × Hug, no fill, no padding: the trigger's si
 ```
 
 - The tip meets the trigger's 48 box, 12 from a Small Icon button's glyph (Toggletip's R7), not Uber's 4 from the glyph.
-- Definition hugs its term, so at Left and Right the tip would touch it: there the Item's `Caret` pads the pointer 4 (`Spacing/spacing-02`, R5; The overflow can't carry the gap: Figma widens a 0-wide frame to its padding, so the instance would grow past the term.
+- Definition hugs its term, so at Left and Right the tip would touch it: there the Item's `Caret` pads the pointer 4 (`Spacing/spacing-02`, R5; 8 before) off the term (`paddingRight` at Left, `paddingLeft` at Right, an override on the nested item). The overflow can't carry the gap: Figma widens a 0-wide frame to its padding, so the instance would grow past the term.
 - The set clips its own view of open tips; an instance on a screen doesn't (Toggletip's R7).
 - No Slots. Nested public instance: Icon button. Private parts: `_Tooltip item`, `_Toggletip definition`, `_Toggletip caret`.
 
@@ -47,7 +47,7 @@ Tooltip (variant root)         Hug × Hug, no fill, no padding: the trigger's si
 | --- | --- | --- |
 | `Position` | Top · Bottom · Left · Right | Container direction, the Caret's index and padding, the Pointer's Direction (T2) |
 | `Alignment` | Center · Start · End | Container's cross-axis alignment; Left and Right only at Center (`exclude`) |
-| `Size` | Small · Medium · Large | the Surface's padding, the Label's max width, the Pointer's Size (R1 |
+| `Size` | Small · Medium · Large | the Surface's padding, the Label's max width, the Pointer's Size (R1; Large,) |
 
 Properties: TEXT `Label`. (4 × 3 − 4 excluded) × 3 = **24 variants**, placed by hand as three compasses (Small, Medium, Large, top to bottom; Build log).
 
@@ -62,7 +62,7 @@ Properties: TEXT `Label`. (4 × 3 − 4 excluded) × 3 = **24 variants**, placed
 
 Properties: none of its own; the exposed Item shows `Label`, the exposed Icon button its glyph, the Definition its `Term`. 2 × 8 × 2 = **32 variants**.
 
-`_Toggletip caret` after T3: `Style` Raised · Inverse × `Direction` Up · Down · Left · Right, Raised × Left and Right excluded: 8 − 2 = **6 variants** (built 2026-11-10; 2 before). 6 + 4 = **10 variants**.
+`_Toggletip caret` after T3: `Style` Raised · Inverse × `Direction` Up · Down · Left · Right, Raised × Left and Right excluded: 8 − 2 = **6 variants** (built 2026-11-10; 2 before). (R3) adds `Size` Large · Small, Small Inverse only: 6 + 4 = **10 variants**.
 
 ## Component variables and Theme tokens
 
@@ -70,12 +70,12 @@ Properties: none of its own; the exposed Item shows `Label`, the exposed Icon bu
 
 | Group | Keyed by | Properties | Values |
 | --- | --- | --- | --- |
-| `Tooltip/Surface/Small`, `/Medium`, `/Large` | `Size` | Padding top, Padding bottom, Padding left, Padding right, Radius | Small 2 (`Spacing/spacing-01 = 2`), 2; Medium 8 (`Spacing/spacing-03 = 8`), 8; `Default` was 12 · 16) |
+| `Tooltip/Surface/Small`, `/Medium`, `/Large` | `Size` | Padding top, Padding bottom, Padding left, Padding right, Radius | Small 2 (`Spacing/spacing-01 = 2`), 2; Medium 8 (`Spacing/spacing-03 = 8`), 8; Large 16 (`Spacing/spacing-05 = 16`), 16; all 16 (`Spacing/spacing-05 = 16`), 16, 8 (`Radius/8px (radius-sm) = 8`) (`Default` was 12 · 16) |
 | `Tooltip/Caret/Top`, `/Bottom`, `/Left`, `/Right` | `Position` | Padding left, Padding right | 16 (`Spacing/spacing-05 = 16`) at Top and Bottom (Medium and Large); 0 (`Spacing/spacing-00 = 0`) at Left and Right |
 | `Tooltip/Caret/Small` | `Size` (Small at Top and Bottom; Medium and Left · Right use the Position rows) | Padding left, Padding right | 20, raw (off the Spacing scale, as List item's 14): 24 less half the 8 caret (R7) |
-| `Tooltip/Label/Small`, `/Medium`, `/Large` | `Size` | Type token, Layout max-width | for code only: Figma binds no variable to a TEXT layer's max width, so the Label's cap is a literal, as Button's 200 is) |
+| `Tooltip/Label/Small`, `/Medium`, `/Large` | `Size` | Type token, Layout max-width | `$subheadline` (R1; `$footnote` in); 176 (Small), 144 (Medium), 256 (Large,) (for code only: Figma binds no variable to a TEXT layer's max width, so the Label's cap is a literal, as Button's 200 is) |
 
-The Pointer brings its own size and stroke weight (`Toggletip/Caret/Default/…` for Large, unchanged; `Toggletip/Caret/Small/…` for Small, R3). The public `Tooltip` adds no variables.
+The Pointer brings its own size and stroke weight (`Toggletip/Caret/Default/…` for Large, unchanged; `Toggletip/Caret/Small/…` for Small, R3). The public `Tooltip` adds no variables. 31 `Tooltip/…` variables (24 before).
 
 `Theme`: the Semantic tokens Carbon's Tooltip binds; none minted.
 
@@ -95,7 +95,7 @@ None of its own. The trigger's glyph is the Icon button's (Small).
 
 | Layer | Text style | Lines | Text property |
 | --- | --- | --- | --- |
-| `Label` |  | one line by copy; wraps past 176 (Small), 144 (Medium) or 256 (Large), never truncates, no `maxLines` (T6, R4) | `Label` |
+| `Label` | `Body/Subheadline` 15/24 (R1; `Utility/Footnote` 13/20 in) | one line by copy; wraps past 176 (Small), 144 (Medium) or 256 (Large), never truncates, no `maxLines` (T6, R4) | `Label` |
 | `Term` | `_Toggletip definition`'s (Subheadline) | one line | the part's `Term` |
 
 ## Hit target and Skeleton
@@ -120,7 +120,7 @@ Timing, not motion (as Snackbar's time on screen): it opens after 100 ms of hove
 - [x] 4. Nothing shown by colour, motion or a haptic alone.
 - [x] 5. N/A for the tip (not focusable). The trigger brings its own Focus ring; `Visible=True` pins it Enabled.
 - [x] 6. reflow-check's only hits are the caret's triangle clipped by its own box, which is how the caret is drawn (in every mode, Large too). The public set's triggers report the same hits as Toggletip's (Build log).
-- [x] 7. Smallest text:
+- [x] 7. Smallest text: Subheadline 15 (Footnote 13 in).
 - [x] 8. Motion part above.
 - [ ] 9. WCAG 1.4.13: dismissible (Esc, without moving the pointer or focus), hoverable (the pointer can move onto the tip without it closing), persistent (it stays until hover or focus leaves or Esc). Role, name, states:
 
@@ -135,7 +135,7 @@ Timing, not motion (as Snackbar's time on screen): it opens after 100 ms of hove
 
 Samples in Thai, both Theme modes, in the page's `Usage` frame:
 
-- An icon-only button named:
+- An icon-only button named: a header's search Icon button with `ค้นหากองทุน`, Bottom · End, since the button sits at the screen's right edge.
 - A term defined on web: `NAV` with `มูลค่าทรัพย์สินสุทธิต่อหน่วย`, Top · Start, beside its figure.
 - Left and Right once each: a `house` button at the left edge (Right, `หน้าหลัก`) and a `gear` button at the right edge (Left, `ตั้งค่า`).
 - Don'ts: a link or a button in a tip (use Toggletip); a status or an error (use Snackbar or the field's helper text); a tooltip on iPhone; a tip on a button that already has a visible label, or holding what the user needs to finish the task.

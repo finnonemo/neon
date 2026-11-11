@@ -29,24 +29,23 @@ Button dock (variant root)          Fill × Hug, no fill, no padding, VERTICAL
 - **Order.** Side by side, Secondary is first (left) and Primary last (right): Carbon's modal footer, the kit's example and v2's XR. Stacked, Primary is on top: Carbon and Base.
 - **Exposed Buttons.** Both are exposed instances, so their own `Label Text`, icons and `State` show on the dock, as Toggletip exposes its footer Button ([toggletip.md](toggletip.md)). The dock has no TEXT property of its own.
 - **The hairline is a layer**, so `Overflow` can bind its visibility (a BOOLEAN binds `visible`, not a stroke). Carbon's Toolbar - iOS draws the same line as a top stroke; the token is the same.
-- **Kit parts** sit unchanged on the kit's variables. not exposed, since its only properties are Device and Orientation; BOOLEAN `Home indicator` instead).
+- **Kit parts** sit unchanged on the kit's variables. The home indicator is an exposed instance, so its own `Show Home Indicator` is the designer's toggle and the dock needs no BOOLEAN of its own (call 5) (reversed by not exposed, since its only properties are Device and Orientation; BOOLEAN `Home indicator` instead).
 - **Accessory** is a Slot (`Show Accessory` beside it, per the Slot naming rule). Its content isn't pinned; Checkbox has no `iOS` axis, so nothing goes stale between looks.
 
 ## Axes
 
 | Axis | Values (default first) | Drives |
 | --- | --- | --- |
-| `Layout` | Stacked · Two · Three · One · Split (call 1 | Stacked: Primary over the bottom button, both full width, the default and the AX-size form of Two and Three; Two: the bottom button and Primary side by side, equal halves; Three: three equal related actions side by side, a third each, all Secondary, no Primary (H7); One: Primary alone; Split: wider than 600, Secondary and Primary at the trailing end and Button 3 · 4 at the leading end, each as wide as its label |
+| `Layout` | Stacked · Two · Three · One · Split (call 1; , ,) | Stacked: Primary over the bottom button, both full width, the default and the AX-size form of Two and Three; Two: the bottom button and Primary side by side, equal halves; Three: three equal related actions side by side, a third each, all Secondary, no Primary (H7); One: Primary alone; Split: wider than 600, Secondary and Primary at the trailing end and Button 3 · 4 at the leading end, each as wide as its label |
 
 Properties (as built):
-- `Overflow` (BOOLEAN, default True):
-- `Top spacing` (BOOLEAN, default True):
+- `Top spacing` (BOOLEAN, default True): the 16 above the dock content.
 - `Show Accessory` (BOOLEAN, default False) and the `Accessory` SLOT.
-- `Button 3` and `Button 4` (BOOLEAN, default False; Stacked and Split): up to two more Secondary actions;
-- `Home indicator` (BOOLEAN, default True;
+- `Button 3` and `Button 4` (BOOLEAN, default False; Stacked and Split): up to two more Secondary actions; `Button 4` shows with `Button 3`.
+- `Home indicator` (BOOLEAN, default True).
 - The exposed Buttons' own properties (`Label Text`, icons, `State`).
 
-The set's default variant is `Layout=Stacked, iOS=False`.
+5 × 2 = **10 variants**, 17 variables in `Components` (`Button dock/Container/<Default · Split>` × 6 each, `Actions/<Default · Split>` × 2 each, `Line/Default` × 1). The set's default variant is `Layout=Stacked, iOS=False`.
 
 ## Component variables and Theme tokens
 
@@ -68,7 +67,6 @@ The set's default variant is `Layout=Stacked, iOS=False`.
 | --- | --- | --- |
 | Container fill (`iOS=False`) | `Layer/layer-01` | the page under the dock |
 | Hairline fill (`iOS=False`) | `Border/border-subtle` | `Layer/layer-01` |
-|  | `Transparent` | n/a |
 
 Carbon's Toolbar - iOS binds these two, by these names (`border-subtle-00` is ours `border-subtle`); none minted. The throwaway's guess, `Background/background-primary`, is the page itself: the dock would vanish into it in Light (call 2).
 
@@ -98,7 +96,7 @@ The dock draws no text of its own and has no TEXT property: each nested part kee
 | `Middle` › label (`Three`) | Button's (`Size=Large`) | one line, never cut | the exposed Button's `Label Text` |
 | `Accessory` › Checkbox label | Checkbox's | wraps (Checkbox's rule) | the Checkbox's own, in the Slot |
 
-Side by side, each button is half the width less 4: about 167 on a 375 screen. A Thai label that doesn't fit on one line there is the case for `Layout=Stacked` (call 1); a label is never cut. On `Three` each is a third less the gaps: 109 at 343, where "สับเปลี่ยน" is 63 wide;
+Side by side, each button is half the width less 4: about 167 on a 375 screen. A Thai label that doesn't fit on one line there is the case for `Layout=Stacked` (call 1); a label is never cut. On `Three` each is a third less the gaps: 109 at 343, where "สับเปลี่ยน" is 63 wide; a label that won't fit is the case for `Stacked`.
 
 ## Hit target and Skeleton
 
@@ -136,18 +134,17 @@ None (#161). The dock is pinned and doesn't move; the scroll edge effect is the 
 
 Built 2026-11-06 in the `Usage` frame on `Button docks`: Light and Dark columns, each with these samples and a caption under each.
 
-- "ยืนยันการโอนเงิน" (Primary) over "ยกเลิก" (Tertiary, BD1). Cancel sits at the bottom; It is the layout at AX text sizes, or whenever a label might not fit half the width in every language (R2).
+- `Stacked`, the default: "ยืนยันการโอนเงิน" (Primary) over "ยกเลิก" (Tertiary, BD1). Cancel sits at the bottom; with no Cancel, Primary is nearest the thumb. It is the layout at AX text sizes, or whenever a label might not fit half the width in every language (R2).
 - `Two` (`iOS=False`): "ยกเลิก" (Tertiary) · "ยืนยัน", only when both labels fit half the width in every language.
-- "ดำเนินการต่อ", with `Overflow`:
-- `Top spacing` and `Overflow` off (`Three`, `iOS=False`):
-- Checkbox "ฉันยอมรับข้อกำหนดและเงื่อนไข" over "เปิดบัญชี".
+- `One`: "ดำเนินการต่อ", with `Overflow`: the hairline (`iOS=False`) or the scroll edge effect shows only while content scrolls under the dock.
+- `Top spacing` and `Overflow` off (`Three`, `iOS=False`): "ซื้อ" · "ขาย" · "สับเปลี่ยน", three equal related actions, all Secondary, no Primary (H7,), for content above that already leaves room (R5).
+- `Show Accessory`: Checkbox "ฉันยอมรับข้อกำหนดและเงื่อนไข" over "เปิดบัญชี".
 - Four actions on `Stacked` (`iOS=False`): Button 4 "ลบรายการ" (Danger, at the top, farthest from the thumb), Button 3 "บันทึกแบบร่าง", Primary "ส่งคำขอ", "ยกเลิก". Four at most, all Large (R3).
 - Focus, once, on Primary (`Two`, `iOS=False`): the ring is the Button's own.
 - `Split` at 1024 (`iOS=False`), for screens wider than 600 (R4): "บันทึกแบบร่าง" at the leading end, "ยกเลิก" · "ส่งคำขอ" at the trailing end, each as wide as its label.
 - Don'ts: more than four buttons or mixed sizes; side by side when a label might not fit half (Two) or a third (Three) of the width; Cancel on top of a stack; `Split` at 600 or narrower; Dialog or Sheet actions, or toolbar icons (they carry their own buttons).
 - Where it sits: pinned to a screen's bottom edge, full width. The Pattern or screen sets its max width and its placement on a wide screen; the set has no width axis (ADR 0013).
-- Not drawn:
-- What not to use it for, as first proposed: "more than two actions (a Menu or a second screen; Button 3 and Button 4, four at most).
+- What not to use it for, as first proposed: "more than two actions (a Menu or a second screen; Base's Button 3–4 and v2 Compact's Leading pair aren't carried over, assumption)" (reversed by Button 3 and Button 4, four at most).
 
 ### Hierarchy
 

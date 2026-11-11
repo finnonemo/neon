@@ -32,7 +32,8 @@
     "PIN code/Field/Default/Layout horizontal": "Hug contents",
     "PIN code/Field/Default/Layout vertical": "Hug contents",
     "PIN code/Field/Default/Gap horizontal": 4,
-    "PIN code/Icon/Medium/Type token": "fa-sharp fa-solid/Medium"
+    "PIN code/Icon/Medium/Type token": "fa-sharp fa-solid/Medium",
+    "Interactive/Medium/Interactive min-height": 48
   },
   "bindings": [
     {"layer":"(root)","property":"minWidth","when":"{{State=*}}","value":"Components/Interactive/Medium/Interactive min-height"},

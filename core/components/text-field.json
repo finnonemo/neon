@@ -260,7 +260,12 @@
     "Text field/Field/Small/Radius": 8,
     "Text field/Field/Small/Stroke weight": 3,
     "Text field/Icon/Large/Type token": "fa-sharp fa-solid/Large",
-    "Text field/Icon/Medium/Type token": "fa-sharp fa-solid/Medium"
+    "Text field/Icon/Medium/Type token": "fa-sharp fa-solid/Medium",
+    "Interactive/XSmall/Interactive min-height": 48,
+    "Interactive/Small/Interactive min-height": 48,
+    "Interactive/Medium/Interactive min-height": 48,
+    "Interactive/Large/Interactive min-height": 56,
+    "Interactive/XLarge/Interactive min-height": 64
   },
   "bindings": [
     {"layer":"(root)","property":"minWidth","when":"{{Size=*}}","value":"Components/Interactive/{{Size=*}}/Interactive min-height"},

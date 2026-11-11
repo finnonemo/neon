@@ -19,7 +19,7 @@ Toggle, Style=Toggle only              Hug × Hug, min 48 × 48
    └─ _Toggle Item | _Toggle Skeleton Item
 ```
 
-`_Toggle Item` (`Size=Medium` × `State` Enabled · Read-only × `iOS` = 4 variants): no fill. The kit's `Toggle - Switch` no longer appears in any Toggle variant.
+no fill. The kit's `Toggle - Switch` no longer appears in any Toggle variant.
 
 ## Axes
 
@@ -37,18 +37,18 @@ Panel order isn't set by the plugin API. Live today: `State` is `Enabled · Disa
 
 `Components`, Tag's three-level shape. Track and Thumb are keyed by `iOS`, the axis that changes them; `Toggled` never reaches a path, so a trailing `True` / `False` is always `iOS` (Variant axes). `Toggle/Container/*` (the track) and the keyless `Toggle/Thumb/*` were renamed in place to `Track/False/*` and `Thumb/False/*`; `True/*` are new.
 
-| Group | Keyed by | Properties | True | False |
-| --- | --- | --- | --- | --- |
-| `Toggle/Track/<iOS>` | `iOS` | Layout horizontal / vertical | `Fixed` / `Hug contents` | same |
-|  |  | Layout width | 64 | 48 |
-|  |  | Gap horizontal | `spacing-03` (8) | `spacing-03` |
-|  |  | Padding left / right / top / bottom | `spacing-01` (2) | 3 (raw, off-scale) |
-|  |  | Radius | `Round (radius-round)` | same |
-|  |  | Stroke weight | 1 (`Sizing/stroke-default = 1`) | 1 (`Sizing/stroke-default = 1`) |
-| `Toggle/Thumb/<iOS>` | `iOS` | Layout horizontal / vertical | `Fixed` | `Fixed` |
-|  |  | Layout width × height | 38 × 24 | 18 × 18 |
-|  |  | Radius | `Round (radius-round)` | same |
-| `Toggle/Label/<Title · Value>` | role | Type token, Type emphasis, Align, Decoration | `$headline` Regular · `$subhead` Strong, Left / Top, `-` |  |
+| Group | Keyed by | Properties | Values |
+| --- | --- | --- | --- |
+| `Toggle/Track/<iOS>` | `iOS` | Layout horizontal / vertical | `Fixed` / `Hug contents` |
+|  |  | Layout width | 48 |
+|  |  | Gap horizontal | `spacing-03` |
+|  |  | Padding left / right / top / bottom | 3 (raw, off-scale) |
+|  |  | Radius | `Round (radius-round)` |
+|  |  | Stroke weight | 1 (`Sizing/stroke-default = 1`) |
+| `Toggle/Thumb/<iOS>` | `iOS` | Layout horizontal / vertical | `Fixed` |
+|  |  | Layout width × height | 18 × 18 |
+|  |  | Radius | `Round (radius-round)` |
+| `Toggle/Label/<Title · Value>` | role | Type token, Type emphasis, Align, Decoration | `$headline` Regular · `$subhead` Strong, Left / Top, `-` |
 
 40 variables. Root min width and height bind `Interactive/Medium/Interactive min-height` (48). The `_Toggle Switch` mains bound the deleted `Toggle/Thumb/Small/Radius`; they now bind `Toggle/Thumb/False/*`.
 
@@ -94,7 +94,6 @@ None: no icon.
 
 | Transition | Token | Reduced form | Haptic |
 | --- | --- | --- | --- |
-|  | System (`UISwitch`) | the system's | the system's |
 | Thumb travels, track fills, `iOS=False` | `fast-01 · standard` | thumb jumps, track crossfades | None |
 | Pressed | `fast-01 · standard` | kept (colour only) | None |
 | Skeleton | the Skeleton's own | static shape, no shimmer | None |

@@ -92,11 +92,11 @@ Pairs (the spec's `contrast` list): Icon (non-text) on the Container fill over e
 Items 2, 5 and 6 are not met.
 
 - [x] 1. N/A: no text. The glyph is checked under item 2.
-- [x] 2. Non-text: the Danger Secondary icon (`icon-negative`, `Red/145` · `Red/50` since 2026-11-09, H2) is 6.19 / 5.91 / 5.56:1 Light and 5.00 / 4.55 / 4.55:1 Dark on `button-secondary` / `-hover` / `-active` (Dark was 3.49 / 3.18 / 3.18 on `Red/75`, 2.40 / 2.18 / 2.18 on `Red/115`). Every other icon and the Focus stroke pass the contrast lint (`check-specs.sh`), with no known defect left. Limit:
+- [x] 2. Non-text: the Danger Secondary icon (`icon-negative`, `Red/145` · `Red/50` since 2026-11-09, H2) is 6.19 / 5.91 / 5.56:1 Light and 5.00 / 4.55 / 4.55:1 Dark on `button-secondary` / `-hover` / `-active` (Dark was 3.49 / 3.18 / 3.18 on `Red/75`, 2.40 / 2.18 / 2.18 on `Red/115`). Every other icon and the Focus stroke pass the contrast lint (`check-specs.sh`), with no known defect left.
 - [x] 3. N/A: not a field.
 - [x] 4. No state by colour alone: Disabled dims the icon, Loading shows a spinner, Skeleton drops the glyph, Focus adds a stroke.
 - [ ] 5. **The Focus ring isn't outside the Container**: `State=Focus` draws a 2 px `Focus/focus` stroke `INSIDE` the Container on all 60 Focus variants (both looks), not the 2 px ring with a 2 px gap outside it. The `iOS=False` Focus variants also carry the kit shadow (see Issues found). Owner's call, as on Button.
-- [ ] 6. Primary Default Enabled `iOS=False`, one per Size). The Container is Fixed and nothing clips (`clipsContent` false), so nothing grows and the glyph spills. Small's 36 pt fills its 36 edge to edge; XLarge just fits (1..63 in 64). the ink (19 pt) fits. iOS's answer for fixed bar buttons is the Large Content Viewer, not growth; which to follow is the owner's call.
+- [ ] 6. The Container is Fixed and nothing clips (`clipsContent` false), so nothing grows and the glyph spills. Small's 36 pt fills its 36 edge to edge; XLarge just fits (1..63 in 64). the ink (19 pt) fits. iOS's answer for fixed bar buttons is the Large Content Viewer, not growth; which to follow is the owner's call.
 - [x] 7. No text under 11 pt: no text; the smallest glyph is 13.
 - [x] 8. The Motion part names each transition.
 - [x] 9. Role, name, states and focus order:
@@ -113,5 +113,5 @@ Items 2, 5 and 6 are not met.
 - `Icon button` for an icon-only action in content or a bar; pin `iOS` (ADR 0005). A chevron at the end of a row isn't one (the row takes the tap), nor is a tab bar item (Small and Rect icon buttons).
 - Which `Hierarchy` to pick: [button.md › Hierarchy](button.md); Tertiary only inside a container with its own surface ([H3](../hierarchy.md)).
 - Danger for a destructive action: Secondary Danger at the entry point, Primary Danger only on the confirmation step ([H2](../hierarchy.md); Secondary Danger passes contrast since 2026-11-09).
-- Tertiary Inverse only on `Background/background-inverse` (Snackbar), for Close or a quiet action; Primary Inverse there for a filled call (, P2).
+- Tertiary Inverse only on `Background/background-inverse` (Snackbar), for Close or a quiet action; Primary Inverse there for a filled call (P2).
 - Primary and Secondary Inverse are also the white icon buttons over maps, photos and headers; Toolbars, Tab bars and Segmented controls use them on `iOS=False`. In Dark both are dark grey.

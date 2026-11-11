@@ -92,7 +92,8 @@
     "Link/Label/Small/Type token": "$footnote",
     "Link/Label/Small/Align horizontal": "Center",
     "Link/Label/Small/Align vertical": "Center",
-    "Link/Label/Small/Decoration": "-"
+    "Link/Label/Small/Decoration": "-",
+    "Interactive/Medium/Interactive min-height": 48
   },
   "bindings": [
     {"layer":"(root)","property":"minWidth","when":"{{Style=*}}{{State=*}}{{Size=*}}","value":"Components/Interactive/Medium/Interactive min-height"},

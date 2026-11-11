@@ -60,7 +60,7 @@ Tile (variant root)              Fill × Hug, no fill, no padding; min width and
 | `Trailing content` | None · Label · Badge · Chevron · Toggle · Checkbox · Radio | the `Content trailing` part. `Check` became `Checkbox`, as on List item |
 | `State` | Enabled · Active · Focus · Skeleton | Active: the Container's second fill; Focus: the `Focus ring`; Skeleton: the bars, the grey artwork, the controls' own Skeleton |
 | `Selected` | Off · On | the Container stroke; the Radio's and Checkbox's `Selection`, the Toggle's `Toggled` |
-| `Layout` | Stacked · Inline | Stacked: the parts above the Label block; Inline |
+| `Layout` | Stacked · Inline | Stacked: the parts above the Label block; Inline: one row, the labels in `Content top` beside the leading part |
 
 Excluded:
 
@@ -69,7 +69,7 @@ Excluded:
 - `Selected=On` with Skeleton.
 - On `Layout=Inline`: `Leading content=Label`; `Trailing content=Label`, `Checkbox`, `Radio`.
 
-Per `Leading content` column: Selection 6 trailing × 7 (`State` × `Selected`: Action 4 × 4 = 16. 65 × 5 columns = **325** `Stacked`; `Inline` per column but Label: **485 variants**.
+Action 4 × 4 = 16. 65 × 5 columns = **325** `Stacked`; `Inline` per column but Label: Selection None · Badge · Toggle = 28 + Action None · Badge · Chevron × 4 = 12, 40 × 4 = 160; **485 variants**.
 
 Properties: TEXT `Title text`, `Description text`, `Leading label text`, `Trailing label text`, `Trailing description text`; BOOLEAN `Description` (on), `Trailing description` (on), `Show Slot` (off); SLOT `Slot`. The glyph is the `Icon` layer's text and the artwork is `Artwork`'s image fill, not instance swaps.
 
@@ -77,7 +77,7 @@ Grid: columns `Leading content`; rows `Layout`, `Behavior`, `Trailing content`, 
 
 ## Component variables and Theme tokens
 
-`Components`, Tag's shape (structure.md, Carbon structure);
+`Components`, Tag's shape (structure.md, Carbon structure); 73 `Tile/…` variables, listed in the spec (`Container`, `Content` and `Content top` keyed by `Layout` since):
 
 | Group | Keyed by | Properties | Values |
 | --- | --- | --- | --- |
@@ -99,9 +99,9 @@ The Root's min width and min height bind `Interactive/Medium/Interactive min-hei
 
 | Layer · property | Condition | Core token | Paired with |
 | --- | --- | --- | --- |
-| Container fill |  | `Layer/layer-01` · `Layer/layer-02` (Light `Navy/5` #F2F3F4, Dark `Grey/85` #262626) | `Background/background-secondary` (decorative, Visuals) |
+| Container fill | Selection (not a Toggle row) · Action and a Toggle row | `Layer/layer-01` · `Layer/layer-02` (Light `Navy/5` #F2F3F4, Dark `Grey/85` #262626) | `Background/background-secondary` (decorative, Visuals) |
 | Container fill 1 | Active | `Layer/layer-active-01` over fill 0 (else `Transparent`) |  |
-| Container stroke | Selection Selected=Off · On; Action and a Toggle row | `Border/border-subtle` (decorative: it marks no state) · `Border/border-subtle-selected` | `layer-01` 18.12 / 17.40:1; `layer-active-01` over `layer-01` 15.43 / 12.08:1; `background-secondary` 16.19 / 21.00:1 |
+| Container stroke | Selection Selected=Off · On; Action and a Toggle row: `Transparent` | `Border/border-subtle` (decorative: it marks no state) · `Border/border-subtle-selected` | `layer-01` 18.12 / 17.40:1; `layer-active-01` over `layer-01` 15.43 / 12.08:1; `background-secondary` 16.19 / 21.00:1 |
 | Title, Leading label, Trailing label | Enabled, Active, Focus | `Text/text-primary` | `layer-01` 15.13 / 17.40:1; `layer-active-01` 13.37 / 12.08:1 |
 | Description, Trailing description | Enabled, Active, Focus | `Text/text-secondary` | `layer-01` 7.00 / 7.93:1; `layer-active-01` 6.57 / 6.16:1 |
 | Icon | not Skeleton | `Icon/icon-primary` | decorative beside the title |
@@ -156,7 +156,7 @@ From the per-component table of Motion and haptics (Tile: pressed, hover, select
 - [x] 3. N/A: not a field.
 - [x] 4. With a Toggle, Checkbox or Radio the control's own state shows the choice as well as the stroke. With a trailing None, Label or Badge (revision 2, item 4) the stroke alone shows it on screen; it is a 2 border at 12:1 or more, not a colour swap, and assistive tech announces the Selected state either way.
 - [x] 5. `State=Focus`: the ring sits outside the Container, a 2 gap then 2 `Focus/focus`, radius 20; 3.89 / 4.83:1 on `background-secondary`, 4.35 / 4.00:1 on `layer-01`. A focused selected tile shows both the ring and the stroke.
-- [ ] 6. last run on the 52-variant set (clean); to run again on the revision-2 set, the Label parts and the 36 Artwork large box first.
+- [ ] 6. to run again on the revision-2 set, the Label parts and the 36 Artwork large box first.
 - [x] 7. Smallest text is Subheadline 15.
 - [x] 8. Motion part above.
 - [x] 9. Role, name, states:

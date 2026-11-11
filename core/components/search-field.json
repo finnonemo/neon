@@ -58,7 +58,6 @@
     "Search field/Field/Large/Gap horizontal": 16,
     "Search field/Field/Large/Stroke weight": 3,
     "Search field/Field/Large/Radius": 8,
-    "Search field/Field/Large/Radius (iOS)": 200,
     "Search field/Field/Medium/Layout horizontal": "Fill container",
     "Search field/Field/Medium/Layout vertical": "Hug contents",
     "Search field/Field/Medium/Layout min-height": 48,
@@ -69,7 +68,6 @@
     "Search field/Field/Medium/Gap horizontal": 16,
     "Search field/Field/Medium/Stroke weight": 3,
     "Search field/Field/Medium/Radius": 8,
-    "Search field/Field/Medium/Radius (iOS)": 200,
     "Search field/Field/Small/Layout horizontal": "Fill container",
     "Search field/Field/Small/Layout vertical": "Hug contents",
     "Search field/Field/Small/Layout min-height": 36,
@@ -80,9 +78,13 @@
     "Search field/Field/Small/Gap horizontal": 16,
     "Search field/Field/Small/Stroke weight": 3,
     "Search field/Field/Small/Radius": 8,
-    "Search field/Field/Small/Radius (iOS)": 200,
     "Search field/Icon/Large/Type token": "fa-sharp fa-solid/Large",
-    "Search field/Icon/Medium/Type token": "fa-sharp fa-solid/Medium"
+    "Search field/Icon/Medium/Type token": "fa-sharp fa-solid/Medium",
+    "Interactive/XSmall/Interactive min-height": 48,
+    "Interactive/Small/Interactive min-height": 48,
+    "Interactive/Medium/Interactive min-height": 48,
+    "Interactive/Large/Interactive min-height": 56,
+    "Interactive/XLarge/Interactive min-height": 64
   },
   "bindings": [
     {"layer":"(root)","property":"minWidth","when":"{{Size=*}}","value":"Components/Interactive/{{Size=*}}/Interactive min-height"},

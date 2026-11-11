@@ -137,16 +137,14 @@ The stroke is 3, not the 2 that #171 and the Motion table name. The owner set Te
 - [x] 2. Meaningful non-text parts pass 3:1: the stroke on Focus, Active, Error and Success, the Warning glyph and the Detail glyphs (the same lint, no defects).
 - [x] 3. The field is identified by more than its fill: the Title above, placeholder or value inside, and stroke 3 on Focus, Active and Error (Filled fields).
 - [x] 4. No state is shown by colour alone. Error and Success carry a glyph and a message, Warning a glyph and a message, Disabled the dimmed text, Read-only its outline. Over the limit is an Error with a message, not only a red count.
-- [x] 5. The Focus ring sits outside the Field. 2 px `Focus/focus`, 4 outside the Field, radius 12.
-- [x] 6. nothing clipped. Checked on Active, Error and Warning at each Size with a long Thai value (`ปั๋ง ผู้ใหญ่ ฎู ฟุ้ง` and the long unspaced phrase), plus Small Enabled and Large Active with a long placeholder. Every text layer's render bounds stay inside its clipping ancestors, the Field grows with the value, and the counter stays one line;
+- [x] 5. The Focus ring sits outside the Field.
+- [x] 6. Checked on Active, Error and Warning at each Size with a long Thai value (`ปั๋ง ผู้ใหญ่ ฎู ฟุ้ง` and the long unspaced phrase), plus Small Enabled and Large Active with a long placeholder. Every text layer's render bounds stay inside its clipping ancestors, the Field grows with the value, and the counter stays one line;
 
   | Mode | Field, long value (Large · Medium · Small, Active) | Lines | Field, long placeholder (Small Enabled) |
   | --- | --- | --- | --- |
   | `Large` | 152 · 152 · 128 | 5 · 5 · 4 | 104 (3 lines, the min) |
-  |  | 248 · 224 · 224 | 6 · 6 · 6 | 160 |
-  |  | 536 · 536 · 500 | 9 · 9 · 9 | 344 |
 
-704, 12 lines).
+Warning is taller than Active where its glyph narrows the text column.
 - [x] 7. No text under 11 pt: the smallest is Subheadline.
 - [x] 8. The Motion part names each transition.
 - [x] 9. Role, name, states and focus order:

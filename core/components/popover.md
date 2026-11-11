@@ -39,7 +39,7 @@ Properties: SLOT `Content`. 12 × 2 = **24 variants**. The grid has one column p
 | `Popover/Surface/False` | `iOS` | Radius, Stroke weight | 12 (`Radius/12px (radius-md) = 12`), 1 (raw) |
 | `Popover/Content/Default` | none varies | Padding left / right / top / bottom | 16 (`Spacing/spacing-05 = 16`, P6) |
 
-Two values stay raw on purpose: The Arrow's size is the kit's (raw). Core's `iOS UI Kit` collection holds `Sheet/*` radii but no popover one; A4 asks whether to add one.
+The Arrow's size is the kit's (raw). Core's `iOS UI Kit` collection holds `Sheet/*` radii but no popover one; A4 asks whether to add one.
 
 No new Theme token. `iOS=False` binds the ones Toggletip and Menu bind (the Arrow too);
 
@@ -48,7 +48,7 @@ No new Theme token. `iOS=False` binds the ones Toggletip and Menu bind (the Arro
 | `Layer/layer-01` (Surface fill, `iOS=False`) | `White/100` | `Grey/90` | `Background/background-primary` (the page behind) |
 | `Border/border-subtle` (Surface stroke, `iOS=False`) | `Black/12A` | `White/18A` | `Layer/layer-01` |
 
-Contrast (`contrast.mjs`, 2026-11-11): `border-subtle` on `layer-01` 1.32 / 1.76 (Light / Dark); `layer-01` on `background-primary` 1.00 / 1.21. The surface's edge is drawn by the shadow and the border, not by contrast, as Toggletip's and a Tile's are (Visuals). The Popover draws no text of its own; The spec's `contrast` list does not apply (Spec: None).
+Contrast (`contrast.mjs`, 2026-11-11): `border-subtle` on `layer-01` 1.32 / 1.76 (Light / Dark); `layer-01` on `background-primary` 1.00 / 1.21. The surface's edge is drawn by the shadow and the border, not by contrast, as Toggletip's and a Tile's are (Visuals). The Popover draws no text of its own; the Slot's content brings its pairs on `layer-01`. The spec's `contrast` list does not apply (Spec: None).
 
 ## Icon records
 
@@ -67,7 +67,6 @@ None of its own: the Popover draws no text. The Slot's content brings its text s
 
 | Transition | Token | Reduced form | Haptic |
 | --- | --- | --- | --- |
-| presents, dismisses | System | System | System |
 | `iOS=False`: opens, fading and scaling from the Edge's side (the Menu's row) | `moderate-02 · entrance` | crossfade | None |
 | `iOS=False`: closes (tap outside, Esc, the anchor again) | `moderate-01 · exit` | crossfade | None |
 
@@ -78,7 +77,7 @@ None of its own: the Popover draws no text. The Slot's content brings its text s
 - [x] 3. N/A: not a field.
 - [x] 4. Nothing is shown by colour, motion or a haptic alone: the popover's presence is announced (item 9).
 - [x] 5. N/A: not focusable as a control; focus rings belong to the controls in the Slot.
-- [x] 6. `reflow-check.js` on `Edge=Top (Center)` at both looks with a Radio in the Slot (Thai copy): A Select in the Slot reads as overflowing at every mode, Large included: the check places the main's Fixed 343, where the Usage samples set it Fill. Past about half the screen the content scrolls (the Pattern's call, as Toggletip's).
+- [x] 6. A Select in the Slot reads as overflowing at every mode, Large included: the check places the main's Fixed 343, where the Usage samples set it Fill. Past about half the screen the content scrolls (the Pattern's call, as Toggletip's).
 - [x] 7. Smallest text: none of its own; the Slot's floor is the Thai 12 / 13.
 - [x] 8. The Motion part names each transition's token, Reduced form and haptic.
 - [ ] 9. Role, name, states and focus order (to confirm with engineering):
@@ -94,7 +93,7 @@ None of its own: the Popover draws no text. The Slot's content brings its text s
 
 The page's `Usage` frame (structure.md) shows, in Light and Dark, each look with the same Thai view in its Slot ("ตัวกรองกองทุน": a Radio group "ประเภทกองทุน", a Select "ระดับความเสี่ยง", a "ล้างค่า" Link and a Primary "ใช้ตัวกรอง" Button):
 
-- **Where it sits.** Width picks the component (ADR 0013, Regular width): at iPad's regular width and on web desktop, a Popover anchored to its control; at compact width the same view is a [Sheet](sheet.md): The Usage shows the iPhone case as that Sheet with the same Slot content, as the issue asks.
+- **Where it sits.** Width picks the component (ADR 0013, Regular width): at iPad's regular width and on web desktop, a Popover anchored to its control; The Usage shows the iPhone case as that Sheet with the same Slot content, as the issue asks.
 - **Edge samples**: the three Top and Bottom Centers, `Leading (Top)` and `Trailing (Top)`, at both looks, so a designer sees where the arrow lands; the rest are in the set. `iOS=False` repeats one surface and its Arrow (P2).
 - **Placement**: the Popover's edge sits 8 from its anchor (`spacing-03`, P7), hand-placed; at both looks the arrow's tip is the kit's 13, so the tip sits 8 from the anchor and the surface 21.
 - **Dismiss**: tap outside or Esc; a Primary or Secondary Button in the Slot ("Got it", "ใช้ตัวกรอง") for a view that needs one, as Base's Popover asks. No ✕ is built in (P9).

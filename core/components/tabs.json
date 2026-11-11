@@ -237,7 +237,8 @@
     "Tabs/Bar/Icon only/Layout height": 8,
     "Tabs/Bar/Icon only/Radius": 0,
     "Tabs/Bar/Icon only/Padding top": 8,
-    "Tabs/Bar/Icon only/Padding bottom": 8
+    "Tabs/Bar/Icon only/Padding bottom": 8,
+    "Interactive/Medium/Interactive min-height": 48
   },
   "bindings": [
     {"layer":"(root)","property":"minWidth","when":"{{State=*}}","value":"Components/Interactive/Medium/Interactive min-height"},

@@ -41,10 +41,10 @@ Theme tokens, Semantic only (ADR 0001); the Container fill is new, the inks chan
 | --- | --- | --- | --- |
 | Primary Enabled, Focus | `Text/text-primary` (unchanged) | `Transparent` | 13.87 / 15.13 |
 | Primary Hover | `Text/text-primary` | `Layer/layer-hover-01` (Navy/5A · White/8A) | 12.83 / 11.90 |
-| Primary Active | `Text/text-primary` (was `text-on-brand`, 1.00 in Dark) | `Layer/layer-active-01` (Navy/8A · White/12A) | 12.16 / 10.37 |
+| Primary Active | `Text/text-primary` | `Layer/layer-active-01` (Navy/8A · White/12A) | 12.16 / 10.37 |
 | Highlight Enabled, Focus | `Link/link-primary` (unchanged) | `Transparent` | 8.10 / 5.12 |
 | Highlight Hover | `Link/link-primary-hover` (unchanged) | `Transparent` | 9.73 / 10.24 |
-| Highlight Active | `Link/link-primary-hover` (was `text-on-brand`; Q7) | `Layer/layer-active-01` | 8.31 / 7.02 |
+| Highlight Active | `Link/link-primary-hover` (Q7) | `Layer/layer-active-01` | 8.31 / 7.02 |
 | Visited | `Link/link-visted` (unchanged) | `Transparent` | — |
 | Disabled | `Text/text-disabled` (unchanged) | `Transparent` | exempt (see Issues found) |
 
@@ -79,8 +79,8 @@ The spec's `contrast` list: the `Link` label (text) and the Focus ring.
 - [x] 2. The Focus ring is `Focus/focus`, unchanged.
 - [x] 3. N/A: not a field.
 - [x] 4. Hover and Active change a fill as well as the ink; Visited changes the ink only (as on the web).
-- [x] 5. The Focus ring is the Container's stroke, inside the 48 Root:
-- [ ] 6. Reflow: `reflow-check.js` on Primary Enabled at each Size (2026-11-05, Thai copy, 343 column): Open: Issues found.
+- [x] 5. The Focus ring is the Container's stroke, inside the 48 Root: drawn round the 32 Container on `Primary, Focus, Medium`, 2026-11-05.
+- [ ] 6. Open: Issues found.
 - [x] 7. Footnote (13) is the smallest text.
 - [x] 8. Motion above.
 - [x] 9. Role, accessible name, announced states and focus order:

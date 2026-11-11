@@ -37,14 +37,13 @@ Sheet - iPad (variant root)         Fixed 936 × 852, VERTICAL, padding top 16 (
 └─ Grabber                          as Sheet - iPhone; BOOLEAN `Show Grabber` (on: the kit's iPad sheet draws it; owner 2026-11-09)
 ```
 
-Header heights differ between the looks because the bars differ: Each detent's sheet height is the same in both looks, so `iOS=False`'s Content is 6 shorter. That is the bars' difference, not the sheet's.
+Header heights differ between the looks because the bars differ: Toolbar - Top - iPhone and - iPad are 58 in Core (kit 54, its 44 buttons at 48), Toolbar - Top is 64 (Toolbars). Each detent's sheet height is the same in both looks, so `iOS=False`'s Content is 6 shorter. That is the bars' difference, not the sheet's.
 
 ## Axes
 
-| Set | Axes (default first) | Variants |
-| --- | --- | --- |
-| `Sheet - iPhone` | `Detent` Medium · Large · Large (Stacked) × `iOS` True · False | 2 × 2 + 1 = **5** |
-| `Sheet - iPad` | `iOS` True · False | **2** |
+| Set | Axes (default first) |
+| --- | --- |
+| `Sheet - iPhone` | `Detent` Medium · Large · Large (Stacked) |
 
 - `iOS` is last, `True` first (ADR 0005). The grid has one column per `iOS`, with the `iOS=False` cell empty on `Large (Stacked)`, as Sidebar's `Floating Window`.
 - No width axis (ADR 0013).
@@ -87,7 +86,6 @@ None of its own: the title and subtitle are the Toolbar's (one line; Uber allows
 
 | Transition | Token | Reduced form | Haptic |
 | --- | --- | --- | --- |
-| present, change detent, dismiss | System | System | System |
 | `iOS=False`: presents, sliding up from off-screen to its detent | `slow-01 · entrance · slide-full` (Uber's 400 ms) | crossfade | None |
 | `iOS=False`: Dimming Layer fades in | `slow-02 · entrance` | crossfade | None |
 | `iOS=False`: changes detent (grabber tap or drag release) | `slow-01 · standard` | instant | None |
@@ -104,17 +102,17 @@ Movement from Motion and haptics, the owner's D6 (ads-tokens.md § 5), edited in
 - [x] 3. N/A: no field.
 - [x] 4. Modal state is shown by the Dimming Layer, by the system's or the web's modal semantics, and by the focus trap, not by colour alone.
 - [x] 5. Focus ring: the sheet takes no focus itself; its Header buttons and content bring their own rings.
-- [ ] 6. Reflow: Content scrolls; the Header and Footer stay put.
+- [ ] 6. Content scrolls; the Header and Footer stay put.
 - [x] 7. No text of its own.
 - [x] 8. Motion names System and the `iOS=False` tokens, reduced forms and haptic.
 - [x] 9. Role, name, states and order:
 
-|  |  | Android (`iOS=False`) | Web (`iOS=False`) |
-| --- | --- | --- | --- |
-| Role | a sheet presentation (`UISheetPresentationController`), `accessibilityViewIsModal`; the grabber is a button | `ModalBottomSheet` (or a standard bottom sheet when non-modal); the drag handle is a button | `role="dialog"` with `aria-modal="true"` when dimmed. A confirmation or warning is Alert's `alertdialog`, not a sheet |
-| Accessible name | the Header's title | the same; the handle "Drag handle" | `aria-labelledby` the Header's title |
-| Announced states | the detent the grabber moves to ("Expanded" / "Collapsed") | Expanded, Collapsed (the handle's actions also dismiss) | `aria-expanded` on the grabber where it changes detent |
-| Focus order | the Header (Leading, title, Trailing), Content, Footer; the escape gesture dismisses | the same; Back dismisses | focus goes to the first interactive element in it, or the primary button (Cancel in a danger sheet); Tab is trapped; Esc dismisses; the page behind doesn't scroll; focus returns to the trigger on close |
+|  | Android (`iOS=False`) | Web (`iOS=False`) |
+| --- | --- | --- |
+| Role | `ModalBottomSheet` (or a standard bottom sheet when non-modal); the drag handle is a button | `role="dialog"` with `aria-modal="true"` when dimmed. A confirmation or warning is Alert's `alertdialog`, not a sheet |
+| Accessible name | the same; the handle "Drag handle" | `aria-labelledby` the Header's title |
+| Announced states | Expanded, Collapsed (the handle's actions also dismiss) | `aria-expanded` on the grabber where it changes detent |
+| Focus order | the same; Back dismisses | focus goes to the first interactive element in it, or the primary button (Cancel in a danger sheet); Tab is trapped; Esc dismisses; the page behind doesn't scroll; focus returns to the trigger on close |
 
 A dimmed sheet keeps an explicit dismiss, X or Cancel. The scrim, Esc and swipe-down are supplemental (Uber, Sheet and Dialog).
 
@@ -125,13 +123,12 @@ A dimmed sheet keeps an explicit dismiss, X or Cancel. The scrim, Esc and swipe-
   - `Sheet - iPhone` Medium, both looks: "ตัวกรอง" (filters), trailing `xmark`, three List item rows, and a Button dock "ดูผลลัพธ์" in the Footer.
   - Large, both looks: "รายละเอียดคำสั่งซื้อ" with List items (Detail rows until 2026-11-09, swapped when Detail row was deprecated);
   - Non-modal: Medium with `Show Dimming Layer` off, over a screen (Uber's sheet over a map).
-  - Button dock R1), "ยกเลิก" and "บันทึก"; the Web sample the same.
+  - the Web sample the same.
   - Web at Regular width: `Sheet - iPad` `iOS=False` centred in a `Screen 1280`, per K8.
-- There is no `Sheet - iPhone Duo` set and no variant for it (ADR 0013: no product targets Duo), so a Duo screen places and sizes the sheet so. Apple's [Designing for iPhone Duo](https://developer.apple.com/design/human-interface-guidelines/designing-for-iphone-duo): the system moves a sheet off the fold by itself. Why the templates draw no fold:
-- **Screens column** (, #515): the sheet on a Screen at every size, beside Light and Dark, in five groups, each a `Screen <W>` wrapper (the Screen Template / Simple instance, its Content Area four List item control rows, the device bezel on top) over a Note naming the size and the detent. Sheet instances bind `iOS` to `Platform/iOS` as the samples do; a pinned `Platform` mode picks the look.
-  - **iPhone Duo** (10): Closed Portrait and Landscape, Inner Portrait and Landscape, and Half-folded, each Medium and Large. Closed (Compact): 450 wide in Portrait, 8 from each side; 662 × 458 in Landscape. Inner Portrait: 653 wide, 8 from each side. Inner Landscape: 653 wide, centred. Each Note gives the sheet's size and place. The kit's Duo Examples section stays as the kit's.
+- iPhone Duo **Half-folded**: Medium and Large sit in the left half of the inner display, 468 wide and 8 from its left edge, clear of the fold at x ≈ 475; open, they are 653 wide and centred. Small stays centred across the fold. There is no `Sheet - iPhone Duo` set and no variant for it (ADR 0013: no product targets Duo), so a Duo screen places and sizes the sheet so. Apple's [Designing for iPhone Duo](https://developer.apple.com/design/human-interface-guidelines/designing-for-iphone-duo): the system moves a sheet off the fold by itself. Why the templates draw no fold: Screen templates .
+- **Screens column** (#515): the sheet on a Screen at every size, beside Light and Dark, in five groups, each a `Screen <W>` wrapper (the Screen Template / Simple instance, its Content Area four List item control rows, the device bezel on top) over a Note naming the size and the detent. Sheet instances bind `iOS` to `Platform/iOS` as the samples do; a pinned `Platform` mode picks the look.
+  - **iPhone Duo** (10): Closed Portrait and Landscape, Inner Portrait and Landscape, and Half-folded, each Medium and Large. Closed (Compact): 450 wide in Portrait, 8 from each side; 662 × 458 in Landscape. Inner Portrait: 653 wide, 8 from each side. Inner Landscape: 653 wide, centred. Half-folded is Inner Landscape at 951 × 669 with the sheet 468 wide in the left half, 8 from the edge, clear of the fold. Each Note gives the sheet's size and place. The kit's Duo Examples section stays as the kit's.
   - **iPhone** (27): the nine sizes, each Medium, Large and Large (Stacked). Medium is inset 6 from the sides and the bottom, its height 465 × H ÷ 874; Large is the full width, 62 from the top (iPhone SE 20). Large (Stacked) is the root resized to the screen with its padding top set (20 on iPhone SE, 62 elsewhere) and no inner override.
-  - **iPad** (6):
   - **Android** (8): `Sheet - iPhone` `iOS=False` at XSmall, Small and Medium, each Medium and Large (Medium h = 465 × H ÷ 874, Large 52 off the top); `Sheet - iPad` `iOS=False` centred at Large (1024 × 1366, `Breakpoint` LG) and XLarge (1280 × 800, XXL), 600 wide. `Platform` pinned to Android.
   - **Web** (3): one `Screen <W>` wrapper per `Breakpoint` mode, SM 320, MD 500 and XL 1080, `Platform` Web, `Layout` Simple. Each holds the dimming, `Sheet - iPhone` `iOS=False` and `Sheet - iPad` `iOS=False`; the mode picks which one shows (`Modal/Bottom sheet` · `Modal/Centred sheet`, R2), so the same frame at SM and MD shows the Medium sheet full width at the bottom and at XL a 600 sheet centred.
   - The Half-folded and Duo Inner samples (the kit's 653-wide sheet) and the eight Large (Stacked) sizes without a variant stay hand-built. Change the sheet's placement in the set, not in a sample.

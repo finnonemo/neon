@@ -134,7 +134,11 @@
     "Button/Container/Round/XLarge/Radius": 200,
     "Button/Icon/Small/Type token": "fa-sharp fa-solid/Small",
     "Button/Icon/Medium/Type token": "fa-sharp fa-solid/Medium",
-    "Button/Icon/Large/Type token": "fa-sharp fa-solid/Large"
+    "Button/Icon/Large/Type token": "fa-sharp fa-solid/Large",
+    "Interactive/XSmall/Interactive min-height": 48,
+    "Interactive/Small/Interactive min-height": 48,
+    "Interactive/Medium/Interactive min-height": 48,
+    "Interactive/Large/Interactive min-height": 56
   },
   "bindings": [
     {"layer":"(root)","property":"minWidth","when":"{{Size=XSmall}}","value":"Components/Interactive/XSmall/Interactive min-height"},
@@ -377,7 +381,11 @@
     "Button/Container/Rect/XLarge/Padding right": 24,
     "Button/Container/Rect/XLarge/Padding top": 16,
     "Button/Container/Rect/XLarge/Padding bottom": 16,
-    "Button/Container/Rect/XLarge/Radius": 16
+    "Button/Container/Rect/XLarge/Radius": 16,
+    "Interactive/XSmall/Interactive min-height": 48,
+    "Interactive/Small/Interactive min-height": 48,
+    "Interactive/Medium/Interactive min-height": 48,
+    "Interactive/Large/Interactive min-height": 56
   },
   "bindings": [
     {"layer":"(root)","property":"minWidth","when":"{{Size=XSmall}}","value":"Components/Interactive/XSmall/Interactive min-height"},

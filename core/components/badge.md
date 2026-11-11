@@ -29,7 +29,7 @@ The ticket's `Type` axis is named `Content` (see Calls).
 | Group | Keyed by | Properties | Count | Dot |
 | --- | --- | --- | --- | --- |
 | `Container` | `Content` | Layout horizontal, Layout vertical (records) | `Hug contents` | `Hug contents` |
-|  |  | Layout min-width, Layout min-height | 20 / 28 / 48) | 8, 8 (→ `spacing-03`) |
+|  |  | Layout min-width, Layout min-height | 20, 20 | 8, 8 (→ `spacing-03`) |
 |  |  | Padding left, Padding right | 4 (→ `spacing-02`) | 0 (→ `spacing-00`) |
 |  |  | Padding top, Padding bottom | 0 (→ `spacing-00`) | 0 (→ `spacing-00`) |
 |  |  | Radius | 200 (→ `Round (radius-round)`) | 200 (→ `Round (radius-round)`) |
@@ -105,7 +105,7 @@ None.
 | Thai test string `ปั๋ง ผู้ใหญ่ ฎู ฟุ้ง` | 86 × 20 | 125 × 28 | 216 × 48 |
 | Dot | 8 × 8 | 8 × 8 | 8 × 8 |
 
-A one-digit Count stays a circle: Re-measured after the change, 2026-11-01. Before, with a raw 20, it was a capsule (20 × 28, 22 × 48).
+Re-measured after the change, 2026-11-01. Before, with a raw 20, it was a capsule (20 × 28, 22 × 48).
 - [x] 7. 12 pt (Caption 1), over 11.
 - [x] 8. Motion: None, haptic None.
 - [x] 9. Hidden from assistive tech; the host folds it into its own name:

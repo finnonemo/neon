@@ -67,7 +67,7 @@ N/A: no text layer.
 - [x] 3. N/A: not a field.
 - [x] 4. It shows no state or meaning; the groups it separates have their own headings or spacing.
 - [x] 5. N/A: not interactive.
-- [x] 6. No text to reflow. the rows grow (Body 17 → 23 → 40), every Divider stays 1 tall with its inset (0 · 16), nothing clips.
+- [x] 6. No text to reflow.
 - [x] 7. N/A: no text.
 - [x] 8. Motion: None.
 - [x] 9. Hidden from assistive tech:

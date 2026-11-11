@@ -108,5 +108,5 @@ On Inset, the group `Label` names the radio group (`radiogroup`'s label on web, 
 22 instances moved onto the new set on 2026-11-02, as Checkbox's did; none of the old set's is left:
 
 - `Style=Default` → `Type=Full-bleed, Alignment=Left`, same State and Selection, `Label text` → `Value text`, the old `Subtitle` boolean → `Description`, the instance's sizing kept (Fill), `Bottom border` on. Ten, in Radio buttons › Usage (Group, Long label and Focus ring, Light and Dark).
-- `Style=Radio only` → `Type=Icon only, Alignment=Left`, same State and Selection (none of them was Pressed, which Icon only lacks). Eight in Radio buttons › Usage (States), and four on 🚧 Drafts: The three `1602:*` came after the proposal's count of 19.
-- `State=Focus` now draws the ring itself, so they could move onto it.
+- `Style=Radio only` → `Type=Icon only, Alignment=Left`, same State and Selection (none of them was Pressed, which Icon only lacks). The three `1602:*` came after the proposal's count of 19.
+- The two Focus ring samples stay `State=Enabled` inside their hand-drawn ring; `State=Focus` now draws the ring itself, so they could move onto it.

@@ -14,7 +14,7 @@ Vertical Bar (variant root)        Fixed 84 × Fill, no fill, no padding
 └─ Navigation                      instance, `Layout=Rail`, `Items=5`, `Type=Search Role`, `Minimized` pinned by `Compression`; absolute, Stretch × Bottom; `Show Navigation`
 ```
 
-The Camera Punchout sits where the outer camera is: bottom in Outer Landscape, top in Outer Portrait, absent on the inner display (its camera is hidden until used). The Rail's bar is Navigation's own 48 × 270, or 48 × 108 at `Minimized=True` ([navigation.md](navigation.md), ), at x 12 of the strip; this component places it, it does not redraw it. With the camera at the bottom the Rail ends 74 above the strip's foot (24 otherwise), and Back and the status bar are off, since 466 has no room for them beside the Rail (Build log).
+The Camera Punchout sits where the outer camera is: bottom in Outer Landscape, top in Outer Portrait, absent on the inner display (its camera is hidden until used). The Rail's bar is Navigation's own 48 × 270, or 48 × 108 at `Minimized=True` ([navigation.md](navigation.md),), at x 12 of the strip; this component places it, it does not redraw it. With the camera at the bottom the Rail ends 74 above the strip's foot (24 otherwise), and Back and the status bar are off, since 466 has no room for them beside the Rail (Build log).
 
 ## Axes
 
@@ -53,11 +53,10 @@ System: an iOS component, so system motion and haptics. Switching `Compression` 
 ## Accessibility
 
 - [x] 1. Each text / background pair: N/A, no text.
-- [x] 2. Non-text parts:
 - [x] 3. N/A: no field.
 - [x] 4. State is never colour alone: the compressed states differ by shape.
 - [x] 5. N/A: not interactive on its own.
-- [x] 6. `reflow-check.js` (held `c9575893`, width 84): the strip has no text of its own. Same as those sets' own runs.
+- [x] 6. the strip has no text of its own. Same as those sets' own runs.
 - [x] 7. No text.
 - [x] 8. Motion: System.
 - [x] 9. Role and name, below.
@@ -75,4 +74,3 @@ System: an iOS component, so system motion and haptics. Switching `Compression` 
 - Back is first and Share, or the prominent action, next, as the HIG orders them. Reserve `…` for overflow.
 - The templates use it in all three rail poses: Outer Landscape, Outer Portrait, Inner Landscape. Inner Portrait keeps its horizontal bars.
 - Not for Split View's left edge: the strip keeps its right-edge drawing (Screen templates).
-- both `Compression` values, each in the three `Camera` cases, with Thai item titles in the Slot.

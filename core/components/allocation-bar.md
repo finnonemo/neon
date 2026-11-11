@@ -41,7 +41,6 @@ Properties: none on the bar; the segments and legend rows are content (Slots). 3
 | `Allocation bar/Container` | `Size` | Gap vertical | `spacing-04` (12) · `spacing-03` (8) |
 | `Allocation bar/Bar` | `Size` | Layout height, Gap horizontal, Radius | `spacing-05` · `spacing-03` (16 · 8); `spacing-01` (2); `None (radius-0)` |
 | `Allocation bar/Segment` | `Size` | Layout min-width | `spacing-02` (4) |
-|  | `Size` | Padding left, Padding right | `spacing-00` (0) · `spacing-00` (0) |
 | `Allocation bar/Legend` | `Size` | Gap horizontal, Gap vertical | `spacing-05` (16), `spacing-03` (8) |
 | `Allocation bar/Label` | role: `Legend` | Type token, Type emphasis, Align horizontal, Align vertical, Decoration | `$subhead`, `Regular`, `Left`, `Top`, `-` |
 | `Allocation bar/Icon` | `Small` | Type token | `fa-sharp fa-solid/Small` (`square-small`) |
@@ -91,7 +90,6 @@ The grow is an app behaviour, not a Figma variant. The Skeleton's own shimmer is
 - [ ] 3. N/A: not a field.
 - [x] 4. No meaning by colour alone: every part has a legend row or inline label with its name, and the List form adds the percentage (charts.md: a legend for 2 or more series). `Legend=None` is allowed only where the host labels each part.
 - [ ] 5. N/A: not focusable. The List legend's rows are List item's.
-- [ ] 6. the Inline legend wraps, the bar keeps its height.
 - [x] 7. No text under 11 pt: the label is 15.
 - [x] 8. Motion table above.
 - [ ] 9. Role, accessible name, announced states:
@@ -122,11 +120,10 @@ Samples on Usage, eight in Light and their Dark twins (`twin-check.js` clean, 8 
 | Asset allocation, List | `List · Medium · Data` | the same parts, rows in percent (35.00 … 5.00, sum 100.00) |
 | Loading | `List · Medium · Skeleton` | the bare track in the skeleton colour, no legend |
 | Host-labelled | `None · Small · Data` | three parts, an 8-high bar, no legend |
-|  | `List · Medium · Data` | Port's two parts inside a `Layer/layer-02` surface, radius 16, padding 16: the flat rows' swatch and % on the bar's edges |
 
 Two findings from the samples:
 
 - **Port's empty and error cases are `State=Data` with the Segments slot emptied**, not `State=Empty`: Port keeps the two legend rows (`0.00 ฿`, `-- ฿`), and `State=Empty` hides the legend by design. `State=Empty` is the bare track alone, for a host that labels it elsewhere.
 - **A row's mark colour is an override** on the `List item`'s `Icon` text (`fills`, `styledTextSegments`: `usage-overrides.js` lists 24 as `gaps`, one per row). That is Q5's call (a domain's colour is set on the row and the segment, since `Leading` has no colour property); the Inline legend's marks and the segments are Slot content and do not show as gaps. Its other output: `passDown`, `borrowed` empty; `defaults` lists only the Baht unit ` ฿` (meant) and the Component Header's namespace.
 
-Contrast of every fill the samples bind, on `layer-01` (white Light, #1A1A1A Dark): Light, `equity` #006D97 5.78, `fixed-income` #893608 8.09, `gold` #919605 3.20, `cash` #BF74D2 3.16, `government-bond` #34A085 3.22, `miscellaneous` and `chart-other` #808B95 3.47; Dark, #006D97 3.01, #AE450A 3.03, #919605 5.44, #BB6BCF 5.07, #37AA8E 6.05, #999999 6.11. All pass 3:1, all at 100% alpha. three fall under 3:1, as the bar's own segments already do on that surface; the label and % beside each swatch carry the meaning ( R5). The track `chart-empty` is #EBECEE Light, #333333 Dark; the skeleton track `skeleton-background` is #E6E8EA Light, #262626 Dark.
+Contrast of every fill the samples bind, on `layer-01` (white Light, #1A1A1A Dark): Light, `equity` #006D97 5.78, `fixed-income` #893608 8.09, `gold` #919605 3.20, `cash` #BF74D2 3.16, `government-bond` #34A085 3.22, `miscellaneous` and `chart-other` #808B95 3.47; Dark, #006D97 3.01, #AE450A 3.03, #919605 5.44, #BB6BCF 5.07, #37AA8E 6.05, #999999 6.11. All pass 3:1, all at 100% alpha. puts the List swatches on the host surface, so inside a Tile (`layer-02`, #F2F3F4 Light) the Light figures are `equity` 5.20, `fixed-income` 7.28, `gold` 2.88, `cash` 2.84, `government-bond` 2.90, `miscellaneous` and `chart-other` 3.13: three fall under 3:1, as the bar's own segments already do on that surface; the label and % beside each swatch carry the meaning (R5). The track `chart-empty` is #EBECEE Light, #333333 Dark; the skeleton track `skeleton-background` is #E6E8EA Light, #262626 Dark.

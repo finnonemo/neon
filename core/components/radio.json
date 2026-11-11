@@ -149,7 +149,8 @@
     "Radio/Bar/Default/Radius": 0,
     "Radio/Line/Default/Layout horizontal": "Fill container",
     "Radio/Line/Default/Layout vertical": "Fixed",
-    "Radio/Line/Default/Layout height": 1
+    "Radio/Line/Default/Layout height": 1,
+    "Interactive/Medium/Interactive min-height": 48
   },
   "bindings": [
     {"layer":"(root)","property":"minWidth","when":"{{Type=*}}","value":"Components/Interactive/Medium/Interactive min-height"},

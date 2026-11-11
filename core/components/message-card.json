@@ -105,7 +105,8 @@
     "Message card/Bar/Default/Padding bottom": 8,
     "Message card/Bar/Default/Gap vertical": 8,
     "Message card/Focus ring/Default/Stroke weight": 2,
-    "Message card/Focus ring/Default/Radius": 20
+    "Message card/Focus ring/Default/Radius": 20,
+    "Interactive/Medium/Interactive min-height": 48
   },
   "bindings": [
     {"layer":"(root)","property":"minWidth","when":"","value":"Components/Interactive/Medium/Interactive min-height"},

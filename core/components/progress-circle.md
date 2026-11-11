@@ -17,9 +17,9 @@ Progress circle (variant root)  Fill × Hug (343 in the set), no fill, no paddin
    └─ Label                     text, Fill × Hug, wraps; Stacked centred, Inline left; Text/text-primary; `Label` boolean (on); TEXT "Label text" = "Loading…"; XLarge: Type Emphasis Strong
 ```
 
-- two Icons instances with the same names as Contextual banner's.
+- The two glyphs follow Progress bar's and Text field's Detail glyphs: two Icons instances with the same names as Contextual banner's.
 - Both ellipses span the Ring, so the diameter is the `Size`, as Base's is. v2's inset (an 18 ring in a 24 box) is not taken: the box would be bigger than what it draws.
-- The Indeterminate arc is a quarter, as v2, Base and `_Loading` draw it. An amount's arc is that share of the ring from 12 o'clock (Base's determinate circle; Carbon's 300° and 144° arcs are frames of its animation, not a resting shape.
+- The Indeterminate arc is a quarter, as v2, Base and `_Loading` draw it. An amount's arc is that share of the ring from 12 o'clock (Base's determinate circle), set by the engine's `arcShare` key. Carbon's 300° and 144° arcs are frames of its animation, not a resting shape.
 - No `_` Items, no Slots. Whether it nests `_Loading` instead of drawing its own Ring is Q2.
 
 ## Axes
@@ -27,19 +27,19 @@ Progress circle (variant root)  Fill × Hug (343 in the set), no fill, no paddin
 | Axis | Values (default first) | Drives |
 | --- | --- | --- |
 | `Layout` | Inline · Stacked | Container's direction and gap |
-| `Size` | XSmall · Small · Medium · Large · XLarge (15 · 24 · 36 · 48 · 64 | the Ring, the stroke, the Label's text style |
+| `Size` | XSmall · Small · Medium · Large · XLarge (15 · 24 · 36 · 48 · 64; XSmall) | the Ring, the stroke, the Label's text style |
 | `Status` | Active · Success · Error | Ring (Active) or a glyph (Success, Error) |
-| `Progress` | Indeterminate · 0% · 25% · 50% · 75% · 100% | the Indicator: a turning quarter arc, or that share of the ring |
+| `Progress` | Indeterminate · 0% · 25% · 50% · 75% · 100% | the Indicator: a turning quarter arc, or that share of the ring; 0% hides it |
 
-- **Inline** is Carbon's one size: `Size=XSmall`, a 15 ring and 15 × 15 glyphs). every Size, the glyph at the ring's size. It is the only Layout with Success and Error (Carbon: "States other than Active only apply to the Inline size").
-- five, with XSmall). A section that finishes loading shows its content, not a glyph.
-- an amount is for a known wait centred on a surface, an upload in a sheet. Inline is `Indeterminate` only: a status line with an amount is Progress bar's row. Values are Progress bar's.
-- Exclude rules drop `{{Layout=Stacked}}` × `{{Status=!Active}}` and `{{Layout=Inline}}` × `{{Progress=!Indeterminate}}`.
+- **Inline** is Carbon's one size: `Size=Small` only, since 24 matches the Label's 24 line (reversed by `Size=XSmall`, a 15 ring and 15 × 15 glyphs). every Size, the glyph at the ring's size. It is the only Layout with Success and Error (Carbon: "States other than Active only apply to the Inline size").
+- **Stacked** comes in all four sizes, Active only (five, with XSmall). A section that finishes loading shows its content, not a glyph.
+- **Progress** is Stacked's only (Q11): an amount is for a known wait centred on a surface, an upload in a sheet. Inline is `Indeterminate` only: a status line with an amount is Progress bar's row. Values are Progress bar's.
+- Exclude rules drop `{{Layout=Stacked}}` × `{{Status=!Active}}` and `{{Layout=Inline}}` × `{{Progress=!Indeterminate}}`. Inline's Size rule (`!Small`, then `!XSmall` in) went in .
 - Carbon's `Inactive` is not taken: it draws the same spinner, and the page says it shows nothing (Q7).
 
 Properties: `Label` (BOOLEAN, on), `Label text` (TEXT, "Loading…").
 
-Variants: The full grid would be 2 × 5 × 3 × 6 = 180 (Q6).
+Variants: 5 × 3 (Inline) + 5 × 6 (Stacked) = **45 variants** (7 before , 27 before , 33 before). The full grid would be 2 × 5 × 3 × 6 = 180 (Q6).
 
 Grid: one column, rows in Layout, Size, Status, Progress order: Inline Active, Success, Error; then Stacked Small to XLarge, each Indeterminate, 0% to 100%. (reversed by the owner 2026-11-05: Size columns XLarge · Large · Medium · Small; rows Layout, Status, Progress; Inline's three rows hold the Small column only and leave the other cells empty, so the grid stays MANUAL: `componentSet.grid.holes`. five columns, XLarge to XSmall; Inline's rows hold the XSmall column. Inline's rows hold all five; the holes are Stacked's Success and Error rows, which have none.)
 
@@ -51,12 +51,12 @@ Grid: one column, rows in Layout, Size, Status, Progress order: Inline Active, S
 | --- | --- | --- | --- |
 | `Progress circle/Container` | `Size` | Gap horizontal, Gap vertical | 8 (→ `spacing-03`), 12 (→ `spacing-04`) at every size |
 | `Progress circle/Ring` | `Size` | Layout width, Layout height | 15 (raw) · 24 (→ `spacing-06`) · 36 (→ `control-small`) · 48 (→ `spacing-09`) · 64 (→ `spacing-10`) |
-| `Progress circle/Track` | `Size` | Stroke weight | 2 · 3 · 4 · 4 · 4 (raw |
+| `Progress circle/Track` | `Size` | Stroke weight | 2 · 3 · 4 · 4 · 4 (raw; , XSmall) |
 | `Progress circle/Indicator` | `Size` | Stroke weight | the same as Track |
 | `Progress circle/Label` | `Size` | Type token, Type emphasis, Align horizontal, Align vertical, Decoration | `$subhead` · `$subhead` · `$callout` · `$headline` · `$title3`; Regular · Regular · Regular · Regular · Strong; Center; Center; `-` |
 | `Progress circle/Icon/<step>` | icon step | Type token | `fa-sharp fa-solid/<step>` for Medium · XLarge · 3XLarge · 4XLarge · 5XLarge |
 
-The Inline glyphs bind the Ring's Layout width and height at their Size. Align horizontal is keyed by `Size`, not `Layout`, so every key is the full set: it is Stacked's Center. Inline's Label is Left: `Ring` is on the `token-path` lint list.
+2 × 5 + 2 × 5 + 5 + 5 + 5 × 5 + 5 = **60 `Components` variables** (45 before , 56 before). The Inline glyphs bind the Ring's Layout width and height at their Size. Align horizontal is keyed by `Size`, not `Layout`, so every key is the full set: it is Stacked's Center. Inline's Label is Left: a literal `textAlignHorizontal` rule, since every Size is shared by both Layouts. `Ring` is on the `token-path` lint list.
 
 `Theme`: no Component-scoped token. Carbon binds `interactive` on the arc and `border-subtle-01` on the track. Measured 2026-11-04 with `skills/build-component/scripts/contrast.mjs` on the Theme snapshot:
 
@@ -64,7 +64,6 @@ The Inline glyphs bind the Ring's Layout width and height at their Size. Align h
 | --- | --- | --- | --- |
 | `Miscellaneous/interactive` (Indicator; Carbon's `interactive`, `_Loading`'s) | 4.51–5.03 on the track over each Base surface; 4.99–5.59 on the surfaces | 3.51 on the track; 5.12–7.10 on the surfaces | `non-text`, on `Track` (Q5) |
 | `Layer/layer-03` (Track) | 1.10–1.23 on the surfaces (1.23 on white; `Navy/10` since 2026-11-11) | 1.46–2.03 | exception, as Progress bar's track: no track token reaches 3:1, and the arc carries the meaning (Q5) |
-| `Text/text-primary` (Label | 13.87–15.13 | 15.13–21.00 | `text`, on the Base surfaces |
 | `Support/support-success` (`circle-check`) | 3.44–3.85 | 6.52–9.05 | `non-text`, on the Base surfaces |
 | `Support/support-error` (`circle-exclamation`) | 4.81–5.39 | 3.50–4.85 | `non-text`, on the Base surfaces |
 
@@ -75,17 +74,17 @@ For comparison, the options Q5 turns down:
 
 ## Icon records
 
-`Progress circle/Icon/<step>/Type token = fa-sharp fa-solid/<step>` for Medium, XLarge, 3XLarge, 4XLarge and 5XLarge. Medium 15 at XSmall, XLarge 20 at Small, 3XLarge 34 at Medium, 4XLarge 48 at Large, 5XLarge 60 at XLarge. At XSmall that is also the Subheadline label's step (Icons); above it, not. Each is its own instance, so no glyph swaps in one layer.
+`Progress circle/Icon/<step>/Type token = fa-sharp fa-solid/<step>` for Medium, XLarge, 3XLarge, 4XLarge and 5XLarge. The glyphs (`circle-check`, `circle-exclamation`) stand in for the ring, so they take the step nearest the ring and not wider ("Match the ring"): Medium 15 at XSmall, XLarge 20 at Small, 3XLarge 34 at Medium, 4XLarge 48 at Large, 5XLarge 60 at XLarge. At XSmall that is also the Subheadline label's step (Icons); above it, not. Each is its own instance, so no glyph swaps in one layer.
 
 ## Text styles, wrapping and truncation
 
 | Layer | Text style | Lines | Text property |
 | --- | --- | --- | --- |
-| `Label` (Inline) | the Size's step, as Stacked's) | one line, Hug; a status message is short ("Saving…", "Saved"); Fill × Hug, HEIGHT, left-aligned, wraps beside the Ring with the Ring on the first line, Q13; the Ring centred on the Label) | `Label text` |
+| `Label` (Inline) | `Body/Subheadline` 15/24, `Text/text-primary` (the Size's step, as Stacked's) | one line, Hug; a status message is short ("Saving…", "Saved"); never cut (reversed by Fill × Hug, HEIGHT, left-aligned, wraps beside the Ring with the Ring on the first line, Q13; reversed by the Ring centred on the Label) | `Label text` |
 | `Label` (Stacked) | `Body/Subheadline` 15/24 (XSmall, Small) · `Body/Callout` 16/24 · `Headings/Headline` 17/24 Medium · `Headings/Title 3` 20/28 Strong (Bold), `Text/text-primary`, centred | Fill × Hug, HEIGHT: wraps at the instance's width (the set is Fill-wide, 343 a column) | `Label text` |
 
 - Carbon's 14/18 becomes Subheadline 15/24, the Thai floor for text that wraps, as Progress bar's helper did.
-- the first build had two).
+- Base's label scales 14 to 20 with Size, and so does this one since (four steps; the first build had two).
 
 ## Hit target and Skeleton
 
@@ -98,7 +97,6 @@ For comparison, the options Q5 turns down:
 | --- | --- | --- | --- |
 | The Indicator turns | iOS: system spinner; Android + web: one turn a second, linear, repeating (`_Loading`'s loop) | keeps turning, as Loading does (Motion and haptics) | None |
 | Active → Success or Error (Inline): the glyph replaces the Ring | `fast-02 · standard` | instant | None (an outcome's haptic is the host's) |
-|  | `moderate-01 · standard` | instant | None |
 
 When the set is built, a row goes into the per-component table in Motion and haptics. Figma has no prototype reaction.
 
@@ -109,7 +107,7 @@ When the set is built, a row goes into the per-component table in Motion and hap
 - [x] 3. N/A: not a field.
 - [ ] 4. Success and Error each carry a glyph and their own Label text, not colour alone. Active's meaning is in the Label and the motion; with `Label` off, the host passes an accessible name.
 - [x] 5. N/A: not interactive.
-- [x] 6. Stacked's Label wraps under the Ring;
+- [x] 6. Stacked's Label wraps under the Ring; Inline's wraps beside it (Q13), 48 · 96 · 156 tall at the three modes.
 - [ ] 7. Smallest text 15 (Subheadline).
 - [ ] 8. Motion: three rows above, each with its Reduced-motion form and haptic None.
 - [ ] 9. Role, name, states and focus order:
@@ -133,7 +131,7 @@ The `Usage` frame shows, with Thai copy:
 - Don'ts:
   - no Progress circle inside a Button or Text field (that is `_Loading`);
   - none for content whose shape is known (Skeleton);
-  - none for an amount or a long task in a row as wide as a bar; a known wait centred on a surface takes `Progress`);
+  - none for a wait with an amount (Progress bar) (reversed by none for an amount or a long task in a row as wide as a bar; a known wait centred on a surface takes `Progress`);
   - no spinner over a whole screen when Skeleton can show the layout.
 
 No Focus ring and no `iOS` pair.

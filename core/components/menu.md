@@ -48,20 +48,20 @@ _Menu Separator                        Fixed × Hug, V, padding 10/8/10/8 [`Menu
 _Menu Quick Action (variant)           Fixed × Hug, V, padding 6/4/6/4, gap 5, radius 20 [`Menu/Quick action/Default/*`]; BG (absolute, `Show Selection`), Symbol, Label
 ```
 
-On `State=Hover` and `State=Pressed` (M16), an item's root takes a `radius-round` pill fill, the same shape as an open submenu. the row stays 48.
+On `State=Hover` and `State=Pressed` (M16), an item's root takes a `radius-round` pill fill, the same shape as an open submenu. On `State=Focus` the same pill takes a 2 `Focus/focus` stroke, centred and out of layout, with no fill: the row stays 48.
 
 Left out of Core (Assumptions): `Edit Menu`, `_Edit Menu Item`, `_Menu Indicator` (the Edit Menu's more button), `Text Selection`, `_Selection`.
 
 ## Axes
 
-| Set | Axes (default first) | Variants |
-| --- | --- | --- |
-| `Menu` | `iOS` True · False (kit | 2 × 2 × 2 = **8** |
-| `_Menu Items` | `State` Enabled · Hover · Pressed · Focus · Disabled (M16, R7) × `Danger` False · True (M5) × `Menu has Selection` False · True | 5 × 2 × 2 = **20** (kit 12) |
-| `_Menu Items - Submenus` | `State` Enabled · Hover · Pressed · Focus · Disabled × `Open` False · True × `Menu has Selection` False · True | 5 × 2 × 2 = **20** (kit 16) |
-| `_Menu Profile Item` | `State` Enabled · Hover · Pressed · Focus · Disabled × `Menu has Selection` False · True (R9) | 5 × 2 = **10** |
-| `_Menu Quick Action` | `State` Enabled · Hover · Pressed × `Danger` False · True (the kit's `Destructive`, M5) | 3 × 2 = **6** (kit 4) |
-| `_Menu Section Title`, `_Menu Separator` | none | 1 each |
+| Set | Axes (default first) |
+| --- | --- |
+| `Menu` | `Anchor` Top right · Top left × `Expand` False · True |
+| `_Menu Items` | `State` Enabled · Hover · Pressed · Focus · Disabled (M16, R7) × `Danger` False · True (M5) × `Menu has Selection` False · True |
+| `_Menu Items - Submenus` | `State` Enabled · Hover · Pressed · Focus · Disabled × `Open` False · True × `Menu has Selection` False · True |
+| `_Menu Profile Item` | `State` Enabled · Hover · Pressed · Focus · Disabled × `Menu has Selection` False · True (R9) |
+| `_Menu Quick Action` | `State` Enabled · Hover · Pressed × `Danger` False · True (the kit's `Destructive`, M5) |
+| `_Menu Section Title`, `_Menu Separator` | none |
 
 Properties follow the kit's:
 
@@ -84,6 +84,7 @@ These are in `Components`, Tag-shaped, 35 in all, and hold for both looks. Every
 | `Menu/Container/Default/Padding top`, `Padding bottom` | 10 | the `Menu` frame |
 | `Menu/Container/Default/Padding left`, `Padding right` | `Spacing/spacing-05` (16, the kit's iPhone value) | the `Menu Items` Slot |
 | `Menu/Container/Default/Layout width` | 238 | the `Menu` frame |
+| `Menu/Container/Default/Radius` | 34 |  |
 | `Menu/Control group/Default/Padding left`, `Padding right` | 10 | `Control Group` |
 | `Menu/Control group/Default/Gap horizontal` | 6 | `Control Group` |
 | `Menu/Item/Default/Padding top`, `Padding bottom` | `Spacing/spacing-04` (12; kit 10) | `Label and Subtitle` in the three item parts |
@@ -113,10 +114,10 @@ Colours map every kit paint to an existing Theme token; there is no new token. D
 | # | Role (layers) | iOS 27 Light / Dark | Proposed | Δ L / D | Uber Base / Carbon | Runner-up, and why not |
 | --- | --- | --- | --- | --- | --- | --- |
 | 1 | Label, Symbol, Checkmark, chevrons | `Labels - Vibrant/Primary` `1A1A1A` / `F5F5F5` | `Text/text-primary` (text), `Icon/icon-primary` (glyphs): `Black/85A` · `White/100` | 12 / 10 | `#000000` / `Icon/icon-secondary` at rest, `text-primary` on Active | `Grey/90` (0 Light): no text token on it |
-| 2 | Subtitle | `Labels - Vibrant/Secondary` `727272` / `8A8A8A` | `Text/text-secondary` (`Black/65A` · `White/65A`) | 25 / 28 |  | `Black/50A` · `Grey/50` (13 / 10) |
+| 2 | Subtitle | `Labels - Vibrant/Secondary` `727272` / `8A8A8A` | `Text/text-secondary` (`Black/65A` · `White/65A`) | 25 / 28 |  | `Black/50A` · `Grey/50` (13 / 10): a second secondary grey, the call Toolbars declined |
 | 3 | Section Title (M6) | `Labels - Vibrant/Tertiary` `BFBFBF` / `404040` | `Text/text-secondary` | 102 / 102 | Header: Uber's grey label | `Text/text-tertiary` (13 / 0) is 1.6:1, and the app draws the `iOS=False` title itself |
 | 4 | Disabled Label, Symbol and Subtitle (M11) | `Labels - Vibrant/Tertiary` / `Quaternary` `BFBFBF` · `D9D9D9` / `404040` · `262626` | `Text/text-disabled`, `Icon/icon-disabled` (`Black/45A` · `White/45A`) | 51 / 51 (Label) | `#A6A6A6` / `Text/text-disabled`, `Icon/icon-disabled` | `Text/text-tertiary` (13 / 0), nearer iOS, but no other Core control's disabled colour |
-| 5 | `Danger` Label and Symbol; Quick Action `Danger` | `Accents/Red` `FF383C` / `FF4245` | `Text/text-negative` (`Red/145` · `Red/50` since 2026-11-09, H2; was `Red/125` · `Red/75`) on text, `Icon/icon-negative` (the same) on glyphs | 67 / 58 (was 47 / 24) |  | a new pair on `Red/95` · `Red/90` (4 / 5) (M7) |
+| 5 | `Danger` Label and Symbol; Quick Action `Danger` | `Accents/Red` `FF383C` / `FF4245` | `Text/text-negative` (`Red/145` · `Red/50` since 2026-11-09, H2) on text, `Icon/icon-negative` (the same) on glyphs | 67 / 58 |  | a new pair on `Red/95` · `Red/90` (4 / 5) (M7) |
 | 6 | Separator line | `Separators/Vibrant` `E6E6E6` / `1A1A1A` | `Border/border-subtle` (`Black/5A` · `White/15A`) | 12 / 12 | Carbon's `border-subtle-00` | `Black/10A` · `White/10A` (1 / 0): no border token on them; `border-subtle` is every divider's |
 | 7 | Quick Action `BG` (`Show Selection`); Submenu `Open=True` fill | `Fills - Vibrant/Tertiary` `EDEDED` / `121212` | `Layer/layer-selected-02` (`Navy/8A` · `White/12A`) | 1 / 13 |  | `Layer/layer-hover-01` (6 / 2; nearer on the sum, 8 vs 14) is a hover; ios-match maps `Fills/Tertiary` to `layer-selected-02`, and both uses are a selected or open state |
 | 8 | Item and Quick Action `State=Hover` fill (M16) | none (iOS has no hover) | `Layer/layer-hover-01` (`Navy/5A` · `White/8A`) | — | Uber white / Carbon none | Carbon's ladder (ios-match.md, Layer ladder) |
@@ -158,7 +159,7 @@ These use our local Typography styles (Localisation), the same in both looks. Li
 
 ## Motion
 
-- System (Motion and haptics). iOS opens, morphs and dismisses the menu and plays its own haptics; the button morphs into the menu, which is why `Expand=True` has no button.
+- iOS opens, morphs and dismisses the menu and plays its own haptics; the button morphs into the menu, which is why `Expand=True` has no button.
 - `iOS=False`:
   - Opening: fades and scales from its `Anchor` corner, over the button, `moderate-02 · entrance · scale-in`.
   - Closing: `moderate-01 · exit · scale-in`.
@@ -174,27 +175,27 @@ These use our local Typography styles (Localisation), the same in both looks. Li
 - [x] 3. N/A: no field.
 - [x] 4. `Danger` is red and named by its label. Disabled is dimmed and announced. The checkmark, not colour, shows the selection.
 - [x] 5. Focus (`iOS=False`): `State=Focus` on the row (R7), a 2 `Focus/focus` stroke centred on its pill, the row still 48; `Focus/focus` on `layer-01` is 3.48:1 or more. A departure from the Focus ring rule, for Menu's rows.
-- [x] 6. labels wrap and rows grow; the open menu measures 919 · 1511 · 3535 with Thai copy, its corner held (Build log, 2026-11-08).
+- [x] 6. the open menu measures 919 · 1511 · 3535 with Thai copy, its corner held (Build log, 2026-11-08).
 - [x] 7. Smallest text: Quick Action Caption 1, 12.
 - [x] 9. Role, name, states and order:
 
-|  |  | Android (`iOS=False`) | Web (`iOS=False`) |
-| --- | --- | --- | --- |
-| Role | menu; each row a button (UIMenu's own semantics) | `DropdownMenu`; each row a `DropdownMenuItem` | `role="menu"` on the surface; rows `menuitem`, `menuitemcheckbox` with `Menu has Selection`, a submenu row with `aria-haspopup="menu"` |
-| Accessible name | the `Label`; a Quick Action's `Label` | the same | the same; the menu is labelled by its trigger (`aria-labelledby`) |
-| Announced states | Selected (checkmark), Dimmed (Disabled), Collapsed / Expanded (submenu) | Selected, Disabled, Collapsed / Expanded | `aria-checked`, `aria-disabled`, `aria-expanded` |
-| Trigger (`Expand=False`) | a button labelled by its glyph's name ("More"), "pop-up button" | `IconButton` with `contentDescription`, "Expanded" / "Collapsed" | `aria-haspopup="menu"`, `aria-expanded` |
-| Focus order | Control Group left to right, then the Slot top to bottom | the same | focus moves into the menu on open; arrows move between rows, Home / End jump; Esc closes and returns focus to the trigger |
+|  | Android (`iOS=False`) | Web (`iOS=False`) |
+| --- | --- | --- |
+| Role | `DropdownMenu`; each row a `DropdownMenuItem` | `role="menu"` on the surface; rows `menuitem`, `menuitemcheckbox` with `Menu has Selection`, a submenu row with `aria-haspopup="menu"` |
+| Accessible name | the same | the same; the menu is labelled by its trigger (`aria-labelledby`) |
+| Announced states | Selected, Disabled, Collapsed / Expanded | `aria-checked`, `aria-disabled`, `aria-expanded` |
+| Trigger (`Expand=False`) | `IconButton` with `contentDescription`, "Expanded" / "Collapsed" | `aria-haspopup="menu"`, `aria-expanded` |
+| Focus order | the same | focus moves into the menu on open; arrows move between rows, Home / End jump; Esc closes and returns focus to the trigger |
 
 ## Usage
 
 - Page `Menus` (new, between `Lists` and `Password fields`, made with `docs/agents/make-page.js`): `Menu` in Components, the six parts in Items; no Bases.
-- Usage samples, in Light and Dark columns (iOS bars' exception). Each look gets a `Screen 402` frame. `Closed`: a toolbar with `Expand=False` in its `Trailing` Slot. `Sort` and `Actions`: The Thai copy:
+- Usage samples, in Light and Dark columns (iOS bars' exception). Each look gets a `Screen 402` frame. `Closed`: a toolbar with `Expand=False` in its `Trailing` Slot. `Sort` and `Actions`: `Expand=True · Anchor=Top right` in the button's place, so the menu covers it. The Thai copy:
   - A sort menu: a `เรียงตาม` section with `ชื่อ`, `ราคาล่าสุด` and `ผลตอบแทน 1 ปี`, one of them checked.
   - An actions menu: `แชร์`, `เพิ่มในรายการโปรด`, a separator, then `ลบ` as `Danger`.
   - The `iOS=False` sample shows a hovered row and `เพิ่มในรายการโปรด` at `State=Focus`.
-  - `สมชาย ใจดี` (checked) and `สมหญิง รักเรียน` on `_Menu Profile Item`, `Menu has Selection=True`, Subtitle off, then a separator and `เพิ่มบัญชี` (glyph `plus`).
-  - Core's `Empty state` `Size=Medium` in the Slot, Artwork and Button off: "No results found", "Try another word or check the spelling."
+  - A profile list (`iOS=False`,): `สมชาย ใจดี` (checked) and `สมหญิง รักเรียน` on `_Menu Profile Item`, `Menu has Selection=True`, Subtitle off, then a separator and `เพิ่มบัญชี` (glyph `plus`).
+  - No result (`iOS=False`,): Core's `Empty state` `Size=Medium` in the Slot, Artwork and Button off: "No results found", "Try another word or check the spelling."
 - Notes:
   - that look is for mockups. Android + web use `iOS=False`.
   - A menu holds actions and choices, never a form. A list of more than about 10 rows, or rows with controls, goes in a Sheet (Bottom sheet on Android + web).
