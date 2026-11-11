@@ -17,15 +17,24 @@ The one source copy of the theme: the Neon registry's items and the CSS adapter.
 _Avoid_: starter theme, theme copy
 
 **Neon base**:
-shadcn/ui on Tailwind with Radix primitives, carrying Neon's components tuned to match CDS's look in theming, sizing and spacing. Behavior is Radix's unless it would be less accessible than CDS.
+shadcn/ui on Tailwind with Radix primitives, carrying Neon's components tuned to match their Core Counterparts in theming, sizing and spacing. Behavior is Radix's unless it would be less accessible than Core specifies.
 _Avoid_: shadcn (alone, which names the stock components), new starter
 
 **Neon registry**:
 The shadcn registry Neon publishes, pinned to each Neon release. Its items are the Neon base, Neon's components and layouts, the theme, the Immersive Themes and the Theme Briefs. Skills add Neon's item, never the stock shadcn one.
 _Avoid_: component library, npm package
 
+**Core**:
+Finnomena's design system, "(v3) Components / Core": the components, their specs and the Theme tokens that Neon's look is matched to. Its web look is each component's `iOS=False` look at the Large text size.
+_Avoid_: the DS, v3, Figma library
+
+**Core snapshot**:
+The compiled copy of Core that Neon carries, pinned to one Core commit. Skills and evals read Core only through it, since employees cannot reach Core's own repository.
+_Avoid_: Core copy, DS export
+
 **Counterpart**:
-The CDS component a Neon component is matched to and measured against, such as Modal for Dialog or Tray for Sheet. A shadcn component with no Counterpart has no CDS look to match, so Neon does not tune it without a design owner's decision.
+The Core component a Neon component is matched to and measured against, such as Divider for separator or Alert for alert-dialog. A Neon component whose Core doc is not yet approved keeps its earlier CDS tuning until it is, and says so. In the frozen CDS context, a CDS Counterpart is the CDS component an item was first tuned to.
+_Avoid_: equivalent, twin
 
 **Supporting item**:
 A Neon registry item that exists only for other Neon items to depend on, such as the toggle a toggle group is built from. It has no Counterpart of its own, is shaped to fit the items that use it, and is not listed as a component for employees to choose.
