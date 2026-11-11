@@ -3,7 +3,7 @@
 This repository distributes skills, theme assets, the Neon registry and the frozen CDS starter. It is not an employee application.
 
 - Branch from freshly fetched `origin/main`; the main checkout's local `main` lags it. Before starting work and before each push, `git fetch origin main` and confirm `git log --oneline HEAD..origin/main` is empty.
-- Read `skills/INSTRUCTION.md` for current visual policy. New work uses the Neon base, and CDS is frozen for apps already on it ([ADR 0006](docs/adr/0006-new-work-on-shadcn-matched-to-cds.md)); skills still describe CDS until their migration. Functional layouts favor restrained, task-led composition; immersive layouts may be colorful. Preserve the provisional status of token mappings.
+- Read `skills/INSTRUCTION.md` for current visual policy. New work uses the Neon base, and CDS is frozen for apps already on it ([ADR 0006](docs/adr/0006-new-work-on-shadcn-matched-to-cds.md)). Neon matches Core, not CDS ([ADR 0009](docs/adr/0009-neon-matches-core-not-cds.md)); the registry, tokens and skills still carry CDS tuning until the Neon 1.0 tickets under #210 land. Functional layouts favor restrained, task-led composition; immersive layouts may be colorful. Preserve the provisional status of token mappings.
 - Theme Briefs, presets, or adding an Immersive Theme's briefs: read `docs/design/theme-briefs.md`.
 - Use the domain terms in `GLOSSARY.md`: install mode is what the installer does, styling tier is a skill's decision.
 - Read the relevant skill and its callers before editing. Keep entrypoints concise with fast paths and read conditions; move setup details into reachable conditional references. Audit is optional for unclear integration, not a mandatory gateway.
