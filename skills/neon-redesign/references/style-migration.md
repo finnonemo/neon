@@ -282,10 +282,23 @@ and a border on every card, a chromatic `--chart-*` or `--sidebar-primary`
 used as decoration, weight utilities doing the work of size, and a
 different radius per component. Look at the rendered result and name the
 ones a user would notice. What you may change follows the tier: at
-`colors`, report them as observations; at `visual-system`, set `--radius`
-and the shadow and border variables the file declares so that depth comes
-from surface steps, and leave markup alone; only `composition: 'adapt'`
-edits markup. Which habit matters most on this screen is your judgment;
+`colors`, report them as observations. At `visual-system`, change them in
+the stylesheet and leave component files alone:
+
+- **Shadows.** Stock shadcn declares no shadow variable; its components
+  use Tailwind's `shadow-xs` and `shadow-sm` utilities. Find which ones
+  the app's on-page components use, then override those steps of
+  Tailwind's shadow scale in a plain `@theme` block
+  (`--shadow-xs: 0 0 #0000;`). Keep the steps that only floating layers
+  use (popover, dialog, sheet, toast).
+- **Radius.** Set `--radius`. Where one multiplier cannot give each
+  footprint its radius, find which `rounded-*` class each component uses
+  and pin those `--radius-*` steps in `@theme inline`.
+- **What a variable cannot reach.** Components that share a class share
+  its value: when button and input both use `rounded-md`, a pill button
+  needs a component edit. Report it; a restyle does not make it.
+
+Only `composition: 'adapt'` edits markup. Which habit matters most on this screen is your judgment;
 say which you chose and why.
 
 ## Mode-specific values

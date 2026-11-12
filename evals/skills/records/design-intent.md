@@ -3,7 +3,7 @@ scenarios:
   - request: Build a Finnomena Back Office screen whose task fits no listed pattern (a week-by-advisor capacity planner)
     observe: Before building, the run writes a design thesis (what is first-read, how regions separate, where color appears, what no pattern covers); the composition is its own, built from Neon items, type roles and color roles; the report states the choice and its reason; one primary action; no tinted tiles or shadows on on-page regions.
   - request: Restyle a v0 shadcn app to Finnomena at visual-system scope (the look after the values)
-    observe: After mapping values by role, the report names the stock shadcn habits a user would notice (card shadow and border, decorative chart or sidebar color, weight doing the work of size); it changes only the radius, shadow and border variables the file declares and no markup.
+    observe: After mapping values by role, the report names the stock shadcn habits a user would notice (card shadow and border, decorative chart or sidebar color, weight doing the work of size); it overrides the on-page shadow steps in `@theme` and sets radius in the stylesheet, edits no component file, and reports a pill button as needing a component edit.
   - request: Restyle a v0 shadcn app to Finnomena, colors only (the look after the values)
     observe: The same habits are reported as observations; radius, shadow, spacing and markup are unchanged.
   - request: Review a Finnomena Back Office screen with an unlisted but task-led composition; do not edit
