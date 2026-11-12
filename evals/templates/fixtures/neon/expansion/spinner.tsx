@@ -1,6 +1,7 @@
-// spinner, measured against CDS Spinner (fixtures/expansion/spinner.tsx) at the
-// default size and size 4. The spin is paused from mount on both targets, so
-// the ring measures at rest and the axe spec's wait for settled animations ends.
+// spinner, measured against Core's Progress circle at XSmall (the default) and
+// Large, then a numeric size, which Core does not have. The spin is paused from
+// mount on every target, so the ring measures at rest and the axe spec's wait
+// for settled animations ends.
 import { Spinner as NeonSpinner } from "@/components/ui/spinner"
 import { Hook } from "../Hook"
 
@@ -13,6 +14,9 @@ export default function Spinner() {
         <NeonSpinner style={paused} label="กำลังโหลด / Loading" />
       </Hook>
       <Hook name="spinner-large">
+        <NeonSpinner size="lg" style={paused} label="กำลังโหลด / Loading" />
+      </Hook>
+      <Hook name="spinner-scaled">
         <NeonSpinner size={4} style={paused} label="กำลังโหลด / Loading" />
       </Hook>
     </div>

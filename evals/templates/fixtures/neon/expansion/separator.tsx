@@ -1,6 +1,6 @@
-// separator, measured against CDS Divider (fixtures/expansion/separator.tsx).
-// The horizontal one keeps the default (decorative); the vertical one is
-// marked semantic, so the a11y spec sees both.
+// separator, measured against Core's Divider. The horizontal one keeps the
+// default (decorative); the vertical one, which Core does not have, is marked
+// semantic, so the a11y spec sees both. The inset one is Core's Inset=Start.
 import { Separator as NeonSeparator } from "@/components/ui/separator"
 import { Hook } from "../Hook"
 
@@ -20,6 +20,9 @@ export default function Separator() {
           <NeonSeparator orientation="vertical" decorative={false} />
           <p className="text-label2">ประวัติ / History</p>
         </div>
+      </Hook>
+      <Hook name="separator-inset">
+        <NeonSeparator inset="start" />
       </Hook>
     </div>
   )

@@ -152,6 +152,7 @@
   --color-bgFieldHover: rgba(1, 23, 43, 0.122);
   --color-bgFieldDisabled: rgba(1, 23, 43, 0.051);
   --color-bgLineStrong: rgb(1, 23, 43);
+  --color-bgLineDisabled: rgba(1, 23, 43, 0.451);
   --color-bgLineNegative: rgb(214, 8, 8);
   --color-fgPlaceholder: rgba(0, 0, 0, 0.651);
   --color-fgHelper: rgba(0, 0, 0, 0.651);
@@ -162,11 +163,24 @@
   --color-bgToggleOff: rgb(128, 128, 128);
   --color-bgElevation1Hover: rgba(1, 23, 43, 0.051);
   --color-bgElevation1Active: rgba(1, 23, 43, 0.078);
+  --color-bgElevation1Selected: rgba(1, 23, 43, 0.078);
   --color-bgTagNeutral: rgb(242, 243, 244);
   --color-bgTagNeutralHover: rgb(230, 232, 234);
   --color-bgTagNeutralDisabled: rgb(242, 243, 244);
   --color-fgTagNeutral: rgb(0, 9, 17);
   --color-bgLineTagNeutral: rgb(217, 220, 223);
+  --color-bgElevation3: rgb(230, 232, 234);
+  --color-bgInfo: rgb(24, 23, 231);
+  --color-fgInteractive: rgb(82, 81, 237);
+  --color-bgAvatar: rgb(93, 93, 238);
+  --color-fgOnColor: rgb(255, 255, 255);
+  --color-fgIconMuted: rgba(0, 0, 0, 0.651);
+  --color-bgTagPositive: rgb(242, 254, 248);
+  --color-fgTagPositive: rgb(0, 116, 53);
+  --color-bgTagWarning: rgb(254, 247, 243);
+  --color-fgTagWarning: rgb(174, 69, 10);
+  --color-bgTagNegative: rgb(255, 245, 245);
+  --color-fgTagNegative: rgb(186, 7, 7);
 
   /* --- Typography (mode-independent) --- */
   --fontFamily-display1: 'IBM Plex Sans Thai', sans-serif;
@@ -325,6 +339,7 @@
     --color-bgFieldHover: rgba(255, 255, 255, 0.149);
     --color-bgFieldDisabled: rgba(255, 255, 255, 0.031);
     --color-bgLineStrong: rgb(255, 255, 255);
+    --color-bgLineDisabled: rgba(255, 255, 255, 0.451);
     --color-bgLineNegative: rgb(243, 9, 9);
     --color-fgPlaceholder: rgba(255, 255, 255, 0.651);
     --color-fgHelper: rgba(255, 255, 255, 0.651);
@@ -332,11 +347,22 @@
     --color-fgIconDisabled: rgba(255, 255, 255, 0.451);
     --color-bgElevation1Hover: rgba(255, 255, 255, 0.078);
     --color-bgElevation1Active: rgba(255, 255, 255, 0.122);
+    --color-bgElevation1Selected: rgba(255, 255, 255, 0.122);
     --color-bgTagNeutral: rgba(166, 191, 204, 0.122);
     --color-bgTagNeutralHover: rgba(166, 191, 204, 0.18);
     --color-bgTagNeutralDisabled: rgba(166, 191, 204, 0.122);
     --color-fgTagNeutral: rgb(192, 197, 202);
     --color-bgLineTagNeutral: rgba(166, 191, 204, 0.251);
+    --color-bgElevation3: rgb(64, 64, 64);
+    --color-bgInfo: rgb(140, 139, 243);
+    --color-fgInteractive: rgb(140, 139, 243);
+    --color-fgIconMuted: rgba(255, 255, 255, 0.651);
+    --color-bgTagPositive: rgba(0, 231, 107, 0.122);
+    --color-fgTagPositive: rgb(0, 208, 96);
+    --color-bgTagWarning: rgba(242, 100, 20, 0.122);
+    --color-fgTagWarning: rgb(245, 139, 79);
+    --color-bgTagNegative: rgba(247, 50, 50, 0.122);
+    --color-fgTagNegative: rgb(249, 112, 112);
 
     --color-transparent: rgba(255, 255, 255, 0);
   }
@@ -394,6 +420,7 @@
   --color-bgFieldHover: rgba(255, 255, 255, 0.149);
   --color-bgFieldDisabled: rgba(255, 255, 255, 0.031);
   --color-bgLineStrong: rgb(255, 255, 255);
+  --color-bgLineDisabled: rgba(255, 255, 255, 0.451);
   --color-bgLineNegative: rgb(243, 9, 9);
   --color-fgPlaceholder: rgba(255, 255, 255, 0.651);
   --color-fgHelper: rgba(255, 255, 255, 0.651);
@@ -401,11 +428,22 @@
   --color-fgIconDisabled: rgba(255, 255, 255, 0.451);
   --color-bgElevation1Hover: rgba(255, 255, 255, 0.078);
   --color-bgElevation1Active: rgba(255, 255, 255, 0.122);
+  --color-bgElevation1Selected: rgba(255, 255, 255, 0.122);
   --color-bgTagNeutral: rgba(166, 191, 204, 0.122);
   --color-bgTagNeutralHover: rgba(166, 191, 204, 0.18);
   --color-bgTagNeutralDisabled: rgba(166, 191, 204, 0.122);
   --color-fgTagNeutral: rgb(192, 197, 202);
   --color-bgLineTagNeutral: rgba(166, 191, 204, 0.251);
+  --color-bgElevation3: rgb(64, 64, 64);
+  --color-bgInfo: rgb(140, 139, 243);
+  --color-fgInteractive: rgb(140, 139, 243);
+  --color-fgIconMuted: rgba(255, 255, 255, 0.651);
+  --color-bgTagPositive: rgba(0, 231, 107, 0.122);
+  --color-fgTagPositive: rgb(0, 208, 96);
+  --color-bgTagWarning: rgba(242, 100, 20, 0.122);
+  --color-fgTagWarning: rgb(245, 139, 79);
+  --color-bgTagNegative: rgba(247, 50, 50, 0.122);
+  --color-fgTagNegative: rgb(249, 112, 112);
 
   --color-transparent: rgba(255, 255, 255, 0);
 }

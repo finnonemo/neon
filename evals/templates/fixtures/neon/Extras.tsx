@@ -10,9 +10,11 @@ import { Dialog, DialogBody, DialogClose, DialogContent, DialogDescription, Dial
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { List, ListRow, ListRowContent, ListRowDescription, ListRowTitle } from "@/components/ui/list-row"
 import { SegmentedControl, SegmentedControlItem } from "@/components/ui/segmented-control"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
+import { Tag } from "@/components/ui/tag"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { Hook } from "./Hook"
@@ -67,7 +69,8 @@ export function Extras() {
         </Hook>
       </div>
       <Hook name="table">
-        <Table>
+        {/* One line a cell, so a row is Core's minimum height at 375 too; the table scrolls sideways. */}
+        <Table className="whitespace-nowrap">
           <TableHeader>
             <TableRow>
               <TableHead>ชื่อ</TableHead>
@@ -194,6 +197,28 @@ export function Extras() {
           <Button variant="secondary" loading={sending} onClick={() => { setSending(true); toast("ส่งแล้ว / Sent") }}>ส่งรายงาน</Button>
           <div className="rounded-lg bg-inverse p-4"><Button variant="inverse">ดูเพิ่มเติม</Button></div>
         </div>
+      </Hook>
+      {/* Core's Display tag cells the approval list has none of: Navy, and the Medium and Large Sizes. */}
+      <Hook name="core-tags">
+        <div className="flex flex-wrap items-center gap-2">
+          <Tag>ฉบับร่าง</Tag>
+          <Tag size="md" variant="positive">อนุมัติแล้ว</Tag>
+          <Tag size="lg" variant="negative">ปฏิเสธ</Tag>
+        </div>
+      </Hook>
+      {/* Core's List item states the approval list has none of: a disabled row (selected, for its Checkmark), and a row of one line. */}
+      <Hook name="core-list">
+        <List aria-label="บัญชี / Accounts">
+          <ListRow disabled selected>
+            <ListRowContent>
+              <ListRowTitle>บัญชีออมทรัพย์</ListRowTitle>
+              <ListRowDescription>ปิดใช้งาน</ListRowDescription>
+            </ListRowContent>
+          </ListRow>
+          <ListRow>
+            <ListRowContent><ListRowTitle>บัญชีกระแสรายวัน</ListRowTitle></ListRowContent>
+          </ListRow>
+        </List>
       </Hook>
     </main>
   )

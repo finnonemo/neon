@@ -103,6 +103,7 @@
   --color-field-hover: var(--field-hover);
   --color-field-disabled: var(--field-disabled);
   --color-line-strong: var(--line-strong);
+  --color-line-disabled: var(--line-disabled);
   --color-invalid: var(--color-bgLineNegative);
   --color-placeholder: var(--placeholder);
   --color-helper: var(--helper);
@@ -114,15 +115,37 @@
   --color-switch-on: var(--switch-on);
   --color-switch-thumb: var(--switch-thumb);
   --color-switch-thumb-disabled: var(--switch-thumb-disabled);
-  /* Core's Layer tokens over a surface at Hover and Active, for a segment not chosen. */
+  /* Core's Layer tokens over a surface at Hover and Active: a segment not chosen, a list or table
+   * row, an accordion header, a tab, a page. */
   --color-layer-hover: var(--layer-hover);
   --color-layer-active: var(--layer-active);
+  --color-layer-selected: var(--layer-selected);
   /* Core's Selection tag in Secondary Navy, for the toggle and toggle-group items. */
   --color-selection-tag: var(--selection-tag);
   --color-selection-tag-hover: var(--selection-tag-hover);
   --color-selection-tag-disabled: var(--selection-tag-disabled);
   --color-selection-tag-foreground: var(--selection-tag-foreground);
   --color-selection-tag-border: var(--selection-tag-border);
+  /* Core's tokens for the display items. track is Layer/layer-03, behind a progress bar's
+   * indicator and a spinner's arc; info and interactive are those two; layer-02 is a table's
+   * header row; icon-muted is Icon/icon-secondary, a chevron; avatar is Core's
+   * Avatar fill under Text/text-on-color. */
+  --color-track: var(--track);
+  --color-info: var(--info);
+  --color-interactive: var(--interactive);
+  --color-layer-02: var(--layer-02);
+  --color-icon-muted: var(--icon-muted);
+  --color-avatar: var(--avatar);
+  --color-avatar-foreground: var(--avatar-foreground);
+  /* Support/support-success, a finished progress bar's indicator; its Error is invalid. A status
+   * color, so it keeps the app's role inside an Immersive Theme. */
+  --color-success: var(--color-bgPositive);
+  /* Core's Display tag in Secondary, for the tag item: Green, Orange and Red fills. The neutral
+   * tag is Navy, the selection tag's fill and ink. Status colors, so they keep the app's roles
+   * inside an Immersive Theme. */
+  --color-tag-positive-wash: var(--color-bgTagPositive);
+  --color-tag-warning-wash: var(--color-bgTagWarning);
+  --color-tag-negative-wash: var(--color-bgTagNegative);
   /* Core's button label below Large: Subheadline and Footnote in Medium (500), a weight no type
    * role holds at those sizes. For the button item; lib/utils.ts lists them in cn's font-size group. */
   --text-button-md: var(--fontSize-label1); --text-button-md--line-height: var(--lineHeight-label1); --text-button-md--font-weight: 500;
@@ -161,13 +184,11 @@
   /* Text on filled colors (onColorLabel): fgInverse in light. */
   --primary-foreground: var(--color-fgInverse);
   --destructive-foreground: var(--color-fgInverse);
-  /* PROVISIONAL: tag inks. Light tags take the spectrum shades CDS draws
-   * tags in (Green/145, Yellow/170, Red/130), 4.8–6.9:1 on the washes, until
-   * the tag is retuned to Core's Tag tokens (#210). fgWarning is 3.93:1 on its
-   * light wash; fgPositive and fgNegative now pass there (5.54 and 7.97:1). */
-  --tag-positive: rgb(0, 127, 59);
-  --tag-warning: rgb(87, 90, 3);
-  --tag-negative: rgb(200, 8, 8);
+  /* Tag inks: Core's Display tag in Secondary, Green, Orange and Red, each on its own fill
+   * (tag-*-wash). Core gives each a light and a dark value. */
+  --tag-positive: var(--color-fgTagPositive);
+  --tag-warning: var(--color-fgTagWarning);
+  --tag-negative: var(--color-fgTagNegative);
   /* The primary Button's states, from Core's Button tokens: its fill at Hover
    * and Active, and Core's Disabled fill and label, which dim by their own
    * alpha and not by opacity. Slots, so an Immersive Theme restates them. */
@@ -191,6 +212,8 @@
   --field-hover: var(--color-bgFieldHover);
   --field-disabled: var(--color-bgFieldDisabled);
   --line-strong: var(--color-bgLineStrong);
+  /* The Line under a disabled selected tab: Core's border-disabled. */
+  --line-disabled: var(--color-bgLineDisabled);
   --placeholder: var(--color-fgPlaceholder);
   --helper: var(--color-fgHelper);
   --icon: var(--color-fgIcon);
@@ -201,9 +224,11 @@
   --switch-on: var(--color-bgPositive);
   --switch-thumb: var(--color-fgIconOnColor);
   --switch-thumb-disabled: var(--color-fgIconOnColorDisabled);
-  /* A segment not chosen, at Hover and Active: Core's layer-hover-01 and layer-active-01. */
+  /* Core's layer-hover-01 and layer-active-01. */
   --layer-hover: var(--color-bgElevation1Hover);
   --layer-active: var(--color-bgElevation1Active);
+  /* A selected table row: Core's layer-selected-01. */
+  --layer-selected: var(--color-bgElevation1Selected);
   /* The toggle, from Core's Selection tag in Secondary Navy. Its Selected ring is the tag's ink
    * and its Disabled ring the Disabled fill, as Core's Tag tokens alias them. */
   --selection-tag: var(--color-bgTagNeutral);
@@ -211,6 +236,14 @@
   --selection-tag-disabled: var(--color-bgTagNeutralDisabled);
   --selection-tag-foreground: var(--color-fgTagNeutral);
   --selection-tag-border: var(--color-bgLineTagNeutral);
+  /* The display items, from Core's Layer, Support, Miscellaneous, Icon and Avatar tokens. */
+  --track: var(--color-bgElevation3);
+  --info: var(--color-bgInfo);
+  --interactive: var(--color-fgInteractive);
+  --layer-02: var(--color-bgElevation2);
+  --icon-muted: var(--color-fgIconMuted);
+  --avatar: var(--color-bgAvatar);
+  --avatar-foreground: var(--color-fgOnColor);
   /* Disabled fills (spike trap 4), as CDS draws them: it blends a filled
    * control's color into the page background at 75%, raised for colors far
    * from the background in luminance (getBlendedColor), under 50% opacity.
@@ -226,18 +259,12 @@
 
 /* Text on filled colors in dark: filled buttons take fg (white), Core's
  * Text/text-on-color; white on dark bgNegative is 5.39:1. Matches theme.css's
- * own dark selectors.
- * PROVISIONAL: dark tags take fgPositive, fgWarning and fgNegative, which
- * on their washes over the page are 7.32, 5.77 and 9.10:1, and over a card
- * 5.49, 4.53 and 7.28:1. */
+ * own dark selectors. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --primary-foreground: var(--color-fg);
     --destructive-foreground: var(--color-fg);
     --destructive-disabled: color-mix(in srgb, var(--destructive) 75%, var(--background));
-    --tag-positive: var(--color-fgPositive);
-    --tag-warning: var(--color-fgWarning);
-    --tag-negative: var(--color-fgNegative);
     --sheet-border-width: 1px;
   }
 }
@@ -245,9 +272,6 @@
   --primary-foreground: var(--color-fg);
   --destructive-foreground: var(--color-fg);
   --destructive-disabled: color-mix(in srgb, var(--destructive) 75%, var(--background));
-  --tag-positive: var(--color-fgPositive);
-  --tag-warning: var(--color-fgWarning);
-  --tag-negative: var(--color-fgNegative);
   --sheet-border-width: 1px;
 }
 
