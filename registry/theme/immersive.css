@@ -10,10 +10,21 @@
  * neon.css's :root[data-theme] blocks and wins by coming after it.
  * A theme's text is White or Navy only, so muted text is the theme's text
  * too, and cards and popovers sit on the canvas so it stays readable there.
- * --primary-disabled is redeclared because :root's mix resolves :root's
- * --primary; every theme's action and canvas sit far apart in luminance, so
- * CDS's blend (getBlendedColor) comes to 93.7%, as in Neon light. Borders,
- * inputs, secondary, accent and destructive keep the app's roles. */
+ * Secondary, muted and accent fills (secondary and outline buttons, toggles,
+ * the segmented control track, tags, list rows, menu items, table headers)
+ * carry the theme's text, not their own foreground, so they take palette 75:
+ * the first stepped block on a theme whose palette 100 is the canvas, and the
+ * one step whose on-color is the theme's text in every theme. Accent equals
+ * secondary, as bgAlternate equals bgSecondary in Neon. Inverse (the checked
+ * segment, the pressed toggle, the tooltip) is the action pair, since a
+ * theme's action is its text color and on-action is White or Navy. The
+ * fgPrimary role (the active tab, the informational alert's icon, a ghost
+ * input button) is the theme's text, or Ultra would draw it navy on navy.
+ * The disabled mixes are redeclared because :root's mix resolves :root's
+ * slots; every theme's action and canvas sit far apart in luminance, so
+ * CDS's blend (getBlendedColor) comes to 93.7%, as in Neon light, and a
+ * secondary fill blends at 75%, as in Neon. Borders, inputs and destructive
+ * keep the app's roles. */
 :root[data-immersive-theme],
 [data-immersive-theme] {
   --background: var(--immersive-canvas);
@@ -26,6 +37,15 @@
   --primary: var(--immersive-action);
   --primary-foreground: var(--immersive-on-action);
   --primary-disabled: color-mix(in srgb, var(--immersive-action) 93.7%, var(--immersive-canvas));
+  --secondary: var(--immersive-palette-75);
+  --secondary-foreground: var(--immersive-on-palette-75);
+  --secondary-disabled: color-mix(in srgb, var(--immersive-palette-75) 75%, var(--immersive-canvas));
+  --muted: var(--immersive-palette-75);
+  --accent: var(--immersive-palette-75);
+  --accent-foreground: var(--immersive-on-palette-75);
+  --inverse: var(--immersive-action);
+  --inverse-foreground: var(--immersive-on-action);
+  --color-fgPrimary: var(--immersive-text);
   --ring: var(--immersive-action);
 }
 

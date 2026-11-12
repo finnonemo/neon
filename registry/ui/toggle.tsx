@@ -7,8 +7,8 @@ import { cn } from "@/lib/utils"
 // A Supporting item (ADR 0008): shaped for toggle-group, whose Counterpart is
 // CDS's grouped toggle buttons, a ButtonGroup of CDS Buttons. CDS has no
 // toggle button, so a toggle is a CDS Button whose variant follows its state.
-// PROVISIONAL (#200): pressed is the inverse Button (bgInverse,
-// fgInverse), as segmented-control's chosen segment is; unpressed is the
+// PROVISIONAL (#200): pressed is the inverse Button (the inverse slot,
+// bgInverse and fgInverse), as segmented-control's chosen segment is; unpressed is the
 // secondary Button (bgSecondary, fg). PROVISIONAL (#201): sm, default
 // and lg are the CDS Button sizes xs, s and m: 16px sides, then 6px and
 // label1, 8px and headline, and 24px sides, 12px and headline. Every size is
@@ -38,7 +38,7 @@ const toggleVariants = cva(
 // dark alike. CDS also fades a pressed button's text to 82%; the text here is
 // a bare text node, so it stays at full strength.
 const toggleStates =
-  "bg-secondary text-secondary-foreground hover:bg-accent disabled:bg-secondary-disabled data-[state=on]:bg-[color-mix(in_srgb,var(--color-bgInverse)_95.7%,var(--background))] data-[state=on]:text-inverse-foreground data-[state=on]:hover:bg-inverse/90 data-[state=on]:disabled:bg-[color-mix(in_srgb,var(--color-bgInverse)_93.7%,var(--background))] focus-visible:z-10 focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0"
+  "bg-secondary text-secondary-foreground hover:bg-accent disabled:bg-secondary-disabled data-[state=on]:bg-[color-mix(in_srgb,var(--inverse)_95.7%,var(--background))] data-[state=on]:text-inverse-foreground data-[state=on]:hover:bg-inverse/90 data-[state=on]:disabled:bg-[color-mix(in_srgb,var(--inverse)_93.7%,var(--background))] focus-visible:z-10 focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0"
 
 function Toggle({
   className,

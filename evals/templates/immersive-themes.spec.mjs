@@ -91,6 +91,80 @@ for (const [theme, scheme] of Object.entries(SCHEMES)) {
   });
 }
 
+// Text on the fills a themed page paints (white on white on Ultra before the adapter mapped them). Expected colors come from
+// immersive.css's mapping: palette 75 under the theme's text, and the action pair for inverse fills.
+// Computed colors come as rgb(0-255) or, for a color-mix(), color(srgb 0-1).
+const channels = text => { const values = text.match(/[\d.]+/g).slice(0, 3).map(Number); return text.startsWith('color(') ? values : values.map(v => v / 255); };
+const luminance = colorText => channels(colorText)
+  .map(v => v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4)
+  .reduce((sum, v, i) => sum + v * [0.2126, 0.7152, 0.0722][i], 0);
+const ratio = (a, b) => { const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x); return (hi + 0.05) / (lo + 0.05); };
+
+for (const theme of Object.keys(SCHEMES)) {
+  const vars = themeVars(theme);
+  test(`${theme}: secondary, outline, ghost, toggle, tag and segmented fills take the theme, text readable`, async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto(`/?layout=immersive&theme=${theme}&controls`);
+    const fill = 'var(--immersive-palette-75)';
+    const expected = await resolve(page, { fill, text: 'var(--immersive-text)', action: 'var(--immersive-action)', onAction: 'var(--immersive-on-action)', pressed: `color-mix(in srgb, ${vars.action} 95.7%, ${vars.canvas})` });
+    expect(expected.fill).toBe(rgb(vars['palette-75']));
+    const colors = locator => locator.evaluate(el => {
+      const style = getComputedStyle(el);
+      return { background: style.backgroundColor, color: style.color };
+    });
+    const checks = [
+      ['secondary button', page.getByRole('button', { name: 'Secondary action', exact: true }), expected.fill, expected.text],
+      ['unpressed toggle', page.getByRole('button', { name: 'Unpressed toggle', exact: true }), expected.fill, expected.text],
+      ['pressed toggle', page.getByRole('button', { name: 'Pressed toggle', exact: true }), expected.pressed, expected.onAction],
+      ['neutral tag', page.getByText('Neutral tag', { exact: true }), expected.fill, expected.text],
+      ['segmented track', page.getByRole('radiogroup', { name: 'Period' }), expected.fill, expected.text],
+      ['checked segment', page.getByRole('radio', { name: 'Month', exact: true }), expected.action, expected.onAction],
+    ];
+    for (const [name, locator, background, color] of checks) {
+      expect(await colors(locator), name).toEqual({ background, color });
+      expect(ratio(color, background), `${name} text contrast`).toBeGreaterThanOrEqual(4.5);
+    }
+    // Hover fills are the accent slot; the text stays the theme's.
+    for (const name of ['Outline action', 'Ghost action', 'Secondary action']) {
+      const button = page.getByRole('button', { name, exact: true });
+      await button.hover();
+      await expect.poll(() => colors(button), { message: `${name} hover` }).toEqual({ background: expected.fill, color: expected.text });
+    }
+    await page.screenshot({ path: test.info().outputPath(`immersive-${theme}-controls.png`) });
+  });
+
+  test(`${theme}: a sticky section pins to the viewport while the window scrolls`, async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto(`/?layout=immersive&theme=${theme}&controls`);
+    const probe = page.locator('[data-sticky-probe]');
+    // Any non-visible overflow between the section and the window traps sticky, scrolling or not.
+    expect(await probe.evaluate(el => {
+      const traps = [];
+      for (let node = el.parentElement; node && node !== document.body; node = node.parentElement) {
+        const style = getComputedStyle(node);
+        if (style.overflowX !== 'visible' || style.overflowY !== 'visible') traps.push(node.className || node.tagName);
+      }
+      return traps;
+    })).toEqual([]);
+    const start = await probe.evaluate(el => el.getBoundingClientRect().top);
+    expect(start).toBeGreaterThan(0);
+    await page.evaluate(() => window.scrollTo(0, 600));
+    await expect.poll(() => page.evaluate(() => scrollY)).toBe(600);
+    expect(await probe.evaluate(el => el.getBoundingClientRect().top)).toBe(0);
+    await page.screenshot({ path: test.info().outputPath(`immersive-${theme}-sticky.png`) });
+  });
+}
+
+// Without a theme the content keeps InspectorView's own scrolling body.
+test('unthemed ImmersiveLayout keeps its scrollable content pane', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto('/?layout=immersive&controls');
+  const pane = page.locator('[data-sticky-probe]').locator('xpath=../..');
+  await expect(pane).toHaveCSS('overflow-y', 'auto');
+  expect(await pane.evaluate(el => el.scrollHeight > el.clientHeight)).toBe(true);
+  expect(await page.evaluate(() => document.scrollingElement.scrollHeight <= innerHeight)).toBe(true);
+});
+
 // The themed page keeps the starter's full-bleed content and its 1440px cap at max.
 for (const width of [1919, 1920]) {
   test(`ultra ${width}px: content stays full-bleed below max and capped at max`, async ({ page }) => {
