@@ -11,6 +11,9 @@ import { tagCell } from '../templates/core/display-tag.mjs';
 import { avatarCell } from '../templates/core/avatar.mjs';
 import { listCell } from '../templates/core/list-item.mjs';
 import { tableCell } from '../templates/core/table.mjs';
+import { tabCell } from '../templates/core/tabs.mjs';
+import { accordionCell } from '../templates/core/accordion.mjs';
+import { paginationCell } from '../templates/core/pagination.mjs';
 
 const NONE = 'rgba(0, 0, 0, 0)';
 const both = async (cell, names) => ({ light: await coreBaseline(cell, 'light', names), dark: await coreBaseline(cell, 'dark', names) });
@@ -156,4 +159,79 @@ test('a table is Core\'s Table at Medium: 56px rows, cells padded 14 and 8, a Fo
   // Type=Button and Type=Input cells: padding 4 · 8.
   assert.deepEqual(await coreBaseline(tableCell('controlCell'), 'light'), { h: 56, pad: [4, 8, 4, 8] });
   assert.throws(() => tableCell('footer'), /no measured part/);
+});
+
+// Tabs: _Tab min 48 × 48, Content padding 12 · 16, stroke 2 inside; Label Body/Subheadline (15 / 24) Regular,
+// Text/text-secondary, Text/text-primary when selected; Line 2 tall in Border/border-strong; Track 1 tall in Border/border-subtle.
+test('a tab is Core\'s _Tab: 48px, padded 12 and 16, a Subheadline label, a 2px Line when selected over a 1px Track', async () => {
+  const tab = { h: 48, pad: [12, 16, 12, 16], bg: 'rgba(255, 255, 255, 0)', border: { width: 2, color: 'rgba(255, 255, 255, 0)' }, opacity: 1 };
+  assert.deepEqual(await both(tabCell('tab')), { light: tab, dark: tab });
+  const font = { size: 15, lineHeight: 24, weight: 400 };
+  assert.deepEqual(await both(tabCell('label')), { light: { font, color: 'rgba(0, 0, 0, 0.651)' }, dark: { font, color: 'rgba(255, 255, 255, 0.651)' } });
+  assert.deepEqual(await both(tabCell('label', { Selected: true })), { light: { font, color: 'rgba(0, 0, 0, 0.851)' }, dark: { font, color: 'rgb(255, 255, 255)' } });
+  assert.deepEqual(await both(tabCell('line', { Selected: true })), { light: { h: 2, bg: 'rgb(1, 23, 43)' }, dark: { h: 2, bg: 'rgb(255, 255, 255)' } });
+  assert.deepEqual(await both(tabCell('line')), { light: { h: 2, bg: 'rgba(255, 255, 255, 0)' }, dark: { h: 2, bg: 'rgba(255, 255, 255, 0)' } });
+  assert.deepEqual(await both(tabCell('track')), { light: { h: 1, bg: 'rgba(0, 0, 0, 0.122)' }, dark: { h: 1, bg: 'rgba(255, 255, 255, 0.18)' } });
+});
+
+test('a tab\'s states: Active fills it, Focus strokes it, Disabled greys its label', async () => {
+  assert.deepEqual(await both(tabCell('tab', { State: 'Active' }), ['bg']), { light: { bg: 'rgba(1, 23, 43, 0.078)' }, dark: { bg: 'rgba(255, 255, 255, 0.122)' } });
+  assert.deepEqual(await both(tabCell('tab', { Selected: true, State: 'Focus' }), ['border']), {
+    light: { border: { width: 2, color: 'rgb(105, 104, 239)' } },
+    dark: { border: { width: 2, color: 'rgb(128, 127, 242)' } },
+  });
+  assert.deepEqual(await both(tabCell('label', { State: 'Disabled' }), ['color']), { light: { color: 'rgba(0, 0, 0, 0.451)' }, dark: { color: 'rgba(255, 255, 255, 0.451)' } });
+  assert.throws(() => tabCell('tab', { State: 'Skeleton' }), /no Skeleton state/);
+});
+
+// Accordion header: row padding 0 · 8, radius 12, Layer/layer-01, stroke 2 inside; Label block padding 14, Medium 56 tall;
+// Label Headings/Headline in Text/text-primary; chevron in a 24 × 24 box in Icon/icon-secondary.
+test('an accordion header is Core\'s _Accordion header at Medium: 56px on Layer/layer-01, a Headline title and a 24px chevron box', async () => {
+  const box = { h: 56, pad: [14, 8, 14, 8], radius: 12, border: { width: 2, color: 'rgba(255, 255, 255, 0)' } };
+  for (const Expanded of [false, true]) {
+    assert.deepEqual(await both(accordionCell('header', { Expanded })), { light: { ...box, bg: 'rgb(255, 255, 255)' }, dark: { ...box, bg: 'rgb(26, 26, 26)' } });
+  }
+  const font = { size: 17, lineHeight: 24, weight: 500 };
+  assert.deepEqual(await both(accordionCell('title')), { light: { font, color: 'rgba(0, 0, 0, 0.851)' }, dark: { font, color: 'rgb(255, 255, 255)' } });
+  assert.deepEqual(await both(accordionCell('chevron')), { light: { h: 24, w: 24, color: 'rgba(0, 0, 0, 0.651)' }, dark: { h: 24, w: 24, color: 'rgba(255, 255, 255, 0.651)' } });
+});
+
+test('an accordion header\'s states: Active fills it, Focus strokes it, Disabled greys its title and chevron', async () => {
+  assert.deepEqual(await both(accordionCell('header', { State: 'Active' }), ['bg']), { light: { bg: 'rgba(1, 23, 43, 0.078)' }, dark: { bg: 'rgba(255, 255, 255, 0.122)' } });
+  assert.deepEqual(await both(accordionCell('header', { State: 'Focus' }), ['border']), {
+    light: { border: { width: 2, color: 'rgb(105, 104, 239)' } },
+    dark: { border: { width: 2, color: 'rgb(128, 127, 242)' } },
+  });
+  for (const part of ['title', 'chevron']) {
+    assert.deepEqual(await both(accordionCell(part, { State: 'Disabled' }), ['color']), { light: { color: 'rgba(0, 0, 0, 0.451)' }, dark: { color: 'rgba(255, 255, 255, 0.451)' } }, part);
+  }
+  assert.throws(() => accordionCell('header', { State: 'Skeleton' }), /no Skeleton state/);
+});
+
+// Pagination: bar min height 56, padding 16 at the sides, Layer/layer-01; a page item's Container 36 × 36, radius 8,
+// Text/text-primary; Selected is Background/background-inverse with Text/text-inverse.
+test('pagination is Core\'s Numbered bar at Medium: 56px on Layer/layer-01, each page a 36px box with 8px corners', async () => {
+  const bar = { h: 56, pad: [0, 16, 0, 16] };
+  assert.deepEqual(await both(paginationCell('bar')), { light: { ...bar, bg: 'rgb(255, 255, 255)' }, dark: { ...bar, bg: 'rgb(26, 26, 26)' } });
+  const box = { h: 36, w: 36, pad: [0, 0, 0, 0], radius: 8 };
+  assert.deepEqual(await both(paginationCell('page')), {
+    light: { ...box, bg: 'rgba(255, 255, 255, 0)', color: 'rgba(0, 0, 0, 0.851)' },
+    dark: { ...box, bg: 'rgba(255, 255, 255, 0)', color: 'rgb(255, 255, 255)' },
+  });
+  assert.deepEqual(await both(paginationCell('page', { Selected: true })), {
+    light: { ...box, bg: 'rgb(0, 0, 0)', color: 'rgb(255, 255, 255)' },
+    dark: { ...box, bg: 'rgb(255, 255, 255)', color: 'rgba(0, 0, 0, 0.851)' },
+  });
+  assert.deepEqual(await both(paginationCell('ellipsis')), { light: { color: 'rgba(0, 0, 0, 0.851)' }, dark: { color: 'rgb(255, 255, 255)' } });
+});
+
+test('a page\'s states: Hover and Pressed fill it, Disabled greys its number, and a disabled selected page keeps a fill', async () => {
+  assert.deepEqual(await both(paginationCell('page', { State: 'Hover' }), ['bg']), { light: { bg: 'rgba(1, 23, 43, 0.051)' }, dark: { bg: 'rgba(255, 255, 255, 0.078)' } });
+  assert.deepEqual(await both(paginationCell('page', { State: 'Pressed' }), ['bg']), { light: { bg: 'rgba(1, 23, 43, 0.078)' }, dark: { bg: 'rgba(255, 255, 255, 0.122)' } });
+  assert.deepEqual(await both(paginationCell('page', { State: 'Disabled' }), ['bg', 'color']), {
+    light: { bg: 'rgba(255, 255, 255, 0)', color: 'rgba(0, 0, 0, 0.451)' },
+    dark: { bg: 'rgba(255, 255, 255, 0)', color: 'rgba(255, 255, 255, 0.451)' },
+  });
+  assert.deepEqual(await both(paginationCell('page', { Selected: true, State: 'Disabled' }), ['bg']), { light: { bg: 'rgba(1, 23, 43, 0.078)' }, dark: { bg: 'rgba(255, 255, 255, 0.122)' } });
+  assert.throws(() => paginationCell('page', { State: 'Skeleton' }), /no Skeleton state/);
 });

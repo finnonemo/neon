@@ -1,4 +1,5 @@
-// pagination, measured against CDS Pagination (fixtures/expansion/pagination.tsx):
+// pagination, measured against Core's Pagination and, where Core gives no value, CDS Pagination
+// (fixtures/expansion/pagination.tsx):
 // the same ten pages from the first with no siblings, so the list is CDS's
 // 1, 2, 3, …, 10 while the current page is any of the first three.
 import { useState, type MouseEvent } from "react"

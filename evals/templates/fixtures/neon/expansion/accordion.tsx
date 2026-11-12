@@ -1,5 +1,7 @@
-// accordion, measured against CDS Accordion (fixtures/expansion/accordion.tsx):
-// one item open at a time, the first open, and any item can close again.
+// accordion, measured against Core's Accordion and, where Core gives no value, CDS Accordion
+// (fixtures/expansion/accordion.tsx):
+// one item open at a time, the first open, and any item can close again. The last
+// item is disabled, which the CDS fixture has none of.
 import { Accordion as NeonAccordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Hook } from "../Hook"
 
@@ -19,6 +21,10 @@ export default function Accordion() {
           <AccordionItem value="documents">
             <AccordionTrigger>เอกสาร / Documents</AccordionTrigger>
             <AccordionContent><p>หนังสือชี้ชวน / Prospectus</p></AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="closed" disabled>
+            <AccordionTrigger>บัญชีที่ปิดแล้ว / Closed account</AccordionTrigger>
+            <AccordionContent><p>ไม่มีรายการ / Nothing to show</p></AccordionContent>
           </AccordionItem>
         </NeonAccordion>
       </Hook>

@@ -1,7 +1,9 @@
-// tabs → CDS Tabs (DefaultTab, DefaultTabsActiveIndicator): an active, an
-// inactive and a disabled tab, the active tab's underline and the panel below.
-// The selectors are ARIA state, which Radix and CDS both render; CDS sets the
-// label in an h2 inside each tab, Neon in the trigger itself.
+// tabs → Core's Tabs (core/tabs.mjs), beside CDS Tabs: a selected, an unselected and a
+// disabled tab, the selected tab's Line, the Track and the panel below. The selectors are
+// ARIA state, which Radix and CDS both render. A tab's width and the distances between
+// tabs are not Core's to give (they follow the label), so they stay on the CDS baseline.
+import { tabCell } from '../core/tabs.mjs';
+
 const at = '[data-measure=tabs-default]';
 const tab = (state) => `${at} [role=tab]${state}`;
 const same = (selector, check) => ({ cds: selector, neon: selector, check });
@@ -12,13 +14,17 @@ const disabled = tab(':disabled');
 export const screens = [{
   targets: {
     tabList: same(`${at} [role=tablist]`, ['h', 'bg']),
-    activeTab: same(active, ['h', 'w', 'bg', 'opacity']),
-    activeLabel: same(active, ['font', 'color']),
-    inactiveTab: same(inactive, ['h', 'w', 'bg', 'opacity']),
-    inactiveLabel: same(inactive, ['font', 'color']),
-    disabledTab: same(disabled, ['h', 'w', 'opacity']),
-    disabledLabel: same(disabled, ['font', 'color']),
-    indicator: { cds: `${at} [data-testid=tabs-active-indicator]`, neon: `${at} [data-slot=tabs-indicator]`, check: ['h', 'w', 'bg'] },
+    activeTab: { ...same(active, ['h', 'w', 'bg', 'opacity']), core: tabCell('tab', { Selected: true }) },
+    activeLabel: { ...same(active, ['font', 'color']), core: tabCell('label', { Selected: true }) },
+    inactiveTab: { ...same(inactive, ['h', 'w', 'bg', 'opacity']), core: tabCell('tab') },
+    inactiveLabel: { ...same(inactive, ['font', 'color']), core: tabCell('label') },
+    disabledTab: { ...same(disabled, ['h', 'w', 'opacity']), core: tabCell('tab', { State: 'Disabled' }) },
+    disabledLabel: { ...same(disabled, ['font', 'color']), core: tabCell('label', { State: 'Disabled' }) },
+    indicator: { cds: `${at} [data-testid=tabs-active-indicator]`, neon: `${at} [data-slot=tabs-indicator]`, check: ['h', 'w', 'bg'], core: tabCell('line', { Selected: true }) },
+    // Core's own parts, which CDS has no element for.
+    activeTabBox: { neon: active, check: ['pad'], core: tabCell('tab', { Selected: true }) },
+    inactiveTabBox: { neon: inactive, check: ['pad'], core: tabCell('tab') },
+    track: { neon: `${at} [data-slot=tabs-track]`, check: ['h', 'bg'], core: tabCell('track') },
     panelText: same(`${at} [role=tabpanel] p`, ['font', 'color']),
   },
   gaps: [
@@ -34,21 +40,22 @@ export const screens = [{
 // and End move along the enabled tabs (wrapping, skipping the disabled one)
 // and select as they go, switching the panel. CDS only moves focus and
 // selects on Enter; selecting on arrival is Radix's documented default and no
-// less accessible. PROVISIONAL (#134): the focus ring is Neon's, so it is
-// checked for being shown rather than measured.
-export function a11y({ test, expect, gotoExpansion, keyboardFocus }) {
+// less accessible. Keyboard focus is Core's 2px Focus/focus stroke inside the tab, an inset ring
+// the selected tab's Line draws over.
+export function a11y({ test, expect, gotoExpansion, keyboardFocus, focusColor }) {
   const tablist = (page) => page.getByRole('tablist', { name: 'บัญชี / Account' });
   const tabsOf = (page) => ['ภาพรวม', 'History', 'เอกสาร'].map((name) => tablist(page).getByRole('tab', { name }));
   const panel = (page) => page.locator('[data-measure=tabs-default]').getByRole('tabpanel');
 
-  test('a tab reached from the keyboard shows a focus indicator', async ({ page }) => {
-    await gotoExpansion(page);
+  for (const mode of ['light', 'dark']) test(`${mode}: a tab reached from the keyboard draws Core's Focus stroke inside it`, async ({ page }) => {
+    await gotoExpansion(page, mode);
     const [overview] = tabsOf(page);
     const focus = await keyboardFocus(page, overview);
     await expect(overview).toBeFocused();
     expect(focus.focusVisible).toBe(true);
-    expect(focus.after, 'the focused tab draws an indicator').not.toBe('');
-    expect(focus.after, 'the focused tab looks different').not.toBe(focus.before);
+    const ring = `${await focusColor(page)} 0px 0px 0px 2px inset`;
+    expect(focus.before).not.toContain(ring);
+    expect(focus.after).toContain(ring);
   });
 
   test('arrows, Home and End move the selection along the enabled tabs and switch the panel', async ({ page }) => {

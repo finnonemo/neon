@@ -71,6 +71,7 @@
   --field-hover: var(--immersive-palette-75);
   --field-disabled: color-mix(in srgb, var(--immersive-palette-75) 37.5%, var(--immersive-canvas));
   --line-strong: var(--immersive-text);
+  --line-disabled: color-mix(in srgb, var(--immersive-text) 50%, var(--immersive-canvas));
   --placeholder: var(--immersive-text);
   --helper: var(--immersive-text);
   --icon: var(--immersive-text);

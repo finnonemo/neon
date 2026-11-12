@@ -103,6 +103,7 @@
   --color-field-hover: var(--field-hover);
   --color-field-disabled: var(--field-disabled);
   --color-line-strong: var(--line-strong);
+  --color-line-disabled: var(--line-disabled);
   --color-invalid: var(--color-bgLineNegative);
   --color-placeholder: var(--placeholder);
   --color-helper: var(--helper);
@@ -210,6 +211,8 @@
   --field-hover: var(--color-bgFieldHover);
   --field-disabled: var(--color-bgFieldDisabled);
   --line-strong: var(--color-bgLineStrong);
+  /* The Line under a disabled selected tab: Core's border-disabled. */
+  --line-disabled: var(--color-bgLineDisabled);
   --placeholder: var(--color-fgPlaceholder);
   --helper: var(--color-fgHelper);
   --icon: var(--color-fgIcon);

@@ -66,6 +66,7 @@
   "bgFieldHover": "Field/field-hover",
   "bgFieldDisabled": "Field/field-disabled",
   "bgLineStrong": "Border/border-strong",
+  "bgLineDisabled": "Border/border-disabled",
   "bgLineNegative": "Support/support-error",
   "fgPlaceholder": "Text/text-placeholder",
   "fgHelper": "Text/text-helper",

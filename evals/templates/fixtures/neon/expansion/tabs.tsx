@@ -1,4 +1,4 @@
-// tabs, measured against CDS Tabs (fixtures/expansion/tabs.tsx): an active
+// tabs, measured against Core's Tabs and, where Core gives no value, CDS Tabs (fixtures/expansion/tabs.tsx): an active
 // tab, an inactive one and a disabled one, each with its panel.
 import { Tabs as NeonTabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Hook } from "../Hook"

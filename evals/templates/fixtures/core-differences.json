@@ -48,12 +48,16 @@
     "sectionHeading: font.lineHeight 24 ≠ 22"
   ],
   "expansion-accordion@375-light": [
+    "openHeader: w 304 ≠ 320",
     "openTitle: h 24 ≠ 22",
-    "openTitle: font.lineHeight 24 ≠ 22",
+    "openTitle: w 256 ≠ 238",
+    "closedHeader: h 76 ≠ 82",
+    "closedHeader: w 304 ≠ 320",
     "closedTitle: h 48 ≠ 44",
-    "closedTitle: font.lineHeight 24 ≠ 22",
+    "closedTitle: w 256 ≠ 238",
     "panelText: h 48 ≠ 44",
-    "panelText: font.lineHeight 24 ≠ 22"
+    "panelText: font.lineHeight 24 ≠ 22",
+    "gap openTitle→openCaret: 8 ≠ 16"
   ],
   "expansion-alert-dialog-open@375-light": [
     "alertCard: h 252 ≠ 238",
@@ -151,12 +155,20 @@
     "buttonInput: h 56 ≠ 54"
   ],
   "expansion-pagination@375-light": [
+    "previous: bg rgba(1, 23, 43, 0.1) ≠ rgba(255, 255, 255, 0)",
+    "previous: opacity 1 ≠ 0.5",
+    "previousIcon: color rgba(0, 0, 0, 0.45) ≠ rgba(0, 0, 0, 0.85)",
     "current: font.lineHeight 24 ≠ 22",
     "page: font.lineHeight 24 ≠ 22",
     "ellipsis: h 24 ≠ 22",
+    "ellipsis: w 36 ≠ 15",
     "ellipsis: font.lineHeight 24 ≠ 22",
-    "last: h 40 ≠ 38",
-    "last: font.lineHeight 24 ≠ 22"
+    "last: font.lineHeight 24 ≠ 22",
+    "gap previous→current: 16 ≠ 4",
+    "gap current→page: 0 ≠ 4",
+    "gap third→ellipsis: 0 ≠ 4",
+    "gap ellipsis→last: 0 ≠ 4",
+    "gap last→next: 16 ≠ 4"
   ],
   "expansion-radio-group@375-light": [
     "groupLabel: font.lineHeight 24 ≠ 22",
@@ -213,14 +225,14 @@
     "gap disabledOnTrack→disabledOnThumb: -21 ≠ -31"
   ],
   "expansion-tabs@375-light": [
-    "tabList: h 58 ≠ 56",
-    "activeTab: h 58 ≠ 56",
-    "activeLabel: font.lineHeight 24 ≠ 22",
-    "inactiveTab: h 58 ≠ 56",
-    "inactiveLabel: font.lineHeight 24 ≠ 22",
-    "disabledTab: h 58 ≠ 56",
-    "disabledLabel: font.lineHeight 24 ≠ 22",
-    "panelText: font.lineHeight 24 ≠ 22"
+    "tabList: h 48 ≠ 56",
+    "activeTab: w 84 ≠ 61",
+    "inactiveTab: w 80 ≠ 58",
+    "disabledTab: w 79 ≠ 57",
+    "indicator: w 84 ≠ 61",
+    "panelText: font.lineHeight 24 ≠ 22",
+    "gap activeTab→inactiveTab: 0 ≠ 32",
+    "gap inactiveTab→disabledTab: 0 ≠ 32"
   ],
   "expansion-toggle-group@375-light": [
     "defaultPressed: w 34 ≠ 53",
@@ -284,12 +296,16 @@
     "sectionHeading: font.lineHeight 24 ≠ 22"
   ],
   "expansion-accordion@375-dark": [
+    "openHeader: w 304 ≠ 320",
     "openTitle: h 24 ≠ 22",
-    "openTitle: font.lineHeight 24 ≠ 22",
+    "openTitle: w 256 ≠ 238",
+    "closedHeader: h 76 ≠ 82",
+    "closedHeader: w 304 ≠ 320",
     "closedTitle: h 48 ≠ 44",
-    "closedTitle: font.lineHeight 24 ≠ 22",
+    "closedTitle: w 256 ≠ 238",
     "panelText: h 48 ≠ 44",
-    "panelText: font.lineHeight 24 ≠ 22"
+    "panelText: font.lineHeight 24 ≠ 22",
+    "gap openTitle→openCaret: 8 ≠ 16"
   ],
   "expansion-alert-dialog-open@375-dark": [
     "alertCard: h 252 ≠ 238",
@@ -389,12 +405,20 @@
     "buttonInput: h 56 ≠ 54"
   ],
   "expansion-pagination@375-dark": [
+    "previous: bg rgba(255, 255, 255, 0.1) ≠ rgba(0, 0, 0, 0)",
+    "previous: opacity 1 ≠ 0.5",
+    "previousIcon: color rgba(255, 255, 255, 0.45) ≠ rgb(255, 255, 255)",
     "current: font.lineHeight 24 ≠ 22",
     "page: font.lineHeight 24 ≠ 22",
     "ellipsis: h 24 ≠ 22",
+    "ellipsis: w 36 ≠ 15",
     "ellipsis: font.lineHeight 24 ≠ 22",
-    "last: h 40 ≠ 38",
-    "last: font.lineHeight 24 ≠ 22"
+    "last: font.lineHeight 24 ≠ 22",
+    "gap previous→current: 16 ≠ 4",
+    "gap current→page: 0 ≠ 4",
+    "gap third→ellipsis: 0 ≠ 4",
+    "gap ellipsis→last: 0 ≠ 4",
+    "gap last→next: 16 ≠ 4"
   ],
   "expansion-radio-group@375-dark": [
     "groupLabel: font.lineHeight 24 ≠ 22",
@@ -459,14 +483,14 @@
     "gap disabledOnTrack→disabledOnThumb: -21 ≠ -31"
   ],
   "expansion-tabs@375-dark": [
-    "tabList: h 58 ≠ 56",
-    "activeTab: h 58 ≠ 56",
-    "activeLabel: font.lineHeight 24 ≠ 22",
-    "inactiveTab: h 58 ≠ 56",
-    "inactiveLabel: font.lineHeight 24 ≠ 22",
-    "disabledTab: h 58 ≠ 56",
-    "disabledLabel: font.lineHeight 24 ≠ 22",
-    "panelText: font.lineHeight 24 ≠ 22"
+    "tabList: h 48 ≠ 56",
+    "activeTab: w 84 ≠ 61",
+    "inactiveTab: w 80 ≠ 58",
+    "disabledTab: w 79 ≠ 57",
+    "indicator: w 84 ≠ 61",
+    "panelText: font.lineHeight 24 ≠ 22",
+    "gap activeTab→inactiveTab: 0 ≠ 32",
+    "gap inactiveTab→disabledTab: 0 ≠ 32"
   ],
   "expansion-toggle-group@375-dark": [
     "defaultPressed: w 34 ≠ 53",
@@ -527,12 +551,16 @@
     "sectionHeading: font.lineHeight 24 ≠ 22"
   ],
   "expansion-accordion@1440-light": [
+    "openHeader: w 304 ≠ 320",
     "openTitle: h 24 ≠ 22",
-    "openTitle: font.lineHeight 24 ≠ 22",
+    "openTitle: w 256 ≠ 238",
+    "closedHeader: h 76 ≠ 82",
+    "closedHeader: w 304 ≠ 320",
     "closedTitle: h 48 ≠ 44",
-    "closedTitle: font.lineHeight 24 ≠ 22",
+    "closedTitle: w 256 ≠ 238",
     "panelText: h 48 ≠ 44",
-    "panelText: font.lineHeight 24 ≠ 22"
+    "panelText: font.lineHeight 24 ≠ 22",
+    "gap openTitle→openCaret: 8 ≠ 16"
   ],
   "expansion-alert-dialog-open@1440-light": [
     "alertCard: h 252 ≠ 238",
@@ -630,12 +658,20 @@
     "buttonInput: h 56 ≠ 54"
   ],
   "expansion-pagination@1440-light": [
+    "previous: bg rgba(1, 23, 43, 0.1) ≠ rgba(255, 255, 255, 0)",
+    "previous: opacity 1 ≠ 0.5",
+    "previousIcon: color rgba(0, 0, 0, 0.45) ≠ rgba(0, 0, 0, 0.85)",
     "current: font.lineHeight 24 ≠ 22",
     "page: font.lineHeight 24 ≠ 22",
     "ellipsis: h 24 ≠ 22",
+    "ellipsis: w 36 ≠ 15",
     "ellipsis: font.lineHeight 24 ≠ 22",
-    "last: h 40 ≠ 38",
-    "last: font.lineHeight 24 ≠ 22"
+    "last: font.lineHeight 24 ≠ 22",
+    "gap previous→current: 16 ≠ 4",
+    "gap current→page: 0 ≠ 4",
+    "gap third→ellipsis: 0 ≠ 4",
+    "gap ellipsis→last: 0 ≠ 4",
+    "gap last→next: 16 ≠ 4"
   ],
   "expansion-radio-group@1440-light": [
     "groupLabel: font.lineHeight 24 ≠ 22",
@@ -692,14 +728,14 @@
     "gap disabledOnTrack→disabledOnThumb: -21 ≠ -31"
   ],
   "expansion-tabs@1440-light": [
-    "tabList: h 58 ≠ 56",
-    "activeTab: h 58 ≠ 56",
-    "activeLabel: font.lineHeight 24 ≠ 22",
-    "inactiveTab: h 58 ≠ 56",
-    "inactiveLabel: font.lineHeight 24 ≠ 22",
-    "disabledTab: h 58 ≠ 56",
-    "disabledLabel: font.lineHeight 24 ≠ 22",
-    "panelText: font.lineHeight 24 ≠ 22"
+    "tabList: h 48 ≠ 56",
+    "activeTab: w 84 ≠ 61",
+    "inactiveTab: w 80 ≠ 58",
+    "disabledTab: w 79 ≠ 57",
+    "indicator: w 84 ≠ 61",
+    "panelText: font.lineHeight 24 ≠ 22",
+    "gap activeTab→inactiveTab: 0 ≠ 32",
+    "gap inactiveTab→disabledTab: 0 ≠ 32"
   ],
   "expansion-toggle-group@1440-light": [
     "defaultPressed: w 34 ≠ 53",
@@ -763,12 +799,16 @@
     "sectionHeading: font.lineHeight 24 ≠ 22"
   ],
   "expansion-accordion@1440-dark": [
+    "openHeader: w 304 ≠ 320",
     "openTitle: h 24 ≠ 22",
-    "openTitle: font.lineHeight 24 ≠ 22",
+    "openTitle: w 256 ≠ 238",
+    "closedHeader: h 76 ≠ 82",
+    "closedHeader: w 304 ≠ 320",
     "closedTitle: h 48 ≠ 44",
-    "closedTitle: font.lineHeight 24 ≠ 22",
+    "closedTitle: w 256 ≠ 238",
     "panelText: h 48 ≠ 44",
-    "panelText: font.lineHeight 24 ≠ 22"
+    "panelText: font.lineHeight 24 ≠ 22",
+    "gap openTitle→openCaret: 8 ≠ 16"
   ],
   "expansion-alert-dialog-open@1440-dark": [
     "alertCard: h 252 ≠ 238",
@@ -868,12 +908,20 @@
     "buttonInput: h 56 ≠ 54"
   ],
   "expansion-pagination@1440-dark": [
+    "previous: bg rgba(255, 255, 255, 0.1) ≠ rgba(0, 0, 0, 0)",
+    "previous: opacity 1 ≠ 0.5",
+    "previousIcon: color rgba(255, 255, 255, 0.45) ≠ rgb(255, 255, 255)",
     "current: font.lineHeight 24 ≠ 22",
     "page: font.lineHeight 24 ≠ 22",
     "ellipsis: h 24 ≠ 22",
+    "ellipsis: w 36 ≠ 15",
     "ellipsis: font.lineHeight 24 ≠ 22",
-    "last: h 40 ≠ 38",
-    "last: font.lineHeight 24 ≠ 22"
+    "last: font.lineHeight 24 ≠ 22",
+    "gap previous→current: 16 ≠ 4",
+    "gap current→page: 0 ≠ 4",
+    "gap third→ellipsis: 0 ≠ 4",
+    "gap ellipsis→last: 0 ≠ 4",
+    "gap last→next: 16 ≠ 4"
   ],
   "expansion-radio-group@1440-dark": [
     "groupLabel: font.lineHeight 24 ≠ 22",
@@ -938,14 +986,14 @@
     "gap disabledOnTrack→disabledOnThumb: -21 ≠ -31"
   ],
   "expansion-tabs@1440-dark": [
-    "tabList: h 58 ≠ 56",
-    "activeTab: h 58 ≠ 56",
-    "activeLabel: font.lineHeight 24 ≠ 22",
-    "inactiveTab: h 58 ≠ 56",
-    "inactiveLabel: font.lineHeight 24 ≠ 22",
-    "disabledTab: h 58 ≠ 56",
-    "disabledLabel: font.lineHeight 24 ≠ 22",
-    "panelText: font.lineHeight 24 ≠ 22"
+    "tabList: h 48 ≠ 56",
+    "activeTab: w 84 ≠ 61",
+    "inactiveTab: w 80 ≠ 58",
+    "disabledTab: w 79 ≠ 57",
+    "indicator: w 84 ≠ 61",
+    "panelText: font.lineHeight 24 ≠ 22",
+    "gap activeTab→inactiveTab: 0 ≠ 32",
+    "gap inactiveTab→disabledTab: 0 ≠ 32"
   ],
   "expansion-toggle-group@1440-dark": [
     "defaultPressed: w 34 ≠ 53",

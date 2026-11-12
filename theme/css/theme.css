@@ -152,6 +152,7 @@
   --color-bgFieldHover: rgba(1, 23, 43, 0.122);
   --color-bgFieldDisabled: rgba(1, 23, 43, 0.051);
   --color-bgLineStrong: rgb(1, 23, 43);
+  --color-bgLineDisabled: rgba(1, 23, 43, 0.451);
   --color-bgLineNegative: rgb(214, 8, 8);
   --color-fgPlaceholder: rgba(0, 0, 0, 0.651);
   --color-fgHelper: rgba(0, 0, 0, 0.651);
@@ -338,6 +339,7 @@
     --color-bgFieldHover: rgba(255, 255, 255, 0.149);
     --color-bgFieldDisabled: rgba(255, 255, 255, 0.031);
     --color-bgLineStrong: rgb(255, 255, 255);
+    --color-bgLineDisabled: rgba(255, 255, 255, 0.451);
     --color-bgLineNegative: rgb(243, 9, 9);
     --color-fgPlaceholder: rgba(255, 255, 255, 0.651);
     --color-fgHelper: rgba(255, 255, 255, 0.651);
@@ -418,6 +420,7 @@
   --color-bgFieldHover: rgba(255, 255, 255, 0.149);
   --color-bgFieldDisabled: rgba(255, 255, 255, 0.031);
   --color-bgLineStrong: rgb(255, 255, 255);
+  --color-bgLineDisabled: rgba(255, 255, 255, 0.451);
   --color-bgLineNegative: rgb(243, 9, 9);
   --color-fgPlaceholder: rgba(255, 255, 255, 0.651);
   --color-fgHelper: rgba(255, 255, 255, 0.651);
