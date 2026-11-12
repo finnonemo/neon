@@ -17,7 +17,9 @@
  * one step whose on-color is the theme's text in every theme. Accent equals
  * secondary, as bgAlternate equals bgSecondary in Neon. Inverse (the checked
  * segment, the pressed toggle, the tooltip) is the action pair, since a
- * theme's action is its text color and on-action is White or Navy.
+ * theme's action is its text color and on-action is White or Navy. The
+ * fgPrimary role (the active tab, the informational alert's icon, a ghost
+ * input button) is the theme's text, or Ultra would draw it navy on navy.
  * The disabled mixes are redeclared because :root's mix resolves :root's
  * slots; every theme's action and canvas sit far apart in luminance, so
  * CDS's blend (getBlendedColor) comes to 93.7%, as in Neon light, and a
@@ -43,6 +45,7 @@
   --accent-foreground: var(--immersive-on-palette-75);
   --inverse: var(--immersive-action);
   --inverse-foreground: var(--immersive-on-action);
+  --color-fgPrimary: var(--immersive-text);
   --ring: var(--immersive-action);
 }
 

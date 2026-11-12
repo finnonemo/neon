@@ -7,8 +7,8 @@ import { cn } from "@/lib/utils"
 // A Supporting item (ADR 0008): shaped for toggle-group, whose Counterpart is
 // CDS's grouped toggle buttons, a ButtonGroup of CDS Buttons. CDS has no
 // toggle button, so a toggle is a CDS Button whose variant follows its state.
-// PROVISIONAL (#200): pressed is the inverse Button (bgInverse,
-// fgInverse), as segmented-control's chosen segment is; unpressed is the
+// PROVISIONAL (#200): pressed is the inverse Button (the inverse slot,
+// bgInverse and fgInverse), as segmented-control's chosen segment is; unpressed is the
 // secondary Button (bgSecondary, fg). PROVISIONAL (#201): sm, default
 // and lg are the CDS Button sizes xs, s and m: 16px sides, then 6px and
 // label1, 8px and headline, and 24px sides, 12px and headline. Every size is

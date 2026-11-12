@@ -268,7 +268,7 @@ test('the Immersive Themes adapter maps every fill the components paint, readabl
   // Borders, inputs and destructive keep the app's roles; immersive.css says so.
   const kept = ['border', 'input', 'destructive', 'destructive-disabled'];
   assert.deepEqual([...painted].filter((slot) => !kept.includes(slot) && !mapped[slot]).sort(), [], 'immersive.css maps every slot a registry component fills');
-  for (const slot of ['secondary', 'muted', 'accent', 'inverse']) assert.ok(mapped[slot], `immersive.css maps --${slot}`);
+  for (const slot of ['secondary', 'muted', 'accent', 'inverse', 'color-fgPrimary']) assert.ok(mapped[slot], `immersive.css maps --${slot}`);
   // Components read inverse through the slot, never theme.css's role, so the adapter reaches the pressed Toggle.
   assert.deepEqual(sourceFiles('registry/ui').filter(([, source]) => /--color-(bgInverse|fgInverse|bgSecondary|bgAlternate)\b/.test(source)).map(([path]) => path), []);
 
@@ -276,7 +276,8 @@ test('the Immersive Themes adapter maps every fill the components paint, readabl
   const declared = (selector) => Object.fromEntries([...generated.match(new RegExp(`${selector.replace(/[[\]]/g, '\\$&')} \\{([^}]*)\\}`))[1].matchAll(/--immersive-([\w-]+):\s*(#[0-9a-f]{6})/g)].map(([, key, hex]) => [key, hex]));
   const shared = declared('[data-immersive-theme]');
   const { themes } = loadImmersiveThemes();
-  const pairs = { secondary: ['secondary-foreground', 'foreground'], muted: ['foreground', 'muted-foreground'], accent: ['accent-foreground', 'foreground', 'secondary-foreground'], inverse: ['inverse-foreground'] };
+  // fgPrimary is read straight from theme.css by the active tab, the informational alert's icon (on secondary) and a ghost input button.
+  const pairs = { background: ['foreground', 'color-fgPrimary'], secondary: ['secondary-foreground', 'foreground', 'color-fgPrimary'], muted: ['foreground', 'muted-foreground'], accent: ['accent-foreground', 'foreground', 'secondary-foreground'], inverse: ['inverse-foreground'] };
   for (const name of Object.keys(themes)) {
     const vars = { ...shared, ...declared(`[data-immersive-theme="${name}"]`) };
     const value = (slot) => {
