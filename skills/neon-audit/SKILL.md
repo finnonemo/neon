@@ -31,4 +31,4 @@ Read only the relevant section of [project inspection](references/project-inspec
 
 ## Done
 
-Return the recommended path and rationale, the app's base, preserved scope, and any unresolved choice. State what was inspected; do not imply an exhaustive hardcoded-style scan. Continue the authorized implementation through the selected skill without repeating onboarding.
+Return the recommended path and rationale, the app's base, preserved scope, and any unresolved choice. Say what the path fixes (base, tier, preserved behavior) and what it leaves to the implementing skill to design, so a narrow recommendation is not read as a layout brief. State what was inspected; do not imply an exhaustive hardcoded-style scan. Continue the authorized implementation through the selected skill without repeating onboarding.

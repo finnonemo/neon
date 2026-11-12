@@ -275,6 +275,19 @@ Verify by toggling `.dark`: primary and destructive labels, the focus
 ring, input outlines, and secondary fills and hovers against their card
 in both modes.
 
+**After the values, the look.** Swapping values gives the app Finnomena
+colors, not yet the [design intent](../../INSTRUCTION.md#design-intent).
+Stock shadcn markup carries habits the variables do not reach: a shadow
+and a border on every card, a chromatic `--chart-*` or `--sidebar-primary`
+used as decoration, weight utilities doing the work of size, and a
+different radius per component. Look at the rendered result and name the
+ones a user would notice. What you may change follows the tier: at
+`colors`, report them as observations; at `visual-system`, set `--radius`
+and the shadow and border variables the file declares so that depth comes
+from surface steps, and leave markup alone; only `composition: 'adapt'`
+edits markup. Which habit matters most on this screen is your judgment;
+say which you chose and why.
+
 ## Mode-specific values
 
 The literal values below illustrate light-mode conversions, not a complete theme for both schemes. Take actual declarations and applicable dark variants from the [canonical CSS adapter](../../../theme/css/theme.css), using the [design contract](../../INSTRUCTION.md#color-roles) for semantic roles. Preserve the app's existing mode selectors. Do not reuse a light-mode value for a dark surface without checking the actual pair. Hover values must come from established app behavior or a verified canonical role, not an invented ramp.

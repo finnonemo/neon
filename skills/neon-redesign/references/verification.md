@@ -21,6 +21,7 @@ After items 1–4 and before reporting, look at your own screenshots and fix wha
    - Is the main task's answer the most prominent, first-read element, per [one question, first screen](../../neon-create/references/new-ui-workflow.md#one-question-first-screen)?
    - Do neighboring blocks share edges and gutters?
    - Are color roles as the [design contract](../../INSTRUCTION.md#color-roles) assigns them?
+   - Does the screen match the design thesis you wrote, and the [design intent](../../INSTRUCTION.md#design-intent): is anything other than content asking for attention?
    - Does Thai text wrap without clipping or overlapping?
    - At 375px, can the user still reach the main task and its details?
    - On a functional screen, does it show any [functional screen habit](../../neon-review/references/review-checks.md#functional-screen-habits)? Name the habit in the finding and use its alternative as the fix.

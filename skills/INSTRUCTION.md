@@ -11,6 +11,30 @@ This is the shared visual direction for Neon feature building, based on the main
 
 For functional layouts, the style means restrained, task-led composition and strong hierarchy. Immersive layouts may be colorful and expressive. It is a design direction, not a measurable 99% match or a dependency requirement. For React feature work, build on the Neon base with Neon registry items; an app already on CDS keeps CDS, which is frozen there, and one app never mixes the two. CSS-only work preserves its framework and styling tier; review-only work does not install components. Do not install a third-party design system, copy third-party assets, or replace Finnomena fonts with a third-party typeface.
 
+## Design intent
+
+A functional Finnomena screen should read like a wayfinding panel: ink on white, where the content is the only thing asking for attention. The rules in this contract and in the skills each follow from one of the ideas below. When a screen meets a case no rule names, design from the idea rather than from the nearest rule.
+
+- **The interface is ink; color is content.** Chrome, controls and text stay navy, white and neutral. Color appears where it carries a meaning (a status, a chart category, a selection) or inside content such as an illustration or a photo. A tinted tile or a colored heading competes with that meaning, which is why the color roles are narrow.
+- **Size and position make the hierarchy.** The answer to the employee's question is the largest, first-read thing; everything else steps down through the type roles. Weight, color and boxes are not used to shout, which is why a role carries its own weight and takes no weight utility beside it.
+- **Depth is a step of surface.** A region separates from the page by a quiet neutral fill or a hairline, and an ink band can frame a page. Only a layer that really floats casts a shadow.
+- **Few shapes, as shipped.** A screen takes its radii from the components it uses, so controls, containers and overlays each keep one shape. A new radius or border style needs a reason a user would notice.
+- **Space first, lines second, boxes last.** Group with spacing; add a divider when spacing alone is ambiguous; add a container when the group is a thing the user acts on.
+- **One next step.** Each screen or panel has one primary action, visible where its answer appears.
+
+Immersive pages share the last three ideas and take their color from an Immersive Theme or a Reference Design instead of the first.
+
+### Fixed, and yours to design
+
+| Fixed | Yours to design |
+| --- | --- |
+| Tokens, type roles and the base's components with their props | Which composition serves the task: grouping, order, density, what is first-read |
+| The color roles and, on campaign pages, the Brand Floor | Where content color goes: illustration, imagery, a chart, an Immersive Theme's blocks |
+| Scope the request set: tier, composition, preserved behavior | A layout, state or interaction no pattern here lists, built from the fixed column |
+| Evidence rules for what a report may claim | Copy, empty states, the reading sequence of a campaign page |
+
+The task-based choices, functional patterns and examples below are defaults that solved earlier screens, not templates. A different composition that serves the task better and keeps the fixed column is welcome; say in the report what you chose and why, so a reviewer judges the choice and not its novelty.
+
 ## Color roles
 
 | Role | Treatment | Current adapter guidance |
