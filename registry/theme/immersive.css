@@ -10,12 +10,27 @@
  * neon.css's :root[data-theme] blocks and wins by coming after it.
  * A theme's text is White or Navy only, so muted text is the theme's text
  * too, and cards and popovers sit on the canvas so it stays readable there.
- * The primary Button's states are restated, since Core's are for its own
- * primary: Hover and Active let 10% of what is behind show through, and
+ * Secondary, muted and accent fills (secondary and outline buttons, toggles,
+ * the segmented control track, tags, list rows, menu items, table headers)
+ * carry the theme's text, not their own foreground, so they take palette 75:
+ * the first stepped block on a theme whose palette 100 is the canvas, and the
+ * one step whose on-color is the theme's text in every theme. Accent equals
+ * secondary, as bgAlternate equals bgSecondary in Neon. Inverse (the checked
+ * segment, the pressed toggle, the tooltip) is the action pair, since a
+ * theme's action is its text color and on-action is White or Navy. The
+ * fgPrimary role (the active tab, the informational alert's icon, a ghost
+ * input button) is the theme's text, or Ultra would draw it navy on navy.
+ * The Button's states are restated, since Core's are for its own colors. The
+ * primary's Hover and Active let 10% of what is behind show through, and its
  * Disabled is the action at half strength on the canvas under a label at half
- * strength, which is what CDS's blend (93.7% for every theme's far-apart
- * action and canvas) under its 50% opacity drew. Borders, inputs, secondary,
- * accent and destructive keep the app's roles. */
+ * strength: CDS's blend (93.7% for every theme's far-apart action and canvas)
+ * under its 50% opacity. The secondary fill, and the Hover of a secondary or
+ * ghost Button, are palette 75 like the other secondary fills; every other
+ * Button's Disabled is that fill's CDS blend (75%) at half strength under the
+ * theme's text at half strength. A link Button is the theme's text. The
+ * secondary disabled mix for the controls not yet retuned is redeclared
+ * because :root's mix resolves :root's slots. Borders, inputs, destructive
+ * and the Button's Brand and Inverse keep the app's roles. */
 :root[data-immersive-theme],
 [data-immersive-theme] {
   --background: var(--immersive-canvas);
@@ -31,6 +46,22 @@
   --primary-active: color-mix(in srgb, var(--immersive-action) 90%, transparent);
   --primary-disabled: color-mix(in srgb, var(--immersive-action) 46.85%, var(--immersive-canvas));
   --primary-disabled-foreground: color-mix(in srgb, var(--immersive-on-action) 50%, var(--immersive-canvas));
+  --secondary: var(--immersive-palette-75);
+  --secondary-foreground: var(--immersive-on-palette-75);
+  --secondary-disabled: color-mix(in srgb, var(--immersive-palette-75) 75%, var(--immersive-canvas));
+  --button-secondary: var(--immersive-palette-75);
+  --button-secondary-hover: var(--immersive-palette-75);
+  --button-secondary-active: var(--immersive-palette-75);
+  --button-disabled: color-mix(in srgb, var(--immersive-palette-75) 37.5%, var(--immersive-canvas));
+  --button-disabled-foreground: color-mix(in srgb, var(--immersive-text) 50%, var(--immersive-canvas));
+  --link: var(--immersive-text);
+  --link-hover: var(--immersive-text);
+  --muted: var(--immersive-palette-75);
+  --accent: var(--immersive-palette-75);
+  --accent-foreground: var(--immersive-on-palette-75);
+  --inverse: var(--immersive-action);
+  --inverse-foreground: var(--immersive-on-action);
+  --color-fgPrimary: var(--immersive-text);
   --ring: var(--immersive-action);
 }
 

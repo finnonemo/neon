@@ -59,8 +59,8 @@
   --color-warning: var(--color-fgWarning);
   --color-negative: var(--color-fgNegative);
   --color-line-heavy: var(--color-bgLineHeavy);
-  --color-inverse: var(--color-bgInverse);
-  --color-inverse-foreground: var(--color-fgInverse);
+  --color-inverse: var(--inverse);
+  --color-inverse-foreground: var(--inverse-foreground);
   --color-overlay: var(--color-bgOverlay);
   --color-positive-wash: var(--color-bgPositiveWash);
   --color-warning-wash: var(--color-bgWarningWash);
@@ -78,22 +78,23 @@
   --color-primary-disabled-foreground: var(--primary-disabled-foreground);
   --color-destructive-hover: var(--color-bgButtonDangerHover);
   --color-destructive-active: var(--color-bgButtonDangerActive);
-  --color-button-secondary: var(--color-bgButtonSecondary);
-  --color-button-secondary-hover: var(--color-bgButtonSecondaryHover);
-  --color-button-secondary-active: var(--color-bgButtonSecondaryActive);
+  --color-button-secondary: var(--button-secondary);
+  --color-button-secondary-hover: var(--button-secondary-hover);
+  --color-button-secondary-active: var(--button-secondary-active);
   --color-button-brand: var(--color-bgButtonBrand);
   --color-button-brand-hover: var(--color-bgButtonBrandHover);
   --color-button-brand-active: var(--color-bgButtonBrandActive);
   --color-button-brand-foreground: var(--color-fgOnBrand);
   --color-button-inverse: var(--color-bgButtonInverse);
+  --color-button-inverse-foreground: var(--color-fg);
   --color-button-inverse-hover: var(--color-bgButtonInverseHover);
   --color-button-inverse-active: var(--color-bgButtonInverseActive);
   --color-button-inverse-disabled: var(--color-bgButtonInverseDisabled);
   --color-button-inverse-disabled-foreground: var(--color-fgInverseDisabled);
-  --color-button-disabled: var(--color-bgButtonDisabled);
-  --color-button-disabled-foreground: var(--color-fgDisabled);
-  --color-link: var(--color-fgLink);
-  --color-link-hover: var(--color-fgLinkHover);
+  --color-button-disabled: var(--button-disabled);
+  --color-button-disabled-foreground: var(--button-disabled-foreground);
+  --color-link: var(--link);
+  --color-link-hover: var(--link-hover);
   /* Core's button label below Large: Subheadline and Footnote in Medium (500), a weight no type
    * role holds at those sizes. For the button item; lib/utils.ts lists them in cn's font-size group. */
   --text-button-md: var(--fontSize-label1); --text-button-md--line-height: var(--lineHeight-label1); --text-button-md--font-weight: 500;
@@ -116,6 +117,11 @@
   --muted-foreground: var(--color-fgMuted);
   --accent: var(--color-bgAlternate);
   --accent-foreground: var(--color-fg);
+  /* A Neon slot shadcn lacks: the Tooltip, the checked SegmentedControl item
+   * and the pressed Toggle fill in the text color, so the Immersive Themes
+   * adapter can remap it as it does the shadcn slots. */
+  --inverse: var(--color-bgInverse);
+  --inverse-foreground: var(--color-fgInverse);
   --destructive: var(--color-bgNegative);
   --border: var(--color-bgLine);
   /* PROVISIONAL: --input keeps the role CDS defaults use, which has no
@@ -141,6 +147,15 @@
   --primary-active: var(--color-bgButtonPrimaryActive);
   --primary-disabled: var(--color-bgButtonDisabled);
   --primary-disabled-foreground: var(--color-fgDisabled);
+  /* The same for Core's secondary fill (a ghost Button's Hover and Active too),
+   * every other Button's Disabled fill and label, and the Link ink. */
+  --button-secondary: var(--color-bgButtonSecondary);
+  --button-secondary-hover: var(--color-bgButtonSecondaryHover);
+  --button-secondary-active: var(--color-bgButtonSecondaryActive);
+  --button-disabled: var(--color-bgButtonDisabled);
+  --button-disabled-foreground: var(--color-fgDisabled);
+  --link: var(--color-fgLink);
+  --link-hover: var(--color-fgLinkHover);
   /* Disabled fills (spike trap 4), for the controls not yet retuned to Core:
    * CDS blends a filled control's color into the page background at 75%,
    * raised for colors far from the background in luminance (getBlendedColor).

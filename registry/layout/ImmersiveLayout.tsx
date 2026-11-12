@@ -21,9 +21,10 @@
  *
  * With an `immersiveTheme`, the page is a Campaign Page in that Immersive
  * Theme: the theme attribute goes on the root and on <html> (immersive.css
- * maps it to canvas, text, action and focus ring, and sets color-scheme),
- * the page scrolls with the window instead of its own pane, and the logo
- * takes the theme's tone.
+ * maps it to canvas, text, action, focus ring and the secondary, muted,
+ * accent and inverse fills, and sets color-scheme), the page scrolls with the
+ * window instead of its own pane, with no inner scroll container, so
+ * `position: sticky` pins to the viewport, and the logo takes the theme's tone.
  */
 import { useLayoutEffect, type ReactNode } from "react"
 import { ColorSchemeContext, useColorScheme, type ColorScheme } from "@/app/colorScheme"
@@ -74,7 +75,7 @@ export function ImmersiveLayout({
         <div style={{ flex: 1, minHeight: 0, display: "flex", justifyContent: "center" }}>
           {/* InspectorView is the generic "fill" pane component (Toolbar + scrollable body) — reused here since Immersive Layout is a single full-width pane with no fixed-width sibling. Capped/centered at `max` per the Figma frame; full-bleed at every other tier. */}
           <div className="neon-immersive-content" style={{ width: "100%", maxWidth: tier === "max" ? MAX_CONTENT_WIDTH : undefined, display: "flex" }}>
-            <InspectorView pane={{}} headerDivider={false}>{content}</InspectorView>
+            <InspectorView pane={{}} headerDivider={false} scroll={immersiveTheme ? "window" : "pane"}>{content}</InspectorView>
           </div>
         </div>
         <BottomNav navigation={navigation} />

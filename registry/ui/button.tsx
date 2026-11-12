@@ -37,7 +37,7 @@ const buttonVariants = cva(
         brand:
           "bg-button-brand text-button-brand-foreground hover:bg-button-brand-hover focus-visible:bg-button-brand-hover active:bg-button-brand-active disabled:bg-button-disabled disabled:text-button-disabled-foreground",
         inverse:
-          "bg-button-inverse text-foreground hover:bg-button-inverse-hover focus-visible:bg-button-inverse-hover active:bg-button-inverse-active disabled:bg-button-inverse-disabled disabled:text-button-inverse-disabled-foreground",
+          "bg-button-inverse text-button-inverse-foreground hover:bg-button-inverse-hover focus-visible:bg-button-inverse-hover active:bg-button-inverse-active disabled:bg-button-inverse-disabled disabled:text-button-inverse-disabled-foreground",
       },
       size: {
         default: "h-14 px-6 py-4",
