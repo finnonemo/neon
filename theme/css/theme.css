@@ -19,10 +19,12 @@
  * ${CLAUDE_PLUGIN_ROOT}/theme/css/core-type-roles.json names for it, and
  * the Core sync writes its --fontSize-* and --lineHeight-* from the Core
  * snapshot (${CLAUDE_PLUGIN_ROOT}/core/text-styles.json), in px. From
- * title1 down the line heights are Core's Thai ones, 1.4 times the size
- * rounded up; display1 to display3 take Core's Display styles, which are
- * tighter. Do not edit one here: the repository check refuses a value
- * that differs from the snapshot.
+ * title1 down the line heights follow Core's Thai rule, 1.4 times the
+ * size rounded up to a multiple of 4 (Core's
+ * docs/adr/0012-thai-line-heights.md, worked out for Finnomena Trek);
+ * display1 to display3 take Core's Display styles, which are tighter.
+ * Do not edit one here: the repository check refuses a value that
+ * differs from the snapshot.
  *
  * EVERYTHING ELSE (font family and weight, space, radius) is
  * hand-captured, not generated: the byte-exact output of
