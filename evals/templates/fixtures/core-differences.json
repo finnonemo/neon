@@ -165,18 +165,11 @@
     "last: h 40 ≠ 38",
     "last: font.lineHeight 24 ≠ 22"
   ],
-  "expansion-progress@375-light": [
-    "progressTrack: bg rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)"
-  ],
   "expansion-radio-group@375-light": [
     "groupLabel: font.lineHeight 24 ≠ 22",
     "gap checkedRing→uncheckedRing: 16 ≠ 18",
     "gap checkedRing→checkedDot: -20 ≠ -17",
     "gap uncheckedRing→disabledCheckedRing: 104 ≠ 102"
-  ],
-  "expansion-separator@375-light": [
-    "separatorHorizontal: bg rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)",
-    "separatorVertical: bg rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)"
   ],
   "expansion-sheet-bottom@375-light": [
     "sheet: h 143 ≠ 134",
@@ -417,18 +410,11 @@
     "last: h 40 ≠ 38",
     "last: font.lineHeight 24 ≠ 22"
   ],
-  "expansion-progress@375-dark": [
-    "progressTrack: bg rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)"
-  ],
   "expansion-radio-group@375-dark": [
     "groupLabel: font.lineHeight 24 ≠ 22",
     "gap checkedRing→uncheckedRing: 16 ≠ 18",
     "gap checkedRing→checkedDot: -20 ≠ -17",
     "gap uncheckedRing→disabledCheckedRing: 104 ≠ 102"
-  ],
-  "expansion-separator@375-dark": [
-    "separatorHorizontal: bg rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
-    "separatorVertical: bg rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)"
   ],
   "expansion-sheet-bottom@375-dark": [
     "sheet: h 145 ≠ 136",
@@ -671,18 +657,11 @@
     "last: h 40 ≠ 38",
     "last: font.lineHeight 24 ≠ 22"
   ],
-  "expansion-progress@1440-light": [
-    "progressTrack: bg rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)"
-  ],
   "expansion-radio-group@1440-light": [
     "groupLabel: font.lineHeight 24 ≠ 22",
     "gap checkedRing→uncheckedRing: 16 ≠ 18",
     "gap checkedRing→checkedDot: -20 ≠ -17",
     "gap uncheckedRing→disabledCheckedRing: 104 ≠ 102"
-  ],
-  "expansion-separator@1440-light": [
-    "separatorHorizontal: bg rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)",
-    "separatorVertical: bg rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)"
   ],
   "expansion-sheet-bottom@1440-light": [
     "sheet: h 95 ≠ 90",
@@ -922,18 +901,11 @@
     "last: h 40 ≠ 38",
     "last: font.lineHeight 24 ≠ 22"
   ],
-  "expansion-progress@1440-dark": [
-    "progressTrack: bg rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)"
-  ],
   "expansion-radio-group@1440-dark": [
     "groupLabel: font.lineHeight 24 ≠ 22",
     "gap checkedRing→uncheckedRing: 16 ≠ 18",
     "gap checkedRing→checkedDot: -20 ≠ -17",
     "gap uncheckedRing→disabledCheckedRing: 104 ≠ 102"
-  ],
-  "expansion-separator@1440-dark": [
-    "separatorHorizontal: bg rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
-    "separatorVertical: bg rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)"
   ],
   "expansion-sheet-bottom@1440-dark": [
     "sheet: h 97 ≠ 92",

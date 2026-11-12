@@ -24,7 +24,10 @@
  * strength on the canvas). A pressed toggle and the chosen segment show by a
  * ring in the theme's text; the chosen segment sits on the canvas. The switch
  * is the action when on and the action at half strength when off, under a
- * thumb in on-action. The
+ * thumb in on-action. The display items retuned to Core do the same: a
+ * progress bar's and a spinner's track and a table's header row are palette
+ * 75, the indicator, the arc and an avatar the action (its initial in
+ * on-action), and a chevron or a sort glyph the theme's text. The
  * fgPrimary role (the active tab, the informational alert's icon, a ghost
  * input button) is the theme's text, or Ultra would draw it navy on navy.
  * The Button's states are restated, since Core's are for its own colors. The
@@ -84,6 +87,13 @@
   --selection-tag-disabled: color-mix(in srgb, var(--immersive-palette-75) 37.5%, var(--immersive-canvas));
   --selection-tag-foreground: var(--immersive-on-palette-75);
   --selection-tag-border: var(--immersive-palette-75);
+  --track: var(--immersive-palette-75);
+  --info: var(--immersive-action);
+  --interactive: var(--immersive-action);
+  --layer-02: var(--immersive-palette-75);
+  --icon-muted: var(--immersive-text);
+  --avatar: var(--immersive-action);
+  --avatar-foreground: var(--immersive-on-action);
   --muted: var(--immersive-palette-75);
   --accent: var(--immersive-palette-75);
   --accent-foreground: var(--immersive-on-palette-75);

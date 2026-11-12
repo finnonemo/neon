@@ -80,5 +80,17 @@
   "bgTagNeutralHover": "Tag/Navy/Secondary/background-hover",
   "bgTagNeutralDisabled": "Tag/Navy/Secondary/background-disabled",
   "fgTagNeutral": "Tag/Navy/Secondary/color",
-  "bgLineTagNeutral": "Tag/Navy/Tertiary/border"
+  "bgLineTagNeutral": "Tag/Navy/Tertiary/border",
+  "bgElevation3": "Layer/layer-03",
+  "bgInfo": "Support/support-info",
+  "fgInteractive": "Miscellaneous/interactive",
+  "bgAvatar": "Avatar/background",
+  "fgOnColor": "Text/text-on-color",
+  "fgIconMuted": "Icon/icon-secondary",
+  "bgTagPositive": "Tag/Green/Secondary/background",
+  "fgTagPositive": "Tag/Green/Secondary/color",
+  "bgTagWarning": "Tag/Orange/Secondary/background",
+  "fgTagWarning": "Tag/Orange/Secondary/color",
+  "bgTagNegative": "Tag/Red/Secondary/background",
+  "fgTagNegative": "Tag/Red/Secondary/color"
 }
