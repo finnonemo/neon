@@ -7,10 +7,11 @@
 // baseline except for the differences recorded in
 // fixtures/core-differences.json (npm run core-differences). A recorded
 // difference that no longer occurs fails too, so a retune removes its entry.
+// A recorded number is held to the same ±1px as the baseline's.
 import { test, expect } from '@playwright/test';
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { screens, viewports, modes, measureInPage, gap, pick, compare } from './measure.mjs';
+import { screens, viewports, modes, measureInPage, gap, pick, compare, asRecorded } from './measure.mjs';
 
 const target = process.env.NEON_TARGET ?? 'cds';
 const capture = process.env.NEON_CAPTURE_BASELINE === '1';
@@ -107,7 +108,8 @@ if (capture) {
         const expected = baseline[caseKey(entry)];
         expect(expected, `${caseKey(entry)} is missing from the baseline; run npm run baseline.`).toBeTruthy();
         const problems = differences(expected, await measureScreen(page, entry.screen, entry.viewport, entry.mode));
-        expect(problems, problems.join('\n')).toEqual(coreDifferences[caseKey(entry)] ?? []);
+        const recorded = coreDifferences[caseKey(entry)] ?? [];
+        expect(asRecorded(problems, recorded), problems.join('\n')).toEqual(recorded);
       });
     }
   });

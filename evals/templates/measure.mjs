@@ -281,3 +281,20 @@ export function compare(actual, expected, tolerance = 1) {
   }
   return problems;
 }
+
+// One problem line that ends in pixel counts: "<element>: <property> <measured> ≠ <baseline>".
+const PIXELS = /^(?<what>.+) (?<measured>-?\d+(?:\.\d+)?) ≠ (?<baseline>-?\d+(?:\.\d+)?)$/;
+
+/**
+ * The problems as the recorded differences word them: a problem that is a recorded difference measured
+ * within `tolerance` px of the recorded number becomes the recorded line, since macOS and Linux round a
+ * text's width a pixel apart. Anything else stays as measured, so it still reads as a problem.
+ */
+export function asRecorded(problems, recorded, tolerance = 1) {
+  const known = new Map(recorded.map(line => [line.match(PIXELS)?.groups.what, line]));
+  return problems.map(problem => {
+    const now = problem.match(PIXELS)?.groups;
+    const then = now && known.get(now.what)?.match(PIXELS).groups;
+    return then && now.baseline === then.baseline && Math.abs(now.measured - then.measured) <= tolerance ? known.get(now.what) : problem;
+  });
+}
