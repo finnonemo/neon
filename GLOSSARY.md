@@ -36,6 +36,10 @@ _Avoid_: Core copy, DS export
 The Core component a Neon component is matched to and measured against, such as Divider for separator or Alert for alert-dialog. A Neon component whose Core doc is not yet approved keeps its earlier CDS tuning until it is, and says so. In the frozen CDS context, a CDS Counterpart is the CDS component an item was first tuned to.
 _Avoid_: equivalent, twin
 
+**Counterpart table**:
+The list that names each Neon registry item's Counterpart, or says why it has none.
+_Avoid_: mapping, counterparts file
+
 **Supporting item**:
 A Neon registry item that exists only for other Neon items to depend on, such as the toggle a toggle group is built from. It has no Counterpart of its own, is shaped to fit the items that use it, and is not listed as a component for employees to choose.
 _Avoid_: internal component, helper component

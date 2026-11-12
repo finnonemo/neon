@@ -1,0 +1,110 @@
+{
+  "Large Title": {
+    "size": 34,
+    "lineHeight": 48
+  },
+  "Title 1": {
+    "size": 28,
+    "lineHeight": 40
+  },
+  "Title 2": {
+    "size": 22,
+    "lineHeight": 32
+  },
+  "Title 3": {
+    "size": 20,
+    "lineHeight": 28
+  },
+  "Headline": {
+    "size": 17,
+    "lineHeight": 24
+  },
+  "Body": {
+    "size": 17,
+    "lineHeight": 24
+  },
+  "Callout": {
+    "size": 16,
+    "lineHeight": 24
+  },
+  "Subheadline": {
+    "size": 15,
+    "lineHeight": 24
+  },
+  "Footnote": {
+    "size": 13,
+    "lineHeight": 20
+  },
+  "Caption 1": {
+    "size": 12,
+    "lineHeight": 18
+  },
+  "Caption 2": {
+    "size": 11,
+    "lineHeight": 16
+  },
+  "Display 1": {
+    "size": 92,
+    "lineHeight": 102
+  },
+  "Display 2": {
+    "size": 60,
+    "lineHeight": 70
+  },
+  "Display 3": {
+    "size": 54,
+    "lineHeight": 64
+  },
+  "Paragraph": {
+    "size": 28,
+    "lineHeight": 36
+  },
+  "Quotation 1": {
+    "size": 42,
+    "lineHeight": 50
+  },
+  "Quotation 2": {
+    "size": 24,
+    "lineHeight": 30
+  },
+  "Icon/2XSmall": {
+    "size": 11,
+    "lineHeight": 18
+  },
+  "Icon/XSmall": {
+    "size": 12,
+    "lineHeight": 18
+  },
+  "Icon/Small": {
+    "size": 13,
+    "lineHeight": 20
+  },
+  "Icon/Medium": {
+    "size": 15,
+    "lineHeight": 24
+  },
+  "Icon/Large": {
+    "size": 17,
+    "lineHeight": 24
+  },
+  "Icon/XLarge": {
+    "size": 20,
+    "lineHeight": 28
+  },
+  "Icon/2XLarge": {
+    "size": 28,
+    "lineHeight": 36
+  },
+  "Icon/3XLarge": {
+    "size": 34,
+    "lineHeight": 40
+  },
+  "Icon/4XLarge": {
+    "size": 48,
+    "lineHeight": 64
+  },
+  "Icon/5XLarge": {
+    "size": 60,
+    "lineHeight": 80
+  }
+}

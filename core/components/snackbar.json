@@ -1,0 +1,150 @@
+{
+"component": "Snackbar",
+"sets": [
+{
+  "name": "Snackbar",
+  "axes": [
+    {
+      "name": "Leading",
+      "values": [
+        "Icon",
+        "None",
+        "Loading"
+      ]
+    },
+    {
+      "name": "Status",
+      "values": [
+        "Info",
+        "Success",
+        "Warning",
+        "Error"
+      ]
+    },
+    {
+      "name": "Action",
+      "values": [
+        "None",
+        "Button"
+      ]
+    }
+  ],
+  "exclude": [
+    "{{Leading=None, Loading}}{{Status=Success, Warning, Error}}"
+  ],
+  "properties": [
+    {
+      "name": "Description text",
+      "type": "TEXT",
+      "default": "Message"
+    }
+  ],
+  "variables": {
+    "Snackbar/Container/None/Layout horizontal": "Fill container",
+    "Snackbar/Container/None/Layout vertical": "Hug contents",
+    "Snackbar/Container/None/Min height": 56,
+    "Snackbar/Container/None/Gap horizontal": 8,
+    "Snackbar/Container/None/Padding left": 16,
+    "Snackbar/Container/None/Padding right": 16,
+    "Snackbar/Container/None/Padding top": 0,
+    "Snackbar/Container/None/Padding bottom": 0,
+    "Snackbar/Container/None/Radius": 16,
+    "Snackbar/Container/Button/Layout horizontal": "Fill container",
+    "Snackbar/Container/Button/Layout vertical": "Hug contents",
+    "Snackbar/Container/Button/Min height": 56,
+    "Snackbar/Container/Button/Gap horizontal": 8,
+    "Snackbar/Container/Button/Padding left": 16,
+    "Snackbar/Container/Button/Padding right": 4,
+    "Snackbar/Container/Button/Padding top": 0,
+    "Snackbar/Container/Button/Padding bottom": 0,
+    "Snackbar/Container/Button/Radius": 16,
+    "Snackbar/Leading/Default/Padding top": 16,
+    "Snackbar/Leading/Default/Padding bottom": 16,
+    "Snackbar/Leading/Default/Padding right": 8,
+    "Snackbar/Text/Default/Layout horizontal": "Fill container",
+    "Snackbar/Text/Default/Padding top": 16,
+    "Snackbar/Text/Default/Padding bottom": 16,
+    "Snackbar/Text/Default/Gap vertical": 0,
+    "Snackbar/Label/Description/Type token": "$callout",
+    "Snackbar/Label/Description/Type emphasis": "Regular",
+    "Snackbar/Label/Description/Align horizontal": "Left",
+    "Snackbar/Label/Description/Align vertical": "Top",
+    "Snackbar/Label/Description/Decoration": "-",
+    "Snackbar/Icon/Medium/Type token": "fa-sharp fa-solid/Medium",
+    "Snackbar/Icon/Medium/Layout width": 24,
+    "Snackbar/Icon/Medium/Layout height": 24
+  },
+  "bindings": [
+    {"layer":"(root)","property":"layoutMode","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"VERTICAL","literal":true},
+    {"layer":"Container","property":"layoutMode","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"HORIZONTAL","literal":true},
+    {"layer":"Container","property":"layoutSizingHorizontal","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"FILL","literal":true},
+    {"layer":"Container","property":"layoutSizingVertical","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"HUG","literal":true},
+    {"layer":"Container","property":"counterAxisAlignItems","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"CENTER","literal":true},
+    {"layer":"Container","property":"minHeight","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"Components/Snackbar/Container/{{Action=*}}/Min height"},
+    {"layer":"Container","property":"itemSpacing","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"Components/Snackbar/Container/{{Action=*}}/Gap horizontal"},
+    {"layer":"Container","property":"paddingLeft","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"Components/Snackbar/Container/{{Action=*}}/Padding left"},
+    {"layer":"Container","property":"paddingRight","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"Components/Snackbar/Container/{{Action=*}}/Padding right"},
+    {"layer":"Container","property":"paddingTop","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"Components/Snackbar/Container/{{Action=*}}/Padding top"},
+    {"layer":"Container","property":"paddingBottom","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"Components/Snackbar/Container/{{Action=*}}/Padding bottom"},
+    {"layer":"Container","property":"cornerRadius","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"Components/Snackbar/Container/{{Action=*}}/Radius"},
+    {"layer":"Container","property":"fills.0","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"Theme/Background/background-inverse"},
+    {"layer":"Container / Leading","property":"visible","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"false","literal":true},
+    {"layer":"Container / Leading","property":"visible","when":"{{Leading=Icon, Loading}}{{Status=*}}{{Action=*}}","value":"true","literal":true},
+    {"layer":"Container / Leading","property":"layoutMode","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"VERTICAL","literal":true},
+    {"layer":"Container / Leading","property":"layoutSizingHorizontal","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"HUG","literal":true},
+    {"layer":"Container / Leading","property":"layoutSizingVertical","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"FILL","literal":true},
+    {"layer":"Container / Leading","property":"primaryAxisAlignItems","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"MIN","literal":true},
+    {"layer":"Container / Leading","property":"paddingTop","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"Components/Snackbar/Leading/Default/Padding top"},
+    {"layer":"Container / Leading","property":"paddingBottom","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"Components/Snackbar/Leading/Default/Padding bottom"},
+    {"layer":"Container / Leading","property":"paddingRight","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"Components/Snackbar/Leading/Default/Padding right"},
+    {"layer":"Container / Leading / Icon box","property":"width","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"Components/Snackbar/Icon/Medium/Layout width"},
+    {"layer":"Container / Leading / Icon box","property":"height","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"Components/Snackbar/Icon/Medium/Layout height"},
+    {"layer":"Container / Leading / Icon box","property":"primaryAxisAlignItems","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"CENTER","literal":true},
+    {"layer":"Container / Leading / Icon box","property":"counterAxisAlignItems","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"CENTER","literal":true},
+    {"layer":"Container / Leading / Icon box / Icon","property":"visible","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"false","literal":true},
+    {"layer":"Container / Leading / Icon box / Icon","property":"visible","when":"{{Leading=Icon}}{{Status=*}}{{Action=*}}","value":"true","literal":true},
+    {"layer":"Container / Leading / Icon box / Icon","property":"textStyleId","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"fa-sharp fa-solid/Medium"},
+    {"layer":"Container / Leading / Icon box / Icon","property":"characters","when":"{{Leading=*}}{{Status=Info}}{{Action=*}}","value":"circle-info","literal":true},
+    {"layer":"Container / Leading / Icon box / Icon","property":"characters","when":"{{Leading=*}}{{Status=Success}}{{Action=*}}","value":"circle-check","literal":true},
+    {"layer":"Container / Leading / Icon box / Icon","property":"characters","when":"{{Leading=*}}{{Status=Warning}}{{Action=*}}","value":"triangle-exclamation","literal":true},
+    {"layer":"Container / Leading / Icon box / Icon","property":"characters","when":"{{Leading=*}}{{Status=Error}}{{Action=*}}","value":"circle-exclamation","literal":true},
+    {"layer":"Container / Leading / Icon box / Icon","property":"fills.0","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"Theme/Icon/icon-inverse"},
+    {"layer":"Container / Leading / Icon box / _Loading","property":"visible","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"false","literal":true},
+    {"layer":"Container / Leading / Icon box / _Loading","property":"visible","when":"{{Leading=Loading}}{{Status=*}}{{Action=*}}","value":"true","literal":true},
+    {"layer":"Container / Leading / Icon box / _Loading","property":"componentProperties.Size","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"Medium"},
+    {"layer":"Container / Text","property":"layoutMode","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"VERTICAL","literal":true},
+    {"layer":"Container / Text","property":"layoutSizingHorizontal","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"FILL","literal":true},
+    {"layer":"Container / Text","property":"layoutSizingVertical","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"HUG","literal":true},
+    {"layer":"Container / Text","property":"paddingTop","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"Components/Snackbar/Text/Default/Padding top"},
+    {"layer":"Container / Text","property":"paddingBottom","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"Components/Snackbar/Text/Default/Padding bottom"},
+    {"layer":"Container / Text","property":"itemSpacing","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"Components/Snackbar/Text/Default/Gap vertical"},
+    {"layer":"Container / Text / Description","property":"textStyleId","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"Body/Callout"},
+    {"layer":"Container / Text / Description","property":"layoutSizingHorizontal","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"FILL","literal":true},
+    {"layer":"Container / Text / Description","property":"textAutoResize","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"HEIGHT","literal":true},
+    {"layer":"Container / Text / Description","property":"textAlignHorizontal","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"LEFT","literal":true},
+    {"layer":"Container / Text / Description","property":"fills.0","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"Theme/Text/text-inverse"},
+    {"layer":"Container / Action","property":"visible","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"false","literal":true},
+    {"layer":"Container / Action","property":"visible","when":"{{Leading=*}}{{Status=*}}{{Action=Button}}","value":"true","literal":true},
+    {"layer":"Container / Action","property":"componentProperties.Hierarchy","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"Tertiary"},
+    {"layer":"Container / Action","property":"componentProperties.Type","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"Inverse"},
+    {"layer":"Container / Action","property":"componentProperties.Size","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"Medium"},
+    {"layer":"Container / Action","property":"componentProperties.State","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"Enabled"},
+    {"layer":"Container / Action","property":"layoutSizingHorizontal","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"HUG","literal":true},
+    {"layer":"Container / Action","property":"layoutSizingVertical","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"HUG","literal":true},
+    {"layer":"Container / Action","property":"componentProperties.Leading Icon","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"false","literal":true},
+    {"layer":"Container / Action","property":"componentProperties.Trailing Icon","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"false","literal":true},
+    {"layer":"Container / Action","property":"isExposedInstance","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"true","literal":true},
+    {"layer":"Container / Close","property":"visible","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"false","literal":true},
+    {"layer":"Container / Close","property":"visible","when":"{{Leading=*}}{{Status=*}}{{Action=Button}}","value":"true","literal":true},
+    {"layer":"Container / Close","property":"componentProperties.Hierarchy","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"Tertiary"},
+    {"layer":"Container / Close","property":"componentProperties.Type","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"Inverse"},
+    {"layer":"Container / Close","property":"componentProperties.Size","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"Medium"},
+    {"layer":"Container / Close","property":"componentProperties.State","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"Enabled"},
+    {"layer":"Container / Close","property":"layoutSizingHorizontal","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"HUG","literal":true},
+    {"layer":"Container / Close","property":"layoutSizingVertical","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"HUG","literal":true},
+    {"layer":"Container / Close","property":"componentProperties.Icon Text","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"xmark"},
+    {"layer":"Container / Close","property":"isExposedInstance","when":"{{Leading=*}}{{Status=*}}{{Action=*}}","value":"false","literal":true}
+  ]
+}
+]
+}

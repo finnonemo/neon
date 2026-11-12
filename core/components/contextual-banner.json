@@ -1,0 +1,173 @@
+{
+"component": "Contextual banner",
+"sets": [
+{
+  "name": "Contextual banner",
+  "axes": [
+    {
+      "name": "Status",
+      "values": [
+        "Success",
+        "Warning",
+        "Error",
+        "Info",
+        "Caution major",
+        "Caution minor"
+      ]
+    },
+    {
+      "name": "Hierarchy",
+      "values": [
+        "Primary",
+        "Secondary"
+      ]
+    },
+    {
+      "name": "Artwork",
+      "values": [
+        "Badge",
+        "Icon",
+        "None"
+      ]
+    },
+    {
+      "name": "Action",
+      "values": [
+        "None",
+        "Icon Button",
+        "Button",
+        "2 Buttons",
+        "Toggle"
+      ]
+    }
+  ],
+  "exclude": [],
+  "properties": [
+    {
+      "name": "Title",
+      "type": "BOOLEAN",
+      "default": true
+    },
+    {
+      "name": "Description",
+      "type": "BOOLEAN",
+      "default": true
+    },
+    {
+      "name": "Title text",
+      "type": "TEXT",
+      "default": "Title"
+    },
+    {
+      "name": "Description text",
+      "type": "TEXT",
+      "default": "Description"
+    }
+  ],
+  "variables": {
+    "Banner/Contextual/Container/Badge/Layout flow": "Vertical",
+    "Banner/Contextual/Container/Badge/Layout horizontal": "Fill container",
+    "Banner/Contextual/Container/Badge/Layout vertical": "Hug contents",
+    "Banner/Contextual/Container/Badge/Layout min-height": 80,
+    "Banner/Contextual/Container/Badge/Gap horizontal": 16,
+    "Banner/Contextual/Container/Badge/Padding left": 16,
+    "Banner/Contextual/Container/Badge/Padding right": 16,
+    "Banner/Contextual/Container/Badge/Padding top": 16,
+    "Banner/Contextual/Container/Badge/Padding bottom": 16,
+    "Banner/Contextual/Container/Badge/Radius": 16,
+    "Banner/Contextual/Container/Badge/Stroke weight": 1,
+    "Banner/Contextual/Container/Icon/Layout flow": "Horizontal",
+    "Banner/Contextual/Container/Icon/Layout horizontal": "Fill container",
+    "Banner/Contextual/Container/Icon/Layout vertical": "Hug contents",
+    "Banner/Contextual/Container/Icon/Layout min-height": 80,
+    "Banner/Contextual/Container/Icon/Gap horizontal": 16,
+    "Banner/Contextual/Container/Icon/Padding left": 16,
+    "Banner/Contextual/Container/Icon/Padding right": 16,
+    "Banner/Contextual/Container/Icon/Padding top": 16,
+    "Banner/Contextual/Container/Icon/Padding bottom": 16,
+    "Banner/Contextual/Container/Icon/Radius": 16,
+    "Banner/Contextual/Container/Icon/Stroke weight": 1,
+    "Banner/Contextual/Container/None/Layout flow": "Vertical",
+    "Banner/Contextual/Container/None/Layout horizontal": "Fill container",
+    "Banner/Contextual/Container/None/Layout vertical": "Hug contents",
+    "Banner/Contextual/Container/None/Layout min-height": 80,
+    "Banner/Contextual/Container/None/Gap horizontal": 16,
+    "Banner/Contextual/Container/None/Padding left": 16,
+    "Banner/Contextual/Container/None/Padding right": 16,
+    "Banner/Contextual/Container/None/Padding top": 16,
+    "Banner/Contextual/Container/None/Padding bottom": 16,
+    "Banner/Contextual/Container/None/Radius": 16,
+    "Banner/Contextual/Container/None/Stroke weight": 1,
+    "Banner/Contextual/Icon/3XLarge/Type token": "fa-sharp fa-solid/3XLarge",
+    "Banner/Contextual/Icon/Large/Type token": "fa-sharp fa-solid/Large",
+    "Banner/Contextual/Label/Title/Type token": "$subhead",
+    "Banner/Contextual/Label/Title/Type emphasis": "Strong",
+    "Banner/Contextual/Label/Title/Align horizontal": "Left",
+    "Banner/Contextual/Label/Title/Align vertical": "Center",
+    "Banner/Contextual/Label/Title/Decoration": "-",
+    "Banner/Contextual/Label/Description/Type token": "$subhead",
+    "Banner/Contextual/Label/Description/Type emphasis": "Regular",
+    "Banner/Contextual/Label/Description/Align horizontal": "Left",
+    "Banner/Contextual/Label/Description/Align vertical": "Center",
+    "Banner/Contextual/Label/Description/Decoration": "-"
+  },
+  "bindings": [
+    {"layer":"Container","property":"layoutMode","when":"{{Status=*}}","value":"VERTICAL","literal":true},
+    {"layer":"Container","property":"layoutMode","when":"{{Artwork=Icon}}","value":"HORIZONTAL","literal":true},
+    {"layer":"Container","property":"layoutSizingHorizontal","when":"{{Status=*}}","value":"FILL","literal":true},
+    {"layer":"Container","property":"layoutSizingVertical","when":"{{Status=*}}","value":"HUG","literal":true},
+    {"layer":"Container","property":"fills.0","when":"{{Status=*}}","value":"Theme/Banner/{{Status=*}}/{{Hierarchy=*}}/background"},
+    {"layer":"Container","property":"strokes.0","when":"{{Status=*}}","value":"Theme/Banner/{{Status=*}}/{{Hierarchy=*}}/border"},
+    {"layer":"Container","property":"strokeWeight","when":"{{Status=*}}","value":"Components/Banner/Contextual/Container/{{Artwork=*}}/Stroke weight"},
+    {"layer":"Container","property":"minHeight","when":"{{Status=*}}","value":"Components/Banner/Contextual/Container/{{Artwork=*}}/Layout min-height"},
+    {"layer":"Container","property":"itemSpacing","when":"{{Status=*}}","value":"Components/Banner/Contextual/Container/{{Artwork=*}}/Gap horizontal"},
+    {"layer":"Container","property":"paddingLeft","when":"{{Status=*}}","value":"Components/Banner/Contextual/Container/{{Artwork=*}}/Padding left"},
+    {"layer":"Container","property":"paddingRight","when":"{{Status=*}}","value":"Components/Banner/Contextual/Container/{{Artwork=*}}/Padding right"},
+    {"layer":"Container","property":"paddingTop","when":"{{Status=*}}","value":"Components/Banner/Contextual/Container/{{Artwork=*}}/Padding top"},
+    {"layer":"Container","property":"paddingBottom","when":"{{Status=*}}","value":"Components/Banner/Contextual/Container/{{Artwork=*}}/Padding bottom"},
+    {"layer":"Container","property":"cornerRadius","when":"{{Status=*}}","value":"Components/Banner/Contextual/Container/{{Artwork=*}}/Radius"},
+    {"layer":"Container / Leading Icon","property":"visible","when":"{{Status=*}}","value":"true","literal":true},
+    {"layer":"Container / Leading Icon","property":"visible","when":"{{Artwork=None}}","value":"false","literal":true},
+    {"layer":"Container / Leading Icon","property":"textStyleId","when":"{{Artwork=Badge}}","value":"fa-sharp fa-solid/3XLarge"},
+    {"layer":"Container / Leading Icon","property":"textStyleId","when":"{{Artwork=Icon}}","value":"fa-sharp fa-solid/Large"},
+    {"layer":"Container / Leading Icon","property":"characters","when":"{{Status=Success}}","value":"circle-check","literal":true},
+    {"layer":"Container / Leading Icon","property":"characters","when":"{{Status=Warning}}","value":"triangle-exclamation","literal":true},
+    {"layer":"Container / Leading Icon","property":"characters","when":"{{Status=Error}}","value":"circle-exclamation","literal":true},
+    {"layer":"Container / Leading Icon","property":"characters","when":"{{Status=Info}}","value":"circle-info","literal":true},
+    {"layer":"Container / Leading Icon","property":"characters","when":"{{Status=Caution major}}","value":"circle-check","literal":true},
+    {"layer":"Container / Leading Icon","property":"characters","when":"{{Status=Caution minor}}","value":"circle-check","literal":true},
+    {"layer":"Container / Leading Icon","property":"fills.0","when":"{{Status=*}}","value":"Theme/Banner/{{Status=*}}/{{Hierarchy=*}}/icon"},
+    {"layer":"Container / Icon button","property":"visible","when":"{{Status=*}}","value":"false","literal":true},
+    {"layer":"Container / Icon button","property":"visible","when":"{{Action=Icon Button}}","value":"true","literal":true},
+    {"layer":"Container / Icon button","property":"componentProperties.Hierarchy","when":"{{Action=Icon Button}}","value":"Tertiary","literal":true},
+    {"layer":"Container / Icon button","property":"componentProperties.Type","when":"{{Action=Icon Button}}","value":"Default","literal":true},
+    {"layer":"Container / Content","property":"layoutSizingHorizontal","when":"{{Status=*}}","value":"FILL","literal":true},
+    {"layer":"Container / Content","property":"layoutSizingVertical","when":"{{Status=*}}","value":"HUG","literal":true},
+    {"layer":"Container / Content","property":"paddingRight","when":"{{Status=*}}","value":"0","literal":true},
+    {"layer":"Container / Content","property":"paddingRight","when":"{{Artwork=Icon, None}}{{Action=Icon Button}}","value":"32","literal":true},
+    {"layer":"Container / Content / Title and Description / Title","property":"fills.0","when":"{{Status=*}}","value":"Theme/Banner/{{Status=*}}/{{Hierarchy=*}}/text"},
+    {"layer":"Container / Content / Title and Description / Description","property":"fills.0","when":"{{Status=*}}","value":"Theme/Banner/{{Status=*}}/{{Hierarchy=*}}/text"},
+    {"layer":"Container / Content / Action","property":"visible","when":"{{Status=*}}","value":"true","literal":true},
+    {"layer":"Container / Content / Action","property":"visible","when":"{{Action=None, Icon Button}}","value":"false","literal":true},
+    {"layer":"Container / Content / Action","property":"paddingTop","when":"{{Status=*}}","value":"0","literal":true},
+    {"layer":"Container / Content / Action","property":"paddingBottom","when":"{{Status=*}}","value":"0","literal":true},
+    {"layer":"Container / Content / Action / Button","property":"visible","when":"{{Status=*}}","value":"false","literal":true},
+    {"layer":"Container / Content / Action / Button","property":"visible","when":"{{Action=Button, 2 Buttons}}","value":"true","literal":true},
+    {"layer":"Container / Content / Action / Button","property":"layoutSizingHorizontal","when":"{{Status=*}}","value":"HUG","literal":true},
+    {"layer":"Container / Content / Action / Button","property":"layoutSizingHorizontal","when":"{{Action=2 Buttons}}","value":"FILL","literal":true},
+    {"layer":"Container / Content / Action / Button","property":"componentProperties.Hierarchy","when":"{{Action=Button, 2 Buttons}}","value":"Secondary","literal":true},
+    {"layer":"Container / Content / Action / Button","property":"componentProperties.Type","when":"{{Action=Button, 2 Buttons}}","value":"Default","literal":true},
+    {"layer":"Container / Content / Action / Button 2","property":"visible","when":"{{Status=*}}","value":"false","literal":true},
+    {"layer":"Container / Content / Action / Button 2","property":"visible","when":"{{Action=2 Buttons}}","value":"true","literal":true},
+    {"layer":"Container / Content / Action / Button 2","property":"layoutSizingHorizontal","when":"{{Status=*}}","value":"FILL","literal":true},
+    {"layer":"Container / Content / Action / Button 2","property":"componentProperties.Hierarchy","when":"{{Action=2 Buttons}}","value":"Secondary","literal":true},
+    {"layer":"Container / Content / Action / Button 2","property":"componentProperties.Type","when":"{{Action=2 Buttons}}","value":"Default","literal":true},
+    {"layer":"Container / Content / Action / Toggle","property":"visible","when":"{{Status=*}}","value":"false","literal":true},
+    {"layer":"Container / Content / Action / Toggle","property":"visible","when":"{{Action=Toggle}}","value":"true","literal":true},
+    {"layer":"Container / Content / Action / Toggle","property":"componentProperties.Style","when":"{{Action=Toggle}}","value":"Toggle only","literal":true},
+    {"layer":"Container / Content / Action / Toggle","property":"layoutSizingHorizontal","when":"{{Action=Toggle}}","value":"HUG","literal":true},
+    {"layer":"Container / Content / Action / Toggle","property":"layoutSizingVertical","when":"{{Action=Toggle}}","value":"HUG","literal":true}
+  ]
+}
+]
+}

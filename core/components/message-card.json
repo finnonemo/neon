@@ -1,0 +1,203 @@
+{
+"component": "Message card",
+"sets": [
+{
+  "name": "Message card",
+  "axes": [
+    {
+      "name": "Layout",
+      "values": [
+        "Headline + paragraph",
+        "Headline"
+      ]
+    },
+    {
+      "name": "Sub layout",
+      "values": [
+        "Button tertiary",
+        "Button secondary",
+        "Button none"
+      ]
+    },
+    {
+      "name": "Style",
+      "values": [
+        "White",
+        "Light",
+        "Dark"
+      ]
+    },
+    {
+      "name": "Artwork",
+      "values": [
+        "Trailing",
+        "Top"
+      ]
+    },
+    {
+      "name": "State",
+      "values": [
+        "Enabled",
+        "Active",
+        "Focus",
+        "Skeleton"
+      ]
+    }
+  ],
+  "exclude": [],
+  "properties": [
+    {
+      "name": "Heading text",
+      "type": "TEXT",
+      "default": "Start your first investment"
+    },
+    {
+      "name": "Paragraph text",
+      "type": "TEXT",
+      "default": "Open an account today and pay half the fees this month."
+    },
+    {
+      "name": "Dismiss",
+      "type": "BOOLEAN",
+      "default": false
+    }
+  ],
+  "variables": {
+    "Message card/Container/Default/Layout horizontal": "Fill container",
+    "Message card/Container/Default/Layout vertical": "Hug contents",
+    "Message card/Container/Default/Gap vertical": 0,
+    "Message card/Container/Default/Radius": 16,
+    "Message card/Container/Default/Stroke weight": 2,
+    "Message card/Body/Default/Gap horizontal": 8,
+    "Message card/Content/Top/Padding top": 16,
+    "Message card/Content/Top/Padding bottom": 16,
+    "Message card/Content/Top/Padding left": 0,
+    "Message card/Content/Top/Padding right": 16,
+    "Message card/Content/Top/Gap vertical": 0,
+    "Message card/Content/Trailing/Padding top": 16,
+    "Message card/Content/Trailing/Padding bottom": 16,
+    "Message card/Content/Trailing/Padding left": 0,
+    "Message card/Content/Trailing/Padding right": 0,
+    "Message card/Content/Trailing/Gap vertical": 0,
+    "Message card/Text/Default/Padding left": 16,
+    "Message card/Text/Default/Gap vertical": 0,
+    "Message card/Actions/Button tertiary/Padding left": 0,
+    "Message card/Actions/Button tertiary/Padding top": 4,
+    "Message card/Actions/Button secondary/Padding left": 16,
+    "Message card/Actions/Button secondary/Padding top": 12,
+    "Message card/Artwork/Default/Layout width": 112,
+    "Message card/Artwork/Default/Layout height": 132,
+    "Message card/Label/Heading/Type token": "$title3",
+    "Message card/Label/Heading/Type emphasis": "Strong",
+    "Message card/Label/Heading/Align horizontal": "Left",
+    "Message card/Label/Heading/Align vertical": "Top",
+    "Message card/Label/Heading/Decoration": "-",
+    "Message card/Label/Paragraph/Type token": "$subhead",
+    "Message card/Label/Paragraph/Type emphasis": "Regular",
+    "Message card/Label/Paragraph/Align horizontal": "Left",
+    "Message card/Label/Paragraph/Align vertical": "Top",
+    "Message card/Label/Paragraph/Decoration": "-",
+    "Message card/Bar/Default/Layout width": 160,
+    "Message card/Bar/Default/Layout height": 8,
+    "Message card/Bar/Default/Radius": 0,
+    "Message card/Bar/Default/Padding left": 16,
+    "Message card/Bar/Default/Padding top": 8,
+    "Message card/Bar/Default/Padding bottom": 8,
+    "Message card/Bar/Default/Gap vertical": 8,
+    "Message card/Focus ring/Default/Stroke weight": 2,
+    "Message card/Focus ring/Default/Radius": 20,
+    "Interactive/Medium/Interactive min-height": 48
+  },
+  "bindings": [
+    {"layer":"(root)","property":"minWidth","when":"","value":"Components/Interactive/Medium/Interactive min-height"},
+    {"layer":"(root)","property":"minHeight","when":"","value":"Components/Interactive/Medium/Interactive min-height"},
+    {"layer":"Focus ring","property":"visible","when":"","value":"false","literal":true},
+    {"layer":"Focus ring","property":"visible","when":"{{State=Focus}}","value":"true","literal":true},
+    {"layer":"Focus ring","property":"strokes.0","when":"","value":"Theme/Focus/focus"},
+    {"layer":"Focus ring","property":"strokeWeight","when":"","value":"Components/Message card/Focus ring/Default/Stroke weight"},
+    {"layer":"Focus ring","property":"cornerRadius","when":"","value":"Components/Message card/Focus ring/Default/Radius"},
+    {"layer":"Container","property":"explicitMode.Theme","when":"","value":"none","literal":true},
+    {"layer":"Container","property":"explicitMode.Theme","when":"{{Style=Light, Dark}}","value":"Light","literal":true},
+    {"layer":"Container","property":"explicitMode.Theme","when":"{{State=Skeleton}}","value":"none","literal":true},
+    {"layer":"Container","property":"fills.0","when":"","value":"Theme/Layer/layer-01"},
+    {"layer":"Container","property":"fills.0","when":"{{Style=Light}}","value":"Theme/Accents/Yellow/25"},
+    {"layer":"Container","property":"fills.0","when":"{{Style=Dark}}","value":"Theme/Accents/Navy/100"},
+    {"layer":"Container","property":"fills.0","when":"{{State=Skeleton}}","value":"Theme/Layer/layer-01"},
+    {"layer":"Container","property":"fills.1","when":"","value":"Theme/Transparent"},
+    {"layer":"Container","property":"fills.1","when":"{{State=Active}}","value":"Theme/Layer/layer-active-01"},
+    {"layer":"Container","property":"fills.1","when":"{{Style=Dark}}{{State=Active}}","value":"Theme/Button/button-tertiary-inverse-active"},
+    {"layer":"Container","property":"strokes.0","when":"","value":"Theme/Border/border-subtle"},
+    {"layer":"Container","property":"strokes.0","when":"{{Style=Dark}}","value":"Theme/Transparent"},
+    {"layer":"Container","property":"strokes.0","when":"{{State=Skeleton}}","value":"Theme/Border/border-subtle"},
+    {"layer":"Container","property":"strokeWeight","when":"","value":"Components/Message card/Container/Default/Stroke weight"},
+    {"layer":"Container","property":"cornerRadius","when":"","value":"Components/Message card/Container/Default/Radius"},
+    {"layer":"Container","property":"itemSpacing","when":"","value":"Components/Message card/Container/Default/Gap vertical"},
+    {"layer":"Container / Artwork top","property":"visible","when":"","value":"false","literal":true},
+    {"layer":"Container / Artwork top","property":"visible","when":"{{Artwork=Top}}","value":"true","literal":true},
+    {"layer":"Container / Artwork top","property":"height","when":"","value":"Components/Message card/Artwork/Default/Layout height"},
+    {"layer":"Container / Artwork top","property":"fills.1","when":"","value":"Theme/Transparent"},
+    {"layer":"Container / Artwork top","property":"fills.1","when":"{{State=Skeleton}}","value":"Theme/Skeleton/skeleton-background"},
+    {"layer":"Container / Body","property":"itemSpacing","when":"","value":"Components/Message card/Body/Default/Gap horizontal"},
+    {"layer":"Container / Body / Artwork trailing","property":"visible","when":"","value":"true","literal":true},
+    {"layer":"Container / Body / Artwork trailing","property":"visible","when":"{{Artwork=Top}}","value":"false","literal":true},
+    {"layer":"Container / Body / Artwork trailing","property":"width","when":"","value":"Components/Message card/Artwork/Default/Layout width"},
+    {"layer":"Container / Body / Artwork trailing","property":"fills.1","when":"","value":"Theme/Transparent"},
+    {"layer":"Container / Body / Artwork trailing","property":"fills.1","when":"{{State=Skeleton}}","value":"Theme/Skeleton/skeleton-background"},
+    {"layer":"Container / Body / Content","property":"paddingTop","when":"","value":"Components/Message card/Content/{{Artwork=*}}/Padding top"},
+    {"layer":"Container / Body / Content","property":"paddingBottom","when":"","value":"Components/Message card/Content/{{Artwork=*}}/Padding bottom"},
+    {"layer":"Container / Body / Content","property":"paddingLeft","when":"","value":"Components/Message card/Content/{{Artwork=*}}/Padding left"},
+    {"layer":"Container / Body / Content","property":"paddingRight","when":"","value":"Components/Message card/Content/{{Artwork=*}}/Padding right"},
+    {"layer":"Container / Body / Content","property":"itemSpacing","when":"","value":"Components/Message card/Content/{{Artwork=*}}/Gap vertical"},
+    {"layer":"Container / Body / Content / Text","property":"visible","when":"","value":"true","literal":true},
+    {"layer":"Container / Body / Content / Text","property":"visible","when":"{{State=Skeleton}}","value":"false","literal":true},
+    {"layer":"Container / Body / Content / Text","property":"paddingLeft","when":"","value":"Components/Message card/Text/Default/Padding left"},
+    {"layer":"Container / Body / Content / Text","property":"itemSpacing","when":"","value":"Components/Message card/Text/Default/Gap vertical"},
+    {"layer":"Container / Body / Content / Text / Heading","property":"explicitMode.Type Emphasis","when":"","value":"Strong","literal":true},
+    {"layer":"Container / Body / Content / Text / Heading","property":"fills.0","when":"","value":"Theme/Text/text-primary"},
+    {"layer":"Container / Body / Content / Text / Heading","property":"fills.0","when":"{{Style=Dark}}","value":"Theme/Text/text-on-color"},
+    {"layer":"Container / Body / Content / Text / Paragraph","property":"visible","when":"","value":"true","literal":true},
+    {"layer":"Container / Body / Content / Text / Paragraph","property":"visible","when":"{{Layout=Headline}}","value":"false","literal":true},
+    {"layer":"Container / Body / Content / Text / Paragraph","property":"fills.0","when":"","value":"Theme/Text/text-primary"},
+    {"layer":"Container / Body / Content / Text / Paragraph","property":"fills.0","when":"{{Style=Dark}}","value":"Theme/Text/text-on-color"},
+    {"layer":"Container / Body / Content / Skeleton","property":"visible","when":"","value":"false","literal":true},
+    {"layer":"Container / Body / Content / Skeleton","property":"visible","when":"{{State=Skeleton}}","value":"true","literal":true},
+    {"layer":"Container / Body / Content / Skeleton","property":"paddingLeft","when":"","value":"Components/Message card/Bar/Default/Padding left"},
+    {"layer":"Container / Body / Content / Skeleton","property":"paddingTop","when":"","value":"Components/Message card/Bar/Default/Padding top"},
+    {"layer":"Container / Body / Content / Skeleton","property":"paddingBottom","when":"","value":"Components/Message card/Bar/Default/Padding bottom"},
+    {"layer":"Container / Body / Content / Skeleton","property":"itemSpacing","when":"","value":"Components/Message card/Bar/Default/Gap vertical"},
+    {"layer":"Container / Body / Content / Skeleton / Heading line","property":"fills.0","when":"","value":"Theme/Skeleton/skeleton-background"},
+    {"layer":"Container / Body / Content / Skeleton / Heading line","property":"width","when":"","value":"Components/Message card/Bar/Default/Layout width"},
+    {"layer":"Container / Body / Content / Skeleton / Heading line","property":"height","when":"","value":"Components/Message card/Bar/Default/Layout height"},
+    {"layer":"Container / Body / Content / Skeleton / Heading line","property":"cornerRadius","when":"","value":"Components/Message card/Bar/Default/Radius"},
+    {"layer":"Container / Body / Content / Skeleton / Paragraph line","property":"visible","when":"","value":"true","literal":true},
+    {"layer":"Container / Body / Content / Skeleton / Paragraph line","property":"visible","when":"{{Layout=Headline}}","value":"false","literal":true},
+    {"layer":"Container / Body / Content / Skeleton / Paragraph line","property":"fills.0","when":"","value":"Theme/Skeleton/skeleton-background"},
+    {"layer":"Container / Body / Content / Skeleton / Paragraph line","property":"height","when":"","value":"Components/Message card/Bar/Default/Layout height"},
+    {"layer":"Container / Body / Content / Skeleton / Paragraph line","property":"cornerRadius","when":"","value":"Components/Message card/Bar/Default/Radius"},
+    {"layer":"Container / Body / Content / Actions","property":"visible","when":"","value":"true","literal":true},
+    {"layer":"Container / Body / Content / Actions","property":"visible","when":"{{Sub layout=Button none}}","value":"false","literal":true},
+    {"layer":"Container / Body / Content / Actions","property":"paddingLeft","when":"{{Sub layout=Button tertiary, Button secondary}}","value":"Components/Message card/Actions/{{Sub layout=*}}/Padding left"},
+    {"layer":"Container / Body / Content / Actions","property":"paddingTop","when":"{{Sub layout=Button tertiary, Button secondary}}","value":"Components/Message card/Actions/{{Sub layout=*}}/Padding top"},
+    {"layer":"Container / Body / Content / Actions / Button","property":"isExposedInstance","when":"","value":"true","literal":true},
+    {"layer":"Container / Body / Content / Actions / Button","property":"componentProperties.Hierarchy","when":"","value":"Tertiary"},
+    {"layer":"Container / Body / Content / Actions / Button","property":"componentProperties.Hierarchy","when":"{{Sub layout=Button secondary}}","value":"Secondary"},
+    {"layer":"Container / Body / Content / Actions / Button","property":"componentProperties.Type","when":"","value":"Default"},
+    {"layer":"Container / Body / Content / Actions / Button","property":"componentProperties.Type","when":"{{Sub layout=Button tertiary}}{{Style=Dark}}","value":"Inverse"},
+    {"layer":"Container / Body / Content / Actions / Button","property":"componentProperties.Type","when":"{{Sub layout=Button secondary}}{{Style=Light, Dark}}","value":"Inverse"},
+    {"layer":"Container / Body / Content / Actions / Button","property":"componentProperties.Type","when":"{{State=Skeleton}}","value":"Default"},
+    {"layer":"Container / Body / Content / Actions / Button","property":"componentProperties.Size","when":"","value":"Small"},
+    {"layer":"Container / Body / Content / Actions / Button","property":"componentProperties.State","when":"","value":"Enabled","literal":true},
+    {"layer":"Container / Body / Content / Actions / Button","property":"componentProperties.State","when":"{{State=Skeleton}}","value":"Skeleton","literal":true},
+    {"layer":"Container / Body / Content / Actions / Button","property":"componentProperties.Leading Icon","when":"","value":"false","literal":true},
+    {"layer":"Container / Body / Content / Actions / Button","property":"componentProperties.Trailing Icon","when":"","value":"true","literal":true},
+    {"layer":"Container / Body / Content / Actions / Button","property":"componentProperties.Trailing Icon","when":"{{Sub layout=Button secondary}}","value":"false","literal":true},
+    {"layer":"Container / Body / Content / Actions / Button","property":"layoutSizingHorizontal","when":"","value":"HUG","literal":true},
+    {"layer":"Container / Dismiss","property":"componentProperties.Hierarchy","when":"","value":"Secondary"},
+    {"layer":"Container / Dismiss","property":"componentProperties.Type","when":"","value":"Default"},
+    {"layer":"Container / Dismiss","property":"componentProperties.Size","when":"","value":"Small"},
+    {"layer":"Container / Dismiss","property":"componentProperties.State","when":"","value":"Enabled","literal":true},
+    {"layer":"Container / Dismiss","property":"componentProperties.State","when":"{{State=Skeleton}}","value":"Skeleton","literal":true}
+  ]
+}
+]
+}

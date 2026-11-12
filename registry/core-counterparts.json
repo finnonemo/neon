@@ -1,0 +1,122 @@
+{
+  "accordion": {
+    "core": "accordion"
+  },
+  "alert": {
+    "core": "banner"
+  },
+  "alert-dialog": {
+    "core": "alert"
+  },
+  "avatar": {
+    "core": "avatar"
+  },
+  "button": {
+    "core": "button"
+  },
+  "button-group": {
+    "core": "button",
+    "why": "Each button in the group matches Button. Core has no joined group of Buttons: its Button dock stacks or splits whole Buttons at the bottom of a screen."
+  },
+  "calendar": {
+    "core": null,
+    "why": "Core has no web calendar grid: Date and time is the iOS picker."
+  },
+  "card": {
+    "core": null,
+    "why": "Core has no Card: a surface is composed from Layer tokens."
+  },
+  "checkbox": {
+    "core": null,
+    "why": "Core's Checkbox is still a draft."
+  },
+  "collapsible": {
+    "core": "accordion",
+    "why": "Collapsible is the disclosure behavior alone; Accordion is the Core component that discloses content."
+  },
+  "date-picker": {
+    "core": null,
+    "why": "It is composed from calendar, which has no Counterpart."
+  },
+  "dialog": {
+    "core": "alert",
+    "why": "Core has one modal: dialog follows Alert at the web look (ADR 0009)."
+  },
+  "dropdown-menu": {
+    "core": "menu"
+  },
+  "field": {
+    "core": "text-field",
+    "why": "Field is the label, helper and error text around a control: Text field's Title and Detail."
+  },
+  "input": {
+    "core": "text-field"
+  },
+  "input-group": {
+    "core": "text-field",
+    "why": "Input group is a field with leading or trailing content: Text field's Field with its unit and status."
+  },
+  "label": {
+    "core": "text-field",
+    "why": "Label is the title above a control: Text field's Title."
+  },
+  "list-row": {
+    "core": "list-item"
+  },
+  "pagination": {
+    "core": "pagination"
+  },
+  "popover": {
+    "core": "popover"
+  },
+  "progress": {
+    "core": "progress-bar"
+  },
+  "radio-group": {
+    "core": "radio"
+  },
+  "segmented-control": {
+    "core": "segmented-control"
+  },
+  "select": {
+    "core": "select"
+  },
+  "separator": {
+    "core": "divider"
+  },
+  "sheet": {
+    "core": "sheet"
+  },
+  "sonner": {
+    "core": "snackbar"
+  },
+  "spinner": {
+    "core": "progress-circle"
+  },
+  "switch": {
+    "core": "toggle"
+  },
+  "table": {
+    "core": "table"
+  },
+  "tabs": {
+    "core": "tabs"
+  },
+  "tag": {
+    "core": "display-tag"
+  },
+  "textarea": {
+    "core": "text-area"
+  },
+  "toggle": {
+    "core": null,
+    "why": "Supporting item: toggle-group is built from it."
+  },
+  "toggle-group": {
+    "core": "selection-tag",
+    "why": "A group of pressable options that filter or pick: Core's Selection tag."
+  },
+  "tooltip": {
+    "core": "tooltip"
+  }
+}

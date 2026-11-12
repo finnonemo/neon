@@ -1,0 +1,169 @@
+{
+"component": "Empty state",
+"sets": [
+{
+  "name": "Empty state",
+  "axes": [
+    {
+      "name": "Size",
+      "values": [
+        "Large",
+        "Medium",
+        "Small"
+      ]
+    }
+  ],
+  "exclude": [],
+  "properties": [
+    {
+      "name": "Artwork",
+      "type": "BOOLEAN",
+      "default": true
+    },
+    {
+      "name": "Button",
+      "type": "BOOLEAN",
+      "default": true
+    },
+    {
+      "name": "Title text",
+      "type": "TEXT",
+      "default": "No orders yet"
+    },
+    {
+      "name": "Description text",
+      "type": "TEXT",
+      "default": "When you buy your first fund, your orders will show here."
+    }
+  ],
+  "variables": {
+    "Empty state/Container/Large/Layout horizontal": "Fill container",
+    "Empty state/Container/Large/Layout vertical": "Hug contents",
+    "Empty state/Container/Large/Padding top": 36,
+    "Empty state/Container/Large/Padding right": 36,
+    "Empty state/Container/Large/Padding bottom": 36,
+    "Empty state/Container/Large/Padding left": 36,
+    "Empty state/Container/Large/Gap horizontal": 0,
+    "Empty state/Container/Large/Gap vertical": 12,
+    "Empty state/Content/Large/Gap vertical": 12,
+    "Empty state/Container/Medium/Layout horizontal": "Fill container",
+    "Empty state/Container/Medium/Layout vertical": "Hug contents",
+    "Empty state/Container/Medium/Padding top": 24,
+    "Empty state/Container/Medium/Padding right": 24,
+    "Empty state/Container/Medium/Padding bottom": 24,
+    "Empty state/Container/Medium/Padding left": 24,
+    "Empty state/Container/Medium/Gap horizontal": 0,
+    "Empty state/Container/Medium/Gap vertical": 12,
+    "Empty state/Content/Medium/Gap vertical": 8,
+    "Empty state/Container/Small/Layout horizontal": "Fill container",
+    "Empty state/Container/Small/Layout vertical": "Hug contents",
+    "Empty state/Container/Small/Padding top": 16,
+    "Empty state/Container/Small/Padding right": 16,
+    "Empty state/Container/Small/Padding bottom": 16,
+    "Empty state/Container/Small/Padding left": 16,
+    "Empty state/Container/Small/Gap horizontal": 12,
+    "Empty state/Container/Small/Gap vertical": 0,
+    "Empty state/Content/Small/Gap vertical": 8,
+    "Empty state/Label/Large title/Type token": "$title3",
+    "Empty state/Label/Large title/Type emphasis": "Strong",
+    "Empty state/Label/Large title/Align horizontal": "Center",
+    "Empty state/Label/Large title/Align vertical": "Top",
+    "Empty state/Label/Large title/Decoration": "-",
+    "Empty state/Label/Large description/Type token": "$callout",
+    "Empty state/Label/Large description/Type emphasis": "Regular",
+    "Empty state/Label/Large description/Align horizontal": "Center",
+    "Empty state/Label/Large description/Align vertical": "Top",
+    "Empty state/Label/Large description/Decoration": "-",
+    "Empty state/Label/Medium title/Type token": "$headline",
+    "Empty state/Label/Medium title/Type emphasis": "Strong",
+    "Empty state/Label/Medium title/Align horizontal": "Center",
+    "Empty state/Label/Medium title/Align vertical": "Top",
+    "Empty state/Label/Medium title/Decoration": "-",
+    "Empty state/Label/Medium description/Type token": "$subhead",
+    "Empty state/Label/Medium description/Type emphasis": "Regular",
+    "Empty state/Label/Medium description/Align horizontal": "Center",
+    "Empty state/Label/Medium description/Align vertical": "Top",
+    "Empty state/Label/Medium description/Decoration": "-",
+    "Empty state/Label/Small title/Type token": "$headline",
+    "Empty state/Label/Small title/Type emphasis": "Strong",
+    "Empty state/Label/Small title/Align horizontal": "Left",
+    "Empty state/Label/Small title/Align vertical": "Center",
+    "Empty state/Label/Small title/Decoration": "-"
+  },
+  "bindings": [
+    {"layer":"Container","property":"layoutMode","when":"{{Size=Large, Medium}}","value":"VERTICAL","literal":true},
+    {"layer":"Container","property":"layoutMode","when":"{{Size=Small}}","value":"HORIZONTAL","literal":true},
+    {"layer":"Container","property":"layoutSizingHorizontal","when":"{{Size=*}}","value":"FILL","literal":true},
+    {"layer":"Container","property":"layoutSizingVertical","when":"{{Size=*}}","value":"HUG","literal":true},
+    {"layer":"Container","property":"paddingTop","when":"{{Size=*}}","value":"Components/Empty state/Container/{{Size=*}}/Padding top"},
+    {"layer":"Container","property":"paddingRight","when":"{{Size=*}}","value":"Components/Empty state/Container/{{Size=*}}/Padding right"},
+    {"layer":"Container","property":"paddingBottom","when":"{{Size=*}}","value":"Components/Empty state/Container/{{Size=*}}/Padding bottom"},
+    {"layer":"Container","property":"paddingLeft","when":"{{Size=*}}","value":"Components/Empty state/Container/{{Size=*}}/Padding left"},
+    {"layer":"Container","property":"itemSpacing","when":"{{Size=Large, Medium}}","value":"Components/Empty state/Container/{{Size=*}}/Gap vertical"},
+    {"layer":"Container","property":"itemSpacing","when":"{{Size=Small}}","value":"Components/Empty state/Container/Small/Gap horizontal"},
+    {"layer":"Container","property":"counterAxisAlignItems","when":"{{Size=*}}","value":"CENTER","literal":true},
+    {"layer":"Container / Artwork","property":"componentProperties.Size","when":"{{Size=*}}","value":"{{Size=*}}"},
+    {"layer":"Container / Artwork","property":"isExposedInstance","when":"{{Size=*}}","value":"true","literal":true},
+    {"layer":"Container / Artwork","property":"layoutSizingHorizontal","when":"{{Size=*}}","value":"HUG","literal":true},
+    {"layer":"Container / Artwork","property":"layoutSizingVertical","when":"{{Size=*}}","value":"HUG","literal":true},
+    {"layer":"Container / Heading + Description","property":"layoutSizingHorizontal","when":"{{Size=*}}","value":"FILL","literal":true},
+    {"layer":"Container / Heading + Description","property":"layoutSizingVertical","when":"{{Size=*}}","value":"HUG","literal":true},
+    {"layer":"Container / Heading + Description","property":"itemSpacing","when":"{{Size=*}}","value":"Components/Empty state/Content/{{Size=*}}/Gap vertical"},
+    {"layer":"Container / Heading + Description / Title","property":"textStyleId","when":"{{Size=Large}}","value":"Headings/Title 3"},
+    {"layer":"Container / Heading + Description / Title","property":"textStyleId","when":"{{Size=Medium, Small}}","value":"Headings/Headline"},
+    {"layer":"Container / Heading + Description / Title","property":"explicitMode.Type Emphasis","when":"{{Size=*}}","value":"Strong","literal":true},
+    {"layer":"Container / Heading + Description / Title","property":"textAlignHorizontal","when":"{{Size=Large, Medium}}","value":"CENTER","literal":true},
+    {"layer":"Container / Heading + Description / Title","property":"textAlignHorizontal","when":"{{Size=Small}}","value":"LEFT","literal":true},
+    {"layer":"Container / Heading + Description / Title","property":"fills.0","when":"{{Size=*}}","value":"Theme/Text/text-primary"},
+    {"layer":"Container / Heading + Description / Description","property":"visible","when":"{{Size=*}}","value":"true","literal":true},
+    {"layer":"Container / Heading + Description / Description","property":"visible","when":"{{Size=Small}}","value":"false","literal":true},
+    {"layer":"Container / Heading + Description / Description","property":"textStyleId","when":"{{Size=Large}}","value":"Body/Callout"},
+    {"layer":"Container / Heading + Description / Description","property":"textStyleId","when":"{{Size=Medium, Small}}","value":"Body/Subheadline"},
+    {"layer":"Container / Heading + Description / Description","property":"textAlignHorizontal","when":"{{Size=*}}","value":"CENTER","literal":true},
+    {"layer":"Container / Heading + Description / Description","property":"fills.0","when":"{{Size=*}}","value":"Theme/Text/text-primary"},
+    {"layer":"Container / Button","property":"visible","when":"{{Size=*}}","value":"true","literal":true},
+    {"layer":"Container / Button","property":"visible","when":"{{Size=Small}}","value":"false","literal":true},
+    {"layer":"Container / Button","property":"isExposedInstance","when":"{{Size=*}}","value":"true","literal":true},
+    {"layer":"Container / Button","property":"componentProperties.Hierarchy","when":"{{Size=*}}","value":"Secondary"},
+    {"layer":"Container / Button","property":"componentProperties.Type","when":"{{Size=*}}","value":"Default"},
+    {"layer":"Container / Button","property":"componentProperties.Size","when":"{{Size=*}}","value":"Small"},
+    {"layer":"Container / Button","property":"componentProperties.State","when":"{{Size=*}}","value":"Enabled"},
+    {"layer":"Container / Button","property":"componentProperties.Leading Icon","when":"{{Size=*}}","value":"false","literal":true},
+    {"layer":"Container / Button","property":"componentProperties.Trailing Icon","when":"{{Size=*}}","value":"false","literal":true},
+    {"layer":"Container / Button","property":"layoutSizingHorizontal","when":"{{Size=*}}","value":"HUG","literal":true}
+  ]
+},
+{
+  "name": "_Empty state artwork",
+  "axes": [
+    {
+      "name": "Size",
+      "values": [
+        "Large",
+        "Medium",
+        "Small"
+      ]
+    }
+  ],
+  "exclude": [],
+  "properties": [
+    {
+      "name": "Artwork text",
+      "type": "TEXT",
+      "default": "circle-question"
+    }
+  ],
+  "variables": {
+    "Empty state/Icon/5XLarge/Type token": "fa-sharp fa-solid/5XLarge",
+    "Empty state/Icon/4XLarge/Type token": "fa-sharp fa-solid/4XLarge",
+    "Empty state/Icon/3XLarge/Type token": "fa-sharp fa-solid/3XLarge"
+  },
+  "bindings": [
+    {"layer":"Container / Artwork","property":"textStyleId","when":"{{Size=Large}}","value":"fa-sharp fa-solid/5XLarge"},
+    {"layer":"Container / Artwork","property":"textStyleId","when":"{{Size=Medium}}","value":"fa-sharp fa-solid/4XLarge"},
+    {"layer":"Container / Artwork","property":"textStyleId","when":"{{Size=Small}}","value":"fa-sharp fa-solid/3XLarge"},
+    {"layer":"Container / Artwork","property":"fills.0","when":"{{Size=*}}","value":"Theme/Icon/icon-primary"}
+  ]
+}
+]
+}

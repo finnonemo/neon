@@ -1,0 +1,180 @@
+{
+  "button": {
+    "counterpart": "Button",
+    "doc": "components/button.md",
+    "values": "components/button.json"
+  },
+  "input": {
+    "counterpart": "Text field",
+    "doc": "components/text-field.md",
+    "values": "components/text-field.json"
+  },
+  "textarea": {
+    "counterpart": "Text area",
+    "doc": "components/text-area.md",
+    "values": "components/text-area.json"
+  },
+  "label": {
+    "counterpart": "Text field",
+    "doc": "components/text-field.md",
+    "values": "components/text-field.json",
+    "why": "Label is the title above a control: Text field's Title."
+  },
+  "checkbox": {
+    "counterpart": null,
+    "why": "Core's Checkbox is still a draft."
+  },
+  "avatar": {
+    "counterpart": "Avatar",
+    "doc": "components/avatar.md",
+    "values": "components/avatar.json"
+  },
+  "tag": {
+    "counterpart": "Display tag",
+    "doc": "components/display-tag.md",
+    "values": "components/display-tag.json"
+  },
+  "list-row": {
+    "counterpart": "List item",
+    "doc": "components/list-item.md",
+    "values": "components/list-item.json"
+  },
+  "segmented-control": {
+    "counterpart": "Segmented control",
+    "doc": "components/segmented-control.md",
+    "values": "components/segmented-control.json"
+  },
+  "tooltip": {
+    "counterpart": "Tooltip",
+    "doc": "components/tooltip.md",
+    "values": "components/tooltip.json"
+  },
+  "sonner": {
+    "counterpart": "Snackbar",
+    "doc": "components/snackbar.md",
+    "values": "components/snackbar.json"
+  },
+  "popover": {
+    "counterpart": "Popover",
+    "doc": "components/popover.md"
+  },
+  "select": {
+    "counterpart": "Select",
+    "doc": "components/select.md",
+    "values": "components/select.json"
+  },
+  "dropdown-menu": {
+    "counterpart": "Menu",
+    "doc": "components/menu.md"
+  },
+  "dialog": {
+    "counterpart": "Alert",
+    "doc": "components/alert.md",
+    "why": "Core has one modal: dialog follows Alert at the web look (ADR 0009)."
+  },
+  "calendar": {
+    "counterpart": null,
+    "why": "Core has no web calendar grid: Date and time is the iOS picker."
+  },
+  "date-picker": {
+    "counterpart": null,
+    "why": "It is composed from calendar, which has no Counterpart."
+  },
+  "table": {
+    "counterpart": "Table",
+    "doc": "components/table.md",
+    "values": "components/table.json"
+  },
+  "separator": {
+    "counterpart": "Divider",
+    "doc": "components/divider.md",
+    "values": "components/divider.json"
+  },
+  "alert": {
+    "counterpart": "In-line banner",
+    "doc": "components/banner.md",
+    "values": "components/banner.json"
+  },
+  "card": {
+    "counterpart": null,
+    "why": "Core has no Card: a surface is composed from Layer tokens."
+  },
+  "alert-dialog": {
+    "counterpart": "Alert",
+    "doc": "components/alert.md"
+  },
+  "sheet": {
+    "counterpart": "Sheet",
+    "doc": "components/sheet.md"
+  },
+  "spinner": {
+    "counterpart": "Progress circle",
+    "doc": "components/progress-circle.md",
+    "values": "components/progress-circle.json"
+  },
+  "progress": {
+    "counterpart": "Progress bar",
+    "doc": "components/progress-bar.md",
+    "values": "components/progress-bar.json"
+  },
+  "field": {
+    "counterpart": "Text field",
+    "doc": "components/text-field.md",
+    "values": "components/text-field.json",
+    "why": "Field is the label, helper and error text around a control: Text field's Title and Detail."
+  },
+  "input-group": {
+    "counterpart": "Text field",
+    "doc": "components/text-field.md",
+    "values": "components/text-field.json",
+    "why": "Input group is a field with leading or trailing content: Text field's Field with its unit and status."
+  },
+  "switch": {
+    "counterpart": "Toggle",
+    "doc": "components/toggle.md",
+    "values": "components/toggle.json"
+  },
+  "radio-group": {
+    "counterpart": "Radio",
+    "doc": "components/radio.md",
+    "values": "components/radio.json"
+  },
+  "toggle-group": {
+    "counterpart": "Selection tag",
+    "doc": "components/selection-tag.md",
+    "values": "components/selection-tag.json",
+    "why": "A group of pressable options that filter or pick: Core's Selection tag."
+  },
+  "toggle": {
+    "counterpart": null,
+    "supporting": true,
+    "why": "Supporting item: toggle-group is built from it."
+  },
+  "button-group": {
+    "counterpart": "Button",
+    "doc": "components/button.md",
+    "values": "components/button.json",
+    "why": "Each button in the group matches Button. Core has no joined group of Buttons: its Button dock stacks or splits whole Buttons at the bottom of a screen."
+  },
+  "pagination": {
+    "counterpart": "Pagination",
+    "doc": "components/pagination.md",
+    "values": "components/pagination.json"
+  },
+  "tabs": {
+    "counterpart": "Tabs",
+    "doc": "components/tabs.md",
+    "values": "components/tabs.json"
+  },
+  "accordion": {
+    "counterpart": "Accordion",
+    "doc": "components/accordion.md",
+    "values": "components/accordion.json"
+  },
+  "collapsible": {
+    "counterpart": "Accordion",
+    "doc": "components/accordion.md",
+    "values": "components/accordion.json",
+    "why": "Collapsible is the disclosure behavior alone; Accordion is the Core component that discloses content."
+  }
+}

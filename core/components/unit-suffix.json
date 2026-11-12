@@ -1,0 +1,48 @@
+{
+"component": "_Unit suffix",
+"sets": [
+{
+  "name": "_Unit suffix",
+  "axes": [
+    {
+      "name": "Unit",
+      "values": [
+        "Baht",
+        "Units",
+        "Percent"
+      ]
+    },
+    {
+      "name": "State",
+      "values": [
+        "Enabled",
+        "Disabled"
+      ]
+    },
+    {
+      "name": "Text style",
+      "values": [
+        "Body",
+        "Title 2",
+        "Title 1",
+        "Large Title"
+      ]
+    }
+  ],
+  "exclude": [],
+  "properties": [],
+  "variables": {},
+  "bindings": [
+    {"layer":"Container / Unit","property":"characters","when":"{{Unit=Baht}}","value":" ฿","literal":true},
+    {"layer":"Container / Unit","property":"characters","when":"{{Unit=Units}}","value":" หน่วย","literal":true},
+    {"layer":"Container / Unit","property":"characters","when":"{{Unit=Percent}}","value":"%","literal":true},
+    {"layer":"Container / Unit","property":"textStyleId","when":"{{Text style=Body}}","value":"Body/Body"},
+    {"layer":"Container / Unit","property":"textStyleId","when":"{{Text style=Title 2}}","value":"Headings/Title 2"},
+    {"layer":"Container / Unit","property":"textStyleId","when":"{{Text style=Title 1}}","value":"Headings/Title 1"},
+    {"layer":"Container / Unit","property":"textStyleId","when":"{{Text style=Large Title}}","value":"Headings/Large Title"},
+    {"layer":"Container / Unit","property":"fills.0","when":"{{State=Enabled}}","value":"Theme/Text/text-secondary"},
+    {"layer":"Container / Unit","property":"fills.0","when":"{{State=Disabled}}","value":"Theme/Text/text-disabled"}
+  ]
+}
+]
+}

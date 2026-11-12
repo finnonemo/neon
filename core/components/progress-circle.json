@@ -1,0 +1,187 @@
+{
+"component": "Progress circle",
+"sets": [
+{
+  "name": "Progress circle",
+  "axes": [
+    {
+      "name": "Layout",
+      "values": [
+        "Inline",
+        "Stacked"
+      ]
+    },
+    {
+      "name": "Size",
+      "values": [
+        "XSmall",
+        "Small",
+        "Medium",
+        "Large",
+        "XLarge"
+      ]
+    },
+    {
+      "name": "Status",
+      "values": [
+        "Active",
+        "Success",
+        "Error"
+      ]
+    },
+    {
+      "name": "Progress",
+      "values": [
+        "Indeterminate",
+        "0%",
+        "25%",
+        "50%",
+        "75%",
+        "100%"
+      ]
+    }
+  ],
+  "exclude": [
+    "{{Layout=Stacked}}{{Status=Success, Error}}",
+    "{{Layout=Inline}}{{Progress=0%, 25%, 50%, 75%, 100%}}"
+  ],
+  "properties": [
+    {
+      "name": "Label",
+      "type": "BOOLEAN",
+      "default": true
+    },
+    {
+      "name": "Label text",
+      "type": "TEXT",
+      "default": "Loading…"
+    }
+  ],
+  "variables": {
+    "Progress circle/Container/XSmall/Gap horizontal": 8,
+    "Progress circle/Container/XSmall/Gap vertical": 12,
+    "Progress circle/Ring/XSmall/Layout width": 15,
+    "Progress circle/Ring/XSmall/Layout height": 15,
+    "Progress circle/Track/XSmall/Stroke weight": 2,
+    "Progress circle/Indicator/XSmall/Stroke weight": 2,
+    "Progress circle/Label/XSmall/Type token": "$subhead",
+    "Progress circle/Label/XSmall/Type emphasis": "Regular",
+    "Progress circle/Label/XSmall/Align horizontal": "Center",
+    "Progress circle/Label/XSmall/Align vertical": "Center",
+    "Progress circle/Label/XSmall/Decoration": "-",
+    "Progress circle/Container/Small/Gap horizontal": 8,
+    "Progress circle/Container/Small/Gap vertical": 12,
+    "Progress circle/Ring/Small/Layout width": 24,
+    "Progress circle/Ring/Small/Layout height": 24,
+    "Progress circle/Track/Small/Stroke weight": 3,
+    "Progress circle/Indicator/Small/Stroke weight": 3,
+    "Progress circle/Label/Small/Type token": "$subhead",
+    "Progress circle/Label/Small/Type emphasis": "Regular",
+    "Progress circle/Label/Small/Align horizontal": "Center",
+    "Progress circle/Label/Small/Align vertical": "Center",
+    "Progress circle/Label/Small/Decoration": "-",
+    "Progress circle/Container/Medium/Gap horizontal": 8,
+    "Progress circle/Container/Medium/Gap vertical": 12,
+    "Progress circle/Ring/Medium/Layout width": 36,
+    "Progress circle/Ring/Medium/Layout height": 36,
+    "Progress circle/Track/Medium/Stroke weight": 4,
+    "Progress circle/Indicator/Medium/Stroke weight": 4,
+    "Progress circle/Label/Medium/Type token": "$callout",
+    "Progress circle/Label/Medium/Type emphasis": "Regular",
+    "Progress circle/Label/Medium/Align horizontal": "Center",
+    "Progress circle/Label/Medium/Align vertical": "Center",
+    "Progress circle/Label/Medium/Decoration": "-",
+    "Progress circle/Container/Large/Gap horizontal": 8,
+    "Progress circle/Container/Large/Gap vertical": 12,
+    "Progress circle/Ring/Large/Layout width": 48,
+    "Progress circle/Ring/Large/Layout height": 48,
+    "Progress circle/Track/Large/Stroke weight": 4,
+    "Progress circle/Indicator/Large/Stroke weight": 4,
+    "Progress circle/Label/Large/Type token": "$headline",
+    "Progress circle/Label/Large/Type emphasis": "Regular",
+    "Progress circle/Label/Large/Align horizontal": "Center",
+    "Progress circle/Label/Large/Align vertical": "Center",
+    "Progress circle/Label/Large/Decoration": "-",
+    "Progress circle/Container/XLarge/Gap horizontal": 8,
+    "Progress circle/Container/XLarge/Gap vertical": 12,
+    "Progress circle/Ring/XLarge/Layout width": 64,
+    "Progress circle/Ring/XLarge/Layout height": 64,
+    "Progress circle/Track/XLarge/Stroke weight": 4,
+    "Progress circle/Indicator/XLarge/Stroke weight": 4,
+    "Progress circle/Label/XLarge/Type token": "$title3",
+    "Progress circle/Label/XLarge/Type emphasis": "Strong",
+    "Progress circle/Label/XLarge/Align horizontal": "Center",
+    "Progress circle/Label/XLarge/Align vertical": "Center",
+    "Progress circle/Label/XLarge/Decoration": "-",
+    "Progress circle/Icon/Medium/Type token": "fa-sharp fa-solid/Medium",
+    "Progress circle/Icon/XLarge/Type token": "fa-sharp fa-solid/XLarge",
+    "Progress circle/Icon/3XLarge/Type token": "fa-sharp fa-solid/3XLarge",
+    "Progress circle/Icon/4XLarge/Type token": "fa-sharp fa-solid/4XLarge",
+    "Progress circle/Icon/5XLarge/Type token": "fa-sharp fa-solid/5XLarge"
+  },
+  "bindings": [
+    {"layer":"Container","property":"layoutMode","when":"{{Status=*}}","value":"HORIZONTAL","literal":true},
+    {"layer":"Container","property":"layoutMode","when":"{{Layout=Stacked}}","value":"VERTICAL","literal":true},
+    {"layer":"Container","property":"layoutSizingHorizontal","when":"{{Status=*}}","value":"FILL","literal":true},
+    {"layer":"Container","property":"layoutSizingVertical","when":"{{Status=*}}","value":"HUG","literal":true},
+    {"layer":"Container","property":"counterAxisAlignItems","when":"{{Status=*}}","value":"CENTER","literal":true},
+    {"layer":"Container","property":"itemSpacing","when":"{{Status=*}}","value":"Components/Progress circle/Container/{{Size=*}}/Gap horizontal"},
+    {"layer":"Container","property":"itemSpacing","when":"{{Layout=Stacked}}","value":"Components/Progress circle/Container/{{Size=*}}/Gap vertical"},
+    {"layer":"Container / Ring","property":"visible","when":"{{Status=*}}","value":"false","literal":true},
+    {"layer":"Container / Ring","property":"visible","when":"{{Status=Active}}","value":"true","literal":true},
+    {"layer":"Container / Ring","property":"width","when":"{{Status=*}}","value":"Components/Progress circle/Ring/{{Size=*}}/Layout width"},
+    {"layer":"Container / Ring","property":"height","when":"{{Status=*}}","value":"Components/Progress circle/Ring/{{Size=*}}/Layout height"},
+    {"layer":"Container / Ring / Track","property":"strokeWeight","when":"{{Status=*}}","value":"Components/Progress circle/Track/{{Size=*}}/Stroke weight"},
+    {"layer":"Container / Ring / Track","property":"strokes.0","when":"{{Status=*}}","value":"Theme/Layer/layer-03"},
+    {"layer":"Container / Ring / Indicator","property":"visible","when":"{{Status=*}}","value":"true","literal":true},
+    {"layer":"Container / Ring / Indicator","property":"visible","when":"{{Progress=0%}}","value":"false","literal":true},
+    {"layer":"Container / Ring / Indicator","property":"arcShare","when":"{{Status=*}}","value":"0.25","literal":true},
+    {"layer":"Container / Ring / Indicator","property":"arcShare","when":"{{Progress=25%}}","value":"0.25","literal":true},
+    {"layer":"Container / Ring / Indicator","property":"arcShare","when":"{{Progress=50%}}","value":"0.5","literal":true},
+    {"layer":"Container / Ring / Indicator","property":"arcShare","when":"{{Progress=75%}}","value":"0.75","literal":true},
+    {"layer":"Container / Ring / Indicator","property":"arcShare","when":"{{Progress=100%}}","value":"1","literal":true},
+    {"layer":"Container / Ring / Indicator","property":"strokeWeight","when":"{{Status=*}}","value":"Components/Progress circle/Indicator/{{Size=*}}/Stroke weight"},
+    {"layer":"Container / Ring / Indicator","property":"strokes.0","when":"{{Status=*}}","value":"Theme/Miscellaneous/interactive"},
+    {"layer":"Container / circle-check","property":"visible","when":"{{Status=*}}","value":"false","literal":true},
+    {"layer":"Container / circle-check","property":"visible","when":"{{Status=Success}}","value":"true","literal":true},
+    {"layer":"Container / circle-check","property":"componentProperties.Size","when":"{{Status=Success}}{{Size=XSmall}}","value":"Medium"},
+    {"layer":"Container / circle-check","property":"componentProperties.Size","when":"{{Status=Success}}{{Size=Small}}","value":"XLarge"},
+    {"layer":"Container / circle-check","property":"componentProperties.Size","when":"{{Status=Success}}{{Size=Medium}}","value":"3XLarge"},
+    {"layer":"Container / circle-check","property":"componentProperties.Size","when":"{{Status=Success}}{{Size=Large}}","value":"4XLarge"},
+    {"layer":"Container / circle-check","property":"componentProperties.Size","when":"{{Status=Success}}{{Size=XLarge}}","value":"5xlarge"},
+    {"layer":"Container / circle-check","property":"layoutSizingHorizontal","when":"{{Status=Success}}","value":"FIXED","literal":true},
+    {"layer":"Container / circle-check","property":"layoutSizingVertical","when":"{{Status=Success}}","value":"FIXED","literal":true},
+    {"layer":"Container / circle-check","property":"width","when":"{{Status=Success}}","value":"Components/Progress circle/Ring/{{Size=*}}/Layout width"},
+    {"layer":"Container / circle-check","property":"height","when":"{{Status=Success}}","value":"Components/Progress circle/Ring/{{Size=*}}/Layout height"},
+    {"layer":"Container / circle-check / Color","property":"fills.0","when":"{{Status=Success}}","value":"Theme/Support/support-success"},
+    {"layer":"Container / circle-exclamation","property":"visible","when":"{{Status=*}}","value":"false","literal":true},
+    {"layer":"Container / circle-exclamation","property":"visible","when":"{{Status=Error}}","value":"true","literal":true},
+    {"layer":"Container / circle-exclamation","property":"componentProperties.Size","when":"{{Status=Error}}{{Size=XSmall}}","value":"Medium"},
+    {"layer":"Container / circle-exclamation","property":"componentProperties.Size","when":"{{Status=Error}}{{Size=Small}}","value":"XLarge"},
+    {"layer":"Container / circle-exclamation","property":"componentProperties.Size","when":"{{Status=Error}}{{Size=Medium}}","value":"3XLarge"},
+    {"layer":"Container / circle-exclamation","property":"componentProperties.Size","when":"{{Status=Error}}{{Size=Large}}","value":"4XLarge"},
+    {"layer":"Container / circle-exclamation","property":"componentProperties.Size","when":"{{Status=Error}}{{Size=XLarge}}","value":"5xlarge"},
+    {"layer":"Container / circle-exclamation","property":"layoutSizingHorizontal","when":"{{Status=Error}}","value":"FIXED","literal":true},
+    {"layer":"Container / circle-exclamation","property":"layoutSizingVertical","when":"{{Status=Error}}","value":"FIXED","literal":true},
+    {"layer":"Container / circle-exclamation","property":"width","when":"{{Status=Error}}","value":"Components/Progress circle/Ring/{{Size=*}}/Layout width"},
+    {"layer":"Container / circle-exclamation","property":"height","when":"{{Status=Error}}","value":"Components/Progress circle/Ring/{{Size=*}}/Layout height"},
+    {"layer":"Container / circle-exclamation / Color","property":"fills.0","when":"{{Status=Error}}","value":"Theme/Support/support-error"},
+    {"layer":"Container / Label","property":"layoutSizingHorizontal","when":"{{Status=*}}","value":"FILL","literal":true},
+    {"layer":"Container / Label","property":"textAutoResize","when":"{{Status=*}}","value":"HEIGHT","literal":true},
+    {"layer":"Container / Label","property":"textAlignHorizontal","when":"{{Status=*}}","value":"LEFT","literal":true},
+    {"layer":"Container / Label","property":"textAlignHorizontal","when":"{{Layout=Stacked}}","value":"CENTER","literal":true},
+    {"layer":"Container / Label","property":"textStyleId","when":"{{Size=XSmall}}","value":"Body/Subheadline"},
+    {"layer":"Container / Label","property":"textStyleId","when":"{{Size=Small}}","value":"Body/Subheadline"},
+    {"layer":"Container / Label","property":"textStyleId","when":"{{Size=Medium}}","value":"Body/Callout"},
+    {"layer":"Container / Label","property":"textStyleId","when":"{{Size=Large}}","value":"Headings/Headline"},
+    {"layer":"Container / Label","property":"textStyleId","when":"{{Size=XLarge}}","value":"Headings/Title 3"},
+    {"layer":"Container / Label","property":"explicitMode.Type Emphasis","when":"{{Size=XSmall}}","value":"none","literal":true},
+    {"layer":"Container / Label","property":"explicitMode.Type Emphasis","when":"{{Size=Small}}","value":"none","literal":true},
+    {"layer":"Container / Label","property":"explicitMode.Type Emphasis","when":"{{Size=Medium}}","value":"none","literal":true},
+    {"layer":"Container / Label","property":"explicitMode.Type Emphasis","when":"{{Size=Large}}","value":"none","literal":true},
+    {"layer":"Container / Label","property":"explicitMode.Type Emphasis","when":"{{Size=XLarge}}","value":"Strong","literal":true},
+    {"layer":"Container / Label","property":"fills.0","when":"{{Status=*}}","value":"Theme/Text/text-primary"}
+  ]
+}
+]
+}

@@ -17,7 +17,7 @@ node scripts/validate.mjs
 git diff --check
 ```
 
-The resource check follows local Markdown links and plugin-root paths in distributed skills, parses skill frontmatter strictly (an unquoted `: ` or ` #` in a plain `description` is rejected, and descriptions are limited to 1024 characters), rejects shipped Markdown that is not UTF-8 or contains double-encoded (mojibake) text, and repeats against a newly packaged artifact. It also checks plain-text file references (bare Markdown filenames, backticked top-level directories, `../` paths and repository paths with an extension) in all Markdown and in code comments under `theme/` and `scripts/`, excluding `templates/`, `theme/examples/` and ignored paths. The packager rejects missing required top-level payloads. These checks do not validate every CDS API example or enforce design taste.
+The resource check follows local Markdown links and plugin-root paths in distributed skills, parses skill frontmatter strictly (an unquoted `: ` or ` #` in a plain `description` is rejected, and descriptions are limited to 1024 characters), rejects shipped Markdown that is not UTF-8 or contains double-encoded (mojibake) text, and repeats against a newly packaged artifact. It also checks plain-text file references (bare Markdown filenames, backticked top-level directories, `../` paths and repository paths with an extension) in all Markdown and in code comments under `theme/` and `scripts/`, excluding `templates/`, `theme/examples/`, the Core snapshot in `core/` (its docs name Core's paths, not this repository's) and ignored paths. The packager rejects missing required top-level payloads. These checks do not validate every CDS API example or enforce design taste.
 
 When raw tokens change, inspect generator headers and run in order:
 
@@ -28,6 +28,14 @@ node theme/scripts/generate-breakpoints-config.mjs
 ```
 
 Review the resulting diff and unresolved-token report. Color mapping is hand-maintained; the CSS adapter must be updated separately using the method in its header. Do not automatically replace missing mappings with guesses. Before naming the Neon registry items a token change affects, list them with `node scripts/registry-consumers.mjs <token>`.
+
+The Core snapshot in `core/` is compiled, never edited: a rule or value changes in Core, and which Core doc an item matches changes in `registry/core-counterparts.json`. Then re-sync from a Core checkout whose docs are committed:
+
+```sh
+node scripts/sync-core.mjs --from <Core checkout>
+```
+
+The sync fails when a registry item has no entry in the Counterpart table, when an entry names a Core doc that is a draft, deprecated or missing, when a Supporting item is given a Counterpart, when a spec aliases a Scale step Core states no number for or binds a variable no Core spec records, and when a compiled file would still hold what the snapshot leaves out (the `iOS=True` look, Figma ids, Revision history, Dynamic Type); it then writes nothing. `validate` fails when a file under `core/`, or the commit `core/snapshot.json` names, differs from what the sync recorded. Review the snapshot's diff as Core's change, and say in the pull request which Core commit it moved to.
 
 The registry's built items in `registry/r/` carry a copy of every file they install, the CSS adapter included. After changing `registry/` or a file an item copies, rebuild them with `node scripts/build-registry.mjs`; `validate` fails on a stale build.
 

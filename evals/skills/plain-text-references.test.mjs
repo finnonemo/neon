@@ -79,3 +79,14 @@ test('leaves unpackaged research notes and app code out of the checked files', a
   assert.ok(!files.some(file => file.startsWith('research/') || file.startsWith('templates/')));
   await checkPlainTextReferences(root, files);
 });
+
+test('leaves the Core snapshot out: its docs name paths in Core, not in this repository', async t => {
+  const root = await fixture(t, { 'skills/demo/SKILL.md': '# Demo\n' });
+  await mkdir(join(root, 'core/components'), { recursive: true });
+  await writeFile(join(root, 'core/components/button.md'), 'The rule is in `docs/theme/theme.json` and structure.md.\n');
+  const files = await referenceFiles(root);
+  assert.ok(!files.some(file => file.startsWith('core/')));
+  await checkPlainTextReferences(root, files);
+  // The same line anywhere else is a broken reference.
+  await assert.rejects(checkPlainTextReferences(root, ['core/components/button.md']), /theme\.json|structure\.md/);
+});

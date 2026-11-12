@@ -1,0 +1,39 @@
+{
+"component": "Divider",
+"sets": [
+{
+  "name": "Divider",
+  "axes": [
+    {
+      "name": "Inset",
+      "values": [
+        "None",
+        "Start"
+      ]
+    }
+  ],
+  "exclude": [],
+  "properties": [],
+  "variables": {
+    "Divider/Container/None/Padding left": 0,
+    "Divider/Container/None/Padding right": 0,
+    "Divider/Container/None/Padding top": 0,
+    "Divider/Container/None/Padding bottom": 0,
+    "Divider/Line/None/Layout height": 1,
+    "Divider/Container/Start/Padding left": 16,
+    "Divider/Container/Start/Padding right": 0,
+    "Divider/Container/Start/Padding top": 0,
+    "Divider/Container/Start/Padding bottom": 0,
+    "Divider/Line/Start/Layout height": 1
+  },
+  "bindings": [
+    {"layer":"Container","property":"paddingLeft","when":"{{Inset=*}}","value":"Components/Divider/Container/{{Inset=*}}/Padding left"},
+    {"layer":"Container","property":"paddingRight","when":"{{Inset=*}}","value":"Components/Divider/Container/{{Inset=*}}/Padding right"},
+    {"layer":"Container","property":"paddingTop","when":"{{Inset=*}}","value":"Components/Divider/Container/{{Inset=*}}/Padding top"},
+    {"layer":"Container","property":"paddingBottom","when":"{{Inset=*}}","value":"Components/Divider/Container/{{Inset=*}}/Padding bottom"},
+    {"layer":"Container / Line","property":"height","when":"{{Inset=*}}","value":"Components/Divider/Line/{{Inset=*}}/Layout height"},
+    {"layer":"Container / Line","property":"fills.0","when":"{{Inset=*}}","value":"Theme/Border/border-subtle"}
+  ]
+}
+]
+}

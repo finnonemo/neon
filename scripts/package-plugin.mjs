@@ -11,6 +11,7 @@ const PAYLOAD_ENTRIES = [
   ".codex-plugin",
   "skills",
   "theme",
+  "core",
   "templates/vitejs-cds",
 
   "scripts/install.mjs",

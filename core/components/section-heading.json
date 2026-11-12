@@ -1,0 +1,238 @@
+{
+"component": "Section heading",
+"sets": [
+{
+  "name": "Section heading",
+  "axes": [
+    {
+      "name": "Hierarchy",
+      "values": [
+        "Primary",
+        "Secondary",
+        "Tertiary"
+      ]
+    },
+    {
+      "name": "Trailing",
+      "values": [
+        "None",
+        "Link",
+        "Column labels",
+        "Disclosure",
+        "Image",
+        "Button"
+      ]
+    }
+  ],
+  "exclude": [],
+  "properties": [
+    {
+      "name": "Title text",
+      "type": "TEXT",
+      "default": "Title"
+    },
+    {
+      "name": "Description text",
+      "type": "TEXT",
+      "default": "Description"
+    },
+    {
+      "name": "Description",
+      "type": "BOOLEAN",
+      "default": false
+    },
+    {
+      "name": "Detail text",
+      "type": "TEXT",
+      "default": "Detail"
+    },
+    {
+      "name": "Column labels",
+      "type": "SLOT"
+    }
+  ],
+  "variables": {
+    "Section heading/Container/None/Layout horizontal": "Fill container",
+    "Section heading/Container/None/Layout vertical": "Hug contents",
+    "Section heading/Container/None/Padding left": 16,
+    "Section heading/Container/None/Padding right": 16,
+    "Section heading/Container/None/Padding top": 24,
+    "Section heading/Container/None/Padding bottom": 8,
+    "Section heading/Container/None/Gap horizontal": 16,
+    "Section heading/Container/Link/Layout horizontal": "Fill container",
+    "Section heading/Container/Link/Layout vertical": "Hug contents",
+    "Section heading/Container/Link/Padding left": 16,
+    "Section heading/Container/Link/Padding right": 16,
+    "Section heading/Container/Link/Padding top": 16,
+    "Section heading/Container/Link/Padding bottom": 0,
+    "Section heading/Container/Link/Gap horizontal": 16,
+    "Section heading/Container/Column labels/Layout horizontal": "Fill container",
+    "Section heading/Container/Column labels/Layout vertical": "Hug contents",
+    "Section heading/Container/Column labels/Padding left": 16,
+    "Section heading/Container/Column labels/Padding right": 16,
+    "Section heading/Container/Column labels/Padding top": 24,
+    "Section heading/Container/Column labels/Padding bottom": 8,
+    "Section heading/Container/Column labels/Gap horizontal": 16,
+    "Section heading/Container/Disclosure/Layout horizontal": "Fill container",
+    "Section heading/Container/Disclosure/Layout vertical": "Hug contents",
+    "Section heading/Container/Disclosure/Padding left": 16,
+    "Section heading/Container/Disclosure/Padding right": 16,
+    "Section heading/Container/Disclosure/Padding top": 16,
+    "Section heading/Container/Disclosure/Padding bottom": 0,
+    "Section heading/Container/Disclosure/Gap horizontal": 16,
+    "Section heading/Container/Image/Layout horizontal": "Fill container",
+    "Section heading/Container/Image/Layout vertical": "Hug contents",
+    "Section heading/Container/Image/Padding left": 16,
+    "Section heading/Container/Image/Padding right": 16,
+    "Section heading/Container/Image/Padding top": 16,
+    "Section heading/Container/Image/Padding bottom": 0,
+    "Section heading/Container/Image/Gap horizontal": 16,
+    "Section heading/Container/Button/Layout horizontal": "Fill container",
+    "Section heading/Container/Button/Layout vertical": "Hug contents",
+    "Section heading/Container/Button/Padding left": 16,
+    "Section heading/Container/Button/Padding right": 16,
+    "Section heading/Container/Button/Padding top": 16,
+    "Section heading/Container/Button/Padding bottom": 0,
+    "Section heading/Container/Button/Gap horizontal": 16,
+    "Section heading/Label/Primary/Type token": "$title2",
+    "Section heading/Label/Primary/Type emphasis": "Strong",
+    "Section heading/Label/Primary/Align horizontal": "Left",
+    "Section heading/Label/Primary/Align vertical": "Top",
+    "Section heading/Label/Primary/Decoration": "-",
+    "Section heading/Label/Secondary/Type token": "$title3",
+    "Section heading/Label/Secondary/Type emphasis": "Strong",
+    "Section heading/Label/Secondary/Align horizontal": "Left",
+    "Section heading/Label/Secondary/Align vertical": "Top",
+    "Section heading/Label/Secondary/Decoration": "-",
+    "Section heading/Label/Tertiary/Type token": "$headline",
+    "Section heading/Label/Tertiary/Type emphasis": "Regular",
+    "Section heading/Label/Tertiary/Align horizontal": "Left",
+    "Section heading/Label/Tertiary/Align vertical": "Top",
+    "Section heading/Label/Tertiary/Decoration": "-",
+    "Section heading/Label/Description/Type token": "$subhead",
+    "Section heading/Label/Description/Type emphasis": "Regular",
+    "Section heading/Label/Description/Align horizontal": "Left",
+    "Section heading/Label/Description/Align vertical": "Top",
+    "Section heading/Label/Description/Decoration": "-",
+    "Section heading/Label/Detail/Type token": "$body",
+    "Section heading/Label/Detail/Type emphasis": "Regular",
+    "Section heading/Label/Detail/Align horizontal": "Right",
+    "Section heading/Label/Detail/Align vertical": "Top",
+    "Section heading/Label/Detail/Decoration": "-",
+    "Section heading/Field/Default/Layout horizontal": "Fill container",
+    "Section heading/Field/Default/Layout vertical": "Hug contents",
+    "Section heading/Field/Default/Gap horizontal": 8,
+    "Section heading/Icon/Large/Type token": "fa-sharp fa-solid/Large",
+    "Section heading/Artwork/Default/Layout width": 48,
+    "Section heading/Artwork/Default/Layout height": 48,
+    "Section heading/Artwork/Default/Radius": 8
+  },
+  "bindings": [
+    {"layer":"Container","property":"paddingLeft","when":"{{Trailing=None}}","value":"Components/Section heading/Container/None/Padding left"},
+    {"layer":"Container","property":"paddingLeft","when":"{{Trailing=Link}}","value":"Components/Section heading/Container/Link/Padding left"},
+    {"layer":"Container","property":"paddingLeft","when":"{{Trailing=Column labels}}","value":"Components/Section heading/Container/Column labels/Padding left"},
+    {"layer":"Container","property":"paddingLeft","when":"{{Trailing=Disclosure}}","value":"Components/Section heading/Container/Disclosure/Padding left"},
+    {"layer":"Container","property":"paddingLeft","when":"{{Trailing=Image}}","value":"Components/Section heading/Container/Image/Padding left"},
+    {"layer":"Container","property":"paddingLeft","when":"{{Trailing=Button}}","value":"Components/Section heading/Container/Button/Padding left"},
+    {"layer":"Container","property":"paddingRight","when":"{{Trailing=None}}","value":"Components/Section heading/Container/None/Padding right"},
+    {"layer":"Container","property":"paddingRight","when":"{{Trailing=Link}}","value":"Components/Section heading/Container/Link/Padding right"},
+    {"layer":"Container","property":"paddingRight","when":"{{Trailing=Column labels}}","value":"Components/Section heading/Container/Column labels/Padding right"},
+    {"layer":"Container","property":"paddingRight","when":"{{Trailing=Disclosure}}","value":"Components/Section heading/Container/Disclosure/Padding right"},
+    {"layer":"Container","property":"paddingRight","when":"{{Trailing=Image}}","value":"Components/Section heading/Container/Image/Padding right"},
+    {"layer":"Container","property":"paddingRight","when":"{{Trailing=Button}}","value":"Components/Section heading/Container/Button/Padding right"},
+    {"layer":"Container","property":"paddingTop","when":"{{Trailing=None}}","value":"Components/Section heading/Container/None/Padding top"},
+    {"layer":"Container","property":"paddingTop","when":"{{Trailing=Link}}","value":"Components/Section heading/Container/Link/Padding top"},
+    {"layer":"Container","property":"paddingTop","when":"{{Trailing=Column labels}}","value":"Components/Section heading/Container/Column labels/Padding top"},
+    {"layer":"Container","property":"paddingTop","when":"{{Trailing=Disclosure}}","value":"Components/Section heading/Container/Disclosure/Padding top"},
+    {"layer":"Container","property":"paddingTop","when":"{{Trailing=Image}}","value":"Components/Section heading/Container/Image/Padding top"},
+    {"layer":"Container","property":"paddingTop","when":"{{Trailing=Button}}","value":"Components/Section heading/Container/Button/Padding top"},
+    {"layer":"Container","property":"paddingBottom","when":"{{Trailing=None}}","value":"Components/Section heading/Container/None/Padding bottom"},
+    {"layer":"Container","property":"paddingBottom","when":"{{Trailing=Link}}","value":"Components/Section heading/Container/Link/Padding bottom"},
+    {"layer":"Container","property":"paddingBottom","when":"{{Trailing=Column labels}}","value":"Components/Section heading/Container/Column labels/Padding bottom"},
+    {"layer":"Container","property":"paddingBottom","when":"{{Trailing=Disclosure}}","value":"Components/Section heading/Container/Disclosure/Padding bottom"},
+    {"layer":"Container","property":"paddingBottom","when":"{{Trailing=Image}}","value":"Components/Section heading/Container/Image/Padding bottom"},
+    {"layer":"Container","property":"paddingBottom","when":"{{Trailing=Button}}","value":"Components/Section heading/Container/Button/Padding bottom"},
+    {"layer":"Container","property":"itemSpacing","when":"{{Trailing=None}}","value":"Components/Section heading/Container/None/Gap horizontal"},
+    {"layer":"Container","property":"itemSpacing","when":"{{Trailing=Link}}","value":"Components/Section heading/Container/Link/Gap horizontal"},
+    {"layer":"Container","property":"itemSpacing","when":"{{Trailing=Column labels}}","value":"Components/Section heading/Container/Column labels/Gap horizontal"},
+    {"layer":"Container","property":"itemSpacing","when":"{{Trailing=Disclosure}}","value":"Components/Section heading/Container/Disclosure/Gap horizontal"},
+    {"layer":"Container","property":"itemSpacing","when":"{{Trailing=Image}}","value":"Components/Section heading/Container/Image/Gap horizontal"},
+    {"layer":"Container","property":"itemSpacing","when":"{{Trailing=Button}}","value":"Components/Section heading/Container/Button/Gap horizontal"},
+    {"layer":"Container","property":"counterAxisAlignItems","when":"{{Hierarchy=*}}","value":"MAX","literal":true},
+    {"layer":"Container","property":"counterAxisAlignItems","when":"{{Trailing=Link, Disclosure, Image, Button}}","value":"CENTER","literal":true},
+    {"layer":"Container / Text","property":"visible","when":"{{Hierarchy=*}}","value":"true","literal":true},
+    {"layer":"Container / Text","property":"visible","when":"{{Trailing=Column labels}}","value":"false","literal":true},
+    {"layer":"Container / Text / Title","property":"textStyleId","when":"{{Hierarchy=Primary}}","value":"Headings/Title 2"},
+    {"layer":"Container / Text / Title","property":"textStyleId","when":"{{Hierarchy=Secondary}}","value":"Headings/Title 3"},
+    {"layer":"Container / Text / Title","property":"textStyleId","when":"{{Hierarchy=Tertiary}}","value":"Headings/Headline"},
+    {"layer":"Container / Text / Title","property":"fills.0","when":"{{Hierarchy=*}}","value":"Theme/Text/text-primary"},
+    {"layer":"Container / Text / Title","property":"fills.0","when":"{{Hierarchy=Tertiary}}","value":"Theme/Text/text-secondary"},
+    {"layer":"Container / Text / Description","property":"visible","when":"{{Hierarchy=*}}","value":"false","literal":true},
+    {"layer":"Container / Text / Description","property":"textStyleId","when":"{{Hierarchy=*}}","value":"Body/Subheadline"},
+    {"layer":"Container / Text / Description","property":"fills.0","when":"{{Hierarchy=*}}","value":"Theme/Text/text-secondary"},
+    {"layer":"Container / Link","property":"visible","when":"{{Hierarchy=*}}","value":"false","literal":true},
+    {"layer":"Container / Link","property":"visible","when":"{{Trailing=Link}}","value":"true","literal":true},
+    {"layer":"Container / Link","property":"componentProperties.Style","when":"{{Hierarchy=*}}","value":"Primary","literal":true},
+    {"layer":"Container / Link","property":"componentProperties.Size","when":"{{Hierarchy=*}}","value":"Medium","literal":true},
+    {"layer":"Container / Link","property":"componentProperties.State","when":"{{Hierarchy=*}}","value":"Enabled","literal":true},
+    {"layer":"Container / Column labels","property":"visible","when":"{{Hierarchy=*}}","value":"false","literal":true},
+    {"layer":"Container / Column labels","property":"visible","when":"{{Trailing=Column labels}}","value":"true","literal":true},
+    {"layer":"Container / Column labels","property":"itemSpacing","when":"{{Hierarchy=*}}","value":"Components/Section heading/Field/Default/Gap horizontal"},
+    {"layer":"Container / Disclosure","property":"visible","when":"{{Hierarchy=*}}","value":"false","literal":true},
+    {"layer":"Container / Disclosure","property":"visible","when":"{{Trailing=Disclosure}}","value":"true","literal":true},
+    {"layer":"Container / Disclosure","property":"itemSpacing","when":"{{Hierarchy=*}}","value":"Components/Section heading/Field/Default/Gap horizontal"},
+    {"layer":"Container / Disclosure / Detail","property":"textStyleId","when":"{{Hierarchy=*}}","value":"Body/Body"},
+    {"layer":"Container / Disclosure / Detail","property":"fills.0","when":"{{Hierarchy=*}}","value":"Theme/Text/text-secondary"},
+    {"layer":"Container / Disclosure / Chevron","property":"textStyleId","when":"{{Hierarchy=*}}","value":"fa-sharp fa-solid/Large"},
+    {"layer":"Container / Disclosure / Chevron","property":"fills.0","when":"{{Hierarchy=*}}","value":"Theme/Icon/icon-secondary"},
+    {"layer":"Container / Image","property":"visible","when":"{{Hierarchy=*}}","value":"false","literal":true},
+    {"layer":"Container / Image","property":"visible","when":"{{Trailing=Image}}","value":"true","literal":true},
+    {"layer":"Container / Image","property":"width","when":"{{Hierarchy=*}}","value":"Components/Section heading/Artwork/Default/Layout width"},
+    {"layer":"Container / Image","property":"height","when":"{{Hierarchy=*}}","value":"Components/Section heading/Artwork/Default/Layout height"},
+    {"layer":"Container / Image","property":"cornerRadius","when":"{{Hierarchy=*}}","value":"Components/Section heading/Artwork/Default/Radius"},
+    {"layer":"Container / Icon button","property":"visible","when":"{{Hierarchy=*}}","value":"false","literal":true},
+    {"layer":"Container / Icon button","property":"visible","when":"{{Trailing=Button}}","value":"true","literal":true},
+    {"layer":"Container / Icon button","property":"componentProperties.Hierarchy","when":"{{Hierarchy=*}}","value":"Secondary","literal":true},
+    {"layer":"Container / Icon button","property":"componentProperties.Type","when":"{{Hierarchy=*}}","value":"Default","literal":true},
+    {"layer":"Container / Icon button","property":"componentProperties.Size","when":"{{Hierarchy=*}}","value":"Small","literal":true},
+    {"layer":"Container / Icon button","property":"componentProperties.State","when":"{{Hierarchy=*}}","value":"Enabled","literal":true}
+  ]
+},
+{
+  "name": "_Column label",
+  "axes": [
+    {
+      "name": "Alignment",
+      "values": [
+        "End",
+        "Start"
+      ]
+    }
+  ],
+  "exclude": [],
+  "properties": [
+    {
+      "name": "Label text",
+      "type": "TEXT",
+      "default": "Label"
+    }
+  ],
+  "variables": {
+    "Section heading/Label/End/Type token": "$footnote",
+    "Section heading/Label/End/Type emphasis": "Regular",
+    "Section heading/Label/End/Align horizontal": "Right",
+    "Section heading/Label/End/Align vertical": "Top",
+    "Section heading/Label/End/Decoration": "-",
+    "Section heading/Label/Start/Type token": "$footnote",
+    "Section heading/Label/Start/Type emphasis": "Regular",
+    "Section heading/Label/Start/Align horizontal": "Left",
+    "Section heading/Label/Start/Align vertical": "Top",
+    "Section heading/Label/Start/Decoration": "-"
+  },
+  "bindings": [
+    {"layer":"Container / Label","property":"textStyleId","when":"{{Alignment=*}}","value":"Utility/Footnote"},
+    {"layer":"Container / Label","property":"fills.0","when":"{{Alignment=*}}","value":"Theme/Text/text-secondary"}
+  ]
+}
+]
+}

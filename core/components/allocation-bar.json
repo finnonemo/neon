@@ -1,0 +1,99 @@
+{
+"component": "Allocation bar",
+"sets": [
+{
+  "name": "Allocation bar",
+  "axes": [
+    {
+      "name": "Legend",
+      "values": [
+        "List",
+        "Inline",
+        "None"
+      ]
+    },
+    {
+      "name": "Size",
+      "values": [
+        "Medium",
+        "Small"
+      ]
+    },
+    {
+      "name": "State",
+      "values": [
+        "Data",
+        "Empty",
+        "Skeleton"
+      ]
+    }
+  ],
+  "exclude": [],
+  "properties": [
+    {
+      "name": "Segments",
+      "type": "SLOT"
+    },
+    {
+      "name": "Legend (List)",
+      "type": "SLOT"
+    },
+    {
+      "name": "Legend (Inline)",
+      "type": "SLOT"
+    }
+  ],
+  "variables": {
+    "Allocation bar/Container/Medium/Gap vertical": 12,
+    "Allocation bar/Bar/Medium/Layout height": 16,
+    "Allocation bar/Bar/Medium/Gap horizontal": 2,
+    "Allocation bar/Bar/Medium/Radius": 0,
+    "Allocation bar/Item/Medium/Layout min-width": 4,
+    "Allocation bar/Item/Medium/Padding left": 0,
+    "Allocation bar/Item/Medium/Padding right": 0,
+    "Allocation bar/Content/Medium/Gap horizontal": 16,
+    "Allocation bar/Content/Medium/Gap vertical": 8,
+    "Allocation bar/Container/Small/Gap vertical": 8,
+    "Allocation bar/Bar/Small/Layout height": 8,
+    "Allocation bar/Bar/Small/Gap horizontal": 2,
+    "Allocation bar/Bar/Small/Radius": 0,
+    "Allocation bar/Item/Small/Layout min-width": 4,
+    "Allocation bar/Item/Small/Padding left": 0,
+    "Allocation bar/Item/Small/Padding right": 0,
+    "Allocation bar/Content/Small/Gap horizontal": 16,
+    "Allocation bar/Content/Small/Gap vertical": 8,
+    "Allocation bar/Label/Legend/Type token": "$subhead",
+    "Allocation bar/Label/Legend/Type emphasis": "Regular",
+    "Allocation bar/Label/Legend/Align horizontal": "Left",
+    "Allocation bar/Label/Legend/Align vertical": "Top",
+    "Allocation bar/Label/Legend/Decoration": "-",
+    "Allocation bar/Icon/Small/Type token": "fa-sharp fa-solid/Small"
+  },
+  "bindings": [
+    {"layer":"Container","property":"layoutSizingHorizontal","when":"{{Legend=*}}","value":"FILL","literal":true},
+    {"layer":"Container","property":"layoutSizingVertical","when":"{{Legend=*}}","value":"HUG","literal":true},
+    {"layer":"Container","property":"itemSpacing","when":"{{Size=*}}","value":"Components/Allocation bar/Container/{{Size=*}}/Gap vertical"},
+    {"layer":"Container / Bar","property":"layoutSizingHorizontal","when":"{{Legend=*}}","value":"FILL","literal":true},
+    {"layer":"Container / Bar","property":"layoutSizingVertical","when":"{{Legend=*}}","value":"FIXED","literal":true},
+    {"layer":"Container / Bar","property":"height","when":"{{Size=*}}","value":"Components/Allocation bar/Bar/{{Size=*}}/Layout height"},
+    {"layer":"Container / Bar","property":"cornerRadius","when":"{{Size=*}}","value":"Components/Allocation bar/Bar/{{Size=*}}/Radius"},
+    {"layer":"Container / Bar","property":"fills.0","when":"{{Legend=*}}","value":"Theme/Chart/chart-empty"},
+    {"layer":"Container / Bar","property":"fills.0","when":"{{State=Skeleton}}","value":"Theme/Skeleton/skeleton-background"},
+    {"layer":"Container / Bar / Segments","property":"visible","when":"{{Legend=*}}","value":"false","literal":true},
+    {"layer":"Container / Bar / Segments","property":"visible","when":"{{State=Data}}","value":"true","literal":true},
+    {"layer":"Container / Bar / Segments","property":"layoutSizingHorizontal","when":"{{Legend=*}}","value":"FILL","literal":true},
+    {"layer":"Container / Bar / Segments","property":"layoutSizingVertical","when":"{{Legend=*}}","value":"FILL","literal":true},
+    {"layer":"Container / Bar / Segments","property":"itemSpacing","when":"{{Size=*}}","value":"Components/Allocation bar/Bar/{{Size=*}}/Gap horizontal"},
+    {"layer":"Container / Legend (List)","property":"visible","when":"{{Legend=*}}","value":"false","literal":true},
+    {"layer":"Container / Legend (List)","property":"visible","when":"{{Legend=List}}{{State=Data}}","value":"true","literal":true},
+    {"layer":"Container / Legend (List)","property":"layoutSizingHorizontal","when":"{{Legend=*}}","value":"FILL","literal":true},
+    {"layer":"Container / Legend (List)","property":"layoutSizingVertical","when":"{{Legend=*}}","value":"HUG","literal":true},
+    {"layer":"Container / Legend (Inline)","property":"visible","when":"{{Legend=*}}","value":"false","literal":true},
+    {"layer":"Container / Legend (Inline)","property":"visible","when":"{{Legend=Inline}}{{State=Data}}","value":"true","literal":true},
+    {"layer":"Container / Legend (Inline)","property":"layoutSizingHorizontal","when":"{{Legend=*}}","value":"FILL","literal":true},
+    {"layer":"Container / Legend (Inline)","property":"layoutSizingVertical","when":"{{Legend=*}}","value":"HUG","literal":true},
+    {"layer":"Container / Legend (Inline)","property":"itemSpacing","when":"{{Size=*}}","value":"Components/Allocation bar/Content/{{Size=*}}/Gap horizontal"}
+  ]
+}
+]
+}

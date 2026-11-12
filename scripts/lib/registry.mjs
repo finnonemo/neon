@@ -22,6 +22,12 @@ export async function neonRegistryUrl({ registry, env = process.env, root }) {
   return registry ?? env.NEON_REGISTRY_URL ?? (await pinnedRegistryUrl(root));
 }
 
+/** The registry's components (not the base, theme or layouts), each with whether it is a Supporting item (GLOSSARY). */
+export async function registryComponents(root) {
+  const { items } = JSON.parse(await readFile(join(root, REGISTRY_DIR, 'registry.json'), 'utf8'));
+  return items.filter(item => item.type === 'registry:ui').map(item => ({ name: item.name, supporting: item.meta?.supporting === true }));
+}
+
 /** Reads one registry file as JSON. */
 export async function fetchRegistryJson(url) {
   const response = await fetch(url);

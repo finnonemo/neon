@@ -5,6 +5,7 @@ import { mkdtemp, access, readdir, readFile, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { packagePlugin } from '../../scripts/package-plugin.mjs';
+import { checkCoreSnapshot, SNAPSHOT_DIR } from '../../scripts/lib/core-snapshot.mjs';
 
 test('distribution contains the shared design contract and conditional CDS guide', async () => {
   const destination = await mkdtemp(join(tmpdir(), 'neon-package-test-'));
@@ -81,6 +82,15 @@ test('distribution leaves out the Theme Brief tool and its data', async () => {
   const paths = await readdir(destination, { recursive: true });
   assert.ok(paths.length > 0);
   assert.deepEqual(paths.filter((path) => path.split(/[\\/]/).includes('theme-briefs')), []);
+});
+
+test('distribution ships the Core snapshot whole, where skills can read it', async () => {
+  const destination = await mkdtemp(join(tmpdir(), 'neon-package-test-'));
+  await packagePlugin({ destination });
+  const index = JSON.parse(await readFile(join(destination, SNAPSHOT_DIR, 'index.json'), 'utf8'));
+  assert.equal(index.dialog.counterpart, 'Alert');
+  await access(join(destination, SNAPSHOT_DIR, index.button.doc));
+  await checkCoreSnapshot(join(destination, SNAPSHOT_DIR));
 });
 
 test('missing required payload fails before writing destination', async () => {

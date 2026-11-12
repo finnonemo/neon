@@ -8,6 +8,8 @@ import { checkMarkdownLinks } from './lib/markdown-links.mjs';
 import { checkPlainTextReferences, referenceFiles } from './lib/plain-text-references.mjs';
 import { checkAdrNumbers } from './lib/adr-numbers.mjs';
 import { checkMarkdownEncoding, checkSkillMetadata, checkStepReads } from './lib/skill-files.mjs';
+import { checkCoreSnapshot, SNAPSHOT_DIR } from './lib/core-snapshot.mjs';
+import { registryComponents } from './lib/registry.mjs';
 
 const sourceRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 // Ignored paths are local or generated, so naming them in prose is expected.
@@ -30,15 +32,17 @@ async function checkCodexManifest(root) {
     throw new Error(`Missing codex plugin skills directory: ${manifest.skills}`);
   });
 }
-async function check(root, { includeReadme = false } = {}) {
+async function check(root, { sourceTree = false } = {}) {
   const manifest = JSON.parse(await readFile(join(root, '.claude-plugin/plugin.json'), 'utf8'));
   for (const skill of manifest.skills) {
     await checkSkillMetadata(join(root, skill, 'SKILL.md'));
     await checkStepReads(join(root, skill, 'SKILL.md'));
   }
   await checkCodexManifest(root);
-  const files = [...await markdownFiles(join(root, 'skills'))];
-  if (includeReadme) files.push(join(root, 'README.md'));
+  // The registry does not ship, so only the source tree can say which items the index must cover.
+  await checkCoreSnapshot(join(root, SNAPSHOT_DIR), sourceTree ? { items: (await registryComponents(root)).map(item => item.name) } : {});
+  const files = [...await markdownFiles(join(root, 'skills')), ...await markdownFiles(join(root, SNAPSHOT_DIR))];
+  if (sourceTree) files.push(join(root, 'README.md'));
   for (const file of files) {
     await checkMarkdownEncoding(file);
     const content = await readFile(file, 'utf8');
@@ -50,16 +54,16 @@ async function check(root, { includeReadme = false } = {}) {
     }
   }
   // Eval records are maintainer-only, so they are checked in the source tree but never shipped.
-  if (includeReadme) {
+  if (sourceTree) {
     for (const file of [join(root, 'evals/skills/README.md'), ...await markdownFiles(join(root, 'evals/skills/records'))]) await checkMarkdownLinks(file);
   }
   await checkPlainTextReferences(root, await referenceFiles(root, ignored), { ignored });
 }
-await check(sourceRoot, { includeReadme: true });
+await check(sourceRoot, { sourceTree: true });
 await checkAdrNumbers(join(sourceRoot, 'docs/adr'));
 const destination = await mkdtemp(join(tmpdir(), 'neon-check-'));
 await packagePlugin({ sourceRoot, destination });
 await check(destination);
 // Everything in the packaged artifact ships, including theme and starter Markdown.
 for (const file of await markdownFiles(destination)) await checkMarkdownEncoding(file);
-console.log('Skill metadata, Markdown encoding, resource links and ADR numbers pass in source and packaged artifact.');
+console.log('Skill metadata, Markdown encoding, resource links, the Core snapshot and ADR numbers pass in source and packaged artifact.');

@@ -1,0 +1,162 @@
+{
+"component": "Line chart",
+"sets": [
+{
+  "name": "Line chart",
+  "axes": [
+    {
+      "name": "Style",
+      "values": [
+        "Positive",
+        "Negative",
+        "Neutral"
+      ]
+    },
+    {
+      "name": "State",
+      "values": [
+        "Data",
+        "Scrubbing",
+        "Empty",
+        "Skeleton"
+      ]
+    },
+    {
+      "name": "Period",
+      "values": [
+        "Below",
+        "None"
+      ]
+    },
+    {
+      "name": "Size",
+      "values": [
+        "Medium",
+        "Small"
+      ]
+    }
+  ],
+  "exclude": [],
+  "properties": [
+    {
+      "name": "Series",
+      "type": "SLOT"
+    },
+    {
+      "name": "Period",
+      "type": "SLOT"
+    },
+    {
+      "name": "Readout date",
+      "type": "TEXT",
+      "default": "Sep 30, 2026"
+    },
+    {
+      "name": "Readout value",
+      "type": "TEXT",
+      "default": "12.40 THB"
+    },
+    {
+      "name": "Empty text",
+      "type": "TEXT",
+      "default": "No data for this period"
+    },
+    {
+      "name": "X label 1",
+      "type": "TEXT",
+      "default": "Jul"
+    },
+    {
+      "name": "X label 2",
+      "type": "TEXT",
+      "default": "Sep"
+    },
+    {
+      "name": "X label 3",
+      "type": "TEXT",
+      "default": "Nov"
+    }
+  ],
+  "variables": {
+    "Line chart/Container/Medium/Gap vertical": 12,
+    "Line chart/Content/Medium/Plot height": 160,
+    "Line chart/Content/Medium/Readout height": 40,
+    "Line chart/Item/Medium/Dot size": 12,
+    "Line chart/Container/Small/Gap vertical": 8,
+    "Line chart/Content/Small/Plot height": 96,
+    "Line chart/Content/Small/Readout height": 32,
+    "Line chart/Item/Small/Dot size": 8,
+    "Line chart/Label/Readout date/Type token": "$footnote",
+    "Line chart/Label/Readout date/Type emphasis": "Regular",
+    "Line chart/Label/Readout date/Align horizontal": "Left",
+    "Line chart/Label/Readout date/Align vertical": "Top",
+    "Line chart/Label/Readout date/Decoration": "-",
+    "Line chart/Label/Readout value/Type token": "$headline",
+    "Line chart/Label/Readout value/Type emphasis": "Strong",
+    "Line chart/Label/Readout value/Align horizontal": "Left",
+    "Line chart/Label/Readout value/Align vertical": "Top",
+    "Line chart/Label/Readout value/Decoration": "-",
+    "Line chart/Label/Axis/Type token": "$caption1",
+    "Line chart/Label/Axis/Type emphasis": "Regular",
+    "Line chart/Label/Axis/Align horizontal": "Left",
+    "Line chart/Label/Axis/Align vertical": "Top",
+    "Line chart/Label/Axis/Decoration": "-",
+    "Line chart/Label/Empty text/Type token": "$subhead",
+    "Line chart/Label/Empty text/Type emphasis": "Regular",
+    "Line chart/Label/Empty text/Align horizontal": "Center",
+    "Line chart/Label/Empty text/Align vertical": "Top",
+    "Line chart/Label/Empty text/Decoration": "-"
+  },
+  "bindings": [
+    {"layer":"Container","property":"layoutSizingHorizontal","when":"{{Style=*}}{{State=*}}{{Period=*}}{{Size=*}}","value":"FILL","literal":true},
+    {"layer":"Container","property":"layoutSizingVertical","when":"{{Style=*}}{{State=*}}{{Period=*}}{{Size=*}}","value":"HUG","literal":true},
+    {"layer":"Container","property":"itemSpacing","when":"{{Size=*}}","value":"Components/Line chart/Container/{{Size=*}}/Gap vertical"},
+    {"layer":"Container / Readout","property":"layoutSizingHorizontal","when":"{{Style=*}}{{State=*}}{{Period=*}}{{Size=*}}","value":"FILL","literal":true},
+    {"layer":"Container / Readout","property":"layoutSizingVertical","when":"{{Style=*}}{{State=*}}{{Period=*}}{{Size=*}}","value":"FIXED","literal":true},
+    {"layer":"Container / Readout","property":"height","when":"{{Size=*}}","value":"Components/Line chart/Content/{{Size=*}}/Readout height"},
+    {"layer":"Container / Readout / Date","property":"visible","when":"{{Style=*}}{{State=*}}{{Period=*}}{{Size=*}}","value":"false","literal":true},
+    {"layer":"Container / Readout / Date","property":"visible","when":"{{State=Scrubbing}}","value":"true","literal":true},
+    {"layer":"Container / Readout / Value","property":"visible","when":"{{Style=*}}{{State=*}}{{Period=*}}{{Size=*}}","value":"false","literal":true},
+    {"layer":"Container / Readout / Value","property":"visible","when":"{{State=Scrubbing}}","value":"true","literal":true},
+    {"layer":"Container / Plot","property":"layoutSizingHorizontal","when":"{{Style=*}}{{State=*}}{{Period=*}}{{Size=*}}","value":"FILL","literal":true},
+    {"layer":"Container / Plot","property":"layoutSizingVertical","when":"{{Style=*}}{{State=*}}{{Period=*}}{{Size=*}}","value":"FIXED","literal":true},
+    {"layer":"Container / Plot","property":"height","when":"{{Size=*}}","value":"Components/Line chart/Content/{{Size=*}}/Plot height"},
+    {"layer":"Container / Plot","property":"fills.0","when":"{{Style=*}}{{State=*}}{{Period=*}}{{Size=*}}","value":"none","literal":true},
+    {"layer":"Container / Plot","property":"fills.0","when":"{{State=Skeleton}}","value":"Theme/Skeleton/skeleton-background"},
+    {"layer":"Container / Plot / Gridlines","property":"visible","when":"{{Style=*}}{{State=*}}{{Period=*}}{{Size=*}}","value":"true","literal":true},
+    {"layer":"Container / Plot / Gridlines","property":"visible","when":"{{State=Skeleton}}","value":"false","literal":true},
+    {"layer":"Container / Plot / Series","property":"visible","when":"{{Style=*}}{{State=*}}{{Period=*}}{{Size=*}}","value":"false","literal":true},
+    {"layer":"Container / Plot / Series","property":"visible","when":"{{State=Data, Scrubbing}}","value":"true","literal":true},
+    {"layer":"Container / Plot / Series","property":"layoutSizingHorizontal","when":"{{Style=*}}{{State=*}}{{Period=*}}{{Size=*}}","value":"FILL","literal":true},
+    {"layer":"Container / Plot / Series","property":"layoutSizingVertical","when":"{{Style=*}}{{State=*}}{{Period=*}}{{Size=*}}","value":"FILL","literal":true},
+    {"layer":"Container / Plot / Series / _Line series / Area","property":"visible","when":"{{Style=*}}{{State=*}}{{Period=*}}{{Size=*}}","value":"true","literal":true},
+    {"layer":"Container / Plot / Series / _Line series / Area","property":"visible","when":"{{Style=Neutral}}","value":"false","literal":true},
+    {"layer":"Container / Plot / Series / _Line series / Area","property":"fills.0","when":"{{Style=Positive}}","value":"Theme/Chart/chart-positive-area"},
+    {"layer":"Container / Plot / Series / _Line series / Area","property":"fills.0","when":"{{Style=Negative}}","value":"Theme/Chart/chart-negative-area"},
+    {"layer":"Container / Plot / Series / _Line series / Area","property":"fills.0","when":"{{Style=Neutral}}","value":"Theme/Chart/chart-neutral"},
+    {"layer":"Container / Plot / Series / _Line series / Line","property":"strokeWeight","when":"{{Size=Medium}}","value":"3","literal":true},
+    {"layer":"Container / Plot / Series / _Line series / Line","property":"strokeWeight","when":"{{Size=Small}}","value":"2","literal":true},
+    {"layer":"Container / Plot / Series / _Line series / Line","property":"strokes.0","when":"{{Style=Positive}}","value":"Theme/Chart/chart-positive"},
+    {"layer":"Container / Plot / Series / _Line series / Line","property":"strokes.0","when":"{{Style=Negative}}","value":"Theme/Chart/chart-negative"},
+    {"layer":"Container / Plot / Series / _Line series / Line","property":"strokes.0","when":"{{Style=Neutral}}","value":"Theme/Chart/chart-neutral"},
+    {"layer":"Container / Plot / _Scrubber","property":"visible","when":"{{Style=*}}{{State=*}}{{Period=*}}{{Size=*}}","value":"false","literal":true},
+    {"layer":"Container / Plot / _Scrubber","property":"visible","when":"{{State=Scrubbing}}","value":"true","literal":true},
+    {"layer":"Container / Plot / _Scrubber / Dot","property":"width","when":"{{Size=*}}","value":"Components/Line chart/Item/{{Size=*}}/Dot size"},
+    {"layer":"Container / Plot / _Scrubber / Dot","property":"height","when":"{{Size=*}}","value":"Components/Line chart/Item/{{Size=*}}/Dot size"},
+    {"layer":"Container / Plot / _Scrubber / Dot","property":"fills.0","when":"{{Style=Positive}}","value":"Theme/Chart/chart-positive"},
+    {"layer":"Container / Plot / _Scrubber / Dot","property":"fills.0","when":"{{Style=Negative}}","value":"Theme/Chart/chart-negative"},
+    {"layer":"Container / Plot / _Scrubber / Dot","property":"fills.0","when":"{{Style=Neutral}}","value":"Theme/Chart/chart-neutral"},
+    {"layer":"Container / Plot / Empty text","property":"visible","when":"{{Style=*}}{{State=*}}{{Period=*}}{{Size=*}}","value":"false","literal":true},
+    {"layer":"Container / Plot / Empty text","property":"visible","when":"{{State=Empty}}","value":"true","literal":true},
+    {"layer":"Container / X axis","property":"visible","when":"{{Style=*}}{{State=*}}{{Period=*}}{{Size=*}}","value":"true","literal":true},
+    {"layer":"Container / X axis","property":"visible","when":"{{State=Skeleton}}","value":"false","literal":true},
+    {"layer":"Container / X axis","property":"layoutSizingHorizontal","when":"{{Style=*}}{{State=*}}{{Period=*}}{{Size=*}}","value":"FILL","literal":true},
+    {"layer":"Container / X axis","property":"layoutSizingVertical","when":"{{Style=*}}{{State=*}}{{Period=*}}{{Size=*}}","value":"HUG","literal":true},
+    {"layer":"Container / Period","property":"visible","when":"{{Style=*}}{{State=*}}{{Period=*}}{{Size=*}}","value":"false","literal":true},
+    {"layer":"Container / Period","property":"visible","when":"{{Period=Below}}","value":"true","literal":true},
+    {"layer":"Container / Period","property":"layoutSizingHorizontal","when":"{{Style=*}}{{State=*}}{{Period=*}}{{Size=*}}","value":"FILL","literal":true},
+    {"layer":"Container / Period","property":"layoutSizingVertical","when":"{{Style=*}}{{State=*}}{{Period=*}}{{Size=*}}","value":"HUG","literal":true}
+  ]
+}
+]
+}
