@@ -53,4 +53,6 @@ For Brand-ready work, include a Handoff Summary in the final report. Also write 
 - investment content or personal-data flags awaiting review;
 - checks performed and checks left unverified.
 
+For new UI the file may already hold a `## Design thesis` section that [neon-create](../../neon-create/SKILL.md) wrote before building. Keep it as written and add the summary below it; a build that turns out Ship-ready keeps the file with that section alone.
+
 When the work lives in a Finnomena product repository, offer to open a draft pull request with the summary as its description; push or open it only after the employee agrees.
