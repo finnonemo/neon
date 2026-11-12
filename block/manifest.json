@@ -1,0 +1,17 @@
+{
+  "block": {
+    "repository": "github.com/pawisssh/block",
+    "commit": "51830c6daeb8a3512f81c72f244879c78e486c76"
+  },
+  "files": {
+    "NOTICE": "cc7a67eea1ae7a33c8d0f1f3b279da6bacae86baff3ccec57728121f1752844c",
+    "block-engine.mjs": "0a575d3bd6d424d589e6964e50684ed480fd3587be388b85567ba63ce3b9a59f",
+    "fonts/IBMPlexMono-LICENSE.txt": "7e6b2818edbd8f6a01ae80641cc8f16a51080d08fb4e532be3a0b6f74adb07da",
+    "fonts/IBMPlexMono-Regular.ttf": "d71c5e8ce165981d5d0c9c62f2e2c046adfcdfd507e209bd1e641cb1c9849aeb",
+    "fonts/IBMPlexSansThai-LICENSE.txt": "7e6b2818edbd8f6a01ae80641cc8f16a51080d08fb4e532be3a0b6f74adb07da",
+    "fonts/IBMPlexSansThai-Medium.ttf": "8607b3f7dc0ed2d695b3dfdaf344ebc27a0e6d75e2818fe4c21ed7d14b0369e8",
+    "fonts/IBMPlexSansThai-Regular.ttf": "daa1e3024598fc137aa2b96716cce8607923ae80a3a83687174034f36bdd6a4f",
+    "hb.wasm": "90c0bd6c34d54ac8730366f4ed7f7ce870e4b6b9260cbe92e728ffa6c4694c0a"
+  },
+  "seal": "09112c47d3484998d3d0737ed5384e747f4963d7ae95c3076155204d4aa1c879"
+}

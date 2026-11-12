@@ -27,3 +27,7 @@ tests/
 
 # Claude CLI and related local state
 .claude/
+
+# Finnomena Trek font files: local only. The licence forbids distributing them
+# without written permission (block/NOTICE, ADR 0010).
+block/fonts/FinnomenaTrek-*

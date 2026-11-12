@@ -61,7 +61,7 @@ The part of Block that draws Patterns and Pages and refuses anything outside the
 _Avoid_: core (Core is the design system), generator (one part of the engine)
 
 **Block snapshot**:
-The built copy of the Block engine that Neon carries, pinned to one Block commit, with the typeface it draws text in.
+The built copy of the Block engine that Neon carries, pinned to one Block commit, with the open typeface it draws text in when Finnomena Trek is not on the computer.
 _Avoid_: Block copy, vendored Block
 
 **finno**:
