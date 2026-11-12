@@ -5,8 +5,8 @@ import { fieldBox } from './text-field.mjs';
 const value = (property) => ({ layer: 'Container / Field / Text overflow / Value text', property });
 
 /** A measured part of the Neon Select's trigger in a cell of Core's Select: Large and Enabled unless said. */
-export function selectCell(part, { State = 'Enabled', Size = 'Large' } = {}) {
-  return { item: 'select', part, cell: { State, Size } };
+export function selectCell(part, { State = 'Enabled' } = {}) {
+  return { item: 'select', part, cell: { State, Size: 'Large' } };
 }
 
 const set = 'Select';

@@ -4,8 +4,8 @@ import { fieldBox } from './text-field.mjs';
 const input = (property) => ({ layer: 'Container / Field / Text overflow / Input text', property });
 
 /** A measured part of the Neon Textarea in a cell of Core's Text area: Large, Enabled and filled unless said. */
-export function textAreaCell(part, { State = 'Enabled', Size = 'Large', filled = 'True' } = {}) {
-  return { item: 'textarea', part, cell: { 'Text filled': filled, State, Size } };
+export function textAreaCell(part, { State = 'Enabled', filled = 'True' } = {}) {
+  return { item: 'textarea', part, cell: { 'Text filled': filled, State, Size: 'Large' } };
 }
 
 const set = 'Text area';

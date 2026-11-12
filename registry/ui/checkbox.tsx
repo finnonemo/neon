@@ -5,7 +5,8 @@ import { Checkbox as CheckboxPrimitive } from "radix-ui"
 import { cn } from "@/lib/utils"
 
 // The CDS Checkbox: 20px, 4px corners, filled with the primary role when
-// checked. Disabled fades to half with its label (peer-disabled), as CDS does.
+// checked. Disabled fades the box to half, as CDS does; a Label beside it takes
+// Core's Text/text-disabled (peer-disabled), as beside every disabled control.
 function Checkbox({ className, ...props }: React.ComponentProps<typeof CheckboxPrimitive.Root>) {
   return (
     <CheckboxPrimitive.Root

@@ -7,7 +7,9 @@ import { cn } from "@/lib/utils"
 // Core's Select at Large: Input's 56px field with the value in body type (the placeholder ink
 // while it shows the placeholder) and a chevron in Icon/icon-primary. Keyboard focus is Core's
 // Focus, 3px in Focus/focus inside the field; open is Core's Active, the page background in a
-// 3px Border/border-strong stroke with the chevron turned up. Invalid and Disabled are Input's.
+// 3px Border/border-strong stroke with the chevron turned up (select.md: "Active means open,
+// Focus means focused and closed"; it also asks for the Focus ring outside the field, which is
+// a question for Core). Invalid and Disabled are Input's.
 // PROVISIONAL (#210): the listbox keeps the CDS look, the elevated fill with 16px corners and
 // 60px headline options, until the menu is retuned. Picking an option closes it, as in Radix.
 function Select(props: React.ComponentProps<typeof SelectPrimitive.Root>) {

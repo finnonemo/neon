@@ -52,6 +52,7 @@ test('the segmented control is one radio group the arrow keys move through', asy
 });
 
 // Core's Focus state: the stroke inside the control turns Focus/focus, 3px on a field and 2px on a segment.
+// A focused text field on the web is being edited, so it takes State=Focus, not Core's ring outside a field at rest.
 for (const mode of ['light', 'dark']) test(`${mode}: a field and a segment reached from the keyboard draw Core's Focus stroke inside them`, async ({ page }) => {
   const dark = mode === 'dark' ? '&mode=dark' : '';
   await page.goto(`/?layout=approval${dark}`);

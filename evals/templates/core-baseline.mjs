@@ -10,6 +10,7 @@
 // property the table leaves out stays on the CDS baseline.
 import { fileURLToPath } from 'node:url';
 import { coreValue, readCoreItem } from '../../scripts/lib/core-cell.mjs';
+import { NO_PAINT } from './core/entries.mjs';
 import button from './core/button.mjs';
 import textField from './core/text-field.mjs';
 import textArea from './core/text-area.mjs';
@@ -33,16 +34,15 @@ const tables = {
   'segmented-control': segmentedControl,
   'toggle-group': selectionTag,
 };
-const NO_PAINT = 'rgba(0, 0, 0, 0)';
 // The snapshot writes a literal as text ("2", "0.5"); a measured number is a number.
-const literal = (value) => (typeof value === 'string' && value.trim() !== '' && !Number.isNaN(Number(value)) ? Number(value) : value);
+const asNumber = (value) => (typeof value === 'string' && value.trim() !== '' && !Number.isNaN(Number(value)) ? Number(value) : value);
 const root = fileURLToPath(new URL('../..', import.meta.url));
 const items = new Map();
 const coreItem = (item) => items.get(item) ?? items.set(item, readCoreItem(root, item)).get(item);
 
 /**
  * One table entry as measure.mjs would measure it: a number, a color, a font's size and line height,
- * a border's width and color, or a literal. An entry reads the cell of its table's set unless it
+ * a border's width and color (`strokeOf` names the layer whose stroke it is), or a literal. An entry reads the cell of its table's set unless it
  * names its own set and where in it (`set`, `at`): a part can be drawn by a nested component.
  */
 function measuredValue(core, table, cell, mode, entry, name) {
@@ -56,10 +56,9 @@ function measuredValue(core, table, cell, mode, entry, name) {
   const set = entry.set ?? table.set;
   const at = entry.at ?? cell;
   // A stroke is drawn where the cell binds a paint to it; its weight alone draws nothing.
-  if ('paint' in entry) {
-    const paint = coreValue(core, set, at, entry.layer, entry.paint);
-    const weight = coreValue(core, set, at, entry.layer, entry.weight);
-    const width = literal(weight?.value);
+  if ('strokeOf' in entry) {
+    const paint = coreValue(core, set, at, entry.strokeOf, 'strokes.0');
+    const width = asNumber(coreValue(core, set, at, entry.strokeOf, 'strokeWeight')?.value);
     return paint && width > 0 ? { width, color: paint[mode] } : { width: 0, color: NO_PAINT };
   }
   const bound = coreValue(core, set, at, entry.layer, entry.property);
@@ -70,7 +69,7 @@ function measuredValue(core, table, cell, mode, entry, name) {
   if (bound.kind === 'color') return bound[mode];
   // A text style gives a size and a line height; the weight is the table's, where it states one.
   if (bound.kind === 'textStyle') return { size: bound.size, lineHeight: bound.lineHeight, ...('weight' in entry && { weight: entry.weight }) };
-  return literal(bound.value);
+  return asNumber(bound.value);
 }
 
 /** The table a target reads: the item's, or the part of it the target names. */
@@ -106,7 +105,7 @@ export async function coreBaseline({ item, part, cell }, mode, names) {
 }
 
 /** The properties a target's table lists. */
-const listed = (core) => Object.keys(tables[core.item] ? tableOf(core).properties : {});
+const listed = (cellRef) => Object.keys(tables[cellRef.item] ? tableOf(cellRef).properties : {});
 
 /**
  * A CDS baseline case with Core's values in place for every target that names a Core cell: each

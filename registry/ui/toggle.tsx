@@ -5,8 +5,8 @@ import { Toggle as TogglePrimitive } from "radix-ui"
 import { cn } from "@/lib/utils"
 
 // A Supporting item (ADR 0008): shaped for toggle-group, whose Counterpart is Core's Selection
-// tag. Core has ten Colors and three Hierarchies and names no default; a toggle is the neutral
-// one, Secondary Navy. sm, default and lg are Core's Small, Medium and Large: 24, 32 and 40px
+// tag. Core's default variant is White Primary, and its doc calls Secondary the usual choice for
+// filters beside their content; a toggle is Secondary Navy until Core says which Color it takes. sm, default and lg are Core's Small, Medium and Large: 24, 32 and 40px
 // tall, with 6px sides, 4px corners and 13/20 type, then 8px sides, 8px corners and 15/24, then
 // the same at 17/24. The gap to an icon is 4, 8 and 12px. Radix sets data-state=on|off;
 // radix-nova's aria-pressed: classes miss a toggle-group's single mode, which sets aria-checked.

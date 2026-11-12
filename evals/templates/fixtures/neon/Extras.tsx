@@ -160,7 +160,7 @@ export function Extras() {
           </div>
         </div>
       </Hook>
-      {/* Core's Segmented control Sizes and its Disabled control, which CDS has no baseline for. */}
+      {/* Core's Segmented control Sizes, its Disabled control and its disabled segments, which CDS has no baseline for. */}
       <Hook name="core-segments">
         <div className="flex w-80 flex-col gap-4">
           <SegmentedControl data-segments="sm" size="sm" defaultValue="week" aria-label="ช่วงเวลา / Period">
@@ -175,6 +175,11 @@ export function Extras() {
           <SegmentedControl data-segments="disabled" disabled defaultValue="buy" aria-label="คำสั่ง / Order">
             <SegmentedControlItem value="buy">ซื้อ</SegmentedControlItem>
             <SegmentedControlItem value="sell">ขาย</SegmentedControlItem>
+          </SegmentedControl>
+          <SegmentedControl data-segments="one-disabled" defaultValue="buy" aria-label="ประเภทคำสั่ง / Order type">
+            <SegmentedControlItem value="buy" disabled>ซื้อ</SegmentedControlItem>
+            <SegmentedControlItem value="sell" disabled>ขาย</SegmentedControlItem>
+            <SegmentedControlItem value="switch">สับเปลี่ยน</SegmentedControlItem>
           </SegmentedControl>
         </div>
       </Hook>

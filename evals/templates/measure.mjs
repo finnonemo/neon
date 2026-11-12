@@ -50,7 +50,13 @@ const segmentSet = (name, hook, cell) => ({
 const coreSegments = {
   ...segmentSet('smSegmented', 'sm', { Size: 'Small' }),
   ...segmentSet('lgSegmented', 'lg', { Size: 'Large' }),
-  ...segmentSet('disabledSegmented', 'disabled', { State: 'Disabled' }),
+  // A disabled control is the track at half opacity over segments that keep their Enabled look;
+  // a segment disabled on its own takes the item's Disabled cell.
+  disabledSegmentedTrack: coreSegment('disabled', '', segmentedCell({ State: 'Disabled' }), trackBox),
+  disabledSegmentedChosen: coreSegment('disabled', ' [role=radio][data-state=checked]', chosen, segmentBox),
+  disabledSegmentedSegment: coreSegment('disabled', ' [role=radio][data-state=unchecked]', segmentCell(), segmentBox),
+  disabledChosenSegment: coreSegment('one-disabled', ' [role=radio][data-state=checked]', segmentCell({ Selected: 'True', State: 'Disabled' }), segmentBox),
+  disabledSegment: coreSegment('one-disabled', ' [role=radio][data-state=unchecked]:disabled', segmentCell({ State: 'Disabled' }), segmentBox),
 };
 const coreFields = {
   readOnlyInput: coreField('read-only', 'input', fieldCell('input', 'field', { State: 'Read-only' })),
@@ -143,7 +149,8 @@ export const screens = [
       rejectRequest: button(1, danger),
       save: button(2, secondary),
       // A disabled Button and a disabled field take Core's disabled fill and text at full opacity;
-      // the checkbox keeps CDS's blended fill and its opacity (spike trap 4) until retuned.
+      // the checkbox keeps CDS's blended fill and its opacity (spike trap 4) until retuned, while
+      // its Label takes Text/text-disabled as beside every disabled control.
       forwardDisabled: button(3, buttonCell('Primary', { State: 'Disabled' }), ['h', 'opacity', 'bg', 'color']),
       // Core's values that CDS has none of: held to the Core baseline alone, on the Neon target only.
       medium: coreOnly('[data-size=md]', buttonCell('Primary', { Size: 'Medium' })),

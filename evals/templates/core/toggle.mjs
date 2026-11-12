@@ -1,5 +1,7 @@
 // switch → Core's Toggle, Style=Toggle only: the track and its thumb. The track's size is the
 // nested _Toggle Item's and the thumb's the nested _Toggle Switch's; their fills are the Toggle's.
+import { padding } from './entries.mjs';
+
 const TRACK = 'Container / _Toggle Item / Container';
 const item = (property) => ({ set: '_Toggle Item', at: { Size: 'Medium', State: 'Enabled' }, layer: 'Container', property });
 const thumb = (property) => ({ set: '_Toggle Switch', at: { Disabled: 'False' }, layer: '(root)', property });
@@ -15,10 +17,11 @@ export default {
     track: {
       set,
       properties: {
-        // Core binds the track no height: it hugs the 18px thumb in 3px of padding.
+        // Core binds the track no height: it hugs the 18px thumb in 3px of padding. toggle.md's
+        // notes say a 28 row, the iOS track's height: a question for Core.
         h: { literal: 24 },
         w: item('width'),
-        pad: ['paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft'].map(item),
+        pad: padding(item),
         radius: { ...item('cornerRadius'), atMostHalf: 'h' },
         bg: { layer: TRACK, property: 'fills.0' },
         // Core binds no opacity: a Disabled toggle dims by its disabled tokens.
@@ -33,7 +36,7 @@ export default {
         radius: { ...thumb('cornerRadius'), atMostHalf: 'h' },
         bg: { layer: `${TRACK} / _Toggle Switch`, property: 'fills.0' },
         // Core binds the thumb no stroke.
-        border: { layer: `${TRACK} / _Toggle Switch`, weight: 'strokeWeight', paint: 'strokes.0' },
+        border: { strokeOf: `${TRACK} / _Toggle Switch` },
         opacity: { literal: 1 },
       },
     },

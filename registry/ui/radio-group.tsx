@@ -9,7 +9,8 @@ import { cn } from "@/lib/utils"
 // circle and circle-dot, drawn in CSS at their proportions). Disabled takes Icon/icon-disabled
 // with no opacity, and a Label beside the radio follows it (peer-disabled). Keyboard focus is
 // Core's round Focus ring, Focus/focus 2px wide, its outer edge 4px out from the Box. Core has
-// no invalid radio: aria-invalid draws the glyph in the invalid role. Options stay 16px apart.
+// no invalid radio: aria-invalid draws the glyph in the invalid role. Core's Radio is one
+// option and gives no gap between options: they stay 16px apart.
 // Radix sets data-state, which radix-nova's data-checked: classes never match.
 function RadioGroup({ className, ...props }: React.ComponentProps<typeof RadioGroupPrimitive.Root>) {
   return <RadioGroupPrimitive.Root data-slot="radio-group" className={cn("grid gap-4", className)} {...props} />

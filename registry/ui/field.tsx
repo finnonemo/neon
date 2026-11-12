@@ -54,7 +54,7 @@ function FieldSet({ className, ...props }: React.ComponentProps<"fieldset">) {
   )
 }
 
-// PROVISIONAL (#195): a legend is headline in fg; its label variant takes FieldLabel's ink.
+// PROVISIONAL (#195): a legend is headline in fg; its label variant follows FieldLabel (Headline, Text/text-secondary).
 function FieldLegend({
   className,
   variant = "legend",

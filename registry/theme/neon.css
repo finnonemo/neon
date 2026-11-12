@@ -97,7 +97,8 @@
   --color-link-hover: var(--link-hover);
   /* Core's Field, Border, Text and Icon tokens, for the field items (input, textarea, select,
    * input-group, field, label): the field's fill at rest, pressed and disabled, the strokes a
-   * state draws inside it, and the inks shadcn has no slot for. */
+   * state draws inside it, and the inks shadcn has no slot for. radio-group, switch,
+   * segmented-control and toggle read the invalid, strong-line, icon and disabled inks too. */
   --color-field: var(--field);
   --color-field-hover: var(--field-hover);
   --color-field-disabled: var(--field-disabled);
@@ -109,10 +110,10 @@
   --color-icon-disabled: var(--icon-disabled);
   --color-disabled-foreground: var(--disabled-foreground);
   /* Core's Toggle tokens, for the switch item. Its Disabled track is button-disabled. */
-  --color-toggle-off: var(--toggle-off);
-  --color-toggle-on: var(--toggle-on);
-  --color-toggle-thumb: var(--toggle-thumb);
-  --color-toggle-thumb-disabled: var(--toggle-thumb-disabled);
+  --color-switch-off: var(--switch-off);
+  --color-switch-on: var(--switch-on);
+  --color-switch-thumb: var(--switch-thumb);
+  --color-switch-thumb-disabled: var(--switch-thumb-disabled);
   /* Core's Layer tokens over a surface at Hover and Active, for a segment not chosen. */
   --color-layer-hover: var(--layer-hover);
   --color-layer-active: var(--layer-active);
@@ -196,10 +197,10 @@
   --icon-disabled: var(--color-fgIconDisabled);
   --disabled-foreground: var(--color-fgDisabled);
   /* The switch, from Core's Toggle: grey off, Support/support-success on, a white thumb. */
-  --toggle-off: var(--color-bgToggleOff);
-  --toggle-on: var(--color-bgPositive);
-  --toggle-thumb: var(--color-fgIconOnColor);
-  --toggle-thumb-disabled: var(--color-fgIconOnColorDisabled);
+  --switch-off: var(--color-bgToggleOff);
+  --switch-on: var(--color-bgPositive);
+  --switch-thumb: var(--color-fgIconOnColor);
+  --switch-thumb-disabled: var(--color-fgIconOnColorDisabled);
   /* A segment not chosen, at Hover and Active: Core's layer-hover-01 and layer-active-01. */
   --layer-hover: var(--color-bgElevation1Hover);
   --layer-active: var(--color-bgElevation1Active);

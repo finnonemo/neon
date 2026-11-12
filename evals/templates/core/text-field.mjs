@@ -1,11 +1,13 @@
 // input, label, field and input-group → Core's Text field: which binding each measured property
 // reads. The Neon field is Core's Large; Medium and Small have no Neon prop.
-const at = (layer) => (property) => ({ layer, property });
-const title = at('Container / Label + Character count / Title');
-const input = at('Container / Field / Text overflow / Input text');
-const placeholder = at('Container / Field / Text overflow / Placeholder text');
-const helper = at('Container / Detail / Helper Text');
-const error = at('Container / Detail / Error message');
+import { padding } from './entries.mjs';
+
+const inLayer = (layer) => (property) => ({ layer, property });
+const title = inLayer('Container / Label + Character count / Title');
+const input = inLayer('Container / Field / Text overflow / Input text');
+const placeholder = inLayer('Container / Field / Text overflow / Placeholder text');
+const helper = inLayer('Container / Detail / Helper Text');
+const error = inLayer('Container / Detail / Error message');
 
 // The snapshot's text styles hold no weight. Core's rule (docs/architecture.md in Core, Type):
 // Headline takes Medium, everything else Regular.
@@ -15,18 +17,18 @@ const REGULAR = 400;
 /** The Field box as every Core field draws it (Text field, Text area, Select): `layer` is its Field layer. */
 export const fieldBox = (layer) => ({
   h: { layer, property: 'minHeight' },
-  pad: ['paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft'].map((property) => ({ layer, property })),
+  pad: padding(inLayer(layer)),
   radius: { layer, property: 'cornerRadius' },
   bg: { layer, property: 'fills.0' },
   // The stroke is inside the Field, and a state draws it: Enabled binds a weight and no paint.
-  border: { layer, weight: 'strokeWeight', paint: 'strokes.0' },
+  border: { strokeOf: layer },
   // Core binds no opacity: a Disabled field dims by its disabled tokens.
   opacity: { literal: 1 },
 });
 
 /** A measured part of a Neon field in a cell of Core's Text field: Large, Enabled and filled unless said. */
-export function fieldCell(item, part, { State = 'Enabled', Size = 'Large', filled = 'True' } = {}) {
-  return { item, part, cell: { 'Text filled': filled, State, Size } };
+export function fieldCell(item, part, { State = 'Enabled', filled = 'True' } = {}) {
+  return { item, part, cell: { 'Text filled': filled, State, Size: 'Large' } };
 }
 
 const set = 'Text field';

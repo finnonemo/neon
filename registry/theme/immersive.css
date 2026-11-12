@@ -73,10 +73,10 @@
   --icon: var(--immersive-text);
   --icon-disabled: color-mix(in srgb, var(--immersive-text) 50%, var(--immersive-canvas));
   --disabled-foreground: color-mix(in srgb, var(--immersive-text) 50%, var(--immersive-canvas));
-  --toggle-off: color-mix(in srgb, var(--immersive-action) 50%, var(--immersive-canvas));
-  --toggle-on: var(--immersive-action);
-  --toggle-thumb: var(--immersive-on-action);
-  --toggle-thumb-disabled: color-mix(in srgb, var(--immersive-on-action) 50%, transparent);
+  --switch-off: color-mix(in srgb, var(--immersive-action) 50%, var(--immersive-canvas));
+  --switch-on: var(--immersive-action);
+  --switch-thumb: var(--immersive-on-action);
+  --switch-thumb-disabled: color-mix(in srgb, var(--immersive-on-action) 50%, transparent);
   --layer-hover: var(--immersive-palette-75);
   --layer-active: var(--immersive-palette-75);
   --selection-tag: var(--immersive-palette-75);

@@ -101,8 +101,8 @@ test('a segmented control is never built on Tabs', () => {
 
 const registryItem = (name) => JSON.parse(read('registry/registry.json')).items.find((item) => item.name === name);
 
-// An item that builds on another Neon item (input-group on button, input and
-// textarea; the base's AppRoot on sonner and tooltip) must pull it in, or
+// An item that builds on another Neon item (input-group on button, toggle-group
+// on toggle; the base's AppRoot on sonner and tooltip) must pull it in, or
 // shadcn add leaves a broken import or installs stock shadcn's.
 test('every registry item that imports a Neon component declares it as a registry dependency', () => {
   const { items } = JSON.parse(read('registry/registry.json'));

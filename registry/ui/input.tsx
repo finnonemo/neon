@@ -6,7 +6,10 @@ import { cn } from "@/lib/utils"
 // stroke at rest. A state draws its stroke inside the field: 3px in Focus/focus while it has
 // focus, 3px in Support/support-error on the page background while invalid (focus shows over
 // it), and 2px in Border/border-subtle on the page background when read-only. Hover and press
-// take Field/field-hover. Disabled takes Core's disabled fill and text, with no opacity.
+// take Field/field-hover (Core's Pressed; it has no Hover state). Disabled takes Core's disabled
+// fill and text, with no opacity. A text field with focus on the web is being edited, Core's
+// State=Focus; Core's ring outside a focused field that is not being edited, and its Active
+// state, have no web state here until Core says when each shows.
 function Input({ className, type, ...props }: React.ComponentProps<"input">) {
   return (
     <input

@@ -11,7 +11,8 @@ import { cn } from "@/lib/utils"
 // Text/text-secondary when not chosen (Hover and Pressed fill it with layer-hover-01 and
 // layer-active-01), Background/background-primary, Border/border-strong and Text/text-primary
 // when chosen, Focus/focus on keyboard focus. A disabled segment takes Text/text-disabled and
-// loses its stroke; a disabled control is the whole track at half opacity.
+// loses its stroke; a disabled control is the track at half opacity over segments that keep
+// their Enabled look.
 function SegmentedControl({
   className,
   size = "default",
@@ -41,6 +42,7 @@ function SegmentedControlItem({ className, ...props }: React.ComponentProps<type
         "data-[state=checked]:bg-background data-[state=checked]:text-foreground data-[state=checked]:outline-line-strong data-[state=checked]:hover:bg-background data-[state=checked]:active:bg-background",
         "focus-visible:outline-ring data-[state=checked]:focus-visible:outline-ring",
         "disabled:pointer-events-none disabled:text-disabled-foreground data-[state=checked]:disabled:text-disabled-foreground data-[state=checked]:disabled:outline-transparent",
+        "group-data-[disabled]/segmented-control:disabled:text-muted-foreground group-data-[disabled]/segmented-control:data-[state=checked]:disabled:text-foreground group-data-[disabled]/segmented-control:data-[state=checked]:disabled:outline-line-strong",
         className
       )}
       {...props}
