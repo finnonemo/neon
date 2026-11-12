@@ -4,7 +4,7 @@ import { AlertDialog as AlertDialogPrimitive } from "radix-ui"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
-// The CDS Alert: the dialog's overlay and surface (bgOverlay, bgElevation2,
+// The CDS Alert: the dialog's overlay and surface (bgOverlay, bgElevation1,
 // 8px corners, the same shadow), but a 318px card centered at every width,
 // never full screen. A centered title3 title with 4px below it and the body
 // in fgMuted sit in 24px of padding (8px below); the actions share one row

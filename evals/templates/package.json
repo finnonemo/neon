@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "test": "node run.mjs",
-    "baseline": "NEON_CAPTURE_BASELINE=1 node run.mjs cds-match.spec.mjs layout-match.spec.mjs"
+    "baseline": "NEON_CAPTURE_BASELINE=1 node run.mjs cds-match.spec.mjs layout-match.spec.mjs",
+    "core-differences": "NEON_CAPTURE_CORE_DIFFERENCES=1 node run.mjs --target neon cds-match.spec.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.14.0",

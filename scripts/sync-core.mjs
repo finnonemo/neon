@@ -5,10 +5,13 @@
 // committed. Which Core doc each registry item matches is Neon's own table,
 // registry/core-counterparts.json. The snapshot is never edited by hand: the
 // repository check compares each file with the hash the sync recorded.
+// The same run writes what follows the snapshot's Theme: the Theme token export
+// and the CSS adapter's colors (scripts/lib/core-theme.mjs).
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
 import { syncCore, SNAPSHOT_DIR, COUNTERPARTS_FILE } from './lib/core-snapshot.mjs';
+import { writeCoreTheme, THEME_EXPORT, ADAPTER } from './lib/core-theme.mjs';
 import { registryComponents } from './lib/registry.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
@@ -28,6 +31,8 @@ try {
   console.log(`Wrote ${files.length} files to ${SNAPSHOT_DIR}/ from Core ${commit}.`);
   const byStatus = Object.groupBy(Object.keys(leftOut), name => leftOut[name]);
   for (const [status, names] of Object.entries(byStatus)) console.log(`Left out, ${status}: ${names.join(', ')}.`);
+  await writeCoreTheme(root);
+  console.log(`Wrote ${THEME_EXPORT} and the colors of ${ADAPTER} from the snapshot's Theme. Rebuild the registry: node scripts/build-registry.mjs`);
 } catch (error) {
   console.error(error.message);
   process.exit(1);

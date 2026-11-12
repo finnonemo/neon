@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils"
 // to 85% of the height, with their content column capped at 70em; left and
 // right sheets are min(400px, 100vw) wide and full height. The open edge's
 // two corners round to 32px. Like Tray it sits on the dialog's overlay and
-// surface (bgOverlay, bgElevation2) and is bordered in bgLine in dark only
+// surface (bgOverlay, bgElevation1) and is bordered in bgLine in dark only
 // (the --sheet-border-width role, 0px when an older theme lacks it). A
 // bottom sheet's header shows CDS's HandleBar, which is its close button;
 // the other sides show an X instead. Radix closes

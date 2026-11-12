@@ -40,6 +40,10 @@ _Avoid_: equivalent, twin
 The list that names each Neon registry item's Counterpart, or says why it has none.
 _Avoid_: mapping, counterparts file
 
+**Role table**:
+The list that names the Core Theme token each color role of the CSS adapter takes, in light and in dark, or says why a role has none.
+_Avoid_: role mapping, color mapping
+
 **Supporting item**:
 A Neon registry item that exists only for other Neon items to depend on, such as the toggle a toggle group is built from. It has no Counterpart of its own, is shaped to fit the items that use it, and is not listed as a component for employees to choose.
 _Avoid_: internal component, helper component

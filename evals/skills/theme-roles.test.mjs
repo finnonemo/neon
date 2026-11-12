@@ -51,18 +51,12 @@ const minimumSurface = 1.1;
 // Every known failure, as `mode text on surface`. An entry the theme no longer
 // fails also fails the test, so a fix removes its entry here.
 const known = {
-  // Open gaps in declared values.
-  'light fgPositive on *': 'green text is 3.4–3.9:1',
-  'light fgWarning on *': 'orange text is 2.8–3.2:1',
-  'light label on bgPositive': 'white on green is 2.96:1',
-  'dark fgNegative on bgElevation1': 'red text on the card is 4.02:1',
-  'dark fgNegative on bgAlternate': 'bgAlternate equals bgElevation1 in dark',
-  'dark fgNegative on bgElevation2': 'red text on the popover is 2.92:1',
-  'dark fgWarning on bgElevation2': 'orange text on the popover is 3.98:1',
-  'dark label on bgNegative': 'white on red is 4.33:1',
-  'dark label on bgPositive': 'Support.support-success is Green.125 in both modes: white is 2.96:1, as in light',
-  'dark bgSecondary on bgElevation1': 'bgSecondary, bgAlternate and bgElevation1 share rgb(26,26,26)',
-  'dark bgAlternate on bgElevation1': 'bgSecondary, bgAlternate and bgElevation1 share rgb(26,26,26)',
+  // Open gaps in Core's Theme, for Core to answer.
+  'light fgWarning on *': 'Support/support-warning (Orange/115) as text is 3.7–4.2:1; Core has no warning text token',
+  'light label on bgPositive': 'white on Support/support-success (Green/135) is 3.85:1',
+  'dark label on bgPositive': 'white on Support/support-success (Green/115) is 2.32:1',
+  'dark bgSecondary on bgElevation1': 'Background/background-secondary and Layer/layer-01 are both Grey/90',
+  'dark bgAlternate on bgElevation1': 'Background/background-secondary and Layer/layer-01 are both Grey/90',
 };
 
 function failures() {

@@ -1,6 +1,8 @@
 /* Neon base adapter: shadcn/ui's slots alias Neon roles from theme.css, so
- * light and dark both come from theme.css alone. Imported by src/index.css
- * after Tailwind; theme.css is the canonical CSS adapter, copied as-is. */
+ * light and dark both come from theme.css alone, and theme.css takes each
+ * role's color from Core's Theme (theme/css/core-roles.json names the token).
+ * Imported by src/index.css after Tailwind; theme.css is the canonical CSS
+ * adapter, copied as-is. */
 @import "./theme.css";
 
 /* Components use Neon roles, never dark: classes; the variant exists only for
@@ -74,7 +76,9 @@
   --foreground: var(--color-fg);
   --card: var(--color-bgElevation1);
   --card-foreground: var(--color-fg);
-  --popover: var(--color-bgElevation2);
+  /* Core's floating surfaces (Alert, Sheet, Menu, Toggletip) are Layer/layer-01,
+   * the card's role; layer-02 is for a container that sits on layer-01. */
+  --popover: var(--color-bgElevation1);
   --popover-foreground: var(--color-fg);
   --primary: var(--color-bgPrimary);
   --secondary: var(--color-bgSecondary);
@@ -85,16 +89,19 @@
   --accent-foreground: var(--color-fg);
   --destructive: var(--color-bgNegative);
   --border: var(--color-bgLine);
-  /* PROVISIONAL (#97): --input and --ring keep the roles CDS defaults use;
-   * the design owner has not confirmed them as Neon roles. */
+  /* PROVISIONAL (#97): --input keeps the role CDS defaults use, which has no
+   * Core Theme token; the field items take Core's Field and Border tokens when
+   * they are retuned (#210). */
   --input: var(--color-bgLineHeavy);
+  /* Core's Focus/focus. */
   --ring: var(--color-bgLinePrimary);
   /* Text on filled colors (onColorLabel): fgInverse in light. */
   --primary-foreground: var(--color-fgInverse);
   --destructive-foreground: var(--color-fgInverse);
-  /* PROVISIONAL (#97): tag inks. fgPositive, fgWarning and fgNegative fail AA
-   * on their light washes, so light tags take the darker spectrum shades CDS
-   * draws tags in (Green/145, Yellow/170, Red/130), 4.8–6.9:1 on the washes. */
+  /* PROVISIONAL (#97): tag inks. Light tags take the spectrum shades CDS draws
+   * tags in (Green/145, Yellow/170, Red/130), 4.8–6.9:1 on the washes, until
+   * the tag is retuned to Core's Tag tokens (#210). fgWarning is 3.93:1 on its
+   * light wash; fgPositive and fgNegative now pass there (5.54 and 7.97:1). */
   --tag-positive: rgb(0, 127, 59);
   --tag-warning: rgb(87, 90, 3);
   --tag-negative: rgb(200, 8, 8);
@@ -111,11 +118,12 @@
   --sheet-border-width: 0px;
 }
 
-/* onColorLabel in dark: filled buttons take fg (white), as createTheme.ts does
- * for CDS. Matches theme.css's own dark selectors.
- * PROVISIONAL (#97): dark tags keep fgPositive and fgWarning (7.5 and 5.5:1 on
- * their washes); fgNegative is 4.25:1, so negative takes Red/50 (8.9:1).
- * PROVISIONAL (#97): white on dark bgNegative measures 4.32:1, below AA. */
+/* Text on filled colors in dark: filled buttons take fg (white), Core's
+ * Text/text-on-color; white on dark bgNegative is 5.39:1. Matches theme.css's
+ * own dark selectors.
+ * PROVISIONAL (#97): dark tags take fgPositive, fgWarning and fgNegative, which
+ * on their washes over the page are 7.32, 5.77 and 9.10:1, and over a card
+ * 5.49, 4.53 and 7.28:1. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --primary-foreground: var(--color-fg);
@@ -124,7 +132,7 @@
     --destructive-disabled: color-mix(in srgb, var(--destructive) 75%, var(--background));
     --tag-positive: var(--color-fgPositive);
     --tag-warning: var(--color-fgWarning);
-    --tag-negative: rgb(251, 153, 153);
+    --tag-negative: var(--color-fgNegative);
     --sheet-border-width: 1px;
   }
 }
@@ -135,7 +143,7 @@
   --destructive-disabled: color-mix(in srgb, var(--destructive) 75%, var(--background));
   --tag-positive: var(--color-fgPositive);
   --tag-warning: var(--color-fgWarning);
-  --tag-negative: rgb(251, 153, 153);
+  --tag-negative: var(--color-fgNegative);
   --sheet-border-width: 1px;
 }
 

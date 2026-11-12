@@ -27,7 +27,7 @@ node theme/scripts/generate-theme-config.mjs
 node theme/scripts/generate-breakpoints-config.mjs
 ```
 
-Review the resulting diff and unresolved-token report. Color mapping is hand-maintained; the CSS adapter must be updated separately using the method in its header. Do not automatically replace missing mappings with guesses. Before naming the Neon registry items a token change affects, list them with `node scripts/registry-consumers.mjs <token>`.
+Review the resulting diff and unresolved-token report. `theme/tokens/theme.json` is not a raw export: the Core sync writes it, so these generators only read it. `generate-theme-config.mjs` also rewrites `theme/cds/color-mapping.todo.md` from it; CDS is frozen, so leave that file's change out. The CDS color mapping is hand-maintained and frozen; the CSS adapter's values other than color are updated separately using the method in its header. Do not automatically replace missing mappings with guesses. Before naming the Neon registry items a token change affects, list them with `node scripts/registry-consumers.mjs <token>`.
 
 The Core snapshot in `core/` is compiled, never edited: a rule or value changes in Core, and which Core doc an item matches changes in `registry/core-counterparts.json`. Then re-sync from a Core checkout whose docs are committed:
 
@@ -36,6 +36,8 @@ node scripts/sync-core.mjs --from <Core checkout>
 ```
 
 The sync fails when a registry item has no entry in the Counterpart table, when an entry names a Core doc that is a draft, deprecated or missing, when a Supporting item is given a Counterpart, when a spec aliases a Scale step Core states no number for or binds a variable no Core spec records, and when a compiled file would still hold what the snapshot leaves out (the `iOS=True` look, Figma ids, Revision history, Dynamic Type); it then writes nothing. `validate` fails when a file under `core/`, or the commit `core/snapshot.json` names, differs from what the sync recorded. Review the snapshot's diff as Core's change, and say in the pull request which Core commit it moved to.
+
+The same run writes what follows the snapshot's Theme: the Theme token export, `theme/tokens/theme.json`, and the colors of the CSS adapter, `theme/css/theme.css`. Which Core Theme token each color role takes, in light and in dark, is the Role table, `theme/css/core-roles.json`, maintained by hand; a role with no Core token says why and keeps its value. The write fails when a Theme token names a primitive `theme/tokens/colors.json` lacks or holds at another value, when the adapter has a color role the Role table does not list, and when the table names a token the snapshot does not have. `validate` fails when the export or an adapter color differs from the snapshot's Theme. After a sync that changes a color, rebuild the registry, list the registry items that consume each changed role, and check each changed text and background pair with `node scripts/contrast.mjs` in light and in dark.
 
 The registry's built items in `registry/r/` carry a copy of every file they install, the CSS adapter included. After changing `registry/` or a file an item copies, rebuild them with `node scripts/build-registry.mjs`; `validate` fails on a stale build.
 
