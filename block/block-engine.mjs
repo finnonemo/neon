@@ -1,5 +1,5 @@
 // block-engine.mjs: the Block engine (Finnomena's Pattern builder) for Node: Patterns, composed Pages, the text
-// shaper and an SVG rasteriser. Built from Block (github.com/pawisssh/block) commit 51830c6daeb8a3512f81c72f244879c78e486c76
+// shaper and an SVG rasteriser. Built from Block (github.com/pawisssh/block) commit ff66fdca6644ddd95972e306fbcf501393d444c5
 // by `npm run build:engine-bundle`. Do not edit: change Block and build again.
 //
 // Code: MIT License, Copyright (c) 2026 Pawish Gawinseth (Block's LICENSE). It bundles harfbuzzjs (MIT License,
@@ -11825,6 +11825,14 @@ function flatten(d, sx, sy) {
         ]);
       }
       at = [x3, y3];
+    } else if (cmd.c === "Q") {
+      const [x1, y1, x2, y2] = cmd.v.map((n, i) => n * (i % 2 === 0 ? sx : sy));
+      for (let i = 1; i <= 12; i++) {
+        const t = i / 12;
+        const u = 1 - t;
+        cur.push([u * u * at[0] + 2 * u * t * x1 + t * t * x2, u * u * at[1] + 2 * u * t * y1 + t * t * y2]);
+      }
+      at = [x2, y2];
     }
   }
   return polys;

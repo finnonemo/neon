@@ -121,6 +121,14 @@ test('the packaged plugin draws on its own: no dependencies, no Trek, text in IB
   assert.deepEqual(answered.tools, TOOLS.map(tool => tool.name));
 });
 
+test('the PNG follows quadratic curves, so text in IBM Plex Sans Thai keeps its round letters', async () => {
+  // Plex outlines are quadratic, Trek's cubic: an engine that flattens only cubics draws "2027" as "Z Z7".
+  const { rasterizeSvg } = await import('../../block/block-engine.mjs');
+  const drawn = rasterizeSvg('<svg viewBox="0 0 8 8" width="8" height="8"><path d="M0 8Q0 0 8 0L8 8Z" fill="#ffffff"/></svg>');
+  const alpha = (x, y) => drawn.data[(y * drawn.width + x) * 4 + 3];
+  assert.deepEqual([alpha(3, 3), alpha(6, 6), alpha(0, 0)], [255, 255, 0]);
+});
+
 test('the command line refuses an unknown setting and exits 1 without a stack trace', () => {
   const run = spawnSync(process.execPath, [join(root, 'scripts/finno.mjs'), 'render', '--colour', 'red'], { encoding: 'utf8' });
   assert.equal(run.status, 1);

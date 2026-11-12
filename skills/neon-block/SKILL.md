@@ -21,7 +21,7 @@ The engine is reached through three tools named `options`, `candidates` and `ren
 node <Neon root>/scripts/finno.mjs candidates --format story-9-16 --layout headline --headline "Invest [every month]" --json
 ```
 
-The Neon root is two levels above this skill's real directory. The command needs Node 20.15 or later; if neither route works, report that and stop, since artwork drawn any other way is not Brand Artwork.
+The Neon root is two levels above this skill's real directory. Run the command from the employee's working directory, where the files are written to `./finnomena-artwork/`. The command needs Node 20.15 or later; if neither route works, report that and stop, since artwork drawn any other way is not Brand Artwork.
 
 ## Workflow
 
