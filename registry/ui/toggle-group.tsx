@@ -5,12 +5,10 @@ import { ToggleGroup as ToggleGroupPrimitive } from "radix-ui"
 import { cn } from "@/lib/utils"
 import { toggleStates, toggleVariants } from "@/components/ui/toggle"
 
-// CDS's grouped toggle buttons: a ButtonGroup of toggles (see toggle), 8px
-// apart in a row, or stretched full width in a column as CDS's vertical
-// ButtonGroup makes its buttons block. CDS has no joined group, so radix-nova's
-// spacing and outline variant are gone. Radix gives the keyboard model: one
-// Tab stop, arrow keys move between items, Space or Enter presses. type="single"
-// is a radio group (aria-checked), type="multiple" a toolbar of aria-pressed
+// A group of Core's Selection tags (see toggle), 8px apart in a row, or stretched full width in a
+// column. The tags are never joined, so radix-nova's spacing and outline variant are gone. Radix
+// gives the keyboard model: one Tab stop, arrow keys move between items, Space or Enter presses.
+// type="single" is a radio group (aria-checked), type="multiple" a toolbar of aria-pressed
 // buttons. Radix sets data-orientation only when given one, so it is always passed.
 const ToggleGroupContext = React.createContext<VariantProps<typeof toggleVariants>>({
   size: "default",

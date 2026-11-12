@@ -95,7 +95,8 @@ for (const [theme, scheme] of Object.entries(SCHEMES)) {
 }
 
 // Text on the fills a themed page paints (white on white on Ultra before the adapter mapped them). Expected colors come from
-// immersive.css's mapping: palette 75 under the theme's text, and the action pair for inverse fills.
+// immersive.css's mapping: palette 75 under the theme's text. A pressed toggle keeps that fill and shows a 2px ring in the
+// theme's text; the chosen segment is the canvas under the theme's text, inside a ring of it.
 // Computed colors come as rgb(0-255) or, for a color-mix(), color(srgb 0-1).
 const channels = text => { const values = text.match(/[\d.]+/g).slice(0, 3).map(Number); return text.startsWith('color(') ? values : values.map(v => v / 255); };
 const luminance = colorText => channels(colorText)
@@ -109,7 +110,7 @@ for (const theme of Object.keys(SCHEMES)) {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto(`/?layout=immersive&theme=${theme}&controls`);
     const fill = 'var(--immersive-palette-75)';
-    const expected = await resolve(page, { fill, text: 'var(--immersive-text)', action: 'var(--immersive-action)', onAction: 'var(--immersive-on-action)', pressed: `color-mix(in srgb, ${vars.action} 95.7%, ${vars.canvas})` });
+    const expected = await resolve(page, { fill, text: 'var(--immersive-text)', canvas: 'var(--immersive-canvas)' });
     expect(expected.fill).toBe(rgb(vars['palette-75']));
     const colors = locator => locator.evaluate(el => {
       const style = getComputedStyle(el);
@@ -118,14 +119,20 @@ for (const theme of Object.keys(SCHEMES)) {
     const checks = [
       ['secondary button', page.getByRole('button', { name: 'Secondary action', exact: true }), expected.fill, expected.text],
       ['unpressed toggle', page.getByRole('button', { name: 'Unpressed toggle', exact: true }), expected.fill, expected.text],
-      ['pressed toggle', page.getByRole('button', { name: 'Pressed toggle', exact: true }), expected.pressed, expected.onAction],
+      ['pressed toggle', page.getByRole('button', { name: 'Pressed toggle', exact: true }), expected.fill, expected.text],
       ['neutral tag', page.getByText('Neutral tag', { exact: true }), expected.fill, expected.text],
       ['segmented track', page.getByRole('radiogroup', { name: 'Period' }), expected.fill, expected.text],
-      ['checked segment', page.getByRole('radio', { name: 'Month', exact: true }), expected.action, expected.onAction],
+      ['checked segment', page.getByRole('radio', { name: 'Month', exact: true }), expected.canvas, expected.text],
     ];
     for (const [name, locator, background, color] of checks) {
       expect(await colors(locator), name).toEqual({ background, color });
       expect(ratio(color, background), `${name} text contrast`).toBeGreaterThanOrEqual(4.5);
+    }
+    // Pressed and chosen show by a 2px ring inside, in the theme's text.
+    for (const ringed of [page.getByRole('button', { name: 'Pressed toggle', exact: true }), page.getByRole('radio', { name: 'Month', exact: true })]) {
+      await expect(ringed).toHaveCSS('outline-width', '2px');
+      await expect(ringed).toHaveCSS('outline-offset', '-2px');
+      await expect(ringed).toHaveCSS('outline-color', expected.text);
     }
     // Hover fills are the accent slot; the text stays the theme's.
     for (const name of ['Outline action', 'Ghost action', 'Secondary action']) {

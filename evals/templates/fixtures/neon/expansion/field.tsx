@@ -1,8 +1,9 @@
-// field, measured against the CDS input stack (fixtures/expansion/field.tsx):
-// a field with long Thai helper text, and one in its error state, where the
-// error takes the helper's place as in CDS. The fixture wires nothing by hand:
-// Field ties its label, helper and error to the control in FieldControl, as
-// CDS TextInput does. The last field (unmeasured) does it for an input group.
+// field, measured against Core's Text field and the CDS input stack
+// (fixtures/expansion/field.tsx): a field with long Thai helper text, one in
+// its error state, where the error takes the helper's place, and a disabled
+// one (Neon only). The fixture wires nothing by hand: Field ties its label,
+// helper and error to the control in FieldControl. The input-group field
+// (unmeasured) does it for an input group.
 import { SearchIcon } from "lucide-react"
 
 import { Field, FieldControl, FieldDescription, FieldError, FieldLabel } from "@/components/ui/field"
@@ -27,6 +28,13 @@ export default function FieldSection() {
           <FieldLabel>อีเมล / Email</FieldLabel>
           <FieldControl><Input defaultValue="kanya@" /></FieldControl>
           <FieldError>รูปแบบอีเมลไม่ถูกต้อง / Invalid email</FieldError>
+        </Field>
+      </Hook>
+      <Hook name="field-disabled">
+        <Field data-disabled="true">
+          <FieldLabel>รหัสพนักงาน / Employee ID</FieldLabel>
+          <FieldControl><Input disabled defaultValue="FN-0042" /></FieldControl>
+          <FieldDescription>แก้ไขไม่ได้ / Cannot be changed</FieldDescription>
         </Field>
       </Hook>
       <Hook name="field-input-group">

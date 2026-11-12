@@ -2,17 +2,22 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 
-// The CDS TextInput's field: 56px, 8px corners, the heavy line role, body type.
-// Disabled fades the field to half, as CDS does; its colors stay.
+// Core's Text field at Large: a 56px Field on Field/field with 8px corners, body type, and no
+// stroke at rest. A state draws its stroke inside the field: 3px in Focus/focus while it has
+// focus, 3px in Support/support-error on the page background while invalid (focus shows over
+// it), and 2px in Border/border-subtle on the page background when read-only. Hover and press
+// take Field/field-hover. Disabled takes Core's disabled fill and text, with no opacity.
 function Input({ className, type, ...props }: React.ComponentProps<"input">) {
   return (
     <input
       type={type}
       data-slot="input"
       className={cn(
-        "h-14 w-full min-w-0 rounded-md border border-input bg-background px-4 py-4 text-body text-foreground transition-[border-color,box-shadow] outline-none placeholder:text-muted-foreground disabled:pointer-events-none disabled:opacity-50",
-        "focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50",
-        "aria-invalid:border-destructive aria-invalid:ring-destructive/20",
+        "h-14 w-full min-w-0 rounded-md bg-field px-4 text-body text-foreground transition-[background-color,outline-color] placeholder:text-placeholder hover:bg-field-hover",
+        "focus-visible:outline-3 focus-visible:-outline-offset-3 focus-visible:outline-ring",
+        "aria-invalid:bg-background aria-invalid:outline-3 aria-invalid:-outline-offset-3 aria-invalid:outline-invalid aria-invalid:hover:bg-background aria-invalid:focus-visible:outline-ring",
+        "[&[readonly]:enabled]:bg-background [&[readonly]:enabled]:outline-2 [&[readonly]:enabled]:-outline-offset-2 [&[readonly]:enabled]:outline-border [&[readonly]:enabled]:focus-visible:outline-3 [&[readonly]:enabled]:focus-visible:-outline-offset-3 [&[readonly]:enabled]:focus-visible:outline-ring",
+        "disabled:pointer-events-none disabled:bg-field-disabled disabled:text-disabled-foreground disabled:placeholder:text-disabled-foreground disabled:aria-invalid:bg-field-disabled disabled:aria-invalid:outline-0",
         className
       )}
       {...props}

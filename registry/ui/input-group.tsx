@@ -2,28 +2,30 @@ import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
 import { cn } from "@/lib/utils"
 
-// CDS TextInput's start and end slots: the group draws Input's 56px field (8px
-// corners, the heavy line role) and the control inside it drops its own
-// border. A start icon sits in 16px either side, as CDS InputIcon, and the
-// input then keeps only 4px of start padding. An end suffix is label1 in the
-// muted role with 16px after it; an end icon button is CDS's transparent
-// InputIconButton, 8px before and 4px after, in the fgPrimary role (read from
-// theme.css, since shadcn has no slot for it). The focus ring is Input's.
+// Core's Text field with something beside its text: the group draws Input's 56px Field
+// (Field/field, 8px corners, no stroke at rest) and holds a bare control. The Field's padding and
+// the space between its parts are 16px. A unit or other text is body in Text/text-secondary; an
+// icon is 20px in Icon/icon-primary. The group shows the control's state as Input does: Focus,
+// invalid (focus shows over it), read-only and Disabled, whose text and icons take Core's disabled
+// tokens with no opacity. Core's Text field has no icon before the text and no action
+// inside the Field (those are its Search field and Password field): a start icon sits 16px from
+// the Field's edge and from the text, and an end icon button keeps its own box inside the Field's
+// padding. An addon above or below the control (block-start, block-end) has no value in Core.
 function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="input-group"
       role="group"
       className={cn(
-        "group/input-group relative flex h-14 w-full min-w-0 items-center rounded-md border border-input bg-background transition-[border-color,box-shadow] outline-none has-disabled:opacity-50",
-        "has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-[3px] has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50",
-        "has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-destructive/20",
+        "group/input-group relative flex h-14 w-full min-w-0 items-center rounded-md bg-field transition-[background-color,outline-color] hover:bg-field-hover",
+        "has-[[data-slot=input-group-control]:focus-visible]:outline-3 has-[[data-slot=input-group-control]:focus-visible]:-outline-offset-3 has-[[data-slot=input-group-control]:focus-visible]:outline-ring",
+        "has-[[data-slot=input-group-control][aria-invalid=true]:enabled]:bg-background has-[[data-slot=input-group-control][aria-invalid=true]:enabled]:outline-3 has-[[data-slot=input-group-control][aria-invalid=true]:enabled]:-outline-offset-3 has-[[data-slot=input-group-control][aria-invalid=true]:enabled]:outline-invalid has-[[data-slot=input-group-control][aria-invalid=true]:enabled:focus-visible]:outline-ring",
+        "has-[[data-slot=input-group-control][readonly]:enabled]:bg-background has-[[data-slot=input-group-control][readonly]:enabled]:outline-2 has-[[data-slot=input-group-control][readonly]:enabled]:-outline-offset-2 has-[[data-slot=input-group-control][readonly]:enabled]:outline-border has-[[data-slot=input-group-control][readonly]:enabled:focus-visible]:outline-3 has-[[data-slot=input-group-control][readonly]:enabled:focus-visible]:-outline-offset-3 has-[[data-slot=input-group-control][readonly]:enabled:focus-visible]:outline-ring",
+        "has-[[data-slot=input-group-control]:disabled]:bg-field-disabled",
         "has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto",
-        "has-[>[data-align=inline-start]]:[&>input]:ps-1 has-[>[data-align=block-end]]:[&>input]:pb-2 has-[>[data-align=block-start]]:[&>input]:pt-2",
+        "has-[>[data-align=block-end]]:[&>input]:pb-2 has-[>[data-align=block-start]]:[&>input]:pt-2",
         className
       )}
       {...props}
@@ -32,11 +34,11 @@ function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
 }
 
 const inputGroupAddonVariants = cva(
-  "flex h-auto cursor-text items-center justify-center gap-2 text-label1 text-muted-foreground select-none [&>svg]:text-foreground [&>svg:not([class*='size-'])]:size-4",
+  "flex h-auto cursor-text items-center justify-center gap-2 text-body text-muted-foreground select-none group-has-[[data-slot=input-group-control]:disabled]/input-group:text-disabled-foreground [&>svg]:text-icon group-has-[[data-slot=input-group-control]:disabled]/input-group:[&>svg]:text-icon-disabled [&>svg:not([class*='size-'])]:size-5",
   {
     variants: {
       align: {
-        "inline-start": "order-first px-4 has-[>button]:ps-1 has-[>button]:pe-2",
+        "inline-start": "order-first ps-4 has-[>button]:ps-1",
         "inline-end": "order-last pe-4 has-[>button]:ps-2 has-[>button]:pe-1",
         "block-start": "order-first w-full justify-start px-4 pt-3",
         "block-end": "order-last w-full justify-start px-4 pb-3",
@@ -93,35 +95,28 @@ function InputGroupText({ className, ...props }: React.ComponentProps<"span">) {
   return (
     <span
       className={cn(
-        "flex items-center gap-2 text-label1 text-muted-foreground [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4",
+        "flex items-center gap-2 text-body [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-5",
         className
       )}
       {...props}
     />
   )
 }
+
+// The control is bare: its group draws the field and shows its state.
+const control =
+  "min-w-0 flex-1 bg-transparent text-body text-foreground outline-none placeholder:text-placeholder disabled:text-disabled-foreground disabled:placeholder:text-disabled-foreground"
 
 function InputGroupInput({ className, ...props }: React.ComponentProps<"input">) {
-  return (
-    <Input
-      data-slot="input-group-control"
-      className={cn(
-        "h-auto flex-1 rounded-none border-0 bg-transparent ring-0 focus-visible:ring-0 disabled:opacity-100 aria-invalid:ring-0",
-        className
-      )}
-      {...props}
-    />
-  )
+  return <input data-slot="input-group-control" className={cn(control, "p-4", className)} {...props} />
 }
 
-function InputGroupTextarea({ className, ...props }: React.ComponentProps<"textarea">) {
+function InputGroupTextarea({ className, rows = 3, ...props }: React.ComponentProps<"textarea">) {
   return (
-    <Textarea
+    <textarea
       data-slot="input-group-control"
-      className={cn(
-        "flex-1 resize-none rounded-none border-0 bg-transparent ring-0 focus-visible:ring-0 disabled:opacity-100 aria-invalid:ring-0",
-        className
-      )}
+      rows={rows}
+      className={cn(control, "min-h-26 w-full resize-none p-4", className)}
       {...props}
     />
   )

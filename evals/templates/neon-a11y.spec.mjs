@@ -3,7 +3,7 @@
 // and the DatePicker's format. Runs on the neon target only.
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-import { expansionItems, gotoExpansion, keyboardFocus, settled } from './expansion.mjs';
+import { computedColor as computed, expansionItems, focusColor, gotoExpansion, keyboardFocus, settled } from './expansion.mjs';
 
 test.skip(process.env.NEON_TARGET !== 'neon', 'The Neon base only');
 
@@ -13,8 +13,11 @@ for (const [layout, mode] of ['approval', 'extras', 'expansion'].flatMap((layout
     await page.evaluate(() => document.fonts.ready);
     // Colors transition into dark mode; axe reads them once they settle.
     await settled(page);
-    // The role-and-color span probes cn, not a component, so axe skips it.
-    const { violations } = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).exclude('[data-measure=role-and-color]').analyze();
+    // The role-and-color span probes cn, not a component, so axe skips it. A disabled field's helper
+    // is Core's Text/text-disabled, part of an inactive control (WCAG 1.4.3 exempts it); axe exempts
+    // a disabled control's label but not its description.
+    const { violations } = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
+      .exclude('[data-measure=role-and-color]').exclude('[data-measure=field-disabled] [data-slot=field-description]').analyze();
     expect(violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);
   });
 }
@@ -46,6 +49,26 @@ test('the segmented control is one radio group the arrow keys move through', asy
   await page.keyboard.up('ArrowRight');
   await expect(group.getByRole('radio', { name: 'รอ' })).toBeFocused();
   await expect(page.locator('[data-measure=list] [data-slot=tag]')).toHaveText(Array(4).fill('รออนุมัติ'));
+});
+
+// Core's Focus state: the stroke inside the control turns Focus/focus, 3px on a field and 2px on a segment.
+for (const mode of ['light', 'dark']) test(`${mode}: a field and a segment reached from the keyboard draw Core's Focus stroke inside them`, async ({ page }) => {
+  const dark = mode === 'dark' ? '&mode=dark' : '';
+  await page.goto(`/?layout=approval${dark}`);
+  const inside = async (control, width) => {
+    const focus = await keyboardFocus(page, control);
+    expect(focus.focusVisible).toBe(true);
+    expect(focus.after).toBe(`outline ${width}px ${await focusColor(page)} -${width}px`);
+  };
+  await inside(page.locator('[data-measure=search] input'), 3);
+  await inside(page.getByRole('radiogroup', { name: 'สถานะ / Status' }).getByRole('radio', { name: 'ทั้งหมด' }), 2);
+  await page.goto(`/?layout=approval&pane=inspector${dark}`);
+  await inside(page.locator('[data-measure=notes] textarea'), 3);
+  await page.goto(`/?layout=extras${dark}`);
+  await inside(page.locator('[data-measure=select] [data-slot=select-trigger]'), 3);
+  // Focus shows over invalid, and a read-only field's 2px stroke grows to the 3px Focus stroke.
+  await inside(page.locator('[data-measure=core-fields] [data-field=invalid] input'), 3);
+  await inside(page.locator('[data-measure=core-fields] [data-field=read-only] input'), 3);
 });
 
 test('the dialog and the row menu return focus to their triggers', async ({ page }) => {
@@ -84,14 +107,6 @@ test('the toast is announced politely without a provider in the screen', async (
   await expect(page.locator('section[aria-live]')).toHaveAttribute('aria-live', 'polite');
 });
 
-// What a color expression computes to in the page, to compare with a drawn color.
-const computed = (page, value) => page.evaluate((color) => {
-  const probe = document.body.appendChild(Object.assign(document.createElement('span'), { style: `color: ${color}` }));
-  const result = getComputedStyle(probe).color;
-  probe.remove();
-  return result;
-}, value);
-
 for (const mode of ['light', 'dark']) test(`${mode}: a button reached from the keyboard draws Core's focus color and its Hover fill`, async ({ page }) => {
   await page.goto(`/?layout=extras${mode === 'dark' ? '&mode=dark' : ''}`);
   const save = page.getByRole('button', { name: 'บันทึก', exact: true });
@@ -99,7 +114,7 @@ for (const mode of ['light', 'dark']) test(`${mode}: a button reached from the k
   expect(focus.focusVisible).toBe(true);
   expect(focus.before).toBe('');
   // Focus/focus, 2px, 2px outside the button.
-  expect(focus.after).toBe(`outline 2px ${await computed(page, 'var(--color-bgLinePrimary)')} 2px`);
+  expect(focus.after).toBe(`outline 2px ${await focusColor(page)} 2px`);
   await expect(save).toHaveCSS('background-color', await computed(page, 'var(--color-bgButtonSecondaryHover)'));
 });
 
@@ -147,4 +162,4 @@ test.describe('in a Thai browser', () => {
 });
 
 // Each registry expansion item's behavior checks, from expansion/<item>.mjs.
-for (const item of expansionItems) if (item.a11y) test.describe(item.name, () => item.a11y({ test, expect, gotoExpansion, keyboardFocus }));
+for (const item of expansionItems) if (item.a11y) test.describe(item.name, () => item.a11y({ test, expect, gotoExpansion, keyboardFocus, focusColor }));

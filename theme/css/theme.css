@@ -148,6 +148,25 @@
   --color-bgButtonInverseActive: rgb(217, 217, 217);
   --color-bgButtonInverseDisabled: rgba(255, 255, 255, 0.102);
   --color-bgButtonDisabled: rgba(1, 23, 43, 0.102);
+  --color-bgField: rgba(1, 23, 43, 0.102);
+  --color-bgFieldHover: rgba(1, 23, 43, 0.122);
+  --color-bgFieldDisabled: rgba(1, 23, 43, 0.051);
+  --color-bgLineStrong: rgb(1, 23, 43);
+  --color-bgLineNegative: rgb(214, 8, 8);
+  --color-fgPlaceholder: rgba(0, 0, 0, 0.651);
+  --color-fgHelper: rgba(0, 0, 0, 0.651);
+  --color-fgIcon: rgba(0, 0, 0, 0.851);
+  --color-fgIconDisabled: rgba(0, 0, 0, 0.451);
+  --color-fgIconOnColor: rgb(255, 255, 255);
+  --color-fgIconOnColorDisabled: rgba(255, 255, 255, 0.451);
+  --color-bgToggleOff: rgb(128, 128, 128);
+  --color-bgElevation1Hover: rgba(1, 23, 43, 0.051);
+  --color-bgElevation1Active: rgba(1, 23, 43, 0.078);
+  --color-bgTagNeutral: rgb(242, 243, 244);
+  --color-bgTagNeutralHover: rgb(230, 232, 234);
+  --color-bgTagNeutralDisabled: rgb(242, 243, 244);
+  --color-fgTagNeutral: rgb(0, 9, 17);
+  --color-bgLineTagNeutral: rgb(217, 220, 223);
 
   /* --- Typography (mode-independent) --- */
   --fontFamily-display1: 'IBM Plex Sans Thai', sans-serif;
@@ -302,6 +321,22 @@
     --color-bgButtonInverseActive: rgb(51, 51, 51);
     --color-bgButtonInverseDisabled: rgba(1, 23, 43, 0.102);
     --color-bgButtonDisabled: rgba(255, 255, 255, 0.102);
+    --color-bgField: rgba(255, 255, 255, 0.122);
+    --color-bgFieldHover: rgba(255, 255, 255, 0.149);
+    --color-bgFieldDisabled: rgba(255, 255, 255, 0.031);
+    --color-bgLineStrong: rgb(255, 255, 255);
+    --color-bgLineNegative: rgb(243, 9, 9);
+    --color-fgPlaceholder: rgba(255, 255, 255, 0.651);
+    --color-fgHelper: rgba(255, 255, 255, 0.651);
+    --color-fgIcon: rgb(255, 255, 255);
+    --color-fgIconDisabled: rgba(255, 255, 255, 0.451);
+    --color-bgElevation1Hover: rgba(255, 255, 255, 0.078);
+    --color-bgElevation1Active: rgba(255, 255, 255, 0.122);
+    --color-bgTagNeutral: rgba(166, 191, 204, 0.122);
+    --color-bgTagNeutralHover: rgba(166, 191, 204, 0.18);
+    --color-bgTagNeutralDisabled: rgba(166, 191, 204, 0.122);
+    --color-fgTagNeutral: rgb(192, 197, 202);
+    --color-bgLineTagNeutral: rgba(166, 191, 204, 0.251);
 
     --color-transparent: rgba(255, 255, 255, 0);
   }
@@ -355,6 +390,22 @@
   --color-bgButtonInverseActive: rgb(51, 51, 51);
   --color-bgButtonInverseDisabled: rgba(1, 23, 43, 0.102);
   --color-bgButtonDisabled: rgba(255, 255, 255, 0.102);
+  --color-bgField: rgba(255, 255, 255, 0.122);
+  --color-bgFieldHover: rgba(255, 255, 255, 0.149);
+  --color-bgFieldDisabled: rgba(255, 255, 255, 0.031);
+  --color-bgLineStrong: rgb(255, 255, 255);
+  --color-bgLineNegative: rgb(243, 9, 9);
+  --color-fgPlaceholder: rgba(255, 255, 255, 0.651);
+  --color-fgHelper: rgba(255, 255, 255, 0.651);
+  --color-fgIcon: rgb(255, 255, 255);
+  --color-fgIconDisabled: rgba(255, 255, 255, 0.451);
+  --color-bgElevation1Hover: rgba(255, 255, 255, 0.078);
+  --color-bgElevation1Active: rgba(255, 255, 255, 0.122);
+  --color-bgTagNeutral: rgba(166, 191, 204, 0.122);
+  --color-bgTagNeutralHover: rgba(166, 191, 204, 0.18);
+  --color-bgTagNeutralDisabled: rgba(166, 191, 204, 0.122);
+  --color-fgTagNeutral: rgb(192, 197, 202);
+  --color-bgLineTagNeutral: rgba(166, 191, 204, 0.251);
 
   --color-transparent: rgba(255, 255, 255, 0);
 }

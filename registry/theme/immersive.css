@@ -11,13 +11,20 @@
  * A theme's text is White or Navy only, so muted text is the theme's text
  * too, and cards and popovers sit on the canvas so it stays readable there.
  * Secondary, muted and accent fills (secondary and outline buttons, toggles,
- * the segmented control track, tags, list rows, menu items, table headers)
- * carry the theme's text, not their own foreground, so they take palette 75:
- * the first stepped block on a theme whose palette 100 is the canvas, and the
- * one step whose on-color is the theme's text in every theme. Accent equals
- * secondary, as bgAlternate equals bgSecondary in Neon. Inverse (the checked
- * segment, the pressed toggle, the tooltip) is the action pair, since a
- * theme's action is its text color and on-action is White or Navy. The
+ * the segmented control track, fields, tags, list rows, menu items, table
+ * headers) carry the theme's text, not their own foreground, so they take
+ * palette 75: the first stepped block on a theme whose palette 100 is the
+ * canvas, and the one step whose on-color is the theme's text in every theme.
+ * Accent equals secondary, as bgAlternate equals bgSecondary in Neon. Inverse
+ * (the tooltip) is the action pair, since a theme's action is its text color
+ * and on-action is White or Navy. The controls retuned to Core restate their
+ * slots the same way: a field, a toggle and a segment's Hover are palette 75,
+ * their strokes, icons, placeholder and helper the theme's text, and their
+ * Disabled the Button's (the fill's CDS blend and the text, each at half
+ * strength on the canvas). A pressed toggle and the chosen segment show by a
+ * ring in the theme's text; the chosen segment sits on the canvas. The switch
+ * is the action when on and the action at half strength when off, under a
+ * thumb in on-action. The
  * fgPrimary role (the active tab, the informational alert's icon, a ghost
  * input button) is the theme's text, or Ultra would draw it navy on navy.
  * The Button's states are restated, since Core's are for its own colors. The
@@ -28,9 +35,10 @@
  * ghost Button, are palette 75 like the other secondary fills; every other
  * Button's Disabled is that fill's CDS blend (75%) at half strength under the
  * theme's text at half strength. A link Button is the theme's text. The
- * secondary disabled mix for the controls not yet retuned is redeclared
- * because :root's mix resolves :root's slots. Borders, inputs, destructive
- * and the Button's Brand and Inverse keep the app's roles. */
+ * secondary disabled mix, which no registry item reads any more, is
+ * redeclared for apps that use it, because :root's mix resolves :root's
+ * slots. Borders, the invalid stroke, destructive and the Button's Brand and
+ * Inverse keep the app's roles. */
 :root[data-immersive-theme],
 [data-immersive-theme] {
   --background: var(--immersive-canvas);
@@ -56,6 +64,26 @@
   --button-disabled-foreground: color-mix(in srgb, var(--immersive-text) 50%, var(--immersive-canvas));
   --link: var(--immersive-text);
   --link-hover: var(--immersive-text);
+  --field: var(--immersive-palette-75);
+  --field-hover: var(--immersive-palette-75);
+  --field-disabled: color-mix(in srgb, var(--immersive-palette-75) 37.5%, var(--immersive-canvas));
+  --line-strong: var(--immersive-text);
+  --placeholder: var(--immersive-text);
+  --helper: var(--immersive-text);
+  --icon: var(--immersive-text);
+  --icon-disabled: color-mix(in srgb, var(--immersive-text) 50%, var(--immersive-canvas));
+  --disabled-foreground: color-mix(in srgb, var(--immersive-text) 50%, var(--immersive-canvas));
+  --toggle-off: color-mix(in srgb, var(--immersive-action) 50%, var(--immersive-canvas));
+  --toggle-on: var(--immersive-action);
+  --toggle-thumb: var(--immersive-on-action);
+  --toggle-thumb-disabled: color-mix(in srgb, var(--immersive-on-action) 50%, transparent);
+  --layer-hover: var(--immersive-palette-75);
+  --layer-active: var(--immersive-palette-75);
+  --selection-tag: var(--immersive-palette-75);
+  --selection-tag-hover: var(--immersive-palette-75);
+  --selection-tag-disabled: color-mix(in srgb, var(--immersive-palette-75) 37.5%, var(--immersive-canvas));
+  --selection-tag-foreground: var(--immersive-on-palette-75);
+  --selection-tag-border: var(--immersive-palette-75);
   --muted: var(--immersive-palette-75);
   --accent: var(--immersive-palette-75);
   --accent-foreground: var(--immersive-on-palette-75);

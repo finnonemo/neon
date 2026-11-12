@@ -2,18 +2,20 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 
-// The CDS TextInput's multiline field: three body lines with 16px padding and a
-// 1px border, 106px at Core's body line height (100px in CDS). Disabled fades to
-// half, as CDS does.
+// Core's Text area: Input's field at least 104px tall (three body lines) with 16px padding all
+// round. Its states are Input's: the stroke a state draws is inside the field, and Disabled
+// takes Core's disabled fill and text, with no opacity.
 function Textarea({ className, rows = 3, ...props }: React.ComponentProps<"textarea">) {
   return (
     <textarea
       data-slot="textarea"
       rows={rows}
       className={cn(
-        "flex w-full rounded-md border border-input bg-background p-4 text-body text-foreground transition-[border-color,box-shadow] outline-none placeholder:text-muted-foreground disabled:pointer-events-none disabled:opacity-50",
-        "focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50",
-        "aria-invalid:border-destructive aria-invalid:ring-destructive/20",
+        "flex min-h-26 w-full rounded-md bg-field p-4 text-body text-foreground transition-[background-color,outline-color] placeholder:text-placeholder hover:bg-field-hover",
+        "focus-visible:outline-3 focus-visible:-outline-offset-3 focus-visible:outline-ring",
+        "aria-invalid:bg-background aria-invalid:outline-3 aria-invalid:-outline-offset-3 aria-invalid:outline-invalid aria-invalid:hover:bg-background aria-invalid:focus-visible:outline-ring",
+        "[&[readonly]:enabled]:bg-background [&[readonly]:enabled]:outline-2 [&[readonly]:enabled]:-outline-offset-2 [&[readonly]:enabled]:outline-border [&[readonly]:enabled]:focus-visible:outline-3 [&[readonly]:enabled]:focus-visible:-outline-offset-3 [&[readonly]:enabled]:focus-visible:outline-ring",
+        "disabled:pointer-events-none disabled:bg-field-disabled disabled:text-disabled-foreground disabled:placeholder:text-disabled-foreground disabled:aria-invalid:bg-field-disabled disabled:aria-invalid:outline-0",
         className
       )}
       {...props}

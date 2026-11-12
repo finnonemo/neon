@@ -20,6 +20,11 @@ test('the Counterpart table marks button\'s outline as not in Core', async () =>
   assert.deepEqual(table.button.notInCore, { variant: ['outline'] });
 });
 
+test('the Counterpart table marks input-group\'s addons above and below the control as not in Core', async () => {
+  const table = JSON.parse(await read('registry/core-counterparts.json'));
+  assert.deepEqual(table['input-group'].notInCore, { align: ['block-start', 'block-end'] });
+});
+
 test('every value marked as not in Core is a value its item still has', async () => {
   const table = JSON.parse(await read('registry/core-counterparts.json'));
   for (const [item, { notInCore }] of Object.entries(table)) {

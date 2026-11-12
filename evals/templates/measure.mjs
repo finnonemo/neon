@@ -11,7 +11,8 @@
 //          and a 9999px pill of the same height agree
 //   radii  all four corners the same way (top-left, top-right, bottom-right,
 //          bottom-left), for a box rounded on some sides only
-//   border top border width and color
+//   border the stroke inside the box: the top border's width and color, or, where no border
+//          is drawn, an outline offset inward by its own width (Core's fields and segments)
 //   opacity the element's opacity times its ancestors', which disabled controls set
 // both: the Neon fixture mirrors the CDS markup, so one selector reads either.
 //
@@ -20,6 +21,10 @@
 // for the properties its item's table lists, and to the CDS baseline for the rest.
 import { expansionItems } from './expansion.mjs';
 import { buttonCell } from './core/button.mjs';
+import { fieldCell } from './core/text-field.mjs';
+import { textAreaCell } from './core/text-area.mjs';
+import { selectCell } from './core/select.mjs';
+import { segmentCell, segmentedCell } from './core/segmented-control.mjs';
 
 const both = (selector, check) => ({ cds: selector, neon: selector, check });
 const button = (n, core, check = ['font', 'color', 'bg', 'h', 'pad', 'radius']) => ({ ...both(`[data-measure=actions] button:nth-of-type(${n})`, check), core });
@@ -27,6 +32,40 @@ const coreOnly = (selector, core, check = ['font', 'color', 'bg', 'h', 'pad', 'r
 const primary = buttonCell('Primary');
 const secondary = buttonCell('Secondary');
 const danger = buttonCell('Primary', { Type: 'Danger' });
+// A field's Title, empty Field and text, as Core's Text field draws them at Large.
+const title = fieldCell('label', 'title', { filled: 'False' });
+const emptyField = fieldCell('input', 'field', { filled: 'False' });
+const fieldBox = ['h', 'radius', 'border', 'bg', 'opacity'];
+const coreField = (hook, selector, core, check = fieldBox) => ({ neon: `[data-measure=core-fields] [data-field=${hook}] ${selector}`, check, core });
+// A segment that is chosen, and the Sizes and the Disabled control CDS's tabs have no element for.
+const chosen = segmentCell({ Selected: 'True' });
+const trackBox = ['h', 'pad', 'radius', 'bg', 'opacity'];
+const segmentBox = ['h', 'pad', 'radius', 'bg', 'border', 'color', 'font'];
+const coreSegment = (hook, selector, core, check) => ({ neon: `[data-measure=core-segments] [data-segments=${hook}]${selector}`, check, core });
+const segmentSet = (name, hook, cell) => ({
+  [`${name}Track`]: coreSegment(hook, '', segmentedCell(cell), trackBox),
+  [`${name}Chosen`]: coreSegment(hook, ' [role=radio][data-state=checked]', segmentCell({ ...cell, Selected: 'True' }), segmentBox),
+  [`${name}Segment`]: coreSegment(hook, ' [role=radio][data-state=unchecked]', segmentCell(cell), segmentBox),
+});
+const coreSegments = {
+  ...segmentSet('smSegmented', 'sm', { Size: 'Small' }),
+  ...segmentSet('lgSegmented', 'lg', { Size: 'Large' }),
+  ...segmentSet('disabledSegmented', 'disabled', { State: 'Disabled' }),
+};
+const coreFields = {
+  readOnlyInput: coreField('read-only', 'input', fieldCell('input', 'field', { State: 'Read-only' })),
+  invalidInput: coreField('invalid', 'input', fieldCell('input', 'field', { State: 'Error' })),
+  disabledLabel: coreField('disabled', 'label', fieldCell('label', 'title', { State: 'Disabled' }), ['font', 'color', 'opacity']),
+  placeholder: coreField('placeholder', 'input', fieldCell('input', 'field', { filled: 'False' })),
+  invalidTextarea: coreField('invalid-textarea', 'textarea', textAreaCell('field', { State: 'Error' })),
+  disabledTextarea: coreField('disabled-textarea', 'textarea', textAreaCell('field', { State: 'Disabled' })),
+  disabledTextareaText: coreField('disabled-textarea', 'textarea', textAreaCell('text', { State: 'Disabled' }), ['font', 'color', 'opacity']),
+  invalidSelect: coreField('invalid-select', '[data-slot=select-trigger]', selectCell('field', { State: 'Error' })),
+  disabledSelect: coreField('disabled-select', '[data-slot=select-trigger]', selectCell('field', { State: 'Disabled' })),
+  disabledSelectValue: coreField('disabled-select', '[data-slot=select-value]', selectCell('value', { State: 'Disabled' }), ['font', 'color', 'opacity']),
+  selectChevron: coreField('invalid-select', '[data-slot=select-trigger] > svg', selectCell('chevron', { State: 'Error' }), ['color']),
+  disabledSelectChevron: coreField('disabled-select', '[data-slot=select-trigger] > svg', selectCell('chevron', { State: 'Disabled' }), ['color']),
+};
 const expansionSection = (n) => `:has(> [data-measure=title]) > section:nth-of-type(${n})`;
 
 export const screens = [
@@ -35,13 +74,17 @@ export const screens = [
     query: 'layout=approval',
     targets: {
       title: both('[data-measure=title] h1', ['font', 'color']),
-      searchLabel: { neon: '[data-measure=search] label', cds: '[data-measure=search] label', check: ['font', 'color'] },
-      searchInput: { neon: '[data-measure=search] input', cds: '[data-measure=search] [data-testid=input-interactable-area]', check: ['h', 'radius', 'border', 'bg'] },
-      searchText: { neon: '[data-measure=search] input', cds: '[data-measure=search] input', check: ['font', 'color'] },
-      segmented: { neon: '[data-measure=segmented] [role=radiogroup]', cds: '[data-measure=segmented] [role=tablist]', check: ['h', 'radius', 'bg'] },
-      segmentThumb: { neon: '[data-measure=segmented] [role=radio][data-state=checked]', cds: '[data-measure=segmented] [data-testid=tabs-active-indicator]', check: ['h', 'radius', 'bg'] },
-      segmentActive: { neon: '[data-measure=segmented] [role=radio][data-state=checked]', cds: '[data-measure=segmented] [role=tablist] > div:nth-child(2) [role=tab]', check: ['h', 'font', 'color'] },
-      segment: { neon: '[data-measure=segmented] [role=radio]:nth-child(3)', cds: '[data-measure=segmented] [role=tablist] > div:nth-child(3) [role=tab]', check: ['h', 'font', 'color'] },
+      searchLabel: { neon: '[data-measure=search] label', cds: '[data-measure=search] label', check: ['font', 'color'], core: title },
+      searchInput: { neon: '[data-measure=search] input', cds: '[data-measure=search] [data-testid=input-interactable-area]', check: ['h', 'radius', 'border', 'bg'], core: emptyField },
+      searchText: { neon: '[data-measure=search] input', cds: '[data-measure=search] input', check: ['font', 'color'], core: fieldCell('input', 'text') },
+      segmented: { neon: '[data-measure=segmented] [role=radiogroup]', cds: '[data-measure=segmented] [role=tablist]', check: ['h', 'radius', 'bg'], core: segmentedCell() },
+      segmentThumb: { neon: '[data-measure=segmented] [role=radio][data-state=checked]', cds: '[data-measure=segmented] [data-testid=tabs-active-indicator]', check: ['h', 'radius', 'bg'], core: chosen },
+      segmentActive: { neon: '[data-measure=segmented] [role=radio][data-state=checked]', cds: '[data-measure=segmented] [role=tablist] > div:nth-child(2) [role=tab]', check: ['h', 'font', 'color'], core: chosen },
+      segment: { neon: '[data-measure=segmented] [role=radio]:nth-child(3)', cds: '[data-measure=segmented] [role=tablist] > div:nth-child(3) [role=tab]', check: ['h', 'font', 'color'], core: segmentCell() },
+      // What CDS's tabs have no element for: the track's padding and each segment's own box and stroke.
+      segmentedPad: { neon: '[data-measure=segmented] [role=radiogroup]', check: ['pad', 'opacity'], core: segmentedCell() },
+      segmentChosenBox: { neon: '[data-measure=segmented] [role=radio][data-state=checked]', check: ['pad', 'border'], core: chosen },
+      segmentBox: { neon: '[data-measure=segmented] [role=radio]:nth-child(3)', check: ['pad', 'radius', 'bg', 'border'], core: segmentCell() },
       row: { neon: '[data-measure=list] li:nth-child(2) [data-slot=list-row]', cds: '[data-measure=list] > div > div:nth-child(2) > button', check: ['h', 'radius'] },
       rowTitle: { neon: '[data-measure=list] li:nth-child(2) [data-slot=list-row-title]', cds: '[data-measure=list] > div > div:nth-child(2) button > div > div:nth-child(2) > div > div:nth-child(1)', check: ['font', 'color'] },
       rowDescription: { neon: '[data-measure=list] li:nth-child(2) [data-slot=list-row-description]', cds: '[data-measure=list] > div > div:nth-child(2) button > div > div:nth-child(2) > div > div:nth-child(2)', check: ['font', 'color'] },
@@ -64,9 +107,9 @@ export const screens = [
       detailsHeading: both('[data-measure=details] span:nth-child(1)', ['font', 'color']),
       detailsBody: both('[data-measure=details] span:nth-child(2)', ['font', 'color']),
       detailsCaption: both('[data-measure=details] span:nth-child(3)', ['font', 'color']),
-      notesLabel: { neon: '[data-measure=notes] label', cds: '[data-measure=notes] label', check: ['font', 'color'] },
-      notes: { neon: '[data-measure=notes] textarea', cds: '[data-measure=notes] [data-testid=input-interactable-area]', check: ['h', 'radius', 'border', 'bg'] },
-      notesText: { neon: '[data-measure=notes] textarea', cds: '[data-measure=notes] textarea', check: ['font', 'color', 'pad'] },
+      notesLabel: { neon: '[data-measure=notes] label', cds: '[data-measure=notes] label', check: ['font', 'color'], core: title },
+      notes: { neon: '[data-measure=notes] textarea', cds: '[data-measure=notes] [data-testid=input-interactable-area]', check: ['h', 'radius', 'border', 'bg'], core: textAreaCell('field', { filled: 'False' }) },
+      notesText: { neon: '[data-measure=notes] textarea', cds: '[data-measure=notes] textarea', check: ['font', 'color', 'pad'], core: textAreaCell('text') },
       checkbox: { neon: '[data-measure=confirm] [role=checkbox]', cds: '[data-measure=confirm] [data-testid=checkbox-outer]', check: ['h', 'w', 'radius', 'border'] },
       checkboxLabel: { neon: '[data-measure=confirm] label', cds: '[data-measure=confirm] label span[id]', check: ['font', 'color'] },
       approve: button(1, primary),
@@ -85,10 +128,12 @@ export const screens = [
     query: 'layout=extras',
     targets: {
       title: both('[data-measure=title] h1', ['font', 'color']),
-      selectLabel: { neon: '[data-measure=select] label', cds: '[data-measure=select] label', check: ['font', 'color'] },
-      selectTrigger: { neon: '[data-measure=select] [data-slot=select-trigger]', cds: '[data-measure=select] [data-testid=input-interactable-area]', check: ['h', 'radius', 'border', 'bg'] },
-      selectValue: { neon: '[data-measure=select] [data-slot=select-value]', cds: '[data-measure=select] button p', check: ['font', 'color'] },
-      dateLabel: { neon: '[data-measure=date] label', cds: '[data-measure=date] label', check: ['font', 'color'] },
+      selectLabel: { neon: '[data-measure=select] label', cds: '[data-measure=select] label', check: ['font', 'color'], core: title },
+      selectTrigger: { neon: '[data-measure=select] [data-slot=select-trigger]', cds: '[data-measure=select] [data-testid=input-interactable-area]', check: ['h', 'radius', 'border', 'bg'], core: selectCell('field') },
+      // Core's Select draws no placeholder: the value shown here is one, and takes Core's type only.
+      selectValue: { neon: '[data-measure=select] [data-slot=select-value]', cds: '[data-measure=select] button p', check: ['font', 'color'], core: selectCell('value'), coreProperties: ['font'] },
+      // The DatePicker is not retuned; its Label is Core's Title.
+      dateLabel: { neon: '[data-measure=date] label', cds: '[data-measure=date] label', check: ['font', 'color'], core: title },
       dateField: { neon: '[data-measure=date] [data-slot=date-picker]', cds: '[data-measure=date] [data-testid=input-interactable-area]', check: ['h', 'radius', 'border', 'bg'] },
       helpButton: { neon: '[data-measure=help] button', cds: '[data-measure=help] button', check: ['h', 'w'] },
       headerCell: { neon: '[data-measure=table] thead th:nth-child(1)', cds: '[data-measure=table] thead th:nth-child(1)', check: ['font', 'color', 'h'] },
@@ -97,8 +142,8 @@ export const screens = [
       rowMenuButton: { neon: '[data-measure=table] tbody tr:nth-child(1) button', cds: '[data-measure=table] tbody tr:nth-child(1) button', check: ['h', 'w'] },
       rejectRequest: button(1, danger),
       save: button(2, secondary),
-      // A disabled Button takes Core's disabled fill and label at full opacity; the other
-      // disabled controls keep CDS's blended fill and its opacity (spike trap 4) until retuned.
+      // A disabled Button and a disabled field take Core's disabled fill and text at full opacity;
+      // the checkbox keeps CDS's blended fill and its opacity (spike trap 4) until retuned.
       forwardDisabled: button(3, buttonCell('Primary', { State: 'Disabled' }), ['h', 'opacity', 'bg', 'color']),
       // Core's values that CDS has none of: held to the Core baseline alone, on the Neon target only.
       medium: coreOnly('[data-size=md]', buttonCell('Primary', { Size: 'Medium' })),
@@ -108,8 +153,11 @@ export const screens = [
       inverse: coreOnly('[data-variant=inverse]', buttonCell('Primary', { Type: 'Inverse' })),
       // Loading fixes the Enabled button's height and binds no label ink.
       loading: coreOnly('[aria-busy=true]', buttonCell('Primary', { State: 'Loading' }), ['bg', 'opacity']),
-      disabledInput: { neon: '[data-measure=disabled-field] input', cds: '[data-measure=disabled-field] [data-testid=input-interactable-area]', check: ['h', 'border', 'bg', 'opacity'] },
-      disabledInputText: { neon: '[data-measure=disabled-field] input', cds: '[data-measure=disabled-field] input', check: ['color', 'opacity'] },
+      disabledInput: { neon: '[data-measure=disabled-field] input', cds: '[data-measure=disabled-field] [data-testid=input-interactable-area]', check: ['h', 'border', 'bg', 'opacity'], core: fieldCell('input', 'field', { State: 'Disabled' }) },
+      disabledInputText: { neon: '[data-measure=disabled-field] input', cds: '[data-measure=disabled-field] input', check: ['color', 'opacity'], core: fieldCell('input', 'text', { State: 'Disabled' }) },
+      // Core's field states CDS has no baseline for: held to the Core baseline alone, on the Neon target only.
+      ...coreFields,
+      ...coreSegments,
       disabledCheckbox: { neon: '[data-measure=disabled-check] [role=checkbox]', cds: '[data-measure=disabled-check] [data-testid=checkbox-outer]', check: ['border', 'bg', 'opacity'] },
       disabledCheckboxLabel: { neon: '[data-measure=disabled-check] label', cds: '[data-measure=disabled-check] label span[id]', check: ['color', 'opacity'] },
     },
@@ -128,6 +176,8 @@ export const screens = [
     query: 'layout=extras',
     open: { action: 'click', neon: '[data-measure=select] [data-slot=select-trigger]', cds: '[data-measure=select] button' },
     targets: {
+      // Open is Core's Active. CDS has no such element, so it is held to Core alone.
+      openTrigger: { neon: '[data-measure=select] [data-slot=select-trigger]', check: fieldBox, core: selectCell('field', { State: 'Active' }) },
       listbox: { neon: '[data-slot=select-content]', cds: '[role=listbox] > div > div', check: ['radius', 'bg'] },
       option: { neon: '[role=option]:nth-of-type(2)', cds: '[role=option]:nth-of-type(2)', check: ['h', 'font', 'color'] },
     },
@@ -234,6 +284,13 @@ export function measureInPage(targets) {
     return match[4] === undefined || Number(match[4]) === 1 ? `rgb(${r}, ${g}, ${b})` : `rgba(${r}, ${g}, ${b}, ${Number(match[4])})`;
   };
   const px = (value) => Math.round(parseFloat(value) * 10) / 10;
+  // The stroke inside the box: the top border, or an outline offset inward by its own width.
+  const stroke = (style) => {
+    const border = px(style.borderTopWidth);
+    const outline = style.outlineStyle === 'none' ? 0 : px(style.outlineWidth);
+    if (!border && outline && px(style.outlineOffset) === -outline) return { width: outline, color: rgb(style.outlineColor) };
+    return { width: border, color: rgb(style.borderTopColor) };
+  };
   const out = {};
   for (const [name, selector] of Object.entries(targets)) {
     const el = [...document.querySelectorAll(selector)].find((node) => {
@@ -252,7 +309,7 @@ export function measureInPage(targets) {
       pad: [style.paddingTop, style.paddingRight, style.paddingBottom, style.paddingLeft].map(px),
       radius: px(Math.min(parseFloat(style.borderTopLeftRadius), box.width / 2, box.height / 2)),
       radii: ['TopLeft', 'TopRight', 'BottomRight', 'BottomLeft'].map((corner) => px(Math.min(parseFloat(style[`border${corner}Radius`]), box.width / 2, box.height / 2))),
-      border: { width: px(style.borderTopWidth), color: rgb(style.borderTopColor) },
+      border: stroke(style),
       opacity: Math.round(opacity(el) * 100) / 100,
     };
   }

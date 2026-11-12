@@ -102,10 +102,13 @@ test('an unknown token has no consumers', async t => {
   assert.deepEqual(await findRegistryConsumers(registry, ['blue60']), []);
 });
 
-test("the repository's registry: Input reads bgLineHeavy, Button the headline role", async () => {
+test("the repository's registry: Checkbox reads bgLineHeavy, Input its invalid stroke through a slot, Button the headline role", async () => {
   const registry = fileURLToPath(new URL('../../registry', import.meta.url));
   const items = async token => new Set((await findRegistryConsumers(registry, [token])).map(m => m.item));
-  assert.ok((await items('bgLineHeavy')).has('input'));
+  assert.ok((await items('bgLineHeavy')).has('checkbox'));
+  // Input took Core's Field (#216): it reads no bgLineHeavy, and its invalid stroke is the invalid slot.
+  assert.ok(!(await items('bgLineHeavy')).has('input'));
+  assert.ok((await items('bgLineNegative')).has('input'));
   assert.ok((await items('fontSize-headline')).has('button'));
   assert.ok(!(await items('fontSize-headline')).has('immersive-themes'));
 });

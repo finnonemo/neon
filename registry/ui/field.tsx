@@ -1,24 +1,27 @@
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
-import { InfoIcon } from "lucide-react"
+import { CircleAlertIcon } from "lucide-react"
 
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { cn } from "@/lib/utils"
 
-// The CDS input stack (InputStack, as TextInput lays it out): the label, the
-// control and the helper text 4px apart. The label is label2 in the muted
-// role with 4px above and below it; helper text is label2, muted, and turns
-// into the error in fgNegative with CDS's info icon before it.
+// Core's Text field around its Field: the Title, the control and the Detail
+// line 8px apart. The Title is Label's (Headline, Text/text-secondary); helper
+// text is Subheadline in Text/text-helper, and the error is Subheadline in
+// Text/text-negative with Core's circle-exclamation, in Support/support-error,
+// 4px before it. A disabled field's Title and helper take Text/text-disabled.
 //
-// Field ties them to the control, as CDS TextInput does with the ids it
-// generates: wrap the control in FieldControl and it takes Field's id (or
-// keeps its own), aria-describedby naming each FieldDescription and FieldError
-// rendered now, and aria-invalid while a FieldError renders. FieldLabel points
-// at it unless given htmlFor. FieldError is role=alert, so it is announced
-// when it appears. In an input group, wrap the InputGroupInput.
+// Set data-disabled="true" on the Field of a disabled control for that.
+//
+// Field ties them to the control with the ids it generates: wrap the control
+// in FieldControl and it takes Field's id (or keeps its own), aria-describedby
+// naming each FieldDescription and FieldError rendered now, and aria-invalid
+// while a FieldError renders. FieldLabel points at it unless given htmlFor.
+// FieldError is role=alert, so it is announced when it appears. In an input
+// group, wrap the InputGroupInput.
 // PROVISIONAL (#195): the legend, title, separator and choice-card roles have
-// no part in the CDS input stack to match.
+// no part in Core's Text field to match.
 
 // The parts a Field ties together: its control, and the helper and error
 // texts rendered now, which describe the control and (an error) make it invalid.
@@ -51,7 +54,7 @@ function FieldSet({ className, ...props }: React.ComponentProps<"fieldset">) {
   )
 }
 
-// PROVISIONAL (#195): a legend is headline in fg; its label variant follows FieldLabel.
+// PROVISIONAL (#195): a legend is headline in fg; its label variant takes FieldLabel's ink.
 function FieldLegend({
   className,
   variant = "legend",
@@ -62,7 +65,7 @@ function FieldLegend({
       data-slot="field-legend"
       data-variant={variant}
       className={cn(
-        "mb-2 text-foreground data-[variant=label]:mb-1 data-[variant=label]:text-label2 data-[variant=label]:text-muted-foreground data-[variant=legend]:text-headline",
+        "mb-2 text-headline text-foreground data-[variant=label]:text-muted-foreground",
         className
       )}
       {...props}
@@ -86,11 +89,11 @@ function FieldGroup({ className, ...props }: React.ComponentProps<"div">) {
 const fieldVariants = cva("group/field flex w-full", {
   variants: {
     orientation: {
-      vertical: "flex-col gap-1 *:w-full [&>.sr-only]:w-auto",
+      vertical: "flex-col gap-2 *:w-full [&>.sr-only]:w-auto",
       horizontal:
-        "flex-row items-center gap-2 has-[>[data-slot=field-content]]:items-start *:data-[slot=field-label]:flex-auto *:data-[slot=field-label]:py-0 has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-0.5",
+        "flex-row items-center gap-2 has-[>[data-slot=field-content]]:items-start *:data-[slot=field-label]:flex-auto has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-0.5",
       responsive:
-        "flex-col gap-1 *:w-full @md/field-group:flex-row @md/field-group:items-center @md/field-group:gap-2 @md/field-group:*:w-auto @md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:*:data-[slot=field-label]:flex-auto [&>.sr-only]:w-auto @md/field-group:has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-0.5",
+        "flex-col gap-2 *:w-full @md/field-group:flex-row @md/field-group:items-center @md/field-group:gap-2 @md/field-group:*:w-auto @md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:*:data-[slot=field-label]:flex-auto [&>.sr-only]:w-auto @md/field-group:has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-0.5",
     },
   },
   defaultVariants: {
@@ -161,8 +164,8 @@ function FieldLabel({ className, htmlFor, ...props }: React.ComponentProps<typeo
       data-slot="field-label"
       htmlFor={htmlFor ?? control?.id}
       className={cn(
-        "group/field-label peer/field-label flex w-fit gap-2 py-1 group-data-[disabled=true]/field:opacity-50",
-        "has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-md has-[>[data-slot=field]]:border has-[>[data-slot=field]]:py-0 *:data-[slot=field]:p-4",
+        "group/field-label peer/field-label flex w-fit gap-2 group-data-[disabled=true]/field:text-disabled-foreground",
+        "has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-md has-[>[data-slot=field]]:border *:data-[slot=field]:p-4",
         "has-[>[data-slot=field]]:has-[:focus-visible]:border-ring has-[>[data-slot=field]]:has-[:focus-visible]:ring-[3px] has-[>[data-slot=field]]:has-[:focus-visible]:ring-ring/50",
         "has-[>[data-slot=field]]:has-data-[state=checked]:border-primary",
         className
@@ -178,7 +181,7 @@ function FieldTitle({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="field-label"
       className={cn(
-        "flex w-fit items-center gap-2 text-body text-foreground group-data-[disabled=true]/field:opacity-50",
+        "flex w-fit items-center gap-2 text-body text-foreground group-data-[disabled=true]/field:text-disabled-foreground",
         className
       )}
       {...props}
@@ -194,7 +197,7 @@ function FieldDescription({ className, id, ...props }: React.ComponentProps<"p">
       id={id ?? generated}
       data-slot="field-description"
       className={cn(
-        "text-start text-label2 wrap-break-word text-muted-foreground group-data-[orientation=horizontal]/field:text-balance",
+        "text-start text-label2 wrap-break-word text-helper group-data-[disabled=true]/field:text-disabled-foreground group-data-[orientation=horizontal]/field:text-balance",
         "[&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary",
         className
       )}
@@ -277,13 +280,13 @@ function FieldError({
       id={id ?? generated}
       role="alert"
       data-slot="field-error"
-      className={cn("text-start text-label2 wrap-break-word text-negative", className)}
+      className={cn("flex items-start gap-1 text-start text-label2 wrap-break-word text-negative", className)}
       {...props}
     >
-      <span data-slot="field-error-icon" aria-hidden="true" className="inline-block pe-1">
-        <InfoIcon className="block size-3" />
+      <span data-slot="field-error-icon" aria-hidden="true" className="flex h-6 shrink-0 items-center text-invalid">
+        <CircleAlertIcon className="block size-4.5" />
       </span>
-      {content}
+      <div className="min-w-0 flex-1">{content}</div>
     </div>
   )
 }

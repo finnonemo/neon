@@ -1,12 +1,12 @@
-// radio-group, measured against CDS RadioGroup (fixtures/expansion/radio-group.tsx).
-// The headline names the group; each option's Label is body, taking the
-// foreground when its radio is checked, as a CDS control label does.
+// radio-group, measured against Core's Radio and CDS RadioGroup (fixtures/expansion/radio-group.tsx).
+// The headline names the group; each option's Label is Core's Value: body in Text/text-primary,
+// chosen or not. Label turns it Text/text-disabled beside a disabled radio.
 import { useState } from "react"
 import { Label } from "@/components/ui/label"
 import { RadioGroup as NeonRadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Hook } from "../Hook"
 
-const label = "text-body peer-data-[state=checked]:text-foreground"
+const label = "text-body text-foreground"
 const payouts = [["bank", "ธนาคาร / Bank"], ["wallet", "วอลเล็ต / Wallet"], ["card", "บัตร / Card"]]
 const frequencies = [["monthly", "รายเดือน / Monthly"], ["weekly", "รายสัปดาห์ / Weekly"]]
 
