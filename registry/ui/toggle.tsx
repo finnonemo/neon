@@ -38,7 +38,7 @@ const toggleVariants = cva(
 // dark alike. CDS also fades a pressed button's text to 82%; the text here is
 // a bare text node, so it stays at full strength.
 const toggleStates =
-  "bg-secondary text-secondary-foreground hover:bg-accent disabled:bg-secondary-disabled data-[state=on]:bg-[color-mix(in_srgb,var(--color-bgInverse)_95.7%,var(--background))] data-[state=on]:text-inverse-foreground data-[state=on]:hover:bg-inverse/90 data-[state=on]:disabled:bg-[color-mix(in_srgb,var(--color-bgInverse)_93.7%,var(--background))] focus-visible:z-10 focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0"
+  "bg-secondary text-secondary-foreground hover:bg-accent disabled:bg-secondary-disabled data-[state=on]:bg-[color-mix(in_srgb,var(--inverse)_95.7%,var(--background))] data-[state=on]:text-inverse-foreground data-[state=on]:hover:bg-inverse/90 data-[state=on]:disabled:bg-[color-mix(in_srgb,var(--inverse)_93.7%,var(--background))] focus-visible:z-10 focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0"
 
 function Toggle({
   className,

@@ -7,6 +7,7 @@ import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { expansionItem, expansionItems } from '../templates/expansion.mjs';
 import { loadImmersiveThemes, resolveColor } from '../../theme/scripts/generate-immersive-themes.mjs';
+import { contrast } from '../../scripts/lib/colors.mjs';
 import { BUILD_DIR, bareCnImports, browserSuiteItems, buildRegistry, darkClasses, unguardedItemRoles, missingTypeRoles, nextThemes, pinnedRegistryUrl, supportingProblems, tabsAsSegmented, themeBriefItemProblems, undeclaredSiblings, unmeasuredComponents, unpinnedUrls, unreachedItems, weightOverrides } from '../../scripts/lib/registry.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -251,6 +252,61 @@ test('ImmersiveLayout names every Immersive Theme, each with the color scheme it
   for (const [name, scheme] of Object.entries(expected)) {
     if (scheme === 'dark') assert.match(css, new RegExp(`:root\\[data-immersive-theme="${name}"\\] \\{ color-scheme: dark !important; \\}`), `immersive.css sets ${name} dark`);
   }
+});
+
+// On a themed ImmersiveLayout every fill a component paints must come from the
+// theme: an app slot left behind drew white text on Neon's light grey on Ultra.
+// Components put the theme's text (foreground) on secondary, muted and accent,
+// as well as the slot's own foreground, so each pair must read in every theme.
+test('the Immersive Themes adapter maps every fill the components paint, readable in every theme', () => {
+  const adapter = read('registry/theme/immersive.css');
+  const block = adapter.match(/:root\[data-immersive-theme\],\s*\[data-immersive-theme\] \{([^}]*)\}/)[1];
+  const mapped = Object.fromEntries([...block.matchAll(/--([\w-]+):\s*([^;]+);/g)].map(([, slot, value]) => [slot, value.trim()]));
+  // Slots behind a bg- utility: @theme inline's --color-<name>: var(--<slot>), skipping theme.css roles.
+  const slots = Object.fromEntries([...read('registry/theme/neon.css').matchAll(/--color-([\w-]+):\s*var\(--(?!color-)([\w-]+)\)/g)].map(([, name, slot]) => [name, slot]));
+  const painted = new Set(sourceFiles('registry/ui').flatMap(([, source]) => [...source.matchAll(/\bbg-([a-z-]+)/g)].map((match) => match[1])).filter((name) => slots[name]).map((name) => slots[name]));
+  // Borders, inputs and destructive keep the app's roles; immersive.css says so.
+  const kept = ['border', 'input', 'destructive', 'destructive-disabled'];
+  assert.deepEqual([...painted].filter((slot) => !kept.includes(slot) && !mapped[slot]).sort(), [], 'immersive.css maps every slot a registry component fills');
+  for (const slot of ['secondary', 'muted', 'accent', 'inverse']) assert.ok(mapped[slot], `immersive.css maps --${slot}`);
+  // Components read inverse through the slot, never theme.css's role, so the adapter reaches the pressed Toggle.
+  assert.deepEqual(sourceFiles('registry/ui').filter(([, source]) => /--color-(bgInverse|fgInverse|bgSecondary|bgAlternate)\b/.test(source)).map(([path]) => path), []);
+
+  const generated = read('theme/css/immersive-themes.css');
+  const declared = (selector) => Object.fromEntries([...generated.match(new RegExp(`${selector.replace(/[[\]]/g, '\\$&')} \\{([^}]*)\\}`))[1].matchAll(/--immersive-([\w-]+):\s*(#[0-9a-f]{6})/g)].map(([, key, hex]) => [key, hex]));
+  const shared = declared('[data-immersive-theme]');
+  const { themes } = loadImmersiveThemes();
+  const pairs = { secondary: ['secondary-foreground', 'foreground'], muted: ['foreground', 'muted-foreground'], accent: ['accent-foreground', 'foreground', 'secondary-foreground'], inverse: ['inverse-foreground'] };
+  for (const name of Object.keys(themes)) {
+    const vars = { ...shared, ...declared(`[data-immersive-theme="${name}"]`) };
+    const value = (slot) => {
+      const ref = mapped[slot]?.match(/^var\(--immersive-([\w-]+)\)$/)?.[1];
+      assert.ok(ref && vars[ref], `${name}: --${slot} is a plain --immersive-* property the theme declares`);
+      return vars[ref];
+    };
+    for (const [fill, texts] of Object.entries(pairs)) {
+      for (const text of texts) {
+        const ratio = contrast(value(text), value(fill));
+        assert.ok(ratio >= 4.5, `${name}: --${text} on --${fill} is ${ratio.toFixed(2)}:1`);
+      }
+    }
+    // The guideline allows text in White or Navy only.
+    for (const text of new Set(Object.values(pairs).flat())) assert.ok(['#ffffff', '#01172b'].includes(value(text)), `${name}: --${text} is White or Navy`);
+  }
+});
+
+// A themed ImmersiveLayout scrolls the window, so its content must sit in no
+// scroll container of its own, or a pinned (sticky) section never engages.
+// Other layouts keep InspectorView's independently scrollable body.
+test('themed ImmersiveLayout content sits in no scroll container; other layouts keep the pane scroll', () => {
+  const inspector = read('registry/layout/InspectorView.tsx');
+  assert.match(inspector, /scroll = "pane"/, 'InspectorView scrolls its own body by default');
+  const body = inspector.match(/style=\{scroll === "pane" \? (\{[^}]*\}) : (\{[^}]*\})\}>\{children\}/);
+  assert.ok(body, 'InspectorView styles its body by scroll mode');
+  assert.match(body[1], /overflowY: "auto"/, 'the pane mode scrolls');
+  assert.doesNotMatch(body[2], /overflow/i, 'the window mode is no scroll container');
+  assert.match(read('registry/layout/ImmersiveLayout.tsx'), /<InspectorView [^>]*scroll=\{immersiveTheme \? "window" : "pane"\}/, 'ImmersiveLayout scrolls the window only when themed');
+  for (const layout of ['SimpleLayout', 'ResponsivePanes']) assert.doesNotMatch(read(`registry/layout/${layout}.tsx`), /scroll="window"/, `${layout} keeps the pane scroll`);
 });
 
 test('the toast takes its theme from AppRoot, never next-themes', () => {

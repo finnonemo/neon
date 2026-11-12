@@ -57,8 +57,8 @@
   --color-warning: var(--color-fgWarning);
   --color-negative: var(--color-fgNegative);
   --color-line-heavy: var(--color-bgLineHeavy);
-  --color-inverse: var(--color-bgInverse);
-  --color-inverse-foreground: var(--color-fgInverse);
+  --color-inverse: var(--inverse);
+  --color-inverse-foreground: var(--inverse-foreground);
   --color-overlay: var(--color-bgOverlay);
   --color-positive-wash: var(--color-bgPositiveWash);
   --color-warning-wash: var(--color-bgWarningWash);
@@ -87,6 +87,11 @@
   --muted-foreground: var(--color-fgMuted);
   --accent: var(--color-bgAlternate);
   --accent-foreground: var(--color-fg);
+  /* A Neon slot shadcn lacks: the Tooltip, the checked SegmentedControl item
+   * and the pressed Toggle fill in the text color, so the Immersive Themes
+   * adapter can remap it as it does the shadcn slots. */
+  --inverse: var(--color-bgInverse);
+  --inverse-foreground: var(--color-fgInverse);
   --destructive: var(--color-bgNegative);
   --border: var(--color-bgLine);
   /* PROVISIONAL: --input keeps the role CDS defaults use, which has no
