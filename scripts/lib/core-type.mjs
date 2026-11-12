@@ -1,7 +1,8 @@
 // Neon's type roles take the size and line height of Core's text styles (ADR 0009). The Core snapshot
 // holds the text styles; from them writeCoreType writes the CSS adapter's type sizes and line heights,
 // and checkCoreType is the repository check that refuses them when they no longer equal the snapshot.
-// Family and weight are not Core's: Neon keeps IBM Plex Sans Thai and its own weights.
+// Family and weight are not Core's: Neon keeps IBM Plex Sans Thai and its own weights. Tracking is not
+// written: the snapshot's text styles state a size and a line height only.
 import { readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { SNAPSHOT_DIR } from './core-snapshot.mjs';
@@ -9,11 +10,13 @@ import { ADAPTER } from './core-theme.mjs';
 
 const SNAPSHOT_TEXT_STYLES = `${SNAPSHOT_DIR}/text-styles.json`;
 // The Type role table: which Core text style each of the adapter's type roles takes. Hand-maintained.
-export const TYPE_ROLES_FILE = 'theme/css/core-type-roles.json';
+const TYPE_ROLES_FILE = 'theme/css/core-type-roles.json';
 // What a role takes from its text style, by the adapter variable that holds it.
 const METRICS = { fontSize: 'size', lineHeight: 'lineHeight' };
 // A type metric as the adapter declares it: alone on its line, so a rewrite and the check see every one.
-const DECLARATION = /^(\s*--(fontSize|lineHeight)-([\w-]+): )([^;]+);\s*$/;
+const VARIABLE = `--(?<variable>${Object.keys(METRICS).join('|')})-(?<role>[\\w-]+)`;
+const DECLARATION = new RegExp(`^(?<lead>\\s*${VARIABLE}: )[^;]+;\\s*$`);
+const MENTION = new RegExp(`${VARIABLE}\\s*:`);
 
 // The design contract restates the table for the skills; its rows are `| \`<role>\` | <Core text style> |`.
 const CONTRACT = 'skills/INSTRUCTION.md';
@@ -28,10 +31,10 @@ const json = async (root, path) => JSON.parse(await readFile(join(root, path), '
  */
 function adapterFromCore(css, roles, textStyles) {
   const lines = css.split('\n');
-  const stray = lines.findIndex(line => /--(?:fontSize|lineHeight)-[\w-]+\s*:/.test(line) && !DECLARATION.test(line));
+  const stray = lines.findIndex(line => MENTION.test(line) && !DECLARATION.test(line));
   if (stray > -1) throw new Error(`${ADAPTER}:${stray + 1} must hold one type size or line height alone on its line, as "--fontSize-<role>: <value>;".`);
-  const declarations = lines.map(line => line.match(DECLARATION)).filter(Boolean);
-  const declared = [...new Set(declarations.map(([, , , role]) => role))];
+  const declarations = lines.map(line => line.match(DECLARATION)?.groups).filter(Boolean);
+  const declared = [...new Set(declarations.map(declaration => declaration.role))];
   const unlisted = declared.filter(role => !(role in roles));
   if (unlisted.length) throw new Error(`${ADAPTER} has type roles ${TYPE_ROLES_FILE} does not list: ${unlisted.join(', ')}. Name each one's Core text style.`);
   const undeclared = Object.keys(roles).filter(role => !declared.includes(role));
@@ -41,11 +44,11 @@ function adapterFromCore(css, roles, textStyles) {
     if (typeof style !== 'string') throw new Error(`${TYPE_ROLES_FILE} must give ${role} one Core text style, by its name in ${SNAPSHOT_TEXT_STYLES}.`);
     if (!textStyles[style]) throw new Error(`${TYPE_ROLES_FILE} gives ${role} the text style ${style}, which the Core snapshot does not have.`);
     for (const variable of Object.keys(METRICS)) {
-      if (!declarations.some(([, , held, of]) => of === role && held === variable)) throw new Error(`${ADAPTER} gives ${role} no --${variable}-${role}; a type role holds a size and a line height.`);
+      if (!declarations.some(declaration => declaration.role === role && declaration.variable === variable)) throw new Error(`${ADAPTER} gives ${role} no --${variable}-${role}; a type role holds a size and a line height.`);
     }
   }
   return lines.map(line => {
-    const [, lead, variable, role] = line.match(DECLARATION) ?? [];
+    const { lead, variable, role } = line.match(DECLARATION)?.groups ?? {};
     return role ? `${lead}${textStyles[roles[role]][METRICS[variable]]}px;` : line;
   }).join('\n');
 }
@@ -74,7 +77,7 @@ function contractTable(contract) {
   return rows;
 }
 
-/** Refuses a design contract whose type role table does not say what the Type role table says. */
+/** Refuses a design contract whose table gives a type role another text style than the Type role table does. */
 function checkContract(contract, roles) {
   const rows = contractTable(contract);
   for (const [role, style] of Object.entries(roles)) {

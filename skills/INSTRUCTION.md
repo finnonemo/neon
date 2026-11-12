@@ -79,7 +79,7 @@ For existing screens, apply these decisions only within authorized composition c
 
 Use IBM Plex Sans Thai via the app's font loader, with both Thai and Latin verified. Use Neon's type roles (`text-title1`, `text-body`, `text-label1` and the rest on the Neon base; the generated CDS typography roles on CDS) and shipped spacing/radius tokens. Structural widths and responsive geometry may use documented layout dimensions; do not prohibit every numeric CSS value. Preserve geometry during colors-only work.
 
-On the Neon base and in the CSS adapter, each type role takes the size and line height of one Core text style; its numbers are in `<Neon root>/core/text-styles.json`. The line heights fit Thai's stacked marks, so do not tighten a role's line height. Family and weight stay Neon's: IBM Plex Sans Thai at the role's own weight. The frozen CDS typography keeps its earlier values.
+On the Neon base and in the CSS adapter, each type role takes the size and line height of one Core text style; its numbers are in `<Neon root>/core/text-styles.json`. From `title1` down the line heights are Core's Thai ones and leave room for stacked marks, so do not tighten a role's line height. `display1` to `display3` take Core's Display styles, whose line heights are tighter: Thai that wraps there collides, so check a Thai display heading in the browser. Family and weight stay Neon's: IBM Plex Sans Thai at the role's own weight. The frozen CDS typography keeps its earlier values.
 
 | Type role | Core text style |
 |---|---|

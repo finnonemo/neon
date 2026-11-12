@@ -190,13 +190,8 @@ test('every Neon type role keeps its name in the Type role table, the adapter an
   }
 });
 
-test('the adapter\'s type roles hold Core\'s Thai line heights, and IBM Plex Sans Thai', async () => {
+test('the repository\'s adapter holds what the snapshot gives each type role, in IBM Plex Sans Thai', async () => {
   await checkCoreType(repositoryRoot);
   const adapter = await read(repositoryRoot, 'theme/css/theme.css');
-  // Worked from Core's ADR 0012: 1.4 × size, rounded up to a multiple of 4.
-  for (const [role, size, lineHeight] of [['title1', 28, 40], ['body', 17, 24], ['label1', 15, 24], ['caption', 13, 20]]) {
-    assert.match(adapter, new RegExp(`--fontSize-${role}: ${size}px;`));
-    assert.match(adapter, new RegExp(`--lineHeight-${role}: ${lineHeight}px;`));
-    assert.match(adapter, new RegExp(`--fontFamily-${role}: 'IBM Plex Sans Thai', sans-serif;`));
-  }
+  for (const role of NEON_TYPE_ROLES) assert.match(adapter, new RegExp(`--fontFamily-${role}: 'IBM Plex Sans Thai', sans-serif;`));
 });

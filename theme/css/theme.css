@@ -18,14 +18,17 @@
  * Each type role takes the Core text style that
  * ${CLAUDE_PLUGIN_ROOT}/theme/css/core-type-roles.json names for it, and
  * the Core sync writes its --fontSize-* and --lineHeight-* from the Core
- * snapshot (${CLAUDE_PLUGIN_ROOT}/core/text-styles.json), in px. The
- * line heights fit Thai's stacked marks. Do not edit one here: the
- * repository check refuses a value that differs from the snapshot.
+ * snapshot (${CLAUDE_PLUGIN_ROOT}/core/text-styles.json), in px. From
+ * title1 down the line heights are Core's Thai ones, 1.4 times the size
+ * rounded up; display1 to display3 take Core's Display styles, which are
+ * tighter. Do not edit one here: the repository check refuses a value
+ * that differs from the snapshot.
  *
  * EVERYTHING ELSE (font family and weight, space, radius) is
  * hand-captured, not generated: the byte-exact output of
  * @coinbase/cds-web@9.26.1's own `createThemeCssVars()` against
- * `createNeonTheme()`.
+ * `createNeonTheme()`. Recapture it by hand when
+ * ${CLAUDE_PLUGIN_ROOT}/theme/cds/theme.config.ts's `neonTheme` changes.
  *
  * NAMES match what CDS's ThemeProvider emits at runtime
  * (`--{category}-{key}`, e.g. `--color-fg`, `--space-2`,
