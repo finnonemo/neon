@@ -1,6 +1,6 @@
 ---
 name: neon-block
-description: Use when an employee asks for Finnomena Brand Artwork as an image file, such as an ad, a social post or story, a cover, a closing frame or a Pattern background, drawn by the Block engine as SVG and PNG. Applies to explicit invocation and established Finnomena intent. Use neon-create for app screens and web pages, including a Campaign Page and its Brand Pattern.
+description: Use when an employee asks for Finnomena Brand Artwork as an image file, such as an ad, a social post or story, a cover, a closing frame or a Pattern background, drawn by the Block engine as SVG and PNG, or for a Finnomena deck, proposal or presentation, whose cover and closing frames it draws. Applies to explicit invocation and established Finnomena intent. Use neon-create for app screens and web pages, including a Campaign Page and its Brand Pattern.
 ---
 
 # Draw Finnomena Brand Artwork
