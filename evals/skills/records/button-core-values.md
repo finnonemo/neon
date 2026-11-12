@@ -24,6 +24,7 @@ Requests, verbatim; each arm had its own port:
 | Actions: watchlist button | `ghost`, with `loading` while its mock call runs | `ghost`, with `loading` and `aria-pressed` |
 | Actions: `outline` in the new work | None | None |
 | Actions: the existing `outline` share button | Unchanged | Unchanged |
+| Actions: primary Buttons on the screen and in the dialog | One, the buy button | One, the buy button |
 | Actions: other Button values used | `size="md"` and `size="sm"` in the fact sheet dialog | `size="md"` in the fact sheet dialog |
 | Loading: buy button | `loading` set while the order runs, plus a ref that drops a press before the render | The same |
 | Loading: a spinner of its own, or a label swap | Neither | Neither |
@@ -33,7 +34,7 @@ Requests, verbatim; each arm had its own port:
 | Cost (actions, loading) | $0.80, $0.43 | $0.63, $0.49 |
 | Verdict | Pass: both | Pass: both |
 
-The two packages chose the same Button values on both requests. The baseline package names none of `md`, `xs`, `brand`, `inverse` or `loading`, and its run used `md` and `loading` all the same: it read them in the app's own `src/components/ui/button.tsx`, whose header says what each variant and size is in Core, that `outline` has no value there, and what `loading` does. So on an app that already holds the retuned Button, these requests do not show what the guidance adds; they show that it does no harm and that neither package reaches for `outline` beside a button that uses it.
+The two packages chose the same Button values on both requests. The baseline package names none of `md`, `xs`, `brand`, `inverse` or `loading`, and its run used `md` and `loading` all the same: both of its runs read the app's own `src/components/ui/button.tsx` before editing (`run-digest.mjs`: a Read in the actions run, a `cat` in the loading run). That file's header says what each variant and size is in Core and that `outline` has no value there, and its `loading` prop says what loading does. That the run took the values from there is inferred from the read, not shown. So on an app that already holds the retuned Button, these requests do not show what the guidance adds; they show that it does no harm and that neither package reaches for `outline` beside a button that uses it.
 
 Limits:
 
@@ -41,5 +42,5 @@ Limits:
 - Both arms started from an app that already holds the retuned Button and its header comment. A request that creates an app, where the guidance is read before any item's source, was not run, and neither was an app on the earlier Button.
 - No request asked for an outlined button by name, and none called for `brand`, `inverse` or `xs`.
 - The runs were graded on their diffs and reports. That a loading button keeps its size is each run's own report and this change's browser test, not a measurement of these apps.
-- The revised package is `a164908`. `main` was merged into the branch afterwards and the Button's fills in an Immersive Theme changed; the guidance text did not.
+- The revised package is `a164908`. Afterwards `main` was merged into the branch, the Button's fills in an Immersive Theme changed, and review reworded one clause of the guidance: `destructive` is "to confirm a destructive action (the confirmation step, not the button that opens it)", where the runs read "for a destructive action". Neither request involved a destructive action, and the runs were not repeated.
 - The served registry is this checkout's.

@@ -1,5 +1,5 @@
-// Prop values with no Core cell (ADR 0009): they keep working, the Counterpart table marks them as
-// not in Core for the Catalog, and the skills do not choose them for new work.
+// Prop values with no Core cell (ADR 0009): they keep working, the Counterpart table lists them as
+// not in Core, for the Catalog site to mark, and the skills do not choose them for new work.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';

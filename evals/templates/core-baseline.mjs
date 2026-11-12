@@ -66,17 +66,17 @@ export async function withCoreBaseline(expected, targets, mode) {
   for (const [name, target] of Object.entries(targets)) {
     const cds = elements[name];
     if (!target.core || cds === null) continue;
-    const table = listed(target.core.item).filter((key) => !target.coreProperties || target.coreProperties.includes(key));
+    const fromCore = listed(target.core.item).filter((key) => !target.coreProperties || target.coreProperties.includes(key));
     if (!cds) {
-      const unlisted = target.check.filter((key) => !table.includes(key));
+      const unlisted = target.check.filter((key) => !fromCore.includes(key));
       if (unlisted.length) throw new Error(`${name} checks ${unlisted.join(', ')}, which the CDS baseline does not hold for it and ${target.core.item}'s property table does not list.`);
       elements[name] = await coreBaseline(target.core, mode, target.check);
       continue;
     }
-    const core = await coreBaseline(target.core, mode, Object.keys(cds).filter((key) => table.includes(key)));
+    const values = await coreBaseline(target.core, mode, Object.keys(cds).filter((key) => fromCore.includes(key)));
     elements[name] = Object.fromEntries(Object.entries(cds).map(([key, value]) => {
-      if (!(key in core)) return [key, value];
-      return [key, key === 'font' ? { ...value, ...core.font } : core[key]];
+      if (!(key in values)) return [key, value];
+      return [key, key === 'font' ? { ...value, ...values.font } : values[key]];
     }));
   }
   return { ...expected, elements };

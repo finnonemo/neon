@@ -120,6 +120,7 @@ export function Extras() {
         <div className="flex flex-wrap items-center gap-2">
           <Button size="md">ส่งคำขอ</Button>
           <Button size="xs" variant="secondary">แก้ไข</Button>
+          <Button size="sm" variant="ghost">ข้าม</Button>
           <Button variant="brand">สมัครเลย</Button>
           <Button loading>กำลังบันทึก</Button>
           <Button variant="secondary" loading={sending} onClick={() => { setSending(true); toast("ส่งแล้ว / Sent") }}>ส่งรายงาน</Button>

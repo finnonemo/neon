@@ -127,7 +127,6 @@
 
   /* Component-scoped Core tokens, each entered by the item that uses it:
    * Button's label and fill tokens, and Link's ink for the link button. */
-  --color-fgOnColor: rgb(255, 255, 255);
   --color-fgOnBrand: rgba(0, 0, 0, 0.851);
   --color-fgDisabled: rgba(0, 0, 0, 0.451);
   --color-fgInverseDisabled: rgba(255, 255, 255, 0.451);

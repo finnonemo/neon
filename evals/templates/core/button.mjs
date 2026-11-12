@@ -4,8 +4,14 @@
 const container = (property) => ({ layer: 'Container', property });
 const label = (property) => ({ layer: 'Container / Label', property });
 
+// The Sizes the Neon Button has a value for. Core's Expressive sizes (a fixed 256 width) are not among them.
+const SIZES = ['Large', 'Medium', 'Small', 'XSmall'];
+
 /** A measured Neon Button's cell of Core's Button: Large, Default and Enabled unless said. */
-export const buttonCell = (Hierarchy, { Type = 'Default', Size = 'Large', State = 'Enabled' } = {}) => ({ item: 'button', cell: { Hierarchy, Type, Size, State } });
+export function buttonCell(Hierarchy, { Type = 'Default', Size = 'Large', State = 'Enabled' } = {}) {
+  if (!SIZES.includes(Size)) throw new Error(`The Neon Button has no size for Core's ${Size}: it has ${SIZES.join(', ')}.`);
+  return { item: 'button', cell: { Hierarchy, Type, Size, State } };
+}
 
 export default {
   set: 'Button',

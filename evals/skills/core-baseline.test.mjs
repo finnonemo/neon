@@ -38,7 +38,7 @@ const THEME = {
   'Button/button-inverse-disabled': { light: { primitive: 'White/10A', hex: '#FFFFFF1A' }, dark: { primitive: 'Navy/10A', hex: '#01172B1A' } },
 };
 
-async function snapshot(t, values = VALUES) {
+async function snapshot(t, values = VALUES, item = 'chip') {
   const dir = await mkdtemp(join(tmpdir(), 'neon-core-cell-'));
   t.after(() => rm(dir, { recursive: true, force: true }));
   const files = {
@@ -51,7 +51,7 @@ async function snapshot(t, values = VALUES) {
     await mkdir(dirname(join(dir, path)), { recursive: true });
     await writeFile(join(dir, path), JSON.stringify(content));
   }
-  return readCoreItem(dir, 'chip');
+  return readCoreItem(dir, item);
 }
 const chip = (Type, Size, State) => ({ Type, Size, State });
 
@@ -103,9 +103,9 @@ test('a value the snapshot cannot resolve is refused', async t => {
   assert.throws(() => coreValue(core, 'Chip', cell, 'Container', 'strokes.0'), /Border\/border-none/);
 });
 
-test('an item whose Counterpart has no values file is refused', async t => {
-  const core = snapshot(t).then(() => readCoreItem(root, 'no-such-item'));
-  await assert.rejects(core, /no-such-item/);
+test('an item whose Counterpart has no values file, or that the Counterpart table does not list, is refused', async t => {
+  await assert.rejects(snapshot(t, VALUES, 'label'), /no values file for label: its Counterpart Label has a doc only/);
+  await assert.rejects(readCoreItem(root, 'no-such-item'), /no-such-item: the Counterpart table does not list it/);
 });
 
 // Core's Button, from core/components/button.md at the pinned commit.
@@ -207,4 +207,10 @@ test('a target can take only some properties from Core and keep the CDS baseline
   const targets = { approve: { ...TARGETS.approve, coreProperties: ['font', 'pad'] } };
   const expected = await withCoreBaseline(CASE, targets, 'dark');
   assert.deepEqual(expected.elements.approve, { ...CDS_BUTTON, font: { size: 17, lineHeight: 24, weight: 500 }, pad: [16, 24, 16, 24] });
+});
+
+test('a measured Button names a Size the Neon Button has: Core\'s Expressive sizes are refused', async () => {
+  const { buttonCell } = await import('../templates/core/button.mjs');
+  assert.deepEqual(buttonCell('Tertiary', { Size: 'Small' }), button('Tertiary', 'Default', 'Small', 'Enabled'));
+  assert.throws(() => buttonCell('Primary', { Size: 'Large (Expressive)' }), /no size for Core's Large \(Expressive\)/);
 });

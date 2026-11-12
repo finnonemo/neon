@@ -60,7 +60,7 @@ for (const [theme, scheme] of Object.entries(SCHEMES)) {
       await page.getByRole('button', { name: /^Request 24 / }).focus();
       await page.keyboard.press('Tab');
       await expect(action).toBeFocused();
-      // The Button draws Core's focus indicator, a solid 2px outline 2px outside it, in --ring: the theme action.
+      // The Button draws its focus indicator as a solid 2px outline 2px outside it, in --ring: the theme action.
       await expect(action).toHaveCSS('outline-style', 'solid');
       await expect(action).toHaveCSS('outline-width', '2px');
       await expect(action).toHaveCSS('outline-offset', '2px');

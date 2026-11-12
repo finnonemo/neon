@@ -103,6 +103,7 @@ export const screens = [
       // Core's values that CDS has none of: held to the Core baseline alone, on the Neon target only.
       medium: coreOnly('[data-size=md]', buttonCell('Primary', { Size: 'Medium' })),
       extraSmall: coreOnly('[data-size=xs]', buttonCell('Secondary', { Size: 'XSmall' })),
+      small: coreOnly('[data-size=sm]', buttonCell('Tertiary', { Size: 'Small' })),
       brand: coreOnly('[data-variant=brand]', buttonCell('Primary', { Type: 'Brand' })),
       inverse: coreOnly('[data-variant=inverse]', buttonCell('Primary', { Type: 'Inverse' })),
       // Loading fixes the Enabled button's height and binds no label ink.

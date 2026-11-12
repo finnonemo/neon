@@ -42,7 +42,6 @@
   "accentBoldYellow": "Accents/Yellow/100",
   "accentSubtleGray": { "light": null, "dark": null, "why": "The palette's Navy 5; Core's Accents tokens start at 25." },
   "accentBoldGray": "Accents/Navy/100",
-  "fgOnColor": "Text/text-on-color",
   "fgOnBrand": "Text/text-on-brand",
   "fgDisabled": "Text/text-disabled",
   "fgInverseDisabled": "Text/text-inverse-disabled",

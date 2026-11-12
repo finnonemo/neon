@@ -156,11 +156,12 @@
   --button-disabled-foreground: var(--color-fgDisabled);
   --link: var(--color-fgLink);
   --link-hover: var(--color-fgLinkHover);
-  /* Disabled fills (spike trap 4), for the controls not yet retuned to Core:
-   * CDS blends a filled control's color into the page background at 75%,
-   * raised for colors far from the background in luminance (getBlendedColor).
-   * Those controls also fade to 50% opacity, as in CDS. The Button no longer
-   * reads them. */
+  /* Disabled fills (spike trap 4), as CDS draws them: it blends a filled
+   * control's color into the page background at 75%, raised for colors far
+   * from the background in luminance (getBlendedColor), under 50% opacity.
+   * The toggle, not yet retuned to Core, reads --secondary-disabled. No
+   * registry item reads --destructive-disabled since the Button took Core's
+   * Disabled; it stays for apps that use it. */
   --secondary-disabled: color-mix(in srgb, var(--secondary) 75%, var(--background));
   --destructive-disabled: color-mix(in srgb, var(--destructive) 92%, var(--background));
   /* CDS Tray is bordered (1px bgLine) in dark only, so a sheet's border

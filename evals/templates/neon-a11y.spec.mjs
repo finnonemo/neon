@@ -92,8 +92,8 @@ const computed = (page, value) => page.evaluate((color) => {
   return result;
 }, value);
 
-test('a button reached from the keyboard draws Core\'s focus indicator and its Hover fill', async ({ page }) => {
-  await page.goto('/?layout=extras');
+for (const mode of ['light', 'dark']) test(`${mode}: a button reached from the keyboard draws Core's focus color and its Hover fill`, async ({ page }) => {
+  await page.goto(`/?layout=extras${mode === 'dark' ? '&mode=dark' : ''}`);
   const save = page.getByRole('button', { name: 'บันทึก', exact: true });
   const focus = await keyboardFocus(page, save);
   expect(focus.focusVisible).toBe(true);
