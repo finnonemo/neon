@@ -3,17 +3,19 @@
 //   screens  CDS-match entries in measure.mjs's shape. name defaults to
 //            'expansion-<item>' and query to 'layout=expansion'; give a second
 //            entry (an overlay's open state) its own name.
-//   a11y     optional: ({ test, expect, gotoExpansion, keyboardFocus, focusColor }) => registers
-//            the item's Neon behavior checks; gotoExpansion(page) opens the screen,
+//   a11y     optional: ({ test, expect, gotoExpansion, keyboardFocus, focusColor, computedColor }) => registers
+//            the item's Neon behavior checks; gotoExpansion(page, mode) opens the screen
+//            (in 'dark' when asked),
 //            keyboardFocus(page, control) reports its keyboard focus indicator and
-//            focusColor(page) is the color Core draws one in.
+//            focusColor(page) is the color Core draws one in and computedColor(page, value)
+//            what a color expression computes to.
 // Its fixtures are fixtures/expansion/<item>.tsx (CDS) and
 // fixtures/neon/expansion/<item>.tsx (Neon). Adding an item adds files only.
 // Modules import nothing from here: this file imports them.
 import { readdirSync } from 'node:fs';
 
 export const EXPANSION_QUERY = 'layout=expansion';
-export const gotoExpansion = (page) => page.goto(`/?${EXPANSION_QUERY}`);
+export const gotoExpansion = (page, mode = 'light') => page.goto(`/?${EXPANSION_QUERY}${mode === 'dark' ? '&mode=dark' : ''}`);
 
 /** Waits until every transition and entry animation has ended. A spinner turns without end, so it is not waited for. */
 export const settled = (page) => page.waitForFunction(() => document.getAnimations().every((animation) =>

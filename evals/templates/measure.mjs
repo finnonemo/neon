@@ -25,6 +25,10 @@ import { fieldCell } from './core/text-field.mjs';
 import { textAreaCell } from './core/text-area.mjs';
 import { selectCell } from './core/select.mjs';
 import { segmentCell, segmentedCell } from './core/segmented-control.mjs';
+import { tagCell } from './core/display-tag.mjs';
+import { avatarCell } from './core/avatar.mjs';
+import { listCell } from './core/list-item.mjs';
+import { tableCell } from './core/table.mjs';
 
 const both = (selector, check) => ({ cds: selector, neon: selector, check });
 const button = (n, core, check = ['font', 'color', 'bg', 'h', 'pad', 'radius']) => ({ ...both(`[data-measure=actions] button:nth-of-type(${n})`, check), core });
@@ -72,6 +76,7 @@ const coreFields = {
   selectChevron: coreField('invalid-select', '[data-slot=select-trigger] > svg', selectCell('chevron', { State: 'Error' }), ['color']),
   disabledSelectChevron: coreField('disabled-select', '[data-slot=select-trigger] > svg', selectCell('chevron', { State: 'Disabled' }), ['color']),
 };
+const tagBox = ['font', 'h', 'pad', 'radius', 'bg', 'color', 'border', 'opacity'];
 const expansionSection = (n) => `:has(> [data-measure=title]) > section:nth-of-type(${n})`;
 
 export const screens = [
@@ -91,12 +96,23 @@ export const screens = [
       segmentedPad: { neon: '[data-measure=segmented] [role=radiogroup]', check: ['pad', 'opacity'], core: segmentedCell() },
       segmentChosenBox: { neon: '[data-measure=segmented] [role=radio][data-state=checked]', check: ['pad', 'border'], core: chosen },
       segmentBox: { neon: '[data-measure=segmented] [role=radio]:nth-child(3)', check: ['pad', 'radius', 'bg', 'border'], core: segmentCell() },
-      row: { neon: '[data-measure=list] li:nth-child(2) [data-slot=list-row]', cds: '[data-measure=list] > div > div:nth-child(2) > button', check: ['h', 'radius'] },
-      rowTitle: { neon: '[data-measure=list] li:nth-child(2) [data-slot=list-row-title]', cds: '[data-measure=list] > div > div:nth-child(2) button > div > div:nth-child(2) > div > div:nth-child(1)', check: ['font', 'color'] },
-      rowDescription: { neon: '[data-measure=list] li:nth-child(2) [data-slot=list-row-description]', cds: '[data-measure=list] > div > div:nth-child(2) button > div > div:nth-child(2) > div > div:nth-child(2)', check: ['font', 'color'] },
-      rowAvatar: { neon: '[data-measure=list] li:nth-child(2) [data-slot=avatar]', cds: '[data-measure=list] > div > div:nth-child(2) [data-shape=circle]', check: ['h', 'w'] },
-      tag: { neon: '[data-measure=list] li:nth-child(3) [data-slot=tag]', cds: '[data-measure=list] > div > div:nth-child(3) [data-testid=cds-tag]', check: ['font', 'h', 'pad', 'radius'] },
-      selectedRow: { neon: '[data-measure=list] li:nth-child(1) [data-slot=list-row]', cds: '[data-measure=list] > div > div:nth-child(1) > button', check: ['h'] },
+      row: { neon: '[data-measure=list] li:nth-child(2) [data-slot=list-row]', cds: '[data-measure=list] > div > div:nth-child(2) > button', check: ['h', 'radius'], core: listCell('row') },
+      rowTitle: { neon: '[data-measure=list] li:nth-child(2) [data-slot=list-row-title]', cds: '[data-measure=list] > div > div:nth-child(2) button > div > div:nth-child(2) > div > div:nth-child(1)', check: ['font', 'color'], core: listCell('title') },
+      rowDescription: { neon: '[data-measure=list] li:nth-child(2) [data-slot=list-row-description]', cds: '[data-measure=list] > div > div:nth-child(2) button > div > div:nth-child(2) > div > div:nth-child(2)', check: ['font', 'color'], core: listCell('subtitle') },
+      rowAvatar: { neon: '[data-measure=list] li:nth-child(2) [data-slot=avatar]', cds: '[data-measure=list] > div > div:nth-child(2) [data-shape=circle]', check: ['h', 'w'], core: avatarCell('circle') },
+      tag: { neon: '[data-measure=list] li:nth-child(3) [data-slot=tag]', cds: '[data-measure=list] > div > div:nth-child(3) [data-testid=cds-tag]', check: ['font', 'h', 'pad', 'radius'], core: tagCell({ Color: 'Green' }) },
+      selectedRow: { neon: '[data-measure=list] li:nth-child(1) [data-slot=list-row]', cds: '[data-measure=list] > div > div:nth-child(1) > button', check: ['h'], core: listCell('row') },
+      // What the CDS list has no element for, or draws another way: held to the Core baseline alone.
+      rowBox: { neon: '[data-measure=list] li:nth-child(2) [data-slot=list-row]', check: ['pad', 'bg', 'border'], core: listCell('row') },
+      rowText: { neon: '[data-measure=list] li:nth-child(2) [data-slot=list-row-content]', check: ['pad'], core: listCell('text') },
+      // A selected row shows Core's Checkmark and keeps the row's fill.
+      selectedRowBox: { neon: '[data-measure=list] li:nth-child(1) [data-slot=list-row]', check: ['bg', 'border'], core: listCell('row') },
+      selectedCheck: { neon: '[data-measure=list] li:nth-child(1) [data-slot=list-row-check]', check: ['color'], core: listCell('checkmark') },
+      rowAvatarFill: { neon: '[data-measure=list] li:nth-child(2) [data-slot=avatar-fallback]', check: ['radius', 'bg'], core: avatarCell('circle') },
+      rowAvatarLabel: { neon: '[data-measure=list] li:nth-child(2) [data-slot=avatar-fallback]', check: ['font', 'color'], core: avatarCell('label') },
+      tagFill: { neon: '[data-measure=list] li:nth-child(3) [data-slot=tag]', check: ['bg', 'color', 'border', 'opacity'], core: tagCell({ Color: 'Green' }) },
+      warningTag: { neon: '[data-measure=list] li:nth-child(2) [data-slot=tag]', check: tagBox, core: tagCell({ Color: 'Orange' }) },
+      negativeTag: { neon: '[data-measure=list] li:nth-child(4) [data-slot=tag]', check: tagBox, core: tagCell({ Color: 'Red' }) },
     },
     gaps: [
       ['searchLabel', 'searchInput', 'y'],
@@ -107,7 +123,8 @@ export const screens = [
     name: 'approval-detail',
     query: 'layout=approval&pane=inspector',
     targets: {
-      detailAvatar: { neon: '[data-measure=summary] [data-slot=avatar]', cds: '[data-measure=summary] [data-shape=circle]', check: ['h', 'w'] },
+      detailAvatar: { neon: '[data-measure=summary] [data-slot=avatar]', cds: '[data-measure=summary] [data-shape=circle]', check: ['h', 'w'], core: avatarCell('circle', { Size: 'Medium' }) },
+      detailAvatarLabel: { neon: '[data-measure=summary] [data-slot=avatar-fallback]', check: ['font', 'color'], core: avatarCell('label', { Size: 'Medium' }) },
       detailTitle: both('[data-measure=summary] h2', ['font', 'color']),
       detailMeta: both('[data-measure=summary] h2 + span', ['font', 'color']),
       detailsHeading: both('[data-measure=details] span:nth-child(1)', ['font', 'color']),
@@ -142,9 +159,14 @@ export const screens = [
       dateLabel: { neon: '[data-measure=date] label', cds: '[data-measure=date] label', check: ['font', 'color'], core: title },
       dateField: { neon: '[data-measure=date] [data-slot=date-picker]', cds: '[data-measure=date] [data-testid=input-interactable-area]', check: ['h', 'radius', 'border', 'bg'] },
       helpButton: { neon: '[data-measure=help] button', cds: '[data-measure=help] button', check: ['h', 'w'] },
-      headerCell: { neon: '[data-measure=table] thead th:nth-child(1)', cds: '[data-measure=table] thead th:nth-child(1)', check: ['font', 'color', 'h'] },
-      bodyRow: { neon: '[data-measure=table] tbody tr:nth-child(1)', cds: '[data-measure=table] tbody tr:nth-child(1)', check: ['h'] },
-      bodyCell: { neon: '[data-measure=table] tbody tr:nth-child(1) td:nth-child(1)', cds: '[data-measure=table] tbody tr:nth-child(1) td:nth-child(1) div:not(:has(*))', check: ['font', 'color'] },
+      headerCell: { neon: '[data-measure=table] thead th:nth-child(1)', cds: '[data-measure=table] thead th:nth-child(1)', check: ['font', 'color', 'h'], core: tableCell('headerCell') },
+      bodyRow: { neon: '[data-measure=table] tbody tr:nth-child(1)', cds: '[data-measure=table] tbody tr:nth-child(1)', check: ['h'], core: tableCell('bodyRow') },
+      bodyCell: { neon: '[data-measure=table] tbody tr:nth-child(1) td:nth-child(1)', cds: '[data-measure=table] tbody tr:nth-child(1) td:nth-child(1) div:not(:has(*))', check: ['font', 'color'], core: tableCell('bodyCell') },
+      // A cell away from the table's edges: Core's cell padding, and the Header row's fill behind a header cell.
+      headerCellBox: { neon: '[data-measure=table] thead th:nth-child(2)', check: ['pad', 'bg'], core: tableCell('headerCell') },
+      bodyCellBox: { neon: '[data-measure=table] tbody tr:nth-child(1) td:nth-child(2)', check: ['pad', 'h'], core: tableCell('bodyCell') },
+      // The row menu's cell is the row's last, so its right side carries the row's 8 too: its height is what is held.
+      controlCell: { neon: '[data-measure=table] tbody tr:nth-child(1) td:nth-child(5)', check: ['h'], core: tableCell('controlCell') },
       rowMenuButton: { neon: '[data-measure=table] tbody tr:nth-child(1) button', cds: '[data-measure=table] tbody tr:nth-child(1) button', check: ['h', 'w'] },
       rejectRequest: button(1, danger),
       save: button(2, secondary),
@@ -165,6 +187,15 @@ export const screens = [
       // Core's field states CDS has no baseline for: held to the Core baseline alone, on the Neon target only.
       ...coreFields,
       ...coreSegments,
+      // Core's Display tag in the cells the approval list has none of: Navy, and the Medium and Large Sizes.
+      neutralTag: { neon: '[data-measure=core-tags] [data-variant=neutral]', check: tagBox, core: tagCell() },
+      mediumTag: { neon: '[data-measure=core-tags] [data-size=md]', check: tagBox, core: tagCell({ Color: 'Green', Size: 'Medium' }) },
+      largeTag: { neon: '[data-measure=core-tags] [data-size=lg]', check: tagBox, core: tagCell({ Color: 'Red', Size: 'Large' }) },
+      // A disabled row's text is Text/text-disabled on the row's own fill.
+      disabledRow: { neon: '[data-measure=core-list] li:nth-child(1) [data-slot=list-row]', check: ['h', 'bg', 'border'], core: listCell('row', { State: 'Disabled' }) },
+      disabledRowTitle: { neon: '[data-measure=core-list] li:nth-child(1) [data-slot=list-row-title]', check: ['font', 'color'], core: listCell('title', { State: 'Disabled' }) },
+      disabledRowDescription: { neon: '[data-measure=core-list] li:nth-child(1) [data-slot=list-row-description]', check: ['font', 'color'], core: listCell('subtitle', { State: 'Disabled' }) },
+      disabledRowCheck: { neon: '[data-measure=core-list] li:nth-child(1) [data-slot=list-row-check]', check: ['color'], core: listCell('checkmark', { State: 'Disabled' }) },
       disabledCheckbox: { neon: '[data-measure=disabled-check] [role=checkbox]', cds: '[data-measure=disabled-check] [data-testid=checkbox-outer]', check: ['border', 'bg', 'opacity'] },
       disabledCheckboxLabel: { neon: '[data-measure=disabled-check] label', cds: '[data-measure=disabled-check] label span[id]', check: ['color', 'opacity'] },
     },
@@ -338,7 +369,8 @@ export function pick(measured, check) {
 const channels = (color) => (color.match(/[\d.]+/g) ?? []).map(Number);
 /**
  * Differences between a measurement and its baseline: ±1px for a measured size, ±2 per color channel.
- * A type size, line height and weight are set values and compare exactly.
+ * A type size, line height and weight are set values and compare exactly; a weight the baseline
+ * does not state (a Core emphasis no Neon type role carries) is not compared.
  */
 export function compare(actual, expected, tolerance = 1) {
   const problems = [];
@@ -354,7 +386,7 @@ export function compare(actual, expected, tolerance = 1) {
     if (key === 'color' || key === 'bg') { if (!sameColor(got, want)) problems.push(`${key} ${got} ≠ ${want}`); }
     else if (key === 'font') {
       for (const part of ['size', 'lineHeight', 'weight']) {
-        if (got[part] !== want[part]) problems.push(`font.${part} ${got[part]} ≠ ${want[part]}`);
+        if (part in want && got[part] !== want[part]) problems.push(`font.${part} ${got[part]} ≠ ${want[part]}`);
       }
     } else if (key === 'opacity') { if (Math.abs(got - want) > 0.02) problems.push(`opacity ${got} ≠ ${want}`); }
     else if (key === 'pad' || key === 'radii') { if (!want.every((v, i) => near(got[i], v))) problems.push(`${key} ${got} ≠ ${want}`); }

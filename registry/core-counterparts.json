@@ -88,7 +88,10 @@
     "core": "select"
   },
   "separator": {
-    "core": "divider"
+    "core": "divider",
+    "notInCore": {
+      "orientation": ["vertical"]
+    }
   },
   "sheet": {
     "core": "sheet"
@@ -97,7 +100,10 @@
     "core": "snackbar"
   },
   "spinner": {
-    "core": "progress-circle"
+    "core": "progress-circle",
+    "notInCore": {
+      "size": ["number"]
+    }
   },
   "switch": {
     "core": "toggle"

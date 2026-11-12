@@ -39,6 +39,40 @@ test('every tag reads at 4.5:1 or more on its wash in light', async ({ page }) =
   for (const { variant, ratio } of ratios) expect(ratio, `${variant} tag`).toBeGreaterThanOrEqual(4.5);
 });
 
+// Core's List item: Focus turns the row's 2px stroke Focus/focus and hides its Divider.
+for (const mode of ['light', 'dark']) test(`${mode}: a list row reached from the keyboard draws Core's Focus stroke inside it and hides its Divider`, async ({ page }) => {
+  await page.goto(`/?layout=approval${mode === 'dark' ? '&mode=dark' : ''}`);
+  const item = page.locator('[data-measure=list] li:nth-child(2)');
+  const divider = item.locator('[data-slot=list-row-divider]');
+  await expect(divider).toBeVisible();
+  const focus = await keyboardFocus(page, item.locator('[data-slot=list-row]'));
+  expect(focus.focusVisible).toBe(true);
+  expect(focus.after).toBe(`outline 2px ${await focusColor(page)} -2px`);
+  await expect(divider).toBeHidden();
+});
+
+test('a selected list row shows by its Checkmark, one line is 56px and the last row has no Divider', async ({ page }) => {
+  await page.goto('/?layout=approval');
+  const rows = page.locator('[data-measure=list] [data-slot=list-row]');
+  await expect(rows.first()).toHaveAttribute('aria-current', 'true');
+  await expect(rows.first().locator('[data-slot=list-row-check]')).toBeVisible();
+  await expect(rows.nth(1).locator('[data-slot=list-row-check]')).toHaveCount(0);
+  await expect(page.locator('[data-measure=list] li:last-child [data-slot=list-row-divider]')).toBeHidden();
+  await page.goto('/?layout=extras');
+  const oneLine = page.locator('[data-measure=core-list] li:nth-child(2) [data-slot=list-row]');
+  expect((await oneLine.boundingBox()).height).toBe(56);
+  await expect(page.locator('[data-measure=core-list] li:nth-child(1) [data-slot=list-row]')).toBeDisabled();
+});
+
+// Core's Table: Hover is a Body row's.
+test('a table row fills on hover in the body only', async ({ page }) => {
+  await page.goto('/?layout=extras');
+  const hover = await computed(page, 'var(--layer-hover)');
+  const fill = async (row) => { await row.hover(); await settled(page); return row.evaluate((el) => getComputedStyle(el).backgroundColor); };
+  expect(await fill(page.locator('[data-measure=table] tbody tr').first())).toBe(hover);
+  expect(await fill(page.locator('[data-measure=table] thead tr'))).not.toBe(hover);
+});
+
 test('the segmented control is one radio group the arrow keys move through', async ({ page }) => {
   await page.goto('/?layout=approval');
   const group = page.getByRole('radiogroup', { name: 'สถานะ / Status' });
@@ -163,4 +197,4 @@ test.describe('in a Thai browser', () => {
 });
 
 // Each registry expansion item's behavior checks, from expansion/<item>.mjs.
-for (const item of expansionItems) if (item.a11y) test.describe(item.name, () => item.a11y({ test, expect, gotoExpansion, keyboardFocus, focusColor }));
+for (const item of expansionItems) if (item.a11y) test.describe(item.name, () => item.a11y({ test, expect, gotoExpansion, keyboardFocus, focusColor, computedColor: computed }));

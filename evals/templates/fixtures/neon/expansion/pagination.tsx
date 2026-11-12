@@ -1,4 +1,5 @@
-// pagination, measured against CDS Pagination (fixtures/expansion/pagination.tsx):
+// pagination, measured against Core's Pagination and, where Core gives no value, CDS Pagination
+// (fixtures/expansion/pagination.tsx):
 // the same ten pages from the first with no siblings, so the list is CDS's
 // 1, 2, 3, …, 10 while the current page is any of the first three.
 import { useState, type MouseEvent } from "react"
@@ -55,6 +56,19 @@ export default function PaginationSection() {
                 disabled={page === total}
                 onClick={go(page + 1)}
               />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      </Hook>
+      {/* Core's Selected and Disabled page, and a page number given a size, which keeps the Button. */}
+      <Hook name="pagination-disabled">
+        <Pagination aria-label="หน้าที่ปิดใช้งาน / Disabled pages">
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationLink aria-label="หน้า 1 / Page 1" isActive disabled>1</PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink href="?page=2" aria-label="หน้า 2 / Page 2" size="icon-sm">2</PaginationLink>
             </PaginationItem>
           </PaginationContent>
         </Pagination>

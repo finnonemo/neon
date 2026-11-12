@@ -15,6 +15,18 @@ function propValues(source, prop) {
   return [...group[1].matchAll(/^ {8}"?([\w-]+)"?:/gm)].map(([, name]) => name);
 }
 
+/**
+ * The values any prop takes: a cva group's keys, or the members of the type the item's source
+ * gives the prop (`size?: "xs" | "sm" | number`), or the values of a Radix prop the item reads
+ * back in a `data-[<prop>=<value>]` class.
+ */
+function valuesOf(source, prop) {
+  if (new RegExp(`\\n {6}${prop}: \\{\\n`).test(source)) return propValues(source, prop);
+  const union = source.match(new RegExp(`\\b${prop}\\?: ([^\\n;}]+)`));
+  if (union) return union[1].split('|').map(member => member.trim().replace(/^"|"$/g, ''));
+  return [...new Set([...source.matchAll(new RegExp(`data-\\[${prop}=([\\w-]+)\\]`, 'g'))].map(([, value]) => value))];
+}
+
 test('the Counterpart table marks button\'s outline as not in Core', async () => {
   const table = JSON.parse(await read('registry/core-counterparts.json'));
   assert.deepEqual(table.button.notInCore, { variant: ['outline'] });
@@ -25,13 +37,19 @@ test('the Counterpart table marks input-group\'s addons above and below the cont
   assert.deepEqual(table['input-group'].notInCore, { align: ['block-start', 'block-end'] });
 });
 
+test('the Counterpart table marks a vertical separator and a numeric spinner size as not in Core', async () => {
+  const table = JSON.parse(await read('registry/core-counterparts.json'));
+  assert.deepEqual(table.separator.notInCore, { orientation: ['vertical'] });
+  assert.deepEqual(table.spinner.notInCore, { size: ['number'] });
+});
+
 test('every value marked as not in Core is a value its item still has', async () => {
   const table = JSON.parse(await read('registry/core-counterparts.json'));
   for (const [item, { notInCore }] of Object.entries(table)) {
     if (!notInCore) continue;
     const source = await read(`registry/ui/${item}.tsx`);
     for (const [prop, values] of Object.entries(notInCore)) {
-      const has = propValues(source, prop);
+      const has = valuesOf(source, prop);
       for (const value of values) assert.ok(has.includes(value), `${item} has no ${prop} "${value}": it has ${has.join(', ')}`);
     }
   }
