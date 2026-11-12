@@ -5,18 +5,21 @@
 // written: the snapshot's text styles state a size and a line height only.
 import { readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { codeLines, refuseUnseenDeclarations } from './adapter-declarations.mjs';
 import { SNAPSHOT_DIR } from './core-snapshot.mjs';
 import { ADAPTER } from './core-theme.mjs';
 
 const SNAPSHOT_TEXT_STYLES = `${SNAPSHOT_DIR}/text-styles.json`;
 // The Type role table: which Core text style each of the adapter's type roles takes. Hand-maintained.
 const TYPE_ROLES_FILE = 'theme/css/core-type-roles.json';
-// What a role takes from its text style, by the adapter variable that holds it.
-const METRICS = { fontSize: 'size', lineHeight: 'lineHeight' };
-// A type metric as the adapter declares it: alone on its line, so a rewrite and the check see every one.
-const VARIABLE = `--(?<variable>${Object.keys(METRICS).join('|')})-(?<role>[\\w-]+)`;
-const DECLARATION = new RegExp(`^(?<lead>\\s*${VARIABLE}: )[^;]+;\\s*$`);
-const MENTION = new RegExp(`${VARIABLE}\\s*:`);
+// What a role takes from its text style, by the category of the adapter variable that holds it
+// (`--{category}-{role}`).
+const FROM_TEXT_STYLE = { fontSize: 'size', lineHeight: 'lineHeight' };
+const CATEGORIES = Object.keys(FROM_TEXT_STYLE);
+// The variables the sync writes, and one as the adapter declares it: alone on its line, so a rewrite
+// and the check see every one.
+const FAMILY = `--(?:${CATEGORIES.join('|')})-`;
+const DECLARATION = new RegExp(`^(?<lead>\\s*--(?<category>${CATEGORIES.join('|')})-(?<role>[\\w-]+): )[^;]+;\\s*$`);
 
 // The design contract restates the table for the skills; its rows are `| \`<role>\` | <Core text style> |`.
 const CONTRACT = 'skills/INSTRUCTION.md';
@@ -31,8 +34,9 @@ const json = async (root, path) => JSON.parse(await readFile(join(root, path), '
  */
 function adapterFromCore(css, roles, textStyles) {
   const lines = css.split('\n');
-  const stray = lines.findIndex(line => MENTION.test(line) && !DECLARATION.test(line));
-  if (stray > -1) throw new Error(`${ADAPTER}:${stray + 1} must hold one type size or line height alone on its line, as "--fontSize-<role>: <value>;".`);
+  refuseUnseenDeclarations(ADAPTER, css, FAMILY, DECLARATION, 'one type size or line height alone on its line, as "--fontSize-<role>: <value>;".');
+  const tracking = codeLines(css).findIndex(line => /letter-?spacing/i.test(line));
+  if (tracking > -1) throw new Error(`${ADAPTER}:${tracking + 1} sets tracking, which the Core snapshot's text styles do not state. The Core sync writes it once they do.`);
   const declarations = lines.map(line => line.match(DECLARATION)?.groups).filter(Boolean);
   const declared = [...new Set(declarations.map(declaration => declaration.role))];
   const unlisted = declared.filter(role => !(role in roles));
@@ -43,16 +47,17 @@ function adapterFromCore(css, roles, textStyles) {
     const style = roles[role];
     if (typeof style !== 'string') throw new Error(`${TYPE_ROLES_FILE} must give ${role} one Core text style, by its name in ${SNAPSHOT_TEXT_STYLES}.`);
     if (!textStyles[style]) throw new Error(`${TYPE_ROLES_FILE} gives ${role} the text style ${style}, which the Core snapshot does not have.`);
-    for (const variable of Object.keys(METRICS)) {
-      if (!declarations.some(declaration => declaration.role === role && declaration.variable === variable)) throw new Error(`${ADAPTER} gives ${role} no --${variable}-${role}; a type role holds a size and a line height.`);
+    for (const category of CATEGORIES) {
+      if (!declarations.some(declaration => declaration.role === role && declaration.category === category)) throw new Error(`${ADAPTER} gives ${role} no --${category}-${role}; a type role holds a size and a line height.`);
     }
   }
   return lines.map(line => {
-    const { lead, variable, role } = line.match(DECLARATION)?.groups ?? {};
-    return role ? `${lead}${textStyles[roles[role]][METRICS[variable]]}px;` : line;
+    const { lead, category, role } = line.match(DECLARATION)?.groups ?? {};
+    return role ? `${lead}${textStyles[roles[role]][FROM_TEXT_STYLE[category]]}px;` : line;
   }).join('\n');
 }
 
+/** The CSS adapter in `root` as the Core snapshot's text styles and the Type role table there give it. */
 async function fromSnapshot(root) {
   const [textStyles, roles, css] = await Promise.all([json(root, SNAPSHOT_TEXT_STYLES), json(root, TYPE_ROLES_FILE), readFile(join(root, ADAPTER), 'utf8')]);
   return adapterFromCore(css, roles, textStyles);
@@ -72,6 +77,7 @@ function contractTable(contract) {
   for (const line of lines.slice(heading + 2)) {
     const [, role, style] = line.match(/^\|\s*`([\w-]+)`\s*\|\s*([^|]+?)\s*\|/) ?? [];
     if (!role) break;
+    if (role in rows) throw new Error(`${CONTRACT} maps ${role} twice; its table gives a type role one row.`);
     rows[role] = style;
   }
   return rows;

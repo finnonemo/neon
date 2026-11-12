@@ -4,6 +4,7 @@
 // either when it no longer equals the snapshot.
 import { readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { refuseUnseenDeclarations } from './adapter-declarations.mjs';
 import { toRgb } from './colors.mjs';
 import { SNAPSHOT_DIR } from './core-snapshot.mjs';
 
@@ -76,8 +77,7 @@ function adapterFromCore(css, roles, theme) {
   const lines = css.split('\n');
   const firstDark = lines.findIndex(line => line.includes(DARK_BLOCKS));
   if (firstDark < 0) throw new Error(`${ADAPTER} has no "Colors (dark)" block.`);
-  const stray = lines.findIndex(line => /--color-[\w-]+\s*:/.test(line) && !DECLARATION.test(line));
-  if (stray > -1) throw new Error(`${ADAPTER}:${stray + 1} must hold one color role alone on its line, as "--color-<role>: <value>;".`);
+  refuseUnseenDeclarations(ADAPTER, css, '--color-', DECLARATION, 'one color role alone on its line, as "--color-<role>: <value>;".');
   const roleOf = line => line.match(DECLARATION)?.[2];
   const declared = [...new Set(lines.map(roleOf).filter(Boolean))];
   const unlisted = declared.filter(role => !(role in roles));

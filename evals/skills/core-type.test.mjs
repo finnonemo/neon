@@ -156,6 +156,23 @@ test('the check refuses a size declared in a shape the sync does not write', asy
   }
 });
 
+test('the check refuses a size or line height declared a second time where the sync does not look', async t => {
+  // Each names the same property as the declaration above it and would win in a browser:
+  // a comment before the colon, the colon on the next line, a CSS escape in the name.
+  for (const added of ['  --lineHeight-body/**/: 20px;', '  --lineHeight-body\n    : 20px;', '  --fontSize-bod\\79: 20px;', '  --fontSiz\\65-body: 20px;']) {
+    const root = await repository(t);
+    await writeCoreType(root);
+    await edit(root, 'theme/css/theme.css', text => text.replace('  --space-2: 16px;', `${added}\n  --space-2: 16px;`));
+    await assert.rejects(checkCoreType(root), /theme\/css\/theme\.css:25 /, added);
+  }
+});
+
+test('a size or line height named in a comment is not a declaration', async t => {
+  const root = await repository(t, { 'theme/css/theme.css': ADAPTER.replace(':root {', '/*\n * The sync writes --fontSize-* and --lineHeight-*;\n * read one as var(--fontSize-body): never edit it.\n */\n:root {') });
+  await writeCoreType(root);
+  await checkCoreType(root);
+});
+
 test('the check refuses a design contract whose table differs from the Type role table', async t => {
   const moved = await repository(t);
   await writeCoreType(moved);
@@ -172,6 +189,23 @@ test('the check refuses a design contract whose table differs from the Type role
   const none = await repository(t, { 'skills/INSTRUCTION.md': '# Design contract\n\nUse the roles.\n' });
   await writeCoreType(none);
   await assert.rejects(checkCoreType(none), /skills\/INSTRUCTION\.md has no "\| Type role \| Core text style \|" table/);
+});
+
+test('the check refuses a design contract that maps one type role twice', async t => {
+  // The second row agrees with the Type role table; the first, which a reader meets first, does not.
+  const root = await repository(t);
+  await writeCoreType(root);
+  await edit(root, 'skills/INSTRUCTION.md', text => text.replace('| `body` | Body |', '| `body` | Subheadline |\n| `body` | Body |'));
+  await assert.rejects(checkCoreType(root), /skills\/INSTRUCTION\.md maps body twice/);
+});
+
+test('refuses tracking in the adapter: the snapshot\'s text styles state none to write', async t => {
+  for (const added of ['  --letterSpacing-body: -0.4px;', '  letter-spacing: -0.4px;']) {
+    const root = await repository(t);
+    await writeCoreType(root);
+    await edit(root, 'theme/css/theme.css', text => text.replace('  --space-2: 16px;', `${added}\n  --space-2: 16px;`));
+    await assert.rejects(checkCoreType(root), /theme\/css\/theme\.css:25 sets tracking/, added);
+  }
 });
 
 // ---- This repository: the type roles apps already use keep their names (ADR 0009: 1.0 only adds).
