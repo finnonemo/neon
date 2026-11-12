@@ -2,7 +2,7 @@
 
 **Build features that feel like Finnomena — describe what you need, and let your AI coding assistant handle the UI.**
 
-Neon is a set of four AI skills, Finnomena theme assets, and a React starter. The main journeys are create, redesign and review. Audit is an optional assessment when the target or integration approach is unclear. For React feature building, it uses real [Coinbase Design System](https://github.com/coinbase/cds) components through `@coinbase/cds-web`.
+Neon is a set of five AI skills, Finnomena theme assets, and a React starter. The main journeys are create, redesign and review. Audit is an optional assessment when the target or integration approach is unclear. The fifth skill, `neon-block`, draws Brand Artwork such as an ad, a post or a cover with the engine of Block, Finnomena's Pattern builder. For React feature building, it uses real [Coinbase Design System](https://github.com/coinbase/cds) components through `@coinbase/cds-web`.
 
 You can write your requests in Thai or English. You do not need to know component names or design token values to get started.
 
@@ -20,6 +20,16 @@ Use an AI coding assistant that supports skills and can read and edit your proje
 Open the **app you want to work on** in your assistant. For a new app, specify a new, empty destination folder. The Neon repository itself contains the reusable tooling; it is not your employee app.
 
 ### 2. Install Neon
+
+**Any agent, in one sentence**
+
+Give your agent this sentence:
+
+```text
+Install Neon and connect it to this coding agent using npx finno@latest setup. Show me the setup plan for approval, then verify the installation.
+```
+
+`finno setup` prints its plan and changes nothing until it is run again with `--yes`. For Claude Code and Codex it installs the `neon` plugin through the agent's own commands, as below. For Claude Desktop it registers the `finno` tools in the app's configuration file and keeps a backup of that file beside it; Desktop gets the skills from your organization's plugin marketplace, or from the plugin file `npx finno@latest setup --plugin-zip <directory>` writes. It needs Node.js 20.15 or later. Then it starts the tool server and checks that its three tools answer.
 
 **Claude Code**
 
@@ -41,7 +51,9 @@ codex plugin marketplace add finnonemo/neon
 codex plugin add neon@finnomena-plugins
 ```
 
-Start a new thread and confirm the four `neon-*` skills are available. Invoke one directly with `$neon-create`, `$neon-audit`, `$neon-redesign`, or `$neon-review`, or just describe your request naturally (mention Finnomena) and Codex will pick the matching skill.
+Start a new thread and confirm the five `neon-*` skills are available. Invoke one directly with `$neon-create`, `$neon-audit`, `$neon-redesign`, `$neon-review` or `$neon-block`, or just describe your request naturally (mention Finnomena) and Codex will pick the matching skill.
+
+`neon-block` draws through the `finno` tools. `finno setup` registers them with Codex; without it, the skill runs the same tools from the terminal.
 
 To remove it later: `codex plugin remove neon@finnomena-plugins`.
 
@@ -53,7 +65,7 @@ Keep a complete checkout of this repository available:
 git clone https://github.com/finnonemo/neon.git
 ```
 
-Register the four folders under `skills/` using your assistant's supported skill-loading mechanism. Keep the checkout intact: these skills also need sibling `theme/`, `templates/` and `scripts/` resources. Copying a `SKILL.md` alone is insufficient.
+Register the five folders under `skills/` using your assistant's supported skill-loading mechanism. Keep the checkout intact: these skills also need sibling `theme/`, `templates/`, `block/` and `scripts/` resources. Copying a `SKILL.md` alone is insufficient.
 
 If your assistant supports reading a skill directly, give it the absolute path to the relevant `SKILL.md` and your app's target directory. Automatic discovery varies by host; the repository checks do not verify host installation.
 
@@ -112,6 +124,15 @@ reference (แนบไฟล์) มีหัวข้อ กำหนดกา
 
 Bring an outside reference design, for example from [Refero Styles](https://styles.refero.design). Neon starts at **Blended**: the reference's layout, spacing, radius and motion, with Finnomena colors, typeface and logo. Ask "ให้ดู finnomena มากขึ้น" or "make it closer to the reference" to move one step at a time between **Finnomena-led**, **Blended** and **Reference-led**. At every level the Finnomena logo, typeface, at least one Finnomena color and readable contrast stay; actions may be white rather than navy or yellow, and nothing from the source brand (logo, imagery, copy, product names) is carried over. Brand Intensity applies to campaign and landing pages; back office screens and product features keep the standard Finnomena look.
 
+### Make an ad or a cover
+
+```text
+ทำภาพโฆษณา Finnomena สำหรับ story ข้อความว่า "ลงทุนทุกเดือน เริ่มต้น 500 บาท"
+ขอดูหลายแบบก่อนเลือก
+```
+
+The assistant shows twelve Patterns on one numbered sheet, drawn by the Block engine from the Format, Colourway and words it read from the request. Pick a number and it writes the artwork as SVG and PNG into a `finnomena-artwork` folder, with a link that opens the same artwork in Block for adjusting by hand. This release draws one picture at a time, without photos.
+
 ### Restyle an existing screen without adopting CDS
 
 ```text
@@ -142,7 +163,7 @@ You can also provide a screenshot. A screenshot review covers the visible state;
 
 ## Choose a skill
 
-Start with the task: create a feature, redesign existing UI, or review the result. Natural-language requests can select the relevant skill through your assistant. To be explicit in Claude Code, use the commands below. You do not need to run all four in sequence.
+Start with the task: create a feature, redesign existing UI, or review the result. Natural-language requests can select the relevant skill through your assistant. To be explicit in Claude Code, use the commands below. You do not need to run them in sequence.
 
 | Skill / command | When to use it | What it does |
 | --- | --- | --- |
@@ -150,6 +171,7 @@ Start with the task: create a feature, redesign existing UI, or review the resul
 | [`/neon:neon-audit`](skills/neon-audit/SKILL.md) | An existing app needs Finnomena branding, but the approach is unclear | Inspects the app without editing it, selects or clarifies the theming depth, then hands off |
 | [`/neon:neon-redesign`](skills/neon-redesign/SKILL.md) | Change existing UI styling or explicitly requested composition without adopting CDS | Applies scoped CSS changes, supports requested layout/hierarchy adaptation, and preserves product behavior |
 | [`/neon:neon-review`](skills/neon-review/SKILL.md) | Check existing UI or screenshots | Reports findings, evidence, suggested fixes and unavailable checks; review-only requests do not edit the app |
+| [`/neon:neon-block`](skills/neon-block/SKILL.md) | Make an ad, a post, a cover or a Pattern background as an image file | Shows twelve Patterns to pick from, then writes the artwork as SVG and PNG, drawn by the Block engine within the brand guideline |
 
 **Typical paths**
 
@@ -159,6 +181,7 @@ Start with the task: create a feature, redesign existing UI, or review the resul
 - Colors-only change → `neon-redesign`; on CDS components in an app already on CDS (frozen) → `neon-create`, still colors only.
 - Landing page from a reference design → `neon-create` for a new page, `neon-redesign` for an existing one.
 - UI quality check → `neon-review`.
+- An ad, post, cover or Pattern background as an image → `neon-block`.
 
 ## Choose how much to change
 
@@ -261,10 +284,12 @@ Packaging does not publish a release. Full contribution, token update and releas
 | --- | --- |
 | [`.claude-plugin/`](.claude-plugin/) | Claude Code plugin manifest and self-hosted marketplace metadata |
 | [`.codex-plugin/`](.codex-plugin/) | Codex plugin manifest, read by `codex plugin add` |
-| [`skills/`](skills/) | Four skill entrypoints and their supporting references |
+| [`skills/`](skills/) | Five skill entrypoints and their supporting references |
 | [`skills/INSTRUCTION.md`](skills/INSTRUCTION.md) | Shared functional and immersive design direction |
 | [`theme/`](theme/) | Exported tokens, CDS adapters, CSS theme and the Finnomena logo SVGs |
 | [`core/`](core/) | The Core snapshot: Core's component rules, specs and Theme tokens compiled for the web, generated by `scripts/sync-core.mjs` |
+| [`block/`](block/) | The Block snapshot: Block's engine built into one file, with the open fonts it draws text in, generated by `scripts/sync-block.mjs` |
+| [`scripts/finno.mjs`](scripts/finno.mjs) | `finno`: the command, the local tool server and `finno setup`; published to npm as `finno` |
 | [`templates/vitejs-cds/`](templates/vitejs-cds/) | React starter source and layouts |
 | [`scripts/`](scripts/) | Theme installation, starter assembly, the browser probe runner, packaging and resource checks |
 | [`scripts/theme-briefs/`](scripts/theme-briefs/) | Maintainer-only Theme Brief tool and its checks, not packaged |

@@ -20,6 +20,8 @@ const PAYLOAD_ENTRIES = [
   "scripts/source-lint.mjs",
   "scripts/probe-page.mjs",
   "scripts/theme-brief.mjs",
+  "scripts/finno.mjs",
+  "scripts/package-plugin.mjs",
   "scripts/lib",
   "LICENSE",
 ];

@@ -1,6 +1,6 @@
 {
   "name": "neon",
-  "description": "Applies Finnomena's brand theme so any employee's vibe-coded apps and UI mockups automatically follow company branding, with a choice of depth: CSS-only colors/typography or the full Coinbase Design System (CDS). Ships neon-audit (recommends a theming depth for an existing project), neon-redesign (colors/typography via CSS variables, no CDS), and neon-create (full CDS \u2014 scaffolds a new project or themes an existing one). Also ships neon-review for read-only, evidence-backed UI reviews of branding, responsiveness, accessibility, and interaction states.",
+  "description": "Applies Finnomena's brand so any employee's vibe-coded apps, UI mockups and artwork follow company branding. Ships neon-create (builds on the Neon base, or in an app already on the Coinbase Design System), neon-redesign (colors and typography through CSS variables), neon-audit (recommends a theming depth for an existing project), neon-review (read-only, evidence-backed UI review) and neon-block (draws Brand Artwork such as ads, posts and covers with the Block engine, through the finno tools).",
   "version": "0.6.0",
   "author": {
     "name": "Finnomena"
@@ -9,6 +9,16 @@
     "./skills/neon-create",
     "./skills/neon-redesign",
     "./skills/neon-audit",
-    "./skills/neon-review"
-  ]
+    "./skills/neon-review",
+    "./skills/neon-block"
+  ],
+  "mcpServers": {
+    "finno": {
+      "command": "node",
+      "args": [
+        "${CLAUDE_PLUGIN_ROOT}/scripts/finno.mjs",
+        "mcp"
+      ]
+    }
+  }
 }
