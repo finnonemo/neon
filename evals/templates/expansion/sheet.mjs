@@ -43,7 +43,7 @@ export const screens = sides.map(side);
 const trigger = (page, pin) => page.locator(`[data-measure=sheet-${pin}]`).getByRole('button', { name: pin, exact: true });
 const settled = (page) => page.waitForFunction(() => document.getAnimations().every((animation) => animation.playState !== 'running'));
 
-// The bottom sheet shows CDS's HandleBar, which is its close button; the other
+// The bottom sheet shows Core's Grabber, which is its close button; the other
 // sides show the close button instead. Every way out returns focus to the
 // trigger. Core's sheet has no stroke in either mode, and its Grabber's target is 96 by 48px
 // at the top of the sheet. Axe reads each side open.

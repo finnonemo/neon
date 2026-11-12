@@ -40,7 +40,7 @@ export async function readCoreDoc(root, item) {
 
 const escaped = text => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 // The doc writes a name whole (`Layer/layer-01`) or by its last part (`radius-lg`, `border-subtle`).
-const names = (doc, name) => new RegExp(`(?<![\\w-])(${escaped(name)}|${escaped(name.slice(name.lastIndexOf('/') + 1))})(?![\\w-])`).test(doc);
+const writes = (doc, name) => new RegExp(`(?<![\\w-])(${escaped(name)}|${escaped(name.slice(name.lastIndexOf('/') + 1))})(?![\\w-])`).test(doc);
 const colorOf = (token, modes) => ({ kind: 'color', token, ...Object.fromEntries(MODES.map(mode => [mode, cssColor(modes[mode].hex)])) });
 // A text style is named with its group (`Body/Subheadline`); the snapshot keys it without (`Subheadline`).
 const textStyleOf = (core, value) => {
@@ -55,7 +55,7 @@ const textStyleOf = (core, value) => {
  */
 export function docValue(core, name) {
   if (!core.doc) throw new Error(`${core.item}'s Counterpart ${core.counterpart} was read by its values, not its doc: read it with readCoreDoc.`);
-  if (!names(core.doc, name)) throw new Error(`Core's ${core.counterpart} doc does not name ${name}.`);
+  if (!writes(core.doc, name)) throw new Error(`Core's ${core.counterpart} doc does not name ${name}.`);
   if (name in core.theme) return colorOf(name, core.theme[name]);
   if (name in core.scales) return { kind: 'number', value: core.scales[name] };
   const style = textStyleOf(core, name);

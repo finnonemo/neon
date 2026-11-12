@@ -16,6 +16,8 @@ import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('../..', import.meta.url));
 
+// Core's Text/text-primary.
+const ink = { light: 'rgba(0, 0, 0, 0.851)', dark: 'rgb(255, 255, 255)' };
 const both = async (cell, names) => ({ light: await coreBaseline(cell, 'light', names), dark: await coreBaseline(cell, 'dark', names) });
 
 // Tooltip: the tip's Surface is Background/background-inverse with 8px corners, padded 16 at its
@@ -49,7 +51,6 @@ test('an alert is Core\'s In-line banner in Primary: its Status\'s fill under pr
   assert.deepEqual(await both(bannerCell('box', 'success')), box('rgb(230, 253, 240)', 'rgba(0, 231, 107, 0.149)'));
   assert.deepEqual(await both(bannerCell('box', 'warning')), box('rgb(254, 247, 243)', 'rgba(242, 100, 20, 0.149)'));
   assert.deepEqual(await both(bannerCell('box', 'error')), box('rgb(255, 245, 245)', 'rgba(247, 50, 50, 0.149)'));
-  const ink = { light: 'rgba(0, 0, 0, 0.851)', dark: 'rgb(255, 255, 255)' };
   assert.deepEqual(await both(bannerCell('icon', 'error')), { light: { color: ink.light }, dark: { color: ink.dark } });
   for (const text of ['title', 'message']) {
     assert.deepEqual(await both(bannerCell(text, 'warning')), { light: { font: { size: 15, lineHeight: 24 }, color: ink.light }, dark: { font: { size: 15, lineHeight: 24 }, color: ink.dark } });
@@ -59,7 +60,6 @@ test('an alert is Core\'s In-line banner in Primary: its Status\'s fill under pr
 
 // The Counterparts the snapshot holds as a doc alone (Alert, Sheet, Popover, Menu): a table names
 // the Theme token, Scale step or text style the doc gives each part, and states the doc's raw numbers.
-const ink = { light: 'rgba(0, 0, 0, 0.851)', dark: 'rgb(255, 255, 255)' };
 const layer01 = { light: 'rgb(255, 255, 255)', dark: 'rgb(26, 26, 26)' };
 const subtle = { light: 'rgba(0, 0, 0, 0.122)', dark: 'rgba(255, 255, 255, 0.18)' };
 const inBoth = (value) => ({ light: value('light'), dark: value('dark') });

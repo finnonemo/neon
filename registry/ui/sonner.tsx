@@ -2,7 +2,8 @@ import { Toaster as Sonner, type ToasterProps } from "sonner"
 
 // Core's Snackbar (core/components/snackbar.md): a Container on Background/background-inverse at
 // least 56px tall with 16px corners, padded 16 at its sides, its text in Text/text-inverse padded
-// 16 above and below. A status icon sits in a 24px box, 16px from the text, in Icon/icon-inverse.
+// 16 above and below. A status icon is Core's Medium glyph, drawn 18px in a 24px box that stays by
+// the first line, 16px from the text, in Icon/icon-inverse.
 // The action and cancel buttons are Core's Button, Tertiary Inverse at Medium: 48px, padded 24,
 // Hover Button/button-tertiary-inverse-hover, focus Focus/focus-inverse; beside one the Container
 // pads 4 at its end. Core's text is Callout, which no type role holds: the title stays Headline.
@@ -23,7 +24,7 @@ function Toaster(props: ToasterProps) {
         unstyled: true,
         classNames: {
           toast: "flex min-h-14 w-(--width) items-center gap-2 rounded-xl bg-inverse px-4 text-inverse-foreground shadow-[0_8px_24px_rgba(0,0,0,0.12)] has-[[data-button]]:pr-1",
-          icon: "mr-2 flex size-6 shrink-0 items-center justify-center [&_svg]:size-5",
+          icon: "mt-4 mr-2 flex size-6 shrink-0 items-center justify-center self-start [&_svg]:size-4.5",
           content: "flex min-w-0 flex-1 flex-col py-4",
           title: "text-headline",
           description: "text-label2",

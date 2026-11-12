@@ -39,7 +39,7 @@ export const screens = [
 const title = 'ลบบัญชีรับเงิน / Remove payout account';
 const trigger = (page) => page.locator('[data-measure=alert-dialog]').getByRole('button', { name: 'ลบบัญชี / Remove account' });
 
-// Radix's alert dialog, as CDS Alert behaves: named by its title and described
+// Radix's alert dialog, as Core's Alert behaves: named by its title and described
 // by its body, deaf to a click on the overlay, and returning focus to its
 // trigger however it closes. Axe reads it open, which the screen pass cannot.
 export function a11y({ test, expect, gotoExpansion }) {

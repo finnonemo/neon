@@ -6,10 +6,8 @@
 // Text/text-disabled at full opacity. The Section Title is Footnote in Text/text-secondary,
 // padded 4, 8, 8, 8 (32px tall); the Separator's line is 1px of Border/border-subtle. The
 // width, the 10 and the 6 are raw numbers in the doc.
-import { NO_PAINT } from './entries.mjs';
+import { NO_STROKE, named, raw } from './entries.mjs';
 
-const named = (doc) => ({ doc });
-const raw = (literal) => ({ literal });
 const body = named('Body/Body');
 
 /** A measured part of Neon's dropdown-menu in Core's Menu. */
@@ -18,7 +16,7 @@ export const menuCell = (part) => ({ item: 'dropdown-menu', part });
 export default {
   doc: true,
   parts: {
-    surface: { properties: { w: raw(238), pad: [raw(10), raw(0), raw(10), raw(0)], radius: named('Radius/radius-md'), bg: named('Layer/layer-01'), border: raw({ width: 0, color: NO_PAINT }) } },
+    surface: { properties: { w: raw(238), pad: [raw(10), raw(0), raw(10), raw(0)], radius: named('Radius/radius-md'), bg: named('Layer/layer-01'), border: NO_STROKE } },
     item: {
       properties: {
         h: raw(48),

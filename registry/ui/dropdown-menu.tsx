@@ -12,7 +12,8 @@ import { cn } from "@/lib/utils"
 // Text/text-disabled, with no opacity. The label is Core's Section Title (Footnote in
 // Text/text-secondary, 32px tall) and the separator a 1px Border/border-subtle line, each 8px
 // inside the rows' sides. Core's checkmark, subtitle, submenu, profile item and quick actions
-// have no part here. The snapshot has no Elevation token, so the shadow is Neon's.
+// have no part here. Core draws the menu over its trigger from the anchored corner; Radix places
+// it 8px off the trigger's side instead. The snapshot has no Elevation token, so the shadow is Neon's.
 function DropdownMenu(props: React.ComponentProps<typeof DropdownMenuPrimitive.Root>) {
   return <DropdownMenuPrimitive.Root data-slot="dropdown-menu" {...props} />
 }

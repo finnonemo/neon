@@ -9,8 +9,9 @@ import { cn } from "@/lib/utils"
 // Miscellaneous/overlay scrim. The Headline title and the Body message, both Text/text-primary
 // and left aligned, sit 10px apart in padding of 8, 8, 24, 8. The actions are Core's Button dock
 // side by side: Medium Buttons 8px apart, each half the row, the cancel Core's Tertiary before
-// the Primary; a long label wraps in its button. Core's Stacked dock is the footer given
-// flex-col. Radix keeps it open on a scrim click, closes it on Escape and returns focus to the
+// the Primary. Core keeps a label on one line and stacks two that do not fit; the footer cannot
+// tell, so a long label wraps in its button. Core's Stacked dock, the Primary above the cancel,
+// is the footer given flex-col-reverse. Radix keeps it open on a scrim click, closes it on Escape and returns focus to the
 // trigger. The snapshot has no Elevation token, so the shadow is Neon's.
 function AlertDialog(props: React.ComponentProps<typeof AlertDialogPrimitive.Root>) {
   return <AlertDialogPrimitive.Root data-slot="alert-dialog" {...props} />

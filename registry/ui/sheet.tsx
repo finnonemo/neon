@@ -13,7 +13,8 @@ import { cn } from "@/lib/utils"
 // capped at 70em; left and right sheets are min(400px, 100vw) wide and full height. A bottom
 // sheet shows Core's Grabber, which is its close button; the other sides show an X. Radix closes
 // it on Escape or a scrim click and returns focus to the trigger; there is no drag to dismiss
-// and there are no detents. The snapshot has no Elevation token, so the shadow is Neon's.
+// and there are no detents. Core's centred sheet for a wide screen (Sheet - iPad) is not drawn:
+// a bottom sheet keeps this look at every width. The snapshot has no Elevation token, so the shadow is Neon's.
 type Side = "top" | "right" | "bottom" | "left"
 
 const SheetSide = React.createContext<Side>("right")

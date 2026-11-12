@@ -6,13 +6,13 @@ import { cn } from "@/lib/utils"
 // Core's In-line banner (core/components/banner.md), Hierarchy=Primary: a box at least 80px tall
 // with 16px corners and 16px padding on its Status's Notifications fill, its text in
 // Text/text-primary and its icon in Icon/icon-primary whatever the Status. The icon is Core's
-// Large glyph, drawn 24px, 16px before the text; the label1 Title sits on the label2 Description
+// Large glyph, drawn 20px in a 24px box as the Button's is, 16px before the text; the label1 Title sits on the label2 Description
 // with no gap. Each variant is a Status:
 //   informational  Info     Notifications/notification-info-background
 //   success        Success  Notifications/notification-success-background
 //   warning        Warning  Notifications/notification-warning-background
 //   error          Error    Notifications/notification-error-background
-// promotional has no Status in Core: it keeps its brand wash and is not chosen for new work.
+// promotional has no Status in Core: it keeps its brand wash (PROVISIONAL: no Core token) and is not chosen for new work.
 // Core's border is the fill's own color in light and clear in dark, so none is drawn. Core's
 // Secondary hierarchy, Caution statuses, Badge artwork and its Button and Toggle actions have no
 // prop. AlertAction sits top right; Core's Icon Button action is the row's last item.
@@ -75,7 +75,7 @@ function Alert({
       <div
         data-slot="alert-content"
         aria-hidden={settled ? undefined : true}
-        className="group/alert grid min-w-0 flex-1 has-[>svg]:grid-cols-[auto_1fr] has-[>svg]:gap-x-4 *:[svg]:row-span-2 *:[svg:not([class*='size-'])]:size-6"
+        className="group/alert grid min-w-0 flex-1 has-[>svg]:grid-cols-[auto_1fr] has-[>svg]:gap-x-4 *:[svg]:row-span-2 *:[svg]:my-0.5 *:[svg:not([class*='size-'])]:size-5"
       >
         {children}
       </div>

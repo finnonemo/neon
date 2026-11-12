@@ -22,6 +22,27 @@ for (const [layout, mode] of ['approval', 'extras', 'expansion'].flatMap((layout
   });
 }
 
+// Axe reads each overlay open, which the screen pass above cannot. An alert dialog and a sheet
+// read theirs in their own expansion files.
+const overlays = [
+  ['dialog', 'click', '[data-measure=actions] button:nth-of-type(1)', '[data-slot=dialog-content]'],
+  ['popover', 'click', '[data-measure=core-popover] button', '[data-slot=popover-content]'],
+  ['menu', 'click', '[data-measure=core-menu] button', '[data-slot=dropdown-menu-content]'],
+  ['tooltip', 'focus', '[data-measure=help] button', '[data-slot=tooltip-content]'],
+  ['toast', 'click', '[data-measure=toast-action] button', '[data-sonner-toast]'],
+];
+for (const [name, action, trigger, surface] of overlays) for (const mode of ['light', 'dark']) {
+  test(`an open ${name} passes axe in ${mode}`, async ({ page }) => {
+    await page.goto(`/?layout=extras${mode === 'dark' ? '&mode=dark' : ''}`);
+    await page.evaluate(() => document.fonts.ready);
+    await page.locator(trigger)[action]();
+    await expect(page.locator(surface)).toBeVisible();
+    await settled(page);
+    const { violations } = await new AxeBuilder({ page }).include(surface).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
+    expect(violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);
+  });
+}
+
 test('every tag reads at 4.5:1 or more on its wash in light', async ({ page }) => {
   await page.goto('/?layout=approval');
   const ratios = await page.$$eval('[data-slot=tag]', (tags) => {
@@ -233,6 +254,9 @@ test('a toast leaves focus on its trigger, sets its icon 16px from its text, and
   const icon = await toast.locator('[data-icon]').boundingBox();
   const text = await toast.locator('[data-title]').boundingBox();
   expect(Math.round(text.x - (icon.x + icon.width))).toBe(16);
+  // Core's Medium glyph, 18px in a 24px box that stays by the first line: 16px below the toast's top.
+  expect(Math.round(icon.y - (await toast.boundingBox()).y)).toBe(16);
+  expect(await toast.locator('[data-icon] svg').evaluate((el) => el.getBoundingClientRect().width)).toBe(18);
   const action = toast.getByRole('button', { name: 'เลิกทำ' });
   await action.hover();
   await settled(page);

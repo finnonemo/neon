@@ -15,7 +15,7 @@
   "bgElevation1": "Layer/layer-01",
   "bgElevation2": "Layer/layer-02",
   "bgPrimary": "Button/button-primary",
-  "bgPrimaryWash": { "light": null, "dark": null, "why": "Core's Theme has no brand wash; the value is the CDS default until alert and tabs take their Counterparts' tokens." },
+  "bgPrimaryWash": { "light": null, "dark": null, "why": "Core's Theme has no brand wash; the value is the CDS default. alert's promotional variant alone reads it, a value with no Core cell." },
   "bgSecondary": "Background/background-secondary",
   "bgTertiary": "Background/background-tertiary",
   "bgSecondaryWash": { "light": null, "dark": null, "why": "No Core Theme token names this; the value is the CDS default." },

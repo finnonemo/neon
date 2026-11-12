@@ -65,7 +65,7 @@ export function bareCnImports(files) {
 }
 
 /**
- * A component reads a role named after itself (--sheet-border-width) only
+ * A component reads a role named after itself (--<item>-<name>) only
  * with a fallback: shadcn add @neon/<item> does not pull the theme, so an app
  * whose neon.css predates the role would get border-width's initial "medium".
  */

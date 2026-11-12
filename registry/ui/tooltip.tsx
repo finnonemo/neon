@@ -6,7 +6,8 @@ import { cn } from "@/lib/utils"
 // Core's Tooltip (core/components/tooltip.md): the tip is Background/background-inverse with 8px
 // corners, padded 16 at its sides, its Subheadline label in Text/text-inverse. size is Core's
 // Size: sm pads 2 above and below and wraps its label past 176px (an icon's name), default 8 and
-// 144px, lg 16 and 256px (a definition). The caret is 16 by 8, or 8 by 4 at sm, in the tip's fill,
+// 144px, lg 16 and 256px (a definition). Core's own Tooltip shows sm on an icon and lg on a
+// definition; default is its item's Medium, kept as the default so a tip in an app does not change. The caret is 16 by 8, or 8 by 4 at sm, in the tip's fill,
 // kept 16px (20 at sm) from the tip's corners, and meets the trigger's box: sideOffset is 0.
 // The base's AppRoot renders the one TooltipProvider, so a Tooltip needs none of its own.
 // Core opens after 100ms of hover and at once on keyboard focus.
