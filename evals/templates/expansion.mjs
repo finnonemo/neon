@@ -3,11 +3,12 @@
 //   screens  CDS-match entries in measure.mjs's shape. name defaults to
 //            'expansion-<item>' and query to 'layout=expansion'; give a second
 //            entry (an overlay's open state) its own name.
-//   a11y     optional: ({ test, expect, gotoExpansion, keyboardFocus, focusColor }) => registers
+//   a11y     optional: ({ test, expect, gotoExpansion, keyboardFocus, focusColor, computedColor }) => registers
 //            the item's Neon behavior checks; gotoExpansion(page, mode) opens the screen
 //            (in 'dark' when asked),
 //            keyboardFocus(page, control) reports its keyboard focus indicator and
-//            focusColor(page) is the color Core draws one in.
+//            focusColor(page) is the color Core draws one in and computedColor(page, value)
+//            what a color expression computes to.
 // Its fixtures are fixtures/expansion/<item>.tsx (CDS) and
 // fixtures/neon/expansion/<item>.tsx (Neon). Adding an item adds files only.
 // Modules import nothing from here: this file imports them.

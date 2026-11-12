@@ -115,7 +115,8 @@
   --color-switch-on: var(--switch-on);
   --color-switch-thumb: var(--switch-thumb);
   --color-switch-thumb-disabled: var(--switch-thumb-disabled);
-  /* Core's Layer tokens over a surface at Hover and Active, for a segment not chosen. */
+  /* Core's Layer tokens over a surface at Hover and Active: a segment not chosen, a list or table
+   * row, an accordion header, a tab, a page. */
   --color-layer-hover: var(--layer-hover);
   --color-layer-active: var(--layer-active);
   --color-layer-selected: var(--layer-selected);
@@ -127,7 +128,7 @@
   --color-selection-tag-border: var(--selection-tag-border);
   /* Core's tokens for the display items. track is Layer/layer-03, behind a progress bar's
    * indicator and a spinner's arc; info and interactive are those two; layer-02 is a table's
-   * header row; icon-muted is Icon/icon-secondary, a chevron or a sort glyph; avatar is Core's
+   * header row; icon-muted is Icon/icon-secondary, a chevron; avatar is Core's
    * Avatar fill under Text/text-on-color. */
   --color-track: var(--track);
   --color-info: var(--info);
@@ -223,7 +224,7 @@
   --switch-on: var(--color-bgPositive);
   --switch-thumb: var(--color-fgIconOnColor);
   --switch-thumb-disabled: var(--color-fgIconOnColorDisabled);
-  /* A segment not chosen, at Hover and Active: Core's layer-hover-01 and layer-active-01. */
+  /* Core's layer-hover-01 and layer-active-01. */
   --layer-hover: var(--color-bgElevation1Hover);
   --layer-active: var(--color-bgElevation1Active);
   /* A selected table row: Core's layer-selected-01. */

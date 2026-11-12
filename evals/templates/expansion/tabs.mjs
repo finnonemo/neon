@@ -42,10 +42,21 @@ export const screens = [{
 // selects on Enter; selecting on arrival is Radix's documented default and no
 // less accessible. Keyboard focus is Core's 2px Focus/focus stroke inside the tab, an inset ring
 // the selected tab's Line draws over.
-export function a11y({ test, expect, gotoExpansion, keyboardFocus, focusColor }) {
+export function a11y({ test, expect, gotoExpansion, keyboardFocus, focusColor, computedColor }) {
   const tablist = (page) => page.getByRole('tablist', { name: 'บัญชี / Account' });
   const tabsOf = (page) => ['ภาพรวม', 'History', 'เอกสาร'].map((name) => tablist(page).getByRole('tab', { name }));
   const panel = (page) => page.locator('[data-measure=tabs-default]').getByRole('tabpanel');
+
+  // The snapshot binds this cell's Label twice, so it is checked against Core's doc: Disabled is
+  // Text/text-disabled, and the Line Border/border-disabled.
+  test('a selected tab that is disabled takes the Disabled text and Line', async ({ page }) => {
+    await gotoExpansion(page);
+    const tab = page.locator('[data-measure=tabs-disabled-selected]').getByRole('tab', { name: 'ปิดแล้ว' });
+    await expect(tab).toHaveAttribute('aria-selected', 'true');
+    await expect(tab).toBeDisabled();
+    await expect(tab).toHaveCSS('color', await computedColor(page, 'var(--disabled-foreground)'));
+    await expect(tab.locator('[data-slot=tabs-indicator]')).toHaveCSS('background-color', await computedColor(page, 'var(--line-disabled)'));
+  });
 
   for (const mode of ['light', 'dark']) test(`${mode}: a tab reached from the keyboard draws Core's Focus stroke inside it`, async ({ page }) => {
     await gotoExpansion(page, mode);

@@ -64,6 +64,15 @@ test('a selected list row shows by its Checkmark, one line is 56px and the last 
   await expect(page.locator('[data-measure=core-list] li:nth-child(1) [data-slot=list-row]')).toBeDisabled();
 });
 
+// Core's Table: Hover is a Body row's.
+test('a table row fills on hover in the body only', async ({ page }) => {
+  await page.goto('/?layout=extras');
+  const hover = await computed(page, 'var(--layer-hover)');
+  const fill = async (row) => { await row.hover(); await settled(page); return row.evaluate((el) => getComputedStyle(el).backgroundColor); };
+  expect(await fill(page.locator('[data-measure=table] tbody tr').first())).toBe(hover);
+  expect(await fill(page.locator('[data-measure=table] thead tr'))).not.toBe(hover);
+});
+
 test('the segmented control is one radio group the arrow keys move through', async ({ page }) => {
   await page.goto('/?layout=approval');
   const group = page.getByRole('radiogroup', { name: 'สถานะ / Status' });
@@ -188,4 +197,4 @@ test.describe('in a Thai browser', () => {
 });
 
 // Each registry expansion item's behavior checks, from expansion/<item>.mjs.
-for (const item of expansionItems) if (item.a11y) test.describe(item.name, () => item.a11y({ test, expect, gotoExpansion, keyboardFocus, focusColor }));
+for (const item of expansionItems) if (item.a11y) test.describe(item.name, () => item.a11y({ test, expect, gotoExpansion, keyboardFocus, focusColor, computedColor: computed }));

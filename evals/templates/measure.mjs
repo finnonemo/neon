@@ -195,6 +195,7 @@ export const screens = [
       disabledRow: { neon: '[data-measure=core-list] li:nth-child(1) [data-slot=list-row]', check: ['h', 'bg', 'border'], core: listCell('row', { State: 'Disabled' }) },
       disabledRowTitle: { neon: '[data-measure=core-list] li:nth-child(1) [data-slot=list-row-title]', check: ['font', 'color'], core: listCell('title', { State: 'Disabled' }) },
       disabledRowDescription: { neon: '[data-measure=core-list] li:nth-child(1) [data-slot=list-row-description]', check: ['font', 'color'], core: listCell('subtitle', { State: 'Disabled' }) },
+      disabledRowCheck: { neon: '[data-measure=core-list] li:nth-child(1) [data-slot=list-row-check]', check: ['color'], core: listCell('checkmark', { State: 'Disabled' }) },
       disabledCheckbox: { neon: '[data-measure=disabled-check] [role=checkbox]', cds: '[data-measure=disabled-check] [data-testid=checkbox-outer]', check: ['border', 'bg', 'opacity'] },
       disabledCheckboxLabel: { neon: '[data-measure=disabled-check] label', cds: '[data-measure=disabled-check] label span[id]', check: ['color', 'opacity'] },
     },

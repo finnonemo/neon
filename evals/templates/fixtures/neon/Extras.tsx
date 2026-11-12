@@ -206,10 +206,10 @@ export function Extras() {
           <Tag size="lg" variant="negative">ปฏิเสธ</Tag>
         </div>
       </Hook>
-      {/* Core's List item states the approval list has none of: a disabled row, and a row of one line. */}
+      {/* Core's List item states the approval list has none of: a disabled row (selected, for its Checkmark), and a row of one line. */}
       <Hook name="core-list">
         <List aria-label="บัญชี / Accounts">
-          <ListRow disabled>
+          <ListRow disabled selected>
             <ListRowContent>
               <ListRowTitle>บัญชีออมทรัพย์</ListRowTitle>
               <ListRowDescription>ปิดใช้งาน</ListRowDescription>

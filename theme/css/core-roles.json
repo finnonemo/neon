@@ -4,7 +4,7 @@
   "fg": "Text/text-primary",
   "fgMuted": "Text/text-secondary",
   "fgInverse": "Text/text-inverse",
-  "fgPrimary": { "light": null, "dark": null, "why": "Core's Theme has no text token in the brand color; the value is the CDS default until alert and tabs take their Counterparts' tokens; input-group's ghost button reads it, a part Core's Text field does not have." },
+  "fgPrimary": { "light": null, "dark": null, "why": "Core's Theme has no text token in the brand color; the value is the CDS default until alert takes its Counterpart's tokens; input-group's ghost button reads it, a part Core's Text field does not have." },
   "fgWarning": "Support/support-warning",
   "fgPositive": "Text/text-positive",
   "fgNegative": "Text/text-negative",

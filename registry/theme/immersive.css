@@ -11,8 +11,8 @@
  * A theme's text is White or Navy only, so muted text is the theme's text
  * too, and cards and popovers sit on the canvas so it stays readable there.
  * Secondary, muted and accent fills (secondary and outline buttons, toggles,
- * the segmented control track, fields, tags, list rows, menu items, table
- * headers) carry the theme's text, not their own foreground, so they take
+ * the segmented control track, fields, menu items) carry the theme's text,
+ * not their own foreground, so they take
  * palette 75: the first stepped block on a theme whose palette 100 is the
  * canvas, and the one step whose on-color is the theme's text in every theme.
  * Accent equals secondary, as bgAlternate equals bgSecondary in Neon. Inverse
@@ -27,8 +27,8 @@
  * thumb in on-action. The display items retuned to Core do the same: a
  * progress bar's and a spinner's track and a table's header row are palette
  * 75, the indicator, the arc and an avatar the action (its initial in
- * on-action), and a chevron or a sort glyph the theme's text. The
- * fgPrimary role (the active tab, the informational alert's icon, a ghost
+ * on-action), and a chevron the theme's text. The
+ * fgPrimary role (the informational alert's icon, a ghost
  * input button) is the theme's text, or Ultra would draw it navy on navy.
  * The Button's states are restated, since Core's are for its own colors. The
  * primary's Hover and Active let 10% of what is behind show through, and its

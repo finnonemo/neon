@@ -35,7 +35,7 @@ function ListRow({
         {...props}
       >
         {children}
-        {selected && <CheckIcon data-slot="list-row-check" className="size-6 shrink-0 text-link" aria-hidden />}
+        {selected && <CheckIcon data-slot="list-row-check" className="size-6 shrink-0 text-link in-disabled:text-icon-disabled" aria-hidden />}
       </button>
       <span
         data-slot="list-row-divider"

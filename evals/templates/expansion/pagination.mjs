@@ -5,7 +5,9 @@
 // baseline, as do the distances.
 import { paginationCell } from '../core/pagination.mjs';
 
-const nav = '[data-measure=pagination]';
+// The fixture's own hook, inside the section's of the same name: the section also holds the
+// disabled pages.
+const nav = '[data-measure=pagination] [data-measure=pagination]';
 const neonItem = (n) => `${nav} [data-slot=pagination-item]:nth-child(${n}) > *`;
 const page = ['h', 'w', 'radius', 'border', 'bg', 'color', 'font', 'pad'];
 const control = ['h', 'w', 'radius', 'bg', 'opacity'];
@@ -24,6 +26,8 @@ export const screens = [
       last: { cds: `${nav} [data-pagenumber="10"]`, neon: neonItem(6), check: page, core: paginationCell('page') },
       next: { cds: `${nav} [data-testid=pagination-next]`, neon: neonItem(7), check: control },
       nextIcon: { cds: `${nav} [data-testid=pagination-next] [data-icon-name]`, neon: `${neonItem(7)} svg`, check: ['h', 'w', 'color'] },
+      // Core's Selected and Disabled page, which the CDS fixture has none of.
+      disabledCurrent: { neon: '[data-measure=pagination-disabled] [aria-current=page]', check: ['bg', 'color'], core: paginationCell('page', { Selected: true, State: 'Disabled' }) },
     },
     gaps: [
       ['previous', 'current', 'x'],
@@ -74,7 +78,16 @@ export function a11y({ test, expect, gotoExpansion, keyboardFocus, focusColor })
     await expect(current).toHaveAccessibleName('หน้า 3 / Page 3');
   });
 
-  // The fixture's bar is 320px wide, narrower than Core's five pages with Previous and Next (384px).
+  // Core's page has one box. A size is the Button's, so a page number given one keeps the Button.
+  test('a page number given a size keeps the Button in that size', async ({ page }) => {
+    await gotoExpansion(page);
+    const sized = page.locator('[data-measure=pagination-disabled]').getByRole('link', { name: 'หน้า 2 / Page 2' });
+    const { width, height } = await sized.boundingBox();
+    expect({ width, height }).toEqual({ width: 32, height: 32 });
+  });
+
+  // The fixture's bar is 320px wide, narrower than five pages at their 48px targets with Previous
+  // and Next (384px; 400px with Core's 48px Icon buttons).
   test('a bar narrower than its pages keeps Previous and Next inside it', async ({ page }) => {
     await gotoExpansion(page);
     const box = (locator) => locator.boundingBox();

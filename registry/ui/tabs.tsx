@@ -33,7 +33,7 @@ function TabsTrigger({ className, children, ...props }: React.ComponentProps<typ
       className={cn(
         "group/tabs-trigger relative inline-flex min-h-12 min-w-12 items-center justify-center gap-2 px-4 py-3 text-label2 whitespace-nowrap text-muted-foreground inset-ring-2 inset-ring-transparent transition-[color,background-color,box-shadow] outline-none",
         "focus-visible:inset-ring-ring active:bg-layer-active data-[state=active]:text-foreground",
-        "disabled:pointer-events-none disabled:text-disabled-foreground",
+        "disabled:pointer-events-none disabled:text-disabled-foreground disabled:data-[state=active]:text-disabled-foreground",
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className
       )}

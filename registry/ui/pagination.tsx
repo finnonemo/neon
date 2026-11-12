@@ -10,9 +10,11 @@ import { cn } from "@/lib/utils"
 // target, its number Text/text-primary: Hover fills it Layer/layer-hover-01 and Pressed
 // Layer/layer-active-01. The current page is Background/background-inverse with
 // Text/text-inverse, marked aria-current="page". Disabled takes Text/text-disabled with no
-// opacity. Keyboard focus is Core's 2px Focus/focus ring round the box, inside the target. Previous and Next are
-// Core's Tertiary icon Buttons. Core's page number is Callout, Strong when selected, which no
-// type role holds: it stays Headline. Core's Overflow type and Small size have no prop.
+// opacity. Keyboard focus is Core's 2px Focus/focus ring round the box, inside the target.
+// Core's Previous and Next are its Icon button (Tertiary, 48px), which the registry has no item
+// for: they stay the Button's 40px ghost icon size. Core's page number is Callout, Strong when
+// selected, which no type role holds: it stays Headline. Core's Overflow type and Small size
+// have no prop.
 function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
   return (
     <nav
@@ -38,19 +40,20 @@ function PaginationItem({ className, ...props }: React.ComponentProps<"li">) {
 type PaginationLinkProps = {
   isActive?: boolean
   /**
-   * Drops the href and onClick and marks the link aria-disabled, as CDS
-   * disables previous on the first page. pointer-events: none stops only the
+   * Drops the href and onClick and marks the link aria-disabled, as Previous
+   * is on the first page. pointer-events: none stops only the
    * mouse; a screen reader still sends a click, so onClick must go too.
    */
   disabled?: boolean
 } & Pick<React.ComponentProps<typeof Button>, "size"> &
   React.ComponentProps<"a">
 
-// A page number is Core's page item, whatever its size; any other content (Previous, Next) is a
-// Tertiary Button in that size. A disabled link is not :disabled, so it takes the Button's
-// disabled look by aria-disabled.
-function PaginationLink({ className, isActive, disabled, size = "icon", href, onClick, children, ...props }: PaginationLinkProps) {
-  const number = typeof children === "string" || typeof children === "number"
+// A page number is Core's page item. Core's page has one box, so a page number given a size
+// keeps the ghost Button in that size, as any other content (Previous, Next) is, in the icon
+// size by default. A disabled link is not :disabled, so it takes its disabled look by
+// aria-disabled.
+function PaginationLink({ className, isActive, disabled, size, href, onClick, children, ...props }: PaginationLinkProps) {
+  const isPage = size === undefined && (typeof children === "string" || typeof children === "number")
   const link = (
     <a
       aria-current={isActive ? "page" : undefined}
@@ -60,12 +63,12 @@ function PaginationLink({ className, isActive, disabled, size = "icon", href, on
       onClick={disabled ? undefined : onClick}
       data-slot="pagination-link"
       data-active={isActive}
-      {...(number && {
+      {...(isPage && {
         className: cn(
           "relative inline-flex min-h-9 min-w-9 items-center justify-center rounded-md text-headline whitespace-nowrap text-foreground outline-2 outline-offset-0 outline-transparent transition-colors after:absolute after:-inset-1.5",
           "hover:bg-layer-hover focus-visible:outline-ring active:bg-layer-active",
           "aria-[current=page]:bg-inverse aria-[current=page]:text-inverse-foreground aria-[current=page]:hover:bg-inverse aria-[current=page]:active:bg-inverse",
-          "aria-disabled:pointer-events-none aria-disabled:bg-transparent aria-disabled:text-disabled-foreground aria-disabled:aria-[current=page]:bg-layer-active",
+          "aria-disabled:pointer-events-none aria-disabled:bg-transparent aria-disabled:text-disabled-foreground aria-disabled:aria-[current=page]:bg-layer-active aria-disabled:aria-[current=page]:text-disabled-foreground",
           className
         ),
       })}
@@ -74,12 +77,12 @@ function PaginationLink({ className, isActive, disabled, size = "icon", href, on
       {children}
     </a>
   )
-  if (number) return link
+  if (isPage) return link
   return (
     <Button
       asChild
       variant="ghost"
-      size={size}
+      size={size ?? "icon"}
       className={cn("aria-disabled:pointer-events-none aria-disabled:bg-button-disabled aria-disabled:text-button-disabled-foreground", className)}
     >
       {link}
