@@ -43,6 +43,11 @@ test('the Counterpart table marks a vertical separator and a numeric spinner siz
   assert.deepEqual(table.spinner.notInCore, { size: ['number'] });
 });
 
+test('the Counterpart table marks the promotional alert as not in Core', async () => {
+  const table = JSON.parse(await read('registry/core-counterparts.json'));
+  assert.deepEqual(table.alert.notInCore, { variant: ['promotional'] });
+});
+
 test('every value marked as not in Core is a value its item still has', async () => {
   const table = JSON.parse(await read('registry/core-counterparts.json'));
   for (const [item, { notInCore }] of Object.entries(table)) {

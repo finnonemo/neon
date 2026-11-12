@@ -1,18 +1,30 @@
-// alert → CDS Banner (contextual style), one per variant: the box's fill,
-// radius and padding, the 16px icon in its variant color, then the label1
-// title and label2 message 4px apart. The box's height shows the Thai
-// message's line count (both targets wrap it at 256px). The icon → title gaps
-// place the icon 4px in from its 24px column and 2px down from the title.
+// alert → Core's In-line banner in Primary, one per variant: the box's fill, radius and padding,
+// the icon in Icon/icon-primary, then the label1 title on the label2 message. informational,
+// warning and error take Core's values for what the banner's table lists; their size, the icon's
+// box and the gaps stay beside the CDS Banner, where they are recorded differences. promotional
+// has no Status in Core and stays on the CDS baseline. success and the title-only alert (Core's
+// 80px minimum height) are not in CDS, so they are held to Core alone.
+import { bannerCell } from '../core/banner.mjs';
+
 const at = (hook) => `[data-measure=${hook}]`;
 const variants = ['informational', 'warning', 'error', 'promotional'];
+const core = (part, variant) => (variant === 'promotional' ? {} : { core: bannerCell(part, variant) });
 const parts = (variant) => {
   const hook = at(`alert-${variant}`);
   return {
-    [`${variant}Box`]: { cds: `${hook} .cds-Banner-content`, neon: `${hook} [data-slot=alert]`, check: ['h', 'w', 'pad', 'radius', 'bg', 'border'] },
-    [`${variant}Icon`]: { cds: `${hook} .cds-Banner-start span[role=img]`, neon: `${hook} [data-slot=alert-content] > svg`, check: ['h', 'w', 'color'] },
-    [`${variant}Title`]: { cds: `${hook} .cds-Banner-middle > div > :nth-child(1)`, neon: `${hook} [data-slot=alert-title]`, check: ['font', 'color', 'h'] },
-    [`${variant}Message`]: { cds: `${hook} .cds-Banner-middle > div > :nth-child(2)`, neon: `${hook} [data-slot=alert-description]`, check: ['font', 'color', 'h'] },
+    [`${variant}Box`]: { cds: `${hook} .cds-Banner-content`, neon: `${hook} [data-slot=alert]`, check: ['h', 'w', 'pad', 'radius', 'bg', 'border'], ...core('box', variant), coreProperties: ['pad', 'radius', 'bg'] },
+    [`${variant}Icon`]: { cds: `${hook} .cds-Banner-start span[role=img]`, neon: `${hook} [data-slot=alert-content] > svg`, check: ['h', 'w', 'color'], ...core('icon', variant) },
+    [`${variant}Title`]: { cds: `${hook} .cds-Banner-middle > div > :nth-child(1)`, neon: `${hook} [data-slot=alert-title]`, check: ['font', 'color', 'h'], ...core('title', variant) },
+    [`${variant}Message`]: { cds: `${hook} .cds-Banner-middle > div > :nth-child(2)`, neon: `${hook} [data-slot=alert-description]`, check: ['font', 'color', 'h'], ...core('message', variant) },
   };
+};
+const success = at('alert-success');
+const coreOnly = {
+  successBox: { neon: `${success} [data-slot=alert]`, check: ['pad', 'radius', 'bg'], core: bannerCell('box', 'success') },
+  successIcon: { neon: `${success} [data-slot=alert-content] > svg`, check: ['color'], core: bannerCell('icon', 'success') },
+  successTitle: { neon: `${success} [data-slot=alert-title]`, check: ['font', 'color'], core: bannerCell('title', 'success') },
+  successMessage: { neon: `${success} [data-slot=alert-description]`, check: ['font', 'color'], core: bannerCell('message', 'success') },
+  titleOnlyBox: { neon: `${at('alert-title-only')} [data-slot=alert]`, check: ['h', 'pad'], core: bannerCell('box', 'informational') },
 };
 const partGaps = (variant) => [
   [`${variant}Icon`, `${variant}Title`, 'x'],
@@ -21,7 +33,7 @@ const partGaps = (variant) => [
 ];
 
 export const screens = [{
-  targets: Object.assign({}, ...variants.map(parts)),
+  targets: Object.assign({}, ...variants.map(parts), coreOnly),
   gaps: [
     ...variants.flatMap(partGaps),
     ...variants.slice(1).map((variant, i) => [`${variants[i]}Box`, `${variant}Box`, 'y']),

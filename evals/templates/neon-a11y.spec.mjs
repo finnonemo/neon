@@ -127,6 +127,26 @@ test('the dialog and the row menu return focus to their triggers', async ({ page
   await expect(more).toBeFocused();
 });
 
+test('a tooltip names its icon button, its caret meets the trigger, and Esc closes it with focus still on the trigger', async ({ page }) => {
+  await page.goto('/?layout=extras');
+  for (const [hook, caret] of [['help', { width: 16, height: 8 }], ['help-sm', { width: 8, height: 4 }], ['help-lg', { width: 16, height: 8 }]]) {
+    const trigger = page.locator(`[data-measure=${hook}] button`);
+    await trigger.focus();
+    const tip = page.locator('[data-slot=tooltip-content]');
+    await expect(tip).toBeVisible();
+    await settled(page);
+    const arrow = await tip.locator('[data-slot=tooltip-arrow]').boundingBox();
+    const box = await trigger.boundingBox();
+    expect({ width: Math.round(arrow.width), height: Math.round(arrow.height) }).toEqual(caret);
+    // The tip sits above its trigger, the caret's point on the trigger's top edge and at its center.
+    expect(Math.abs(arrow.y + arrow.height - box.y)).toBeLessThanOrEqual(1);
+    expect(Math.abs(arrow.x + arrow.width / 2 - (box.x + box.width / 2))).toBeLessThanOrEqual(1);
+    await page.keyboard.press('Escape');
+    await expect(tip).toBeHidden();
+    await expect(trigger).toBeFocused();
+  }
+});
+
 test('picking an option closes the select', async ({ page }) => {
   await page.goto('/?layout=extras');
   await page.getByRole('combobox', { name: 'ประเภท / Type' }).click();
@@ -140,6 +160,26 @@ test('the toast is announced politely without a provider in the screen', async (
   await page.getByRole('button', { name: 'บันทึก', exact: true }).click();
   await expect(page.locator('[data-sonner-toast]')).toHaveText('บันทึกแล้ว / Saved');
   await expect(page.locator('section[aria-live]')).toHaveAttribute('aria-live', 'polite');
+});
+
+test('a toast leaves focus on its trigger, sets its icon 16px from its text, and its action fills on hover', async ({ page }) => {
+  await page.goto('/?layout=extras');
+  const trigger = page.locator('[data-measure=toast-action] button');
+  await trigger.focus();
+  await page.keyboard.press('Enter');
+  const toast = page.locator('[data-sonner-toast]');
+  await expect(toast).toBeVisible();
+  await expect(trigger).toBeFocused();
+  await settled(page);
+  const icon = await toast.locator('[data-icon]').boundingBox();
+  const text = await toast.locator('[data-title]').boundingBox();
+  expect(Math.round(text.x - (icon.x + icon.width))).toBe(16);
+  const action = toast.getByRole('button', { name: 'เลิกทำ' });
+  await action.hover();
+  await settled(page);
+  expect(await action.evaluate((el) => getComputedStyle(el).backgroundColor)).toBe(await computed(page, 'var(--color-bgButtonTertiaryInverseHover)'));
+  await action.click();
+  await expect(toast).toBeHidden();
 });
 
 for (const mode of ['light', 'dark']) test(`${mode}: a button reached from the keyboard draws Core's focus color and its Hover fill`, async ({ page }) => {

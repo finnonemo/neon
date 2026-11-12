@@ -28,6 +28,8 @@ import { segmentCell, segmentedCell } from './core/segmented-control.mjs';
 import { tagCell } from './core/display-tag.mjs';
 import { avatarCell } from './core/avatar.mjs';
 import { listCell } from './core/list-item.mjs';
+import { tooltipCell } from './core/tooltip.mjs';
+import { snackbarAction, snackbarCell } from './core/snackbar.mjs';
 import { tableCell } from './core/table.mjs';
 
 const both = (selector, check) => ({ cds: selector, neon: selector, check });
@@ -261,8 +263,23 @@ export const screens = [
     query: 'layout=extras',
     open: { action: 'click', neon: '[data-measure=actions] button:nth-of-type(2)', cds: '[data-measure=actions] button:nth-of-type(2)' },
     targets: {
-      toast: { neon: '[data-sonner-toast]', cds: '[data-testid=cds-toast] > div', check: ['radius', 'bg'] },
-      toastText: { neon: '[data-sonner-toast] [data-title]', cds: '[data-testid=cds-toast] p', check: ['font', 'color'] },
+      toast: { neon: '[data-sonner-toast]', cds: '[data-testid=cds-toast] > div', check: ['radius', 'bg'], core: snackbarCell('container') },
+      toastText: { neon: '[data-sonner-toast] [data-title]', cds: '[data-testid=cds-toast] p', check: ['font', 'color'], core: snackbarCell('text') },
+      // Core's height and padding, which the CDS baseline does not hold for the toast.
+      toastBox: { neon: '[data-sonner-toast]', check: ['h', 'pad'], core: snackbarCell('container') },
+    },
+    gaps: [],
+  },
+  // A toast with a status icon and an action. CDS's toast has neither, so this is held to Core alone.
+  {
+    name: 'toast-action-open',
+    query: 'layout=extras',
+    open: { action: 'click', neon: '[data-measure=toast-action] button' },
+    targets: {
+      toastActionBox: { neon: '[data-sonner-toast]', check: ['h', 'pad', 'radius', 'bg'], core: snackbarCell('container', { leading: true, action: true }) },
+      toastIcon: { neon: '[data-sonner-toast] [data-icon]', check: ['h', 'w', 'color'], core: snackbarCell('icon', { leading: true, action: true }) },
+      toastActionText: { neon: '[data-sonner-toast] [data-title]', check: ['color'], core: snackbarCell('text', { leading: true, action: true }) },
+      toastAction: { neon: '[data-sonner-toast] [data-button]', check: ['h', 'pad', 'radius', 'bg', 'color', 'font'], core: snackbarAction },
     },
     gaps: [],
   },
@@ -271,11 +288,22 @@ export const screens = [
     query: 'layout=extras',
     open: { action: 'focus', neon: '[data-measure=help] button', cds: '[data-measure=help] button' },
     targets: {
-      tooltip: { neon: '[data-slot=tooltip-content]', cds: '[role=tooltip]', check: ['radius', 'bg', 'pad'] },
-      tooltipText: { neon: '[data-slot=tooltip-content]', cds: '[role=tooltip] span', check: ['font', 'color'] },
+      tooltip: { neon: '[data-slot=tooltip-content]', cds: '[role=tooltip]', check: ['radius', 'bg', 'pad'], core: tooltipCell('surface') },
+      tooltipText: { neon: '[data-slot=tooltip-content]', cds: '[role=tooltip] span', check: ['font', 'color'], core: tooltipCell('label') },
     },
     gaps: [],
   },
+  // Core's Small and Large tips. CDS has one size, so these are held to Core alone.
+  ...['sm', 'lg'].map((size) => ({
+    name: `tooltip-${size}-open`,
+    query: 'layout=extras',
+    open: { action: 'focus', neon: `[data-measure=help-${size}] button` },
+    targets: {
+      [`tooltip-${size}`]: { neon: '[data-slot=tooltip-content]', check: ['radius', 'bg', 'pad'], core: tooltipCell('surface', { size }) },
+      [`tooltipText-${size}`]: { neon: '[data-slot=tooltip-content]', check: ['font', 'color'], core: tooltipCell('label', { size }) },
+    },
+    gaps: [],
+  })),
   // The expansion screen itself: its title, padding, the gap between sections
   // and within one (heading → the item's own markup, past its display: contents hook).
   {

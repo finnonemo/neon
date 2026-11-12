@@ -3,7 +3,10 @@
     "core": "accordion"
   },
   "alert": {
-    "core": "banner"
+    "core": "banner",
+    "notInCore": {
+      "variant": ["promotional"]
+    }
   },
   "alert-dialog": {
     "core": "alert"

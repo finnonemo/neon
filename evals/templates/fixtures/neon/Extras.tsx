@@ -53,6 +53,19 @@ export function Extras() {
             <TooltipContent>ช่วยเหลือ / Help</TooltipContent>
           </Tooltip>
         </Hook>
+        {(["sm", "lg"] as const).map((size) => (
+          <Hook key={size} name={`help-${size}`}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="ghost" size="icon" aria-label={`ช่วยเหลือ ${size}`}><InfoIcon /></Button>
+              </TooltipTrigger>
+              <TooltipContent size={size}>มูลค่าทรัพย์สินสุทธิต่อหน่วย / Net asset value per unit</TooltipContent>
+            </Tooltip>
+          </Hook>
+        ))}
+        <Hook name="toast-action">
+          <Button variant="secondary" size="sm" onClick={() => toast.success("ลบแล้ว / Removed", { action: { label: "เลิกทำ", onClick: () => {} } })}>ลบ</Button>
+        </Hook>
       </div>
       <div className="flex flex-wrap items-center gap-4">
         <Hook name="disabled-field">

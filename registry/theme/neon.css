@@ -64,6 +64,7 @@
   --color-overlay: var(--color-bgOverlay);
   --color-positive-wash: var(--color-bgPositiveWash);
   --color-warning-wash: var(--color-bgWarningWash);
+  --color-info-wash: var(--color-bgInfoWash);
   --color-negative-wash: var(--color-bgNegativeWash);
   --color-tag-positive: var(--tag-positive);
   --color-tag-warning: var(--tag-warning);
@@ -91,6 +92,9 @@
   --color-button-inverse-active: var(--color-bgButtonInverseActive);
   --color-button-inverse-disabled: var(--color-bgButtonInverseDisabled);
   --color-button-inverse-disabled-foreground: var(--color-fgInverseDisabled);
+  --color-button-tertiary-inverse-hover: var(--color-bgButtonTertiaryInverseHover);
+  --color-button-tertiary-inverse-active: var(--color-bgButtonTertiaryInverseActive);
+  --color-ring-inverse: var(--color-bgLineFocusInverse);
   --color-button-disabled: var(--button-disabled);
   --color-button-disabled-foreground: var(--button-disabled-foreground);
   --color-link: var(--link);

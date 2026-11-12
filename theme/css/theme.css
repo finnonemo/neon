@@ -105,6 +105,7 @@
   --color-bgPositiveWash: rgb(230, 253, 240);
   --color-bgWarning: rgb(211, 84, 12);
   --color-bgWarningWash: rgb(254, 247, 243);
+  --color-bgInfoWash: rgb(243, 243, 254);
 
   --color-bgLine: rgba(0, 0, 0, 0.122);
   --color-bgLineHeavy: rgba(91, 97, 110, 0.66);
@@ -147,6 +148,9 @@
   --color-bgButtonInverseHover: rgb(230, 230, 230);
   --color-bgButtonInverseActive: rgb(217, 217, 217);
   --color-bgButtonInverseDisabled: rgba(255, 255, 255, 0.102);
+  --color-bgButtonTertiaryInverseHover: rgba(255, 255, 255, 0.122);
+  --color-bgButtonTertiaryInverseActive: rgba(255, 255, 255, 0.149);
+  --color-bgLineFocusInverse: rgb(255, 255, 255);
   --color-bgButtonDisabled: rgba(1, 23, 43, 0.102);
   --color-bgField: rgba(1, 23, 43, 0.102);
   --color-bgFieldHover: rgba(1, 23, 43, 0.122);
@@ -314,6 +318,7 @@
     --color-bgPositiveWash: rgba(0, 231, 107, 0.149);
     --color-bgWarning: rgb(242, 100, 20);
     --color-bgWarningWash: rgba(242, 100, 20, 0.149);
+    --color-bgInfoWash: rgba(24, 23, 231, 0.251);
 
     --color-bgLine: rgba(255, 255, 255, 0.18);
     --color-bgLineHeavy: rgba(138, 145, 158, 0.66);
@@ -334,6 +339,9 @@
     --color-bgButtonInverseHover: rgb(38, 38, 38);
     --color-bgButtonInverseActive: rgb(51, 51, 51);
     --color-bgButtonInverseDisabled: rgba(1, 23, 43, 0.102);
+    --color-bgButtonTertiaryInverseHover: rgba(1, 23, 43, 0.122);
+    --color-bgButtonTertiaryInverseActive: rgba(1, 23, 43, 0.149);
+    --color-bgLineFocusInverse: rgb(0, 0, 0);
     --color-bgButtonDisabled: rgba(255, 255, 255, 0.102);
     --color-bgField: rgba(255, 255, 255, 0.122);
     --color-bgFieldHover: rgba(255, 255, 255, 0.149);
@@ -395,6 +403,7 @@
   --color-bgPositiveWash: rgba(0, 231, 107, 0.149);
   --color-bgWarning: rgb(242, 100, 20);
   --color-bgWarningWash: rgba(242, 100, 20, 0.149);
+  --color-bgInfoWash: rgba(24, 23, 231, 0.251);
 
   --color-bgLine: rgba(255, 255, 255, 0.18);
   --color-bgLineHeavy: rgba(138, 145, 158, 0.66);
@@ -415,6 +424,9 @@
   --color-bgButtonInverseHover: rgb(38, 38, 38);
   --color-bgButtonInverseActive: rgb(51, 51, 51);
   --color-bgButtonInverseDisabled: rgba(1, 23, 43, 0.102);
+  --color-bgButtonTertiaryInverseHover: rgba(1, 23, 43, 0.122);
+  --color-bgButtonTertiaryInverseActive: rgba(1, 23, 43, 0.149);
+  --color-bgLineFocusInverse: rgb(0, 0, 0);
   --color-bgButtonDisabled: rgba(255, 255, 255, 0.102);
   --color-bgField: rgba(255, 255, 255, 0.122);
   --color-bgFieldHover: rgba(255, 255, 255, 0.149);

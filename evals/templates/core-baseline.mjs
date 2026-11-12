@@ -29,6 +29,9 @@ import table from './core/table.mjs';
 import tabs from './core/tabs.mjs';
 import accordion from './core/accordion.mjs';
 import pagination from './core/pagination.mjs';
+import tooltip from './core/tooltip.mjs';
+import snackbar from './core/snackbar.mjs';
+import banner from './core/banner.mjs';
 
 // By registry item. Input, label, field and input-group are the parts of one Counterpart, Text field.
 const tables = {
@@ -53,6 +56,9 @@ const tables = {
   tabs,
   accordion,
   pagination,
+  tooltip,
+  sonner: snackbar,
+  alert: banner,
 };
 // The snapshot writes a literal as text ("2", "0.5"); a measured number is a number.
 const asNumber = (value) => (typeof value === 'string' && value.trim() !== '' && !Number.isNaN(Number(value)) ? Number(value) : value);

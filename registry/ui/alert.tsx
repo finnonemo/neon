@@ -3,39 +3,34 @@ import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
 
-// alert → CDS Banner, contextual style (Counterpart; cds-web 9.26.1
-// banner/Banner.js and cds-common tokens/banner.js): a 16px-radius box with
-// 16px padding and no border; a 16px icon in a 24px column (4px each side, 2px
-// down), 8px before the label1 title and the label2 message, 4px apart, both
-// in fg. Each variant takes CDS's banner fill and icon color:
-//   informational  bgSecondary     fgPrimary
-//   warning        bgWarningWash   fgWarning
-//   error          bgNegativeWash  fgNegative
-//   promotional    bgPrimaryWash   fgPrimary
-// Not matched: CDS clamps the title to 2 lines and the message to 3 and sets a
-// 320px minimum width; Neon wraps the whole text and takes its container's width.
-// PROVISIONAL (#203): fgWarning on bgWarningWash is 2.998:1 in light, under
-// the 3:1 non-text minimum, for the warning icon.
-// PROVISIONAL (#204): informational and promotional differ only in fill, and
-// those are nearly the same: Grey/5 and Navy/5 in light (1.01:1), Grey/90 and
-// Navy/100 in dark (1.04:1).
-// PROVISIONAL (#205): AlertAction has no measured Counterpart; it sits top
-// right, where CDS puts a Banner's dismiss button.
+// Core's In-line banner (core/components/banner.md), Hierarchy=Primary: a box at least 80px tall
+// with 16px corners and 16px padding on its Status's Notifications fill, its text in
+// Text/text-primary and its icon in Icon/icon-primary whatever the Status. The icon is Core's
+// Large glyph, drawn 24px, 16px before the text; the label1 Title sits on the label2 Description
+// with no gap. Each variant is a Status:
+//   informational  Info     Notifications/notification-info-background
+//   success        Success  Notifications/notification-success-background
+//   warning        Warning  Notifications/notification-warning-background
+//   error          Error    Notifications/notification-error-background
+// promotional has no Status in Core: it keeps its brand wash and is not chosen for new work.
+// Core's border is the fill's own color in light and clear in dark, so none is drawn. Core's
+// Secondary hierarchy, Caution statuses, Badge artwork and its Button and Toggle actions have no
+// prop. AlertAction sits top right; Core's Icon Button action is the row's last item.
 //
 // Announced politely: the alert is a polite, atomic status region (never
 // role=alert, which interrupts). Its content stays aria-hidden until the frame
 // after the region is first painted, so the region is in the accessibility
 // tree before its text and screen readers announce an alert that appears.
-// CDS Banner has no live region.
 const alertVariants = cva(
-  "relative w-full rounded-xl p-4 text-left text-label2 text-foreground has-data-[slot=alert-action]:pr-14",
+  "relative flex min-h-20 w-full items-center rounded-xl p-4 text-left text-label2 text-foreground has-data-[slot=alert-action]:pr-14",
   {
     variants: {
       variant: {
-        informational: "bg-secondary [--alert-icon:var(--color-fgPrimary)]",
-        warning: "bg-warning-wash [--alert-icon:var(--color-fgWarning)]",
-        error: "bg-negative-wash [--alert-icon:var(--color-fgNegative)]",
-        promotional: "bg-(--color-bgPrimaryWash) [--alert-icon:var(--color-fgPrimary)]",
+        informational: "bg-info-wash",
+        success: "bg-positive-wash",
+        warning: "bg-warning-wash",
+        error: "bg-negative-wash",
+        promotional: "bg-(--color-bgPrimaryWash)",
       },
     },
     defaultVariants: {
@@ -80,7 +75,7 @@ function Alert({
       <div
         data-slot="alert-content"
         aria-hidden={settled ? undefined : true}
-        className="group/alert grid gap-y-1 has-[>svg]:grid-cols-[auto_1fr] has-[>svg]:gap-x-2 *:[svg]:row-span-2 *:[svg]:mx-1 *:[svg]:mt-0.5 *:[svg]:text-[color:var(--alert-icon,currentColor)] *:[svg:not([class*='size-'])]:size-4"
+        className="group/alert grid min-w-0 flex-1 has-[>svg]:grid-cols-[auto_1fr] has-[>svg]:gap-x-4 *:[svg]:row-span-2 *:[svg:not([class*='size-'])]:size-6"
       >
         {children}
       </div>
