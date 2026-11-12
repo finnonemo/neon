@@ -1,0 +1,190 @@
+{
+  "menu-open@375-light": [
+    "menuItemNegative: color rgb(157, 6, 6) ≠ rgb(214, 8, 8)"
+  ],
+  "expansion-alert@375-light": [
+    "warningIcon: color rgb(211, 84, 12) ≠ rgb(242, 100, 20)",
+    "errorIcon: color rgb(157, 6, 6) ≠ rgb(214, 8, 8)"
+  ],
+  "expansion-card@375-light": [
+    "card: border.color rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)"
+  ],
+  "expansion-field@375-light": [
+    "errorText: color rgb(157, 6, 6) ≠ rgb(214, 8, 8)",
+    "errorIcon: color rgb(157, 6, 6) ≠ rgb(214, 8, 8)"
+  ],
+  "expansion-progress@375-light": [
+    "progressTrack: bg rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)"
+  ],
+  "expansion-separator@375-light": [
+    "separatorHorizontal: bg rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)",
+    "separatorVertical: bg rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)"
+  ],
+  "expansion-switch@375-light": [
+    "offThumb: border.color rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)",
+    "onThumb: border.color rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)",
+    "disabledOffThumb: border.color rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)",
+    "disabledOnThumb: border.color rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)"
+  ],
+  "approval-detail@375-dark": [
+    "reject: bg rgb(214, 8, 8) ≠ rgb(243, 9, 9)"
+  ],
+  "extras@375-dark": [
+    "rejectRequest: bg rgb(214, 8, 8) ≠ rgb(243, 9, 9)"
+  ],
+  "select-open@375-dark": [
+    "listbox: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)"
+  ],
+  "date-open@375-dark": [
+    "calendar: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)"
+  ],
+  "menu-open@375-dark": [
+    "menuItemNegative: color rgb(251, 153, 153) ≠ rgb(243, 9, 9)"
+  ],
+  "dialog-open@375-dark": [
+    "dialog: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
+    "dialogConfirm: bg rgb(214, 8, 8) ≠ rgb(243, 9, 9)"
+  ],
+  "expansion-alert-dialog-open@375-dark": [
+    "alertCard: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
+    "alertAction: bg rgb(214, 8, 8) ≠ rgb(243, 9, 9)"
+  ],
+  "expansion-alert@375-dark": [
+    "warningBox: bg rgba(242, 100, 20, 0.15) ≠ rgb(51, 13, 0)",
+    "errorBox: bg rgba(247, 50, 50, 0.15) ≠ rgb(51, 0, 4)",
+    "errorIcon: color rgb(251, 153, 153) ≠ rgb(243, 9, 9)"
+  ],
+  "expansion-card@375-dark": [
+    "card: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)"
+  ],
+  "expansion-field@375-dark": [
+    "errorControl: border.color rgb(214, 8, 8) ≠ rgb(243, 9, 9)",
+    "errorText: color rgb(251, 153, 153) ≠ rgb(243, 9, 9)",
+    "errorIcon: color rgb(251, 153, 153) ≠ rgb(243, 9, 9)"
+  ],
+  "expansion-progress@375-dark": [
+    "progressTrack: bg rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)"
+  ],
+  "expansion-separator@375-dark": [
+    "separatorHorizontal: bg rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
+    "separatorVertical: bg rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)"
+  ],
+  "expansion-sheet-bottom@375-dark": [
+    "sheet: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
+    "sheet: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)"
+  ],
+  "expansion-sheet-top@375-dark": [
+    "sheet: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
+    "sheet: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)"
+  ],
+  "expansion-sheet-left@375-dark": [
+    "sheet: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
+    "sheet: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)"
+  ],
+  "expansion-sheet-right@375-dark": [
+    "sheet: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
+    "sheet: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)"
+  ],
+  "expansion-switch@375-dark": [
+    "offTrack: bg rgb(51, 51, 51) ≠ rgb(38, 38, 38)",
+    "offThumb: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
+    "onThumb: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
+    "disabledOffTrack: bg rgb(51, 51, 51) ≠ rgb(38, 38, 38)",
+    "disabledOffThumb: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
+    "disabledOnThumb: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)"
+  ],
+  "menu-open@1440-light": [
+    "menuItemNegative: color rgb(157, 6, 6) ≠ rgb(214, 8, 8)"
+  ],
+  "expansion-alert@1440-light": [
+    "warningIcon: color rgb(211, 84, 12) ≠ rgb(242, 100, 20)",
+    "errorIcon: color rgb(157, 6, 6) ≠ rgb(214, 8, 8)"
+  ],
+  "expansion-card@1440-light": [
+    "card: border.color rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)"
+  ],
+  "expansion-field@1440-light": [
+    "errorText: color rgb(157, 6, 6) ≠ rgb(214, 8, 8)",
+    "errorIcon: color rgb(157, 6, 6) ≠ rgb(214, 8, 8)"
+  ],
+  "expansion-progress@1440-light": [
+    "progressTrack: bg rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)"
+  ],
+  "expansion-separator@1440-light": [
+    "separatorHorizontal: bg rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)",
+    "separatorVertical: bg rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)"
+  ],
+  "expansion-switch@1440-light": [
+    "offThumb: border.color rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)",
+    "onThumb: border.color rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)",
+    "disabledOffThumb: border.color rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)",
+    "disabledOnThumb: border.color rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)"
+  ],
+  "approval-detail@1440-dark": [
+    "reject: bg rgb(214, 8, 8) ≠ rgb(243, 9, 9)"
+  ],
+  "extras@1440-dark": [
+    "rejectRequest: bg rgb(214, 8, 8) ≠ rgb(243, 9, 9)"
+  ],
+  "select-open@1440-dark": [
+    "listbox: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)"
+  ],
+  "date-open@1440-dark": [
+    "calendar: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)"
+  ],
+  "menu-open@1440-dark": [
+    "menuItemNegative: color rgb(251, 153, 153) ≠ rgb(243, 9, 9)"
+  ],
+  "dialog-open@1440-dark": [
+    "dialog: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
+    "dialogConfirm: bg rgb(214, 8, 8) ≠ rgb(243, 9, 9)"
+  ],
+  "expansion-alert-dialog-open@1440-dark": [
+    "alertCard: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
+    "alertAction: bg rgb(214, 8, 8) ≠ rgb(243, 9, 9)"
+  ],
+  "expansion-alert@1440-dark": [
+    "warningBox: bg rgba(242, 100, 20, 0.15) ≠ rgb(51, 13, 0)",
+    "errorBox: bg rgba(247, 50, 50, 0.15) ≠ rgb(51, 0, 4)",
+    "errorIcon: color rgb(251, 153, 153) ≠ rgb(243, 9, 9)"
+  ],
+  "expansion-card@1440-dark": [
+    "card: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)"
+  ],
+  "expansion-field@1440-dark": [
+    "errorControl: border.color rgb(214, 8, 8) ≠ rgb(243, 9, 9)",
+    "errorText: color rgb(251, 153, 153) ≠ rgb(243, 9, 9)",
+    "errorIcon: color rgb(251, 153, 153) ≠ rgb(243, 9, 9)"
+  ],
+  "expansion-progress@1440-dark": [
+    "progressTrack: bg rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)"
+  ],
+  "expansion-separator@1440-dark": [
+    "separatorHorizontal: bg rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
+    "separatorVertical: bg rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)"
+  ],
+  "expansion-sheet-bottom@1440-dark": [
+    "sheet: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
+    "sheet: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)"
+  ],
+  "expansion-sheet-top@1440-dark": [
+    "sheet: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
+    "sheet: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)"
+  ],
+  "expansion-sheet-left@1440-dark": [
+    "sheet: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
+    "sheet: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)"
+  ],
+  "expansion-sheet-right@1440-dark": [
+    "sheet: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
+    "sheet: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)"
+  ],
+  "expansion-switch@1440-dark": [
+    "offTrack: bg rgb(51, 51, 51) ≠ rgb(38, 38, 38)",
+    "offThumb: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
+    "onThumb: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
+    "disabledOffTrack: bg rgb(51, 51, 51) ≠ rgb(38, 38, 38)",
+    "disabledOffThumb: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
+    "disabledOnThumb: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)"
+  ]
+}

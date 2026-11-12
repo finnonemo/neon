@@ -2,6 +2,10 @@
 // ±1px and the same colors, at 375 and 1440, light and dark. The baseline is
 // captured from the CDS fixtures (npm run baseline) and is the contract both
 // targets are held to; NEON_TARGET picks which app the selectors read.
+// Neon's colors now come from Core's Theme (ADR 0009), so the Neon target is
+// held to the baseline except for the differences recorded in
+// fixtures/core-differences.json (npm run core-differences). A recorded
+// difference that no longer occurs fails too, so a retune removes its entry.
 import { test, expect } from '@playwright/test';
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -12,6 +16,10 @@ const capture = process.env.NEON_CAPTURE_BASELINE === '1';
 const baselinePath = fileURLToPath(new URL('./fixtures/cds-baseline.json', import.meta.url));
 if (capture && target !== 'cds') throw new Error('The baseline is captured from the CDS target only.');
 const baseline = existsSync(baselinePath) ? JSON.parse(readFileSync(baselinePath, 'utf8')) : null;
+const differencesPath = fileURLToPath(new URL('./fixtures/core-differences.json', import.meta.url));
+const captureDifferences = process.env.NEON_CAPTURE_CORE_DIFFERENCES === '1';
+if (captureDifferences && target !== 'neon') throw new Error('Core differences are recorded from the Neon target only.');
+const coreDifferences = target === 'neon' && existsSync(differencesPath) ? JSON.parse(readFileSync(differencesPath, 'utf8')) : {};
 
 async function measureScreen(page, screen, viewport, mode) {
   await page.setViewportSize(viewport);
@@ -47,6 +55,23 @@ async function measureScreen(page, screen, viewport, mode) {
   return result;
 }
 
+/** Where a measured screen differs from its baseline: one line per element property or gap. */
+function differences(expected, actual) {
+  const problems = [];
+  for (const [name, want] of Object.entries(expected.elements)) {
+    if (!(name in actual.elements)) continue; // no selector for this target yet
+    const got = actual.elements[name];
+    if (!want || !got) { if (!want !== !got) problems.push(`${name}: ${got ? 'rendered' : 'not rendered'} but the baseline ${want ? 'has it' : 'does not'}`); continue; }
+    for (const problem of compare(got, want)) problems.push(`${name}: ${problem}`);
+  }
+  for (const [name, want] of Object.entries(expected.gaps)) {
+    if (!(name in actual.gaps)) continue; // no selector for one side yet
+    const got = actual.gaps[name];
+    if (got === null || want === null ? got !== want : Math.abs(got - want) > 1) problems.push(`gap ${name}: ${got} ≠ ${want}`);
+  }
+  return problems;
+}
+
 const cases = viewports.flatMap((viewport) => modes.flatMap((mode) => screens.map((screen) => ({ screen, viewport, mode }))));
 const caseKey = ({ screen, viewport, mode }) => `${screen.name}@${viewport.width}-${mode}`;
 
@@ -60,6 +85,18 @@ if (capture) {
     writeFileSync(baselinePath, `${JSON.stringify(out, null, 2)}\n`);
     console.log(`Wrote ${Object.keys(out).length} cases; not rendered: ${missing.length ? missing.join(', ') : 'none'}`);
   });
+} else if (captureDifferences) {
+  test('record where Neon follows Core, not the CDS baseline', async ({ page }) => {
+    test.setTimeout(240_000);
+    const out = {};
+    for (const entry of cases) {
+      if (entry.screen.open && !entry.screen.open[target]) continue;
+      const problems = differences(baseline[caseKey(entry)], await measureScreen(page, entry.screen, entry.viewport, entry.mode));
+      if (problems.length) out[caseKey(entry)] = problems;
+    }
+    writeFileSync(differencesPath, `${JSON.stringify(out, null, 2)}\n`);
+    console.log(`Recorded differences in ${Object.keys(out).length} of ${cases.length} cases. Read each one before committing: it must follow from a Core Theme token.`);
+  });
 } else {
   test.describe(`${target} matches the CDS baseline`, () => {
     for (const entry of cases) {
@@ -68,20 +105,8 @@ if (capture) {
         test.skip(entry.screen.open && !entry.screen.open[target], `${target} has no trigger for ${entry.screen.name} yet`);
         const expected = baseline[caseKey(entry)];
         expect(expected, `${caseKey(entry)} is missing from the baseline; run npm run baseline.`).toBeTruthy();
-        const actual = await measureScreen(page, entry.screen, entry.viewport, entry.mode);
-        const problems = [];
-        for (const [name, want] of Object.entries(expected.elements)) {
-          if (!(name in actual.elements)) continue; // no selector for this target yet
-          const got = actual.elements[name];
-          if (!want || !got) { if (!want !== !got) problems.push(`${name}: ${got ? 'rendered' : 'not rendered'} but the baseline ${want ? 'has it' : 'does not'}`); continue; }
-          for (const problem of compare(got, want)) problems.push(`${name}: ${problem}`);
-        }
-        for (const [name, want] of Object.entries(expected.gaps)) {
-          if (!(name in actual.gaps)) continue; // no selector for one side yet
-          const got = actual.gaps[name];
-          if (got === null || want === null ? got !== want : Math.abs(got - want) > 1) problems.push(`gap ${name}: ${got} ≠ ${want}`);
-        }
-        expect(problems, problems.join('\n')).toEqual([]);
+        const problems = differences(expected, await measureScreen(page, entry.screen, entry.viewport, entry.mode));
+        expect(problems, problems.join('\n')).toEqual(coreDifferences[caseKey(entry)] ?? []);
       });
     }
   });

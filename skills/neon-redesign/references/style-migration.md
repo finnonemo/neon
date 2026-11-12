@@ -37,7 +37,7 @@ bucket:
 - **Semantic status colors** (success/warning/error, often already named
   `success`/`danger`/`warn` in the target's config or chart library) have
   real Finnomena equivalents — Positive `#009646`, Negative `#d60808`,
-  Warning `#f26414` (the pastel container pairs are the
+  Warning `#d3540c` (the pastel container pairs are the
   `Notifications.notification-*-background` tokens in
   `theme/tokens/theme.json`, which resolve to `theme/tokens/colors.json`
   steps). Map these directly: a chart's "success" series color
@@ -234,7 +234,7 @@ Map shadcn's roles by their meaning in shadcn:
 | Variable pair | Job in shadcn | Adapter role |
 | --- | --- | --- |
 | `--background` / `--foreground` | Page | `bg` / `fg` |
-| `--card`, `--popover` / their `-foreground` | Raised surfaces | `bgElevation1`, `bgElevation2` / `fg` |
+| `--card`, `--popover` / their `-foreground` | Raised surfaces | `bgElevation1` for both / `fg` |
 | `--primary` / `--primary-foreground` | Primary action | `bgPrimary` (Navy Ink) / `fgInverse` in light, `fg` in dark |
 | `--secondary` / `--secondary-foreground` | Secondary button | `bgSecondary` in light, `bgTertiary` in dark / `fg` |
 | `--muted` / `--muted-foreground` | Quiet surface and secondary text | `bgAlternate` in light, `bgTertiary` in dark / `fgMuted` |
