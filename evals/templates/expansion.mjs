@@ -14,6 +14,10 @@ import { readdirSync } from 'node:fs';
 export const EXPANSION_QUERY = 'layout=expansion';
 export const gotoExpansion = (page) => page.goto(`/?${EXPANSION_QUERY}`);
 
+/** Waits until every transition and entry animation has ended. A spinner turns without end, so it is not waited for. */
+export const settled = (page) => page.waitForFunction(() => document.getAnimations().every((animation) =>
+  animation.playState !== 'running' || animation.effect?.getComputedTiming().iterations === Infinity));
+
 /**
  * Reaches a control from the keyboard (Shift+Tab away, Tab back) and returns
  * the indicator it draws, before and after, and whether it matches
@@ -31,7 +35,7 @@ export async function keyboardFocus(page, control) {
   await control.focus();
   await page.keyboard.press('Shift+Tab');
   await page.keyboard.press('Tab');
-  await page.waitForFunction(() => document.getAnimations().every((animation) => animation.playState !== 'running'));
+  await settled(page);
   const after = await indicator();
   return { before: before.look, after: after.look, focusVisible: after.visible };
 }

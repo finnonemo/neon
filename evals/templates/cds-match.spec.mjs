@@ -8,10 +8,14 @@
 // fixtures/core-differences.json (npm run core-differences). A recorded
 // difference that no longer occurs fails too, so a retune removes its entry.
 // A recorded number is held to the same ±1px as the baseline's.
+// A retuned item is held to Core's own numbers instead: a target that names a
+// Core cell takes the Core baseline, computed from the Core snapshot
+// (core-baseline.mjs), for every property its item's table lists.
 import { test, expect } from '@playwright/test';
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { screens, viewports, modes, measureInPage, gap, pick, compare, asRecorded } from './measure.mjs';
+import { withCoreBaseline } from './core-baseline.mjs';
 
 const target = process.env.NEON_TARGET ?? 'cds';
 const capture = process.env.NEON_CAPTURE_BASELINE === '1';
@@ -74,6 +78,12 @@ function differences(expected, actual) {
   return problems;
 }
 
+/** What a case is held to: the CDS baseline, with the Core baseline in place on the Neon target for each target that names a Core cell. */
+const expectedFor = async (entry) => {
+  const cds = baseline?.[caseKey(entry)];
+  return cds && target === 'neon' ? withCoreBaseline(cds, entry.screen.targets, entry.mode) : cds;
+};
+
 const cases = viewports.flatMap((viewport) => modes.flatMap((mode) => screens.map((screen) => ({ screen, viewport, mode }))));
 const caseKey = ({ screen, viewport, mode }) => `${screen.name}@${viewport.width}-${mode}`;
 
@@ -93,11 +103,11 @@ if (capture) {
     const out = {};
     for (const entry of cases) {
       if (entry.screen.open && !entry.screen.open[target]) continue;
-      const problems = differences(baseline[caseKey(entry)], await measureScreen(page, entry.screen, entry.viewport, entry.mode));
+      const problems = differences(await expectedFor(entry), await measureScreen(page, entry.screen, entry.viewport, entry.mode));
       if (problems.length) out[caseKey(entry)] = problems;
     }
     writeFileSync(differencesPath, `${JSON.stringify(out, null, 2)}\n`);
-    console.log(`Recorded differences in ${Object.keys(out).length} of ${cases.length} cases. Read each one before committing: it must follow from a Core Theme token or a Core text style.`);
+    console.log(`Recorded differences in ${Object.keys(out).length} of ${cases.length} cases. Read each one before committing: it must follow from a Core Theme token, a Core text style or an item retuned to Core.`);
   });
 } else {
   test.describe(`${target} matches the CDS baseline`, () => {
@@ -105,7 +115,7 @@ if (capture) {
       test(caseKey(entry), async ({ page }) => {
         expect(baseline, 'Run npm run baseline first.').not.toBeNull();
         test.skip(entry.screen.open && !entry.screen.open[target], `${target} has no trigger for ${entry.screen.name} yet`);
-        const expected = baseline[caseKey(entry)];
+        const expected = await expectedFor(entry);
         expect(expected, `${caseKey(entry)} is missing from the baseline; run npm run baseline.`).toBeTruthy();
         const problems = differences(expected, await measureScreen(page, entry.screen, entry.viewport, entry.mode));
         const recorded = coreDifferences[caseKey(entry)] ?? [];

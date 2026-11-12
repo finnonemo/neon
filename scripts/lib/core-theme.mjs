@@ -5,7 +5,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { refuseUnseenDeclarations } from './adapter-declarations.mjs';
-import { toRgb } from './colors.mjs';
+import { cssColor } from './colors.mjs';
 import { SNAPSHOT_DIR } from './core-snapshot.mjs';
 
 const SNAPSHOT_THEME = `${SNAPSHOT_DIR}/theme.json`;
@@ -45,13 +45,6 @@ function themeExport(theme, palette) {
     }
   }
   return out;
-}
-
-/** `#RRGGBBAA` as the adapter writes a color: `rgb(1, 23, 43)`, or `rgba(0, 0, 0, 0.851)` when it is not opaque. */
-function cssColor(hex) {
-  const rgb = toRgb(hex).join(', ');
-  const alpha = parseInt(hex.slice(7, 9) || 'ff', 16);
-  return alpha === 255 ? `rgb(${rgb})` : `rgba(${rgb}, ${Math.round((alpha / 255) * 1000) / 1000})`;
 }
 
 /**

@@ -12,7 +12,10 @@
     "core": "avatar"
   },
   "button": {
-    "core": "button"
+    "core": "button",
+    "notInCore": {
+      "variant": ["outline"]
+    }
   },
   "button-group": {
     "core": "button",

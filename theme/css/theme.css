@@ -125,6 +125,31 @@
   --color-accentSubtleGray: rgb(242, 243, 244);
   --color-accentBoldGray: rgb(1, 23, 43);
 
+  /* Component-scoped Core tokens, each entered by the item that uses it:
+   * Button's label and fill tokens, and Link's ink for the link button. */
+  --color-fgOnColor: rgb(255, 255, 255);
+  --color-fgOnBrand: rgba(0, 0, 0, 0.851);
+  --color-fgDisabled: rgba(0, 0, 0, 0.451);
+  --color-fgInverseDisabled: rgba(255, 255, 255, 0.451);
+  --color-fgLink: rgb(24, 23, 231);
+  --color-fgLinkHover: rgb(20, 20, 196);
+
+  --color-bgButtonPrimaryHover: rgb(26, 46, 64);
+  --color-bgButtonPrimaryActive: rgb(52, 69, 85);
+  --color-bgButtonSecondary: rgba(1, 23, 43, 0.102);
+  --color-bgButtonSecondaryHover: rgba(1, 23, 43, 0.122);
+  --color-bgButtonSecondaryActive: rgba(1, 23, 43, 0.149);
+  --color-bgButtonDangerHover: rgb(186, 7, 7);
+  --color-bgButtonDangerActive: rgb(157, 6, 6);
+  --color-bgButtonBrand: rgb(242, 249, 60);
+  --color-bgButtonBrandHover: rgb(244, 250, 89);
+  --color-bgButtonBrandActive: rgb(245, 251, 109);
+  --color-bgButtonInverse: rgb(255, 255, 255);
+  --color-bgButtonInverseHover: rgb(230, 230, 230);
+  --color-bgButtonInverseActive: rgb(217, 217, 217);
+  --color-bgButtonInverseDisabled: rgba(255, 255, 255, 0.102);
+  --color-bgButtonDisabled: rgba(1, 23, 43, 0.102);
+
   /* --- Typography (mode-independent) --- */
   --fontFamily-display1: 'IBM Plex Sans Thai', sans-serif;
   --fontFamily-display2: 'IBM Plex Sans Thai', sans-serif;
@@ -263,6 +288,21 @@
     --color-bgLineInverse: rgb(0, 0, 0);
     --color-bgLinePrimary: rgb(128, 127, 242);
     --color-bgLinePrimarySubtle: rgb(5, 59, 177);
+    --color-fgDisabled: rgba(255, 255, 255, 0.451);
+    --color-fgInverseDisabled: rgba(0, 0, 0, 0.451);
+    --color-fgLink: rgb(140, 139, 243);
+    --color-fgLinkHover: rgb(209, 209, 250);
+    --color-bgButtonPrimaryHover: rgb(90, 104, 117);
+    --color-bgButtonPrimaryActive: rgb(90, 104, 117);
+    --color-bgButtonSecondary: rgba(255, 255, 255, 0.122);
+    --color-bgButtonSecondaryHover: rgba(255, 255, 255, 0.149);
+    --color-bgButtonSecondaryActive: rgba(255, 255, 255, 0.149);
+    --color-bgButtonBrand: rgb(217, 225, 7);
+    --color-bgButtonInverse: rgb(26, 26, 26);
+    --color-bgButtonInverseHover: rgb(38, 38, 38);
+    --color-bgButtonInverseActive: rgb(51, 51, 51);
+    --color-bgButtonInverseDisabled: rgba(1, 23, 43, 0.102);
+    --color-bgButtonDisabled: rgba(255, 255, 255, 0.102);
 
     --color-transparent: rgba(255, 255, 255, 0);
   }
@@ -301,6 +341,21 @@
   --color-bgLineInverse: rgb(0, 0, 0);
   --color-bgLinePrimary: rgb(128, 127, 242);
   --color-bgLinePrimarySubtle: rgb(5, 59, 177);
+  --color-fgDisabled: rgba(255, 255, 255, 0.451);
+  --color-fgInverseDisabled: rgba(0, 0, 0, 0.451);
+  --color-fgLink: rgb(140, 139, 243);
+  --color-fgLinkHover: rgb(209, 209, 250);
+  --color-bgButtonPrimaryHover: rgb(90, 104, 117);
+  --color-bgButtonPrimaryActive: rgb(90, 104, 117);
+  --color-bgButtonSecondary: rgba(255, 255, 255, 0.122);
+  --color-bgButtonSecondaryHover: rgba(255, 255, 255, 0.149);
+  --color-bgButtonSecondaryActive: rgba(255, 255, 255, 0.149);
+  --color-bgButtonBrand: rgb(217, 225, 7);
+  --color-bgButtonInverse: rgb(26, 26, 26);
+  --color-bgButtonInverseHover: rgb(38, 38, 38);
+  --color-bgButtonInverseActive: rgb(51, 51, 51);
+  --color-bgButtonInverseDisabled: rgba(1, 23, 43, 0.102);
+  --color-bgButtonDisabled: rgba(255, 255, 255, 0.102);
 
   --color-transparent: rgba(255, 255, 255, 0);
 }
