@@ -11,8 +11,8 @@
  * (${CLAUDE_PLUGIN_ROOT}/core/theme.json). Do not edit a color here:
  * the repository check refuses one that differs from the snapshot. A role
  * the table gives no token (it says why) keeps its earlier value and is
- * PROVISIONAL: the accents, bgSecondaryWash, bgLineHeavy,
- * bgLinePrimarySubtle and light bgPrimaryWash.
+ * PROVISIONAL: fgPrimary, bgPrimaryWash, bgSecondaryWash, bgLineHeavy,
+ * bgLinePrimarySubtle and the subtle accents.
  *
  * EVERYTHING ELSE (typography, space, radius) is hand-captured, not
  * generated: the byte-exact output of @coinbase/cds-web@9.26.1's own

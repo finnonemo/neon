@@ -102,7 +102,7 @@ test('refuses a Theme token whose primitive the palette lacks or holds at anothe
   await assert.rejects(read(moved, 'theme/tokens/theme.json'), /ENOENT/);
 });
 
-test('writes each mapped role\'s color into the adapter\'s light block and both dark blocks', async t => {
+test('writes the color of each role the Role table gives a token, in the light block and both dark blocks', async t => {
   const root = await repository(t);
   await writeCoreTheme(root);
   const [light, osDark, manualDark] = (await read(root, 'theme/css/theme.css')).split('/* --- Colors (dark)');
@@ -134,13 +134,27 @@ test('leaves a role with no Core token, and everything that is not a color, as w
   assert.match(css, /^\/\* Colors come from Core\. \*\/\n:root \{\n  \/\* --- Colors \(light — default\) --- \*\//);
 });
 
-test('refuses an adapter role the role table does not list, and a listed role the adapter lacks', async t => {
+test('refuses an adapter role the Role table does not list, and a listed role the adapter lacks', async t => {
   const unlisted = await repository(t, { 'theme/css/theme.css': ADAPTER.replace('  --space-2', '  --color-bgNew: rgb(1, 2, 3);\n  --space-2') });
   await assert.rejects(writeCoreTheme(unlisted), /color roles .*core-roles\.json does not list: bgNew/);
   const gone = await repository(t, { 'theme/css/core-roles.json': JSON.stringify({ ...ROLES, fgGone: 'Text/text-primary' }) });
   await assert.rejects(writeCoreTheme(gone), /lists roles .*theme\.css does not have: fgGone/);
   const unknown = await repository(t, { 'theme/css/core-roles.json': JSON.stringify({ ...ROLES, fg: 'Text/text-missing' }) });
   await assert.rejects(writeCoreTheme(unknown), /fg \(light\) the token Text\/text-missing, which the Core snapshot's Theme does not have/);
+});
+
+test('writes and adds colors in a dark block that also holds a comment', async t => {
+  const root = await repository(t, { 'theme/css/theme.css': ADAPTER.replace(":root[data-theme='dark'] {\n", ":root[data-theme='dark'] {\n  /* Same as the block above. */\n") });
+  await writeCoreTheme(root);
+  const manualDark = (await read(root, 'theme/css/theme.css')).split('/* --- Colors (dark)')[2];
+  assert.match(manualDark, /\/\* Same as the block above\. \*\/\n  --color-fg: rgb\(255, 255, 255\);\n  --color-fgWarning: rgb\(242, 100, 20\);/);
+});
+
+test('refuses a Role table entry that keeps a value without saying why, or leaves a mode out', async t => {
+  const silent = await repository(t, { 'theme/css/core-roles.json': JSON.stringify({ ...ROLES, bgLineHeavy: { light: null, dark: null } }) });
+  await assert.rejects(writeCoreTheme(silent), /core-roles\.json must give bgLineHeavy .* why/);
+  const half = await repository(t, { 'theme/css/core-roles.json': JSON.stringify({ ...ROLES, fg: { light: 'Text/text-primary', why: 'Dark is not decided.' } }) });
+  await assert.rejects(writeCoreTheme(half), /core-roles\.json must give fg /);
 });
 
 test('the check passes what the sync wrote, and writing again changes nothing', async t => {
@@ -172,4 +186,15 @@ test('the check refuses a snapshot Theme that moved on without a sync', async t 
   const moved = { ...THEME, 'Text/text-primary': { ...THEME['Text/text-primary'], dark: { primitive: 'White/0', hex: '#FFFFFF00' } } };
   await writeFile(join(root, 'core/theme.json'), JSON.stringify(moved));
   await assert.rejects(checkCoreTheme(root), /theme\/tokens\/theme\.json does not equal/);
+});
+
+test('the check refuses a color declared in a shape the sync does not write', async t => {
+  const written = '  --color-bgPrimary: rgb(1, 23, 43);';
+  // No space after the colon; a second declaration on the line: neither is a line the sync rewrites.
+  for (const edited of ['  --color-bgPrimary:rgb(0, 0, 0);', `${written} --color-fg: red;`]) {
+    const root = await repository(t);
+    await writeCoreTheme(root);
+    await edit(root, 'theme/css/theme.css', text => text.replace(written, edited));
+    await assert.rejects(checkCoreTheme(root), /theme\/css\/theme\.css:8 .* alone on its line/);
+  }
 });

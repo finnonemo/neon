@@ -89,7 +89,7 @@
   --accent-foreground: var(--color-fg);
   --destructive: var(--color-bgNegative);
   --border: var(--color-bgLine);
-  /* PROVISIONAL (#97): --input keeps the role CDS defaults use, which has no
+  /* PROVISIONAL: --input keeps the role CDS defaults use, which has no
    * Core Theme token; the field items take Core's Field and Border tokens when
    * they are retuned (#210). */
   --input: var(--color-bgLineHeavy);
@@ -98,7 +98,7 @@
   /* Text on filled colors (onColorLabel): fgInverse in light. */
   --primary-foreground: var(--color-fgInverse);
   --destructive-foreground: var(--color-fgInverse);
-  /* PROVISIONAL (#97): tag inks. Light tags take the spectrum shades CDS draws
+  /* PROVISIONAL: tag inks. Light tags take the spectrum shades CDS draws
    * tags in (Green/145, Yellow/170, Red/130), 4.8–6.9:1 on the washes, until
    * the tag is retuned to Core's Tag tokens (#210). fgWarning is 3.93:1 on its
    * light wash; fgPositive and fgNegative now pass there (5.54 and 7.97:1). */
@@ -121,7 +121,7 @@
 /* Text on filled colors in dark: filled buttons take fg (white), Core's
  * Text/text-on-color; white on dark bgNegative is 5.39:1. Matches theme.css's
  * own dark selectors.
- * PROVISIONAL (#97): dark tags take fgPositive, fgWarning and fgNegative, which
+ * PROVISIONAL: dark tags take fgPositive, fgWarning and fgNegative, which
  * on their washes over the page are 7.32, 5.77 and 9.10:1, and over a card
  * 5.49, 4.53 and 7.28:1. */
 @media (prefers-color-scheme: dark) {
