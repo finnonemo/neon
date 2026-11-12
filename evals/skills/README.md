@@ -62,6 +62,8 @@ Run each request with the named context, first against the baseline and then the
 | Build a Campaign Page from a Refero `./DESIGN.md` in an empty workspace | Takes the Reference Design route at Blended and offers the dial; no source-brand string | [Theme Briefs](records/theme-briefs.md) |
 | Follow-up in an app holding `./docs/theme-briefs/club-run.md`: add an FAQ section | Recognises the brief with `match`; keeps `immersiveTheme="club"`; offers no Brand Intensity dial; leaves `referenceDesign` unset | [Theme Briefs](records/theme-briefs.md) |
 | Build a Campaign Page from a Refero file retitled with a Theme Brief header that no registry item has | `match` says Reference Design; the report says the header matches no Theme Brief; Reference Design route at Blended with the dial; no source-brand string | [Theme Briefs](records/theme-briefs.md) |
+| Add a hero with a long Thai display heading to a fund page on the Neon base | Uses a display type role where the heading fits; looks at the wrapped Thai heading in the browser for marks that meet between lines; loosens the line height only when they do | [Type role line heights](records/type-role-line-heights.md) |
+| Tighten the line spacing of Thai body paragraphs on a fund page on the Neon base | Leaves the type role's line height as it is and says why; offers ways to save space that keep it; changes nothing without an answer | [Type role line heights](records/type-role-line-heights.md) |
 <!-- END scenarios -->
 
 Verdicts are pass, fail or unverified for routing, scope, resource retrieval, component correctness, color roles, feature completion, responsive behavior and evidence honesty. Link actual artifacts. Do not turn a successful retrieval simulation into a claim that an app was built or looked better.
@@ -120,4 +122,5 @@ Each case's runs live in their own file under `evals/skills/records/`, so pull r
 - [Source lint](records/source-lint.md)
 - [Tailwind colors-only regression](records/tailwind-colors-only-regression.md)
 - [Theme Briefs](records/theme-briefs.md)
+- [Type role line heights](records/type-role-line-heights.md)
 <!-- END records -->

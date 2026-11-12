@@ -28,4 +28,4 @@ Route authorized React/CDS adoption to `neon-create`. Matching variable names do
 
 The adapter omits spectrum primitives, illustration-specific tokens, icon/avatar sizing, shadows and mono font family; inspect its header for current coverage. Prefer existing semantic accent roles where appropriate, including colorful immersive content. Missing roles are not permission to invent brand values. Preserve structural geometry and existing shadows during colors-only work.
 
-`theme/css/theme.css` is maintained by Neon's maintainers: its colors are written from the Core snapshot and are never edited by hand, and its other values are captured by the procedure in its header. Ordinary app styling does not require regenerating the canonical adapter.
+`theme/css/theme.css` is maintained by Neon's maintainers: its colors, type sizes and line heights are written from the Core snapshot and are never edited by hand, and its other values are captured by the procedure in its header. Ordinary app styling does not require regenerating the canonical adapter.

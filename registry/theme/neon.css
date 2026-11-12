@@ -1,6 +1,8 @@
 /* Neon base adapter: shadcn/ui's slots alias Neon roles from theme.css, so
  * light and dark both come from theme.css alone, and theme.css takes each
- * role's color from Core's Theme (theme/css/core-roles.json names the token).
+ * role's color from Core's Theme (theme/css/core-roles.json names the token)
+ * and each type role's size and line height from a Core text style
+ * (theme/css/core-type-roles.json names it).
  * Imported by src/index.css after Tailwind; theme.css is the canonical CSS
  * adapter, copied as-is. */
 @import "./theme.css";

@@ -198,3 +198,14 @@ test('the check refuses a color declared in a shape the sync does not write', as
     await assert.rejects(checkCoreTheme(root), /theme\/css\/theme\.css:8 .* alone on its line/);
   }
 });
+
+test('the check refuses a color declared a second time where the sync does not look', async t => {
+  const written = '  --color-bgPrimary: rgb(1, 23, 43);';
+  // A comment before the colon, the colon on the next line, a CSS escape in the name: each is the same property.
+  for (const added of ['  --color-fg/**/: red;', '  --color-fg\n    : red;', '  --color-f\\67: red;', '  --colo\\72-fg: red;']) {
+    const root = await repository(t);
+    await writeCoreTheme(root);
+    await edit(root, 'theme/css/theme.css', text => text.replace(written, `${written}\n${added}`));
+    await assert.rejects(checkCoreTheme(root), /theme\/css\/theme\.css:9 /, added);
+  }
+});

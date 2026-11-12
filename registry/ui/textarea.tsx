@@ -2,8 +2,9 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 
-// The CDS TextInput's multiline field: three body lines with 16px padding make
-// its 100px. Disabled fades to half, as CDS does.
+// The CDS TextInput's multiline field: three body lines with 16px padding and a
+// 1px border, 106px at Core's body line height (100px in CDS). Disabled fades to
+// half, as CDS does.
 function Textarea({ className, rows = 3, ...props }: React.ComponentProps<"textarea">) {
   return (
     <textarea
