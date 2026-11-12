@@ -5,11 +5,15 @@
 // An item measured as several elements (a field and its text, a track and its
 // thumb) has a table of parts, and its targets name theirs (core: { item, part, cell }).
 //
+// A Counterpart the snapshot holds as a doc alone has no cells: its table says so (doc: true) and
+// names the Theme token, Scale step or text style the doc gives each part ({ doc: 'Layer/layer-01' }),
+// or states the doc's raw number ({ literal: 300 }).
+//
 // To add an item: write core/<counterpart>.mjs, list it in tables below, and give
 // the item's targets in measure.mjs or expansion/<item>.mjs a core cell. A
 // property the table leaves out stays on the CDS baseline.
 import { fileURLToPath } from 'node:url';
-import { coreValue, readCoreItem } from '../../scripts/lib/core-cell.mjs';
+import { coreValue, docValue, readCoreDoc, readCoreItem } from '../../scripts/lib/core-cell.mjs';
 import { NO_PAINT } from './core/entries.mjs';
 import button from './core/button.mjs';
 import textField from './core/text-field.mjs';
@@ -32,6 +36,10 @@ import pagination from './core/pagination.mjs';
 import tooltip from './core/tooltip.mjs';
 import snackbar from './core/snackbar.mjs';
 import banner from './core/banner.mjs';
+import alert from './core/alert.mjs';
+import sheet from './core/sheet.mjs';
+import popover from './core/popover.mjs';
+import menu from './core/menu.mjs';
 
 // By registry item. Input, label, field and input-group are the parts of one Counterpart, Text field.
 const tables = {
@@ -59,20 +67,32 @@ const tables = {
   tooltip,
   sonner: snackbar,
   alert: banner,
+  'alert-dialog': alert,
+  dialog: alert,
+  sheet,
+  popover,
+  'dropdown-menu': menu,
 };
 // The snapshot writes a literal as text ("2", "0.5"); a measured number is a number.
 const asNumber = (value) => (typeof value === 'string' && value.trim() !== '' && !Number.isNaN(Number(value)) ? Number(value) : value);
 const root = fileURLToPath(new URL('../..', import.meta.url));
 const items = new Map();
-const coreItem = (item) => items.get(item) ?? items.set(item, readCoreItem(root, item)).get(item);
+const coreItem = (item) => items.get(item) ?? items.set(item, (tables[item].doc ? readCoreDoc : readCoreItem)(root, item)).get(item);
 
 /**
  * One table entry as measure.mjs would measure it: a number, a color, a font's size and line height,
- * a border's width and color (`strokeOf` names the layer whose stroke it is), or a literal. An entry reads the cell of its table's set unless it
+ * a border's width and color (`strokeOf` names the layer whose stroke it is), a literal, or what a
+ * name in the Counterpart's doc stands for (`doc`). An entry reads the cell of its table's set unless it
  * names its own set and where in it (`set`, `at`): a part can be drawn by a nested component.
  */
 function measuredValue(core, table, cell, mode, entry, name) {
   if ('literal' in entry) return entry.literal;
+  // A name the Counterpart's doc gives the part; a color with a strokeWidth is a border.
+  if ('doc' in entry) {
+    const named = docValue(core, entry.doc);
+    if (named.kind === 'color') return 'strokeWidth' in entry ? { width: entry.strokeWidth, color: named[mode] } : named[mode];
+    return named.kind === 'textStyle' ? { size: named.size, lineHeight: named.lineHeight } : named.value;
+  }
   // A text style Core's doc names for a layer the snapshot binds none to.
   if ('textStyle' in entry) {
     const style = core.textStyles[entry.textStyle];

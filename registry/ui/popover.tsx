@@ -3,8 +3,11 @@ import { Popover as PopoverPrimitive } from "radix-ui"
 
 import { cn } from "@/lib/utils"
 
-// The CDS popover surface: the elevated fill, 16px corners, the line role and
-// CDS's soft shadow. The DatePicker's calendar opens in one.
+// Core's Popover at iOS=False (core/components/popover.md): a 352px surface on Layer/layer-01
+// with 12px corners and a 1px Border/border-subtle stroke, its content padded 16, opening 8px
+// from its anchor. It is never wider than the room beside its anchor. Core's doc both draws and
+// hides an Arrow at iOS=False: none is drawn. The snapshot has no Elevation token, so the shadow
+// is Neon's. The DatePicker's calendar opens in one.
 function Popover(props: React.ComponentProps<typeof PopoverPrimitive.Root>) {
   return <PopoverPrimitive.Root data-slot="popover" {...props} />
 }
@@ -26,7 +29,7 @@ function PopoverContent({ className, align = "center", sideOffset = 8, collision
         sideOffset={sideOffset}
         collisionPadding={collisionPadding}
         className={cn(
-          "z-50 w-72 origin-(--radix-popover-content-transform-origin) rounded-xl border border-border bg-popover p-4 text-popover-foreground shadow-[0_8px_24px_rgba(0,0,0,0.12)] outline-hidden",
+          "z-50 w-[352px] max-w-(--radix-popover-content-available-width) origin-(--radix-popover-content-transform-origin) rounded-lg border border-border bg-popover p-4 text-popover-foreground shadow-[0_8px_24px_rgba(0,0,0,0.12)] outline-hidden",
           "data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
           className
         )}

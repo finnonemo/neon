@@ -5,11 +5,14 @@ import { Dialog as DialogPrimitive } from "radix-ui"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
-// The CDS Modal: full screen below 768px; from there a 612px-wide sheet with
-// 8px corners (CDS fits it to its content between 768 and 1280). The header
-// centers the title beside the close button; the footer stacks its buttons
-// full width on phones, the last one on top, and lines them up at the right
-// from 768px. Radix hides the rest of the page and returns focus on close.
+// Core has one modal, so the dialog follows Core's Alert at iOS=False (core/components/alert.md,
+// ADR 0009) where it can: Layer/layer-01 with 16px corners over the Miscellaneous/overlay scrim, a
+// Headline title and Body text in Text/text-primary. An Alert is a 300px card for one question;
+// a dialog holds more, so its size is Neon's: full screen below 768px, from there 612px wide.
+// The header, which centers the title beside a close button, and the footer, which stacks its
+// buttons full width on phones (the last one on top) and lines them up at the right from 768px,
+// are Neon's too. Radix hides the rest of the page and returns focus on close. The snapshot has
+// no Elevation token, so the shadow is Neon's.
 function Dialog(props: React.ComponentProps<typeof DialogPrimitive.Root>) {
   return <DialogPrimitive.Root data-slot="dialog" {...props} />
 }
@@ -43,7 +46,7 @@ function DialogContent({ className, children, ...props }: React.ComponentProps<t
         data-slot="dialog-content"
         className={cn(
           "fixed inset-0 z-50 flex flex-col bg-popover text-popover-foreground shadow-[0_8px_24px_rgba(0,0,0,0.12)] outline-none",
-          "md:inset-auto md:top-1/2 md:left-1/2 md:max-h-[calc(100svh-4rem)] md:w-auto md:max-w-[612px] md:-translate-x-1/2 md:-translate-y-1/2 md:rounded-md xl:w-[612px]",
+          "md:inset-auto md:top-1/2 md:left-1/2 md:max-h-[calc(100svh-4rem)] md:w-auto md:max-w-[612px] md:-translate-x-1/2 md:-translate-y-1/2 md:rounded-xl xl:w-[612px]",
           "data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
           className
         )}

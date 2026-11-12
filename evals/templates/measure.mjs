@@ -31,6 +31,9 @@ import { listCell } from './core/list-item.mjs';
 import { tooltipCell } from './core/tooltip.mjs';
 import { snackbarAction, snackbarCell } from './core/snackbar.mjs';
 import { tableCell } from './core/table.mjs';
+import { alertCell } from './core/alert.mjs';
+import { menuCell } from './core/menu.mjs';
+import { popoverCell } from './core/popover.mjs';
 
 const both = (selector, check) => ({ cds: selector, neon: selector, check });
 const button = (n, core, check = ['font', 'color', 'bg', 'h', 'pad', 'radius']) => ({ ...both(`[data-measure=actions] button:nth-of-type(${n})`, check), core });
@@ -228,7 +231,8 @@ export const screens = [
     query: 'layout=extras',
     open: { action: 'click', neon: '[data-measure=date] [data-slot=date-picker]', cds: '[data-measure=date] button[aria-label="Open calendar"]' },
     targets: {
-      calendar: { neon: '[data-slot=popover-content]', cds: '[role=dialog] [role=menu]', check: ['radius', 'bg'] },
+      // The calendar opens in a popover: Core's Popover surface, at the calendar's own width.
+      calendar: { neon: '[data-slot=popover-content]', cds: '[role=dialog] [role=menu]', check: ['radius', 'bg'], core: popoverCell() },
       month: { neon: '[data-slot=calendar] .rdp-caption_label', cds: '[role=dialog] h3', check: ['font', 'color'] },
       day: { neon: '[data-slot=calendar] button[data-day$="-10"]', cds: '[data-calendar-date$="-10"]', check: ['h', 'w', 'font', 'color'] },
     },
@@ -239,9 +243,33 @@ export const screens = [
     query: 'layout=extras',
     open: { action: 'click', neon: '[data-measure=table] tbody tr:nth-child(1) button', cds: '[data-measure=table] tbody tr:nth-child(1) button' },
     targets: {
-      menu: { neon: '[data-slot=dropdown-menu-content]', cds: '[role=menu]', check: ['radius', 'bg'] },
-      menuItem: { neon: '[role=menuitem]:nth-of-type(1)', cds: '[role=menuitem]:nth-of-type(1)', check: ['h', 'font', 'color'] },
-      menuItemNegative: { neon: '[role=menuitem]:nth-of-type(2)', cds: '[role=menuitem]:nth-of-type(2)', check: ['font', 'color'] },
+      menu: { neon: '[data-slot=dropdown-menu-content]', cds: '[role=menu]', check: ['radius', 'bg'], core: menuCell('surface') },
+      menuItem: { neon: '[role=menuitem]:nth-of-type(1)', cds: '[role=menuitem]:nth-of-type(1)', check: ['h', 'font', 'color'], core: menuCell('item') },
+      menuItemNegative: { neon: '[role=menuitem]:nth-of-type(2)', cds: '[role=menuitem]:nth-of-type(2)', check: ['font', 'color'], core: menuCell('danger') },
+    },
+    gaps: [],
+  },
+  // Core's Menu parts the row menu has none of, and its sizes, which the CDS baseline does not hold: held to Core alone.
+  {
+    name: 'menu-core-open',
+    query: 'layout=extras',
+    open: { action: 'click', neon: '[data-measure=core-menu] button' },
+    targets: {
+      coreMenu: { neon: '[data-slot=dropdown-menu-content]', check: ['w', 'pad', 'radius', 'bg', 'border'], core: menuCell('surface') },
+      coreMenuItem: { neon: '[data-slot=dropdown-menu-item]:not([data-disabled], [data-variant=destructive])', check: ['h', 'pad', 'radius', 'font', 'color'], core: menuCell('item') },
+      coreMenuDisabled: { neon: '[data-slot=dropdown-menu-item][data-disabled]', check: ['color', 'opacity'], core: menuCell('disabled') },
+      coreMenuLabel: { neon: '[data-slot=dropdown-menu-label]', check: ['h', 'pad', 'font', 'color'], core: menuCell('sectionTitle') },
+      coreMenuSeparator: { neon: '[data-slot=dropdown-menu-separator]', check: ['h', 'bg'], core: menuCell('separator') },
+    },
+    gaps: [],
+  },
+  // A popover of its own content. CDS has no popover of its own, so this is held to Core alone.
+  {
+    name: 'popover-open',
+    query: 'layout=extras',
+    open: { action: 'click', neon: '[data-measure=core-popover] button' },
+    targets: {
+      popover: { neon: '[data-slot=popover-content]', check: ['w', 'pad', 'radius', 'bg', 'border'], core: popoverCell() },
     },
     gaps: [],
   },
@@ -250,9 +278,12 @@ export const screens = [
     query: 'layout=extras',
     open: { action: 'click', neon: '[data-measure=actions] button:nth-of-type(1)', cds: '[data-measure=actions] button:nth-of-type(1)' },
     targets: {
-      dialog: { neon: '[data-slot=dialog-content]', cds: '[data-testid=modal-dialog-motion] > div', check: ['w', 'radius', 'bg'] },
-      dialogTitle: { neon: '[data-slot=dialog-title]', cds: '[role=dialog] h2', check: ['font', 'color'] },
-      dialogBody: { neon: '[data-slot=dialog-body]', cds: '[role=dialog] [tabindex="0"] span', check: ['font', 'color'] },
+      // dialog follows Core's Alert for its surface, scrim and text; its size is Neon's (full screen
+      // on a phone, so its corners are not Core's there) and stays on the CDS baseline.
+      dialog: { neon: '[data-slot=dialog-content]', cds: '[data-testid=modal-dialog-motion] > div', check: ['w', 'radius', 'bg'], core: alertCell('card', 'dialog'), coreProperties: ['bg'] },
+      dialogOverlay: { neon: '[data-slot=dialog-overlay]', check: ['bg'], core: alertCell('overlay', 'dialog') },
+      dialogTitle: { neon: '[data-slot=dialog-title]', cds: '[role=dialog] h2', check: ['font', 'color'], core: alertCell('title', 'dialog') },
+      dialogBody: { neon: '[data-slot=dialog-body]', cds: '[role=dialog] [tabindex="0"] span', check: ['font', 'color'], core: alertCell('message', 'dialog') },
       dialogCancel: { neon: '[data-slot=dialog-footer] [data-variant=secondary]', cds: '[role=dialog] button[data-variant=secondary]:not([data-compact])', check: ['h', 'font', 'pad', 'radius', 'bg'], core: secondary },
       dialogConfirm: { neon: '[data-slot=dialog-footer] [data-variant=destructive]', cds: '[role=dialog] button[data-variant=negative]', check: ['h', 'font', 'pad', 'radius', 'bg'], core: danger },
     },

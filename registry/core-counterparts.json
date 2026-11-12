@@ -97,7 +97,10 @@
     }
   },
   "sheet": {
-    "core": "sheet"
+    "core": "sheet",
+    "notInCore": {
+      "side": ["top", "left", "right"]
+    }
   },
   "sonner": {
     "core": "snackbar"

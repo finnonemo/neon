@@ -7,6 +7,14 @@ import { coreBaseline } from '../templates/core-baseline.mjs';
 import { tooltipCell } from '../templates/core/tooltip.mjs';
 import { snackbarAction, snackbarCell } from '../templates/core/snackbar.mjs';
 import { bannerCell } from '../templates/core/banner.mjs';
+import { alertCell } from '../templates/core/alert.mjs';
+import { sheetCell } from '../templates/core/sheet.mjs';
+import { popoverCell } from '../templates/core/popover.mjs';
+import { menuCell } from '../templates/core/menu.mjs';
+import { docValue, readCoreDoc } from '../../scripts/lib/core-cell.mjs';
+import { fileURLToPath } from 'node:url';
+
+const root = fileURLToPath(new URL('../..', import.meta.url));
 
 const both = async (cell, names) => ({ light: await coreBaseline(cell, 'light', names), dark: await coreBaseline(cell, 'dark', names) });
 
@@ -47,4 +55,51 @@ test('an alert is Core\'s In-line banner in Primary: its Status\'s fill under pr
     assert.deepEqual(await both(bannerCell(text, 'warning')), { light: { font: { size: 15, lineHeight: 24 }, color: ink.light }, dark: { font: { size: 15, lineHeight: 24 }, color: ink.dark } });
   }
   assert.throws(() => bannerCell('box', 'promotional'), /no Status for the promotional alert/);
+});
+
+// The Counterparts the snapshot holds as a doc alone (Alert, Sheet, Popover, Menu): a table names
+// the Theme token, Scale step or text style the doc gives each part, and states the doc's raw numbers.
+const ink = { light: 'rgba(0, 0, 0, 0.851)', dark: 'rgb(255, 255, 255)' };
+const layer01 = { light: 'rgb(255, 255, 255)', dark: 'rgb(26, 26, 26)' };
+const subtle = { light: 'rgba(0, 0, 0, 0.122)', dark: 'rgba(255, 255, 255, 0.18)' };
+const inBoth = (value) => ({ light: value('light'), dark: value('dark') });
+
+test('an alert dialog is Core\'s Alert at iOS=False: a 300px card on Layer/layer-01 with 16px corners, over the overlay', async () => {
+  assert.deepEqual(await both(alertCell('card')), inBoth((mode) => ({ w: 300, pad: [14, 14, 14, 14], radius: 16, bg: layer01[mode] })));
+  assert.deepEqual(await both(alertCell('overlay')), { light: { bg: 'rgba(0, 0, 0, 0.2)' }, dark: { bg: 'rgba(0, 0, 0, 0.502)' } });
+  assert.deepEqual(await both(alertCell('text')), inBoth(() => ({ pad: [8, 8, 24, 8] })));
+  for (const part of ['title', 'message']) {
+    assert.deepEqual(await both(alertCell(part)), inBoth((mode) => ({ font: { size: 17, lineHeight: 24 }, color: ink[mode] })));
+  }
+  // dialog is matched to the same Alert.
+  assert.deepEqual(await coreBaseline(alertCell('card', 'dialog'), 'dark', ['bg']), { bg: layer01.dark });
+});
+
+test('a sheet is Core\'s Sheet at iOS=False: Layer/layer-01 with 16px top corners, padded 16 above, under a 48 by 4 grabber', async () => {
+  assert.deepEqual(await both(sheetCell('surface')), inBoth((mode) => ({ pad: [16, 0, 0, 0], radii: [16, 16, 0, 0], bg: layer01[mode], border: { width: 0, color: 'rgba(0, 0, 0, 0)' } })));
+  assert.deepEqual(await both(sheetCell('grabber')), inBoth((mode) => ({ h: 4, w: 48, radius: 2, bg: subtle[mode], opacity: 1 })));
+  assert.deepEqual(await both(sheetCell('overlay')), { light: { bg: 'rgba(0, 0, 0, 0.2)' }, dark: { bg: 'rgba(0, 0, 0, 0.502)' } });
+});
+
+test('a popover is Core\'s Popover at iOS=False: 352px on Layer/layer-01 with 12px corners, a 1px subtle border and 16px padding', async () => {
+  assert.deepEqual(await both(popoverCell()), inBoth((mode) => ({ w: 352, pad: [16, 16, 16, 16], radius: 12, bg: layer01[mode], border: { width: 1, color: subtle[mode] } })));
+});
+
+test('a dropdown menu is Core\'s Menu at iOS=False: 238px on Layer/layer-01 with 12px corners, 48px pill rows in Body', async () => {
+  assert.deepEqual(await both(menuCell('surface')), inBoth((mode) => ({ w: 238, pad: [10, 0, 10, 0], radius: 12, bg: layer01[mode], border: { width: 0, color: 'rgba(0, 0, 0, 0)' } })));
+  assert.deepEqual(await both(menuCell('item')), inBoth((mode) => ({ h: 48, pad: [12, 8, 12, 6], radius: 24, font: { size: 17, lineHeight: 24 }, color: ink[mode] })));
+  assert.deepEqual(await both(menuCell('danger')), { light: { font: { size: 17, lineHeight: 24 }, color: 'rgb(157, 6, 6)' }, dark: { font: { size: 17, lineHeight: 24 }, color: 'rgb(251, 153, 153)' } });
+  assert.deepEqual(await both(menuCell('disabled')), { light: { color: 'rgba(0, 0, 0, 0.451)', opacity: 1 }, dark: { color: 'rgba(255, 255, 255, 0.451)', opacity: 1 } });
+  assert.deepEqual(await both(menuCell('sectionTitle')), { light: { h: 32, pad: [4, 8, 8, 8], font: { size: 13, lineHeight: 20 }, color: 'rgba(0, 0, 0, 0.651)' }, dark: { h: 32, pad: [4, 8, 8, 8], font: { size: 13, lineHeight: 20 }, color: 'rgba(255, 255, 255, 0.651)' } });
+  assert.deepEqual(await both(menuCell('separator')), inBoth((mode) => ({ h: 1, bg: subtle[mode] })));
+});
+
+test('a doc table cannot name a token, a step or a text style its Counterpart\'s doc does not', async () => {
+  const core = await readCoreDoc(root, 'popover');
+  assert.equal(docValue(core, 'Radius/radius-md').value, 12);
+  assert.deepEqual(docValue(core, 'Layer/layer-01'), { kind: 'color', token: 'Layer/layer-01', ...layer01 });
+  assert.throws(() => docValue(core, 'Text/text-negative'), /Core's Popover doc does not name Text\/text-negative/);
+  assert.throws(() => docValue(core, 'Radius/radius-xl'), /Core's Popover doc does not name Radius\/radius-xl/);
+  await assert.rejects(readCoreDoc(root, 'calendar'), /no Counterpart/);
+  assert.equal(docValue(await readCoreDoc(root, 'dropdown-menu'), 'Body/Body').lineHeight, 24);
 });

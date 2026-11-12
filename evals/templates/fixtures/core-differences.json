@@ -28,13 +28,8 @@
     "day: font.lineHeight 24 ≠ 22"
   ],
   "menu-open@375-light": [
-    "menuItem: font.lineHeight 24 ≠ 22",
-    "menuItemNegative: font.lineHeight 24 ≠ 22",
-    "menuItemNegative: color rgb(157, 6, 6) ≠ rgb(214, 8, 8)"
-  ],
-  "dialog-open@375-light": [
-    "dialogTitle: font.lineHeight 24 ≠ 22",
-    "dialogBody: font.lineHeight 24 ≠ 22"
+    "menuItem: font.weight 400 ≠ 500",
+    "menuItemNegative: font.weight 400 ≠ 500"
   ],
   "toast-open@375-light": [
     "toastText: font.lineHeight 24 ≠ 22"
@@ -56,17 +51,19 @@
     "gap openTitle→openCaret: 8 ≠ 16"
   ],
   "expansion-alert-dialog-open@375-light": [
-    "alertCard: h 252 ≠ 238",
-    "alertTitle: font.lineHeight 28 ≠ 25",
-    "alertTitle: h 60 ≠ 54",
-    "alertBody: font.lineHeight 24 ≠ 22",
+    "alertTitle: font.weight 500 ≠ 400",
+    "alertTitle: h 48 ≠ 54",
+    "alertTitle: w 256 ≠ 270",
     "alertBody: h 48 ≠ 44",
-    "alertCancel: h 80 ≠ 76",
-    "alertCancel: radius 40 ≠ 38",
-    "alertAction: h 80 ≠ 76",
-    "alertAction: radius 40 ≠ 38",
-    "gap alertCard→alertTitle: -228 ≠ -214",
-    "gap alertAction→alertCard: -236 ≠ -222"
+    "alertBody: w 256 ≠ 270",
+    "alertCancel: h 72 ≠ 76",
+    "alertCancel: radius 36 ≠ 38",
+    "alertAction: h 72 ≠ 76",
+    "alertAction: radius 36 ≠ 38",
+    "gap alertCard→alertTitle: -216 ≠ -214",
+    "gap alertTitle→alertCard: -278 ≠ -294",
+    "gap alertTitle→alertBody: 10 ≠ 0",
+    "gap alertAction→alertCard: -224 ≠ -222"
   ],
   "expansion-alert@375-light": [
     "informationalBox: h 128 ≠ 96",
@@ -176,16 +173,18 @@
     "gap uncheckedRing→disabledCheckedRing: 104 ≠ 102"
   ],
   "expansion-sheet-bottom@375-light": [
-    "sheet: h 143 ≠ 134",
+    "sheet: h 139 ≠ 134",
     "sheetTitle: font.lineHeight 28 ≠ 25",
     "sheetTitle: h 28 ≠ 25",
     "sheetBody: font.lineHeight 24 ≠ 22",
     "sheetBody: h 72 ≠ 66",
     "gap sheet→sheetTitle: -107 ≠ -98",
-    "gap sheet→sheetHandle: -127 ≠ -118"
+    "gap sheet→sheetHandle: -131 ≠ -118",
+    "gap sheetHandle→sheetTitle: 20 ≠ 16"
   ],
   "expansion-sheet-top@375-light": [
     "sheet: h 135 ≠ 129",
+    "sheet: radii 0,0,16,16 ≠ 0,0,32,32",
     "sheetTitle: font.lineHeight 28 ≠ 25",
     "sheetTitle: h 28 ≠ 25",
     "sheetBody: font.lineHeight 24 ≠ 22",
@@ -196,12 +195,14 @@
     "gap sheetTitle→sheetBody: 13 ≠ 15"
   ],
   "expansion-sheet-left@375-light": [
+    "sheet: radii 0,16,16,0 ≠ 0,32,32,0",
     "sheetTitle: font.lineHeight 28 ≠ 25",
     "sheetTitle: h 28 ≠ 25",
     "sheetBody: font.lineHeight 24 ≠ 22",
     "sheetBody: h 72 ≠ 66"
   ],
   "expansion-sheet-right@375-light": [
+    "sheet: radii 16,0,0,16 ≠ 32,0,0,32",
     "sheetTitle: font.lineHeight 28 ≠ 25",
     "sheetTitle: h 28 ≠ 25",
     "sheetBody: font.lineHeight 24 ≠ 22",
@@ -269,19 +270,12 @@
     "option: font.lineHeight 24 ≠ 22"
   ],
   "date-open@375-dark": [
-    "calendar: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
     "month: font.lineHeight 24 ≠ 22",
     "day: font.lineHeight 24 ≠ 22"
   ],
   "menu-open@375-dark": [
-    "menuItem: font.lineHeight 24 ≠ 22",
-    "menuItemNegative: font.lineHeight 24 ≠ 22",
-    "menuItemNegative: color rgb(251, 153, 153) ≠ rgb(243, 9, 9)"
-  ],
-  "dialog-open@375-dark": [
-    "dialog: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
-    "dialogTitle: font.lineHeight 24 ≠ 22",
-    "dialogBody: font.lineHeight 24 ≠ 22"
+    "menuItem: font.weight 400 ≠ 500",
+    "menuItemNegative: font.weight 400 ≠ 500"
   ],
   "toast-open@375-dark": [
     "toastText: font.lineHeight 24 ≠ 22"
@@ -303,18 +297,19 @@
     "gap openTitle→openCaret: 8 ≠ 16"
   ],
   "expansion-alert-dialog-open@375-dark": [
-    "alertCard: h 252 ≠ 238",
-    "alertCard: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
-    "alertTitle: font.lineHeight 28 ≠ 25",
-    "alertTitle: h 60 ≠ 54",
-    "alertBody: font.lineHeight 24 ≠ 22",
+    "alertTitle: font.weight 500 ≠ 400",
+    "alertTitle: h 48 ≠ 54",
+    "alertTitle: w 256 ≠ 270",
     "alertBody: h 48 ≠ 44",
-    "alertCancel: h 80 ≠ 76",
-    "alertCancel: radius 40 ≠ 38",
-    "alertAction: h 80 ≠ 76",
-    "alertAction: radius 40 ≠ 38",
-    "gap alertCard→alertTitle: -228 ≠ -214",
-    "gap alertAction→alertCard: -236 ≠ -222"
+    "alertBody: w 256 ≠ 270",
+    "alertCancel: h 72 ≠ 76",
+    "alertCancel: radius 36 ≠ 38",
+    "alertAction: h 72 ≠ 76",
+    "alertAction: radius 36 ≠ 38",
+    "gap alertCard→alertTitle: -216 ≠ -214",
+    "gap alertTitle→alertCard: -278 ≠ -294",
+    "gap alertTitle→alertBody: 10 ≠ 0",
+    "gap alertAction→alertCard: -224 ≠ -222"
   ],
   "expansion-alert@375-dark": [
     "informationalBox: h 128 ≠ 96",
@@ -424,44 +419,44 @@
     "gap uncheckedRing→disabledCheckedRing: 104 ≠ 102"
   ],
   "expansion-sheet-bottom@375-dark": [
-    "sheet: h 145 ≠ 136",
-    "sheet: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
-    "sheet: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
+    "sheet: h 139 ≠ 136",
     "sheetTitle: font.lineHeight 28 ≠ 25",
     "sheetTitle: h 28 ≠ 25",
     "sheetBody: font.lineHeight 24 ≠ 22",
     "sheetBody: h 72 ≠ 66",
-    "gap sheet→sheetTitle: -108 ≠ -99",
-    "gap sheet→sheetHandle: -128 ≠ -119"
+    "sheetBody: w 327 ≠ 325",
+    "gap sheet→sheetTitle: -107 ≠ -99",
+    "gap sheet→sheetHandle: -131 ≠ -119",
+    "gap sheetHandle→sheetTitle: 20 ≠ 16"
   ],
   "expansion-sheet-top@375-dark": [
-    "sheet: h 137 ≠ 131",
-    "sheet: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
-    "sheet: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
+    "sheet: h 135 ≠ 131",
+    "sheet: radii 0,0,16,16 ≠ 0,0,32,32",
     "sheetTitle: font.lineHeight 28 ≠ 25",
     "sheetTitle: h 28 ≠ 25",
     "sheetBody: font.lineHeight 24 ≠ 22",
     "sheetBody: h 72 ≠ 66",
-    "gap sheet→sheetOverlay: -137 ≠ -131",
-    "gap sheet→sheetTitle: -114 ≠ -106",
-    "gap sheet→sheetClose: -120 ≠ -114",
+    "sheetBody: w 327 ≠ 325",
+    "gap sheet→sheetOverlay: -135 ≠ -131",
+    "gap sheet→sheetTitle: -113 ≠ -106",
+    "gap sheet→sheetClose: -119 ≠ -114",
     "gap sheetTitle→sheetBody: 13 ≠ 15"
   ],
   "expansion-sheet-left@375-dark": [
-    "sheet: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
-    "sheet: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
+    "sheet: radii 0,16,16,0 ≠ 0,32,32,0",
     "sheetTitle: font.lineHeight 28 ≠ 25",
     "sheetTitle: h 28 ≠ 25",
     "sheetBody: font.lineHeight 24 ≠ 22",
-    "sheetBody: h 72 ≠ 66"
+    "sheetBody: h 72 ≠ 66",
+    "sheetBody: w 327 ≠ 325"
   ],
   "expansion-sheet-right@375-dark": [
-    "sheet: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
-    "sheet: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
+    "sheet: radii 16,0,0,16 ≠ 32,0,0,32",
     "sheetTitle: font.lineHeight 28 ≠ 25",
     "sheetTitle: h 28 ≠ 25",
     "sheetBody: font.lineHeight 24 ≠ 22",
-    "sheetBody: h 72 ≠ 66"
+    "sheetBody: h 72 ≠ 66",
+    "sheetBody: w 327 ≠ 325"
   ],
   "expansion-switch@375-dark": [
     "offLabel: font.lineHeight 24 ≠ 22",
@@ -528,13 +523,11 @@
     "day: font.lineHeight 24 ≠ 22"
   ],
   "menu-open@1440-light": [
-    "menuItem: font.lineHeight 24 ≠ 22",
-    "menuItemNegative: font.lineHeight 24 ≠ 22",
-    "menuItemNegative: color rgb(157, 6, 6) ≠ rgb(214, 8, 8)"
+    "menuItem: font.weight 400 ≠ 500",
+    "menuItemNegative: font.weight 400 ≠ 500"
   ],
   "dialog-open@1440-light": [
-    "dialogTitle: font.lineHeight 24 ≠ 22",
-    "dialogBody: font.lineHeight 24 ≠ 22"
+    "dialog: radius 16 ≠ 8"
   ],
   "toast-open@1440-light": [
     "toastText: font.lineHeight 24 ≠ 22"
@@ -556,17 +549,19 @@
     "gap openTitle→openCaret: 8 ≠ 16"
   ],
   "expansion-alert-dialog-open@1440-light": [
-    "alertCard: h 252 ≠ 238",
-    "alertTitle: font.lineHeight 28 ≠ 25",
-    "alertTitle: h 60 ≠ 54",
-    "alertBody: font.lineHeight 24 ≠ 22",
+    "alertTitle: font.weight 500 ≠ 400",
+    "alertTitle: h 48 ≠ 54",
+    "alertTitle: w 256 ≠ 270",
     "alertBody: h 48 ≠ 44",
-    "alertCancel: h 80 ≠ 76",
-    "alertCancel: radius 40 ≠ 38",
-    "alertAction: h 80 ≠ 76",
-    "alertAction: radius 40 ≠ 38",
-    "gap alertCard→alertTitle: -228 ≠ -214",
-    "gap alertAction→alertCard: -236 ≠ -222"
+    "alertBody: w 256 ≠ 270",
+    "alertCancel: h 72 ≠ 76",
+    "alertCancel: radius 36 ≠ 38",
+    "alertAction: h 72 ≠ 76",
+    "alertAction: radius 36 ≠ 38",
+    "gap alertCard→alertTitle: -216 ≠ -214",
+    "gap alertTitle→alertCard: -278 ≠ -294",
+    "gap alertTitle→alertBody: 10 ≠ 0",
+    "gap alertAction→alertCard: -224 ≠ -222"
   ],
   "expansion-alert@1440-light": [
     "informationalBox: h 128 ≠ 96",
@@ -676,16 +671,17 @@
     "gap uncheckedRing→disabledCheckedRing: 104 ≠ 102"
   ],
   "expansion-sheet-bottom@1440-light": [
-    "sheet: h 95 ≠ 90",
     "sheetTitle: font.lineHeight 28 ≠ 25",
     "sheetTitle: h 28 ≠ 25",
     "sheetBody: font.lineHeight 24 ≠ 22",
     "sheetBody: h 24 ≠ 22",
     "gap sheet→sheetTitle: -59 ≠ -54",
-    "gap sheet→sheetHandle: -79 ≠ -74"
+    "gap sheet→sheetHandle: -83 ≠ -74",
+    "gap sheetHandle→sheetTitle: 20 ≠ 16"
   ],
   "expansion-sheet-top@1440-light": [
     "sheet: h 87 ≠ 85",
+    "sheet: radii 0,0,16,16 ≠ 0,0,32,32",
     "sheetTitle: font.lineHeight 28 ≠ 25",
     "sheetTitle: h 28 ≠ 25",
     "sheetBody: font.lineHeight 24 ≠ 22",
@@ -696,12 +692,14 @@
     "gap sheetTitle→sheetBody: 13 ≠ 15"
   ],
   "expansion-sheet-left@1440-light": [
+    "sheet: radii 0,16,16,0 ≠ 0,32,32,0",
     "sheetTitle: font.lineHeight 28 ≠ 25",
     "sheetTitle: h 28 ≠ 25",
     "sheetBody: font.lineHeight 24 ≠ 22",
     "sheetBody: h 72 ≠ 66"
   ],
   "expansion-sheet-right@1440-light": [
+    "sheet: radii 16,0,0,16 ≠ 32,0,0,32",
     "sheetTitle: font.lineHeight 28 ≠ 25",
     "sheetTitle: h 28 ≠ 25",
     "sheetBody: font.lineHeight 24 ≠ 22",
@@ -769,19 +767,15 @@
     "option: font.lineHeight 24 ≠ 22"
   ],
   "date-open@1440-dark": [
-    "calendar: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
     "month: font.lineHeight 24 ≠ 22",
     "day: font.lineHeight 24 ≠ 22"
   ],
   "menu-open@1440-dark": [
-    "menuItem: font.lineHeight 24 ≠ 22",
-    "menuItemNegative: font.lineHeight 24 ≠ 22",
-    "menuItemNegative: color rgb(251, 153, 153) ≠ rgb(243, 9, 9)"
+    "menuItem: font.weight 400 ≠ 500",
+    "menuItemNegative: font.weight 400 ≠ 500"
   ],
   "dialog-open@1440-dark": [
-    "dialog: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
-    "dialogTitle: font.lineHeight 24 ≠ 22",
-    "dialogBody: font.lineHeight 24 ≠ 22"
+    "dialog: radius 16 ≠ 8"
   ],
   "toast-open@1440-dark": [
     "toastText: font.lineHeight 24 ≠ 22"
@@ -803,18 +797,19 @@
     "gap openTitle→openCaret: 8 ≠ 16"
   ],
   "expansion-alert-dialog-open@1440-dark": [
-    "alertCard: h 252 ≠ 238",
-    "alertCard: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
-    "alertTitle: font.lineHeight 28 ≠ 25",
-    "alertTitle: h 60 ≠ 54",
-    "alertBody: font.lineHeight 24 ≠ 22",
+    "alertTitle: font.weight 500 ≠ 400",
+    "alertTitle: h 48 ≠ 54",
+    "alertTitle: w 256 ≠ 270",
     "alertBody: h 48 ≠ 44",
-    "alertCancel: h 80 ≠ 76",
-    "alertCancel: radius 40 ≠ 38",
-    "alertAction: h 80 ≠ 76",
-    "alertAction: radius 40 ≠ 38",
-    "gap alertCard→alertTitle: -228 ≠ -214",
-    "gap alertAction→alertCard: -236 ≠ -222"
+    "alertBody: w 256 ≠ 270",
+    "alertCancel: h 72 ≠ 76",
+    "alertCancel: radius 36 ≠ 38",
+    "alertAction: h 72 ≠ 76",
+    "alertAction: radius 36 ≠ 38",
+    "gap alertCard→alertTitle: -216 ≠ -214",
+    "gap alertTitle→alertCard: -278 ≠ -294",
+    "gap alertTitle→alertBody: 10 ≠ 0",
+    "gap alertAction→alertCard: -224 ≠ -222"
   ],
   "expansion-alert@1440-dark": [
     "informationalBox: h 128 ≠ 96",
@@ -924,44 +919,38 @@
     "gap uncheckedRing→disabledCheckedRing: 104 ≠ 102"
   ],
   "expansion-sheet-bottom@1440-dark": [
-    "sheet: h 97 ≠ 92",
-    "sheet: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
-    "sheet: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
     "sheetTitle: font.lineHeight 28 ≠ 25",
     "sheetTitle: h 28 ≠ 25",
     "sheetBody: font.lineHeight 24 ≠ 22",
     "sheetBody: h 24 ≠ 22",
-    "gap sheet→sheetTitle: -60 ≠ -55",
-    "gap sheet→sheetHandle: -80 ≠ -75"
+    "gap sheet→sheetTitle: -59 ≠ -55",
+    "gap sheet→sheetHandle: -83 ≠ -75",
+    "gap sheetHandle→sheetTitle: 20 ≠ 16"
   ],
   "expansion-sheet-top@1440-dark": [
-    "sheet: h 89 ≠ 87",
-    "sheet: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
-    "sheet: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
+    "sheet: radii 0,0,16,16 ≠ 0,0,32,32",
     "sheetTitle: font.lineHeight 28 ≠ 25",
     "sheetTitle: h 28 ≠ 25",
     "sheetBody: font.lineHeight 24 ≠ 22",
     "sheetBody: h 24 ≠ 22",
-    "gap sheet→sheetOverlay: -89 ≠ -87",
-    "gap sheet→sheetTitle: -66 ≠ -62",
-    "gap sheet→sheetClose: -72 ≠ -70",
+    "gap sheet→sheetTitle: -65 ≠ -62",
     "gap sheetTitle→sheetBody: 13 ≠ 15"
   ],
   "expansion-sheet-left@1440-dark": [
-    "sheet: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
-    "sheet: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
+    "sheet: radii 0,16,16,0 ≠ 0,32,32,0",
     "sheetTitle: font.lineHeight 28 ≠ 25",
     "sheetTitle: h 28 ≠ 25",
     "sheetBody: font.lineHeight 24 ≠ 22",
-    "sheetBody: h 72 ≠ 66"
+    "sheetBody: h 72 ≠ 66",
+    "sheetBody: w 336 ≠ 334"
   ],
   "expansion-sheet-right@1440-dark": [
-    "sheet: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
-    "sheet: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
+    "sheet: radii 16,0,0,16 ≠ 32,0,0,32",
     "sheetTitle: font.lineHeight 28 ≠ 25",
     "sheetTitle: h 28 ≠ 25",
     "sheetBody: font.lineHeight 24 ≠ 22",
-    "sheetBody: h 72 ≠ 66"
+    "sheetBody: h 72 ≠ 66",
+    "sheetBody: w 336 ≠ 334"
   ],
   "expansion-switch@1440-dark": [
     "offLabel: font.lineHeight 24 ≠ 22",

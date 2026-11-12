@@ -255,8 +255,9 @@
    * Disabled; they stay for apps that use them. */
   --secondary-disabled: color-mix(in srgb, var(--secondary) 75%, var(--background));
   --destructive-disabled: color-mix(in srgb, var(--destructive) 92%, var(--background));
-  /* CDS Tray is bordered (1px bgLine) in dark only, so a sheet's border
-   * width switches with the mode; a width, not light-dark(), which Tailwind's
+  /* CDS Tray is bordered (1px bgLine) in dark only. Core's Sheet has no
+   * stroke, so the sheet no longer reads this; it stays for an app whose
+   * sheet predates Core's. A width, not light-dark(), which Tailwind's
    * polyfill breaks under AppRoot's inline color-scheme. */
   --sheet-border-width: 0px;
 }

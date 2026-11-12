@@ -127,6 +127,65 @@ test('the dialog and the row menu return focus to their triggers', async ({ page
   await expect(more).toBeFocused();
 });
 
+// Core's Layer/layer-hover-01 and Layer/layer-active-01 (core/theme.json).
+const layerFill = { light: { hover: 'rgba(1, 23, 43, 0.05)', active: 'rgba(1, 23, 43, 0.08)' }, dark: { hover: 'rgba(255, 255, 255, 0.08)', active: 'rgba(255, 255, 255, 0.12)' } };
+
+test('a menu row fills Layer/layer-hover-01 under the pointer and draws the Focus/focus stroke, with no fill, from the keyboard', async ({ page }) => {
+  for (const mode of ['light', 'dark']) {
+    await page.goto(`/?layout=extras${mode === 'dark' ? '&mode=dark' : ''}`);
+    const trigger = page.locator('[data-measure=core-menu] button');
+    const row = page.getByRole('menuitem', { name: 'แก้ไข' });
+    const drawn = () => row.evaluate((el) => {
+      const style = getComputedStyle(el);
+      return { bg: style.backgroundColor, outline: `${style.outlineWidth} ${style.outlineColor}` };
+    });
+    const clear = 'rgba(0, 0, 0, 0)';
+    // The pointer: the hover fill and no stroke, then the pressed fill; the press picks the row and closes the menu.
+    await trigger.click();
+    await row.hover();
+    await settled(page);
+    expect(await drawn(), `${mode} pointer`).toEqual({ bg: layerFill[mode].hover, outline: `2px ${clear}` });
+    await page.mouse.down();
+    await settled(page);
+    expect((await drawn()).bg, `${mode} pressed`).toBe(layerFill[mode].active);
+    await page.mouse.up();
+    await expect(page.getByRole('menu')).toBeHidden();
+    await expect(trigger).toBeFocused();
+
+    // Opened from the keyboard, Radix moves focus to the first row: the stroke, and no fill.
+    await page.mouse.move(0, 0);
+    await page.keyboard.press('Enter');
+    await expect(row).toBeFocused();
+    await settled(page);
+    expect(await drawn(), `${mode} keyboard`).toEqual({ bg: clear, outline: `2px ${await focusColor(page)}` });
+    // A disabled row is skipped: the next key lands on the row after it.
+    await page.keyboard.press('ArrowDown');
+    await expect(page.getByRole('menuitem', { name: 'ลบ' })).toBeFocused();
+    await page.keyboard.press('Escape');
+    await expect(page.getByRole('menu')).toBeHidden();
+    await expect(trigger).toBeFocused();
+  }
+});
+
+test('a popover is a dialog its trigger opens, and Escape or a press outside closes it with focus back on the trigger', async ({ page }) => {
+  await page.goto('/?layout=extras');
+  const trigger = page.locator('[data-measure=core-popover] button');
+  const popover = page.locator('[data-slot=popover-content]');
+  await trigger.click();
+  await expect(popover).toBeVisible();
+  await expect(popover).toHaveRole('dialog');
+  await expect(trigger).toHaveAttribute('aria-expanded', 'true');
+  await page.keyboard.press('Escape');
+  await expect(popover).toBeHidden();
+  await expect(trigger).toBeFocused();
+
+  await trigger.click();
+  await expect(popover).toBeVisible();
+  await page.locator('[data-measure=title] h1').click();
+  await expect(popover).toBeHidden();
+  await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+});
+
 test('a tooltip names its icon button, its caret meets the trigger, and Esc closes it with focus still on the trigger', async ({ page }) => {
   await page.goto('/?layout=extras');
   for (const [hook, caret] of [['help', { width: 16, height: 8 }], ['help-sm', { width: 8, height: 4 }], ['help-lg', { width: 16, height: 8 }]]) {
