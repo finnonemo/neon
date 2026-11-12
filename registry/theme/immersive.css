@@ -82,6 +82,7 @@
   --switch-thumb-disabled: color-mix(in srgb, var(--immersive-on-action) 50%, transparent);
   --layer-hover: var(--immersive-palette-75);
   --layer-active: var(--immersive-palette-75);
+  --layer-selected: var(--immersive-palette-75);
   --selection-tag: var(--immersive-palette-75);
   --selection-tag-hover: var(--immersive-palette-75);
   --selection-tag-disabled: color-mix(in srgb, var(--immersive-palette-75) 37.5%, var(--immersive-canvas));

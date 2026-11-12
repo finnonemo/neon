@@ -39,3 +39,10 @@ test('a recorded set value holds to its own number', () => {
     assert.deepEqual(asRecorded([problem], recorded), [problem]);
   }
 });
+
+test('a font part the baseline does not state is not compared; one it states compares exactly', () => {
+  const measured = { font: { size: 20, lineHeight: 28, weight: 400 } };
+  assert.deepEqual(compare(measured, { font: { size: 20, lineHeight: 28 } }), []);
+  assert.deepEqual(compare(measured, { font: { size: 20, lineHeight: 28, weight: 600 } }), ['font.weight 400 ≠ 600']);
+  assert.deepEqual(compare(measured, { font: { size: 17, lineHeight: 28 } }), ['font.size 20 ≠ 17']);
+});

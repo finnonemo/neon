@@ -22,6 +22,10 @@ import selectionTag from './core/selection-tag.mjs';
 import divider from './core/divider.mjs';
 import progressBar from './core/progress-bar.mjs';
 import progressCircle from './core/progress-circle.mjs';
+import displayTag from './core/display-tag.mjs';
+import avatar from './core/avatar.mjs';
+import listItem from './core/list-item.mjs';
+import table from './core/table.mjs';
 
 // By registry item. Input, label, field and input-group are the parts of one Counterpart, Text field.
 const tables = {
@@ -39,6 +43,10 @@ const tables = {
   separator: divider,
   progress: progressBar,
   spinner: progressCircle,
+  tag: displayTag,
+  avatar,
+  'list-row': listItem,
+  table,
 };
 // The snapshot writes a literal as text ("2", "0.5"); a measured number is a number.
 const asNumber = (value) => (typeof value === 'string' && value.trim() !== '' && !Number.isNaN(Number(value)) ? Number(value) : value);

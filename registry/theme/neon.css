@@ -117,6 +117,7 @@
   /* Core's Layer tokens over a surface at Hover and Active, for a segment not chosen. */
   --color-layer-hover: var(--layer-hover);
   --color-layer-active: var(--layer-active);
+  --color-layer-selected: var(--layer-selected);
   /* Core's Selection tag in Secondary Navy, for the toggle and toggle-group items. */
   --color-selection-tag: var(--selection-tag);
   --color-selection-tag-hover: var(--selection-tag-hover);
@@ -222,6 +223,8 @@
   /* A segment not chosen, at Hover and Active: Core's layer-hover-01 and layer-active-01. */
   --layer-hover: var(--color-bgElevation1Hover);
   --layer-active: var(--color-bgElevation1Active);
+  /* A selected table row: Core's layer-selected-01. */
+  --layer-selected: var(--color-bgElevation1Selected);
   /* The toggle, from Core's Selection tag in Secondary Navy. Its Selected ring is the tag's ink
    * and its Disabled ring the Disabled fill, as Core's Tag tokens alias them. */
   --selection-tag: var(--color-bgTagNeutral);

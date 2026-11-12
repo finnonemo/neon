@@ -1,11 +1,8 @@
 {
   "approval@375-light": [
     "title: font.lineHeight 32 ≠ 28",
-    "rowTitle: font.lineHeight 24 ≠ 22",
-    "rowDescription: font.lineHeight 24 ≠ 22",
-    "tag: font.size 15 ≠ 14",
-    "tag: font.lineHeight 24 ≠ 20",
-    "gap searchLabel→searchInput: 8 ≠ 4"
+    "gap searchLabel→searchInput: 8 ≠ 4",
+    "gap selectedRow→row: 1 ≠ 16"
   ],
   "approval-detail@375-light": [
     "detailTitle: font.lineHeight 28 ≠ 25",
@@ -19,10 +16,6 @@
   ],
   "extras@375-light": [
     "title: font.lineHeight 32 ≠ 28",
-    "headerCell: font.lineHeight 24 ≠ 22",
-    "headerCell: h 80 ≠ 76",
-    "bodyRow: h 80 ≠ 76",
-    "bodyCell: font.lineHeight 24 ≠ 22",
     "disabledCheckboxLabel: color rgba(0, 0, 0, 0.45) ≠ rgba(0, 0, 0, 0.85)",
     "disabledCheckboxLabel: opacity 1 ≠ 0.5",
     "gap selectLabel→selectTrigger: 8 ≠ 4"
@@ -241,11 +234,8 @@
   ],
   "approval@375-dark": [
     "title: font.lineHeight 32 ≠ 28",
-    "rowTitle: font.lineHeight 24 ≠ 22",
-    "rowDescription: font.lineHeight 24 ≠ 22",
-    "tag: font.size 15 ≠ 14",
-    "tag: font.lineHeight 24 ≠ 20",
-    "gap searchLabel→searchInput: 8 ≠ 4"
+    "gap searchLabel→searchInput: 8 ≠ 4",
+    "gap selectedRow→row: 1 ≠ 16"
   ],
   "approval-detail@375-dark": [
     "detailTitle: font.lineHeight 28 ≠ 25",
@@ -259,10 +249,6 @@
   ],
   "extras@375-dark": [
     "title: font.lineHeight 32 ≠ 28",
-    "headerCell: font.lineHeight 24 ≠ 22",
-    "headerCell: h 80 ≠ 76",
-    "bodyRow: h 80 ≠ 76",
-    "bodyCell: font.lineHeight 24 ≠ 22",
     "disabledCheckboxLabel: color rgba(255, 255, 255, 0.45) ≠ rgb(255, 255, 255)",
     "disabledCheckboxLabel: opacity 1 ≠ 0.5",
     "gap selectLabel→selectTrigger: 8 ≠ 4"
@@ -494,11 +480,8 @@
   ],
   "approval@1440-light": [
     "title: font.lineHeight 32 ≠ 28",
-    "rowTitle: font.lineHeight 24 ≠ 22",
-    "rowDescription: font.lineHeight 24 ≠ 22",
-    "tag: font.size 15 ≠ 14",
-    "tag: font.lineHeight 24 ≠ 20",
-    "gap searchLabel→searchInput: 8 ≠ 4"
+    "gap searchLabel→searchInput: 8 ≠ 4",
+    "gap selectedRow→row: 1 ≠ 16"
   ],
   "approval-detail@1440-light": [
     "detailTitle: font.lineHeight 28 ≠ 25",
@@ -512,9 +495,6 @@
   ],
   "extras@1440-light": [
     "title: font.lineHeight 32 ≠ 28",
-    "headerCell: font.lineHeight 24 ≠ 22",
-    "headerCell: h 56 ≠ 54",
-    "bodyCell: font.lineHeight 24 ≠ 22",
     "disabledCheckboxLabel: color rgba(0, 0, 0, 0.45) ≠ rgba(0, 0, 0, 0.85)",
     "disabledCheckboxLabel: opacity 1 ≠ 0.5",
     "gap selectLabel→selectTrigger: 8 ≠ 4"
@@ -733,11 +713,8 @@
   ],
   "approval@1440-dark": [
     "title: font.lineHeight 32 ≠ 28",
-    "rowTitle: font.lineHeight 24 ≠ 22",
-    "rowDescription: font.lineHeight 24 ≠ 22",
-    "tag: font.size 15 ≠ 14",
-    "tag: font.lineHeight 24 ≠ 20",
-    "gap searchLabel→searchInput: 8 ≠ 4"
+    "gap searchLabel→searchInput: 8 ≠ 4",
+    "gap selectedRow→row: 1 ≠ 16"
   ],
   "approval-detail@1440-dark": [
     "detailTitle: font.lineHeight 28 ≠ 25",
@@ -751,9 +728,6 @@
   ],
   "extras@1440-dark": [
     "title: font.lineHeight 32 ≠ 28",
-    "headerCell: font.lineHeight 24 ≠ 22",
-    "headerCell: h 56 ≠ 54",
-    "bodyCell: font.lineHeight 24 ≠ 22",
     "disabledCheckboxLabel: color rgba(255, 255, 255, 0.45) ≠ rgb(255, 255, 255)",
     "disabledCheckboxLabel: opacity 1 ≠ 0.5",
     "gap selectLabel→selectTrigger: 8 ≠ 4"

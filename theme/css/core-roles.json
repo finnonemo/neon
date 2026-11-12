@@ -76,6 +76,7 @@
   "bgToggleOff": "Miscellaneous/toggle-off",
   "bgElevation1Hover": "Layer/layer-hover-01",
   "bgElevation1Active": "Layer/layer-active-01",
+  "bgElevation1Selected": "Layer/layer-selected-01",
   "bgTagNeutral": "Tag/Navy/Secondary/background",
   "bgTagNeutralHover": "Tag/Navy/Secondary/background-hover",
   "bgTagNeutralDisabled": "Tag/Navy/Secondary/background-disabled",

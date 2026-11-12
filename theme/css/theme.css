@@ -162,6 +162,7 @@
   --color-bgToggleOff: rgb(128, 128, 128);
   --color-bgElevation1Hover: rgba(1, 23, 43, 0.051);
   --color-bgElevation1Active: rgba(1, 23, 43, 0.078);
+  --color-bgElevation1Selected: rgba(1, 23, 43, 0.078);
   --color-bgTagNeutral: rgb(242, 243, 244);
   --color-bgTagNeutralHover: rgb(230, 232, 234);
   --color-bgTagNeutralDisabled: rgb(242, 243, 244);
@@ -344,6 +345,7 @@
     --color-fgIconDisabled: rgba(255, 255, 255, 0.451);
     --color-bgElevation1Hover: rgba(255, 255, 255, 0.078);
     --color-bgElevation1Active: rgba(255, 255, 255, 0.122);
+    --color-bgElevation1Selected: rgba(255, 255, 255, 0.122);
     --color-bgTagNeutral: rgba(166, 191, 204, 0.122);
     --color-bgTagNeutralHover: rgba(166, 191, 204, 0.18);
     --color-bgTagNeutralDisabled: rgba(166, 191, 204, 0.122);
@@ -423,6 +425,7 @@
   --color-fgIconDisabled: rgba(255, 255, 255, 0.451);
   --color-bgElevation1Hover: rgba(255, 255, 255, 0.078);
   --color-bgElevation1Active: rgba(255, 255, 255, 0.122);
+  --color-bgElevation1Selected: rgba(255, 255, 255, 0.122);
   --color-bgTagNeutral: rgba(166, 191, 204, 0.122);
   --color-bgTagNeutralHover: rgba(166, 191, 204, 0.18);
   --color-bgTagNeutralDisabled: rgba(166, 191, 204, 0.122);
