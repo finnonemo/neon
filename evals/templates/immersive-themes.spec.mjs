@@ -49,9 +49,10 @@ for (const [theme, scheme] of Object.entries(SCHEMES)) {
       await page.screenshot({ path: test.info().outputPath(`immersive-${theme}-os-${os}-app-${app}.png`) });
 
       // Cards and popovers portalled into the body sit on the canvas in its text, so muted text stays readable;
-      // a disabled fill is CDS's blend, which every theme's far-apart action and canvas raise to 93.7%.
+      // a disabled fill is what CDS drew on the canvas: its 93.7% blend of action and canvas under 50% opacity,
+      // which the Button now states as one color, since Core's Disabled has no opacity.
       expect(await resolve(page, { card: 'var(--card)', cardText: 'var(--card-foreground)', popover: 'var(--popover)', popoverText: 'var(--popover-foreground)', disabled: 'var(--primary-disabled)' }))
-        .toEqual(await resolve(page, { card: vars.canvas, cardText: vars.text, popover: vars.canvas, popoverText: vars.text, disabled: `color-mix(in srgb, ${vars.action} 93.7%, ${vars.canvas})` }));
+        .toEqual(await resolve(page, { card: vars.canvas, cardText: vars.text, popover: vars.canvas, popoverText: vars.text, disabled: `color-mix(in srgb, ${vars.action} 46.85%, ${vars.canvas})` }));
 
       const action = page.getByRole('button', { name: 'Final action' });
       await expect(action).toHaveCSS('background-color', rgb(vars.action));
@@ -59,9 +60,11 @@ for (const [theme, scheme] of Object.entries(SCHEMES)) {
       await page.getByRole('button', { name: /^Request 24 / }).focus();
       await page.keyboard.press('Tab');
       await expect(action).toBeFocused();
-      // The Button draws its ring in --ring at 50%, transitioning in: the shadow must settle on the theme action at 50%.
-      const { ring } = await resolve(page, { ring: `color-mix(in oklab, ${vars.action} 50%, transparent)` });
-      await expect.poll(() => action.evaluate(el => getComputedStyle(el).boxShadow), { message: 'the focus ring is drawn in the theme action' }).toContain(`${ring} 0px 0px 0px 3px`);
+      // The Button draws its focus indicator as a solid 2px outline 2px outside it, in --ring: the theme action.
+      await expect(action).toHaveCSS('outline-style', 'solid');
+      await expect(action).toHaveCSS('outline-width', '2px');
+      await expect(action).toHaveCSS('outline-offset', '2px');
+      await expect(action, 'the focus indicator is drawn in the theme action').toHaveCSS('outline-color', rgb(vars.action));
 
       await expect(logos.first()).toHaveAttribute('src', toned);
       for (const element of ['html', 'body']) {
@@ -130,6 +133,13 @@ for (const theme of Object.keys(SCHEMES)) {
       await button.hover();
       await expect.poll(() => colors(button), { message: `${name} hover` }).toEqual({ background: expected.fill, color: expected.text });
     }
+    // A Button's Disabled is one color, not a fill under 50% opacity: the secondary fill's CDS blend (75%) and the theme's
+    // text, each at half strength on the canvas. A link Button is the theme's text, as it was the theme's action.
+    const dimmed = await resolve(page, { background: `color-mix(in srgb, ${vars['palette-75']} 37.5%, ${vars.canvas})`, color: `color-mix(in srgb, ${vars.text} 50%, ${vars.canvas})` });
+    const disabled = page.getByRole('button', { name: 'Disabled action', exact: true });
+    expect(await colors(disabled), 'disabled secondary button').toEqual(dimmed);
+    await expect(disabled).toHaveCSS('opacity', '1');
+    await expect(page.getByRole('button', { name: 'Link action', exact: true })).toHaveCSS('color', expected.text);
     await page.screenshot({ path: test.info().outputPath(`immersive-${theme}-controls.png`) });
   });
 

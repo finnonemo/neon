@@ -70,7 +70,7 @@ function InputGroupAddon({
   )
 }
 
-// Neon Button's own sizes: "icon" is CDS's 40px IconButton, "sm" a 40px text button.
+// Neon Button's own sizes: "icon" is CDS's 40px IconButton, "sm" Core's Small, a 36px text button.
 function InputGroupButton({
   className,
   type = "button",

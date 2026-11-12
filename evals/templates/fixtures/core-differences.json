@@ -22,10 +22,7 @@
     "notesLabel: font.lineHeight 24 ≠ 20",
     "notes: h 106 ≠ 100",
     "notesText: font.lineHeight 24 ≠ 22",
-    "checkboxLabel: font.lineHeight 24 ≠ 22",
-    "approve: font.lineHeight 24 ≠ 22",
-    "requestInfo: font.lineHeight 24 ≠ 22",
-    "reject: font.lineHeight 24 ≠ 22"
+    "checkboxLabel: font.lineHeight 24 ≠ 22"
   ],
   "extras@375-light": [
     "title: font.lineHeight 32 ≠ 28",
@@ -37,9 +34,7 @@
     "headerCell: font.lineHeight 24 ≠ 22",
     "headerCell: h 80 ≠ 76",
     "bodyRow: h 80 ≠ 76",
-    "bodyCell: font.lineHeight 24 ≠ 22",
-    "rejectRequest: font.lineHeight 24 ≠ 22",
-    "save: font.lineHeight 24 ≠ 22"
+    "bodyCell: font.lineHeight 24 ≠ 22"
   ],
   "select-open@375-light": [
     "option: font.lineHeight 24 ≠ 22"
@@ -55,9 +50,7 @@
   ],
   "dialog-open@375-light": [
     "dialogTitle: font.lineHeight 24 ≠ 22",
-    "dialogBody: font.lineHeight 24 ≠ 22",
-    "dialogCancel: font.lineHeight 24 ≠ 22",
-    "dialogConfirm: font.lineHeight 24 ≠ 22"
+    "dialogBody: font.lineHeight 24 ≠ 22"
   ],
   "toast-open@375-light": [
     "toastText: font.lineHeight 24 ≠ 22"
@@ -85,10 +78,8 @@
     "alertBody: font.lineHeight 24 ≠ 22",
     "alertBody: h 48 ≠ 44",
     "alertCancel: h 80 ≠ 76",
-    "alertCancel: font.lineHeight 24 ≠ 22",
     "alertCancel: radius 40 ≠ 38",
     "alertAction: h 80 ≠ 76",
-    "alertAction: font.lineHeight 24 ≠ 22",
     "alertAction: radius 40 ≠ 38",
     "gap alertCard→alertTitle: -228 ≠ -214",
     "gap alertAction→alertCard: -236 ≠ -222"
@@ -130,10 +121,9 @@
     "gap promotionalTitle→promotionalIcon: -22 ≠ -18"
   ],
   "expansion-button-group@375-light": [
-    "first: font.lineHeight 24 ≠ 22",
-    "second: font.lineHeight 24 ≠ 22",
-    "stackedFirst: font.lineHeight 24 ≠ 22",
-    "stackedSecond: font.lineHeight 24 ≠ 22"
+    "group: h 56 ≠ 54",
+    "first: w 113 ≠ 129",
+    "second: w 121 ≠ 137"
   ],
   "expansion-card@375-light": [
     "card: border.color rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)",
@@ -303,11 +293,7 @@
     "notesLabel: font.lineHeight 24 ≠ 20",
     "notes: h 106 ≠ 100",
     "notesText: font.lineHeight 24 ≠ 22",
-    "checkboxLabel: font.lineHeight 24 ≠ 22",
-    "approve: font.lineHeight 24 ≠ 22",
-    "requestInfo: font.lineHeight 24 ≠ 22",
-    "reject: font.lineHeight 24 ≠ 22",
-    "reject: bg rgb(214, 8, 8) ≠ rgb(243, 9, 9)"
+    "checkboxLabel: font.lineHeight 24 ≠ 22"
   ],
   "extras@375-dark": [
     "title: font.lineHeight 32 ≠ 28",
@@ -319,10 +305,7 @@
     "headerCell: font.lineHeight 24 ≠ 22",
     "headerCell: h 80 ≠ 76",
     "bodyRow: h 80 ≠ 76",
-    "bodyCell: font.lineHeight 24 ≠ 22",
-    "rejectRequest: font.lineHeight 24 ≠ 22",
-    "rejectRequest: bg rgb(214, 8, 8) ≠ rgb(243, 9, 9)",
-    "save: font.lineHeight 24 ≠ 22"
+    "bodyCell: font.lineHeight 24 ≠ 22"
   ],
   "select-open@375-dark": [
     "listbox: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
@@ -341,10 +324,7 @@
   "dialog-open@375-dark": [
     "dialog: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
     "dialogTitle: font.lineHeight 24 ≠ 22",
-    "dialogBody: font.lineHeight 24 ≠ 22",
-    "dialogCancel: font.lineHeight 24 ≠ 22",
-    "dialogConfirm: font.lineHeight 24 ≠ 22",
-    "dialogConfirm: bg rgb(214, 8, 8) ≠ rgb(243, 9, 9)"
+    "dialogBody: font.lineHeight 24 ≠ 22"
   ],
   "toast-open@375-dark": [
     "toastText: font.lineHeight 24 ≠ 22"
@@ -373,12 +353,9 @@
     "alertBody: font.lineHeight 24 ≠ 22",
     "alertBody: h 48 ≠ 44",
     "alertCancel: h 80 ≠ 76",
-    "alertCancel: font.lineHeight 24 ≠ 22",
     "alertCancel: radius 40 ≠ 38",
     "alertAction: h 80 ≠ 76",
-    "alertAction: font.lineHeight 24 ≠ 22",
     "alertAction: radius 40 ≠ 38",
-    "alertAction: bg rgb(214, 8, 8) ≠ rgb(243, 9, 9)",
     "gap alertCard→alertTitle: -228 ≠ -214",
     "gap alertAction→alertCard: -236 ≠ -222"
   ],
@@ -420,10 +397,9 @@
     "gap promotionalTitle→promotionalIcon: -22 ≠ -18"
   ],
   "expansion-button-group@375-dark": [
-    "first: font.lineHeight 24 ≠ 22",
-    "second: font.lineHeight 24 ≠ 22",
-    "stackedFirst: font.lineHeight 24 ≠ 22",
-    "stackedSecond: font.lineHeight 24 ≠ 22"
+    "group: h 56 ≠ 54",
+    "first: w 113 ≠ 129",
+    "second: w 121 ≠ 137"
   ],
   "expansion-card@375-dark": [
     "card: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
@@ -604,10 +580,7 @@
     "notesLabel: font.lineHeight 24 ≠ 20",
     "notes: h 106 ≠ 100",
     "notesText: font.lineHeight 24 ≠ 22",
-    "checkboxLabel: font.lineHeight 24 ≠ 22",
-    "approve: font.lineHeight 24 ≠ 22",
-    "requestInfo: font.lineHeight 24 ≠ 22",
-    "reject: font.lineHeight 24 ≠ 22"
+    "checkboxLabel: font.lineHeight 24 ≠ 22"
   ],
   "extras@1440-light": [
     "title: font.lineHeight 32 ≠ 28",
@@ -618,9 +591,7 @@
     "dateLabel: font.lineHeight 24 ≠ 20",
     "headerCell: font.lineHeight 24 ≠ 22",
     "headerCell: h 56 ≠ 54",
-    "bodyCell: font.lineHeight 24 ≠ 22",
-    "rejectRequest: font.lineHeight 24 ≠ 22",
-    "save: font.lineHeight 24 ≠ 22"
+    "bodyCell: font.lineHeight 24 ≠ 22"
   ],
   "select-open@1440-light": [
     "option: font.lineHeight 24 ≠ 22"
@@ -636,9 +607,7 @@
   ],
   "dialog-open@1440-light": [
     "dialogTitle: font.lineHeight 24 ≠ 22",
-    "dialogBody: font.lineHeight 24 ≠ 22",
-    "dialogCancel: font.lineHeight 24 ≠ 22",
-    "dialogConfirm: font.lineHeight 24 ≠ 22"
+    "dialogBody: font.lineHeight 24 ≠ 22"
   ],
   "toast-open@1440-light": [
     "toastText: font.lineHeight 24 ≠ 22"
@@ -666,10 +635,8 @@
     "alertBody: font.lineHeight 24 ≠ 22",
     "alertBody: h 48 ≠ 44",
     "alertCancel: h 80 ≠ 76",
-    "alertCancel: font.lineHeight 24 ≠ 22",
     "alertCancel: radius 40 ≠ 38",
     "alertAction: h 80 ≠ 76",
-    "alertAction: font.lineHeight 24 ≠ 22",
     "alertAction: radius 40 ≠ 38",
     "gap alertCard→alertTitle: -228 ≠ -214",
     "gap alertAction→alertCard: -236 ≠ -222"
@@ -711,10 +678,9 @@
     "gap promotionalTitle→promotionalIcon: -22 ≠ -18"
   ],
   "expansion-button-group@1440-light": [
-    "first: font.lineHeight 24 ≠ 22",
-    "second: font.lineHeight 24 ≠ 22",
-    "stackedFirst: font.lineHeight 24 ≠ 22",
-    "stackedSecond: font.lineHeight 24 ≠ 22"
+    "group: h 56 ≠ 54",
+    "first: w 113 ≠ 129",
+    "second: w 121 ≠ 137"
   ],
   "expansion-card@1440-light": [
     "card: border.color rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)",
@@ -884,11 +850,7 @@
     "notesLabel: font.lineHeight 24 ≠ 20",
     "notes: h 106 ≠ 100",
     "notesText: font.lineHeight 24 ≠ 22",
-    "checkboxLabel: font.lineHeight 24 ≠ 22",
-    "approve: font.lineHeight 24 ≠ 22",
-    "requestInfo: font.lineHeight 24 ≠ 22",
-    "reject: font.lineHeight 24 ≠ 22",
-    "reject: bg rgb(214, 8, 8) ≠ rgb(243, 9, 9)"
+    "checkboxLabel: font.lineHeight 24 ≠ 22"
   ],
   "extras@1440-dark": [
     "title: font.lineHeight 32 ≠ 28",
@@ -899,10 +861,7 @@
     "dateLabel: font.lineHeight 24 ≠ 20",
     "headerCell: font.lineHeight 24 ≠ 22",
     "headerCell: h 56 ≠ 54",
-    "bodyCell: font.lineHeight 24 ≠ 22",
-    "rejectRequest: font.lineHeight 24 ≠ 22",
-    "rejectRequest: bg rgb(214, 8, 8) ≠ rgb(243, 9, 9)",
-    "save: font.lineHeight 24 ≠ 22"
+    "bodyCell: font.lineHeight 24 ≠ 22"
   ],
   "select-open@1440-dark": [
     "listbox: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
@@ -921,10 +880,7 @@
   "dialog-open@1440-dark": [
     "dialog: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
     "dialogTitle: font.lineHeight 24 ≠ 22",
-    "dialogBody: font.lineHeight 24 ≠ 22",
-    "dialogCancel: font.lineHeight 24 ≠ 22",
-    "dialogConfirm: font.lineHeight 24 ≠ 22",
-    "dialogConfirm: bg rgb(214, 8, 8) ≠ rgb(243, 9, 9)"
+    "dialogBody: font.lineHeight 24 ≠ 22"
   ],
   "toast-open@1440-dark": [
     "toastText: font.lineHeight 24 ≠ 22"
@@ -953,12 +909,9 @@
     "alertBody: font.lineHeight 24 ≠ 22",
     "alertBody: h 48 ≠ 44",
     "alertCancel: h 80 ≠ 76",
-    "alertCancel: font.lineHeight 24 ≠ 22",
     "alertCancel: radius 40 ≠ 38",
     "alertAction: h 80 ≠ 76",
-    "alertAction: font.lineHeight 24 ≠ 22",
     "alertAction: radius 40 ≠ 38",
-    "alertAction: bg rgb(214, 8, 8) ≠ rgb(243, 9, 9)",
     "gap alertCard→alertTitle: -228 ≠ -214",
     "gap alertAction→alertCard: -236 ≠ -222"
   ],
@@ -1000,10 +953,9 @@
     "gap promotionalTitle→promotionalIcon: -22 ≠ -18"
   ],
   "expansion-button-group@1440-dark": [
-    "first: font.lineHeight 24 ≠ 22",
-    "second: font.lineHeight 24 ≠ 22",
-    "stackedFirst: font.lineHeight 24 ≠ 22",
-    "stackedSecond: font.lineHeight 24 ≠ 22"
+    "group: h 56 ≠ 54",
+    "first: w 113 ≠ 129",
+    "second: w 121 ≠ 137"
   ],
   "expansion-card@1440-dark": [
     "card: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",

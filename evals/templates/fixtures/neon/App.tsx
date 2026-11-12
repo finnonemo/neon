@@ -61,6 +61,8 @@ function ThemedControls({ children }: { children: ReactNode }) {
         <Button variant="secondary">Secondary action</Button>
         <Button variant="outline">Outline action</Button>
         <Button variant="ghost">Ghost action</Button>
+        <Button variant="secondary" disabled>Disabled action</Button>
+        <Button variant="link">Link action</Button>
         <Toggle defaultPressed>Pressed toggle</Toggle>
         <Toggle>Unpressed toggle</Toggle>
         <Tag>Neutral tag</Tag>

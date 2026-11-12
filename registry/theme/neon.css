@@ -71,6 +71,34 @@
   --color-primary-disabled: var(--primary-disabled);
   --color-secondary-disabled: var(--secondary-disabled);
   --color-destructive-disabled: var(--destructive-disabled);
+  /* Core's Button and Link tokens, for the button item: each Type's fill at
+   * Hover and Active, the Disabled look, and the label inks shadcn has no slot for. */
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-active: var(--primary-active);
+  --color-primary-disabled-foreground: var(--primary-disabled-foreground);
+  --color-destructive-hover: var(--color-bgButtonDangerHover);
+  --color-destructive-active: var(--color-bgButtonDangerActive);
+  --color-button-secondary: var(--button-secondary);
+  --color-button-secondary-hover: var(--button-secondary-hover);
+  --color-button-secondary-active: var(--button-secondary-active);
+  --color-button-brand: var(--color-bgButtonBrand);
+  --color-button-brand-hover: var(--color-bgButtonBrandHover);
+  --color-button-brand-active: var(--color-bgButtonBrandActive);
+  --color-button-brand-foreground: var(--color-fgOnBrand);
+  --color-button-inverse: var(--color-bgButtonInverse);
+  --color-button-inverse-foreground: var(--color-fg);
+  --color-button-inverse-hover: var(--color-bgButtonInverseHover);
+  --color-button-inverse-active: var(--color-bgButtonInverseActive);
+  --color-button-inverse-disabled: var(--color-bgButtonInverseDisabled);
+  --color-button-inverse-disabled-foreground: var(--color-fgInverseDisabled);
+  --color-button-disabled: var(--button-disabled);
+  --color-button-disabled-foreground: var(--button-disabled-foreground);
+  --color-link: var(--link);
+  --color-link-hover: var(--link-hover);
+  /* Core's button label below Large: Subheadline and Footnote in Medium (500), a weight no type
+   * role holds at those sizes. For the button item; lib/utils.ts lists them in cn's font-size group. */
+  --text-button-md: var(--fontSize-label1); --text-button-md--line-height: var(--lineHeight-label1); --text-button-md--font-weight: 500;
+  --text-button-xs: var(--fontSize-caption); --text-button-xs--line-height: var(--lineHeight-caption); --text-button-xs--font-weight: 500;
 }
 
 :root {
@@ -112,11 +140,28 @@
   --tag-positive: rgb(0, 127, 59);
   --tag-warning: rgb(87, 90, 3);
   --tag-negative: rgb(200, 8, 8);
-  /* Disabled fills (spike trap 4): CDS blends a filled control's color into the
-   * page background at 75%, raised for colors far from the background in
-   * luminance (getBlendedColor). The mixes below are that blend worked out for
-   * each role; disabled controls also fade to 50% opacity, as in CDS. */
-  --primary-disabled: color-mix(in srgb, var(--primary) 93.7%, var(--background));
+  /* The primary Button's states, from Core's Button tokens: its fill at Hover
+   * and Active, and Core's Disabled fill and label, which dim by their own
+   * alpha and not by opacity. Slots, so an Immersive Theme restates them. */
+  --primary-hover: var(--color-bgButtonPrimaryHover);
+  --primary-active: var(--color-bgButtonPrimaryActive);
+  --primary-disabled: var(--color-bgButtonDisabled);
+  --primary-disabled-foreground: var(--color-fgDisabled);
+  /* The same for Core's secondary fill (a ghost Button's Hover and Active too),
+   * every other Button's Disabled fill and label, and the Link ink. */
+  --button-secondary: var(--color-bgButtonSecondary);
+  --button-secondary-hover: var(--color-bgButtonSecondaryHover);
+  --button-secondary-active: var(--color-bgButtonSecondaryActive);
+  --button-disabled: var(--color-bgButtonDisabled);
+  --button-disabled-foreground: var(--color-fgDisabled);
+  --link: var(--color-fgLink);
+  --link-hover: var(--color-fgLinkHover);
+  /* Disabled fills (spike trap 4), as CDS draws them: it blends a filled
+   * control's color into the page background at 75%, raised for colors far
+   * from the background in luminance (getBlendedColor), under 50% opacity.
+   * The toggle, not yet retuned to Core, reads --secondary-disabled. No
+   * registry item reads --destructive-disabled since the Button took Core's
+   * Disabled; it stays for apps that use it. */
   --secondary-disabled: color-mix(in srgb, var(--secondary) 75%, var(--background));
   --destructive-disabled: color-mix(in srgb, var(--destructive) 92%, var(--background));
   /* CDS Tray is bordered (1px bgLine) in dark only, so a sheet's border
@@ -135,7 +180,6 @@
   :root:not([data-theme="light"]) {
     --primary-foreground: var(--color-fg);
     --destructive-foreground: var(--color-fg);
-    --primary-disabled: color-mix(in srgb, var(--primary) 75%, var(--background));
     --destructive-disabled: color-mix(in srgb, var(--destructive) 75%, var(--background));
     --tag-positive: var(--color-fgPositive);
     --tag-warning: var(--color-fgWarning);
@@ -146,7 +190,6 @@
 :root[data-theme="dark"] {
   --primary-foreground: var(--color-fg);
   --destructive-foreground: var(--color-fg);
-  --primary-disabled: color-mix(in srgb, var(--primary) 75%, var(--background));
   --destructive-disabled: color-mix(in srgb, var(--destructive) 75%, var(--background));
   --tag-positive: var(--color-fgPositive);
   --tag-warning: var(--color-fgWarning);

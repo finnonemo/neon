@@ -14,10 +14,19 @@
 //   border top border width and color
 //   opacity the element's opacity times its ancestors', which disabled controls set
 // both: the Neon fixture mirrors the CDS markup, so one selector reads either.
+//
+// core names the cell of the item's Counterpart the Neon element renders. On
+// the Neon target such a target is held to the Core baseline (core-baseline.mjs)
+// for the properties its item's table lists, and to the CDS baseline for the rest.
 import { expansionItems } from './expansion.mjs';
+import { buttonCell } from './core/button.mjs';
 
 const both = (selector, check) => ({ cds: selector, neon: selector, check });
-const button = (n, check = ['font', 'color', 'bg', 'h', 'pad', 'radius']) => both(`[data-measure=actions] button:nth-of-type(${n})`, check);
+const button = (n, core, check = ['font', 'color', 'bg', 'h', 'pad', 'radius']) => ({ ...both(`[data-measure=actions] button:nth-of-type(${n})`, check), core });
+const coreOnly = (selector, core, check = ['font', 'color', 'bg', 'h', 'pad', 'radius', 'opacity']) => ({ neon: `[data-measure=core-buttons] ${selector}`, check, core });
+const primary = buttonCell('Primary');
+const secondary = buttonCell('Secondary');
+const danger = buttonCell('Primary', { Type: 'Danger' });
 const expansionSection = (n) => `:has(> [data-measure=title]) > section:nth-of-type(${n})`;
 
 export const screens = [
@@ -60,9 +69,9 @@ export const screens = [
       notesText: { neon: '[data-measure=notes] textarea', cds: '[data-measure=notes] textarea', check: ['font', 'color', 'pad'] },
       checkbox: { neon: '[data-measure=confirm] [role=checkbox]', cds: '[data-measure=confirm] [data-testid=checkbox-outer]', check: ['h', 'w', 'radius', 'border'] },
       checkboxLabel: { neon: '[data-measure=confirm] label', cds: '[data-measure=confirm] label span[id]', check: ['font', 'color'] },
-      approve: button(1),
-      requestInfo: button(2),
-      reject: button(3),
+      approve: button(1, primary),
+      requestInfo: button(2, secondary),
+      reject: button(3, danger),
     },
     gaps: [
       ['detailTitle', 'detailMeta', 'y'],
@@ -86,10 +95,19 @@ export const screens = [
       bodyRow: { neon: '[data-measure=table] tbody tr:nth-child(1)', cds: '[data-measure=table] tbody tr:nth-child(1)', check: ['h'] },
       bodyCell: { neon: '[data-measure=table] tbody tr:nth-child(1) td:nth-child(1)', cds: '[data-measure=table] tbody tr:nth-child(1) td:nth-child(1) div:not(:has(*))', check: ['font', 'color'] },
       rowMenuButton: { neon: '[data-measure=table] tbody tr:nth-child(1) button', cds: '[data-measure=table] tbody tr:nth-child(1) button', check: ['h', 'w'] },
-      rejectRequest: button(1),
-      save: button(2),
-      // Disabled controls keep CDS's blended disabled fill as well as its opacity (spike trap 4).
-      forwardDisabled: button(3, ['h', 'opacity', 'bg', 'color']),
+      rejectRequest: button(1, danger),
+      save: button(2, secondary),
+      // A disabled Button takes Core's disabled fill and label at full opacity; the other
+      // disabled controls keep CDS's blended fill and its opacity (spike trap 4) until retuned.
+      forwardDisabled: button(3, buttonCell('Primary', { State: 'Disabled' }), ['h', 'opacity', 'bg', 'color']),
+      // Core's values that CDS has none of: held to the Core baseline alone, on the Neon target only.
+      medium: coreOnly('[data-size=md]', buttonCell('Primary', { Size: 'Medium' })),
+      extraSmall: coreOnly('[data-size=xs]', buttonCell('Secondary', { Size: 'XSmall' })),
+      small: coreOnly('[data-size=sm]', buttonCell('Tertiary', { Size: 'Small' })),
+      brand: coreOnly('[data-variant=brand]', buttonCell('Primary', { Type: 'Brand' })),
+      inverse: coreOnly('[data-variant=inverse]', buttonCell('Primary', { Type: 'Inverse' })),
+      // Loading fixes the Enabled button's height and binds no label ink.
+      loading: coreOnly('[aria-busy=true]', buttonCell('Primary', { State: 'Loading' }), ['bg', 'opacity']),
       disabledInput: { neon: '[data-measure=disabled-field] input', cds: '[data-measure=disabled-field] [data-testid=input-interactable-area]', check: ['h', 'border', 'bg', 'opacity'] },
       disabledInputText: { neon: '[data-measure=disabled-field] input', cds: '[data-measure=disabled-field] input', check: ['color', 'opacity'] },
       disabledCheckbox: { neon: '[data-measure=disabled-check] [role=checkbox]', cds: '[data-measure=disabled-check] [data-testid=checkbox-outer]', check: ['border', 'bg', 'opacity'] },
@@ -145,8 +163,8 @@ export const screens = [
       dialog: { neon: '[data-slot=dialog-content]', cds: '[data-testid=modal-dialog-motion] > div', check: ['w', 'radius', 'bg'] },
       dialogTitle: { neon: '[data-slot=dialog-title]', cds: '[role=dialog] h2', check: ['font', 'color'] },
       dialogBody: { neon: '[data-slot=dialog-body]', cds: '[role=dialog] [tabindex="0"] span', check: ['font', 'color'] },
-      dialogCancel: { neon: '[data-slot=dialog-footer] [data-variant=secondary]', cds: '[role=dialog] button[data-variant=secondary]:not([data-compact])', check: ['h', 'font', 'pad', 'radius', 'bg'] },
-      dialogConfirm: { neon: '[data-slot=dialog-footer] [data-variant=destructive]', cds: '[role=dialog] button[data-variant=negative]', check: ['h', 'font', 'pad', 'radius', 'bg'] },
+      dialogCancel: { neon: '[data-slot=dialog-footer] [data-variant=secondary]', cds: '[role=dialog] button[data-variant=secondary]:not([data-compact])', check: ['h', 'font', 'pad', 'radius', 'bg'], core: secondary },
+      dialogConfirm: { neon: '[data-slot=dialog-footer] [data-variant=destructive]', cds: '[role=dialog] button[data-variant=negative]', check: ['h', 'font', 'pad', 'radius', 'bg'], core: danger },
     },
     gaps: [['dialogCancel', 'dialogConfirm', 'x']],
   },

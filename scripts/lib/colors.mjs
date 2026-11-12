@@ -11,6 +11,13 @@ const luminance = rgb => toRgb(rgb).map(v => v / 255)
   .map(v => v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4)
   .reduce((sum, v, i) => sum + v * [0.2126, 0.7152, 0.0722][i], 0);
 
+/** `#RRGGBBAA` as CSS writes a color: `rgb(1, 23, 43)`, or `rgba(0, 0, 0, 0.851)` when it is not opaque. */
+export function cssColor(hex) {
+  const rgb = toRgb(hex).join(', ');
+  const alpha = parseInt(hex.slice(7, 9) || 'ff', 16);
+  return alpha === 255 ? `rgb(${rgb})` : `rgba(${rgb}, ${Math.round((alpha / 255) * 1000) / 1000})`;
+}
+
 // WCAG 2 contrast ratio of two opaque colors.
 export function contrast(a, b) {
   const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);

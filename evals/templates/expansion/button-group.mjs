@@ -1,20 +1,25 @@
 // button-group → CDS ButtonGroup: separate pill buttons 8px apart, never
 // joined, in a group as wide as its container. Horizontal keeps each button's
 // own size and type; vertical fills the group's width with each button.
+import { buttonCell } from '../core/button.mjs';
+
 const horizontal = '[data-measure=button-group-horizontal]';
 const vertical = '[data-measure=button-group-vertical]';
 const cdsButton = (group, n) => `${group} ul > li:nth-child(${n}) > button`;
 const neonButton = (group, n) => `${group} [data-slot=button-group] > :nth-child(${n})`;
 const look = ['h', 'w', 'radius', 'border', 'bg', 'color', 'font', 'pad'];
+// Each button in the group is Core's Button; the group itself has no Counterpart.
+const primary = buttonCell('Primary');
+const secondary = buttonCell('Secondary');
 
 export const screens = [
   {
     targets: {
       group: { cds: `${horizontal} ul`, neon: `${horizontal} [data-slot=button-group]`, check: ['h', 'w'] },
-      first: { cds: cdsButton(horizontal, 1), neon: neonButton(horizontal, 1), check: look },
-      second: { cds: cdsButton(horizontal, 2), neon: neonButton(horizontal, 2), check: look },
-      stackedFirst: { cds: cdsButton(vertical, 1), neon: neonButton(vertical, 1), check: look },
-      stackedSecond: { cds: cdsButton(vertical, 2), neon: neonButton(vertical, 2), check: look },
+      first: { cds: cdsButton(horizontal, 1), neon: neonButton(horizontal, 1), check: look, core: primary },
+      second: { cds: cdsButton(horizontal, 2), neon: neonButton(horizontal, 2), check: look, core: secondary },
+      stackedFirst: { cds: cdsButton(vertical, 1), neon: neonButton(vertical, 1), check: look, core: secondary },
+      stackedSecond: { cds: cdsButton(vertical, 2), neon: neonButton(vertical, 2), check: look, core: secondary },
     },
     gaps: [
       ['first', 'second', 'x'],

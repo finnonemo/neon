@@ -3,7 +3,7 @@
 // title over the label2 muted description, body text, then the footer, 16px
 // apart. The description's height shows the Thai line count (both targets
 // wrap it at 288px). The card's own height is not compared: its footer holds a
-// small button, 38px in CDS (compact) and 40px in Neon (size sm).
+// small button, 38px in CDS (compact) and 36px in Neon (size sm, Core's Small).
 const card = '[data-measure=card-default]';
 
 export const screens = [{

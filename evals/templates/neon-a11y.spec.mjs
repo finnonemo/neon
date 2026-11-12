@@ -3,25 +3,19 @@
 // and the DatePicker's format. Runs on the neon target only.
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-import { expansionItems, gotoExpansion, keyboardFocus } from './expansion.mjs';
+import { expansionItems, gotoExpansion, keyboardFocus, settled } from './expansion.mjs';
 
 test.skip(process.env.NEON_TARGET !== 'neon', 'The Neon base only');
-
-// PROVISIONAL (#97): white on fgNegative is 4.32:1 in dark; CDS ships the same pair.
-const knownDark = (violation, mode) => mode === 'dark' && violation.id === 'color-contrast'
-  ? violation.nodes.every((node) => node.target.join(' ').includes('[data-variant="destructive"]') || /data-variant="destructive"/.test(node.html))
-  : false;
 
 for (const [layout, mode] of ['approval', 'extras', 'expansion'].flatMap((layout) => ['light', 'dark'].map((mode) => [layout, mode]))) {
   test(`${layout} passes axe in ${mode}`, async ({ page }) => {
     await page.goto(`/?layout=${layout}${mode === 'dark' ? '&mode=dark' : ''}`);
     await page.evaluate(() => document.fonts.ready);
     // Colors transition into dark mode; axe reads them once they settle.
-    await page.waitForFunction(() => document.getAnimations().every((animation) => animation.playState !== 'running'));
+    await settled(page);
     // The role-and-color span probes cn, not a component, so axe skips it.
     const { violations } = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).exclude('[data-measure=role-and-color]').analyze();
-    const unexpected = violations.filter((violation) => !knownDark(violation, mode));
-    expect(unexpected.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);
+    expect(violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);
   });
 }
 
@@ -88,6 +82,53 @@ test('the toast is announced politely without a provider in the screen', async (
   await page.getByRole('button', { name: 'บันทึก', exact: true }).click();
   await expect(page.locator('[data-sonner-toast]')).toHaveText('บันทึกแล้ว / Saved');
   await expect(page.locator('section[aria-live]')).toHaveAttribute('aria-live', 'polite');
+});
+
+// What a color expression computes to in the page, to compare with a drawn color.
+const computed = (page, value) => page.evaluate((color) => {
+  const probe = document.body.appendChild(Object.assign(document.createElement('span'), { style: `color: ${color}` }));
+  const result = getComputedStyle(probe).color;
+  probe.remove();
+  return result;
+}, value);
+
+for (const mode of ['light', 'dark']) test(`${mode}: a button reached from the keyboard draws Core's focus color and its Hover fill`, async ({ page }) => {
+  await page.goto(`/?layout=extras${mode === 'dark' ? '&mode=dark' : ''}`);
+  const save = page.getByRole('button', { name: 'บันทึก', exact: true });
+  const focus = await keyboardFocus(page, save);
+  expect(focus.focusVisible).toBe(true);
+  expect(focus.before).toBe('');
+  // Focus/focus, 2px, 2px outside the button.
+  expect(focus.after).toBe(`outline 2px ${await computed(page, 'var(--color-bgLinePrimary)')} 2px`);
+  await expect(save).toHaveCSS('background-color', await computed(page, 'var(--color-bgButtonSecondaryHover)'));
+});
+
+test('a loading button keeps its size, focus and name, is announced as busy and ignores a press', async ({ page }) => {
+  await page.goto('/?layout=extras');
+  const send = page.getByRole('button', { name: 'ส่งรายงาน' });
+  const size = async () => { const { width, height } = await send.boundingBox(); return { width, height }; };
+  const idle = await size();
+  await send.focus();
+  await page.keyboard.press('Enter');
+  await expect(send).toHaveAttribute('aria-busy', 'true');
+  await expect(page.locator('[data-sonner-toast]')).toHaveCount(1);
+  expect(await size()).toEqual(idle);
+  await expect(send).toBeFocused();
+  // The spinner takes the label's place; the label stays in the button for its name and its width.
+  await expect(send.locator('[data-slot=button-spinner]')).toBeVisible();
+  await expect(send).toHaveCSS('-webkit-text-fill-color', 'rgba(0, 0, 0, 0)');
+  await page.keyboard.press('Enter');
+  await send.click();
+  await page.waitForTimeout(300);
+  await expect(page.locator('[data-sonner-toast]')).toHaveCount(1);
+});
+
+test('the loading spinner turns once a second and stands still under reduced motion', async ({ page }) => {
+  await page.goto('/?layout=extras');
+  const spinner = page.locator('[data-measure=core-buttons] [aria-busy=true] [data-slot=button-spinner]');
+  await expect(spinner).toHaveCSS('animation-duration', '1s');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect(spinner).toHaveCSS('animation-name', 'none');
 });
 
 test.describe('in a Thai browser', () => {

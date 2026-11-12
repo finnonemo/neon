@@ -1,7 +1,14 @@
 // alert-dialog → CDS Alert, measured open: the overlay, the 318px card, the
 // centered title and muted body, and the two half-width actions. The gaps from
 // the card's edges pin where the title and actions sit inside it (gaps are
-// keyed by their pair, so each pair is measured along one axis).
+// keyed by their pair, so each pair is measured along one axis). The two
+// actions are Neon Buttons, so on the Neon target they take Core's Button for
+// their label, padding and fill; their height grows with a wrapped label, which
+// is the alert's own and stays on the CDS baseline until alert-dialog is retuned.
+import { buttonCell } from '../core/button.mjs';
+
+const fromCore = ['font', 'color', 'pad', 'bg'];
+
 const alert = '[role=alertdialog]';
 
 export const screens = [
@@ -13,8 +20,8 @@ export const screens = [
       alertCard: { cds: `${alert} [data-testid=modal-dialog-motion] > div`, neon: '[data-slot=alert-dialog-content]', check: ['w', 'h', 'radius', 'bg'] },
       alertTitle: { cds: `${alert} h3`, neon: '[data-slot=alert-dialog-title]', check: ['font', 'color', 'h', 'w'] },
       alertBody: { cds: `${alert} p`, neon: '[data-slot=alert-dialog-description]', check: ['font', 'color', 'h', 'w'] },
-      alertCancel: { cds: `${alert} button[data-variant=secondary]`, neon: '[data-slot=alert-dialog-cancel]', check: ['h', 'w', 'font', 'color', 'pad', 'radius', 'bg'] },
-      alertAction: { cds: `${alert} button[data-variant=negative]`, neon: '[data-slot=alert-dialog-action]', check: ['h', 'w', 'font', 'color', 'pad', 'radius', 'bg'] },
+      alertCancel: { cds: `${alert} button[data-variant=secondary]`, neon: '[data-slot=alert-dialog-cancel]', check: ['h', 'w', 'font', 'color', 'pad', 'radius', 'bg'], core: buttonCell('Secondary'), coreProperties: fromCore },
+      alertAction: { cds: `${alert} button[data-variant=negative]`, neon: '[data-slot=alert-dialog-action]', check: ['h', 'w', 'font', 'color', 'pad', 'radius', 'bg'], core: buttonCell('Primary', { Type: 'Danger' }), coreProperties: fromCore },
     },
     gaps: [
       ['alertCard', 'alertTitle', 'y'],
@@ -73,10 +80,7 @@ export function a11y({ test, expect, gotoExpansion }) {
       await expect(page.getByRole('alertdialog')).toBeVisible();
       await page.waitForFunction(() => document.getAnimations().every((animation) => animation.playState !== 'running'));
       const { violations } = await new AxeBuilder({ page }).include('[data-slot=alert-dialog-content]').withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
-      // PROVISIONAL (#97): white on fgNegative is 4.32:1 in dark; CDS ships the same pair.
-      const unexpected = violations.filter((violation) => !(mode === 'dark' && violation.id === 'color-contrast'
-        && violation.nodes.every((node) => /data-variant="destructive"/.test(node.html))));
-      expect(unexpected.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);
+      expect(violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);
     });
   }
 }

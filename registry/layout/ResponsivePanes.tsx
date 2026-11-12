@@ -85,7 +85,7 @@ export function ResponsivePanes({
     </Button>
   ) : undefined
   const inspectorToolbar = compact ? (
-    <Button type="button" variant="ghost" size="sm" className="-ms-3" onClick={() => changePane("content")}>
+    <Button type="button" variant="ghost" size="sm" className="-ms-4" onClick={() => changePane("content")}>
       <ArrowLeft />
       {labels.backToContent}
     </Button>

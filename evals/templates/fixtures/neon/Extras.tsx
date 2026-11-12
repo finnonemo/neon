@@ -19,6 +19,7 @@ import { requests, statusLabel, types } from "./shared/data"
 export function Extras() {
   const [type, setType] = useState<string>()
   const [date, setDate] = useState<Date>()
+  const [sending, setSending] = useState(false)
   return (
     <main className="flex min-h-svh flex-col gap-6 p-6">
       <Hook name="title"><h1 className="text-title2">Extras</h1></Hook>
@@ -112,6 +113,18 @@ export function Extras() {
           </Dialog>
           <Button variant="secondary" onClick={() => toast("บันทึกแล้ว / Saved")}>บันทึก</Button>
           <Button disabled>ส่งต่อ</Button>
+        </div>
+      </Hook>
+      {/* Core's Button values CDS has no baseline for; Inverse sits on the inverse background. */}
+      <Hook name="core-buttons">
+        <div className="flex flex-wrap items-center gap-2">
+          <Button size="md">ส่งคำขอ</Button>
+          <Button size="xs" variant="secondary">แก้ไข</Button>
+          <Button size="sm" variant="ghost">ข้าม</Button>
+          <Button variant="brand">สมัครเลย</Button>
+          <Button loading>กำลังบันทึก</Button>
+          <Button variant="secondary" loading={sending} onClick={() => { setSending(true); toast("ส่งแล้ว / Sent") }}>ส่งรายงาน</Button>
+          <div className="rounded-lg bg-inverse p-4"><Button variant="inverse">ดูเพิ่มเติม</Button></div>
         </div>
       </Hook>
     </main>

@@ -439,6 +439,8 @@ function specOwners(entries, docs) {
  * The index: each registry item's Counterpart (GLOSSARY) with the snapshot files that hold it, or why it has none.
  * `counterparts` is the Counterpart table, { item: { core: '<doc>', why? } | { core: null, why } }; it must cover
  * `items` exactly. A Supporting item (GLOSSARY) has no Counterpart of its own.
+ * An entry may also list the prop values with no Core cell (`notInCore: { variant: ['outline'] }`), for the
+ * Catalog site to mark; the skills leave them out of new work (ADR 0009). The index does not carry them.
  */
 function counterpartIndex({ items, counterparts, docs, files }) {
   const names = items.map(item => item.name);
