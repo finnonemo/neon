@@ -1,190 +1,1072 @@
 {
+  "approval@375-light": [
+    "title: font.lineHeight 32 ≠ 28",
+    "searchLabel: font.lineHeight 24 ≠ 20",
+    "searchText: font.lineHeight 24 ≠ 22",
+    "segmentActive: font.lineHeight 24 ≠ 22",
+    "segment: font.lineHeight 24 ≠ 22",
+    "rowTitle: font.lineHeight 24 ≠ 22",
+    "rowDescription: font.lineHeight 24 ≠ 22",
+    "tag: font.lineHeight 24 ≠ 20"
+  ],
+  "approval-detail@375-light": [
+    "detailTitle: font.lineHeight 28 ≠ 25",
+    "detailMeta: font.lineHeight 24 ≠ 22",
+    "detailsHeading: font.lineHeight 24 ≠ 22",
+    "detailsBody: font.lineHeight 24 ≠ 22",
+    "detailsCaption: font.lineHeight 24 ≠ 20",
+    "notesLabel: font.lineHeight 24 ≠ 20",
+    "notes: h 106 ≠ 100",
+    "notesText: font.lineHeight 24 ≠ 22",
+    "checkboxLabel: font.lineHeight 24 ≠ 22",
+    "approve: font.lineHeight 24 ≠ 22",
+    "requestInfo: font.lineHeight 24 ≠ 22",
+    "reject: font.lineHeight 24 ≠ 22"
+  ],
+  "extras@375-light": [
+    "title: font.lineHeight 32 ≠ 28",
+    "selectLabel: font.lineHeight 24 ≠ 20",
+    "selectValue: font.lineHeight 24 ≠ 22",
+    "dateLabel: font.lineHeight 24 ≠ 20",
+    "headerCell: font.lineHeight 24 ≠ 22",
+    "headerCell: h 80 ≠ 76",
+    "bodyRow: h 80 ≠ 76",
+    "bodyCell: font.lineHeight 24 ≠ 22",
+    "rejectRequest: font.lineHeight 24 ≠ 22",
+    "save: font.lineHeight 24 ≠ 22"
+  ],
+  "select-open@375-light": [
+    "option: font.lineHeight 24 ≠ 22"
+  ],
+  "date-open@375-light": [
+    "month: font.lineHeight 24 ≠ 22",
+    "day: font.lineHeight 24 ≠ 22"
+  ],
   "menu-open@375-light": [
+    "menuItem: font.lineHeight 24 ≠ 22",
+    "menuItemNegative: font.lineHeight 24 ≠ 22",
     "menuItemNegative: color rgb(157, 6, 6) ≠ rgb(214, 8, 8)"
   ],
+  "dialog-open@375-light": [
+    "dialogTitle: font.lineHeight 24 ≠ 22",
+    "dialogBody: font.lineHeight 24 ≠ 22",
+    "dialogCancel: font.lineHeight 24 ≠ 22",
+    "dialogConfirm: font.lineHeight 24 ≠ 22"
+  ],
+  "toast-open@375-light": [
+    "toastText: font.lineHeight 24 ≠ 22"
+  ],
+  "tooltip-open@375-light": [
+    "tooltipText: font.lineHeight 24 ≠ 20"
+  ],
+  "expansion@375-light": [
+    "title: font.lineHeight 32 ≠ 28",
+    "sectionHeading: font.lineHeight 24 ≠ 22"
+  ],
+  "expansion-accordion@375-light": [
+    "openTitle: h 24 ≠ 22",
+    "openTitle: font.lineHeight 24 ≠ 22",
+    "closedTitle: h 48 ≠ 44",
+    "closedTitle: font.lineHeight 24 ≠ 22",
+    "panelText: h 48 ≠ 44",
+    "panelText: font.lineHeight 24 ≠ 22"
+  ],
+  "expansion-alert-dialog-open@375-light": [
+    "alertCard: h 252 ≠ 238",
+    "alertTitle: font.lineHeight 28 ≠ 25",
+    "alertTitle: h 60 ≠ 54",
+    "alertBody: font.lineHeight 24 ≠ 22",
+    "alertBody: h 48 ≠ 44",
+    "alertCancel: h 80 ≠ 76",
+    "alertCancel: font.lineHeight 24 ≠ 22",
+    "alertCancel: radius 40 ≠ 38",
+    "alertAction: h 80 ≠ 76",
+    "alertAction: font.lineHeight 24 ≠ 22",
+    "alertAction: radius 40 ≠ 38",
+    "gap alertCard→alertTitle: -228 ≠ -214",
+    "gap alertAction→alertCard: -236 ≠ -222"
+  ],
   "expansion-alert@375-light": [
+    "informationalBox: h 132 ≠ 96",
+    "informationalTitle: font.lineHeight 24 ≠ 20",
+    "informationalTitle: h 24 ≠ 20",
+    "informationalMessage: font.lineHeight 24 ≠ 20",
+    "informationalMessage: h 72 ≠ 40",
+    "warningBox: h 156 ≠ 116",
     "warningIcon: color rgb(211, 84, 12) ≠ rgb(242, 100, 20)",
-    "errorIcon: color rgb(157, 6, 6) ≠ rgb(214, 8, 8)"
+    "warningTitle: font.lineHeight 24 ≠ 20",
+    "warningTitle: h 48 ≠ 20",
+    "warningMessage: font.lineHeight 24 ≠ 20",
+    "warningMessage: h 72 ≠ 60",
+    "errorBox: h 108 ≠ 96",
+    "errorIcon: color rgb(157, 6, 6) ≠ rgb(214, 8, 8)",
+    "errorTitle: font.lineHeight 24 ≠ 20",
+    "errorTitle: h 24 ≠ 20",
+    "errorMessage: font.lineHeight 24 ≠ 20",
+    "errorMessage: h 48 ≠ 40",
+    "promotionalBox: h 108 ≠ 96",
+    "promotionalTitle: font.lineHeight 24 ≠ 20",
+    "promotionalTitle: h 24 ≠ 20",
+    "promotionalMessage: font.lineHeight 24 ≠ 20",
+    "promotionalMessage: h 48 ≠ 40",
+    "gap informationalTitle→informationalIcon: -22 ≠ -18",
+    "gap warningTitle→warningIcon: -46 ≠ -18",
+    "gap errorTitle→errorIcon: -22 ≠ -18",
+    "gap promotionalTitle→promotionalIcon: -22 ≠ -18"
+  ],
+  "expansion-button-group@375-light": [
+    "first: font.lineHeight 24 ≠ 22",
+    "second: font.lineHeight 24 ≠ 22",
+    "stackedFirst: font.lineHeight 24 ≠ 22",
+    "stackedSecond: font.lineHeight 24 ≠ 22"
   ],
   "expansion-card@375-light": [
-    "card: border.color rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)"
+    "card: border.color rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)",
+    "title: font.lineHeight 24 ≠ 22",
+    "title: h 24 ≠ 22",
+    "description: font.lineHeight 24 ≠ 20",
+    "description: h 72 ≠ 40",
+    "content: font.lineHeight 24 ≠ 22",
+    "content: h 24 ≠ 22"
+  ],
+  "expansion-collapsible@375-light": [
+    "content: h 48 ≠ 44",
+    "contentText: font.lineHeight 24 ≠ 22"
   ],
   "expansion-field@375-light": [
+    "stack: h 168 ≠ 152",
+    "label: font.lineHeight 24 ≠ 20",
+    "label: h 32 ≠ 28",
+    "helperText: font.lineHeight 24 ≠ 20",
+    "helperText: h 72 ≠ 60",
+    "errorStack: h 120 ≠ 112",
+    "errorLabel: font.lineHeight 24 ≠ 20",
+    "errorText: font.lineHeight 24 ≠ 20",
     "errorText: color rgb(157, 6, 6) ≠ rgb(214, 8, 8)",
+    "errorText: h 24 ≠ 20",
     "errorIcon: color rgb(157, 6, 6) ≠ rgb(214, 8, 8)"
+  ],
+  "expansion-input-group@375-light": [
+    "startInput: h 56 ≠ 54",
+    "startInput: font.lineHeight 24 ≠ 22",
+    "suffixInput: h 56 ≠ 54",
+    "suffixInput: font.lineHeight 24 ≠ 22",
+    "suffixText: w 45 ≠ 43",
+    "suffixText: font.lineHeight 24 ≠ 20",
+    "buttonInput: h 56 ≠ 54",
+    "buttonInput: font.lineHeight 24 ≠ 22"
+  ],
+  "expansion-pagination@375-light": [
+    "current: font.lineHeight 24 ≠ 22",
+    "page: font.lineHeight 24 ≠ 22",
+    "ellipsis: h 24 ≠ 22",
+    "ellipsis: font.lineHeight 24 ≠ 22",
+    "last: h 40 ≠ 38",
+    "last: font.lineHeight 24 ≠ 22"
   ],
   "expansion-progress@375-light": [
     "progressTrack: bg rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)"
+  ],
+  "expansion-radio-group@375-light": [
+    "groupLabel: font.lineHeight 24 ≠ 22",
+    "checkedLabel: font.lineHeight 24 ≠ 22",
+    "uncheckedLabel: font.lineHeight 24 ≠ 22",
+    "disabledCheckedLabel: font.lineHeight 24 ≠ 22",
+    "disabledUncheckedLabel: font.lineHeight 24 ≠ 22",
+    "gap checkedRing→uncheckedRing: 20 ≠ 18",
+    "gap uncheckedRing→disabledCheckedRing: 108 ≠ 102"
   ],
   "expansion-separator@375-light": [
     "separatorHorizontal: bg rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)",
     "separatorVertical: bg rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)"
   ],
+  "expansion-sheet-bottom@375-light": [
+    "sheet: h 143 ≠ 134",
+    "sheetTitle: font.lineHeight 28 ≠ 25",
+    "sheetTitle: h 28 ≠ 25",
+    "sheetBody: font.lineHeight 24 ≠ 22",
+    "sheetBody: h 72 ≠ 66",
+    "gap sheet→sheetTitle: -107 ≠ -98",
+    "gap sheet→sheetHandle: -127 ≠ -118"
+  ],
+  "expansion-sheet-top@375-light": [
+    "sheet: h 135 ≠ 129",
+    "sheetTitle: font.lineHeight 28 ≠ 25",
+    "sheetTitle: h 28 ≠ 25",
+    "sheetBody: font.lineHeight 24 ≠ 22",
+    "sheetBody: h 72 ≠ 66",
+    "gap sheet→sheetOverlay: -135 ≠ -129",
+    "gap sheet→sheetTitle: -113 ≠ -105",
+    "gap sheet→sheetClose: -119 ≠ -113",
+    "gap sheetTitle→sheetBody: 13 ≠ 15"
+  ],
+  "expansion-sheet-left@375-light": [
+    "sheetTitle: font.lineHeight 28 ≠ 25",
+    "sheetTitle: h 28 ≠ 25",
+    "sheetBody: font.lineHeight 24 ≠ 22",
+    "sheetBody: h 72 ≠ 66"
+  ],
+  "expansion-sheet-right@375-light": [
+    "sheetTitle: font.lineHeight 28 ≠ 25",
+    "sheetTitle: h 28 ≠ 25",
+    "sheetBody: font.lineHeight 24 ≠ 22",
+    "sheetBody: h 72 ≠ 66"
+  ],
   "expansion-switch@375-light": [
     "offThumb: border.color rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)",
+    "offLabel: font.lineHeight 24 ≠ 22",
     "onThumb: border.color rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)",
+    "onLabel: font.lineHeight 24 ≠ 22",
     "disabledOffThumb: border.color rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)",
-    "disabledOnThumb: border.color rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)"
+    "disabledOffLabel: font.lineHeight 24 ≠ 22",
+    "disabledOnThumb: border.color rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)",
+    "disabledOnLabel: font.lineHeight 24 ≠ 22"
+  ],
+  "expansion-tabs@375-light": [
+    "tabList: h 58 ≠ 56",
+    "activeTab: h 58 ≠ 56",
+    "activeLabel: font.lineHeight 24 ≠ 22",
+    "inactiveTab: h 58 ≠ 56",
+    "inactiveLabel: font.lineHeight 24 ≠ 22",
+    "disabledTab: h 58 ≠ 56",
+    "disabledLabel: font.lineHeight 24 ≠ 22",
+    "panelText: font.lineHeight 24 ≠ 22"
+  ],
+  "expansion-toggle-group@375-light": [
+    "defaultPressed: h 40 ≠ 38",
+    "defaultPressed: font.lineHeight 24 ≠ 22",
+    "defaultUnpressed: h 40 ≠ 38",
+    "defaultUnpressed: font.lineHeight 24 ≠ 22",
+    "defaultPressedLast: h 40 ≠ 38",
+    "smPressed: h 36 ≠ 32",
+    "smPressed: w 114 ≠ 108",
+    "smPressed: radius 18 ≠ 16",
+    "smPressed: font.lineHeight 24 ≠ 20",
+    "smUnpressed: h 36 ≠ 32",
+    "smUnpressed: w 82 ≠ 79",
+    "smUnpressed: radius 18 ≠ 16",
+    "smUnpressed: font.lineHeight 24 ≠ 20",
+    "smUnpressedLast: h 36 ≠ 32",
+    "smUnpressedLast: w 100 ≠ 95",
+    "lgPressed: h 48 ≠ 46",
+    "lgPressed: font.lineHeight 24 ≠ 22",
+    "lgUnpressed: h 48 ≠ 46",
+    "lgUnpressed: font.lineHeight 24 ≠ 22",
+    "disabledPressed: h 40 ≠ 38",
+    "disabledUnpressed: h 40 ≠ 38",
+    "verticalPressed: h 40 ≠ 38",
+    "verticalUnpressed: h 40 ≠ 38"
+  ],
+  "approval@375-dark": [
+    "title: font.lineHeight 32 ≠ 28",
+    "searchLabel: font.lineHeight 24 ≠ 20",
+    "searchText: font.lineHeight 24 ≠ 22",
+    "segmentActive: font.lineHeight 24 ≠ 22",
+    "segment: font.lineHeight 24 ≠ 22",
+    "rowTitle: font.lineHeight 24 ≠ 22",
+    "rowDescription: font.lineHeight 24 ≠ 22",
+    "tag: font.lineHeight 24 ≠ 20"
   ],
   "approval-detail@375-dark": [
+    "detailTitle: font.lineHeight 28 ≠ 25",
+    "detailMeta: font.lineHeight 24 ≠ 22",
+    "detailsHeading: font.lineHeight 24 ≠ 22",
+    "detailsBody: font.lineHeight 24 ≠ 22",
+    "detailsCaption: font.lineHeight 24 ≠ 20",
+    "notesLabel: font.lineHeight 24 ≠ 20",
+    "notes: h 106 ≠ 100",
+    "notesText: font.lineHeight 24 ≠ 22",
+    "checkboxLabel: font.lineHeight 24 ≠ 22",
+    "approve: font.lineHeight 24 ≠ 22",
+    "requestInfo: font.lineHeight 24 ≠ 22",
+    "reject: font.lineHeight 24 ≠ 22",
     "reject: bg rgb(214, 8, 8) ≠ rgb(243, 9, 9)"
   ],
   "extras@375-dark": [
-    "rejectRequest: bg rgb(214, 8, 8) ≠ rgb(243, 9, 9)"
+    "title: font.lineHeight 32 ≠ 28",
+    "selectLabel: font.lineHeight 24 ≠ 20",
+    "selectValue: font.lineHeight 24 ≠ 22",
+    "dateLabel: font.lineHeight 24 ≠ 20",
+    "headerCell: font.lineHeight 24 ≠ 22",
+    "headerCell: h 80 ≠ 76",
+    "bodyRow: h 80 ≠ 76",
+    "bodyCell: font.lineHeight 24 ≠ 22",
+    "rejectRequest: font.lineHeight 24 ≠ 22",
+    "rejectRequest: bg rgb(214, 8, 8) ≠ rgb(243, 9, 9)",
+    "save: font.lineHeight 24 ≠ 22"
   ],
   "select-open@375-dark": [
-    "listbox: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)"
+    "listbox: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
+    "option: font.lineHeight 24 ≠ 22"
   ],
   "date-open@375-dark": [
-    "calendar: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)"
+    "calendar: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
+    "month: font.lineHeight 24 ≠ 22",
+    "day: font.lineHeight 24 ≠ 22"
   ],
   "menu-open@375-dark": [
+    "menuItem: font.lineHeight 24 ≠ 22",
+    "menuItemNegative: font.lineHeight 24 ≠ 22",
     "menuItemNegative: color rgb(251, 153, 153) ≠ rgb(243, 9, 9)"
   ],
   "dialog-open@375-dark": [
     "dialog: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
+    "dialogTitle: font.lineHeight 24 ≠ 22",
+    "dialogBody: font.lineHeight 24 ≠ 22",
+    "dialogCancel: font.lineHeight 24 ≠ 22",
+    "dialogConfirm: font.lineHeight 24 ≠ 22",
     "dialogConfirm: bg rgb(214, 8, 8) ≠ rgb(243, 9, 9)"
   ],
+  "toast-open@375-dark": [
+    "toastText: font.lineHeight 24 ≠ 22"
+  ],
+  "tooltip-open@375-dark": [
+    "tooltipText: font.lineHeight 24 ≠ 20"
+  ],
+  "expansion@375-dark": [
+    "title: font.lineHeight 32 ≠ 28",
+    "sectionHeading: font.lineHeight 24 ≠ 22"
+  ],
+  "expansion-accordion@375-dark": [
+    "openTitle: h 24 ≠ 22",
+    "openTitle: font.lineHeight 24 ≠ 22",
+    "closedTitle: h 48 ≠ 44",
+    "closedTitle: font.lineHeight 24 ≠ 22",
+    "panelText: h 48 ≠ 44",
+    "panelText: font.lineHeight 24 ≠ 22"
+  ],
   "expansion-alert-dialog-open@375-dark": [
+    "alertCard: h 252 ≠ 238",
     "alertCard: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
-    "alertAction: bg rgb(214, 8, 8) ≠ rgb(243, 9, 9)"
+    "alertTitle: font.lineHeight 28 ≠ 25",
+    "alertTitle: h 60 ≠ 54",
+    "alertBody: font.lineHeight 24 ≠ 22",
+    "alertBody: h 48 ≠ 44",
+    "alertCancel: h 80 ≠ 76",
+    "alertCancel: font.lineHeight 24 ≠ 22",
+    "alertCancel: radius 40 ≠ 38",
+    "alertAction: h 80 ≠ 76",
+    "alertAction: font.lineHeight 24 ≠ 22",
+    "alertAction: radius 40 ≠ 38",
+    "alertAction: bg rgb(214, 8, 8) ≠ rgb(243, 9, 9)",
+    "gap alertCard→alertTitle: -228 ≠ -214",
+    "gap alertAction→alertCard: -236 ≠ -222"
   ],
   "expansion-alert@375-dark": [
+    "informationalBox: h 132 ≠ 96",
+    "informationalTitle: font.lineHeight 24 ≠ 20",
+    "informationalTitle: h 24 ≠ 20",
+    "informationalMessage: font.lineHeight 24 ≠ 20",
+    "informationalMessage: h 72 ≠ 40",
+    "warningBox: h 156 ≠ 116",
     "warningBox: bg rgba(242, 100, 20, 0.15) ≠ rgb(51, 13, 0)",
+    "warningTitle: font.lineHeight 24 ≠ 20",
+    "warningTitle: h 48 ≠ 20",
+    "warningMessage: font.lineHeight 24 ≠ 20",
+    "warningMessage: h 72 ≠ 60",
+    "errorBox: h 108 ≠ 96",
     "errorBox: bg rgba(247, 50, 50, 0.15) ≠ rgb(51, 0, 4)",
-    "errorIcon: color rgb(251, 153, 153) ≠ rgb(243, 9, 9)"
+    "errorIcon: color rgb(251, 153, 153) ≠ rgb(243, 9, 9)",
+    "errorTitle: font.lineHeight 24 ≠ 20",
+    "errorTitle: h 24 ≠ 20",
+    "errorMessage: font.lineHeight 24 ≠ 20",
+    "errorMessage: h 48 ≠ 40",
+    "promotionalBox: h 108 ≠ 96",
+    "promotionalTitle: font.lineHeight 24 ≠ 20",
+    "promotionalTitle: h 24 ≠ 20",
+    "promotionalMessage: font.lineHeight 24 ≠ 20",
+    "promotionalMessage: h 48 ≠ 40",
+    "gap informationalTitle→informationalIcon: -22 ≠ -18",
+    "gap warningTitle→warningIcon: -46 ≠ -18",
+    "gap errorTitle→errorIcon: -22 ≠ -18",
+    "gap promotionalTitle→promotionalIcon: -22 ≠ -18"
+  ],
+  "expansion-button-group@375-dark": [
+    "first: font.lineHeight 24 ≠ 22",
+    "second: font.lineHeight 24 ≠ 22",
+    "stackedFirst: font.lineHeight 24 ≠ 22",
+    "stackedSecond: font.lineHeight 24 ≠ 22"
   ],
   "expansion-card@375-dark": [
-    "card: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)"
+    "card: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
+    "title: font.lineHeight 24 ≠ 22",
+    "title: h 24 ≠ 22",
+    "description: font.lineHeight 24 ≠ 20",
+    "description: h 72 ≠ 40",
+    "content: font.lineHeight 24 ≠ 22",
+    "content: h 24 ≠ 22"
+  ],
+  "expansion-collapsible@375-dark": [
+    "content: h 48 ≠ 44",
+    "contentText: font.lineHeight 24 ≠ 22"
   ],
   "expansion-field@375-dark": [
+    "stack: h 168 ≠ 152",
+    "label: font.lineHeight 24 ≠ 20",
+    "label: h 32 ≠ 28",
+    "helperText: font.lineHeight 24 ≠ 20",
+    "helperText: h 72 ≠ 60",
+    "errorStack: h 120 ≠ 112",
+    "errorLabel: font.lineHeight 24 ≠ 20",
     "errorControl: border.color rgb(214, 8, 8) ≠ rgb(243, 9, 9)",
+    "errorText: font.lineHeight 24 ≠ 20",
     "errorText: color rgb(251, 153, 153) ≠ rgb(243, 9, 9)",
+    "errorText: h 24 ≠ 20",
     "errorIcon: color rgb(251, 153, 153) ≠ rgb(243, 9, 9)"
+  ],
+  "expansion-input-group@375-dark": [
+    "startInput: h 56 ≠ 54",
+    "startInput: font.lineHeight 24 ≠ 22",
+    "suffixInput: h 56 ≠ 54",
+    "suffixInput: font.lineHeight 24 ≠ 22",
+    "suffixText: w 45 ≠ 43",
+    "suffixText: font.lineHeight 24 ≠ 20",
+    "buttonInput: h 56 ≠ 54",
+    "buttonInput: font.lineHeight 24 ≠ 22"
+  ],
+  "expansion-pagination@375-dark": [
+    "current: font.lineHeight 24 ≠ 22",
+    "page: font.lineHeight 24 ≠ 22",
+    "ellipsis: h 24 ≠ 22",
+    "ellipsis: font.lineHeight 24 ≠ 22",
+    "last: h 40 ≠ 38",
+    "last: font.lineHeight 24 ≠ 22"
   ],
   "expansion-progress@375-dark": [
     "progressTrack: bg rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)"
+  ],
+  "expansion-radio-group@375-dark": [
+    "groupLabel: font.lineHeight 24 ≠ 22",
+    "checkedLabel: font.lineHeight 24 ≠ 22",
+    "uncheckedLabel: font.lineHeight 24 ≠ 22",
+    "disabledCheckedLabel: font.lineHeight 24 ≠ 22",
+    "disabledUncheckedLabel: font.lineHeight 24 ≠ 22",
+    "gap checkedRing→uncheckedRing: 20 ≠ 18",
+    "gap uncheckedRing→disabledCheckedRing: 108 ≠ 102"
   ],
   "expansion-separator@375-dark": [
     "separatorHorizontal: bg rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
     "separatorVertical: bg rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)"
   ],
   "expansion-sheet-bottom@375-dark": [
+    "sheet: h 145 ≠ 136",
     "sheet: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
-    "sheet: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)"
+    "sheet: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
+    "sheetTitle: font.lineHeight 28 ≠ 25",
+    "sheetTitle: h 28 ≠ 25",
+    "sheetBody: font.lineHeight 24 ≠ 22",
+    "sheetBody: h 72 ≠ 66",
+    "gap sheet→sheetTitle: -108 ≠ -99",
+    "gap sheet→sheetHandle: -128 ≠ -119"
   ],
   "expansion-sheet-top@375-dark": [
+    "sheet: h 137 ≠ 131",
     "sheet: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
-    "sheet: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)"
+    "sheet: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
+    "sheetTitle: font.lineHeight 28 ≠ 25",
+    "sheetTitle: h 28 ≠ 25",
+    "sheetBody: font.lineHeight 24 ≠ 22",
+    "sheetBody: h 72 ≠ 66",
+    "gap sheet→sheetOverlay: -137 ≠ -131",
+    "gap sheet→sheetTitle: -114 ≠ -106",
+    "gap sheet→sheetClose: -120 ≠ -114",
+    "gap sheetTitle→sheetBody: 13 ≠ 15"
   ],
   "expansion-sheet-left@375-dark": [
     "sheet: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
-    "sheet: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)"
+    "sheet: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
+    "sheetTitle: font.lineHeight 28 ≠ 25",
+    "sheetTitle: h 28 ≠ 25",
+    "sheetBody: font.lineHeight 24 ≠ 22",
+    "sheetBody: h 72 ≠ 66"
   ],
   "expansion-sheet-right@375-dark": [
     "sheet: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
-    "sheet: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)"
+    "sheet: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
+    "sheetTitle: font.lineHeight 28 ≠ 25",
+    "sheetTitle: h 28 ≠ 25",
+    "sheetBody: font.lineHeight 24 ≠ 22",
+    "sheetBody: h 72 ≠ 66"
   ],
   "expansion-switch@375-dark": [
     "offTrack: bg rgb(51, 51, 51) ≠ rgb(38, 38, 38)",
     "offThumb: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
+    "offLabel: font.lineHeight 24 ≠ 22",
     "onThumb: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
+    "onLabel: font.lineHeight 24 ≠ 22",
     "disabledOffTrack: bg rgb(51, 51, 51) ≠ rgb(38, 38, 38)",
     "disabledOffThumb: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
-    "disabledOnThumb: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)"
+    "disabledOffLabel: font.lineHeight 24 ≠ 22",
+    "disabledOnThumb: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
+    "disabledOnLabel: font.lineHeight 24 ≠ 22"
+  ],
+  "expansion-tabs@375-dark": [
+    "tabList: h 58 ≠ 56",
+    "activeTab: h 58 ≠ 56",
+    "activeLabel: font.lineHeight 24 ≠ 22",
+    "inactiveTab: h 58 ≠ 56",
+    "inactiveLabel: font.lineHeight 24 ≠ 22",
+    "disabledTab: h 58 ≠ 56",
+    "disabledLabel: font.lineHeight 24 ≠ 22",
+    "panelText: font.lineHeight 24 ≠ 22"
+  ],
+  "expansion-toggle-group@375-dark": [
+    "defaultPressed: h 40 ≠ 38",
+    "defaultPressed: font.lineHeight 24 ≠ 22",
+    "defaultUnpressed: h 40 ≠ 38",
+    "defaultUnpressed: font.lineHeight 24 ≠ 22",
+    "defaultPressedLast: h 40 ≠ 38",
+    "smPressed: h 36 ≠ 32",
+    "smPressed: w 114 ≠ 108",
+    "smPressed: radius 18 ≠ 16",
+    "smPressed: font.lineHeight 24 ≠ 20",
+    "smUnpressed: h 36 ≠ 32",
+    "smUnpressed: w 82 ≠ 79",
+    "smUnpressed: radius 18 ≠ 16",
+    "smUnpressed: font.lineHeight 24 ≠ 20",
+    "smUnpressedLast: h 36 ≠ 32",
+    "smUnpressedLast: w 100 ≠ 95",
+    "lgPressed: h 48 ≠ 46",
+    "lgPressed: font.lineHeight 24 ≠ 22",
+    "lgUnpressed: h 48 ≠ 46",
+    "lgUnpressed: font.lineHeight 24 ≠ 22",
+    "disabledPressed: h 40 ≠ 38",
+    "disabledUnpressed: h 40 ≠ 38",
+    "verticalPressed: h 40 ≠ 38",
+    "verticalUnpressed: h 40 ≠ 38"
+  ],
+  "approval@1440-light": [
+    "title: font.lineHeight 32 ≠ 28",
+    "searchLabel: font.lineHeight 24 ≠ 20",
+    "searchText: font.lineHeight 24 ≠ 22",
+    "segmentActive: font.lineHeight 24 ≠ 22",
+    "segment: font.lineHeight 24 ≠ 22",
+    "rowTitle: font.lineHeight 24 ≠ 22",
+    "rowDescription: font.lineHeight 24 ≠ 22",
+    "tag: font.lineHeight 24 ≠ 20"
+  ],
+  "approval-detail@1440-light": [
+    "detailTitle: font.lineHeight 28 ≠ 25",
+    "detailMeta: font.lineHeight 24 ≠ 22",
+    "detailsHeading: font.lineHeight 24 ≠ 22",
+    "detailsBody: font.lineHeight 24 ≠ 22",
+    "detailsCaption: font.lineHeight 24 ≠ 20",
+    "notesLabel: font.lineHeight 24 ≠ 20",
+    "notes: h 106 ≠ 100",
+    "notesText: font.lineHeight 24 ≠ 22",
+    "checkboxLabel: font.lineHeight 24 ≠ 22",
+    "approve: font.lineHeight 24 ≠ 22",
+    "requestInfo: font.lineHeight 24 ≠ 22",
+    "reject: font.lineHeight 24 ≠ 22"
+  ],
+  "extras@1440-light": [
+    "title: font.lineHeight 32 ≠ 28",
+    "selectLabel: font.lineHeight 24 ≠ 20",
+    "selectValue: font.lineHeight 24 ≠ 22",
+    "dateLabel: font.lineHeight 24 ≠ 20",
+    "headerCell: font.lineHeight 24 ≠ 22",
+    "headerCell: h 56 ≠ 54",
+    "bodyCell: font.lineHeight 24 ≠ 22",
+    "rejectRequest: font.lineHeight 24 ≠ 22",
+    "save: font.lineHeight 24 ≠ 22"
+  ],
+  "select-open@1440-light": [
+    "option: font.lineHeight 24 ≠ 22"
+  ],
+  "date-open@1440-light": [
+    "month: font.lineHeight 24 ≠ 22",
+    "day: font.lineHeight 24 ≠ 22"
   ],
   "menu-open@1440-light": [
+    "menuItem: font.lineHeight 24 ≠ 22",
+    "menuItemNegative: font.lineHeight 24 ≠ 22",
     "menuItemNegative: color rgb(157, 6, 6) ≠ rgb(214, 8, 8)"
   ],
+  "dialog-open@1440-light": [
+    "dialogTitle: font.lineHeight 24 ≠ 22",
+    "dialogBody: font.lineHeight 24 ≠ 22",
+    "dialogCancel: font.lineHeight 24 ≠ 22",
+    "dialogConfirm: font.lineHeight 24 ≠ 22"
+  ],
+  "toast-open@1440-light": [
+    "toastText: font.lineHeight 24 ≠ 22"
+  ],
+  "tooltip-open@1440-light": [
+    "tooltipText: font.lineHeight 24 ≠ 20"
+  ],
+  "expansion@1440-light": [
+    "title: font.lineHeight 32 ≠ 28",
+    "sectionHeading: font.lineHeight 24 ≠ 22"
+  ],
+  "expansion-accordion@1440-light": [
+    "openTitle: h 24 ≠ 22",
+    "openTitle: font.lineHeight 24 ≠ 22",
+    "closedTitle: h 48 ≠ 44",
+    "closedTitle: font.lineHeight 24 ≠ 22",
+    "panelText: h 48 ≠ 44",
+    "panelText: font.lineHeight 24 ≠ 22"
+  ],
+  "expansion-alert-dialog-open@1440-light": [
+    "alertCard: h 252 ≠ 238",
+    "alertTitle: font.lineHeight 28 ≠ 25",
+    "alertTitle: h 60 ≠ 54",
+    "alertBody: font.lineHeight 24 ≠ 22",
+    "alertBody: h 48 ≠ 44",
+    "alertCancel: h 80 ≠ 76",
+    "alertCancel: font.lineHeight 24 ≠ 22",
+    "alertCancel: radius 40 ≠ 38",
+    "alertAction: h 80 ≠ 76",
+    "alertAction: font.lineHeight 24 ≠ 22",
+    "alertAction: radius 40 ≠ 38",
+    "gap alertCard→alertTitle: -228 ≠ -214",
+    "gap alertAction→alertCard: -236 ≠ -222"
+  ],
   "expansion-alert@1440-light": [
+    "informationalBox: h 132 ≠ 96",
+    "informationalTitle: font.lineHeight 24 ≠ 20",
+    "informationalTitle: h 24 ≠ 20",
+    "informationalMessage: font.lineHeight 24 ≠ 20",
+    "informationalMessage: h 72 ≠ 40",
+    "warningBox: h 156 ≠ 116",
     "warningIcon: color rgb(211, 84, 12) ≠ rgb(242, 100, 20)",
-    "errorIcon: color rgb(157, 6, 6) ≠ rgb(214, 8, 8)"
+    "warningTitle: font.lineHeight 24 ≠ 20",
+    "warningTitle: h 48 ≠ 20",
+    "warningMessage: font.lineHeight 24 ≠ 20",
+    "warningMessage: h 72 ≠ 60",
+    "errorBox: h 108 ≠ 96",
+    "errorIcon: color rgb(157, 6, 6) ≠ rgb(214, 8, 8)",
+    "errorTitle: font.lineHeight 24 ≠ 20",
+    "errorTitle: h 24 ≠ 20",
+    "errorMessage: font.lineHeight 24 ≠ 20",
+    "errorMessage: h 48 ≠ 40",
+    "promotionalBox: h 108 ≠ 96",
+    "promotionalTitle: font.lineHeight 24 ≠ 20",
+    "promotionalTitle: h 24 ≠ 20",
+    "promotionalMessage: font.lineHeight 24 ≠ 20",
+    "promotionalMessage: h 48 ≠ 40",
+    "gap informationalTitle→informationalIcon: -22 ≠ -18",
+    "gap warningTitle→warningIcon: -46 ≠ -18",
+    "gap errorTitle→errorIcon: -22 ≠ -18",
+    "gap promotionalTitle→promotionalIcon: -22 ≠ -18"
+  ],
+  "expansion-button-group@1440-light": [
+    "first: font.lineHeight 24 ≠ 22",
+    "second: font.lineHeight 24 ≠ 22",
+    "stackedFirst: font.lineHeight 24 ≠ 22",
+    "stackedSecond: font.lineHeight 24 ≠ 22"
   ],
   "expansion-card@1440-light": [
-    "card: border.color rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)"
+    "card: border.color rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)",
+    "title: font.lineHeight 24 ≠ 22",
+    "title: h 24 ≠ 22",
+    "description: font.lineHeight 24 ≠ 20",
+    "description: h 72 ≠ 40",
+    "content: font.lineHeight 24 ≠ 22",
+    "content: h 24 ≠ 22"
+  ],
+  "expansion-collapsible@1440-light": [
+    "content: h 48 ≠ 44",
+    "contentText: font.lineHeight 24 ≠ 22"
   ],
   "expansion-field@1440-light": [
+    "stack: h 168 ≠ 152",
+    "label: font.lineHeight 24 ≠ 20",
+    "label: h 32 ≠ 28",
+    "helperText: font.lineHeight 24 ≠ 20",
+    "helperText: h 72 ≠ 60",
+    "errorStack: h 120 ≠ 112",
+    "errorLabel: font.lineHeight 24 ≠ 20",
+    "errorText: font.lineHeight 24 ≠ 20",
     "errorText: color rgb(157, 6, 6) ≠ rgb(214, 8, 8)",
+    "errorText: h 24 ≠ 20",
     "errorIcon: color rgb(157, 6, 6) ≠ rgb(214, 8, 8)"
+  ],
+  "expansion-input-group@1440-light": [
+    "startInput: h 56 ≠ 54",
+    "startInput: font.lineHeight 24 ≠ 22",
+    "suffixInput: h 56 ≠ 54",
+    "suffixInput: font.lineHeight 24 ≠ 22",
+    "suffixText: w 45 ≠ 43",
+    "suffixText: font.lineHeight 24 ≠ 20",
+    "buttonInput: h 56 ≠ 54",
+    "buttonInput: font.lineHeight 24 ≠ 22"
+  ],
+  "expansion-pagination@1440-light": [
+    "current: font.lineHeight 24 ≠ 22",
+    "page: font.lineHeight 24 ≠ 22",
+    "ellipsis: h 24 ≠ 22",
+    "ellipsis: font.lineHeight 24 ≠ 22",
+    "last: h 40 ≠ 38",
+    "last: font.lineHeight 24 ≠ 22"
   ],
   "expansion-progress@1440-light": [
     "progressTrack: bg rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)"
+  ],
+  "expansion-radio-group@1440-light": [
+    "groupLabel: font.lineHeight 24 ≠ 22",
+    "checkedLabel: font.lineHeight 24 ≠ 22",
+    "uncheckedLabel: font.lineHeight 24 ≠ 22",
+    "disabledCheckedLabel: font.lineHeight 24 ≠ 22",
+    "disabledUncheckedLabel: font.lineHeight 24 ≠ 22",
+    "gap checkedRing→uncheckedRing: 20 ≠ 18",
+    "gap uncheckedRing→disabledCheckedRing: 108 ≠ 102"
   ],
   "expansion-separator@1440-light": [
     "separatorHorizontal: bg rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)",
     "separatorVertical: bg rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)"
   ],
+  "expansion-sheet-bottom@1440-light": [
+    "sheet: h 95 ≠ 90",
+    "sheetTitle: font.lineHeight 28 ≠ 25",
+    "sheetTitle: h 28 ≠ 25",
+    "sheetBody: font.lineHeight 24 ≠ 22",
+    "sheetBody: h 24 ≠ 22",
+    "gap sheet→sheetTitle: -59 ≠ -54",
+    "gap sheet→sheetHandle: -79 ≠ -74"
+  ],
+  "expansion-sheet-top@1440-light": [
+    "sheet: h 87 ≠ 85",
+    "sheetTitle: font.lineHeight 28 ≠ 25",
+    "sheetTitle: h 28 ≠ 25",
+    "sheetBody: font.lineHeight 24 ≠ 22",
+    "sheetBody: h 24 ≠ 22",
+    "gap sheet→sheetOverlay: -87 ≠ -85",
+    "gap sheet→sheetTitle: -65 ≠ -61",
+    "gap sheet→sheetClose: -71 ≠ -69",
+    "gap sheetTitle→sheetBody: 13 ≠ 15"
+  ],
+  "expansion-sheet-left@1440-light": [
+    "sheetTitle: font.lineHeight 28 ≠ 25",
+    "sheetTitle: h 28 ≠ 25",
+    "sheetBody: font.lineHeight 24 ≠ 22",
+    "sheetBody: h 72 ≠ 66"
+  ],
+  "expansion-sheet-right@1440-light": [
+    "sheetTitle: font.lineHeight 28 ≠ 25",
+    "sheetTitle: h 28 ≠ 25",
+    "sheetBody: font.lineHeight 24 ≠ 22",
+    "sheetBody: h 72 ≠ 66"
+  ],
   "expansion-switch@1440-light": [
     "offThumb: border.color rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)",
+    "offLabel: font.lineHeight 24 ≠ 22",
     "onThumb: border.color rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)",
+    "onLabel: font.lineHeight 24 ≠ 22",
     "disabledOffThumb: border.color rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)",
-    "disabledOnThumb: border.color rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)"
+    "disabledOffLabel: font.lineHeight 24 ≠ 22",
+    "disabledOnThumb: border.color rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)",
+    "disabledOnLabel: font.lineHeight 24 ≠ 22"
+  ],
+  "expansion-tabs@1440-light": [
+    "tabList: h 58 ≠ 56",
+    "activeTab: h 58 ≠ 56",
+    "activeLabel: font.lineHeight 24 ≠ 22",
+    "inactiveTab: h 58 ≠ 56",
+    "inactiveLabel: font.lineHeight 24 ≠ 22",
+    "disabledTab: h 58 ≠ 56",
+    "disabledLabel: font.lineHeight 24 ≠ 22",
+    "panelText: font.lineHeight 24 ≠ 22"
+  ],
+  "expansion-toggle-group@1440-light": [
+    "defaultPressed: h 40 ≠ 38",
+    "defaultPressed: font.lineHeight 24 ≠ 22",
+    "defaultUnpressed: h 40 ≠ 38",
+    "defaultUnpressed: font.lineHeight 24 ≠ 22",
+    "defaultPressedLast: h 40 ≠ 38",
+    "smPressed: h 36 ≠ 32",
+    "smPressed: w 114 ≠ 108",
+    "smPressed: radius 18 ≠ 16",
+    "smPressed: font.lineHeight 24 ≠ 20",
+    "smUnpressed: h 36 ≠ 32",
+    "smUnpressed: w 82 ≠ 79",
+    "smUnpressed: radius 18 ≠ 16",
+    "smUnpressed: font.lineHeight 24 ≠ 20",
+    "smUnpressedLast: h 36 ≠ 32",
+    "smUnpressedLast: w 100 ≠ 95",
+    "lgPressed: h 48 ≠ 46",
+    "lgPressed: font.lineHeight 24 ≠ 22",
+    "lgUnpressed: h 48 ≠ 46",
+    "lgUnpressed: font.lineHeight 24 ≠ 22",
+    "disabledPressed: h 40 ≠ 38",
+    "disabledUnpressed: h 40 ≠ 38",
+    "verticalPressed: h 40 ≠ 38",
+    "verticalUnpressed: h 40 ≠ 38"
+  ],
+  "approval@1440-dark": [
+    "title: font.lineHeight 32 ≠ 28",
+    "searchLabel: font.lineHeight 24 ≠ 20",
+    "searchText: font.lineHeight 24 ≠ 22",
+    "segmentActive: font.lineHeight 24 ≠ 22",
+    "segment: font.lineHeight 24 ≠ 22",
+    "rowTitle: font.lineHeight 24 ≠ 22",
+    "rowDescription: font.lineHeight 24 ≠ 22",
+    "tag: font.lineHeight 24 ≠ 20"
   ],
   "approval-detail@1440-dark": [
+    "detailTitle: font.lineHeight 28 ≠ 25",
+    "detailMeta: font.lineHeight 24 ≠ 22",
+    "detailsHeading: font.lineHeight 24 ≠ 22",
+    "detailsBody: font.lineHeight 24 ≠ 22",
+    "detailsCaption: font.lineHeight 24 ≠ 20",
+    "notesLabel: font.lineHeight 24 ≠ 20",
+    "notes: h 106 ≠ 100",
+    "notesText: font.lineHeight 24 ≠ 22",
+    "checkboxLabel: font.lineHeight 24 ≠ 22",
+    "approve: font.lineHeight 24 ≠ 22",
+    "requestInfo: font.lineHeight 24 ≠ 22",
+    "reject: font.lineHeight 24 ≠ 22",
     "reject: bg rgb(214, 8, 8) ≠ rgb(243, 9, 9)"
   ],
   "extras@1440-dark": [
-    "rejectRequest: bg rgb(214, 8, 8) ≠ rgb(243, 9, 9)"
+    "title: font.lineHeight 32 ≠ 28",
+    "selectLabel: font.lineHeight 24 ≠ 20",
+    "selectValue: font.lineHeight 24 ≠ 22",
+    "dateLabel: font.lineHeight 24 ≠ 20",
+    "headerCell: font.lineHeight 24 ≠ 22",
+    "headerCell: h 56 ≠ 54",
+    "bodyCell: font.lineHeight 24 ≠ 22",
+    "rejectRequest: font.lineHeight 24 ≠ 22",
+    "rejectRequest: bg rgb(214, 8, 8) ≠ rgb(243, 9, 9)",
+    "save: font.lineHeight 24 ≠ 22"
   ],
   "select-open@1440-dark": [
-    "listbox: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)"
+    "listbox: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
+    "option: font.lineHeight 24 ≠ 22"
   ],
   "date-open@1440-dark": [
-    "calendar: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)"
+    "calendar: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
+    "month: font.lineHeight 24 ≠ 22",
+    "day: font.lineHeight 24 ≠ 22"
   ],
   "menu-open@1440-dark": [
+    "menuItem: font.lineHeight 24 ≠ 22",
+    "menuItemNegative: font.lineHeight 24 ≠ 22",
     "menuItemNegative: color rgb(251, 153, 153) ≠ rgb(243, 9, 9)"
   ],
   "dialog-open@1440-dark": [
     "dialog: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
+    "dialogTitle: font.lineHeight 24 ≠ 22",
+    "dialogBody: font.lineHeight 24 ≠ 22",
+    "dialogCancel: font.lineHeight 24 ≠ 22",
+    "dialogConfirm: font.lineHeight 24 ≠ 22",
     "dialogConfirm: bg rgb(214, 8, 8) ≠ rgb(243, 9, 9)"
   ],
+  "toast-open@1440-dark": [
+    "toastText: font.lineHeight 24 ≠ 22"
+  ],
+  "tooltip-open@1440-dark": [
+    "tooltipText: font.lineHeight 24 ≠ 20"
+  ],
+  "expansion@1440-dark": [
+    "title: font.lineHeight 32 ≠ 28",
+    "sectionHeading: font.lineHeight 24 ≠ 22"
+  ],
+  "expansion-accordion@1440-dark": [
+    "openTitle: h 24 ≠ 22",
+    "openTitle: font.lineHeight 24 ≠ 22",
+    "closedTitle: h 48 ≠ 44",
+    "closedTitle: font.lineHeight 24 ≠ 22",
+    "panelText: h 48 ≠ 44",
+    "panelText: font.lineHeight 24 ≠ 22"
+  ],
   "expansion-alert-dialog-open@1440-dark": [
+    "alertCard: h 252 ≠ 238",
     "alertCard: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
-    "alertAction: bg rgb(214, 8, 8) ≠ rgb(243, 9, 9)"
+    "alertTitle: font.lineHeight 28 ≠ 25",
+    "alertTitle: h 60 ≠ 54",
+    "alertBody: font.lineHeight 24 ≠ 22",
+    "alertBody: h 48 ≠ 44",
+    "alertCancel: h 80 ≠ 76",
+    "alertCancel: font.lineHeight 24 ≠ 22",
+    "alertCancel: radius 40 ≠ 38",
+    "alertAction: h 80 ≠ 76",
+    "alertAction: font.lineHeight 24 ≠ 22",
+    "alertAction: radius 40 ≠ 38",
+    "alertAction: bg rgb(214, 8, 8) ≠ rgb(243, 9, 9)",
+    "gap alertCard→alertTitle: -228 ≠ -214",
+    "gap alertAction→alertCard: -236 ≠ -222"
   ],
   "expansion-alert@1440-dark": [
+    "informationalBox: h 132 ≠ 96",
+    "informationalTitle: font.lineHeight 24 ≠ 20",
+    "informationalTitle: h 24 ≠ 20",
+    "informationalMessage: font.lineHeight 24 ≠ 20",
+    "informationalMessage: h 72 ≠ 40",
+    "warningBox: h 156 ≠ 116",
     "warningBox: bg rgba(242, 100, 20, 0.15) ≠ rgb(51, 13, 0)",
+    "warningTitle: font.lineHeight 24 ≠ 20",
+    "warningTitle: h 48 ≠ 20",
+    "warningMessage: font.lineHeight 24 ≠ 20",
+    "warningMessage: h 72 ≠ 60",
+    "errorBox: h 108 ≠ 96",
     "errorBox: bg rgba(247, 50, 50, 0.15) ≠ rgb(51, 0, 4)",
-    "errorIcon: color rgb(251, 153, 153) ≠ rgb(243, 9, 9)"
+    "errorIcon: color rgb(251, 153, 153) ≠ rgb(243, 9, 9)",
+    "errorTitle: font.lineHeight 24 ≠ 20",
+    "errorTitle: h 24 ≠ 20",
+    "errorMessage: font.lineHeight 24 ≠ 20",
+    "errorMessage: h 48 ≠ 40",
+    "promotionalBox: h 108 ≠ 96",
+    "promotionalTitle: font.lineHeight 24 ≠ 20",
+    "promotionalTitle: h 24 ≠ 20",
+    "promotionalMessage: font.lineHeight 24 ≠ 20",
+    "promotionalMessage: h 48 ≠ 40",
+    "gap informationalTitle→informationalIcon: -22 ≠ -18",
+    "gap warningTitle→warningIcon: -46 ≠ -18",
+    "gap errorTitle→errorIcon: -22 ≠ -18",
+    "gap promotionalTitle→promotionalIcon: -22 ≠ -18"
+  ],
+  "expansion-button-group@1440-dark": [
+    "first: font.lineHeight 24 ≠ 22",
+    "second: font.lineHeight 24 ≠ 22",
+    "stackedFirst: font.lineHeight 24 ≠ 22",
+    "stackedSecond: font.lineHeight 24 ≠ 22"
   ],
   "expansion-card@1440-dark": [
-    "card: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)"
+    "card: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
+    "title: font.lineHeight 24 ≠ 22",
+    "title: h 24 ≠ 22",
+    "description: font.lineHeight 24 ≠ 20",
+    "description: h 72 ≠ 40",
+    "content: font.lineHeight 24 ≠ 22",
+    "content: h 24 ≠ 22"
+  ],
+  "expansion-collapsible@1440-dark": [
+    "content: h 48 ≠ 44",
+    "contentText: font.lineHeight 24 ≠ 22"
   ],
   "expansion-field@1440-dark": [
+    "stack: h 168 ≠ 152",
+    "label: font.lineHeight 24 ≠ 20",
+    "label: h 32 ≠ 28",
+    "helperText: font.lineHeight 24 ≠ 20",
+    "helperText: h 72 ≠ 60",
+    "errorStack: h 120 ≠ 112",
+    "errorLabel: font.lineHeight 24 ≠ 20",
     "errorControl: border.color rgb(214, 8, 8) ≠ rgb(243, 9, 9)",
+    "errorText: font.lineHeight 24 ≠ 20",
     "errorText: color rgb(251, 153, 153) ≠ rgb(243, 9, 9)",
+    "errorText: h 24 ≠ 20",
     "errorIcon: color rgb(251, 153, 153) ≠ rgb(243, 9, 9)"
+  ],
+  "expansion-input-group@1440-dark": [
+    "startInput: h 56 ≠ 54",
+    "startInput: font.lineHeight 24 ≠ 22",
+    "suffixInput: h 56 ≠ 54",
+    "suffixInput: font.lineHeight 24 ≠ 22",
+    "suffixText: w 45 ≠ 43",
+    "suffixText: font.lineHeight 24 ≠ 20",
+    "buttonInput: h 56 ≠ 54",
+    "buttonInput: font.lineHeight 24 ≠ 22"
+  ],
+  "expansion-pagination@1440-dark": [
+    "current: font.lineHeight 24 ≠ 22",
+    "page: font.lineHeight 24 ≠ 22",
+    "ellipsis: h 24 ≠ 22",
+    "ellipsis: font.lineHeight 24 ≠ 22",
+    "last: h 40 ≠ 38",
+    "last: font.lineHeight 24 ≠ 22"
   ],
   "expansion-progress@1440-dark": [
     "progressTrack: bg rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)"
+  ],
+  "expansion-radio-group@1440-dark": [
+    "groupLabel: font.lineHeight 24 ≠ 22",
+    "checkedLabel: font.lineHeight 24 ≠ 22",
+    "uncheckedLabel: font.lineHeight 24 ≠ 22",
+    "disabledCheckedLabel: font.lineHeight 24 ≠ 22",
+    "disabledUncheckedLabel: font.lineHeight 24 ≠ 22",
+    "gap checkedRing→uncheckedRing: 20 ≠ 18",
+    "gap uncheckedRing→disabledCheckedRing: 108 ≠ 102"
   ],
   "expansion-separator@1440-dark": [
     "separatorHorizontal: bg rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
     "separatorVertical: bg rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)"
   ],
   "expansion-sheet-bottom@1440-dark": [
+    "sheet: h 97 ≠ 92",
     "sheet: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
-    "sheet: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)"
+    "sheet: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
+    "sheetTitle: font.lineHeight 28 ≠ 25",
+    "sheetTitle: h 28 ≠ 25",
+    "sheetBody: font.lineHeight 24 ≠ 22",
+    "sheetBody: h 24 ≠ 22",
+    "gap sheet→sheetTitle: -60 ≠ -55",
+    "gap sheet→sheetHandle: -80 ≠ -75"
   ],
   "expansion-sheet-top@1440-dark": [
+    "sheet: h 89 ≠ 87",
     "sheet: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
-    "sheet: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)"
+    "sheet: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
+    "sheetTitle: font.lineHeight 28 ≠ 25",
+    "sheetTitle: h 28 ≠ 25",
+    "sheetBody: font.lineHeight 24 ≠ 22",
+    "sheetBody: h 24 ≠ 22",
+    "gap sheet→sheetOverlay: -89 ≠ -87",
+    "gap sheet→sheetTitle: -66 ≠ -62",
+    "gap sheet→sheetClose: -72 ≠ -70",
+    "gap sheetTitle→sheetBody: 13 ≠ 15"
   ],
   "expansion-sheet-left@1440-dark": [
     "sheet: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
-    "sheet: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)"
+    "sheet: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
+    "sheetTitle: font.lineHeight 28 ≠ 25",
+    "sheetTitle: h 28 ≠ 25",
+    "sheetBody: font.lineHeight 24 ≠ 22",
+    "sheetBody: h 72 ≠ 66"
   ],
   "expansion-sheet-right@1440-dark": [
     "sheet: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
-    "sheet: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)"
+    "sheet: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
+    "sheetTitle: font.lineHeight 28 ≠ 25",
+    "sheetTitle: h 28 ≠ 25",
+    "sheetBody: font.lineHeight 24 ≠ 22",
+    "sheetBody: h 72 ≠ 66"
   ],
   "expansion-switch@1440-dark": [
     "offTrack: bg rgb(51, 51, 51) ≠ rgb(38, 38, 38)",
     "offThumb: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
+    "offLabel: font.lineHeight 24 ≠ 22",
     "onThumb: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
+    "onLabel: font.lineHeight 24 ≠ 22",
     "disabledOffTrack: bg rgb(51, 51, 51) ≠ rgb(38, 38, 38)",
     "disabledOffThumb: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
-    "disabledOnThumb: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)"
+    "disabledOffLabel: font.lineHeight 24 ≠ 22",
+    "disabledOnThumb: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
+    "disabledOnLabel: font.lineHeight 24 ≠ 22"
+  ],
+  "expansion-tabs@1440-dark": [
+    "tabList: h 58 ≠ 56",
+    "activeTab: h 58 ≠ 56",
+    "activeLabel: font.lineHeight 24 ≠ 22",
+    "inactiveTab: h 58 ≠ 56",
+    "inactiveLabel: font.lineHeight 24 ≠ 22",
+    "disabledTab: h 58 ≠ 56",
+    "disabledLabel: font.lineHeight 24 ≠ 22",
+    "panelText: font.lineHeight 24 ≠ 22"
+  ],
+  "expansion-toggle-group@1440-dark": [
+    "defaultPressed: h 40 ≠ 38",
+    "defaultPressed: font.lineHeight 24 ≠ 22",
+    "defaultUnpressed: h 40 ≠ 38",
+    "defaultUnpressed: font.lineHeight 24 ≠ 22",
+    "defaultPressedLast: h 40 ≠ 38",
+    "smPressed: h 36 ≠ 32",
+    "smPressed: w 114 ≠ 108",
+    "smPressed: radius 18 ≠ 16",
+    "smPressed: font.lineHeight 24 ≠ 20",
+    "smUnpressed: h 36 ≠ 32",
+    "smUnpressed: w 82 ≠ 79",
+    "smUnpressed: radius 18 ≠ 16",
+    "smUnpressed: font.lineHeight 24 ≠ 20",
+    "smUnpressedLast: h 36 ≠ 32",
+    "smUnpressedLast: w 100 ≠ 95",
+    "lgPressed: h 48 ≠ 46",
+    "lgPressed: font.lineHeight 24 ≠ 22",
+    "lgUnpressed: h 48 ≠ 46",
+    "lgUnpressed: font.lineHeight 24 ≠ 22",
+    "disabledPressed: h 40 ≠ 38",
+    "disabledUnpressed: h 40 ≠ 38",
+    "verticalPressed: h 40 ≠ 38",
+    "verticalUnpressed: h 40 ≠ 38"
   ]
 }

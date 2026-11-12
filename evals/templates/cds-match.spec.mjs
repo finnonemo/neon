@@ -2,8 +2,9 @@
 // ±1px and the same colors, at 375 and 1440, light and dark. The baseline is
 // captured from the CDS fixtures (npm run baseline) and is the contract both
 // targets are held to; NEON_TARGET picks which app the selectors read.
-// Neon's colors now come from Core's Theme (ADR 0009), so the Neon target is
-// held to the baseline except for the differences recorded in
+// Neon's colors now come from Core's Theme and its type sizes and line heights
+// from Core's text styles (ADR 0009), so the Neon target is held to the
+// baseline except for the differences recorded in
 // fixtures/core-differences.json (npm run core-differences). A recorded
 // difference that no longer occurs fails too, so a retune removes its entry.
 import { test, expect } from '@playwright/test';
@@ -95,7 +96,7 @@ if (capture) {
       if (problems.length) out[caseKey(entry)] = problems;
     }
     writeFileSync(differencesPath, `${JSON.stringify(out, null, 2)}\n`);
-    console.log(`Recorded differences in ${Object.keys(out).length} of ${cases.length} cases. Read each one before committing: it must follow from a Core Theme token.`);
+    console.log(`Recorded differences in ${Object.keys(out).length} of ${cases.length} cases. Read each one before committing: it must follow from a Core Theme token or a Core text style.`);
   });
 } else {
   test.describe(`${target} matches the CDS baseline`, () => {
@@ -124,7 +125,8 @@ if (target === 'neon' && !capture) {
       probe.remove();
       return result;
     });
-    expect(font).toEqual(['14px', '20px', '600']);
+    // label1 takes Core's Subheadline: 15 over 24.
+    expect(font).toEqual(['15px', '24px', '600']);
     expect(color).toBe(positive);
   });
 }
