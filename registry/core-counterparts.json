@@ -57,7 +57,10 @@
   },
   "input-group": {
     "core": "text-field",
-    "why": "Input group is a field with leading or trailing content: Text field's Field with its unit and status."
+    "why": "Input group is a field with leading or trailing content: Text field's Field with its unit and status.",
+    "notInCore": {
+      "align": ["block-start", "block-end"]
+    }
   },
   "label": {
     "core": "text-field",

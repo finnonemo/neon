@@ -4,27 +4,20 @@ import { Toggle as TogglePrimitive } from "radix-ui"
 
 import { cn } from "@/lib/utils"
 
-// A Supporting item (ADR 0008): shaped for toggle-group, whose Counterpart is
-// CDS's grouped toggle buttons, a ButtonGroup of CDS Buttons. CDS has no
-// toggle button, so a toggle is a CDS Button whose variant follows its state.
-// PROVISIONAL (#200): pressed is the inverse Button (the inverse slot,
-// bgInverse and fgInverse), as segmented-control's chosen segment is; unpressed is the
-// secondary Button (bgSecondary, fg). PROVISIONAL (#201): sm, default
-// and lg are the CDS Button sizes xs, s and m: 16px sides, then 6px and
-// label1, 8px and headline, and 24px sides, 12px and headline. Every size is
-// a pill. Disabled blends the fill into the page and halves the opacity, as a
-// CDS Button does. Radix sets data-state=on|off; radix-nova's aria-pressed:
-// classes miss a toggle-group's single mode, which sets aria-checked instead.
-// PROVISIONAL (#134): keyboard focus shows the Neon controls' 3px ring/50
-// ring, not CDS's 2px bgPrimary outline.
+// A Supporting item (ADR 0008): shaped for toggle-group, whose Counterpart is Core's Selection
+// tag. Core's default variant is White Primary, and its doc calls Secondary the usual choice for
+// filters beside their content; a toggle is Secondary Navy until Core says which Color it takes. sm, default and lg are Core's Small, Medium and Large: 24, 32 and 40px
+// tall, with 6px sides, 4px corners and 13/20 type, then 8px sides, 8px corners and 15/24, then
+// the same at 17/24. The gap to an icon is 4, 8 and 12px. Radix sets data-state=on|off;
+// radix-nova's aria-pressed: classes miss a toggle-group's single mode, which sets aria-checked.
 const toggleVariants = cva(
-  "inline-flex shrink-0 items-center justify-center gap-2 rounded-full whitespace-nowrap transition-[color,background-color,box-shadow] outline-none",
+  "inline-flex shrink-0 items-center justify-center whitespace-nowrap transition-[color,background-color,outline-color,box-shadow]",
   {
     variants: {
       size: {
-        sm: "px-4 py-1.5 text-label1 [&_svg:not([class*='size-'])]:size-4",
-        default: "px-4 py-2 text-headline [&_svg:not([class*='size-'])]:size-4",
-        lg: "px-6 py-3 text-headline [&_svg:not([class*='size-'])]:size-5",
+        sm: "h-6 gap-1 rounded-sm px-1.5 py-0.5 text-legal [&_svg:not([class*='size-'])]:size-4",
+        default: "h-8 gap-2 rounded-md px-2 py-1.5 text-label2 [&_svg:not([class*='size-'])]:size-4.5",
+        lg: "h-10 gap-3 rounded-md px-2 py-2.5 text-body [&_svg:not([class*='size-'])]:size-5",
       },
     },
     defaultVariants: {
@@ -33,12 +26,13 @@ const toggleVariants = cva(
   }
 )
 
-// CDS paints [aria-pressed=true] with its press blend, so a pressed toggle is
-// the inverse fill 95.7% into the page, and 93.7% when disabled, in light and
-// dark alike. CDS also fades a pressed button's text to 82%; the text here is
-// a bare text node, so it stays at full strength.
+// The tag's fill and ink with a ring inside it: 1px in the tag's border, and 2px in its ink when
+// pressed, the one thing that tells pressed from not. Hover darkens the fill. Disabled takes
+// Core's disabled tokens with no opacity, and its ring is its fill's color. Core's Selection tag
+// has no Focus state: keyboard focus draws Focus/focus 2px wide round the tag, outside the ring,
+// so a focused toggle still shows whether it is pressed.
 const toggleStates =
-  "bg-secondary text-secondary-foreground hover:bg-accent disabled:bg-secondary-disabled data-[state=on]:bg-[color-mix(in_srgb,var(--inverse)_95.7%,var(--background))] data-[state=on]:text-inverse-foreground data-[state=on]:hover:bg-inverse/90 data-[state=on]:disabled:bg-[color-mix(in_srgb,var(--inverse)_93.7%,var(--background))] focus-visible:z-10 focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0"
+  "bg-selection-tag text-selection-tag-foreground outline-1 -outline-offset-1 outline-selection-tag-border hover:bg-selection-tag-hover data-[state=on]:outline-2 data-[state=on]:-outline-offset-2 data-[state=on]:outline-selection-tag-foreground focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:bg-selection-tag-disabled disabled:text-disabled-foreground disabled:outline-selection-tag-disabled data-[state=on]:disabled:outline-selection-tag-disabled [&_svg]:pointer-events-none [&_svg]:shrink-0"
 
 function Toggle({
   className,

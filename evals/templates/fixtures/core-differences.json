@@ -1,15 +1,11 @@
 {
   "approval@375-light": [
     "title: font.lineHeight 32 ≠ 28",
-    "searchLabel: font.size 15 ≠ 14",
-    "searchLabel: font.lineHeight 24 ≠ 20",
-    "searchText: font.lineHeight 24 ≠ 22",
-    "segmentActive: font.lineHeight 24 ≠ 22",
-    "segment: font.lineHeight 24 ≠ 22",
     "rowTitle: font.lineHeight 24 ≠ 22",
     "rowDescription: font.lineHeight 24 ≠ 22",
     "tag: font.size 15 ≠ 14",
-    "tag: font.lineHeight 24 ≠ 20"
+    "tag: font.lineHeight 24 ≠ 20",
+    "gap searchLabel→searchInput: 8 ≠ 4"
   ],
   "approval-detail@375-light": [
     "detailTitle: font.lineHeight 28 ≠ 25",
@@ -18,23 +14,18 @@
     "detailsBody: font.lineHeight 24 ≠ 22",
     "detailsCaption: font.size 15 ≠ 14",
     "detailsCaption: font.lineHeight 24 ≠ 20",
-    "notesLabel: font.size 15 ≠ 14",
-    "notesLabel: font.lineHeight 24 ≠ 20",
-    "notes: h 106 ≠ 100",
-    "notesText: font.lineHeight 24 ≠ 22",
-    "checkboxLabel: font.lineHeight 24 ≠ 22"
+    "checkboxLabel: font.lineHeight 24 ≠ 22",
+    "gap notesLabel→notes: 8 ≠ 4"
   ],
   "extras@375-light": [
     "title: font.lineHeight 32 ≠ 28",
-    "selectLabel: font.size 15 ≠ 14",
-    "selectLabel: font.lineHeight 24 ≠ 20",
-    "selectValue: font.lineHeight 24 ≠ 22",
-    "dateLabel: font.size 15 ≠ 14",
-    "dateLabel: font.lineHeight 24 ≠ 20",
     "headerCell: font.lineHeight 24 ≠ 22",
     "headerCell: h 80 ≠ 76",
     "bodyRow: h 80 ≠ 76",
-    "bodyCell: font.lineHeight 24 ≠ 22"
+    "bodyCell: font.lineHeight 24 ≠ 22",
+    "disabledCheckboxLabel: color rgba(0, 0, 0, 0.45) ≠ rgba(0, 0, 0, 0.85)",
+    "disabledCheckboxLabel: opacity 1 ≠ 0.5",
+    "gap selectLabel→selectTrigger: 8 ≠ 4"
   ],
   "select-open@375-light": [
     "option: font.lineHeight 24 ≠ 22"
@@ -141,31 +132,30 @@
   ],
   "expansion-field@375-light": [
     "stack: h 168 ≠ 152",
-    "label: font.size 15 ≠ 14",
-    "label: font.lineHeight 24 ≠ 20",
-    "label: h 32 ≠ 28",
-    "helperText: font.size 15 ≠ 14",
-    "helperText: font.lineHeight 24 ≠ 20",
+    "label: h 24 ≠ 28",
+    "label: pad 0,0,0,0 ≠ 4,0,4,0",
     "helperText: h 72 ≠ 60",
-    "errorStack: h 120 ≠ 112",
-    "errorLabel: font.size 15 ≠ 14",
-    "errorLabel: font.lineHeight 24 ≠ 20",
-    "errorText: font.size 15 ≠ 14",
-    "errorText: font.lineHeight 24 ≠ 20",
-    "errorText: color rgb(157, 6, 6) ≠ rgb(214, 8, 8)",
-    "errorText: h 24 ≠ 20",
-    "errorIcon: color rgb(157, 6, 6) ≠ rgb(214, 8, 8)"
+    "errorStack: h 144 ≠ 112",
+    "errorText: h 48 ≠ 20",
+    "errorIcon: h 24 ≠ 12",
+    "errorIcon: w 18 ≠ 16",
+    "errorIcon: pad 0,0,0,0 ≠ 0,4,0,0",
+    "gap label→control: 8 ≠ 4",
+    "gap control→helperText: 8 ≠ 4",
+    "gap errorLabel→errorControl: 8 ≠ 4",
+    "gap errorControl→errorText: 8 ≠ 4"
   ],
   "expansion-input-group@375-light": [
+    "startSlot: h 20 ≠ 16",
+    "startSlot: w 36 ≠ 48",
+    "startSlot: pad 0,0,0,16 ≠ 0,16,0,16",
+    "startIcon: h 20 ≠ 16",
+    "startIcon: w 20 ≠ 16",
     "startInput: h 56 ≠ 54",
-    "startInput: font.lineHeight 24 ≠ 22",
+    "startInput: pad 16,16,16,16 ≠ 16,16,16,4",
     "suffixInput: h 56 ≠ 54",
-    "suffixInput: font.lineHeight 24 ≠ 22",
-    "suffixText: w 45 ≠ 43",
-    "suffixText: font.size 15 ≠ 14",
-    "suffixText: font.lineHeight 24 ≠ 20",
-    "buttonInput: h 56 ≠ 54",
-    "buttonInput: font.lineHeight 24 ≠ 22"
+    "suffixText: w 49 ≠ 43",
+    "buttonInput: h 56 ≠ 54"
   ],
   "expansion-pagination@375-light": [
     "current: font.lineHeight 24 ≠ 22",
@@ -180,12 +170,9 @@
   ],
   "expansion-radio-group@375-light": [
     "groupLabel: font.lineHeight 24 ≠ 22",
-    "checkedLabel: font.lineHeight 24 ≠ 22",
-    "uncheckedLabel: font.lineHeight 24 ≠ 22",
-    "disabledCheckedLabel: font.lineHeight 24 ≠ 22",
-    "disabledUncheckedLabel: font.lineHeight 24 ≠ 22",
-    "gap checkedRing→uncheckedRing: 20 ≠ 18",
-    "gap uncheckedRing→disabledCheckedRing: 108 ≠ 102"
+    "gap checkedRing→uncheckedRing: 16 ≠ 18",
+    "gap checkedRing→checkedDot: -20 ≠ -17",
+    "gap uncheckedRing→disabledCheckedRing: 104 ≠ 102"
   ],
   "expansion-separator@375-light": [
     "separatorHorizontal: bg rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)",
@@ -224,14 +211,20 @@
     "sheetBody: h 72 ≠ 66"
   ],
   "expansion-switch@375-light": [
-    "offThumb: border.color rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)",
     "offLabel: font.lineHeight 24 ≠ 22",
-    "onThumb: border.color rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)",
     "onLabel: font.lineHeight 24 ≠ 22",
-    "disabledOffThumb: border.color rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)",
     "disabledOffLabel: font.lineHeight 24 ≠ 22",
-    "disabledOnThumb: border.color rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)",
-    "disabledOnLabel: font.lineHeight 24 ≠ 22"
+    "disabledOffLabel: color rgba(0, 0, 0, 0.45) ≠ rgba(0, 0, 0, 0.65)",
+    "disabledOffLabel: opacity 1 ≠ 0.5",
+    "disabledOnLabel: font.lineHeight 24 ≠ 22",
+    "disabledOnLabel: color rgba(0, 0, 0, 0.45) ≠ rgba(0, 0, 0, 0.85)",
+    "disabledOnLabel: opacity 1 ≠ 0.5",
+    "gap offThumb→offLabel: 35 ≠ 30",
+    "gap offTrack→offThumb: -21 ≠ -31",
+    "gap onTrack→onThumb: -21 ≠ -31",
+    "gap disabledOffThumb→disabledOffLabel: 35 ≠ 30",
+    "gap disabledOffTrack→disabledOffThumb: -21 ≠ -31",
+    "gap disabledOnTrack→disabledOnThumb: -21 ≠ -31"
   ],
   "expansion-tabs@375-light": [
     "tabList: h 58 ≠ 56",
@@ -244,43 +237,22 @@
     "panelText: font.lineHeight 24 ≠ 22"
   ],
   "expansion-toggle-group@375-light": [
-    "defaultPressed: h 40 ≠ 38",
-    "defaultPressed: font.lineHeight 24 ≠ 22",
-    "defaultUnpressed: h 40 ≠ 38",
-    "defaultUnpressed: font.lineHeight 24 ≠ 22",
-    "defaultPressedLast: h 40 ≠ 38",
-    "smPressed: h 36 ≠ 32",
-    "smPressed: w 114 ≠ 108",
-    "smPressed: radius 18 ≠ 16",
-    "smPressed: font.size 15 ≠ 14",
-    "smPressed: font.lineHeight 24 ≠ 20",
-    "smUnpressed: h 36 ≠ 32",
-    "smUnpressed: w 82 ≠ 79",
-    "smUnpressed: radius 18 ≠ 16",
-    "smUnpressed: font.size 15 ≠ 14",
-    "smUnpressed: font.lineHeight 24 ≠ 20",
-    "smUnpressedLast: h 36 ≠ 32",
-    "smUnpressedLast: w 100 ≠ 95",
-    "lgPressed: h 48 ≠ 46",
-    "lgPressed: font.lineHeight 24 ≠ 22",
-    "lgUnpressed: h 48 ≠ 46",
-    "lgUnpressed: font.lineHeight 24 ≠ 22",
-    "disabledPressed: h 40 ≠ 38",
-    "disabledUnpressed: h 40 ≠ 38",
-    "verticalPressed: h 40 ≠ 38",
-    "verticalUnpressed: h 40 ≠ 38"
+    "defaultPressed: w 34 ≠ 53",
+    "defaultUnpressed: w 60 ≠ 83",
+    "defaultPressedLast: w 42 ≠ 62",
+    "smPressed: w 81 ≠ 108",
+    "smUnpressed: w 54 ≠ 79",
+    "smUnpressedLast: w 70 ≠ 95",
+    "lgPressed: w 112 ≠ 147",
+    "lgUnpressed: w 108 ≠ 143"
   ],
   "approval@375-dark": [
     "title: font.lineHeight 32 ≠ 28",
-    "searchLabel: font.size 15 ≠ 14",
-    "searchLabel: font.lineHeight 24 ≠ 20",
-    "searchText: font.lineHeight 24 ≠ 22",
-    "segmentActive: font.lineHeight 24 ≠ 22",
-    "segment: font.lineHeight 24 ≠ 22",
     "rowTitle: font.lineHeight 24 ≠ 22",
     "rowDescription: font.lineHeight 24 ≠ 22",
     "tag: font.size 15 ≠ 14",
-    "tag: font.lineHeight 24 ≠ 20"
+    "tag: font.lineHeight 24 ≠ 20",
+    "gap searchLabel→searchInput: 8 ≠ 4"
   ],
   "approval-detail@375-dark": [
     "detailTitle: font.lineHeight 28 ≠ 25",
@@ -289,23 +261,18 @@
     "detailsBody: font.lineHeight 24 ≠ 22",
     "detailsCaption: font.size 15 ≠ 14",
     "detailsCaption: font.lineHeight 24 ≠ 20",
-    "notesLabel: font.size 15 ≠ 14",
-    "notesLabel: font.lineHeight 24 ≠ 20",
-    "notes: h 106 ≠ 100",
-    "notesText: font.lineHeight 24 ≠ 22",
-    "checkboxLabel: font.lineHeight 24 ≠ 22"
+    "checkboxLabel: font.lineHeight 24 ≠ 22",
+    "gap notesLabel→notes: 8 ≠ 4"
   ],
   "extras@375-dark": [
     "title: font.lineHeight 32 ≠ 28",
-    "selectLabel: font.size 15 ≠ 14",
-    "selectLabel: font.lineHeight 24 ≠ 20",
-    "selectValue: font.lineHeight 24 ≠ 22",
-    "dateLabel: font.size 15 ≠ 14",
-    "dateLabel: font.lineHeight 24 ≠ 20",
     "headerCell: font.lineHeight 24 ≠ 22",
     "headerCell: h 80 ≠ 76",
     "bodyRow: h 80 ≠ 76",
-    "bodyCell: font.lineHeight 24 ≠ 22"
+    "bodyCell: font.lineHeight 24 ≠ 22",
+    "disabledCheckboxLabel: color rgba(255, 255, 255, 0.45) ≠ rgb(255, 255, 255)",
+    "disabledCheckboxLabel: opacity 1 ≠ 0.5",
+    "gap selectLabel→selectTrigger: 8 ≠ 4"
   ],
   "select-open@375-dark": [
     "listbox: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
@@ -417,32 +384,30 @@
   ],
   "expansion-field@375-dark": [
     "stack: h 168 ≠ 152",
-    "label: font.size 15 ≠ 14",
-    "label: font.lineHeight 24 ≠ 20",
-    "label: h 32 ≠ 28",
-    "helperText: font.size 15 ≠ 14",
-    "helperText: font.lineHeight 24 ≠ 20",
+    "label: h 24 ≠ 28",
+    "label: pad 0,0,0,0 ≠ 4,0,4,0",
     "helperText: h 72 ≠ 60",
-    "errorStack: h 120 ≠ 112",
-    "errorLabel: font.size 15 ≠ 14",
-    "errorLabel: font.lineHeight 24 ≠ 20",
-    "errorControl: border.color rgb(214, 8, 8) ≠ rgb(243, 9, 9)",
-    "errorText: font.size 15 ≠ 14",
-    "errorText: font.lineHeight 24 ≠ 20",
-    "errorText: color rgb(251, 153, 153) ≠ rgb(243, 9, 9)",
-    "errorText: h 24 ≠ 20",
-    "errorIcon: color rgb(251, 153, 153) ≠ rgb(243, 9, 9)"
+    "errorStack: h 144 ≠ 112",
+    "errorText: h 48 ≠ 20",
+    "errorIcon: h 24 ≠ 12",
+    "errorIcon: w 18 ≠ 16",
+    "errorIcon: pad 0,0,0,0 ≠ 0,4,0,0",
+    "gap label→control: 8 ≠ 4",
+    "gap control→helperText: 8 ≠ 4",
+    "gap errorLabel→errorControl: 8 ≠ 4",
+    "gap errorControl→errorText: 8 ≠ 4"
   ],
   "expansion-input-group@375-dark": [
+    "startSlot: h 20 ≠ 16",
+    "startSlot: w 36 ≠ 48",
+    "startSlot: pad 0,0,0,16 ≠ 0,16,0,16",
+    "startIcon: h 20 ≠ 16",
+    "startIcon: w 20 ≠ 16",
     "startInput: h 56 ≠ 54",
-    "startInput: font.lineHeight 24 ≠ 22",
+    "startInput: pad 16,16,16,16 ≠ 16,16,16,4",
     "suffixInput: h 56 ≠ 54",
-    "suffixInput: font.lineHeight 24 ≠ 22",
-    "suffixText: w 45 ≠ 43",
-    "suffixText: font.size 15 ≠ 14",
-    "suffixText: font.lineHeight 24 ≠ 20",
-    "buttonInput: h 56 ≠ 54",
-    "buttonInput: font.lineHeight 24 ≠ 22"
+    "suffixText: w 49 ≠ 43",
+    "buttonInput: h 56 ≠ 54"
   ],
   "expansion-pagination@375-dark": [
     "current: font.lineHeight 24 ≠ 22",
@@ -457,12 +422,9 @@
   ],
   "expansion-radio-group@375-dark": [
     "groupLabel: font.lineHeight 24 ≠ 22",
-    "checkedLabel: font.lineHeight 24 ≠ 22",
-    "uncheckedLabel: font.lineHeight 24 ≠ 22",
-    "disabledCheckedLabel: font.lineHeight 24 ≠ 22",
-    "disabledUncheckedLabel: font.lineHeight 24 ≠ 22",
-    "gap checkedRing→uncheckedRing: 20 ≠ 18",
-    "gap uncheckedRing→disabledCheckedRing: 108 ≠ 102"
+    "gap checkedRing→uncheckedRing: 16 ≠ 18",
+    "gap checkedRing→checkedDot: -20 ≠ -17",
+    "gap uncheckedRing→disabledCheckedRing: 104 ≠ 102"
   ],
   "expansion-separator@375-dark": [
     "separatorHorizontal: bg rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
@@ -509,16 +471,20 @@
     "sheetBody: h 72 ≠ 66"
   ],
   "expansion-switch@375-dark": [
-    "offTrack: bg rgb(51, 51, 51) ≠ rgb(38, 38, 38)",
-    "offThumb: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
     "offLabel: font.lineHeight 24 ≠ 22",
-    "onThumb: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
     "onLabel: font.lineHeight 24 ≠ 22",
-    "disabledOffTrack: bg rgb(51, 51, 51) ≠ rgb(38, 38, 38)",
-    "disabledOffThumb: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
     "disabledOffLabel: font.lineHeight 24 ≠ 22",
-    "disabledOnThumb: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
-    "disabledOnLabel: font.lineHeight 24 ≠ 22"
+    "disabledOffLabel: color rgba(255, 255, 255, 0.45) ≠ rgba(255, 255, 255, 0.65)",
+    "disabledOffLabel: opacity 1 ≠ 0.5",
+    "disabledOnLabel: font.lineHeight 24 ≠ 22",
+    "disabledOnLabel: color rgba(255, 255, 255, 0.45) ≠ rgb(255, 255, 255)",
+    "disabledOnLabel: opacity 1 ≠ 0.5",
+    "gap offThumb→offLabel: 35 ≠ 30",
+    "gap offTrack→offThumb: -21 ≠ -31",
+    "gap onTrack→onThumb: -21 ≠ -31",
+    "gap disabledOffThumb→disabledOffLabel: 35 ≠ 30",
+    "gap disabledOffTrack→disabledOffThumb: -21 ≠ -31",
+    "gap disabledOnTrack→disabledOnThumb: -21 ≠ -31"
   ],
   "expansion-tabs@375-dark": [
     "tabList: h 58 ≠ 56",
@@ -531,43 +497,22 @@
     "panelText: font.lineHeight 24 ≠ 22"
   ],
   "expansion-toggle-group@375-dark": [
-    "defaultPressed: h 40 ≠ 38",
-    "defaultPressed: font.lineHeight 24 ≠ 22",
-    "defaultUnpressed: h 40 ≠ 38",
-    "defaultUnpressed: font.lineHeight 24 ≠ 22",
-    "defaultPressedLast: h 40 ≠ 38",
-    "smPressed: h 36 ≠ 32",
-    "smPressed: w 114 ≠ 108",
-    "smPressed: radius 18 ≠ 16",
-    "smPressed: font.size 15 ≠ 14",
-    "smPressed: font.lineHeight 24 ≠ 20",
-    "smUnpressed: h 36 ≠ 32",
-    "smUnpressed: w 82 ≠ 79",
-    "smUnpressed: radius 18 ≠ 16",
-    "smUnpressed: font.size 15 ≠ 14",
-    "smUnpressed: font.lineHeight 24 ≠ 20",
-    "smUnpressedLast: h 36 ≠ 32",
-    "smUnpressedLast: w 100 ≠ 95",
-    "lgPressed: h 48 ≠ 46",
-    "lgPressed: font.lineHeight 24 ≠ 22",
-    "lgUnpressed: h 48 ≠ 46",
-    "lgUnpressed: font.lineHeight 24 ≠ 22",
-    "disabledPressed: h 40 ≠ 38",
-    "disabledUnpressed: h 40 ≠ 38",
-    "verticalPressed: h 40 ≠ 38",
-    "verticalUnpressed: h 40 ≠ 38"
+    "defaultPressed: w 34 ≠ 53",
+    "defaultUnpressed: w 60 ≠ 83",
+    "defaultPressedLast: w 42 ≠ 62",
+    "smPressed: w 81 ≠ 108",
+    "smUnpressed: w 54 ≠ 79",
+    "smUnpressedLast: w 70 ≠ 95",
+    "lgPressed: w 112 ≠ 147",
+    "lgUnpressed: w 108 ≠ 143"
   ],
   "approval@1440-light": [
     "title: font.lineHeight 32 ≠ 28",
-    "searchLabel: font.size 15 ≠ 14",
-    "searchLabel: font.lineHeight 24 ≠ 20",
-    "searchText: font.lineHeight 24 ≠ 22",
-    "segmentActive: font.lineHeight 24 ≠ 22",
-    "segment: font.lineHeight 24 ≠ 22",
     "rowTitle: font.lineHeight 24 ≠ 22",
     "rowDescription: font.lineHeight 24 ≠ 22",
     "tag: font.size 15 ≠ 14",
-    "tag: font.lineHeight 24 ≠ 20"
+    "tag: font.lineHeight 24 ≠ 20",
+    "gap searchLabel→searchInput: 8 ≠ 4"
   ],
   "approval-detail@1440-light": [
     "detailTitle: font.lineHeight 28 ≠ 25",
@@ -576,22 +521,17 @@
     "detailsBody: font.lineHeight 24 ≠ 22",
     "detailsCaption: font.size 15 ≠ 14",
     "detailsCaption: font.lineHeight 24 ≠ 20",
-    "notesLabel: font.size 15 ≠ 14",
-    "notesLabel: font.lineHeight 24 ≠ 20",
-    "notes: h 106 ≠ 100",
-    "notesText: font.lineHeight 24 ≠ 22",
-    "checkboxLabel: font.lineHeight 24 ≠ 22"
+    "checkboxLabel: font.lineHeight 24 ≠ 22",
+    "gap notesLabel→notes: 8 ≠ 4"
   ],
   "extras@1440-light": [
     "title: font.lineHeight 32 ≠ 28",
-    "selectLabel: font.size 15 ≠ 14",
-    "selectLabel: font.lineHeight 24 ≠ 20",
-    "selectValue: font.lineHeight 24 ≠ 22",
-    "dateLabel: font.size 15 ≠ 14",
-    "dateLabel: font.lineHeight 24 ≠ 20",
     "headerCell: font.lineHeight 24 ≠ 22",
     "headerCell: h 56 ≠ 54",
-    "bodyCell: font.lineHeight 24 ≠ 22"
+    "bodyCell: font.lineHeight 24 ≠ 22",
+    "disabledCheckboxLabel: color rgba(0, 0, 0, 0.45) ≠ rgba(0, 0, 0, 0.85)",
+    "disabledCheckboxLabel: opacity 1 ≠ 0.5",
+    "gap selectLabel→selectTrigger: 8 ≠ 4"
   ],
   "select-open@1440-light": [
     "option: font.lineHeight 24 ≠ 22"
@@ -698,31 +638,30 @@
   ],
   "expansion-field@1440-light": [
     "stack: h 168 ≠ 152",
-    "label: font.size 15 ≠ 14",
-    "label: font.lineHeight 24 ≠ 20",
-    "label: h 32 ≠ 28",
-    "helperText: font.size 15 ≠ 14",
-    "helperText: font.lineHeight 24 ≠ 20",
+    "label: h 24 ≠ 28",
+    "label: pad 0,0,0,0 ≠ 4,0,4,0",
     "helperText: h 72 ≠ 60",
-    "errorStack: h 120 ≠ 112",
-    "errorLabel: font.size 15 ≠ 14",
-    "errorLabel: font.lineHeight 24 ≠ 20",
-    "errorText: font.size 15 ≠ 14",
-    "errorText: font.lineHeight 24 ≠ 20",
-    "errorText: color rgb(157, 6, 6) ≠ rgb(214, 8, 8)",
-    "errorText: h 24 ≠ 20",
-    "errorIcon: color rgb(157, 6, 6) ≠ rgb(214, 8, 8)"
+    "errorStack: h 144 ≠ 112",
+    "errorText: h 48 ≠ 20",
+    "errorIcon: h 24 ≠ 12",
+    "errorIcon: w 18 ≠ 16",
+    "errorIcon: pad 0,0,0,0 ≠ 0,4,0,0",
+    "gap label→control: 8 ≠ 4",
+    "gap control→helperText: 8 ≠ 4",
+    "gap errorLabel→errorControl: 8 ≠ 4",
+    "gap errorControl→errorText: 8 ≠ 4"
   ],
   "expansion-input-group@1440-light": [
+    "startSlot: h 20 ≠ 16",
+    "startSlot: w 36 ≠ 48",
+    "startSlot: pad 0,0,0,16 ≠ 0,16,0,16",
+    "startIcon: h 20 ≠ 16",
+    "startIcon: w 20 ≠ 16",
     "startInput: h 56 ≠ 54",
-    "startInput: font.lineHeight 24 ≠ 22",
+    "startInput: pad 16,16,16,16 ≠ 16,16,16,4",
     "suffixInput: h 56 ≠ 54",
-    "suffixInput: font.lineHeight 24 ≠ 22",
-    "suffixText: w 45 ≠ 43",
-    "suffixText: font.size 15 ≠ 14",
-    "suffixText: font.lineHeight 24 ≠ 20",
-    "buttonInput: h 56 ≠ 54",
-    "buttonInput: font.lineHeight 24 ≠ 22"
+    "suffixText: w 49 ≠ 43",
+    "buttonInput: h 56 ≠ 54"
   ],
   "expansion-pagination@1440-light": [
     "current: font.lineHeight 24 ≠ 22",
@@ -737,12 +676,9 @@
   ],
   "expansion-radio-group@1440-light": [
     "groupLabel: font.lineHeight 24 ≠ 22",
-    "checkedLabel: font.lineHeight 24 ≠ 22",
-    "uncheckedLabel: font.lineHeight 24 ≠ 22",
-    "disabledCheckedLabel: font.lineHeight 24 ≠ 22",
-    "disabledUncheckedLabel: font.lineHeight 24 ≠ 22",
-    "gap checkedRing→uncheckedRing: 20 ≠ 18",
-    "gap uncheckedRing→disabledCheckedRing: 108 ≠ 102"
+    "gap checkedRing→uncheckedRing: 16 ≠ 18",
+    "gap checkedRing→checkedDot: -20 ≠ -17",
+    "gap uncheckedRing→disabledCheckedRing: 104 ≠ 102"
   ],
   "expansion-separator@1440-light": [
     "separatorHorizontal: bg rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)",
@@ -781,14 +717,20 @@
     "sheetBody: h 72 ≠ 66"
   ],
   "expansion-switch@1440-light": [
-    "offThumb: border.color rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)",
     "offLabel: font.lineHeight 24 ≠ 22",
-    "onThumb: border.color rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)",
     "onLabel: font.lineHeight 24 ≠ 22",
-    "disabledOffThumb: border.color rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)",
     "disabledOffLabel: font.lineHeight 24 ≠ 22",
-    "disabledOnThumb: border.color rgba(0, 0, 0, 0.12) ≠ rgba(0, 0, 0, 0.05)",
-    "disabledOnLabel: font.lineHeight 24 ≠ 22"
+    "disabledOffLabel: color rgba(0, 0, 0, 0.45) ≠ rgba(0, 0, 0, 0.65)",
+    "disabledOffLabel: opacity 1 ≠ 0.5",
+    "disabledOnLabel: font.lineHeight 24 ≠ 22",
+    "disabledOnLabel: color rgba(0, 0, 0, 0.45) ≠ rgba(0, 0, 0, 0.85)",
+    "disabledOnLabel: opacity 1 ≠ 0.5",
+    "gap offThumb→offLabel: 35 ≠ 30",
+    "gap offTrack→offThumb: -21 ≠ -31",
+    "gap onTrack→onThumb: -21 ≠ -31",
+    "gap disabledOffThumb→disabledOffLabel: 35 ≠ 30",
+    "gap disabledOffTrack→disabledOffThumb: -21 ≠ -31",
+    "gap disabledOnTrack→disabledOnThumb: -21 ≠ -31"
   ],
   "expansion-tabs@1440-light": [
     "tabList: h 58 ≠ 56",
@@ -801,43 +743,22 @@
     "panelText: font.lineHeight 24 ≠ 22"
   ],
   "expansion-toggle-group@1440-light": [
-    "defaultPressed: h 40 ≠ 38",
-    "defaultPressed: font.lineHeight 24 ≠ 22",
-    "defaultUnpressed: h 40 ≠ 38",
-    "defaultUnpressed: font.lineHeight 24 ≠ 22",
-    "defaultPressedLast: h 40 ≠ 38",
-    "smPressed: h 36 ≠ 32",
-    "smPressed: w 114 ≠ 108",
-    "smPressed: radius 18 ≠ 16",
-    "smPressed: font.size 15 ≠ 14",
-    "smPressed: font.lineHeight 24 ≠ 20",
-    "smUnpressed: h 36 ≠ 32",
-    "smUnpressed: w 82 ≠ 79",
-    "smUnpressed: radius 18 ≠ 16",
-    "smUnpressed: font.size 15 ≠ 14",
-    "smUnpressed: font.lineHeight 24 ≠ 20",
-    "smUnpressedLast: h 36 ≠ 32",
-    "smUnpressedLast: w 100 ≠ 95",
-    "lgPressed: h 48 ≠ 46",
-    "lgPressed: font.lineHeight 24 ≠ 22",
-    "lgUnpressed: h 48 ≠ 46",
-    "lgUnpressed: font.lineHeight 24 ≠ 22",
-    "disabledPressed: h 40 ≠ 38",
-    "disabledUnpressed: h 40 ≠ 38",
-    "verticalPressed: h 40 ≠ 38",
-    "verticalUnpressed: h 40 ≠ 38"
+    "defaultPressed: w 34 ≠ 53",
+    "defaultUnpressed: w 60 ≠ 83",
+    "defaultPressedLast: w 42 ≠ 62",
+    "smPressed: w 81 ≠ 108",
+    "smUnpressed: w 54 ≠ 79",
+    "smUnpressedLast: w 70 ≠ 95",
+    "lgPressed: w 112 ≠ 147",
+    "lgUnpressed: w 108 ≠ 143"
   ],
   "approval@1440-dark": [
     "title: font.lineHeight 32 ≠ 28",
-    "searchLabel: font.size 15 ≠ 14",
-    "searchLabel: font.lineHeight 24 ≠ 20",
-    "searchText: font.lineHeight 24 ≠ 22",
-    "segmentActive: font.lineHeight 24 ≠ 22",
-    "segment: font.lineHeight 24 ≠ 22",
     "rowTitle: font.lineHeight 24 ≠ 22",
     "rowDescription: font.lineHeight 24 ≠ 22",
     "tag: font.size 15 ≠ 14",
-    "tag: font.lineHeight 24 ≠ 20"
+    "tag: font.lineHeight 24 ≠ 20",
+    "gap searchLabel→searchInput: 8 ≠ 4"
   ],
   "approval-detail@1440-dark": [
     "detailTitle: font.lineHeight 28 ≠ 25",
@@ -846,22 +767,17 @@
     "detailsBody: font.lineHeight 24 ≠ 22",
     "detailsCaption: font.size 15 ≠ 14",
     "detailsCaption: font.lineHeight 24 ≠ 20",
-    "notesLabel: font.size 15 ≠ 14",
-    "notesLabel: font.lineHeight 24 ≠ 20",
-    "notes: h 106 ≠ 100",
-    "notesText: font.lineHeight 24 ≠ 22",
-    "checkboxLabel: font.lineHeight 24 ≠ 22"
+    "checkboxLabel: font.lineHeight 24 ≠ 22",
+    "gap notesLabel→notes: 8 ≠ 4"
   ],
   "extras@1440-dark": [
     "title: font.lineHeight 32 ≠ 28",
-    "selectLabel: font.size 15 ≠ 14",
-    "selectLabel: font.lineHeight 24 ≠ 20",
-    "selectValue: font.lineHeight 24 ≠ 22",
-    "dateLabel: font.size 15 ≠ 14",
-    "dateLabel: font.lineHeight 24 ≠ 20",
     "headerCell: font.lineHeight 24 ≠ 22",
     "headerCell: h 56 ≠ 54",
-    "bodyCell: font.lineHeight 24 ≠ 22"
+    "bodyCell: font.lineHeight 24 ≠ 22",
+    "disabledCheckboxLabel: color rgba(255, 255, 255, 0.45) ≠ rgb(255, 255, 255)",
+    "disabledCheckboxLabel: opacity 1 ≠ 0.5",
+    "gap selectLabel→selectTrigger: 8 ≠ 4"
   ],
   "select-open@1440-dark": [
     "listbox: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
@@ -973,32 +889,30 @@
   ],
   "expansion-field@1440-dark": [
     "stack: h 168 ≠ 152",
-    "label: font.size 15 ≠ 14",
-    "label: font.lineHeight 24 ≠ 20",
-    "label: h 32 ≠ 28",
-    "helperText: font.size 15 ≠ 14",
-    "helperText: font.lineHeight 24 ≠ 20",
+    "label: h 24 ≠ 28",
+    "label: pad 0,0,0,0 ≠ 4,0,4,0",
     "helperText: h 72 ≠ 60",
-    "errorStack: h 120 ≠ 112",
-    "errorLabel: font.size 15 ≠ 14",
-    "errorLabel: font.lineHeight 24 ≠ 20",
-    "errorControl: border.color rgb(214, 8, 8) ≠ rgb(243, 9, 9)",
-    "errorText: font.size 15 ≠ 14",
-    "errorText: font.lineHeight 24 ≠ 20",
-    "errorText: color rgb(251, 153, 153) ≠ rgb(243, 9, 9)",
-    "errorText: h 24 ≠ 20",
-    "errorIcon: color rgb(251, 153, 153) ≠ rgb(243, 9, 9)"
+    "errorStack: h 144 ≠ 112",
+    "errorText: h 48 ≠ 20",
+    "errorIcon: h 24 ≠ 12",
+    "errorIcon: w 18 ≠ 16",
+    "errorIcon: pad 0,0,0,0 ≠ 0,4,0,0",
+    "gap label→control: 8 ≠ 4",
+    "gap control→helperText: 8 ≠ 4",
+    "gap errorLabel→errorControl: 8 ≠ 4",
+    "gap errorControl→errorText: 8 ≠ 4"
   ],
   "expansion-input-group@1440-dark": [
+    "startSlot: h 20 ≠ 16",
+    "startSlot: w 36 ≠ 48",
+    "startSlot: pad 0,0,0,16 ≠ 0,16,0,16",
+    "startIcon: h 20 ≠ 16",
+    "startIcon: w 20 ≠ 16",
     "startInput: h 56 ≠ 54",
-    "startInput: font.lineHeight 24 ≠ 22",
+    "startInput: pad 16,16,16,16 ≠ 16,16,16,4",
     "suffixInput: h 56 ≠ 54",
-    "suffixInput: font.lineHeight 24 ≠ 22",
-    "suffixText: w 45 ≠ 43",
-    "suffixText: font.size 15 ≠ 14",
-    "suffixText: font.lineHeight 24 ≠ 20",
-    "buttonInput: h 56 ≠ 54",
-    "buttonInput: font.lineHeight 24 ≠ 22"
+    "suffixText: w 49 ≠ 43",
+    "buttonInput: h 56 ≠ 54"
   ],
   "expansion-pagination@1440-dark": [
     "current: font.lineHeight 24 ≠ 22",
@@ -1013,12 +927,9 @@
   ],
   "expansion-radio-group@1440-dark": [
     "groupLabel: font.lineHeight 24 ≠ 22",
-    "checkedLabel: font.lineHeight 24 ≠ 22",
-    "uncheckedLabel: font.lineHeight 24 ≠ 22",
-    "disabledCheckedLabel: font.lineHeight 24 ≠ 22",
-    "disabledUncheckedLabel: font.lineHeight 24 ≠ 22",
-    "gap checkedRing→uncheckedRing: 20 ≠ 18",
-    "gap uncheckedRing→disabledCheckedRing: 108 ≠ 102"
+    "gap checkedRing→uncheckedRing: 16 ≠ 18",
+    "gap checkedRing→checkedDot: -20 ≠ -17",
+    "gap uncheckedRing→disabledCheckedRing: 104 ≠ 102"
   ],
   "expansion-separator@1440-dark": [
     "separatorHorizontal: bg rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
@@ -1065,16 +976,20 @@
     "sheetBody: h 72 ≠ 66"
   ],
   "expansion-switch@1440-dark": [
-    "offTrack: bg rgb(51, 51, 51) ≠ rgb(38, 38, 38)",
-    "offThumb: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
     "offLabel: font.lineHeight 24 ≠ 22",
-    "onThumb: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
     "onLabel: font.lineHeight 24 ≠ 22",
-    "disabledOffTrack: bg rgb(51, 51, 51) ≠ rgb(38, 38, 38)",
-    "disabledOffThumb: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
     "disabledOffLabel: font.lineHeight 24 ≠ 22",
-    "disabledOnThumb: border.color rgba(255, 255, 255, 0.18) ≠ rgba(255, 255, 255, 0.15)",
-    "disabledOnLabel: font.lineHeight 24 ≠ 22"
+    "disabledOffLabel: color rgba(255, 255, 255, 0.45) ≠ rgba(255, 255, 255, 0.65)",
+    "disabledOffLabel: opacity 1 ≠ 0.5",
+    "disabledOnLabel: font.lineHeight 24 ≠ 22",
+    "disabledOnLabel: color rgba(255, 255, 255, 0.45) ≠ rgb(255, 255, 255)",
+    "disabledOnLabel: opacity 1 ≠ 0.5",
+    "gap offThumb→offLabel: 35 ≠ 30",
+    "gap offTrack→offThumb: -21 ≠ -31",
+    "gap onTrack→onThumb: -21 ≠ -31",
+    "gap disabledOffThumb→disabledOffLabel: 35 ≠ 30",
+    "gap disabledOffTrack→disabledOffThumb: -21 ≠ -31",
+    "gap disabledOnTrack→disabledOnThumb: -21 ≠ -31"
   ],
   "expansion-tabs@1440-dark": [
     "tabList: h 58 ≠ 56",
@@ -1087,30 +1002,13 @@
     "panelText: font.lineHeight 24 ≠ 22"
   ],
   "expansion-toggle-group@1440-dark": [
-    "defaultPressed: h 40 ≠ 38",
-    "defaultPressed: font.lineHeight 24 ≠ 22",
-    "defaultUnpressed: h 40 ≠ 38",
-    "defaultUnpressed: font.lineHeight 24 ≠ 22",
-    "defaultPressedLast: h 40 ≠ 38",
-    "smPressed: h 36 ≠ 32",
-    "smPressed: w 114 ≠ 108",
-    "smPressed: radius 18 ≠ 16",
-    "smPressed: font.size 15 ≠ 14",
-    "smPressed: font.lineHeight 24 ≠ 20",
-    "smUnpressed: h 36 ≠ 32",
-    "smUnpressed: w 82 ≠ 79",
-    "smUnpressed: radius 18 ≠ 16",
-    "smUnpressed: font.size 15 ≠ 14",
-    "smUnpressed: font.lineHeight 24 ≠ 20",
-    "smUnpressedLast: h 36 ≠ 32",
-    "smUnpressedLast: w 100 ≠ 95",
-    "lgPressed: h 48 ≠ 46",
-    "lgPressed: font.lineHeight 24 ≠ 22",
-    "lgUnpressed: h 48 ≠ 46",
-    "lgUnpressed: font.lineHeight 24 ≠ 22",
-    "disabledPressed: h 40 ≠ 38",
-    "disabledUnpressed: h 40 ≠ 38",
-    "verticalPressed: h 40 ≠ 38",
-    "verticalUnpressed: h 40 ≠ 38"
+    "defaultPressed: w 34 ≠ 53",
+    "defaultUnpressed: w 60 ≠ 83",
+    "defaultPressedLast: w 42 ≠ 62",
+    "smPressed: w 81 ≠ 108",
+    "smUnpressed: w 54 ≠ 79",
+    "smUnpressedLast: w 70 ≠ 95",
+    "lgPressed: w 112 ≠ 147",
+    "lgUnpressed: w 108 ≠ 143"
   ]
 }

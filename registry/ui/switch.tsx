@@ -3,31 +3,30 @@ import { Switch as SwitchPrimitive } from "radix-ui"
 
 import { cn } from "@/lib/utils"
 
-// The CDS Switch: a 52x32 pill track with 1px of padding round a 30px thumb
-// that slides 20px when checked. The track takes bgPrimary when checked and
-// bgTertiary when not; PROVISIONAL (#194): light bgTertiary is the
-// page's white, so the off track shows only through the thumb's hairline.
-// The thumb is the onColor role (--primary-foreground) with a bgLine hairline.
-// Disabled fades to half with its label (peer-disabled), as CDS does. Radix
-// sets data-state, which radix-nova's data-checked: classes never match.
-// PROVISIONAL (#134): keyboard focus shows the Neon controls' 3px ring/50
-// ring, not CDS's 2px bgPrimary outline 1px out; the checkbox, input and
-// button share it, so it changes with them.
+// Core's Toggle (Style=Toggle only): a 48x24 pill track with 3px of padding round an 18px thumb
+// that slides 24px when on. The track is Miscellaneous/toggle-off, and Support/support-success
+// when on; the thumb is Icon/icon-on-color. Disabled takes Core's disabled tokens with no
+// opacity: the track Button/button-disabled, on or off, and the thumb icon-on-color-disabled; a
+// Label beside the switch follows it (peer-disabled). Core's web Toggle draws no Focus state and
+// has no invalid one: keyboard focus shows the Button's indicator, Focus/focus 2px wide and 2px
+// out, and aria-invalid the same outline in the invalid role. Radix sets data-state, which
+// radix-nova's data-checked: classes never match.
 function Switch({ className, ...props }: React.ComponentProps<typeof SwitchPrimitive.Root>) {
   return (
     <SwitchPrimitive.Root
       data-slot="switch"
       className={cn(
-        "peer inline-flex h-8 w-13 shrink-0 items-center rounded-full bg-(--color-bgTertiary) p-px transition-colors outline-none disabled:cursor-not-allowed disabled:opacity-50",
-        "focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:ring-[3px] aria-invalid:ring-destructive/20",
-        "data-[state=checked]:bg-primary",
+        "peer inline-flex h-6 w-12 shrink-0 items-center rounded-full bg-switch-off p-[3px] transition-[background-color,outline-color] data-[state=checked]:bg-switch-on",
+        "aria-invalid:outline-2 aria-invalid:outline-offset-2 aria-invalid:outline-invalid",
+        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring aria-invalid:focus-visible:outline-ring",
+        "disabled:cursor-not-allowed disabled:bg-button-disabled data-[state=checked]:disabled:bg-button-disabled disabled:aria-invalid:outline-0",
         className
       )}
       {...props}
     >
       <SwitchPrimitive.Thumb
         data-slot="switch-thumb"
-        className="pointer-events-none block size-7.5 rounded-full border-[0.5px] border-border bg-primary-foreground transition-transform data-[state=checked]:translate-x-5"
+        className="pointer-events-none block size-4.5 rounded-full bg-switch-thumb transition-transform data-[disabled]:bg-switch-thumb-disabled data-[state=checked]:translate-x-6"
       />
     </SwitchPrimitive.Root>
   )

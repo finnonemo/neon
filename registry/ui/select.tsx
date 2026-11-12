@@ -4,9 +4,14 @@ import { Select as SelectPrimitive } from "radix-ui"
 
 import { cn } from "@/lib/utils"
 
-// The CDS Select: a 56px field like Input, the value in body type (muted while
-// it shows the placeholder), and a listbox on the elevated fill with 16px
-// corners and 60px headline options. Picking an option closes it, as in Radix.
+// Core's Select at Large: Input's 56px field with the value in body type (the placeholder ink
+// while it shows the placeholder) and a chevron in Icon/icon-primary. Keyboard focus is Core's
+// Focus, 3px in Focus/focus inside the field; open is Core's Active, the page background in a
+// 3px Border/border-strong stroke with the chevron turned up (select.md: "Active means open,
+// Focus means focused and closed"; it also asks for the Focus ring outside the field, which is
+// a question for Core). Invalid and Disabled are Input's.
+// PROVISIONAL (#210): the listbox keeps the CDS look, the elevated fill with 16px corners and
+// 60px headline options, until the menu is retuned. Picking an option closes it, as in Radix.
 function Select(props: React.ComponentProps<typeof SelectPrimitive.Root>) {
   return <SelectPrimitive.Root data-slot="select" {...props} />
 }
@@ -24,8 +29,11 @@ function SelectTrigger({ className, children, ...props }: React.ComponentProps<t
     <SelectPrimitive.Trigger
       data-slot="select-trigger"
       className={cn(
-        "flex h-14 w-full min-w-0 items-center justify-between gap-2 rounded-md border border-input bg-background pr-3 pl-4 text-left text-body text-foreground transition-[border-color,box-shadow] outline-none select-none data-[placeholder]:text-muted-foreground disabled:pointer-events-none disabled:opacity-50",
-        "focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20",
+        "group/select-trigger flex h-14 w-full min-w-0 items-center justify-between gap-4 rounded-md bg-field px-4 text-left text-body text-foreground transition-[background-color,outline-color] select-none hover:bg-field-hover data-[placeholder]:text-placeholder",
+        "focus-visible:outline-3 focus-visible:-outline-offset-3 focus-visible:outline-ring",
+        "aria-invalid:bg-background aria-invalid:outline-3 aria-invalid:-outline-offset-3 aria-invalid:outline-invalid aria-invalid:hover:bg-background aria-invalid:focus-visible:outline-ring",
+        "data-[state=open]:bg-background data-[state=open]:outline-3 data-[state=open]:-outline-offset-3 data-[state=open]:outline-line-strong data-[state=open]:hover:bg-background data-[state=open]:aria-invalid:outline-line-strong",
+        "disabled:pointer-events-none disabled:bg-field-disabled disabled:text-disabled-foreground disabled:aria-invalid:bg-field-disabled disabled:aria-invalid:outline-0 disabled:data-[placeholder]:text-disabled-foreground",
         "*:data-[slot=select-value]:line-clamp-1 [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className
       )}
@@ -33,7 +41,7 @@ function SelectTrigger({ className, children, ...props }: React.ComponentProps<t
     >
       {children}
       <SelectPrimitive.Icon asChild>
-        <ChevronDownIcon className="size-5 text-muted-foreground" />
+        <ChevronDownIcon className="size-5 text-icon transition-transform group-disabled/select-trigger:text-icon-disabled group-data-[state=open]/select-trigger:rotate-180" />
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
   )

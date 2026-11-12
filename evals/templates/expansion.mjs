@@ -3,9 +3,10 @@
 //   screens  CDS-match entries in measure.mjs's shape. name defaults to
 //            'expansion-<item>' and query to 'layout=expansion'; give a second
 //            entry (an overlay's open state) its own name.
-//   a11y     optional: ({ test, expect, gotoExpansion, keyboardFocus }) => registers the item's
-//            Neon behavior checks; gotoExpansion(page) opens the screen and
-//            keyboardFocus(page, control) reports its keyboard focus indicator.
+//   a11y     optional: ({ test, expect, gotoExpansion, keyboardFocus, focusColor }) => registers
+//            the item's Neon behavior checks; gotoExpansion(page) opens the screen,
+//            keyboardFocus(page, control) reports its keyboard focus indicator and
+//            focusColor(page) is the color Core draws one in.
 // Its fixtures are fixtures/expansion/<item>.tsx (CDS) and
 // fixtures/neon/expansion/<item>.tsx (Neon). Adding an item adds files only.
 // Modules import nothing from here: this file imports them.
@@ -39,6 +40,17 @@ export async function keyboardFocus(page, control) {
   const after = await indicator();
   return { before: before.look, after: after.look, focusVisible: after.visible };
 }
+
+/** What a color expression computes to in the page, to compare with a drawn color. */
+export const computedColor = (page, value) => page.evaluate((color) => {
+  const probe = document.body.appendChild(Object.assign(document.createElement('span'), { style: `color: ${color}` }));
+  const result = getComputedStyle(probe).color;
+  probe.remove();
+  return result;
+}, value);
+
+/** Core's Focus/focus as the page computes it: the color of every retuned control's focus indicator. */
+export const focusColor = (page) => computedColor(page, 'var(--color-bgLinePrimary)');
 
 const dir = new URL('./expansion/', import.meta.url);
 

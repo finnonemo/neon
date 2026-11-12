@@ -10,7 +10,9 @@ import { Dialog, DialogBody, DialogClose, DialogContent, DialogDescription, Dial
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { SegmentedControl, SegmentedControlItem } from "@/components/ui/segmented-control"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { Hook } from "./Hook"
@@ -25,7 +27,7 @@ export function Extras() {
       <Hook name="title"><h1 className="text-title2">Extras</h1></Hook>
       <div className="flex flex-wrap items-end gap-4">
         <Hook name="select">
-          <div className="flex w-64 flex-col gap-1">
+          <div className="flex w-64 flex-col gap-2">
             <Label htmlFor="type">ประเภท / Type</Label>
             <Select value={type} onValueChange={setType}>
               <SelectTrigger id="type"><SelectValue placeholder="เลือกประเภท" /></SelectTrigger>
@@ -36,7 +38,7 @@ export function Extras() {
           </div>
         </Hook>
         <Hook name="date">
-          <div className="flex w-64 flex-col gap-1">
+          <div className="flex w-64 flex-col gap-2">
             <Label htmlFor="submitted">วันที่ส่ง / Submitted</Label>
             <DatePicker id="submitted" value={date} onChange={setDate} />
           </div>
@@ -52,7 +54,7 @@ export function Extras() {
       </div>
       <div className="flex flex-wrap items-center gap-4">
         <Hook name="disabled-field">
-          <div className="flex w-64 flex-col gap-1">
+          <div className="flex w-64 flex-col gap-2">
             <Label htmlFor="approver">ผู้อนุมัติ / Approver</Label>
             <Input id="approver" value="Kanya Srisuk" disabled readOnly />
           </div>
@@ -113,6 +115,72 @@ export function Extras() {
           </Dialog>
           <Button variant="secondary" onClick={() => toast("บันทึกแล้ว / Saved")}>บันทึก</Button>
           <Button disabled>ส่งต่อ</Button>
+        </div>
+      </Hook>
+      {/* Core's field states CDS has no baseline for. */}
+      <Hook name="core-fields">
+        <div className="flex flex-wrap items-start gap-4">
+          <div data-field="read-only" className="flex w-64 flex-col gap-2">
+            <Label htmlFor="account">เลขที่บัญชี / Account</Label>
+            <Input id="account" readOnly defaultValue="123-4-56789-0" />
+          </div>
+          <div data-field="invalid" className="flex w-64 flex-col gap-2">
+            <Label htmlFor="email">อีเมล / Email</Label>
+            <Input id="email" aria-invalid defaultValue="kanya@" />
+          </div>
+          <div data-field="placeholder" className="flex w-64 flex-col gap-2">
+            <Label htmlFor="branch">สาขา / Branch</Label>
+            <Input id="branch" placeholder="ชื่อสาขา" />
+          </div>
+          <div data-field="disabled" data-disabled="true" className="group flex w-64 flex-col gap-2">
+            <Label htmlFor="team">ทีม / Team</Label>
+            <Input id="team" disabled defaultValue="Operations" />
+          </div>
+          <div data-field="invalid-textarea" className="flex w-64 flex-col gap-2">
+            <Label htmlFor="reason">เหตุผล / Reason</Label>
+            <Textarea id="reason" aria-invalid defaultValue="สั้นเกินไป" />
+          </div>
+          <div data-field="disabled-textarea" data-disabled="true" className="group flex w-64 flex-col gap-2">
+            <Label htmlFor="remark">หมายเหตุ / Remark</Label>
+            <Textarea id="remark" disabled defaultValue="ปิดรับแล้ว" />
+          </div>
+          <div data-field="invalid-select" className="flex w-64 flex-col gap-2">
+            <Label htmlFor="channel">ช่องทาง / Channel</Label>
+            <Select defaultValue={types[0]}>
+              <SelectTrigger id="channel" aria-invalid><SelectValue /></SelectTrigger>
+              <SelectContent>{types.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent>
+            </Select>
+          </div>
+          <div data-field="disabled-select" data-disabled="true" className="group flex w-64 flex-col gap-2">
+            <Label htmlFor="region">ภูมิภาค / Region</Label>
+            <Select defaultValue={types[0]} disabled>
+              <SelectTrigger id="region"><SelectValue /></SelectTrigger>
+              <SelectContent>{types.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent>
+            </Select>
+          </div>
+        </div>
+      </Hook>
+      {/* Core's Segmented control Sizes, its Disabled control and its disabled segments, which CDS has no baseline for. */}
+      <Hook name="core-segments">
+        <div className="flex w-80 flex-col gap-4">
+          <SegmentedControl data-segments="sm" size="sm" defaultValue="week" aria-label="ช่วงเวลา / Period">
+            <SegmentedControlItem value="day">วัน</SegmentedControlItem>
+            <SegmentedControlItem value="week">สัปดาห์</SegmentedControlItem>
+            <SegmentedControlItem value="month">เดือน</SegmentedControlItem>
+          </SegmentedControl>
+          <SegmentedControl data-segments="lg" size="lg" defaultValue="list" aria-label="มุมมอง / View">
+            <SegmentedControlItem value="list">รายการ</SegmentedControlItem>
+            <SegmentedControlItem value="grid">ตาราง</SegmentedControlItem>
+          </SegmentedControl>
+          <SegmentedControl data-segments="disabled" disabled defaultValue="buy" aria-label="คำสั่ง / Order">
+            <SegmentedControlItem value="buy">ซื้อ</SegmentedControlItem>
+            <SegmentedControlItem value="sell">ขาย</SegmentedControlItem>
+          </SegmentedControl>
+          <SegmentedControl data-segments="one-disabled" defaultValue="buy" aria-label="ประเภทคำสั่ง / Order type">
+            <SegmentedControlItem value="buy" disabled>ซื้อ</SegmentedControlItem>
+            <SegmentedControlItem value="sell" disabled>ขาย</SegmentedControlItem>
+            <SegmentedControlItem value="switch">สับเปลี่ยน</SegmentedControlItem>
+          </SegmentedControl>
         </div>
       </Hook>
       {/* Core's Button values CDS has no baseline for; Inverse sits on the inverse background. */}

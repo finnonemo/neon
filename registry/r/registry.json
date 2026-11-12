@@ -577,9 +577,7 @@
       ],
       "registryDependencies": [
         "@neon/utils",
-        "@neon/button",
-        "@neon/input",
-        "@neon/textarea"
+        "@neon/button"
       ],
       "files": [
         {

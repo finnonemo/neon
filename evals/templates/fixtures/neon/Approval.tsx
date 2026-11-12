@@ -28,7 +28,7 @@ export function Approval() {
     <main className="flex flex-col gap-6 p-6">
       <Hook name="title"><h1 className="text-title2">คำขออนุมัติ</h1></Hook>
       <Hook name="search">
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-2">
           <Label htmlFor="search">ค้นหา / Search</Label>
           <Input id="search" placeholder="ชื่อผู้ขอ" value={query} onChange={(e) => setQuery(e.target.value)} />
         </div>
@@ -72,7 +72,7 @@ export function Approval() {
         </div>
       </Hook>
       <Hook name="notes">
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-2">
           <Label htmlFor="notes">บันทึก / Notes</Label>
           <Textarea id="notes" placeholder="เหตุผลประกอบการพิจารณา" />
         </div>

@@ -95,6 +95,34 @@
   --color-button-disabled-foreground: var(--button-disabled-foreground);
   --color-link: var(--link);
   --color-link-hover: var(--link-hover);
+  /* Core's Field, Border, Text and Icon tokens, for the field items (input, textarea, select,
+   * input-group, field, label): the field's fill at rest, pressed and disabled, the strokes a
+   * state draws inside it, and the inks shadcn has no slot for. radio-group, switch,
+   * segmented-control and toggle read the invalid, strong-line, icon and disabled inks too. */
+  --color-field: var(--field);
+  --color-field-hover: var(--field-hover);
+  --color-field-disabled: var(--field-disabled);
+  --color-line-strong: var(--line-strong);
+  --color-invalid: var(--color-bgLineNegative);
+  --color-placeholder: var(--placeholder);
+  --color-helper: var(--helper);
+  --color-icon: var(--icon);
+  --color-icon-disabled: var(--icon-disabled);
+  --color-disabled-foreground: var(--disabled-foreground);
+  /* Core's Toggle tokens, for the switch item. Its Disabled track is button-disabled. */
+  --color-switch-off: var(--switch-off);
+  --color-switch-on: var(--switch-on);
+  --color-switch-thumb: var(--switch-thumb);
+  --color-switch-thumb-disabled: var(--switch-thumb-disabled);
+  /* Core's Layer tokens over a surface at Hover and Active, for a segment not chosen. */
+  --color-layer-hover: var(--layer-hover);
+  --color-layer-active: var(--layer-active);
+  /* Core's Selection tag in Secondary Navy, for the toggle and toggle-group items. */
+  --color-selection-tag: var(--selection-tag);
+  --color-selection-tag-hover: var(--selection-tag-hover);
+  --color-selection-tag-disabled: var(--selection-tag-disabled);
+  --color-selection-tag-foreground: var(--selection-tag-foreground);
+  --color-selection-tag-border: var(--selection-tag-border);
   /* Core's button label below Large: Subheadline and Footnote in Medium (500), a weight no type
    * role holds at those sizes. For the button item; lib/utils.ts lists them in cn's font-size group. */
   --text-button-md: var(--fontSize-label1); --text-button-md--line-height: var(--lineHeight-label1); --text-button-md--font-weight: 500;
@@ -117,9 +145,9 @@
   --muted-foreground: var(--color-fgMuted);
   --accent: var(--color-bgAlternate);
   --accent-foreground: var(--color-fg);
-  /* A Neon slot shadcn lacks: the Tooltip, the checked SegmentedControl item
-   * and the pressed Toggle fill in the text color, so the Immersive Themes
-   * adapter can remap it as it does the shadcn slots. */
+  /* A Neon slot shadcn lacks: the Tooltip and the Sheet's handle fill in the
+   * text color, so the Immersive Themes adapter can remap it as it does the
+   * shadcn slots. */
   --inverse: var(--color-bgInverse);
   --inverse-foreground: var(--color-fgInverse);
   --destructive: var(--color-bgNegative);
@@ -156,12 +184,38 @@
   --button-disabled-foreground: var(--color-fgDisabled);
   --link: var(--color-fgLink);
   --link-hover: var(--color-fgLinkHover);
+  /* The field items' colors, from Core's Field, Border, Text and Icon tokens. A field is filled
+   * and has no stroke at rest; Disabled takes Core's disabled tokens and no opacity. Slots, so an
+   * Immersive Theme restates them. */
+  --field: var(--color-bgField);
+  --field-hover: var(--color-bgFieldHover);
+  --field-disabled: var(--color-bgFieldDisabled);
+  --line-strong: var(--color-bgLineStrong);
+  --placeholder: var(--color-fgPlaceholder);
+  --helper: var(--color-fgHelper);
+  --icon: var(--color-fgIcon);
+  --icon-disabled: var(--color-fgIconDisabled);
+  --disabled-foreground: var(--color-fgDisabled);
+  /* The switch, from Core's Toggle: grey off, Support/support-success on, a white thumb. */
+  --switch-off: var(--color-bgToggleOff);
+  --switch-on: var(--color-bgPositive);
+  --switch-thumb: var(--color-fgIconOnColor);
+  --switch-thumb-disabled: var(--color-fgIconOnColorDisabled);
+  /* A segment not chosen, at Hover and Active: Core's layer-hover-01 and layer-active-01. */
+  --layer-hover: var(--color-bgElevation1Hover);
+  --layer-active: var(--color-bgElevation1Active);
+  /* The toggle, from Core's Selection tag in Secondary Navy. Its Selected ring is the tag's ink
+   * and its Disabled ring the Disabled fill, as Core's Tag tokens alias them. */
+  --selection-tag: var(--color-bgTagNeutral);
+  --selection-tag-hover: var(--color-bgTagNeutralHover);
+  --selection-tag-disabled: var(--color-bgTagNeutralDisabled);
+  --selection-tag-foreground: var(--color-fgTagNeutral);
+  --selection-tag-border: var(--color-bgLineTagNeutral);
   /* Disabled fills (spike trap 4), as CDS draws them: it blends a filled
    * control's color into the page background at 75%, raised for colors far
    * from the background in luminance (getBlendedColor), under 50% opacity.
-   * The toggle, not yet retuned to Core, reads --secondary-disabled. No
-   * registry item reads --destructive-disabled since the Button took Core's
-   * Disabled; it stays for apps that use it. */
+   * No registry item reads either since the Button and the toggle took Core's
+   * Disabled; they stay for apps that use them. */
   --secondary-disabled: color-mix(in srgb, var(--secondary) 75%, var(--background));
   --destructive-disabled: color-mix(in srgb, var(--destructive) 92%, var(--background));
   /* CDS Tray is bordered (1px bgLine) in dark only, so a sheet's border

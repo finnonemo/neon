@@ -1,24 +1,33 @@
-// field → the CDS input stack (TextInput's InputStack): label, field and helper
-// 4px apart, and the error state's red border, red helper and info icon.
-// The stack's own height shows the label's 4px padding and the Thai helper's
-// line count (both targets use IBM Plex Sans Thai at 256px).
+// field → Core's Text field: the Title, the Field and the Detail line 8px apart, and the Error
+// state's stroke, red message and circle-exclamation. The CDS side is its input stack
+// (TextInput's InputStack), which keeps what Core's table does not give: box sizes and gaps.
+// The stack's own height shows the Thai helper's line count (both targets use IBM Plex Sans
+// Thai at 256px).
+import { fieldCell } from '../core/text-field.mjs';
+
 const helper = '[data-measure=field-helper]';
 const error = '[data-measure=field-error]';
 const box = ['h', 'radius', 'border', 'bg'];
 const text = ['font', 'color', 'h'];
+const empty = { filled: 'False' };
+const invalid = { State: 'Error' };
 
 export const screens = [
   {
     targets: {
       stack: { cds: `${helper} > div`, neon: `${helper} [data-slot=field]`, check: ['h', 'w'] },
-      label: { cds: `${helper} [data-testid=field-helper-label]`, neon: `${helper} [data-slot=field-label]`, check: [...text, 'pad'] },
-      control: { cds: `${helper} [data-testid=input-interactable-area]`, neon: `${helper} input`, check: box },
-      helperText: { cds: `${helper} [data-testid=field-helper-text]`, neon: `${helper} [data-slot=field-description]`, check: text },
+      label: { cds: `${helper} [data-testid=field-helper-label]`, neon: `${helper} [data-slot=field-label]`, check: [...text, 'pad'], core: fieldCell('field', 'title', empty) },
+      control: { cds: `${helper} [data-testid=input-interactable-area]`, neon: `${helper} input`, check: box, core: fieldCell('input', 'field', empty) },
+      helperText: { cds: `${helper} [data-testid=field-helper-text]`, neon: `${helper} [data-slot=field-description]`, check: text, core: fieldCell('field', 'helper', empty) },
       errorStack: { cds: `${error} > div`, neon: `${error} [data-slot=field]`, check: ['h'] },
-      errorLabel: { cds: `${error} [data-testid=field-error-label]`, neon: `${error} [data-slot=field-label]`, check: ['font', 'color'] },
-      errorControl: { cds: `${error} [data-testid=input-interactable-area]`, neon: `${error} input`, check: box },
-      errorText: { cds: `${error} [data-testid=field-error-text]`, neon: `${error} [data-slot=field-error]`, check: text },
-      errorIcon: { cds: `${error} [data-testid=field-error-text] > span`, neon: `${error} [data-slot=field-error-icon]`, check: ['h', 'w', 'pad', 'color'] },
+      errorLabel: { cds: `${error} [data-testid=field-error-label]`, neon: `${error} [data-slot=field-label]`, check: ['font', 'color'], core: fieldCell('field', 'title', invalid) },
+      errorControl: { cds: `${error} [data-testid=input-interactable-area]`, neon: `${error} input`, check: box, core: fieldCell('input', 'field', invalid) },
+      errorText: { cds: `${error} [data-testid=field-error-text]`, neon: `${error} [data-slot=field-error]`, check: text, core: fieldCell('field', 'error', invalid) },
+      errorIcon: { cds: `${error} [data-testid=field-error-text] > span`, neon: `${error} [data-slot=field-error-icon]`, check: ['h', 'w', 'pad', 'color'], core: fieldCell('field', 'errorIcon', invalid) },
+      // Core's Disabled, which CDS has no baseline for: the Title and helper take Text/text-disabled.
+      disabledLabel: { neon: '[data-measure=field-disabled] [data-slot=field-label]', check: ['font', 'color', 'opacity'], core: fieldCell('field', 'title', { State: 'Disabled' }) },
+      disabledControl: { neon: '[data-measure=field-disabled] input', check: [...box, 'opacity'], core: fieldCell('input', 'field', { State: 'Disabled' }) },
+      disabledHelper: { neon: '[data-measure=field-disabled] [data-slot=field-description]', check: ['font', 'color'], core: fieldCell('field', 'helper', { State: 'Disabled' }) },
     },
     gaps: [
       ['label', 'control', 'y'],
@@ -32,7 +41,17 @@ export const screens = [
 // The item, not the fixture, ties the label, the helper and the error to the
 // control: the error state is invalid and announced, an input group's input
 // is described too, and long Thai helper text wraps inside the field.
-export function a11y({ test, expect, gotoExpansion }) {
+export function a11y({ test, expect, gotoExpansion, keyboardFocus, focusColor }) {
+  test('a field reached from the keyboard draws the Focus stroke, over an error too', async ({ page }) => {
+    await gotoExpansion(page);
+    const email = page.locator(error).getByRole('textbox', { name: 'อีเมล / Email' });
+    const focus = await keyboardFocus(page, email);
+    expect(focus.focusVisible).toBe(true);
+    expect(focus.before, 'the error stroke at rest').toMatch(/^outline 3px .+ -3px$/);
+    expect(focus.after).toBe(`outline 3px ${await focusColor(page)} -3px`);
+    expect(focus.after).not.toBe(focus.before);
+  });
+
   test('a field labels its control and describes it with the helper, and an error is invalid and announced', async ({ page }) => {
     await gotoExpansion(page);
     const helperField = page.locator(helper);

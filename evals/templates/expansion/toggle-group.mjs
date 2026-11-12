@@ -1,27 +1,43 @@
-// toggle-group → CDS's grouped toggle buttons (a ButtonGroup of Buttons; CDS
-// 9.26.1 has no toggle button). Each size's pressed and unpressed items (box,
-// padding, type and fill), the 8px between items, a disabled group's fade and
-// a vertical group's full-width items. toggle, a Supporting item, is measured
-// here through toggle-group's items and has no screen of its own.
+// toggle-group → Core's Selection tag in Secondary Navy. Each size's pressed and unpressed items
+// (box, padding, type, fill and the ring inside, which alone tells pressed from not), the 8px
+// between items, a disabled group's tokens and a vertical group's full-width items. toggle, a
+// Supporting item, is measured here through toggle-group's items and has no screen of its own.
+// The CDS selectors (a ButtonGroup of Buttons) stay for the CDS target and for the widths and
+// gaps, which Core's Selection tag does not give.
+import { selectionTagCell } from '../core/selection-tag.mjs';
+
 const at = (hook) => `[data-measure=toggle-group-${hook}]`;
-const item = (hook, n, check) => ({ cds: `${at(hook)} li:nth-child(${n}) > button`, neon: `${at(hook)} [data-slot=toggle-group-item]:nth-child(${n})`, check });
+const neon = (hook, n) => `${at(hook)} [data-slot=toggle-group-item]:nth-child(${n})`;
+const item = (hook, n, check, cell) => ({ cds: `${at(hook)} li:nth-child(${n}) > button`, neon: neon(hook, n), check, core: selectionTagCell(cell) });
+// CDS's buttons have no ring, so the baseline holds none: the ring is held to Core alone.
+const ring = (hook, n, cell) => ({ neon: neon(hook, n), check: ['border'], core: selectionTagCell(cell) });
 const look = ['h', 'w', 'pad', 'radius', 'font', 'color', 'bg'];
+const pressed = (cell) => ({ ...cell, Selected: 'True' });
+const [sm, lg, off] = [{ Size: 'Small' }, { Size: 'Large' }, { State: 'Disabled' }];
 
 export const screens = [
   {
     targets: {
-      defaultPressed: item('default', 1, look),
-      defaultUnpressed: item('default', 2, look),
-      defaultPressedLast: item('default', 3, ['h', 'w', 'bg']),
-      smPressed: item('sm', 2, look),
-      smUnpressed: item('sm', 1, look),
-      smUnpressedLast: item('sm', 3, ['h', 'w']),
-      lgPressed: item('lg', 1, look),
-      lgUnpressed: item('lg', 2, look),
-      disabledPressed: item('disabled', 1, ['h', 'color', 'bg', 'opacity']),
-      disabledUnpressed: item('disabled', 2, ['h', 'color', 'bg', 'opacity']),
-      verticalPressed: item('vertical', 1, ['h', 'w', 'bg']),
-      verticalUnpressed: item('vertical', 2, ['h', 'w', 'bg']),
+      defaultPressed: item('default', 1, look, pressed({})),
+      defaultUnpressed: item('default', 2, look, {}),
+      defaultPressedLast: item('default', 3, ['h', 'w', 'bg'], pressed({})),
+      defaultPressedRing: ring('default', 1, pressed({})),
+      defaultUnpressedRing: ring('default', 2, {}),
+      smPressed: item('sm', 2, look, pressed(sm)),
+      smUnpressed: item('sm', 1, look, sm),
+      smUnpressedLast: item('sm', 3, ['h', 'w'], sm),
+      smPressedRing: ring('sm', 2, pressed(sm)),
+      smUnpressedRing: ring('sm', 1, sm),
+      lgPressed: item('lg', 1, look, pressed(lg)),
+      lgUnpressed: item('lg', 2, look, lg),
+      lgPressedRing: ring('lg', 1, pressed(lg)),
+      lgUnpressedRing: ring('lg', 2, lg),
+      disabledPressed: item('disabled', 1, ['h', 'color', 'bg', 'opacity'], pressed(off)),
+      disabledUnpressed: item('disabled', 2, ['h', 'color', 'bg', 'opacity'], off),
+      disabledPressedRing: ring('disabled', 1, pressed(off)),
+      disabledUnpressedRing: ring('disabled', 2, off),
+      verticalPressed: item('vertical', 1, ['h', 'w', 'bg'], pressed({})),
+      verticalUnpressed: item('vertical', 2, ['h', 'w', 'bg'], {}),
     },
     gaps: [
       ['defaultPressed', 'defaultUnpressed', 'x'],
@@ -38,8 +54,8 @@ export const screens = [
 // Radix's keyboard model: one Tab stop per group, which lands on its first
 // pressed item; arrows move focus without pressing, Space and Enter press. Single mode is a radio group, so pressing
 // one item releases the other; multiple mode is a toolbar of aria-pressed
-// buttons, each pressed on its own. PROVISIONAL (#134): the focus ring is
-// Neon's, so it is checked for being shown rather than measured.
+// buttons, each pressed on its own. Core's Selection tag has no Focus state: keyboard focus
+// draws Focus/focus 2px wide round the tag, outside its ring.
 export function a11y({ test, expect, gotoExpansion, keyboardFocus }) {
   test('a toggle reached from the keyboard shows a focus indicator', async ({ page }) => {
     await gotoExpansion(page);
@@ -49,6 +65,9 @@ export function a11y({ test, expect, gotoExpansion, keyboardFocus }) {
     expect(focus.focusVisible).toBe(true);
     expect(focus.after, 'the focused toggle draws an indicator').not.toBe('');
     expect(focus.after, 'the focused toggle looks different').not.toBe(focus.before);
+    // The ring inside still tells pressed from not: 2px in the tag's ink.
+    await expect(stock).toHaveCSS('outline-width', '2px');
+    await expect(stock).toHaveCSS('outline-offset', '-2px');
   });
 
   test('single mode: arrows move focus, Space and Enter choose one item and release the other', async ({ page }) => {
