@@ -14,18 +14,26 @@
  * PROVISIONAL: fgPrimary, bgPrimaryWash, bgSecondaryWash, bgLineHeavy,
  * bgLinePrimarySubtle and the subtle accents.
  *
- * EVERYTHING ELSE (typography, space, radius) is hand-captured, not
- * generated: the byte-exact output of @coinbase/cds-web@9.26.1's own
- * `createThemeCssVars()` against `createNeonTheme()`. Recapture it by hand
- * when ${CLAUDE_PLUGIN_ROOT}/theme/cds/theme.config.ts's `neonTheme`
- * changes.
+ * TYPE SIZES AND LINE HEIGHTS come from Core's text styles (ADR 0009).
+ * Each type role takes the Core text style that
+ * ${CLAUDE_PLUGIN_ROOT}/theme/css/core-type-roles.json names for it, and
+ * the Core sync writes its --fontSize-* and --lineHeight-* from the Core
+ * snapshot (${CLAUDE_PLUGIN_ROOT}/core/text-styles.json), in px. The
+ * line heights fit Thai's stacked marks. Do not edit one here: the
+ * repository check refuses a value that differs from the snapshot.
+ *
+ * EVERYTHING ELSE (font family and weight, space, radius) is
+ * hand-captured, not generated: the byte-exact output of
+ * @coinbase/cds-web@9.26.1's own `createThemeCssVars()` against
+ * `createNeonTheme()`.
  *
  * NAMES match what CDS's ThemeProvider emits at runtime
  * (`--{category}-{key}`, e.g. `--color-fg`, `--space-2`,
  * `--borderRadius-200`, `--fontFamily-body`), so an app already on CDS
- * keeps its `var(--color-fg)` references. The colors are no longer CDS's:
- * the frozen CDS theme (${CLAUDE_PLUGIN_ROOT}/theme/cds/) keeps the
- * values it had, and this file follows Core.
+ * keeps its `var(--color-fg)` references. The colors, type sizes and line
+ * heights are no longer CDS's: the frozen CDS theme
+ * (${CLAUDE_PLUGIN_ROOT}/theme/cds/) keeps the values it had, and this
+ * file follows Core.
  *
  * SCOPE: only color, typography (fontFamily/fontSize/fontWeight/
  * lineHeight), space, and borderRadius are included — the fields Finnomena
@@ -133,13 +141,13 @@
   --fontSize-title1: 28px;
   --fontSize-title2: 22px;
   --fontSize-title3: 20px;
-  --fontSize-title4: 1.25rem;
+  --fontSize-title4: 20px;
   --fontSize-headline: 17px;
   --fontSize-body: 17px;
-  --fontSize-label1: 0.875rem;
-  --fontSize-label2: 0.875rem;
-  --fontSize-caption: 0.8125rem;
-  --fontSize-legal: 0.8125rem;
+  --fontSize-label1: 15px;
+  --fontSize-label2: 15px;
+  --fontSize-caption: 13px;
+  --fontSize-legal: 13px;
 
   --fontWeight-display1: 400;
   --fontWeight-display2: 400;
@@ -158,16 +166,16 @@
   --lineHeight-display1: 102px;
   --lineHeight-display2: 70px;
   --lineHeight-display3: 64px;
-  --lineHeight-title1: 34px;
-  --lineHeight-title2: 28px;
-  --lineHeight-title3: 25px;
-  --lineHeight-title4: 1.75rem;
-  --lineHeight-headline: 22px;
-  --lineHeight-body: 22px;
-  --lineHeight-label1: 1.25rem;
-  --lineHeight-label2: 1.25rem;
-  --lineHeight-caption: 1rem;
-  --lineHeight-legal: 1rem;
+  --lineHeight-title1: 40px;
+  --lineHeight-title2: 32px;
+  --lineHeight-title3: 28px;
+  --lineHeight-title4: 28px;
+  --lineHeight-headline: 24px;
+  --lineHeight-body: 24px;
+  --lineHeight-label1: 24px;
+  --lineHeight-label2: 24px;
+  --lineHeight-caption: 20px;
+  --lineHeight-legal: 20px;
 
   /* --- Spacing (mode-independent) --- */
   --space-0: 0px;

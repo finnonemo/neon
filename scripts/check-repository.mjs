@@ -10,6 +10,7 @@ import { checkAdrNumbers } from './lib/adr-numbers.mjs';
 import { checkMarkdownEncoding, checkSkillMetadata, checkStepReads } from './lib/skill-files.mjs';
 import { checkCoreSnapshot, SNAPSHOT_DIR } from './lib/core-snapshot.mjs';
 import { checkCoreTheme } from './lib/core-theme.mjs';
+import { checkCoreType } from './lib/core-type.mjs';
 import { registryComponents } from './lib/registry.mjs';
 
 const sourceRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -43,6 +44,7 @@ async function check(root, { sourceTree = false } = {}) {
   // The registry does not ship, so only the source tree can say which items the index must cover.
   await checkCoreSnapshot(join(root, SNAPSHOT_DIR), sourceTree ? { items: (await registryComponents(root)).map(item => item.name) } : {});
   await checkCoreTheme(root);
+  await checkCoreType(root);
   const files = [...await markdownFiles(join(root, 'skills')), ...await markdownFiles(join(root, SNAPSHOT_DIR))];
   if (sourceTree) files.push(join(root, 'README.md'));
   for (const file of files) {

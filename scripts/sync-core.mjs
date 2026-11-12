@@ -6,12 +6,14 @@
 // registry/core-counterparts.json. The snapshot is never edited by hand: the
 // repository check compares each file with the hash the sync recorded.
 // The same run writes what follows the snapshot's Theme: the Theme token export
-// and the CSS adapter's colors (scripts/lib/core-theme.mjs).
+// and the CSS adapter's colors (scripts/lib/core-theme.mjs); and what follows its
+// text styles: the adapter's type sizes and line heights (scripts/lib/core-type.mjs).
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
 import { syncCore, SNAPSHOT_DIR, COUNTERPARTS_FILE } from './lib/core-snapshot.mjs';
 import { writeCoreTheme, THEME_EXPORT, ADAPTER } from './lib/core-theme.mjs';
+import { writeCoreType } from './lib/core-type.mjs';
 import { registryComponents } from './lib/registry.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
@@ -32,7 +34,8 @@ try {
   const byStatus = Object.groupBy(Object.keys(leftOut), name => leftOut[name]);
   for (const [status, names] of Object.entries(byStatus)) console.log(`Left out, ${status}: ${names.join(', ')}.`);
   await writeCoreTheme(root);
-  console.log(`Wrote ${THEME_EXPORT} and the colors of ${ADAPTER} from the snapshot's Theme. Rebuild the registry: node scripts/build-registry.mjs`);
+  await writeCoreType(root);
+  console.log(`Wrote ${THEME_EXPORT} and the colors of ${ADAPTER} from the snapshot's Theme, and its type sizes and line heights from the snapshot's text styles. Rebuild the registry: node scripts/build-registry.mjs`);
 } catch (error) {
   console.error(error.message);
   process.exit(1);
