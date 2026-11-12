@@ -93,7 +93,9 @@ for (const [theme, scheme] of Object.entries(SCHEMES)) {
 
 // Text on the fills a themed page paints (white on white on Ultra before the adapter mapped them). Expected colors come from
 // immersive.css's mapping: palette 75 under the theme's text, and the action pair for inverse fills.
-const luminance = rgbText => rgbText.match(/[\d.]+/g).slice(0, 3).map(v => v / 255)
+// Computed colors come as rgb(0-255) or, for a color-mix(), color(srgb 0-1).
+const channels = text => { const values = text.match(/[\d.]+/g).slice(0, 3).map(Number); return text.startsWith('color(') ? values : values.map(v => v / 255); };
+const luminance = colorText => channels(colorText)
   .map(v => v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4)
   .reduce((sum, v, i) => sum + v * [0.2126, 0.7152, 0.0722][i], 0);
 const ratio = (a, b) => { const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x); return (hi + 0.05) / (lo + 0.05); };
@@ -111,12 +113,12 @@ for (const theme of Object.keys(SCHEMES)) {
       return { background: style.backgroundColor, color: style.color };
     });
     const checks = [
-      ['secondary button', page.getByRole('button', { name: 'Secondary action' }), expected.fill, expected.text],
-      ['unpressed toggle', page.getByRole('button', { name: 'Unpressed toggle' }), expected.fill, expected.text],
-      ['pressed toggle', page.getByRole('button', { name: 'Pressed toggle' }), expected.pressed, expected.onAction],
-      ['neutral tag', page.getByText('Neutral tag'), expected.fill, expected.text],
+      ['secondary button', page.getByRole('button', { name: 'Secondary action', exact: true }), expected.fill, expected.text],
+      ['unpressed toggle', page.getByRole('button', { name: 'Unpressed toggle', exact: true }), expected.fill, expected.text],
+      ['pressed toggle', page.getByRole('button', { name: 'Pressed toggle', exact: true }), expected.pressed, expected.onAction],
+      ['neutral tag', page.getByText('Neutral tag', { exact: true }), expected.fill, expected.text],
       ['segmented track', page.getByRole('radiogroup', { name: 'Period' }), expected.fill, expected.text],
-      ['checked segment', page.getByRole('radio', { name: 'Month' }), expected.action, expected.onAction],
+      ['checked segment', page.getByRole('radio', { name: 'Month', exact: true }), expected.action, expected.onAction],
     ];
     for (const [name, locator, background, color] of checks) {
       expect(await colors(locator), name).toEqual({ background, color });
@@ -124,7 +126,7 @@ for (const theme of Object.keys(SCHEMES)) {
     }
     // Hover fills are the accent slot; the text stays the theme's.
     for (const name of ['Outline action', 'Ghost action', 'Secondary action']) {
-      const button = page.getByRole('button', { name });
+      const button = page.getByRole('button', { name, exact: true });
       await button.hover();
       await expect.poll(() => colors(button), { message: `${name} hover` }).toEqual({ background: expected.fill, color: expected.text });
     }

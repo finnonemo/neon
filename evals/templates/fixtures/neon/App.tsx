@@ -2,7 +2,7 @@
 // built from the Neon registry, so layouts.spec.mjs runs on both and
 // cds-match.spec.mjs and layout-match.spec.mjs measure one against the other.
 // The integration, on-color and spectrum routes exercise CDS only.
-import { useState } from "react"
+import { useState, type ReactNode } from "react"
 import { House, UserRound, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { SegmentedControl, SegmentedControlItem } from "@/components/ui/segmented-control"
@@ -51,22 +51,26 @@ function Details({ selected }: { selected: number | null }) {
 }
 
 // ?controls on the immersive route only (immersive-themes.spec.mjs): the fills a themed
-// page must take from its theme, and a sticky bar that must pin to the viewport.
-function ThemedControls() {
-  return <div className="flex flex-col gap-4 p-4">
-    <div data-sticky-probe className="sticky top-0 z-10 bg-background py-2">Pinned section</div>
-    <div className="flex flex-wrap gap-2">
-      <Button variant="secondary">Secondary action</Button>
-      <Button variant="outline">Outline action</Button>
-      <Button variant="ghost">Ghost action</Button>
-      <Toggle defaultPressed>Pressed toggle</Toggle>
-      <Toggle>Unpressed toggle</Toggle>
-      <Tag>Neutral tag</Tag>
+// page must take from its theme, and a sticky bar that must pin to the viewport while
+// the page beneath it (its parent's content) scrolls past.
+function ThemedControls({ children }: { children: ReactNode }) {
+  return <div>
+    <div data-sticky-probe className="sticky top-0 z-10 bg-background p-4">Pinned section</div>
+    <div className="flex flex-col gap-4 p-4">
+      <div className="flex flex-wrap gap-2">
+        <Button variant="secondary">Secondary action</Button>
+        <Button variant="outline">Outline action</Button>
+        <Button variant="ghost">Ghost action</Button>
+        <Toggle defaultPressed>Pressed toggle</Toggle>
+        <Toggle>Unpressed toggle</Toggle>
+        <Tag>Neutral tag</Tag>
+      </div>
+      <SegmentedControl defaultValue="month" aria-label="Period">
+        <SegmentedControlItem value="week">Week</SegmentedControlItem>
+        <SegmentedControlItem value="month">Month</SegmentedControlItem>
+      </SegmentedControl>
     </div>
-    <SegmentedControl defaultValue="month" aria-label="Period">
-      <SegmentedControlItem value="week">Week</SegmentedControlItem>
-      <SegmentedControlItem value="month">Month</SegmentedControlItem>
-    </SegmentedControl>
+    {children}
   </div>
 }
 
@@ -90,5 +94,5 @@ export function App() {
     : layout === "content" ? <ContentLayout {...props} />
     : layout === "simple" ? <SimpleLayout {...props} />
     : layout === "board" ? <MultiColumnLayout {...props} columns={[content, <div key="next">Next column</div>, <div key="done">Completed column</div>]} />
-    : <ImmersiveLayout {...props} content={params.has("controls") ? <><ThemedControls />{content}</> : content} immersiveTheme={(params.get("theme") ?? undefined) as ImmersiveTheme | undefined} />
+    : <ImmersiveLayout {...props} content={params.has("controls") ? <ThemedControls>{content}</ThemedControls> : content} immersiveTheme={(params.get("theme") ?? undefined) as ImmersiveTheme | undefined} />
 }
