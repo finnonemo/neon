@@ -40,7 +40,8 @@ type PaginationLinkProps = {
   React.ComponentProps<"a">
 
 // CDS sizes a page button by its number: one digit is a 40px circle, more is a
-// pill padded 16px by 8px (38px tall). Headline type, from the Button.
+// pill padded 16px by 8px (40px tall at Core's headline line height, 38px in
+// CDS). Headline type, from the Button.
 function PaginationLink({ className, isActive, disabled, size = "icon", href, onClick, children, ...props }: PaginationLinkProps) {
   const number = typeof children === "string" || typeof children === "number" ? String(children) : null
   return (

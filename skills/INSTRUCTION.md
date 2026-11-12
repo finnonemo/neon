@@ -6,7 +6,7 @@ This is the shared visual direction for Neon feature building, based on the main
 
 - **User brief:** product behavior, audience, content, scope, and explicit exceptions.
 - **This contract:** Finnomena visual language and semantic color usage.
-- **theme/tokens/:** exported foundation values. **theme/cds/color-overrides.ts:** provisional mapping to CDS roles; **theme/cds/theme.config.ts:** generated spacing, radius and typography. **theme/css/theme.css:** CSS adapter, which the Neon base's theme item maps to shadcn slots and type-role utilities. Its colors come from Core's Theme tokens; a color role with no Core token stays provisional. **theme/immersive-themes.json:** provisional Immersive Themes, generated into theme/css/immersive-themes.css.
+- **theme/tokens/:** exported foundation values. **theme/cds/color-overrides.ts:** provisional mapping to CDS roles; **theme/cds/theme.config.ts:** generated spacing, radius and typography. **theme/css/theme.css:** CSS adapter, which the Neon base's theme item maps to shadcn slots and type-role utilities. Its colors come from Core's Theme tokens; a color role with no Core token stays provisional. Its type sizes and line heights come from Core's text styles (see [Typography](#typography-geometry-and-assets)). **theme/immersive-themes.json:** provisional Immersive Themes, generated into theme/css/immersive-themes.css.
 - **Installed component sources and types** (Neon items on the Neon base, `@coinbase/cds-web` on CDS) **and official docs:** actual components, props and theme extension APIs.
 
 For functional layouts, the style means restrained, task-led composition and strong hierarchy. Immersive layouts may be colorful and expressive. It is a design direction, not a measurable 99% match or a dependency requirement. For React feature work, build on the Neon base with Neon registry items; an app already on CDS keeps CDS, which is frozen there, and one app never mixes the two. CSS-only work preserves its framework and styling tier; review-only work does not install components. Do not install a third-party design system, copy third-party assets, or replace Finnomena fonts with a third-party typeface.
@@ -78,6 +78,24 @@ For existing screens, apply these decisions only within authorized composition c
 ## Typography, geometry and assets
 
 Use IBM Plex Sans Thai via the app's font loader, with both Thai and Latin verified. Use Neon's type roles (`text-title1`, `text-body`, `text-label1` and the rest on the Neon base; the generated CDS typography roles on CDS) and shipped spacing/radius tokens. Structural widths and responsive geometry may use documented layout dimensions; do not prohibit every numeric CSS value. Preserve geometry during colors-only work.
+
+On the Neon base and in the CSS adapter, each type role takes the size and line height of one Core text style; its numbers are in `<Neon root>/core/text-styles.json`. From `title1` down the line heights follow Core's Thai rule, 1.4 × the size rounded up to a multiple of 4, which Core worked out for Finnomena Trek. In IBM Plex Sans Thai that clears most wrapped Thai and not the worst stack: measured in Chromium, a deep vowel directly above a stacked tone mark overlaps by up to 2px from `title1` to `body`, and one wrapped sample touched by 1px at `headline` and `body`. So do not tighten a role's line height. `display1` to `display3` take Core's Display styles, whose line heights are tighter (1.1 to 1.2 × the size): wrapped Thai collides there wherever a vowel below one line meets a mark above the next, so look at a wrapped Thai display heading in the browser and loosen only one that collides. Family and weight stay Neon's: IBM Plex Sans Thai at the role's own weight. The frozen CDS typography keeps its earlier values.
+
+| Type role | Core text style |
+|---|---|
+| `display1` | Display 1 |
+| `display2` | Display 2 |
+| `display3` | Display 3 |
+| `title1` | Title 1 |
+| `title2` | Title 2 |
+| `title3` | Title 3 |
+| `title4` | Title 3 |
+| `headline` | Headline |
+| `body` | Body |
+| `label1` | Subheadline |
+| `label2` | Subheadline |
+| `caption` | Footnote |
+| `legal` | Footnote |
 
 Use the Finnomena logo SVGs in `theme/logo/` through a `Logo`: the Neon base's `@neon/logo` registry item, or `templates/vitejs-cds/src/layout/Logo.tsx` on CDS. Select the mark for its actual surface. Do not recreate the wordmark as text. Existing apps reuse their approved assets.
 

@@ -51,16 +51,16 @@ Membership ratio: White 60%, Light Grey 15%, Yellow 15%, Navy 10%.
 | display1 | IBM Plex Sans Thai | 400 | 92px | 102px | `--fontSize-display1` |
 | display2 | IBM Plex Sans Thai | 400 | 60px | 70px | `--fontSize-display2` |
 | display3 | IBM Plex Sans Thai | 700 | 54px | 64px | `--fontSize-display3` |
-| title1 | IBM Plex Sans Thai | 400 | 28px | 34px | `--fontSize-title1` |
-| title2 | IBM Plex Sans Thai | 400 | 22px | 28px | `--fontSize-title2` |
-| title3 | IBM Plex Sans Thai | 400 | 20px | 25px | `--fontSize-title3` |
+| title1 | IBM Plex Sans Thai | 400 | 28px | 40px | `--fontSize-title1` |
+| title2 | IBM Plex Sans Thai | 400 | 22px | 32px | `--fontSize-title2` |
+| title3 | IBM Plex Sans Thai | 400 | 20px | 28px | `--fontSize-title3` |
 | title4 | IBM Plex Sans Thai | 400 | 20px | 28px | `--fontSize-title4` |
-| headline | IBM Plex Sans Thai | 500 | 17px | 22px | `--fontSize-headline` |
-| body | IBM Plex Sans Thai | 400 | 17px | 22px | `--fontSize-body` |
-| label1 | IBM Plex Sans Thai | 600 | 14px | 20px | `--fontSize-label1` |
-| label2 | IBM Plex Sans Thai | 400 | 14px | 20px | `--fontSize-label2` |
-| caption | IBM Plex Sans Thai | 600 | 13px | 16px | `--fontSize-caption` |
-| legal | IBM Plex Sans Thai | 400 | 13px | 16px | `--fontSize-legal` |
+| headline | IBM Plex Sans Thai | 500 | 17px | 24px | `--fontSize-headline` |
+| body | IBM Plex Sans Thai | 400 | 17px | 24px | `--fontSize-body` |
+| label1 | IBM Plex Sans Thai | 600 | 15px | 24px | `--fontSize-label1` |
+| label2 | IBM Plex Sans Thai | 400 | 15px | 24px | `--fontSize-label2` |
+| caption | IBM Plex Sans Thai | 600 | 13px | 20px | `--fontSize-caption` |
+| legal | IBM Plex Sans Thai | 400 | 13px | 20px | `--fontSize-legal` |
 
 ## Tokens — Spacing & Shapes
 

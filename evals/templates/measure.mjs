@@ -254,7 +254,10 @@ export function pick(measured, check) {
 }
 
 const channels = (color) => (color.match(/[\d.]+/g) ?? []).map(Number);
-/** Differences between a measurement and its baseline: ±1px for sizes, ±2 per color channel. */
+/**
+ * Differences between a measurement and its baseline: ±1px for a measured size, ±2 per color channel.
+ * A type size, line height and weight are set values and compare exactly.
+ */
 export function compare(actual, expected, tolerance = 1) {
   const problems = [];
   const near = (a, b) => typeof a === 'number' && typeof b === 'number' ? Math.abs(a - b) <= tolerance : a === b;
@@ -269,8 +272,7 @@ export function compare(actual, expected, tolerance = 1) {
     if (key === 'color' || key === 'bg') { if (!sameColor(got, want)) problems.push(`${key} ${got} ≠ ${want}`); }
     else if (key === 'font') {
       for (const part of ['size', 'lineHeight', 'weight']) {
-        const ok = part === 'weight' ? got[part] === want[part] : near(got[part], want[part]);
-        if (!ok) problems.push(`font.${part} ${got[part]} ≠ ${want[part]}`);
+        if (got[part] !== want[part]) problems.push(`font.${part} ${got[part]} ≠ ${want[part]}`);
       }
     } else if (key === 'opacity') { if (Math.abs(got - want) > 0.02) problems.push(`opacity ${got} ≠ ${want}`); }
     else if (key === 'pad' || key === 'radii') { if (!want.every((v, i) => near(got[i], v))) problems.push(`${key} ${got} ≠ ${want}`); }
@@ -280,4 +282,23 @@ export function compare(actual, expected, tolerance = 1) {
     } else if (!near(got, want)) problems.push(`${key} ${got} ≠ ${want}`);
   }
   return problems;
+}
+
+// A problem line for a box measurement, which rounding moves a pixel between platforms:
+// "<element>: w|h|radius <measured> ≠ <baseline>" or "gap <a>→<b>: <measured> ≠ <baseline>".
+const BOX = /^(?<what>.+: (?:w|h|radius)|gap .+:) (?<measured>-?\d+(?:\.\d+)?) ≠ (?<baseline>-?\d+(?:\.\d+)?)$/;
+
+/**
+ * The problems as the recorded differences word them: a problem that is a recorded box measurement
+ * within the baseline's ±1px of the recorded number becomes the recorded line, since macOS and Linux
+ * round a text's width a pixel apart. Anything else stays as measured, so it still reads as a problem:
+ * a type size, line height, weight or opacity is a set value and holds to its recorded number.
+ */
+export function asRecorded(problems, recorded) {
+  const known = new Map(recorded.map(line => [line.match(BOX)?.groups.what, line]));
+  return problems.map(problem => {
+    const now = problem.match(BOX)?.groups;
+    const then = now && known.get(now.what)?.match(BOX).groups;
+    return then && now.baseline === then.baseline && Math.abs(now.measured - then.measured) <= 1 ? known.get(now.what) : problem;
+  });
 }
