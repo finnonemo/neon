@@ -2,7 +2,7 @@
 
 **Build features that feel like Finnomena — describe what you need, and let your AI coding assistant handle the UI.**
 
-Neon is a set of five AI skills, Finnomena theme assets, and a React starter. The main journeys are create, redesign and review. Audit is an optional assessment when the target or integration approach is unclear. The fifth skill, `neon-block`, draws Brand Artwork such as an ad, a post or a cover with the engine of Block, Finnomena's Pattern builder. For React feature building, it uses real [Coinbase Design System](https://github.com/coinbase/cds) components through `@coinbase/cds-web`.
+Neon is a set of six AI skills, Finnomena theme assets, and a React starter. The main journeys are create, redesign and review. Audit is an optional assessment when the target or integration approach is unclear. The fifth skill, `neon-block`, draws Brand Artwork such as an ad, a post or a cover with the engine of Block, Finnomena's Pattern builder. The sixth, `neon-deck`, builds a deck of slides as one HTML file whose cover, closing and Patterns come from the same engine. For React feature building, it uses real [Coinbase Design System](https://github.com/coinbase/cds) components through `@coinbase/cds-web`.
 
 You can write your requests in Thai or English. You do not need to know component names or design token values to get started.
 
@@ -51,9 +51,9 @@ codex plugin marketplace add finnonemo/neon
 codex plugin add neon@finnomena-plugins
 ```
 
-Start a new thread and confirm the five `neon-*` skills are available. Invoke one directly with `$neon-create`, `$neon-audit`, `$neon-redesign`, `$neon-review` or `$neon-block`, or just describe your request naturally (mention Finnomena) and Codex will pick the matching skill.
+Start a new thread and confirm the six `neon-*` skills are available. Invoke one directly with `$neon-create`, `$neon-audit`, `$neon-redesign`, `$neon-review`, `$neon-block` or `$neon-deck`, or just describe your request naturally (mention Finnomena) and Codex will pick the matching skill.
 
-`neon-block` draws through the `finno` tools. `finno setup` registers them with Codex; without it, the skill runs the same tools from the terminal.
+`neon-block` and `neon-deck` draw through the `finno` tools. `finno setup` registers them with Codex; without it, each skill runs the same tools from the terminal.
 
 To remove it later: `codex plugin remove neon@finnomena-plugins`.
 
@@ -65,7 +65,7 @@ Keep a complete checkout of this repository available:
 git clone https://github.com/finnonemo/neon.git
 ```
 
-Register the five folders under `skills/` using your assistant's supported skill-loading mechanism. Keep the checkout intact: these skills also need sibling `theme/`, `templates/`, `block/` and `scripts/` resources. Copying a `SKILL.md` alone is insufficient.
+Register the six folders under `skills/` using your assistant's supported skill-loading mechanism. Keep the checkout intact: these skills also need sibling `theme/`, `templates/`, `block/` and `scripts/` resources. Copying a `SKILL.md` alone is insufficient.
 
 If your assistant supports reading a skill directly, give it the absolute path to the relevant `SKILL.md` and your app's target directory. Automatic discovery varies by host; the repository checks do not verify host installation.
 
@@ -172,6 +172,7 @@ Start with the task: create a feature, redesign existing UI, or review the resul
 | [`/neon:neon-redesign`](skills/neon-redesign/SKILL.md) | Change existing UI styling or explicitly requested composition without changing its components | Applies scoped CSS changes, supports requested layout/hierarchy adaptation, and preserves product behavior |
 | [`/neon:neon-review`](skills/neon-review/SKILL.md) | Check existing UI or screenshots | Reports findings, evidence, suggested fixes and unavailable checks; review-only requests do not edit the app |
 | [`/neon:neon-block`](skills/neon-block/SKILL.md) | Make an ad, a post, a cover or a Pattern background as an image file | Shows twelve Patterns to pick from, then writes the artwork as SVG and PNG, drawn by the Block engine within the brand guideline |
+| [`/neon:neon-deck`](skills/neon-deck/SKILL.md) | Make a deck, a proposal or a presentation | Builds 16:9 slides as one HTML file that presents in a browser and prints to PDF, with the cover, closing and Pattern panels drawn by the Block engine |
 
 **Typical paths**
 
@@ -182,6 +183,7 @@ Start with the task: create a feature, redesign existing UI, or review the resul
 - Landing page from a reference design → `neon-create` for a new page, `neon-redesign` for an existing one.
 - UI quality check → `neon-review`.
 - An ad, post, cover or Pattern background as an image → `neon-block`.
+- A deck, proposal or presentation as slides → `neon-deck`.
 
 ## Choose how much to change
 

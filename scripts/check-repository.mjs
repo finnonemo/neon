@@ -14,7 +14,7 @@ import { checkCoreTheme } from './lib/core-theme.mjs';
 import { checkCoreType } from './lib/core-type.mjs';
 import { registryComponents } from './lib/registry.mjs';
 
-const SKILLS = ['neon-create', 'neon-redesign', 'neon-audit', 'neon-review', 'neon-block'];
+const SKILLS = ['neon-create', 'neon-redesign', 'neon-audit', 'neon-review', 'neon-block', 'neon-deck'];
 const sourceRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 // Ignored paths are local or generated, so naming them in prose is expected.
 const ignored = (await readFile(join(sourceRoot, '.gitignore'), 'utf8'))

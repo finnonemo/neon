@@ -1,6 +1,6 @@
 ---
 name: neon-block
-description: Use when an employee asks for Finnomena Brand Artwork as an image file, such as an ad, a social post or story, a cover, a closing frame or a Pattern background, drawn by the Block engine as SVG and PNG, or for a Finnomena deck, proposal or presentation, whose cover and closing frames it draws. Applies to explicit invocation and established Finnomena intent. Use neon-create for app screens and web pages, including a Campaign Page and its Brand Pattern.
+description: Use when an employee asks for Finnomena Brand Artwork as an image file, such as an ad, a social post or story, a cover, a closing frame or a Pattern background, drawn by the Block engine as SVG and PNG. Applies to explicit invocation and established Finnomena intent. Use neon-deck for a deck, proposal or presentation as slides, and neon-create for app screens and web pages, including a Campaign Page and its Brand Pattern.
 ---
 
 # Draw Finnomena Brand Artwork
@@ -11,7 +11,7 @@ Turn a spoken request into Brand Artwork: a Pattern alone, or one Page with a he
 
 ## When to use
 
-Use for a single picture the employee will post, print or place in another file. This release draws one Page without photos in four layouts. A deck, a proposal, a photo layout or an animated piece is outside it: say so, and offer the Pages it can draw (a cover, a headline frame, a closing frame) for the employee to assemble.
+Use for a single picture the employee will post, print or place in another file. This release draws one Page without photos in four layouts. A deck, a proposal or a presentation goes to `neon-deck` (`<Neon root>/skills/neon-deck/SKILL.md`), which builds the slides and draws their artwork the way this skill does. A photo layout or an animated piece is outside this release: say so, and offer the Pages it can draw (a cover, a headline frame, a closing frame) for the employee to assemble.
 
 ## Tools
 
