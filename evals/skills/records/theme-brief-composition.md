@@ -71,7 +71,7 @@ Run logs, reports and apps are in `.local/evals/final-{exclusive,club,ultra,priv
 
 ## Brief changes after these runs
 
-The five findings above changed the brief tool and the four briefs. No page was built from the changed briefs, so each line below is what a brief now says, not what a page did.
+The five findings above changed the brief tool and the four briefs. Each line below is what a brief now says. What a page did with it is under "Runs on the changed briefs".
 
 - **Secondary Action.** Neon's `secondary` button: `--immersive-palette-75` fill with its `on-` label. On a block that already has that fill, `ghost`. A component paragraph that outlines an action is sent back.
 - **Main action on a fill where it does not read.** The Main Action entry lists the block fills whose text is not the action's color. There the button takes the fill's `on-` text variable and its label the fill's own. Only Ultra has such fills: its lighter palette steps, its accent and its support. A component with the action role that names `--immersive-action` on one of them is sent back.
@@ -79,13 +79,47 @@ The five findings above changed the brief tool and the four briefs. No page was 
 - **Brand Pattern.** A picks file names a Block Colourway from Block's primary group, checked against the theme's colors: Club `white__yellow-100`, Exclusive and Private `grey__yellow-100`, Ultra `navy__grey-100`. The brief places the Pattern on the section when Block draws on its fill and in a panel when it does not, as a strip beside or under the text.
 - **Narrow-screen name.** `event-landing` now says the name drops one display role, as `event-poster` did. Ultra's miss on `event-poster` was against a brief that already said so, and stays one sample.
 
+## Runs on the changed briefs
+
+All four briefs as `fd6e2e9` holds them, one request each, two at a time, with the same requests, runner, model and measuring script as the second set. The package was that checkout at plugin 0.7.0.
+
+| Observed at 1440px | Exclusive · Run (`event-poster`) | Club · Run (`event-landing`) | Ultra · Run (`event-poster`) | Private · Run (`event-landing`) |
+| --- | --- | --- | --- | --- |
+| Hero | Poster: the name at 92px over the date at 54px | Split: the name at 54px beside a date block whose numeral is 92px | Poster: the name at 92px over the date and place | Split: the name at 92px beside a date block whose numeral is 92px |
+| Section grounds | The brief's table row for row | The brief's table row for row | The brief's table row for row | The brief's table row for row |
+| Lead facts | 60px (`display2`) | 54px (`display3`) | 60px | 54px |
+| Card select action | Neon's `secondary` button, `--immersive-palette-75` fill, no border | The same | The same | The same |
+| Hero's second action | `secondary` | `ghost`, on the accent 50 ground | None | `secondary` |
+| Main action in the call-out | Navy with a White label | Navy with a White label | Navy fill, label in the block's own fill | Navy with a White label |
+| Feature blocks | 48px on the route block and the call-out, each lighter than its ground | 40px on the call-out and the route block, each lighter than its ground | 48px on the route block and the call-out, each lighter than its ground | 40px on the call-out and the route block, each lighter than its ground |
+| Brand Pattern | `grey__yellow-100` in a Light Grey panel on the Yellow hero | `white__yellow-100` in a White panel beside the text | `navy__grey-100` on the ground, edge to edge under the text | `grey__yellow-100` on the ground, edge to edge under the text |
+| Name at 375px | 60px, one role down | 54px, unchanged | 60px, one role down | 60px, one role down |
+| Cost, turns, time | $4.07, 108 turns, 10 min | $3.76, 95 turns, 9 min | $4.19, 113 turns, 10 min | $3.92, 102 turns, 9 min |
+| Verdict | Pass, with the panel's edge lost | Pass | Pass | Pass |
+
+Each of the five changes shows on a page:
+
+- **Secondary Action.** All eight card select actions are Neon's `secondary` button with no border. No run drew an outline.
+- **Ultra's main action.** In the call-out it is Navy with its label in the block's fill. In the hero and the form, on Navy grounds, it stays White.
+- **Feature block on an edge-to-edge ground.** All eight feature blocks show their radius against the section. Ultra's route block now takes 48px. Ultra's call-out stepped from accent 100 to accent 25, three steps where the brief says one.
+- **Brand Pattern.** Every Pattern has the two colors of the brief's Block Colourway and runs as a strip. Club and Exclusive put it in a panel, Ultra and Private on the ground. No report lists the Pattern's colors as a departure.
+- **Narrow-screen name.** Exclusive, Ultra and Private drop from `display1` to `display2`. Club's name is `display3` at both widths.
+
+What these runs showed:
+
+- **Exclusive's panel loses its edge.** `grey__yellow-100` draws Yellow blocks, and the hero's ground is Yellow. Where a block meets the panel's side the panel has no edge, and its top right corner is cut away. The picks check compares a Block Colourway's colors with the theme's colors, not its blocks with the section's fill.
+- **A name already at `display3` has no role to drop to.** Club set the name in `display3` beside a `display1` numeral, so the narrow-screen rule changed nothing. The brief gives the numeral block no role, and the numeral outranks the name at both widths.
+- **Club's hero drew its second action as `ghost`.** The brief keeps `ghost` for a block with the `--immersive-palette-75` fill. Club's hero is accent 50, where the Light Grey `secondary` button would sit on Yellow.
+
+None overflowed sideways at either width. Run logs, reports and apps are in `.local/evals/gaps-{exclusive,club,ultra,private}`; captures and the two measuring scripts are in `.local/evals/gaps-shots`.
+
 ## Limits
 
 - One sample per brief in each set of runs.
-- The brief changes after the second set are unobserved on a page.
+- The third set observes each brief change once. Its three findings changed no brief.
 - The four briefs are trial drafts under `maintainer-sign-in`. A redraft under a neutral account changes their prose, and these runs do not cover it.
 - The evaluator wrote the change and judged the captures. No blind judge compared them.
 - The runner reported every case as failed: its diff step met the app's own repository inside the workspace. Each run had already ended on its result event, with no void.
-- No Brand Pattern file, photograph or map was supplied. The first runs had no Pattern; the second drew their own. A supplied lead image under the poster hero was not exercised.
+- No Brand Pattern file, photograph or map was supplied. The first runs had no Pattern; the second and third drew their own. A supplied lead image under the poster hero was not exercised.
 - Reduced motion was read from the CSS and script, not emulated.
 - Costs are each run's last reported `total_cost_usd`.
