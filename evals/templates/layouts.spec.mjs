@@ -323,6 +323,19 @@ for (const layout of ['app', 'content']) {
     await page.screenshot({ path: test.info().outputPath(`${layout}-workspace-wide.png`) });
   });
 }
+for (const layout of ['app', 'content']) {
+  test(`${layout}: desktop panes read sidebar, content, then inspector`, async ({ page }) => {
+    // The frozen CDS starter still draws ContentLayout's inspector before its content.
+    test.skip(target !== 'neon', 'Neon base only');
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto(`/?layout=${layout}`);
+    const left = name => page.getByRole('region', { name, exact: true }).evaluate(el => el.getBoundingClientRect().x);
+    const sidebar = await page.locator('.neon-sidebar').evaluate(el => el.getBoundingClientRect().x);
+    const content = await left('Content');
+    expect(sidebar).toBeLessThan(content);
+    expect(content).toBeLessThan(await left('Details'));
+  });
+}
 
 for (const mode of ['light', 'dark']) {
   for (const layout of ['app', 'content', 'simple', 'board', 'immersive']) {
