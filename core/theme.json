@@ -4602,8 +4602,8 @@
       "hex": "#B359C9FF"
     },
     "dark": {
-      "primitive": "Purple/110",
-      "hex": "#9C3AB4FF"
+      "primitive": "Purple/100",
+      "hex": "#AA46C3FF"
     }
   },
   "Chart/Multi-asset/thai-equity": {
@@ -4622,14 +4622,14 @@
       "hex": "#747804FF"
     },
     "dark": {
-      "primitive": "Yellow/90",
-      "hex": "#F3FA50FF"
+      "primitive": "Yellow/125",
+      "hex": "#D9E107FF"
     }
   },
   "Chart/Multi-asset/cash": {
     "light": {
-      "primitive": "Green/160",
-      "hex": "#005C2BFF"
+      "primitive": "Green/165",
+      "hex": "#005125FF"
     },
     "dark": {
       "primitive": "Green/135",
@@ -4638,8 +4638,8 @@
   },
   "Chart/Multi-asset/mutual-fund": {
     "light": {
-      "primitive": "Navy/110",
-      "hex": "#011527FF"
+      "primitive": "Navy/65",
+      "hex": "#5A6875FF"
     },
     "dark": {
       "primitive": "Navy/60",
@@ -4658,8 +4658,8 @@
   },
   "Chart/Multi-asset/esavings": {
     "light": {
-      "primitive": "Green/130",
-      "hex": "#00A24BFF"
+      "primitive": "Green/135",
+      "hex": "#009646FF"
     },
     "dark": {
       "primitive": "Green/110",
@@ -4702,14 +4702,14 @@
       "hex": "#B359C9FF"
     },
     "dark": {
-      "primitive": "Purple/110",
-      "hex": "#9C3AB4FF"
+      "primitive": "Purple/100",
+      "hex": "#AA46C3FF"
     }
   },
   "Chart/Mutual fund/fixed-income": {
     "light": {
-      "primitive": "Green/130",
-      "hex": "#00A24BFF"
+      "primitive": "Green/135",
+      "hex": "#009646FF"
     },
     "dark": {
       "primitive": "Green/125",
@@ -4738,18 +4738,18 @@
   },
   "Chart/Mutual fund/commodities": {
     "light": {
-      "primitive": "Yellow/150",
-      "hex": "#919605FF"
+      "primitive": "Yellow/160",
+      "hex": "#747804FF"
     },
     "dark": {
-      "primitive": "Yellow/65",
-      "hex": "#F7FB80FF"
+      "primitive": "Yellow/125",
+      "hex": "#D9E107FF"
     }
   },
   "Chart/Tax saving/ssf": {
     "light": {
-      "primitive": "Blue/135",
-      "hex": "#009EDAFF"
+      "primitive": "Blue/140",
+      "hex": "#0092C9FF"
     },
     "dark": {
       "primitive": "Blue/130",
@@ -4762,14 +4762,14 @@
       "hex": "#792D8CFF"
     },
     "dark": {
-      "primitive": "Purple/110",
-      "hex": "#9C3AB4FF"
+      "primitive": "Purple/100",
+      "hex": "#AA46C3FF"
     }
   },
   "Chart/Tax saving/thaiesg": {
     "light": {
-      "primitive": "Green/130",
-      "hex": "#00A24BFF"
+      "primitive": "Green/135",
+      "hex": "#009646FF"
     },
     "dark": {
       "primitive": "Green/45",
@@ -4778,8 +4778,8 @@
   },
   "Chart/Tax saving/thaiesgx": {
     "light": {
-      "primitive": "Green/160",
-      "hex": "#005C2BFF"
+      "primitive": "Green/165",
+      "hex": "#005125FF"
     },
     "dark": {
       "primitive": "Green/120",
@@ -4788,12 +4788,12 @@
   },
   "Chart/Tax saving/ltf": {
     "light": {
-      "primitive": "Navy/140",
-      "hex": "#010E1AFF"
-    },
-    "dark": {
       "primitive": "Navy/65",
       "hex": "#5A6875FF"
+    },
+    "dark": {
+      "primitive": "Navy/60",
+      "hex": "#677480FF"
     }
   },
   "Chart/Super sector/Cyclical/basic-materials": {

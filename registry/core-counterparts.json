@@ -34,7 +34,7 @@
   },
   "checkbox": {
     "core": null,
-    "why": "Core's Checkbox is still a draft."
+    "why": "Core approved its Checkbox on 2026-11-14; the item is not retuned to it yet and keeps its CDS tuning."
   },
   "collapsible": {
     "core": "accordion",

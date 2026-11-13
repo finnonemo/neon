@@ -74,6 +74,7 @@ Each component gets a `### Hierarchy` section in its own doc, from its own Uber 
 | Empty state | Secondary, Small (rule 3) | [empty-state.md](components/empty-state.md) |  |
 | File upload, File item, File media item | the zone Button and Cancel on `Primary · Inverse` (H6); Remove and Retry on Secondary | [file-upload.md](components/file-upload.md) |  |
 | In-line banner, Contextual banner | close Tertiary, action Secondary, the same on both banner Hierarchies; `2 Icon Buttons` and `2 Buttons` kept by the owner past Uber's one action | [banner.md](components/banner.md), [contextual-banner.md](components/contextual-banner.md) | none: pins verified 2026-11-10 (BN4, CB5), the second `2 Icon Buttons` instance by hand |
+| Toolbars | iPhone and iPad bars Secondary, a top bar's own Primary `add` (H1); Toolbar - Top `Primary · Inverse` (H6) | [toolbars.md](components/toolbars.md) |  |
 | List item, List item control | Picker on Secondary; Stepper on Tertiary (H3, rows) | [list-item.md](components/list-item.md) |  |
 | Table row, Table cell | Expand and the cell Button on Tertiary (H3, rows) | [table.md](components/table.md) |  |
 | Progress step | Secondary (rule 3) | [progress-steps.md](components/progress-steps.md) |  |

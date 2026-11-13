@@ -139,15 +139,17 @@ Our local Typography styles (Localisation), the same in both looks. Dates and ti
 
 ## Usage
 
-- Page `Date and time pickers` (new, from the `Templates` clone, A-Z between `Checkboxes` and `Detail rows`): both sets in Components, `_Day` and `_Week` in Items. A base for each set in its set frame on 🚧 Drafts waits for the owner before the sets are built (`build-component` step 1).
+- Page `Date and time pickers` (new, from the `Templates` clone, A-Z between `Checkboxes` and `Detail rows`): both sets in Components, then [Date picker](date-picker.md), `_Day` and `_Week` in Items. A base for each set in its set frame on 🚧 Drafts waits for the owner before the sets are built (`build-component` step 1).
 - Samples in Light and Dark, both looks, Thai copy, today 9 พ.ย. 69:
   - A Grouped list "วันที่โอน" (transfer date) with a List item `Trailing=Picker - Date and Time` and, under it, Pickers `Style=Inline` `Mode=Date and Time`: header "พฤศจิกายน 2569", 17 selected, today's mark on 9, days before today Disabled (a scheduled transfer), the Time row "เวลา" "11.30 น.".
   - Collapsed `State=Selected` "17 พ.ย. 69" with Pickers `Style=Compact` open under it, over a screen;
   - Collapsed alone, the three `Mode`s, as a designer drops them in a row.
   - The Focus ring once, on a `_Day` (`iOS=False`).
   - Web at Regular width: Collapsed in a form row and Compact under it, `iOS=False`.
+  - A date range: a List item "ช่วงวันที่" "17–24 พ.ย. 69" over Pickers `Mode=Range`, both looks.
+  - Date picker, Single and Range, open (Android + web), after the Compact open `iOS=False` sample.
   - Buddhist era throughout: rows `17 พ.ย. 69`, the header the long month and BE year, never `2026`.
-- Not for: a date the user types ([Date field](date-field.md)); a wheel of arbitrary values (the system's `.wheels`, or Select).
+- Not for: a date the user types ([Date field](date-field.md)); a field over a calendar on Android and web ([Date picker](date-picker.md)); a wheel of arbitrary values (the system's `.wheels`, or Select).
 
 ### Hierarchy
 
