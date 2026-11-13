@@ -60,6 +60,20 @@ export function serverCommand({ root = NEON_ROOT, platform = process.platform, e
   return { command: existsSync(join(directory, 'npx')) ? join(directory, 'npx') : 'npx', args, env: { PATH: path }, published };
 }
 
+/**
+ * Whether the Claude Desktop app is running. While it runs it writes its configuration file again from what it read
+ * at launch, so an entry added from outside is gone within seconds. `ps` rather than `pgrep`: setup is often run by
+ * an agent inside the app, and pgrep leaves its own ancestors out.
+ */
+function desktopOpen({ run, platform = process.platform }) {
+  if (platform === 'darwin') return run('ps', ['-axco', 'comm']).output.split('\n').some(line => line.trim() === 'Claude');
+  if (platform === 'win32') return run('tasklist', ['/NH', '/FO', 'CSV']).output.includes('"Claude.exe"');
+  return false;
+}
+
+/** The command that registers the tools with Claude Desktop alone, for the employee to run once the app is quit. */
+const desktopAgain = published => `${published ? `npx -y ${NPM_PACKAGE}@latest` : `node ${join(NEON_ROOT, 'scripts/finno.mjs')}`} setup --agent claude-desktop --yes`;
+
 /** What is on this computer: which agents, and what of Neon each already has. */
 export function detect({ run = defaultRun, ...where } = {}) {
   const found = {};
@@ -81,7 +95,7 @@ export function detect({ run = defaultRun, ...where } = {}) {
     };
   }
   const config = desktopConfigPath(where);
-  if (existsSync(dirname(config))) found['claude-desktop'] = { config };
+  if (existsSync(dirname(config))) found['claude-desktop'] = { config, open: desktopOpen({ run, platform: where.platform }) };
   return found;
 }
 
@@ -107,7 +121,7 @@ export function planFor(found, { source = DEFAULT_SOURCE, server = serverCommand
   const desktop = found['claude-desktop'];
   if (desktop) {
     const entry = { command: server.command, args: server.args, ...(Object.keys(server.env).length ? { env: server.env } : {}) };
-    steps.push({ agent: 'claude-desktop', what: 'Register the finno tools, keeping a backup of the file beside it', file: desktop.config, entry });
+    steps.push({ agent: 'claude-desktop', what: 'Register the finno tools, keeping a backup of the file beside it', file: desktop.config, entry, held: desktop.open });
   }
   return steps;
 }
@@ -128,6 +142,11 @@ export function describePlan(found, steps, { published }) {
       lines.push(`  This marketplace is a folder on this computer (${found[agent].folder}), and Claude Code copies that whole`,
         '  folder to install the plugin: a checkout with worktrees or node_modules can take many minutes and gigabytes.',
         `  To install from GitHub instead, run "claude plugin marketplace remove ${MARKETPLACE}" and then setup again.`);
+    }
+    if (agent === 'claude-desktop' && found[agent].open) {
+      lines.push('  Claude Desktop is open, so setup will leave this file as it is: while the app runs it writes the file',
+        '  again and drops the entry. Quit Claude Desktop, then run:',
+        `     ${desktopAgain(published)}`);
     }
     if (agent === 'claude-desktop') {
       lines.push('  Only the tools reach Claude Desktop this way. Its skills come from your organization\'s plugin',
@@ -259,6 +278,7 @@ export async function setup(argv, { run = defaultRun, log = console.log, interac
   for (const step of steps) {
     const label = `${steps.indexOf(step) + 1}. ${NAMES[step.agent]}: ${step.what}`;
     if (failed.has(step.agent)) { log(`- ${label}: skipped, an earlier step for ${NAMES[step.agent]} failed.`); continue; }
+    if (step.held) { log(`- ${label}: not done, Claude Desktop is open.`); continue; }
     try {
       if (step.command) {
         log(`… ${label}`);
@@ -293,8 +313,14 @@ export async function setup(argv, { run = defaultRun, log = console.log, interac
     if (!ok) verified = false;
     log(ok ? '✔ Codex lists the finno tools. Start a new session to use them.' : '✖ Codex does not list the finno tools.');
   }
-  if (found['claude-desktop'] && !failed.has('claude-desktop')) log('✔ Claude Desktop: quit and reopen it to load the finno tools.');
+  const held = steps.filter(step => step.held);
+  if (found['claude-desktop'] && !failed.has('claude-desktop')) {
+    log(held.length
+      ? `- Claude Desktop is open, so its finno tools are not registered. Quit it, then run:\n  ${desktopAgain(server.published)}`
+      : '✔ Claude Desktop: quit and reopen it to load the finno tools.');
+  }
   if (failed.size || !verified) { log('\nSetup did not finish. The steps marked ✖ say why; the others were applied.'); return 1; }
-  log('\nDone. Try: "Make a Finnomena story ad that says Invest every month."');
+  if (held.length === steps.length) { log('\nNothing has been changed.'); return 0; }
+  log(`\nDone${held.length ? ', except Claude Desktop' : ''}. Try: "Make a Finnomena story ad that says Invest every month."`);
   return 0;
 }

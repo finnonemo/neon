@@ -29,7 +29,7 @@ Give your agent this sentence:
 Install Neon and connect it to this coding agent using npx finnomena@latest setup. Show me the setup plan for approval, then verify the installation.
 ```
 
-The package is named `finnomena` on npm and the command it runs is `finno`. `finno setup` prints its plan and changes nothing until it is run again with `--yes`. For Claude Code and Codex it installs the `neon` plugin through the agent's own commands, as below. For Claude Desktop it registers the `finno` tools in the app's configuration file and keeps a backup of that file beside it; Desktop gets the skills from your organization's plugin marketplace, or from the plugin file `npx finno@latest setup --plugin-zip <directory>` writes. It needs Node.js 20.15 or later. Then it starts the tool server and checks that its three tools answer.
+The package is named `finnomena` on npm and the command it runs is `finno`. `finno setup` prints its plan and changes nothing until it is run again with `--yes`. For Claude Code and Codex it installs the `neon` plugin through the agent's own commands, as below. For Claude Desktop it registers the `finno` tools in the app's configuration file and keeps a backup of that file beside it. Quit Claude Desktop first: while it is open it writes that file again without the entry, so setup leaves the file alone and prints the command to run once the app is quit. Desktop gets the skills from your organization's plugin marketplace, or from the plugin file `npx finnomena@latest setup --plugin-zip <directory>` writes. It needs Node.js 20.15 or later. Then it starts the tool server and checks that its three tools answer.
 
 **Claude Code**
 
