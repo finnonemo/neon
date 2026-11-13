@@ -31,7 +31,7 @@ export const ENTRIES = ['tagline', 'mood-occasion', 'occasion-components', 'pres
 // earlier entries' output. A whole preset ("layout", "imagery") leaves out its kind, slug and source.
 export const INPUTS = [
   ...['taglineIntent', 'moodIntent', 'components', 'dos', 'donts', 'promptInputs', 'secondaryHighlights'].map((field) => `occasion.${field}`),
-  'layout', ...['sections', 'heroPattern', 'navigation', 'footer', 'density', 'blockRadius', 'sectionGap', 'cardPadding', 'pageWidth', 'motion', 'brandPattern', 'grounds', 'featureRadius', 'factRole'].map((field) => `layout.${field}`),
+  'layout', ...['sections', 'heroPattern', 'navigation', 'footer', 'density', 'blockRadius', 'sectionGap', 'cardPadding', 'pageWidth', 'motion', 'brandPattern', 'grounds', 'featureRadius', 'factRole', 'nameRole'].map((field) => `layout.${field}`),
   'imagery', ...['leads', 'framing', 'subject', 'illustration', 'density'].map((field) => `imagery.${field}`),
   'theme.kind', 'theme.label', 'theme.mood', 'theme.sibling', 'theme.roles', 'brief.name', 'brandPattern.colourway', 'brandPattern.section',
   'accentPlacements', 'offActionFills', 'colorVars', 'typeRoles', 'sectionGrounds', 'occasion-components.components', 'occasion-components.names',
@@ -94,6 +94,8 @@ export function presetSchema(kind, name, facts) {
       cardPadding: step(facts.space, 'space'),
       featureRadius: step(facts.borderRadius, 'borderRadius'),
       factRole: oneOf(...facts.scale.type.map(({ role }) => role).filter((role) => role.startsWith('display'))),
+      // The hero name's role. Narrow screens take the next display role down, so the smallest is not a choice.
+      nameRole: oneOf(...facts.scale.type.map(({ role }) => role).filter((role) => role.startsWith('display')).slice(0, -1)),
       pageWidth: oneOf('contained', 'full-bleed'),
       motion: oneOf('still', 'subtle', 'lively'),
       brandPattern: object({ section: oneOf(...SECTION_ROLES) }),

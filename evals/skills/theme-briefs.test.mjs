@@ -32,7 +32,7 @@ const valid = {
     grounds: ['pattern', 'canvas', 'accent', 'tint', 'canvas'],
     heroPattern: 'split headline and lead image', navigation: 'none', footer: 'minimal',
     density: 'comfortable', blockRadius: 'borderRadius-500', sectionGap: 'space-10', cardPadding: 'space-4',
-    featureRadius: 'borderRadius-700', factRole: 'display3',
+    featureRadius: 'borderRadius-700', factRole: 'display3', nameRole: 'display1',
     pageWidth: 'full-bleed', motion: 'subtle', brandPattern: { section: 'hero' },
   },
   'theme-briefs/presets/imagery/people-in-action.json': {
@@ -155,6 +155,7 @@ Object.assign(SCHEMA_REFUSALS, {
   'a step that is not on the scale': [edit(LAYOUT, (p) => ({ ...p, cardPadding: 'space-11' })), /"cardPadding" must be a space-\* step name$/m],
   'a step written as a variable': [edit(LAYOUT, (p) => ({ ...p, cardPadding: 'var(--space-4)' })), /"cardPadding" must be a space-\* step name$/m],
   'a spacing step for the feature radius': [edit(LAYOUT, (p) => ({ ...p, featureRadius: 'space-4' })), /"featureRadius" must be a borderRadius-\* step name$/m],
+  'a hero name role with no display role below it': [edit(LAYOUT, (p) => ({ ...p, nameRole: 'display3' })), /event-landing\.json: "nameRole" must be one of display1, display2$/m],
   'a fact role below the display roles': [edit(LAYOUT, (p) => ({ ...p, factRole: 'title1' })), /event-landing\.json: "factRole" must be one of display1, display2, display3$/m],
   'a ground that is not one of the four': [edit(LAYOUT, (p) => ({ ...p, grounds: ['pattern', 'canvas', 'accent', 'navy', 'canvas'] })), /event-landing\.json: "grounds\.3" must be one of canvas, tint, accent, pattern$/m],
   'grounds that do not match the sections': [edit(LAYOUT, (p) => ({ ...p, grounds: ['pattern', 'canvas', 'accent'] })), /event-landing\.json: "grounds" has 3 items; it gives one ground per section, and there are 5$/m],
@@ -574,6 +575,8 @@ test('scripted rendering holds for every theme, colourway, page width and motion
     // Only where the main action's color is not the text of a block fill does its entry name the swap.
     assert.equal(/`--immersive-action` does not read/.test(section(text, 'Components')), theme === 'ultra', at);
     assert.match(section(text, 'Components'), /^Neon `Button` in its `secondary` variant: `--immersive-palette-75` fill with its label in `--immersive-on-palette-75`\./m, at);
+    assert.match(section(text, 'Components'), theme === 'ultra' ? /On an accent or support fill, or on a block that already has that fill, the `ghost` variant/ : /On an accent fill, or on a block that already has that fill, the `ghost` variant/, at);
+    assert.match(section(text, 'Tokens — Spacing & Shapes'), /^- \*\*Hero name role:\*\* `display1` \(92px\/102px\), and `display2` \(60px\/70px\) on narrow screens; nothing else in the hero is set larger than the name$/m, at);
     assert.doesNotMatch(text.replace('Neon has no outlined button.', ''), /outline/i, at);
     // No block may be capped at a count that a colourway's Brand Pattern ground could break.
     assert.doesNotMatch(text, /\bone per (screen|page)\b|\bonly one\b/i, at);
@@ -1277,6 +1280,12 @@ test('check-only refuses a Block Colourway that draws in a color the theme lacks
     /^theme-briefs\/picks\/exclusive-run\.json: Block Colourway "white__navy-100" draws its ground in White, which is not one of Exclusive's colors at full strength$/m);
 });
 
+test('check-only refuses a panel whose blocks are the color of the section it sits on', (t) => {
+  const exclusive = { ...valid[PICKS], theme: 'exclusive', brandPattern: { colourway: 'palette', ground: 100, blockColourway: 'grey__yellow-100' } };
+  assertRefused(t, { ...THEME_TEXTS, [PICKS]: null, 'theme-briefs/picks/exclusive-run.json': exclusive },
+    /^theme-briefs\/picks\/exclusive-run\.json: Block Colourway "grey__yellow-100" draws Yellow blocks in a panel on a Yellow section, where the panel loses its edge; pick one whose blocks are another color$/m);
+});
+
 test('the Brand Pattern sits on the section when Block draws on its fill, and in a panel when it does not', (t) => {
   const { briefs } = renderMatrix(t);
   const pattern = (theme, colourway) => section(briefs.find((brief) => brief.theme === theme && brief.colourway === colourway).text, 'Brand Pattern');
@@ -1290,11 +1299,12 @@ test('soft checks send back an outlined action, and a main action in the action 
   themes.themes.club.action = { bg: 'White.100', fg: 'Navy.100' };
   const bad = components([]);
   bad.components[0] = { ...bad.components[0], paragraph: bad.components[0].paragraph.replace('then one select action', 'then one outlined select action') };
-  bad.components[1] = { ...bad.components[1], paragraph: bad.components[1].paragraph.replace('above one main action', 'above one main action in var(--immersive-action) with var(--immersive-on-action)') };
+  bad.components[1] = { ...bad.components[1], paragraph: bad.components[1].paragraph.replace('above one main action', 'above one main action in var(--immersive-action) with var(--immersive-on-action) and a Secondary Action filled with var(--immersive-palette-75)') };
   const { fake, status, out } = draft(t, { changes: { 'theme/immersive-themes.json': themes }, answers: { 'occasion-components': [bad, GOOD['occasion-components']] } });
   assert.equal(status, 0, out);
   const sent = calls(fake, 'occasion-components')[1].prompt;
   assert.match(sent, /^- "components\.0\.paragraph" outlines an action; Neon has no outlined button, and a Secondary Action is the secondary or ghost variant$/m);
   assert.match(sent, /^- "components\.1\.paragraph" fills its action with --immersive-action on --immersive-accent-100, where it does not read; fill it with --immersive-on-accent-100 and set its label in --immersive-accent-100$/m);
+  assert.match(sent, /^- "components\.1\.paragraph" fills a Secondary Action with --immersive-palette-75 on --immersive-accent-100; on an accent or support fill it is the ghost variant, its label in --immersive-on-accent-100$/m);
   assert.match(sent, /"offActionFills": ?\[/);
 });

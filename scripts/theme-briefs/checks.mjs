@@ -54,6 +54,10 @@ function compatibility({ path, data }, presets, facts) {
   }
   const drawn = data.brandPattern?.blockColourway;
   if (BLOCK_COLOURWAYS.includes(drawn)) {
+    // In a panel, blocks in the section's own color cut the panel's edge away wherever they meet it.
+    const fill = theme.steps[colourway]?.[ground]?.bg;
+    const { ground: panel, blocks } = blockColourway(drawn);
+    if (fill && panel !== fill && blocks === fill) problems.push(`Block Colourway "${drawn}" draws ${blocks.split('.')[0]} blocks in a panel on a ${blocks.split('.')[0]} section, where the panel loses its edge; pick one whose blocks are another color`);
     for (const [part, color] of Object.entries(blockColourway(drawn))) {
       if (!colorVariable(theme, color)) problems.push(`Block Colourway "${drawn}" draws its ${part} in ${color.split('.')[0]}, which is not one of ${theme.label}'s colors at full strength`);
     }

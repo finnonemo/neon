@@ -35,7 +35,7 @@
   },
   "rules": [
     "a fill var(--immersive-X) always with its text var(--immersive-on-X)",
-    "only a component whose roles include action names var(--immersive-action), for the page's main action; an action in any other component is the Secondary Action: var(--immersive-palette-75) fill with its label in var(--immersive-on-palette-75), or on a block with that fill no fill and its label in the block's on- text variable; never an outline",
+    "only a component whose roles include action names var(--immersive-action), for the page's main action; an action in any other component is the Secondary Action: var(--immersive-palette-75) fill with its label in var(--immersive-on-palette-75), or on an accent or support fill, or a block with that fill, no fill and its label in the fill's on- text variable; never an outline",
     "on a fill in offActionFills the main action does not take var(--immersive-action): it is filled with that fill's on- text variable, its label in the fill's own variable",
     "radius and padding as var(--borderRadius-…) and var(--space-…) from the supplied picks: a component with feature true takes the feature radius, every other the block radius",
     "type as role names from typeRoles, such as title2 or body",
