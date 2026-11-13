@@ -33,4 +33,4 @@ Reporting which of the app's components have a Counterpart: [Counterpart coverag
 
 ## Done
 
-Return the recommended path and rationale, the app's base, preserved scope, and any unresolved choice. Where the app has a `src/components/ui/`, say which of its components have a Counterpart. State what was inspected; do not imply an exhaustive hardcoded-style scan. Continue the authorized implementation through the selected skill without repeating onboarding.
+Return the recommended path and rationale, the app's base, preserved scope, and any unresolved choice. Where the app has a `src/components/ui/`, say which of its components have a Counterpart. Say what the path fixes (base, tier, preserved behavior) and what it leaves to the implementing skill to design, so a narrow recommendation is not read as a layout brief. State what was inspected; do not imply an exhaustive hardcoded-style scan. Continue the authorized implementation through the selected skill without repeating onboarding.
