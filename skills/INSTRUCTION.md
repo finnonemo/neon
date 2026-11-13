@@ -35,7 +35,7 @@ Immersive pages share the last three ideas and take their color from an Immersiv
 | Scope the request set: tier, composition, preserved behavior | Inside a pane, a layout, state or interaction no pattern here lists, built from the fixed column |
 | Evidence rules for what a report may claim | Copy, empty states, the reading sequence of a campaign page |
 
-The shell is not edited or rebuilt for one screen. When none of its layouts fits the task, build in the nearest one and say in the report what did not fit.
+The shell is not edited, rebuilt or put together again from its parts for one screen: one of its layouts renders the screen. When none fits the task, take the nearest one, build what it lacks inside its panes, and say in the report which layout that is and what did not fit.
 
 The task-based choices, functional patterns and examples below are defaults that solved earlier screens, not templates. A different composition that serves the task better and keeps the fixed column is welcome; say in the report what you chose and why, so a reviewer judges the choice and not its novelty.
 
