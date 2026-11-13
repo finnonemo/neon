@@ -4,9 +4,10 @@ import { AlertDialog as AlertDialogPrimitive } from "radix-ui"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
-// Core's Alert at iOS=False (core/components/alert.md): a 300px card centered at every width,
-// never full screen, padded 16 on Layer/layer-01 with 16px corners over the
-// Miscellaneous/overlay scrim. The Headline title and the Body message, both Text/text-primary
+// Core's Alert at iOS=False (core/components/alert.md): a card centered at every width, never
+// full screen, padded 16 on Layer/layer-01 with 16px corners over the Miscellaneous/overlay
+// scrim. It is 300px wide: Core's two side-by-side buttons at 130, the 8 between them and the
+// padding. The Headline title and the Body message, both Text/text-primary
 // and left aligned, sit 10px apart in padding of 8, 8, 24, 8. The actions are Core's Button dock
 // side by side: Medium Buttons 8px apart, each half the row, the cancel Core's Tertiary before
 // the Primary. Core keeps a label on one line and stacks two that do not fit; the footer cannot

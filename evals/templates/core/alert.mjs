@@ -1,8 +1,10 @@
 // alert-dialog and dialog → Core's Alert at iOS=False (core/components/alert.md), which the
-// snapshot holds as a doc alone: a 300px card padded 16 (spacing-05) on Layer/layer-01 with radius-lg corners,
-// over the Miscellaneous/overlay scrim. Its "Title and Message" block pads 8, 8, 24, 8
-// (spacing-03, spacing-06) round a Headline Title and a Body Message, both Text/text-primary.
-// The card's width is a raw number in the doc. dialog reads the same parts.
+// snapshot holds as a doc alone: a 300px card padded 16 (spacing-05, "the root's padding") on
+// Layer/layer-01 with radius-lg corners, over the Miscellaneous/overlay scrim. Its "Title and
+// Message" block pads 8, 8, 24, 8 (spacing-03, spacing-06) round a Headline Title and a Body
+// Message, both Text/text-primary. The doc's layer tree states no width: 300 is its Side-by-Side
+// row, two buttons 130 wide and the Button dock's 8 between them, inside the 16 paddings.
+// dialog reads the same parts.
 import { named, raw } from './entries.mjs';
 
 const text = (style) => ({ font: named(style), color: named('Text/text-primary') });

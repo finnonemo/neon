@@ -11,11 +11,11 @@ import { Toaster as Sonner, type ToasterProps } from "sonner"
 // beside the action) is not drawn: sonner's closeButton keeps its own look.
 // Core places it at the top, never the bottom: up to 600px wide it is flush under the status bar
 // (the top of the page, below a device's safe area) and 8px from each side; past 600px it is
-// centered 16px from the top edge at sonner's 356px, inside Core's 320 to 540. Core sets it 16px
-// below a Navigation bar: a screen with a bar at the top passes offset. Core lets desktop web
-// alone move it, one position for the whole app: pass position.
+// centered 16px from the top edge at sonner's 356px, inside Core's 320 to 540.
 // The base's AppRoot renders the one Toaster and passes its color scheme as theme, so no theme
-// provider is needed; call toast() from "sonner" anywhere.
+// provider is needed; call toast() from "sonner" anywhere. Core sets the Snackbar 16px below a
+// Navigation bar, and lets desktop web alone move it, one position for the whole app: an app
+// with a bar at the top passes offset, and one that moves it passes position, both in AppRoot.
 const button =
   "inline-flex min-h-12 shrink-0 items-center justify-center rounded-full px-6 py-3 text-button-md text-inverse-foreground transition-colors hover:bg-button-tertiary-inverse-hover focus-visible:bg-button-tertiary-inverse-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring-inverse active:bg-button-tertiary-inverse-active"
 
@@ -24,7 +24,7 @@ function Toaster(props: ToasterProps) {
     <Sonner
       position="top-center"
       offset={16}
-      mobileOffset={{ top: "env(safe-area-inset-top, 0px)", right: 8, bottom: 8, left: 8 }}
+      mobileOffset={{ top: "env(safe-area-inset-top, 0px)", right: 8, left: 8 }}
       toastOptions={{
         unstyled: true,
         classNames: {
