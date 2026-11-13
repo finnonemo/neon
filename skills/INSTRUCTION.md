@@ -31,8 +31,11 @@ Immersive pages share the last three ideas and take their color from an Immersiv
 | --- | --- |
 | Tokens, type roles and the base's components with their props | Which composition serves the task: grouping, order, density, what is first-read |
 | The color roles and, on campaign pages, the Brand Floor | Where content color goes: illustration, imagery, a chart, an Immersive Theme's blocks |
-| Scope the request set: tier, composition, preserved behavior | A layout, state or interaction no pattern here lists, built from the fixed column |
+| The app's shell: its navigation, panes and the layout components that supply them | Which of the shell's layouts the screen takes and what goes in each pane |
+| Scope the request set: tier, composition, preserved behavior | Inside a pane, a layout, state or interaction no pattern here lists, built from the fixed column |
 | Evidence rules for what a report may claim | Copy, empty states, the reading sequence of a campaign page |
+
+The shell is not edited or rebuilt for one screen. When none of its layouts fits the task, build in the nearest one and say in the report what did not fit.
 
 The task-based choices, functional patterns and examples below are defaults that solved earlier screens, not templates. A different composition that serves the task better and keeps the fixed column is welcome; say in the report what you chose and why, so a reviewer judges the choice and not its novelty.
 
@@ -52,9 +55,9 @@ Current exported tokens still include black-alpha text, black dark surfaces, and
 
 ## Composition
 
-Start from the employee's main task and the information needed to complete it. Use typography, alignment, whitespace and subtle dividers to establish hierarchy. Use containers when they group related content; avoid card-within-card treatment or decorative gradients as the default product scaffold.
+Start from the employee's main task and the information needed to complete it. Use typography, alignment, whitespace and subtle dividers to establish hierarchy. Group related content with spacing first and a divider when spacing alone is ambiguous; use a container when the group is a thing the user acts on, such as an item in a collection or a card the request asks for. Avoid card-within-card treatment or decorative gradients as the default product scaffold.
 
-**Functional screens:** prioritize scanning, comparison and action. Forms use clear labels, nearby help and validation. Tables suit dense comparisons; lists suit short summaries. A detail pane earns its space when users need to inspect and act on a selected record. Reuse the existing shell. In the starter, `AppShell` supplies list/detail emphasis, `ContentLayout` emphasizes the main content, `SimpleLayout` omits the inspector, and `MultiColumnLayout` is for explicit board workflows. These names are not guaranteed exports in an existing app.
+**Functional screens:** prioritize scanning, comparison and action. Forms use clear labels, nearby help and validation. Tables suit dense comparisons; lists suit short summaries. A detail pane earns its space when users need to inspect and act on a selected record. Reuse the existing shell. Its sidebar is the app's menu: the destinations an employee moves between. A list of records is content, never sidebar. When the task is to pick one record and then read or act on it, take the layout that supplies a list pane and a detail pane from the start; do not take a simpler layout and fit the list somewhere else. In the starter, `AppShell` supplies list/detail emphasis, `ContentLayout` emphasizes the main content, `SimpleLayout` omits the inspector, and `MultiColumnLayout` is for explicit board workflows. These names are not guaranteed exports in an existing app.
 
 On functional screens, which action is primary, secondary or tertiary, and how many primaries a screen or panel holds, are Core's [hierarchy rules](../core/hierarchy.md). Prefer list rows to cards for scanning, settings and record rows. Shadows mark only layers that float above the page. These rules shape new UI and `composition: 'adapt'`; preserve and colors-only work keep existing structure. Detail: [functional patterns](neon-audit/references/functional-patterns.md).
 

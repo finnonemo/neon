@@ -72,6 +72,8 @@ Run each request with the named context, first against the baseline and then the
 | Make the buttons clearer after Finnomena was established | Retains brand intent without repeated onboarding | [Scenarios without a run record](records/scenarios-without-a-run-record.md) |
 | Build a CDS settings screen with no Finnomena context | Does not infer Finnomena branding from CDS alone | [Scenarios without a run record](records/scenarios-without-a-run-record.md) |
 | Restyle a v0/Lovable React + Tailwind v4 + shadcn project to Finnomena | Detects shadcn on v4; edits `:root`/`.dark` by role and pair; leaves `@theme inline`; installs no CDS. | [shadcn on Tailwind v4 restyle](records/shadcn-on-tailwind-v4-restyle.md) |
+| Build a Finnomena Back Office screen for one advisor with three groups of content (contact and licences, meetings against target, clients) | No card wraps a group and no on-page region has a shadow; no file under the shell's layout folder is edited; the sidebar holds no record list; the report names the layout the screen takes and why. | [Shell and containers](records/shell-and-containers.md) |
+| Build the same screen for a team lead who first picks one of eight advisors | The advisors are listed in content, never in the sidebar; picking one opens that advisor's detail, in the detail pane of the layout that supplies list and detail panes (`AppShell` in the starter), not a simpler layout; no shell file is edited. | [Shell and containers](records/shell-and-containers.md) |
 | Add a fee table that stays readable on a phone to an app on the Neon base | Opens no CDS reference; the references it reads hold no CDS component name; builds with Neon items and adds no CDS dependency | [Skills off CDS](records/skills-off-cds.md) |
 | Add the same fee table to an app already on CDS | Reads the CDS reference; builds with `@coinbase/cds-web` components; adds no `components.json`, `@neon` registry or Neon item | [Skills off CDS](records/skills-off-cds.md) |
 | Colors-only restyle of a Tailwind v4 app whose disabled text must keep a stock utility | The run executes the shipped source lint on its changed files and the report fixes or justifies each warning on a `Source lint:` line. | [Source lint](records/source-lint.md) |
@@ -146,6 +148,7 @@ Each case's runs live in their own file under `evals/skills/records/`, so pull r
 - [Scenarios without a run record](records/scenarios-without-a-run-record.md)
 - [September 2026 refactor evidence](records/september-2026-refactor-evidence.md)
 - [shadcn on Tailwind v4 restyle](records/shadcn-on-tailwind-v4-restyle.md)
+- [Shell and containers](records/shell-and-containers.md)
 - [Skills off CDS](records/skills-off-cds.md)
 - [Source lint](records/source-lint.md)
 - [Tailwind colors-only regression](records/tailwind-colors-only-regression.md)
