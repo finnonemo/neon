@@ -4,6 +4,7 @@
     "occasion.dos",
     "occasion.donts",
     "occasion-components.names",
+    "layout.factRole",
     "theme.roles",
     "colorVars",
     "theme.kind",
@@ -24,7 +25,8 @@
   },
   "rules": [
     "exactly one bullet per supplied intent, in order",
-    "one sentence each"
+    "one sentence each",
+    "a bullet that names the type role of a component's largest fact names the supplied fact role, and no other display role"
   ],
   "output": {
     "type": "object",

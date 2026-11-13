@@ -10,7 +10,7 @@ import { join, relative } from 'node:path';
 import { briefProblems, checkInputs, RECORDS, renderable, sourceNamesOf } from './checks.mjs';
 import { askClaude, ClaudeError, claudeVersion, EFFORT, MODEL } from './model.mjs';
 import { accentPlacements, entryChecks, proseText, words } from './prose-checks.mjs';
-import { freshBrief, placeholderProse, readProse, renderBrief, SCRIPTED_SECTIONS, splitSections } from './render.mjs';
+import { freshBrief, placeholderProse, readProse, renderBrief, SCRIPTED_SECTIONS, sectionGrounds, splitSections } from './render.mjs';
 import { ENTRIES, entryOrder } from './schemas.mjs';
 import { paletteTokens } from '../lib/colors.mjs';
 
@@ -51,6 +51,7 @@ function inputValue(input, brief, outputs) {
   if (input === 'accentPlacements') return accentPlacements(brief);
   if (input === 'colorVars') return [...theme.vars.keys()].map((name) => `--immersive-${name}`);
   if (input === 'typeRoles') return facts.scale.type.map(({ role }) => role);
+  if (input === 'sectionGrounds') return sectionGrounds(brief);
   if (input === 'occasion-components.components') return outputs['occasion-components'].components;
   if (input === 'occasion-components.names') return outputs['occasion-components'].components.map(({ name }) => name);
   throw new Error(`no value for input "${input}"`);

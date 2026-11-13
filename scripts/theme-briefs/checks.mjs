@@ -39,6 +39,10 @@ function compatibility({ path, data }, presets, facts) {
       if (!theme.roles.includes(role)) problems.push(`occasion "${data.presets.occasion}" component "${component.name}" uses role "${role}", which ${theme.label} lacks (roles: ${theme.roles.join(', ')})`);
     }
   }
+  const accented = (Array.isArray(chosen.occasion?.components) ? chosen.occasion.components : []).some((component) => Array.isArray(component?.roles) && component.roles.includes('accent'));
+  if (Array.isArray(chosen.layout?.grounds) && chosen.layout.grounds.includes('accent') && chosen.occasion && !accented) {
+    problems.push(`layout "${data.presets.layout}" gives a section an accent ground, but no component of occasion "${data.presets.occasion}" takes the accent role`);
+  }
   const { colourway, ground } = data.brandPattern ?? {};
   if (typeof colourway === 'string' && Number.isInteger(ground)) {
     const steps = theme.steps[colourway];

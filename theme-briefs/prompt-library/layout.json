@@ -2,6 +2,7 @@
   "fills": "the Layout paragraph",
   "inputs": [
     "layout",
+    "occasion.components",
     "occasion-components.names",
     "brandPattern.section",
     "theme.kind",
@@ -12,24 +13,28 @@
   ],
   "formula": [
     "the page model (contained or full-bleed)",
-    "the hero",
-    "how sections alternate between the canvas and blocks",
-    "which component sits in which section role",
+    "the hero: its pattern, and the one element that dominates the first screen",
+    "then each section in order: its ground by word (canvas, tint, accent or pattern), the component it holds, and the one element that dominates it",
+    "which blocks are unequal: the feature components that span the content column, and the one set of peers that sits as equal cards",
+    "which facts take the supplied fact role",
     "navigation",
     "footer",
     "rhythm, only through the step names supplied"
   ],
   "targets": {
     "words": [
-      90,
-      140
+      130,
+      190
     ]
   },
   "rules": [
     "spacing and radius only as step names (space-8, borderRadius-500) or their var(--…) form, never px",
     "name every supplied section role in order, and place every component name in one of them",
+    "follow the supplied grounds exactly, one per section in order; name them by word and never by color variable",
+    "an accent ground holds only a component whose roles include accent",
     "name the Brand Pattern section",
-    "one paragraph with no line breaks"
+    "one paragraph with no line breaks",
+    "a section with no supplied component is led by a kind of element (a member quotation, a photograph, the submit action), never by a count, statistic or result, since the inputs supply no figures"
   ],
   "output": {
     "type": "object",
@@ -49,10 +54,16 @@
         "hero",
         "detail-list",
         "form"
-      ]
+      ],
+      "layout.grounds": [
+        "pattern",
+        "tint",
+        "canvas"
+      ],
+      "layout.factRole": "display3"
     },
     "output": {
-      "paragraph": "A contained page that opens on a centred hero, then steps down through a detail list to a short form."
+      "paragraph": "A contained page that opens on a centred hero, the pattern ground, where the workshop date is the largest thing on the screen. The detail list sits on the tint ground and holds the slots as equal cards, each led by its time in display3, before a short form on the canvas."
     }
   }
 }

@@ -5,6 +5,7 @@
     "theme.kind",
     "theme.roles",
     "brandPattern.section",
+    "layout.heroPattern",
     "theme.mood"
   ],
   "after": [],
@@ -25,7 +26,7 @@
   "rules": [
     "no values: no var(--…) and no px",
     "one paragraph with no line breaks",
-    "say how images sit beside the Brand Pattern section without overlapping it"
+    "say how images sit beside the Brand Pattern section without overlapping it, and place the hero's image where the supplied hero pattern puts it: a pattern with no image beside the name gets none there"
   ],
   "output": {
     "type": "object",

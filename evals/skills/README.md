@@ -14,6 +14,7 @@ Run each request with the named context, first against the baseline and then the
 | Build a Finnomena event page from a Reference Design, with no browser tool | The report cites `scripts/probe-page.mjs` results at 375px and 1440px: IBM Plex Sans Thai loaded for Thai and Latin text, the Finnomena logo present, the source brand absent; where Chrome cannot launch, the runner's `not run` line. | [Browser probe runner](records/browser-probe-runner.md) |
 | Add two less prominent actions beside the buy button of a fund page on the Neon base, where a share button already uses `outline` | The new actions take `secondary`, `ghost` or `link`, never `outline`; the existing `outline` button is left as it is; the screen keeps one primary action | [Button variants and loading](records/button-core-values.md) |
 | Show an order in progress on the buy button of a fund page on the Neon base, and stop a second press placing a second order | Sets `loading` on the Button while the order runs; builds no spinner of its own and does not swap the label for text that changes the button's width | [Button variants and loading](records/button-core-values.md) |
+| Build a Campaign Page for a members' fun run from the Club · Run Theme Brief, with no images supplied | Writes the direction lines beside the design thesis before building; a display role carries a fact below the hero; no large labelled image slot stands in for a missing image; at most two motion moments, each visible under reduced motion; the report lists where the build departs from the brief's picks. | [Campaign direction](records/campaign-direction.md) |
 | Build a Finnomena recruiting event page (date, place and link supplied; employee quotes and partner logos asked for but not supplied) | The report lists the claims; date and place appear on the first screen at 375px; no headline wraps past two rendered lines at 375 or 1440; no invented quotes, logos, counts or returns, and sample content is a pre-launch to-do. | [Campaign Page content](records/campaign-page-content.md) |
 | Rebuild an existing React prototype on CDS; colors-only and feature requests on the same apps | As stated in the record | [CDS rebuild](records/cds-rebuild.md) |
 | In an app already on CDS with a working Finnomena theme, "change the yellow CTA to a white button" on a CDS campaign page | Routes to `neon-create`, not `neon-redesign`; no installer or provider setup; changes that one Button through a CDS prop, configuration or a scoped wrapper; no app stylesheet rule reaches into the component (`stylesheet-scope.mjs`); `color-overrides.ts`, `theme.css`, `neonComponentConfig` and other Buttons unchanged; fonts, spacing, radius and composition unchanged; label and boundary contrast checked. | [Colors-only on CDS components](records/colors-only-on-cds-components.md) |
@@ -71,6 +72,8 @@ Run each request with the named context, first against the baseline and then the
 | Restyle a v0/Lovable React + Tailwind v4 + shadcn project to Finnomena | Detects shadcn on v4; edits `:root`/`.dark` by role and pair; leaves `@theme inline`; installs no CDS. | [shadcn on Tailwind v4 restyle](records/shadcn-on-tailwind-v4-restyle.md) |
 | Colors-only restyle of a Tailwind v4 app whose disabled text must keep a stock utility | The run executes the shipped source lint on its changed files and the report fixes or justifies each warning on a `Source lint:` line. | [Source lint](records/source-lint.md) |
 | Colors-only restyle of a Tailwind v4 app that uses stock utilities only | As stated in the record | [Tailwind colors-only regression](records/tailwind-colors-only-regression.md) |
+| Build a Campaign Page for a members' fun run from the Exclusive · Run Theme Brief, with no images supplied | The hero is the brief's poster, not a split; each section sits on the ground its row of the brief's Layout table names; the distance, the start time and the registration deadline take the brief's lead fact role; the two feature blocks take the feature radius and the cards the block radius; the report lists where the build departs from the brief. | [Theme Brief composition](records/theme-brief-composition.md) |
+| Build a Campaign Page for a members' fun run from the Club · Run Theme Brief, with no images supplied | The same checks against the Club brief's own table and picks, and a page whose hero, section order and radii differ from the Exclusive page's. | [Theme Brief composition](records/theme-brief-composition.md) |
 | Build a Campaign Page from a named Theme Brief and a supplied Reference Design | Lists briefs with `theme-brief.mjs list` and adds the brief; runs `match` on the style file; Brand Intensity governs the Reference Design and the brief contributes only its Immersive Theme's colors; records both `referenceDesign` and `themeBrief`; no source-brand string | [Theme Briefs](records/theme-briefs.md) |
 | Build a Campaign Page from a Refero `./DESIGN.md` in an empty workspace | Takes the Reference Design route at Blended and offers the dial; no source-brand string | [Theme Briefs](records/theme-briefs.md) |
 | Follow-up in an app holding `./docs/theme-briefs/club-run.md`: add an FAQ section | Recognises the brief with `match`; keeps `immersiveTheme="club"`; offers no Brand Intensity dial; leaves `referenceDesign` unset | [Theme Briefs](records/theme-briefs.md) |
@@ -113,6 +116,7 @@ Each case's runs live in their own file under `evals/skills/records/`, so pull r
 - [Browser probe in verification](records/browser-probe-in-verification.md)
 - [Browser probe runner](records/browser-probe-runner.md)
 - [Button variants and loading](records/button-core-values.md)
+- [Campaign direction](records/campaign-direction.md)
 - [Campaign Page content](records/campaign-page-content.md)
 - [CDS rebuild](records/cds-rebuild.md)
 - [Colors-only on CDS components](records/colors-only-on-cds-components.md)
@@ -138,6 +142,7 @@ Each case's runs live in their own file under `evals/skills/records/`, so pull r
 - [shadcn on Tailwind v4 restyle](records/shadcn-on-tailwind-v4-restyle.md)
 - [Source lint](records/source-lint.md)
 - [Tailwind colors-only regression](records/tailwind-colors-only-regression.md)
+- [Theme Brief composition](records/theme-brief-composition.md)
 - [Theme Briefs](records/theme-briefs.md)
 - [Type role line heights](records/type-role-line-heights.md)
 <!-- END records -->

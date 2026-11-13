@@ -28,6 +28,8 @@ Every value comes from the theme and Neon's tokens, and CI checks committed brie
 
 A Theme Brief is a Markdown file in the Refero Styles section order, one per Immersive Theme and occasion, headed `# Finnomena <Theme> · <Brief name> — Theme Brief`. It combines one occasion, one layout and one imagery Preset with a theme and a Brand Pattern colourway. The value sections are scripted from the theme and tokens. The prose comes from a model, through the prompt library, and a maintainer reviews it.
 
+A brief fixes a page's values, components and section order, and the three picks that keep it from one texture: each section's ground, the type role a component's lead fact takes, and a larger radius for a feature block. A brief with one radius, one padding and no type role above `title2` builds a page of equal cards, whatever the theme. It still does not compose the page: which element dominates a screenful, how blocks are sized against each other and what moves are decided at build time, by `neon-create`'s [campaign direction](../../skills/neon-create/references/campaign-direction.md).
+
 A published brief is the Markdown `<theme>-<slug>.md` in `registry/theme-briefs`, plus its registry entry `theme-brief-<theme>-<slug>`. Its maintainer files stay under `theme-briefs/`:
 
 | Maintainer term | File | Holds |
@@ -49,14 +51,14 @@ Drafts and review reports go to `.local/` and are never committed.
 | 0 | Header | title, `**Theme:**` and `**Immersive Theme:**` labels, status paragraph, the mood's theme half (the theme text) and membership ratio line | tagline (`tagline`); the mood's occasion half (`mood-occasion`) |
 | 1 | Tokens — Colors | the theme's roles and steps, canvas first, and the shared secondary table | — |
 | 2 | Tokens — Typography | the typeface and every type role | — |
-| 3 | Tokens — Spacing & Shapes | the space and radius scales, a Layout table with `--layout-contentMaxWidth` and `--layout-endMargin` in px, and the layout picks | — |
+| 3 | Tokens — Spacing & Shapes | the space and radius scales, a Layout table with `--layout-contentMaxWidth` and `--layout-endMargin` in px, and the layout picks, with the feature block radius and the lead fact role | — |
 | 4 | Components | Main Action, Secondary Action, Logo, Tint Block, Accent Block, and Support Block on a theme with `support` | the occasion's components (`occasion-components`) |
 | 5 | Do's and Don'ts | the stock bullets, first in each list | the preset bullets, last in each list (`preset-dos-donts`) |
 | 6 | Surfaces | canvas, block steps and the first accent and support steps | — |
 | 7 | Elevation | none | — |
 | 8 | Imagery | the Brand Floor sentence, the last paragraph | the paragraphs before it (`imagery`) |
 | 9 | Brand Pattern | section, colourway and ground | — |
-| 10 | Layout | — | one paragraph (`layout`) |
+| 10 | Layout | the section table (each section's ground with its fill and text variables) and the sentence after it, which starts `Rows are in page order.` | the paragraphs after them (`layout`) |
 | 11 | Motion | the level's vocabulary and the reduced-motion rule | — |
 | 12 | Agent Prompt Guide | the Quick Color Reference | prompts after **Example Component Prompts** (`example-prompts`) |
 | 13 | Sibling Themes | each other theme's label, light or dark, canvas and its `sibling` text | — |
@@ -80,9 +82,15 @@ It rewrites the scripted parts of every brief in `registry/theme-briefs` (or `--
 - Type comes from the theme, so no key may name a font or typeface.
 - Spacing and radius are step names (`space-4`, `borderRadius-500`), never px.
 
-**Occasion presets** have 2–6 components. Each names the roles it uses: `palette`, `accent`, `support` or `action`. They also have 1–3 do's and 1–3 don'ts, their prompt inputs and any secondary highlights.
+**Occasion presets** have 2–6 components. Each names the roles it uses: `palette`, `accent`, `support` or `action`. A component may name its `leadFact`, the one fact it sets in the layout's fact role (a distance, a deadline), and may be a `feature`, a block that spans the content column and takes the layout's feature radius. They also have 1–3 do's and 1–3 don'ts, their prompt inputs and any secondary highlights.
 
 **Layout presets** list generic section roles (`hero`, `proof`, `detail-list`, `call-out`, `form`, `footer`) and a density. They give block radius, section gap and card padding as steps, a page width of `contained` or `full-bleed`, and a motion level of `still`, `subtle` or `lively`. The Brand Pattern's section must be one of the layout's own roles.
+
+A layout also makes three composition picks:
+
+- `grounds`, one per section in page order: `canvas`, `tint` (the palette's strongest block step), `accent` (the accent's strongest step) or `pattern`. `pattern` goes on the Brand Pattern's section and nowhere else, where the picks file's colourway and ground fill it. At least one section takes `tint` or `accent`. The tool resolves each ground to the theme's variables, so one layout reads differently on each theme.
+- `featureRadius`, a radius step for a feature component.
+- `factRole`, the `display` role a component's lead fact takes. No other component text goes above `title1`.
 
 **Imagery presets** describe what leads, framing, subject, illustration and density.
 
@@ -91,6 +99,7 @@ A layout or imagery preset drafted from a page records it in `source`. The URL i
 A **picks file** is named after its theme and brief name: theme `club` with brief name `Run` gives `club-run.json`. Its choices must fit the theme:
 
 - Every role an occasion component uses exists on the theme. Every theme has `action` and its own families; only some have `support`.
+- A layout with an `accent` ground needs an occasion component that takes the `accent` role, since an accent ground holds nothing else.
 - The colourway is one of the theme's own families, never a secondary color, and the ground is a step of it.
 - A Brand Pattern sits on the bare canvas only as `palette` 100. A ground whose fill is the theme's canvas color under any other colourway or step is refused. On Club, whose palette 100 is a grey tint, every Pattern therefore sits on a tinted section.
 
@@ -109,7 +118,7 @@ node scripts/theme-briefs/theme-briefs.mjs club-run
 The tool drafts the prose one prompt library entry at a time, in `after` order. Each call is `claude -p` with `claude-opus-5-5` at high effort, run from an empty folder with no tools, MCP servers, project settings or saved session. `CLAUDE_PATH` names another executable; the tests point it at a fake.
 
 - **Inputs.** An entry gets only the `inputs` it declares: preset fields, theme text and facts, the picks, computed lists and earlier entries' output. Neither a preset's `source` nor the picks file's `review` is ever an input. The shared file fills `{{variables}}` with the variables prose may name and `{{typeRoles}}` with the type roles.
-- **Checks on each answer.** Hard checks refuse an answer. They cover its shape against the entry's `output` and whatever would stop the brief reading its prose back. They also cover the values in check 4, a fill named with another fill's text in check 6, the accent placement in check 10, eight words copied from the example, and a source name. Soft checks send an answer back: the `targets` word bands, one sentence per Do and Don't, component paragraph slots in order (fill, border, radius, padding), a Don't that starts "Do not" and gives its reason after " — ", a sentence-case tagline, agreement with the presets, and a fill named with no text.
+- **Checks on each answer.** Hard checks refuse an answer. They cover its shape against the entry's `output` and whatever would stop the brief reading its prose back. They also cover the values in check 4, a fill named with another fill's text in check 6, the accent placement in check 10, eight words copied from the example, and a source name. Soft checks send an answer back: the `targets` word bands, one sentence per Do and Don't, component paragraph slots in order (fill, border, radius, padding), a Don't that starts "Do not" and gives its reason after " — ", a sentence-case tagline, agreement with the presets, and a fill named with no text. Agreement covers the composition picks: a component sets its lead fact in the fact role, a component without one names no display role, a component rounds to the feature radius or the block radius as its preset says, a component without the `action` role names no `--immersive-action` (its action is the Secondary Action, so a row of cards never shows a row of main actions), a Do names no display role but the fact role, and the Layout paragraph names each tint and accent ground by word and no color variable.
 - **Retries.** An entry gets up to three attempts, and each retry is sent the last attempt's misses. The tool keeps the attempt that passes the hard checks with the fewest soft misses, the earliest on a tie. Later entries take the kept attempt.
 - **Writes.** Every run writes a draft, a review report and a run record to `.local/theme-briefs/<brief>/`. The run record is the authoring record the run would commit, with `null` for what an entry did not produce. The review gives each entry's hash and inputs, its attempts and their misses, a diff against the committed brief, and the word overlap per model section with other briefs on the same theme. When every entry passes, and the whole brief passes checks 3, 4, 5, 6, 7 and 10, the tool also writes the brief to the registry and its authoring record to the `records` folder beside the prompt library. Otherwise it exits 1, and the draft shows `**Hard checks failed — <entry>:**` or `**Not drafted — <entry>:**` under each section it could not fill.
 - **Claude Code fails.** If Claude Code cannot answer, the run stops and writes nothing. That covers a missing sign-in, a missing executable and a timeout. It does not count as an attempt.
@@ -212,6 +221,8 @@ The check module in `scripts/theme-briefs` is shared by the tool's `check-only` 
 | `uses role … which <Theme> lacks`, `is not one of <Theme>'s families`, `is not a step of`, `bare canvas` | The picks file does not fit its theme. Choose another preset, colourway or ground. |
 | `has the same occasion, layout and imagery presets as` | Check 9: two picks files of one theme share all three presets, so they would be one design; a different colourway does not make them distinct. Change at least one preset in the file named first. |
 | `Brand Pattern section … is not one of its sections` | A layout places the Pattern in a section it does not have. |
+| `"grounds" has … items`, `must be "pattern"`, `is "pattern", but the Brand Pattern section is`, `leaves every section on the canvas` | A layout's grounds do not fit its sections: give one ground per section, `pattern` on the Brand Pattern's section only, and a `tint` or `accent` on at least one other. |
+| `gives a section an accent ground, but no component of occasion … takes the accent role` | The picks file pairs a layout that has an accent ground with an occasion that has nothing to put on it. Give a component the `accent` role, or choose another layout. |
 | `preset … not found` | A picks file names a preset with no file. Add the preset or fix the slug. |
 | `needs a review record`, `review status is "illustrative"`, `needs a reviewer and reviewed_on` | A third-party source needs a recorded Finnomena design review before its picks file is committed. Record the review, or choose presets with no third-party source. |
 | `review record without a third-party source` | None of the chosen presets needs a review. Remove the record. |

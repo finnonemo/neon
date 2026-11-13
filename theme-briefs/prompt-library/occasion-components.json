@@ -3,6 +3,8 @@
   "inputs": [
     "occasion.components",
     "layout.blockRadius",
+    "layout.featureRadius",
+    "layout.factRole",
     "layout.cardPadding",
     "layout.density",
     "typeRoles",
@@ -13,7 +15,8 @@
   "after": [],
   "formula": [
     "for each supplied component, in order: its name unchanged, a role as a short noun phrase, then one paragraph",
-    "paragraph slot order: fill, border, radius, padding, type, contents, state, then an optional closing 'only' or 'never' line"
+    "paragraph slot order: fill, border, radius, padding, type, contents, state, then an optional closing 'only' or 'never' line",
+    "type opens on the component's leadFact in the supplied fact role, when it has one, then the rest in title, body and label roles"
   ],
   "targets": {
     "roleWords": [
@@ -21,8 +24,8 @@
       8
     ],
     "paragraphWords": [
-      25,
-      45
+      30,
+      55
     ],
     "paragraphSentences": [
       2,
@@ -31,8 +34,11 @@
   },
   "rules": [
     "a fill var(--immersive-X) always with its text var(--immersive-on-X)",
-    "radius and padding as var(--borderRadius-…) and var(--space-…) from the supplied picks",
+    "only a component whose roles include action names var(--immersive-action), for the page's main action; an action in any other component is the Secondary Action: no fill, its label and outline in the block's on- text variable",
+    "radius and padding as var(--borderRadius-…) and var(--space-…) from the supplied picks: a component with feature true takes the feature radius, every other the block radius",
     "type as role names from typeRoles, such as title2 or body",
+    "a component with a leadFact sets that one fact in the supplied fact role and nothing else above title1; a component without one stops at title1",
+    "a block inside a feature component takes a lighter step of the same family, never a second family",
     "exactly one entry per supplied component, in order, keeping its name"
   ],
   "output": {
@@ -77,16 +83,19 @@
           "roles": [
             "palette",
             "action"
-          ]
+          ],
+          "leadFact": "the slot time"
         }
-      ]
+      ],
+      "layout.blockRadius": "borderRadius-400",
+      "layout.factRole": "display3"
     },
     "output": {
       "components": [
         {
           "name": "Kiln slot card",
           "role": "One bookable firing slot",
-          "paragraph": "var(--immersive-palette-50) fill with var(--immersive-on-palette-50) text, no border, var(--borderRadius-400) corners and var(--space-3) padding. The slot time sits in title3 above a body line for the glaze rules, then one main action. Full slots show a plain label and never a disabled button."
+          "paragraph": "var(--immersive-palette-50) fill with var(--immersive-on-palette-50) text, no border, var(--borderRadius-400) corners and var(--space-3) padding. The slot time leads in display3 and fills the top of the card; the glaze rules follow in body, then one main action. Full slots show a plain label and never a disabled button."
         }
       ]
     }

@@ -3,7 +3,7 @@
   "briefName": "Run",
   "presets": {
     "occasion": "run",
-    "layout": "event-landing",
+    "layout": "event-poster",
     "imagery": "people-in-action"
   },
   "brandPattern": {

@@ -3,6 +3,9 @@
 // (type and colors come from the theme, never from an input).
 
 const SECTION_ROLES = ['hero', 'proof', 'detail-list', 'call-out', 'form', 'footer'];
+// What a section sits on: the canvas, the theme's strongest tint step, its strongest accent step, or the
+// Brand Pattern's ground, which the picks file chooses.
+export const GROUNDS = ['canvas', 'tint', 'accent', 'pattern'];
 export const COLOURWAYS = ['palette', 'accent', 'support'];
 const SECONDARIES = ['green', 'blue', 'purple', 'red', 'orange'];
 const REVIEW_STATUSES = ['illustrative', 'partially-reviewed', 'reviewed'];
@@ -13,10 +16,10 @@ export const ENTRIES = ['tagline', 'mood-occasion', 'occasion-components', 'pres
 // earlier entries' output. A whole preset ("layout", "imagery") leaves out its kind, slug and source.
 export const INPUTS = [
   ...['taglineIntent', 'moodIntent', 'components', 'dos', 'donts', 'promptInputs', 'secondaryHighlights'].map((field) => `occasion.${field}`),
-  'layout', ...['sections', 'heroPattern', 'navigation', 'footer', 'density', 'blockRadius', 'sectionGap', 'cardPadding', 'pageWidth', 'motion', 'brandPattern'].map((field) => `layout.${field}`),
+  'layout', ...['sections', 'heroPattern', 'navigation', 'footer', 'density', 'blockRadius', 'sectionGap', 'cardPadding', 'pageWidth', 'motion', 'brandPattern', 'grounds', 'featureRadius', 'factRole'].map((field) => `layout.${field}`),
   'imagery', ...['leads', 'framing', 'subject', 'illustration', 'density'].map((field) => `imagery.${field}`),
   'theme.kind', 'theme.label', 'theme.mood', 'theme.sibling', 'theme.roles', 'brief.name', 'brandPattern.colourway', 'brandPattern.section',
-  'accentPlacements', 'colorVars', 'typeRoles', 'occasion-components.components', 'occasion-components.names',
+  'accentPlacements', 'colorVars', 'typeRoles', 'sectionGrounds', 'occasion-components.components', 'occasion-components.names',
 ];
 // The bands each entry's soft checks read from its targets.
 export const TARGETS = {
@@ -54,7 +57,8 @@ export function presetSchema(kind, name, facts) {
       ...common,
       taglineIntent: text,
       moodIntent: text,
-      components: list(object({ name: text, role: text, contentNotes: text, roles: list(oneOf(...COLOURWAYS, 'action'), 1) }), 2, 6),
+      // leadFact: the one fact the component sets in the layout's fact role. feature: it spans the content column.
+      components: list(object({ name: text, role: text, contentNotes: text, roles: list(oneOf(...COLOURWAYS, 'action'), 1), leadFact: text, feature: { type: 'boolean' } }, ['leadFact', 'feature']), 2, 6),
       dos: list(text, 1, 3),
       donts: list(text, 1, 3),
       promptInputs: list(text),
@@ -65,6 +69,7 @@ export function presetSchema(kind, name, facts) {
     return object({
       ...common,
       sections: list(oneOf(...SECTION_ROLES), 1),
+      grounds: list(oneOf(...GROUNDS), 1),
       heroPattern: text,
       navigation: text,
       footer: text,
@@ -72,6 +77,8 @@ export function presetSchema(kind, name, facts) {
       blockRadius: step(facts.borderRadius, 'borderRadius'),
       sectionGap: step(facts.space, 'space'),
       cardPadding: step(facts.space, 'space'),
+      featureRadius: step(facts.borderRadius, 'borderRadius'),
+      factRole: oneOf(...facts.scale.type.map(({ role }) => role).filter((role) => role.startsWith('display'))),
       pageWidth: oneOf('contained', 'full-bleed'),
       motion: oneOf('still', 'subtle', 'lively'),
       brandPattern: object({ section: oneOf(...SECTION_ROLES) }),
@@ -276,6 +283,18 @@ export function presetProblems(kind, data) {
   const { sections, brandPattern } = data ?? {};
   if (kind === 'layout' && Array.isArray(sections) && brandPattern?.section && !sections.includes(brandPattern.section)) {
     problems.push(`Brand Pattern section "${brandPattern.section}" is not one of its sections`);
+  }
+  if (kind === 'layout' && Array.isArray(sections) && Array.isArray(data.grounds)) {
+    const { grounds } = data;
+    if (grounds.length !== sections.length) problems.push(`"grounds" has ${grounds.length} items; it gives one ground per section, and there are ${sections.length}`);
+    else {
+      const at = sections.indexOf(brandPattern?.section);
+      grounds.forEach((ground, index) => {
+        if (ground === 'pattern' && index !== at) problems.push(`"grounds.${index}" is "pattern", but the Brand Pattern section is ${at < 0 ? 'not a section' : `section ${at + 1}`}`);
+      });
+      if (at >= 0 && grounds[at] !== 'pattern') problems.push(`"grounds.${at}" must be "pattern": the Brand Pattern section takes the ground its picks file chooses`);
+      if (grounds.every((ground) => ground === 'canvas' || ground === 'pattern')) problems.push('"grounds" leaves every section on the canvas; give at least one section a tint or accent ground');
+    }
   }
   if (kind === 'occasion' && Array.isArray(data?.components)) {
     for (const { name } of data.components) if (FIXED_COMPONENTS.includes(name)) problems.push(`component "${name}" takes the name of a fixed component`);
