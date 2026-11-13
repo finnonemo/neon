@@ -242,6 +242,29 @@ test('the toast is announced politely without a provider in the screen', async (
   await expect(page.locator('section[aria-live]')).toHaveAttribute('aria-live', 'polite');
 });
 
+// Core's Snackbar (core/components/snackbar.md, Usage): at the top, never the bottom. Up to 600
+// wide it is flush under the status bar, here the top of the page, and 8 from each side; past
+// 600 it is centred 16 from the top edge and 320 to 540 wide.
+test('a toast sits at the top centre: flush with the top and 8 from each side on a phone, 16 from the top past 600', async ({ page }) => {
+  const placed = async (width) => {
+    await page.setViewportSize({ width, height: 812 });
+    await page.goto('/?layout=extras');
+    await page.getByRole('button', { name: 'บันทึก', exact: true }).click();
+    const toast = page.locator('[data-sonner-toast]');
+    await expect(toast).toBeVisible();
+    await settled(page);
+    const box = await toast.boundingBox();
+    return { top: Math.round(box.y), left: Math.round(box.x), right: Math.round(width - box.x - box.width), width: Math.round(box.width) };
+  };
+  expect(await placed(375)).toEqual({ top: 0, left: 8, right: 8, width: 359 });
+  expect(await placed(600)).toEqual({ top: 0, left: 8, right: 8, width: 584 });
+  const wide = await placed(1440);
+  expect(wide.top).toBe(16);
+  expect(wide.left).toBe(wide.right);
+  expect(wide.width).toBeGreaterThanOrEqual(320);
+  expect(wide.width).toBeLessThanOrEqual(540);
+});
+
 test('a toast leaves focus on its trigger, sets its icon 16px from its text, and its action fills on hover', async ({ page }) => {
   await page.goto('/?layout=extras');
   const trigger = page.locator('[data-measure=toast-action] button');

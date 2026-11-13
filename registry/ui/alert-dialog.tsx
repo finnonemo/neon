@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
 // Core's Alert at iOS=False (core/components/alert.md): a 300px card centered at every width,
-// never full screen, padded 14 on Layer/layer-01 with 16px corners over the
+// never full screen, padded 16 on Layer/layer-01 with 16px corners over the
 // Miscellaneous/overlay scrim. The Headline title and the Body message, both Text/text-primary
 // and left aligned, sit 10px apart in padding of 8, 8, 24, 8. The actions are Core's Button dock
 // side by side: Medium Buttons 8px apart, each half the row, the cancel Core's Tertiary before
@@ -45,7 +45,7 @@ function AlertDialogContent({ className, ...props }: React.ComponentProps<typeof
       <AlertDialogPrimitive.Content
         data-slot="alert-dialog-content"
         className={cn(
-          "fixed top-1/2 left-1/2 z-50 flex max-h-[calc(100svh-2rem)] w-[300px] max-w-[calc(100vw-2rem)] -translate-x-1/2 -translate-y-1/2 flex-col overflow-y-auto rounded-xl bg-popover p-3.5 text-popover-foreground shadow-[0_8px_24px_rgba(0,0,0,0.12)] outline-none",
+          "fixed top-1/2 left-1/2 z-50 flex max-h-[calc(100svh-2rem)] w-[300px] max-w-[calc(100vw-2rem)] -translate-x-1/2 -translate-y-1/2 flex-col overflow-y-auto rounded-xl bg-popover p-4 text-popover-foreground shadow-[0_8px_24px_rgba(0,0,0,0.12)] outline-none",
           "data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
           className
         )}
