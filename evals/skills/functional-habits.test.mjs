@@ -19,14 +19,14 @@ test('review checks place the habits table right after brand consistency', async
   assert.deepEqual(headings.slice(at, at + 3), ['Brand consistency', 'Functional screen habits', 'Responsive behavior']);
 });
 
-test('the habits table names each habit the ticket lists, with a CDS or composition alternative', async () => {
+test('the habits table names each habit the ticket lists, with a component or composition alternative', async () => {
   const rows = tableRows(section(await read('neon-review/references/review-checks.md'), 'Functional screen habits'));
   assert.ok(rows.length >= 6 && rows.length <= 9, `about eight rows, got ${rows.length}`);
   const habits = rows.map(([habit]) => habit).join('\n');
   for (const habit of [/icon/i, /chart/i, /zebra/i, /uppercase/i, /chip/i, /pagination/i, /emoji/i]) assert.match(habits, habit);
   for (const [habit, alternative] of rows) {
-    // Each alternative is a CDS component, prop or composition choice, never a stylesheet edit.
-    assert.match(alternative ?? '', /`[A-Za-z]+|[Cc]omposition/, `${habit}: names a CDS component, prop or composition`);
+    // Each alternative is a component, prop or composition choice, never a stylesheet edit.
+    assert.match(alternative ?? '', /`[A-Za-z]+|[Cc]omposition/, `${habit}: names a component, prop or composition`);
   }
 });
 
@@ -54,9 +54,12 @@ test('responsive task access turns a narrow comparison table into two-line rows 
   assert.match(narrow, /two-line rows/);
   assert.match(narrow, /identity and (?:its )?key figure/);
   assert.match(narrow, /[Ff]ields move to line 2.*never dropped/);
-  // Without column headers each moved field needs its label; ListCell truncates description unless multiline.
+  // Without column headers each moved field needs its label; a row's description truncates unless told to wrap.
   assert.match(narrow, /label/);
-  assert.match(narrow, /`multiline`/);
+  assert.match(narrow, /`whitespace-normal`/);
+  // The CDS name for the same rule is in the CDS reference (#220).
+  assert.doesNotMatch(narrow, /ListCell|multiline/);
+  assert.match(await read('neon-create/references/cds-integration.md'), /cuts `description` to one line unless `multiline` is set/);
   assert.match(narrow, /[Ff]ilters fold into one control row or a sheet/);
   assert.match(narrow, /375px/);
 });

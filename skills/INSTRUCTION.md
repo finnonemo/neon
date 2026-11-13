@@ -1,14 +1,14 @@
 # Finnomena product design contract
 
-This is the shared visual direction for Neon feature building, based on the maintainer's September 2026 brief. It defines intended usage; it does not claim design approval of the provisional CDS mapping.
+This is the shared visual direction for Neon feature building, based on the maintainer's September 2026 brief. It defines intended usage. Colors and type sizes that trace to Core are Core's decisions; the Immersive Themes, the gradient recipes, a color role with no Core token and the frozen CDS theme's color mapping are provisional, with no design approval claimed.
 
 ## Ownership
 
 - **User brief:** product behavior, audience, content, scope, and explicit exceptions.
 - **This contract:** Finnomena visual language and semantic color usage.
-- **theme/tokens/:** exported foundation values. **theme/cds/color-overrides.ts:** provisional mapping to CDS roles; **theme/cds/theme.config.ts:** generated spacing, radius and typography. **theme/css/theme.css:** CSS adapter, which the Neon base's theme item maps to shadcn slots and type-role utilities. Its colors come from Core's Theme tokens; a color role with no Core token stays provisional. Its type sizes and line heights come from Core's text styles (see [Typography](#typography-geometry-and-assets)). **theme/immersive-themes.json:** provisional Immersive Themes, generated into theme/css/immersive-themes.css.
+- **theme/tokens/:** exported foundation values. **theme/cds/:** the frozen CDS theme, for apps already on CDS; the CSS adapter's font family and weight, space and radius were captured from it. **theme/css/theme.css:** CSS adapter, which the Neon base's theme item maps to shadcn slots and type-role utilities. Its colors come from Core's Theme tokens; a color role with no Core token stays provisional. Its type sizes and line heights come from Core's text styles (see [Typography](#typography-geometry-and-assets)). **theme/immersive-themes.json:** provisional Immersive Themes, generated into theme/css/immersive-themes.css.
 - **Core snapshot (`core/`):** component rules: which component fits a job, its hierarchy, states and usage. This contract keeps brand and screen-level rules and links the snapshot instead of restating a component's; where the two differ, Core's rule holds. Read it per [Core rules](neon-audit/references/core-rules.md), only for a component the task uses.
-- **Installed component sources and types** (Neon items on the Neon base, `@coinbase/cds-web` on CDS) **and official docs:** actual components, props and theme extension APIs.
+- **Installed component sources and types** (Neon items on the Neon base; `@coinbase/cds-web` in an app already on CDS) **and official docs:** actual components, props and theme extension APIs.
 
 For functional layouts, the style means restrained, task-led composition and strong hierarchy. Immersive layouts may be colorful and expressive. It is a design direction, not a measurable 99% match or a dependency requirement. For React feature work, build on the Neon base with Neon registry items; an app already on CDS keeps CDS, which is frozen there, and one app never mixes the two. CSS-only work preserves its framework and styling tier; review-only work does not install components. Do not install a third-party design system, copy third-party assets, or replace Finnomena fonts with a third-party typeface.
 
@@ -48,7 +48,7 @@ The task-based choices, functional patterns and examples below are defaults that
 
 Functional UI should read as navy/white with restrained indigo interaction signals. Do not make every card, heading, or action indigo, assign random colored dashboard tiles, or use status colors as generic decoration. Pair status color with text or an icon. Illustrations may use the supporting palette without determining the app chrome.
 
-Current exported tokens still include black-alpha text, black dark surfaces, and inherited CDS fallback slots. Preserve their traceable values; this direction does not authorize inventing a replacement navy ramp. Report a concrete mismatch when it affects the requested screen. An indigo border token is not automatically an accessible link color. Verify actual foreground/background combinations in the affected mode.
+Current exported tokens still include black-alpha text, black dark surfaces, and a few color roles with no Core token, which keep their earlier values and are provisional. Preserve their traceable values; this direction does not authorize inventing a replacement navy ramp. Report a concrete mismatch when it affects the requested screen. An indigo border token is not automatically an accessible link color. Verify actual foreground/background combinations in the affected mode.
 
 ## Composition
 
@@ -102,7 +102,7 @@ For existing screens, apply these decisions only within authorized composition c
 
 ## Typography, geometry and assets
 
-Use IBM Plex Sans Thai via the app's font loader, with both Thai and Latin verified. Use Neon's type roles (`text-title1`, `text-body`, `text-label1` and the rest on the Neon base; the generated CDS typography roles on CDS) and shipped spacing/radius tokens. Structural widths and responsive geometry may use documented layout dimensions; do not prohibit every numeric CSS value. Preserve geometry during colors-only work.
+Use IBM Plex Sans Thai via the app's font loader, with both Thai and Latin verified. Use Neon's type roles (`text-title1`, `text-body`, `text-label1` and the rest on the Neon base) and shipped spacing/radius tokens. Structural widths and responsive geometry may use documented layout dimensions; do not prohibit every numeric CSS value. Preserve geometry during colors-only work.
 
 On the Neon base and in the CSS adapter, each type role takes the size and line height of one Core text style; its numbers are in `<Neon root>/core/text-styles.json`. From `title1` down the line heights follow Core's Thai rule, 1.4 × the size rounded up to a multiple of 4, which Core worked out for Finnomena Trek. In IBM Plex Sans Thai that clears most wrapped Thai and not the worst stack: measured in Chromium, a deep vowel directly above a stacked tone mark overlaps by up to 2px from `title1` to `body`, and one wrapped sample touched by 1px at `headline` and `body`. So do not tighten a role's line height. `display1` to `display3` take Core's Display styles, whose line heights are tighter (1.1 to 1.2 × the size): wrapped Thai collides there wherever a vowel below one line meets a mark above the next, so look at a wrapped Thai display heading in the browser and loosen only one that collides. Family and weight stay Neon's: IBM Plex Sans Thai at the role's own weight. The frozen CDS typography keeps its earlier values.
 
@@ -122,7 +122,7 @@ On the Neon base and in the CSS adapter, each type role takes the size and line 
 | `caption` | Footnote |
 | `legal` | Footnote |
 
-Use the Finnomena logo SVGs in `theme/logo/` through a `Logo`: the Neon base's `@neon/logo` registry item, or `templates/vitejs-cds/src/layout/Logo.tsx` on CDS. Select the mark for its actual surface. Do not recreate the wordmark as text. Existing apps reuse their approved assets.
+Use the Finnomena logo SVGs in `theme/logo/` through a `Logo`: the Neon base's `@neon/logo` registry item. Select the mark for its actual surface. Do not recreate the wordmark as text. Existing apps reuse their approved assets.
 
 ## Feature states and narrow screens
 
