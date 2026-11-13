@@ -7,7 +7,7 @@
 This is a Finnomena Theme Brief, not a Reference Design: skip Brand Intensity and apply the whole Brand Contract. Colors come from the Exclusive Immersive Theme and type from Neon's theme; layout, components, imagery and motion are Finnomena-authored and interpreted, not measured. Provisional pending design owner review.
 
 Exclusive fills the canvas with saturated yellow and sets navy ink on it. Yellow steps build the section blocks, Light Grey steps cool the page where it needs a pause, and the navy main action anchors every section. It is loud, warm and unmistakably Finnomena.
-For race weekend the accent is saved for the Registration call-out, so a member scanning the route lands there once they know where the start line sits. The page leans on rounded blocks stacked like course markers, with generous gaps between them so each stage of the week reads at an easy pace. It closes on a row of laced shoes by the door the night before the start.
+For race weekend the accent lands on the Registration call-out, where members commit to the start, and the patterned hero at the top carries it too, so the route opens and closes on the same signal. Rounded blocks and generous gaps pace the page like steady training laps, each section a clear stretch of road. It ends on a row of race bibs pinned out the night before the start.
 Membership ratio: Yellow 60%, Light Grey 30%, Navy 10%.
 
 ## Tokens — Colors
@@ -148,24 +148,24 @@ Neon's logo item, the light-surface mark. Never recreate the wordmark as text.
 `--immersive-accent-100` to `--immersive-accent-25` fills, each with its own `on-` text variable. Flat, like the Tint Block.
 
 ### Race distance card
-**Role:** One distance to compare and pick
+**Role:** One selectable race distance
 
-Fill var(--immersive-palette-50) with text in var(--immersive-on-palette-50), no border, var(--borderRadius-400) radius and var(--space-5) padding. The distance leads in display2. The start and cut-off times sit in title3, the member price in headline and notes in body. Each card's select action is the Secondary Action: no fill, with its label1 label and outline in var(--immersive-on-palette-50).
+var(--immersive-palette-50) fill with var(--immersive-on-palette-50) text, no border, var(--borderRadius-400) corners and var(--space-5) padding. The distance leads in display2; start time and cut-off time follow in body, the member price in title3. Each card has one select action as a secondary action, with a var(--immersive-palette-75) fill and its label in var(--immersive-on-palette-75). Never an outlined button.
 
 ### Route overview
 **Role:** Course map with checkpoints
 
-Fill var(--immersive-palette-75) with var(--immersive-on-palette-75) text, no border, var(--borderRadius-800) radius and var(--space-5) padding. The course name goes no higher than title1, checkpoint names use title4, distance markers and water stations use label1, and notes use body. The labelled map image slot and each checkpoint block sit on var(--immersive-palette-25) with var(--immersive-on-palette-25) text, never a second family.
+var(--immersive-palette-50) fill with var(--immersive-on-palette-50) text, no border, var(--borderRadius-800) corners and var(--space-5) padding. The course name sits in title1 above a labelled map image slot. Checkpoints sit in var(--immersive-palette-25) blocks with var(--immersive-on-palette-25) text and var(--borderRadius-400) corners, distance markers in label1 and water stations in body. Nothing here goes above title1.
 
 ### Race-day schedule
 **Role:** Race-day timeline
 
-Fill var(--immersive-palette-25) with var(--immersive-on-palette-25) text, no border, var(--borderRadius-400) radius and var(--space-5) padding. The start time leads in display2. Each row then gives its time in title4, the item in body and the place in label2, covering check-in, warm-up, start, finish and awards. Rows stay in time order and never become cards.
+var(--immersive-palette-25) fill with var(--immersive-on-palette-25) text, no border, var(--borderRadius-400) corners and var(--space-5) padding. The start time leads in display2; each row then gives time in label1, item in title4 and place in body, for check-in, warm-up, start, finish and awards. Past items stay listed, never struck through.
 
 ### Registration call-out
-**Role:** Main registration call-out
+**Role:** Main registration call to action
 
-Fill var(--immersive-accent-100) with var(--immersive-on-accent-100) text, no border, var(--borderRadius-800) radius and var(--space-5) padding. The registration deadline leads in display2 and a title2 line follows. The member benefit sits in body inside an inner block of var(--immersive-accent-50) with var(--immersive-on-accent-50) text. The page's only main action uses var(--immersive-action) with var(--immersive-on-action) in label1.
+var(--immersive-accent-100) fill with var(--immersive-on-accent-100) text, no border, var(--borderRadius-800) corners and var(--space-5) padding. The registration deadline leads in display2, the member benefit follows in title3 and body. The main action takes var(--immersive-action) with its label in var(--immersive-on-action) and label1 type. Only this component carries it.
 
 ## Do's and Don'ts
 
@@ -175,16 +175,16 @@ Fill var(--immersive-accent-100) with var(--immersive-on-accent-100) text, no bo
 - Build emphasis with tint steps, never with opacity.
 - Keep one color family per block.
 - Start stepped blocks at `--immersive-palette-75`; `--immersive-palette-100` is the canvas.
-- Place the registration deadline beside the Registration call-out's main action in --immersive-action with --immersive-on-action text, and beside each Race distance card's secondary select action.
-- Set each distance on the Race distance card and the deadline in the Registration call-out in display2, the largest thing in its block.
+- Show the registration deadline in label1 beside the main action in the Registration call-out, and beside each Race distance card's secondary select action.
+- Set each distance on its Race distance card and the deadline in the Registration call-out in display2, as the largest thing in its block.
 
 ### Don't
 - Do not use gradients — Immersive Themes have none.
 - Do not write new hex values or near-palette tints — every color is a token step.
 - Do not let the shared secondary colors lead — keep them to small highlight, tag and illustration blocks.
 - Do not use `--immersive-action` (Navy 100) as a block fill — it is reserved for the main action and its `--immersive-on-action` label.
-- Do not run the route map from the Route overview behind section content as decoration — runners need to read every turn and marker on it.
-- Do not give the Race distance card, Route overview and Race-day schedule one shared card recipe — the page then reads as a single flat texture.
+- Do not place the route map behind text as a decorative background in the Route overview — runners need to read every turn and marker.
+- Do not build the Race distance card, Route overview and Race-day schedule from one card recipe — the page then reads as a single texture.
 
 ## Surfaces
 
@@ -229,7 +229,7 @@ The hero section carries the Brand Pattern in a panel on its ground: Block draws
 
 Rows are in page order. A `tint`, `accent` or `pattern` ground fills its section edge to edge, with the content column inside it; on `canvas` the section's blocks carry the fills. A component whose fill is its section's ground steps one lighter in the same family, so the block and its radius show against the ground.
 
-A full-bleed page opens on the hero, the Brand Pattern section on the pattern ground: a poster stack where the event name, over its date, place, supporting line and main action, dominates the first screen and drops one display role on narrow screens. The first detail-list, on tint, holds the Race distance cards, the one set of peers, as equal cards at borderRadius-400 with space-5 padding, each led by its distance. The second detail-list, on the canvas, holds the Route overview spanning the content column at borderRadius-800, dominated by its map image, then the Race-day schedule led by its start time. The call-out, on the accent ground, holds the Registration call-out across the column at borderRadius-800, dominated by the registration deadline. Proof, on the canvas, is led by a member quotation; the form, on tint, is led by the submit action. Distance, start time and deadline take display2. No navigation; a sticky main action appears on narrow screens after the hero. The minimal footer on the canvas holds the logo, organiser line and legal links, and space-10 separates every section.
+A full-bleed page that opens on a poster hero, the Brand Pattern section on the pattern ground, where the stacked event name is the largest thing on the first screen and any lead image runs below as a wide strip. The first detail list, on the tint ground, holds the Race distance cards as the one set of equal peers, each led by its distance. The second detail list, on the canvas, carries the Route overview across the full content column, dominated by its map, followed by the Race-day schedule led by the start time. On the accent ground the Registration call-out spans the column, its deadline dominating. Proof follows on the canvas, led by a member quotation, and the form sits on the tint ground, led by the submit action. The distance, start time and registration deadline take display2. There is no navigation; a sticky main action appears on narrow screens after the hero. The footer, on the canvas, keeps the logo, organiser line and legal links. Sections part by space-10, cards pad by space-5 at borderRadius-400, and feature components round to borderRadius-800.
 
 ## Motion
 
@@ -251,13 +251,13 @@ Under `prefers-reduced-motion: reduce`, use the still level. Nothing animates th
 
 **Example Component Prompts**
 
-1. Create a set of three Race distance cards: var(--immersive-palette-50) fill with var(--immersive-on-palette-50) text, no border, var(--borderRadius-400) corners, var(--space-5) padding, the distance in display2, start and cut-off times in title3, member price in headline, notes in body, and a Secondary Action select outline in var(--immersive-on-palette-50) with a label1 label.
+1. Create a set of three Race distance cards: each card takes var(--immersive-palette-50) as fill and var(--immersive-on-palette-50) as text, var(--borderRadius-400) corners, var(--space-5) padding and no border. The distance leads in display2, start and cut-off times sit in body, the member price in title3, and one secondary select button is filled var(--immersive-palette-75) and labelled in var(--immersive-on-palette-75).
 
-2. Create a Registration call-out: var(--immersive-accent-100) fill with var(--immersive-on-accent-100) text, var(--borderRadius-800) corners, var(--space-5) padding, the registration deadline in display2, a title2 line beneath, the member benefit in body on an inner var(--immersive-accent-50) block with var(--immersive-on-accent-50) text, and the page's single main action filled var(--immersive-action) with var(--immersive-on-action) label1 text.
+2. Create a Registration call-out: var(--immersive-accent-100) fill, var(--immersive-on-accent-100) text, var(--borderRadius-800) corners and var(--space-5) padding. The registration deadline leads in display2, then the member benefit in title3 with its detail in body, and the page's only main action uses var(--immersive-action) with its label1 text in var(--immersive-on-action).
 
-3. Create the first detail-list section: var(--immersive-palette-75) fill with var(--immersive-on-palette-75) text, var(--space-10) gap above and below, a title1 heading, dominated by a row of three Race distance cards on var(--immersive-palette-50) with var(--immersive-on-palette-50) text, var(--borderRadius-400) corners and var(--space-5) padding.
+3. Create a detail-list section: var(--immersive-palette-75) fill with var(--immersive-on-palette-75) text, var(--space-10) above and below, dominated by a Route overview whose course name sits in title1 over a labelled map image slot, with checkpoints in var(--immersive-palette-25) blocks, var(--immersive-on-palette-25) text and var(--borderRadius-400) corners.
 
-4. Create a Race-day schedule: var(--immersive-palette-25) fill with var(--immersive-on-palette-25) text, no border, var(--borderRadius-400) corners, var(--space-5) padding, the first start time in display2, then time-ordered rows for check-in, warm-up, start, finish and awards, each giving its time in title4, item in body and place in label2.
+4. Create a Race-day schedule: var(--immersive-palette-25) fill and var(--immersive-on-palette-25) text, var(--borderRadius-400) corners, var(--space-5) padding. The first start time leads in display2, then each row gives time in label1, item in title4 and place in body for check-in, warm-up, start, finish and awards, with past rows kept visible.
 
 ## Sibling Themes
 
