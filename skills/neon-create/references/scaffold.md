@@ -26,7 +26,7 @@ Choose based on the task, not the default `App.tsx`:
 | `MultiColumnLayout` | Explicit board/kanban task |
 | `ImmersiveLayout` | Focused content or landing page; full-bleed except at the widest tier, where content caps at 1440px. `immersiveTheme` sets a Campaign Page's [Immersive Theme](../../INSTRUCTION.md#composition) |
 
-Import them from `@/layout/<name>`. These are starter exports, not guaranteed imports in other apps. Inspect `src/layout/layoutPanes.ts` for corroborated versus extrapolated geometry. Supply navigation for actual destinations; ecosystem links are opt-in. Use the shipped `Logo` and SVG marks appropriate to the surface, not a recreated text wordmark.
+Import them from `@/layout/<name>`. These are starter exports, not guaranteed imports in other apps. Inspect `src/layout/layoutPanes.ts` for corroborated versus extrapolated geometry. Supply navigation for actual destinations; ecosystem links are opt-in. The sidebar holds that navigation and nothing that is a record: a list of advisors, requests or funds goes in content, as a list page that opens a detail page, or as `AppShell`'s list pane. Use the shipped `Logo` and SVG marks appropriate to the surface, not a recreated text wordmark.
 
 ## Content and details on narrow screens
 
