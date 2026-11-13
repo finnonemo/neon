@@ -16,6 +16,8 @@ November 2026. The contract now states the app's shell as fixed, puts containers
 | One advisor | `9fd0167` (shell fixed, containers last) | 2.79 | 93 | 8.1 | 1 |
 | One advisor | `67bd78e` (adds the sidebar rule) | 3.10 | 91 | 10.7 | 0 |
 | Pick from a team | `67bd78e` | 2.85 | 76 | 8.5 | 3 |
+| Pick from a team | `c8f0f3d` (list and detail layout named) | 3.23 | 102 | 8.8 | 1 |
+| Pick from a team | baseline `fd6e2e9` | 3.24 | 94 | 8.8 | 1 |
 
 A first run at `9fd0167` ended its turn while the scaffold installed (22 turns) and is not counted.
 
@@ -25,8 +27,10 @@ A first run at `9fd0167` ended its turn while the scaffold installed (22 turns) 
 
 **Sidebar is the menu: met at `67bd78e`.** The one-advisor run left the sidebar without a record list and built in `ContentLayout`. The team run passed `sidebar={null}` and an empty navigation, listed the eight advisors in a list pane with the detail beside it, and shows them as two views with a "Back to team" link only on narrow screens. It took `AppShell`, the starter's list and detail layout, which is what the owner asked for; the `9fd0167` run had taken `SimpleLayout`. The contract at that commit also allowed a list page and a detail page; the next commit names the list and detail layout as the one form and has not been run.
 
+**List and detail layout from the start (`c8f0f3d`): taken, and the baseline takes it too.** Both later runs of the team request import `AppShell`, pass `sidebar={null}` and an empty navigation, put the eight advisors in its list pane, and change no file under `src/layout/`. The baseline does the same without the sentence, so this request does not show what the sentence changed; the one run that took `SimpleLayout` for a list was the one-advisor request at `9fd0167`. Neither report says which layout it took or why, though both give a thesis written before building. The baseline report notes a React style warning logged from the starter's `ResponsivePanes`, which the run left alone.
+
 **Report names the layout: only with the change.** The baseline report does not say why it took `ContentLayout`; the `67bd78e` runs name the layout and the reason, and the team run wrote its thesis before its first source file.
 
-What the runs do not show: whether the containers wording changes any build; whether the list and detail layout is taken every time, since one run shows it; whether the shell stays unedited when no layout fits, since both `67bd78e` requests fit an existing layout. The last two runs were served a registry with the pane order fixed (sidebar, content, inspector); the first two were not, so their pane positions are not comparable.
+What the runs do not show: whether the containers wording changes any build; whether the list and detail sentence changes a build, since the baseline also takes that layout for the team request, and the request that once took `SimpleLayout` was not rerun; whether the shell stays unedited when no layout fits, since both `67bd78e` requests fit an existing layout. Every run from `67bd78e` on, the team baseline included, was served a registry with the pane order fixed (sidebar, content, inspector); the first two were not, so their pane positions are not comparable. The "report names the layout" result holds for the two `67bd78e` runs only.
 
 Limits: one sample per row, graded by the author of the change from each run's report, patch and file list, and 1440px screenshots of the built pages; no interaction was exercised beyond picking an advisor.
