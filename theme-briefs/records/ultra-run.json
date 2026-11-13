@@ -1,8 +1,8 @@
 {
   "brief": "ultra-run",
   "tool": {
-    "commit": "9b3905d281e92a7746b9fa79bba64031ba171a15",
-    "version": "c8db70ff85af45d20233edde011ce4abe6f06c33a666649d0e1ff8b04c80f3dd"
+    "commit": "1e3b249c397dfebe25631a3568ca60bce225061e",
+    "version": "92244fde56da7279d34a1990cf603372c97b33a9d0310196a727a37f74da2411"
   },
   "claudeCode": {
     "version": "2.1.323",
@@ -26,7 +26,7 @@
       "output": "d2ea3534bc75305112f0387030bc7400e28a67fe0ac44f9cc472ccc67dd167ad"
     },
     "mood-occasion": {
-      "entry": "b679ae0e1542cd0df4c5e61e8db56e89dbffea15b8825c29b9b4998dcc2dcfc3",
+      "entry": "163c9ac13b32bd1c5e5e30787a27fa064d2ea9f9a69c41ce14bbc3a94b83faad",
       "shared": "935d2a8c01c5a85ebc05a23cc765299676c01eddbf0fac2e6901efb45ef6a880",
       "inputs": "4305753cab5483326984937d56e89a7a2f36dff7d90a73482243abd080503572",
       "attempts": [
@@ -36,20 +36,24 @@
         }
       ],
       "kept": 1,
-      "output": "399f37be72fa5e8868da3e14b2c948cbd0ff3c4577cbc4efa1cf1762fef2e5db"
+      "output": "8c04c9d168c7c7be429395b77c5cdb6a3bed1c72aa9ebec77efd2c547974475d"
     },
     "occasion-components": {
-      "entry": "19d3e2dcf52c4e89b3cc4cf6c0a8476b1a678682ab38e3a029597d7b7f525f3a",
+      "entry": "6de5f25bc0506087ad8b3bcca6bbb53c06729aad766edaaf92ff1df45c1a8efa",
       "shared": "935d2a8c01c5a85ebc05a23cc765299676c01eddbf0fac2e6901efb45ef6a880",
-      "inputs": "2158a7910c65d77b4619b965182bc7165bad14b26ef520b3f644e374001cf190",
+      "inputs": "840775ba91b38d5fee4c45be3cd39ef74d6ffa24546812e52a2657a119799412",
       "attempts": [
+        {
+          "hard": 0,
+          "soft": 2
+        },
         {
           "hard": 0,
           "soft": 0
         }
       ],
-      "kept": 1,
-      "output": "0667397878b1608dacd1b3f64572885710bc2704f5330e5fa5a740561031ed27"
+      "kept": 2,
+      "output": "c0c79272a3bb4a8905d3304055ac641b283534e055e35cc63226574e1c18c2b3"
     },
     "preset-dos-donts": {
       "entry": "382754d83d3750ee2a88981be8f71810f7a0ee084b0fc382a246d25d8fae6fc1",
@@ -58,15 +62,11 @@
       "attempts": [
         {
           "hard": 0,
-          "soft": 1
-        },
-        {
-          "hard": 0,
           "soft": 0
         }
       ],
-      "kept": 2,
-      "output": "30421ad82daf62188fa2d35a2dd986fc548842e5346e267defa510e01da77d18"
+      "kept": 1,
+      "output": "322783052369e7816fc162f652772a4d777aa20b481d38eb5a2321e7e8f7da9d"
     },
     "imagery": {
       "entry": "437ec358242f1bcbaa6baa1d96e81e59d4d4adbee7fd4604a760a3da0e4b971e",
@@ -96,12 +96,12 @@
         }
       ],
       "kept": 1,
-      "output": "eade5911e3054cf385b001cbd12a2a1eab7083df4eb0c2e0adf9f58db73bdf23"
+      "output": "4920aedd06e214ef2692f36709d76faf2497429ee5e34619be009cade852dd65"
     },
     "example-prompts": {
       "entry": "0589dc0146632bac6575ff5e3eb6fef367eec1b26a45b8f20078741df4d62230",
       "shared": "935d2a8c01c5a85ebc05a23cc765299676c01eddbf0fac2e6901efb45ef6a880",
-      "inputs": "66c9f94ab82ac30302135b56a9f5b34e98ab26c4a325ba7a3bc4770034bef642",
+      "inputs": "834bd83ae38629dd101183e4e2cebb6893d76a0aef3f6a81c96809d616e7d2db",
       "attempts": [
         {
           "hard": 0,
@@ -109,7 +109,7 @@
         }
       ],
       "kept": 1,
-      "output": "229bf112bace6953120cdc7b019304da8a3cfa2b6b187e9ce86e4f93538612a2"
+      "output": "e4616b38382f10814897a7ce202aa1650a89f4f039546b3dfe7ef373152f646b"
     }
   },
   "accentPlacement": "Registration call-out"

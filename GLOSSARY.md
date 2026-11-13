@@ -137,8 +137,12 @@ Finnomena background artwork made by Block's generator from a locked seed, place
 _Avoid_: texture, background, Page (Block's full composition)
 
 **Brand Pattern colourway**:
-The one Immersive Theme color family (its palette, accent or support) whose steps a Brand Pattern and the block beneath it use.
+The one Immersive Theme color family (its palette, accent or support) whose step fills the section a Theme Brief's Brand Pattern sits in.
 _Avoid_: pattern palette, pattern color, secondary color
+
+**Block Colourway**:
+One of the pairs of a ground color and a block color that Block's generator draws a Brand Pattern in. A Theme Brief names one from Block's primary group, whose two colors are its Immersive Theme's own.
+_Avoid_: pattern colors, Brand Pattern colourway (the section's fill)
 
 **Brand Artwork**:
 A finished Finnomena picture drawn by the Block engine from an employee's request: a Pattern alone, or one Page with a headline and the logo, for an ad, a post or a cover. Unlike a Brand Pattern it is a file of its own, not part of an app's screen.

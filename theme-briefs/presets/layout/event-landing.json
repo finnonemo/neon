@@ -19,7 +19,7 @@
     "canvas",
     "canvas"
   ],
-  "heroPattern": "split: the event name with its date and place, the supporting line and the main action on one side, the lead image on the other; with no image supplied the date takes that side as a numeral block; stacks image-last on narrow screens",
+  "heroPattern": "split: the event name with its date and place, the supporting line and the main action on one side, the lead image on the other; with no image supplied the date takes that side as a numeral block; stacks image-last on narrow screens, with the name one display role smaller",
   "navigation": "none; a sticky main action appears on narrow screens after the hero",
   "footer": "minimal: logo, organiser line and legal links",
   "density": "comfortable",

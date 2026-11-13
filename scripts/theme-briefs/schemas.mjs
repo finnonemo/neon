@@ -7,6 +7,21 @@ const SECTION_ROLES = ['hero', 'proof', 'detail-list', 'call-out', 'form', 'foot
 // Brand Pattern's ground, which the picks file chooses.
 export const GROUNDS = ['canvas', 'tint', 'accent', 'pattern'];
 export const COLOURWAYS = ['palette', 'accent', 'support'];
+// Block's primary Colourways (COLOURWAYS_LIST in block/block-engine.mjs): a ground color and one block color.
+// Block draws a Brand Pattern in one of these and no other; a test holds this list to the engine's.
+const BLOCK_COLORS = { navy: 'Navy', grey: 'Light Grey', white: 'White', yellow: 'Yellow' };
+export const BLOCK_COLOURWAYS = ['navy__yellow-100', 'navy__grey-100', 'navy__white-100', 'grey__yellow-100', 'grey__navy-100', 'grey__white-100', 'white__yellow-100', 'white__grey-100', 'white__navy-100'];
+// The two colors a Block Colourway draws with, as Immersive Theme color names.
+export function blockColourway(id) {
+  const [ground, blocks] = String(id).split('__');
+  return { ground: `${BLOCK_COLORS[ground]}.100`, blocks: `${BLOCK_COLORS[String(blocks).replace(/-100$/, '')]}.100` };
+}
+// A theme's variable for one of its colors at full strength: the canvas, the text or a family's 100 step.
+export function colorVariable(theme, color) {
+  if (color === theme.canvas) return 'canvas';
+  const family = theme.families.find((name) => theme.steps[name]['100']?.bg === color);
+  return family ? `${family}-100` : color === theme.text ? 'text' : null;
+}
 const SECONDARIES = ['green', 'blue', 'purple', 'red', 'orange'];
 const REVIEW_STATUSES = ['illustrative', 'partially-reviewed', 'reviewed'];
 // The components every brief renders itself; an occasion component never takes one of their names.
@@ -19,7 +34,7 @@ export const INPUTS = [
   'layout', ...['sections', 'heroPattern', 'navigation', 'footer', 'density', 'blockRadius', 'sectionGap', 'cardPadding', 'pageWidth', 'motion', 'brandPattern', 'grounds', 'featureRadius', 'factRole'].map((field) => `layout.${field}`),
   'imagery', ...['leads', 'framing', 'subject', 'illustration', 'density'].map((field) => `imagery.${field}`),
   'theme.kind', 'theme.label', 'theme.mood', 'theme.sibling', 'theme.roles', 'brief.name', 'brandPattern.colourway', 'brandPattern.section',
-  'accentPlacements', 'colorVars', 'typeRoles', 'sectionGrounds', 'occasion-components.components', 'occasion-components.names',
+  'accentPlacements', 'offActionFills', 'colorVars', 'typeRoles', 'sectionGrounds', 'occasion-components.components', 'occasion-components.names',
 ];
 // The bands each entry's soft checks read from its targets.
 export const TARGETS = {
@@ -93,7 +108,8 @@ export function picksSchema(facts) {
     theme: oneOf(...Object.keys(facts.themes)),
     briefName: { type: 'string', pattern: /^[A-Z][A-Za-z0-9]*(?: [A-Za-z0-9]+)*$/, describe: 'an English name starting with a capital, letters, digits and single spaces' },
     presets: object({ occasion: slug, layout: slug, imagery: slug }),
-    brandPattern: object({ colourway: oneOf(...COLOURWAYS), ground: { type: 'integer' } }),
+    // colourway and ground: the fill the Pattern's section takes. blockColourway: what Block draws the Pattern in.
+    brandPattern: object({ colourway: oneOf(...COLOURWAYS), ground: { type: 'integer' }, blockColourway: oneOf(...BLOCK_COLOURWAYS) }),
     // The example-library review record, for a brief built from a third-party source.
     review: object({
       status: oneOf(...REVIEW_STATUSES),
