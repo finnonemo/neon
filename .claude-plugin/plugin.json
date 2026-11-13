@@ -1,7 +1,7 @@
 {
   "name": "neon",
   "description": "Applies Finnomena's brand so any employee's vibe-coded apps, UI mockups and artwork follow company branding. Ships neon-create (builds on the Neon base, or in an app already on the Coinbase Design System), neon-redesign (colors and typography through CSS variables), neon-audit (recommends a theming depth for an existing project), neon-review (read-only, evidence-backed UI review) and neon-block (draws Brand Artwork such as ads, posts and covers with the Block engine, through the finno tools).",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "author": {
     "name": "Finnomena"
   },
