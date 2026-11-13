@@ -7,7 +7,6 @@
 `Alert`, as the kit, with changes in brackets:
 
 ```
-Alert (variant root)              Fixed 300 × Hug, VERTICAL, padding 14 (raw, the kit's), gap 0, clip
 │                                   iOS=False: `Layer/layer-01`, radius 16 (`radius-lg`), `Elevation/Floating` (A6)
 ├─ Title and Message              VERTICAL, Fill × Hug, padding 8 · 8 · 24 · 8 (`spacing-03`, `spacing-06`), gap 10 (raw)
 │  ├─ Title                       `Headings/Headline`, `Text/text-primary`, left, wraps; TEXT `Title`
@@ -39,7 +38,7 @@ The kit's 52-tall field rows and its 19 under them go through the Size table: Te
 
 ## Component variables and Theme tokens
 
-No new `Components` variable. The values on a Scale step bind it: 8 `spacing-03`, 24 `spacing-06`, `iOS=False`'s radius `16px (radius-lg)`. Button and Text field bring their own variables. No `Alert/…` group: it would hold only raw kit values, which Sheet and Menu left unbound too.
+No new `Components` variable. The values on a Scale step bind it: 8 `spacing-03`, 16 `spacing-05` (the root's padding, not the kit's 14,), 24 `spacing-06`, `iOS=False`'s radius `16px (radius-lg)`. Button and Text field bring their own variables. No `Alert/…` group: it would hold only raw kit values, which Sheet and Menu left unbound too.
 
 Colours map every kit paint the alert owns to an existing Theme token; no new token. The buttons' and fields' paints are Button's and Text field's own.
 
@@ -65,7 +64,7 @@ None: the kit's alert draws no glyph, and Uber's artwork and CDS's pictogram sta
 | `Title` | `Headings/Headline` (17, kit 17 Semibold) | wraps, no limit (Localisation: content text) | `Title` |
 | `Message` | `Body/Body` (17) | wraps, no limit | `Message` |
 
-The Button labels and Text field values are theirs: a control label is one line and never cut. In Side-by-Side each button is 132 wide, 84 for its label after the 24 paddings; two labels that don't fit go Stacked (Usage).
+The Button labels and Text field values are theirs: a control label is one line and never cut. In Side-by-Side each button is 130 wide, 82 for its label after the 24 paddings; two labels that don't fit go Stacked (Usage).
 
 ## Hit target and Skeleton
 
@@ -91,7 +90,7 @@ Movement from Motion and haptics, the owner's D6 (ads-tokens.md § 5), edited in
 - [x] 3. The fields are Text field, identified by more than their fill.
 - [x] 4. A destructive action is named by its label as well as red (`Type=Danger`); the alert's modal state is the system's or the web's, not the scrim's colour alone.
 - [x] 5. The Focus ring is the Buttons' and Text fields' own, outside each (`iOS=False`); the alert itself takes no focus.
-- [x] 6. **Reflows** since Button's . `reflow-check.js` (`84e87b06`, 2026-11-10, `Show Text Field` on, Thai copy, 343): `counts` {}; The Text field's placeholder truncates with "…", the field's own behaviour.
+- [x] 6. **Reflows** since Button's . `reflow-check.js` (`c9575893`, 2026-11-12 after , `Show Text Field` on, Thai copy, 343): `counts` {}; The Text field's placeholder truncates with "…", the field's own behaviour.
 - [x] 7. No text under 17.
 - [x] 8. Motion names System and the `iOS=False` tokens, reduced forms and haptic.
 - [x] 9. Role, name, states and order:
@@ -112,8 +111,9 @@ Movement from Motion and haptics, the owner's D6 (ads-tokens.md § 5), edited in
   - Stacked, three actions: "ยืนยันตัวตนไม่สำเร็จ" (Couldn't verify you), Preferred "ลองอีกครั้ง", Other "ใช้รหัส PIN", Dismiss "ยกเลิก".
   - With a field: "ตั้งชื่อพอร์ต", one Text field (`Second Field` off), "ยกเลิก" / "บันทึก".
   - Web at Regular width: `iOS=False` centred in a `Screen 1280` (Sheet's K8 (a): a confirmation is Alert there).
+- **Placement**: **centred** on the screen, both looks, over the `Miscellaneous/overlay` scrim, at every width: iPhone, iPad, Android and web (Regular width: centred in the `Screen`). Never at the bottom of the screen and never inset like a Sheet. A Pattern places it as a sibling layer over the whole screen (screen-rules). One at a time; it dismisses by its own buttons (a tap on the scrim is not a way out).
 - Not for: a form, long content or several steps (Sheet; at Regular width `Sheet - iPad`); a choice among several actions from a control (Action Sheet, #151, or Menu); feedback that needs no answer (Snackbar, the banners).
-- Two to three actions. Labels short: two that don't fit 84 each go Stacked.
+- Two to three actions. Labels short: two that don't fit 82 each go Stacked.
 
 ### Hierarchy
 

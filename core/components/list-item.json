@@ -113,6 +113,11 @@
       "default": false
     },
     {
+      "name": "Change percent",
+      "type": "BOOLEAN",
+      "default": true
+    },
+    {
       "name": "Pop-up text",
       "type": "TEXT",
       "default": "Option"
@@ -327,6 +332,7 @@
     {"layer":"Container / Main table cell / Right content / Change / Change value","property":"isExposedInstance","when":"{{State=*}}","value":"true","literal":true},
     {"layer":"Container / Main table cell / Right content / Change / Change value","property":"componentProperties.State","when":"{{State=*}}","value":"Enabled","literal":true},
     {"layer":"Container / Main table cell / Right content / Change / Change value","property":"componentProperties.State","when":"{{State=Disabled}}","value":"Disabled","literal":true},
+    {"layer":"Container / Main table cell / Right content / Change / Change percent","property":"visible","when":"{{State=*}}","value":"true","literal":true},
     {"layer":"Container / Main table cell / Right content / Change / Change percent","property":"isExposedInstance","when":"{{State=*}}","value":"true","literal":true},
     {"layer":"Container / Main table cell / Right content / Change / Change percent","property":"componentProperties.State","when":"{{State=*}}","value":"Enabled","literal":true},
     {"layer":"Container / Main table cell / Right content / Change / Change percent","property":"componentProperties.State","when":"{{State=Disabled}}","value":"Disabled","literal":true},

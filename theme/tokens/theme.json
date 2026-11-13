@@ -2307,71 +2307,6 @@
         "type": "color",
         "prefix": "color"
       },
-      "chart-categorical-01": {
-        "value": "{Blue.155}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-categorical-02": {
-        "value": "{Orange.145}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-categorical-03": {
-        "value": "{Yellow.150}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-categorical-04": {
-        "value": "{Purple.75}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-categorical-05": {
-        "value": "{Teal.120}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-categorical-06": {
-        "value": "{Red.90}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-categorical-07": {
-        "value": "{Indigo.80}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-categorical-08": {
-        "value": "{Green.140}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-sequential-01": {
-        "value": "{Blue.160}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-sequential-02": {
-        "value": "{Blue.150}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-sequential-03": {
-        "value": "{Blue.140}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-sequential-04": {
-        "value": "{Blue.130}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-sequential-05": {
-        "value": "{Blue.115}",
-        "type": "color",
-        "prefix": "color"
-      },
       "Asset allocation": {
         "equity": {
           "value": "{Blue.155}",
@@ -2421,106 +2356,106 @@
       },
       "Multi-asset": {
         "equity": {
-          "value": "{Blue.155}",
+          "value": "{Purple.90}",
           "type": "color",
           "prefix": "color"
         },
         "thai-equity": {
-          "value": "{Orange.145}",
+          "value": "{Indigo.145}",
           "type": "color",
           "prefix": "color"
         },
         "gold": {
-          "value": "{Yellow.150}",
+          "value": "{Yellow.160}",
           "type": "color",
           "prefix": "color"
         },
         "cash": {
-          "value": "{Purple.75}",
+          "value": "{Green.160}",
           "type": "color",
           "prefix": "color"
         },
         "mutual-fund": {
-          "value": "{Teal.120}",
+          "value": "{Navy.110}",
           "type": "color",
           "prefix": "color"
         },
         "tax-saving": {
-          "value": "{Red.90}",
+          "value": "{Blue.140}",
           "type": "color",
           "prefix": "color"
         },
         "esavings": {
-          "value": "{Indigo.80}",
+          "value": "{Green.130}",
           "type": "color",
           "prefix": "color"
         },
         "cryptocurrency": {
-          "value": "{Green.140}",
+          "value": "{Red.155}",
           "type": "color",
           "prefix": "color"
         },
         "crowdfunding": {
-          "value": "{Navy.50}",
+          "value": "{Red.110}",
           "type": "color",
           "prefix": "color"
         },
         "p2p-lending": {
-          "value": "{Navy.50}",
+          "value": "{Orange.160}",
           "type": "color",
           "prefix": "color"
         }
       },
       "Mutual fund": {
         "equity": {
-          "value": "{Blue.155}",
+          "value": "{Purple.90}",
           "type": "color",
           "prefix": "color"
         },
         "fixed-income": {
-          "value": "{Orange.145}",
+          "value": "{Green.130}",
           "type": "color",
           "prefix": "color"
         },
         "balanced": {
-          "value": "{Teal.120}",
+          "value": "{Light Grey.155}",
           "type": "color",
           "prefix": "color"
         },
         "reits": {
-          "value": "{Red.90}",
+          "value": "{Blue.160}",
           "type": "color",
           "prefix": "color"
         },
         "commodities": {
-          "value": "{Indigo.80}",
+          "value": "{Yellow.150}",
           "type": "color",
           "prefix": "color"
         }
       },
       "Tax saving": {
         "ssf": {
-          "value": "{Blue.155}",
+          "value": "{Blue.135}",
           "type": "color",
           "prefix": "color"
         },
         "rmf": {
-          "value": "{Orange.145}",
+          "value": "{Purple.130}",
           "type": "color",
           "prefix": "color"
         },
         "thaiesg": {
-          "value": "{Yellow.150}",
+          "value": "{Green.130}",
           "type": "color",
           "prefix": "color"
         },
         "thaiesgx": {
-          "value": "{Purple.75}",
+          "value": "{Green.160}",
           "type": "color",
           "prefix": "color"
         },
         "ltf": {
-          "value": "{Teal.120}",
+          "value": "{Navy.140}",
           "type": "color",
           "prefix": "color"
         }
@@ -2592,51 +2527,6 @@
             "prefix": "color"
           }
         }
-      },
-      "chart-diverging-01": {
-        "value": "{Red.135}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-diverging-02": {
-        "value": "{Red.120}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-diverging-03": {
-        "value": "{Red.95}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-diverging-04": {
-        "value": "{Red.70}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-diverging-05": {
-        "value": "{Grey.10}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-diverging-06": {
-        "value": "{Indigo.45}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-diverging-07": {
-        "value": "{Indigo.55}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-diverging-08": {
-        "value": "{Indigo.70}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-diverging-09": {
-        "value": "{Indigo.85}",
-        "type": "color",
-        "prefix": "color"
       }
     },
     "Avatar": {
@@ -4955,71 +4845,6 @@
         "type": "color",
         "prefix": "color"
       },
-      "chart-categorical-01": {
-        "value": "{Blue.155}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-categorical-02": {
-        "value": "{Orange.130}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-categorical-03": {
-        "value": "{Yellow.150}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-categorical-04": {
-        "value": "{Purple.80}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-categorical-05": {
-        "value": "{Teal.115}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-categorical-06": {
-        "value": "{Red.90}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-categorical-07": {
-        "value": "{Indigo.55}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-categorical-08": {
-        "value": "{Green.125}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-sequential-01": {
-        "value": "{Blue.80}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-sequential-02": {
-        "value": "{Blue.110}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-sequential-03": {
-        "value": "{Blue.130}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-sequential-04": {
-        "value": "{Blue.145}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-sequential-05": {
-        "value": "{Blue.155}",
-        "type": "color",
-        "prefix": "color"
-      },
       "Asset allocation": {
         "equity": {
           "value": "{Blue.155}",
@@ -5069,106 +4894,106 @@
       },
       "Multi-asset": {
         "equity": {
-          "value": "{Blue.155}",
+          "value": "{Purple.110}",
           "type": "color",
           "prefix": "color"
         },
         "thai-equity": {
-          "value": "{Orange.130}",
+          "value": "{Indigo.45}",
           "type": "color",
           "prefix": "color"
         },
         "gold": {
-          "value": "{Yellow.150}",
+          "value": "{Yellow.90}",
           "type": "color",
           "prefix": "color"
         },
         "cash": {
-          "value": "{Purple.80}",
+          "value": "{Green.135}",
           "type": "color",
           "prefix": "color"
         },
         "mutual-fund": {
-          "value": "{Teal.115}",
+          "value": "{Navy.60}",
           "type": "color",
           "prefix": "color"
         },
         "tax-saving": {
-          "value": "{Red.90}",
+          "value": "{Blue.120}",
           "type": "color",
           "prefix": "color"
         },
         "esavings": {
-          "value": "{Indigo.55}",
+          "value": "{Green.110}",
           "type": "color",
           "prefix": "color"
         },
         "cryptocurrency": {
-          "value": "{Green.125}",
+          "value": "{Red.120}",
           "type": "color",
           "prefix": "color"
         },
         "crowdfunding": {
-          "value": "{Grey.40}",
+          "value": "{Red.40}",
           "type": "color",
           "prefix": "color"
         },
         "p2p-lending": {
-          "value": "{Grey.40}",
+          "value": "{Orange.50}",
           "type": "color",
           "prefix": "color"
         }
       },
       "Mutual fund": {
         "equity": {
-          "value": "{Blue.155}",
+          "value": "{Purple.110}",
           "type": "color",
           "prefix": "color"
         },
         "fixed-income": {
-          "value": "{Orange.130}",
+          "value": "{Green.125}",
           "type": "color",
           "prefix": "color"
         },
         "balanced": {
-          "value": "{Teal.115}",
+          "value": "{Light Grey.65}",
           "type": "color",
           "prefix": "color"
         },
         "reits": {
-          "value": "{Red.90}",
+          "value": "{Blue.70}",
           "type": "color",
           "prefix": "color"
         },
         "commodities": {
-          "value": "{Indigo.55}",
+          "value": "{Yellow.65}",
           "type": "color",
           "prefix": "color"
         }
       },
       "Tax saving": {
         "ssf": {
-          "value": "{Blue.155}",
+          "value": "{Blue.130}",
           "type": "color",
           "prefix": "color"
         },
         "rmf": {
-          "value": "{Orange.130}",
+          "value": "{Purple.110}",
           "type": "color",
           "prefix": "color"
         },
         "thaiesg": {
-          "value": "{Yellow.150}",
+          "value": "{Green.45}",
           "type": "color",
           "prefix": "color"
         },
         "thaiesgx": {
-          "value": "{Purple.80}",
+          "value": "{Green.120}",
           "type": "color",
           "prefix": "color"
         },
         "ltf": {
-          "value": "{Teal.115}",
+          "value": "{Navy.65}",
           "type": "color",
           "prefix": "color"
         }
@@ -5240,51 +5065,6 @@
             "prefix": "color"
           }
         }
-      },
-      "chart-diverging-01": {
-        "value": "{Red.70}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-diverging-02": {
-        "value": "{Red.95}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-diverging-03": {
-        "value": "{Red.120}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-diverging-04": {
-        "value": "{Red.135}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-diverging-05": {
-        "value": "{Grey.75}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-diverging-06": {
-        "value": "{Indigo.85}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-diverging-07": {
-        "value": "{Indigo.70}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-diverging-08": {
-        "value": "{Indigo.55}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-diverging-09": {
-        "value": "{Indigo.45}",
-        "type": "color",
-        "prefix": "color"
       }
     },
     "Avatar": {

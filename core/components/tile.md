@@ -26,12 +26,15 @@ Tile (variant root)              Fill × Hug, no fill, no padding; min width and
 │     │  │                       properties) beside the leading part, Fill; hidden in Skeleton
 │     │  ├─ Inline skeleton    Layout=Inline + Skeleton only: Inline line 80 × 8 beside the leading part
 │     │  └─ Content trailing     hidden with Trailing None. A 24 box (Icon/Large) for Badge, Chevron, Checkbox,
-│     │     │                    Radio; the Toggle Item's size for Toggle; Fill × Hug for Label
+│     │     │                    Radio; the Toggle Item's size for Toggle; Artwork/Thumbnail (40 × 28) for
+│     │     │                    Thumbnail; Fill × Hug for Label
 │     │     ├─ Trailing labels   Label: VERTICAL, right-aligned › Trailing label (Headline, text-primary),
 │     │     │                    Trailing description (Subheadline, text-secondary; BOOLEAN, on); hidden in Skeleton
 │     │     ├─ Trailing skeleton Label + Skeleton: VERTICAL, Fill, right-aligned › Trailing line 80 × 8
 │     │     ├─ Badge             Badge Content=Dot (8 × 8), centred; hidden in Skeleton
 │     │     ├─ Chevron           TEXT angle-right, fa-sharp fa-solid/Large, icon-secondary; hidden in Skeleton
+│     │     │                    image, fill 1 Transparent (Skeleton: skeleton-background); stroke 1 inside
+│     │     │                    border-subtle
 │     │     ├─ Toggle            Toggle Style=Toggle only, absolute at y −10; iOS from the tile's iOS, Toggled from
 │     │     │                    Selected, State Enabled (Skeleton: Skeleton)
 │     │     ├─ Radio             Type=Icon only, absolute, centred on the box (x −12, y −12)
@@ -57,19 +60,20 @@ Tile (variant root)              Fill × Hug, no fill, no padding; min width and
 | --- | --- | --- |
 | `Behavior` | Selection · Action | Selection is picked (`Selected`); Action opens something |
 | `Leading content` | None · Artwork medium · Artwork large · Artwork custom · Label | the `Content leading` part and `Content top`'s alignment |
-| `Trailing content` | None · Label · Badge · Chevron · Toggle · Checkbox · Radio | the `Content trailing` part. `Check` became `Checkbox`, as on List item |
+| `Trailing content` | None · Label · Badge · Chevron · Thumbnail · Toggle · Checkbox · Radio | the `Content trailing` part. `Check` became `Checkbox`, as on List item; `Thumbnail` a trailing image |
 | `State` | Enabled · Active · Focus · Skeleton | Active: the Container's second fill; Focus: the `Focus ring`; Skeleton: the bars, the grey artwork, the controls' own Skeleton |
 | `Selected` | Off · On | the Container stroke; the Radio's and Checkbox's `Selection`, the Toggle's `Toggled` |
 | `Layout` | Stacked · Inline | Stacked: the parts above the Label block; Inline: one row, the labels in `Content top` beside the leading part |
 
 Excluded:
 
-- On `Behavior=Selection`: Chevron.
+- On `Behavior=Selection`: Chevron, Thumbnail.
+- `Trailing content=Thumbnail` with `Leading content=Artwork custom` (two images in one row,).
 - On `Behavior=Action`: Toggle, Checkbox, Radio, and `Selected=On`.
 - `Selected=On` with Skeleton.
 - On `Layout=Inline`: `Leading content=Label`; `Trailing content=Label`, `Checkbox`, `Radio`.
 
-Action 4 × 4 = 16. 65 × 5 columns = **325** `Stacked`; `Inline` per column but Label: Selection None · Badge · Toggle = 28 + Action None · Badge · Chevron × 4 = 12, 40 × 4 = 160; **485 variants**.
+Action 4 × 4 = 16. 65 × 5 columns = **325** `Stacked`; `Inline` per column but Label: Selection None · Badge · Toggle = 28 + Action None · Badge · Chevron × 4 = 12, 40 × 4 = 160; 485 before . Thumbnail on Action: Stacked 4 columns (not Artwork custom) × 4 States = 16, Inline 3 × 4 = 12; **513 variants**.
 
 Properties: TEXT `Title text`, `Description text`, `Leading label text`, `Trailing label text`, `Trailing description text`; BOOLEAN `Description` (on), `Trailing description` (on), `Show Slot` (off); SLOT `Slot`. The glyph is the `Icon` layer's text and the artwork is `Artwork`'s image fill, not instance swaps.
 
@@ -77,7 +81,7 @@ Grid: columns `Leading content`; rows `Layout`, `Behavior`, `Trailing content`, 
 
 ## Component variables and Theme tokens
 
-`Components`, Tag's shape (structure.md, Carbon structure); 73 `Tile/…` variables, listed in the spec (`Container`, `Content` and `Content top` keyed by `Layout` since):
+`Components`, Tag's shape (structure.md, Carbon structure); 78 `Tile/…` variables, listed in the spec (`Container`, `Content` and `Content top` keyed by `Layout` since):
 
 | Group | Keyed by | Properties | Values |
 | --- | --- | --- | --- |
@@ -85,7 +89,7 @@ Grid: columns `Leading content`; rows `Layout`, `Behavior`, `Trailing content`, 
 | `Tile/Content/Default` | none varies | Padding left / right · top / bottom, Gap vertical | 16 (`Spacing/spacing-05 = 16`) |
 | `Tile/Content top/Default` | none varies | Layout horizontal, Gap horizontal | `Fill container`, 8 (`Spacing/spacing-03 = 8`) |
 | `Tile/Icon/Large`, `/2XLarge` | Icon step | Type token, Layout width, Layout height |  |
-| `Tile/Artwork/Custom` | none varies | Layout width, Layout height, Radius | 48, 48 (raw), `Radius/8px (radius-sm) = 8` |
+| `Tile/Artwork/Custom`, `/Thumbnail` | artwork | Layout width, Layout height, Radius, Stroke weight | Custom 48, 48 (raw), `Radius/8px (radius-sm) = 8`, 0; Thumbnail 40, 28 (raw), `Radius/4px (radius-xs) = 4`, `Sizing/stroke-default = 1` (1) |
 | `Tile/Toggle/False`, `/True` | `iOS` | Layout width, Layout height | 48 · 64, 28 (raw) |
 | `Tile/Label/Title`, `/Description`, `/Leading`, `/Trailing`, `/Trailing description` | role | Type token, Type emphasis, Align horizontal, Align vertical, Decoration | `$headline` · `$subhead`; Leading `Left`, Trailing `Right` |
 | `Tile/Bar/Default` | none varies | Layout width, Layout height, Radius, Padding top / bottom | 80, 8 (raw), `Radius/None (radius-0) = 0`, 8 (`Spacing/spacing-03 = 8`) |
@@ -106,7 +110,8 @@ The Root's min width and min height bind `Interactive/Medium/Interactive min-hei
 | Description, Trailing description | Enabled, Active, Focus | `Text/text-secondary` | `layer-01` 7.00 / 7.93:1; `layer-active-01` 6.57 / 6.16:1 |
 | Icon | not Skeleton | `Icon/icon-primary` | decorative beside the title |
 | Chevron | Action, Chevron | `Icon/icon-secondary` | non-text on `layer-01`, checked by the contrast lint |
-| Content leading fill, Artwork fill 1 | Skeleton | `Skeleton/skeleton-background` |  |
+| Content leading fill, Artwork fill 1, Thumbnail fill 1 | Skeleton | `Skeleton/skeleton-background` |  |
+| Thumbnail stroke | Thumbnail | `Border/border-subtle` (Light `Black/12A`, Dark `White/18A`) | decorative: the image's edge |
 | Title line, Leading line, Trailing line | Skeleton | `Skeleton/skeleton-background` |  |
 | Focus ring stroke | Focus | `Focus/focus` | 3.89 / 4.83:1 on `background-secondary`, 4.35 / 4.00:1 on `layer-01` |
 | Controls | Toggle, Checkbox, Radio, Badge | their own |  |
@@ -173,6 +178,7 @@ From the per-component table of Motion and haptics (Tile: pressed, hover, select
 - A plan picker, `Behavior=Selection`, `Trailing content=Radio`: `ลงทุนรายเดือน` / `ตัดเงินอัตโนมัติทุกวันที่ 25` selected, `ลงทุนครั้งเดียว` / `จ่ายครั้งเดียวผ่านบัญชีธนาคาร` beside it.
 - A fund pick, `Trailing content=Checkbox`, `Leading content=Artwork medium`: `กองทุนหุ้นไทย` / `ความเสี่ยงระดับ 6` and `กองทุนตราสารหนี้` / `ความเสี่ยงระดับ 4`, one selected.
 - A content tile, `Behavior=Action`, `Leading content=Artwork custom`, that opens an article.
+- A document row, `Layout=Inline`, `Leading content=Artwork medium` (`file-invoice`), `Trailing content=Thumbnail`: `หนังสือชี้ชวนกองทุน` / `อัปเดตล่าสุด 1 พ.ย. 2569`, in `Action rows`.
 - Skeleton tiles; `State=Focus` once, on a selected tile.
 - Not yet drawn: a tile with a Toggle, a trailing Label (an amount), a Badge, a Chevron; a neutral tile with a CTA (a Button in `Slot`).
 - Not for one-line options (bank accounts, settings): List item with a trailing Radio or Checkbox. Not for a status message: Contextual banner. Not a container of rows: stack List items on the page. A tile with a control in `Slot` is never `Behavior=Selection` (two targets in one); Figma can't stop it, so review checks it.
