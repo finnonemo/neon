@@ -15,7 +15,7 @@ Like the [task-based choices](../../INSTRUCTION.md#task-based-choices), these ar
 - **Content answers; the inspector acts.** On a page where no record is picked (an overview, a collection, an item's own page), the inspector holds the page's action module: the one primary action with the few inputs it needs, then at most two or three secondary action rows under a hairline. Nothing in it is needed to understand the content.
 - **Test:** cover the inspector. If the content still answers the page's question, the split is right. If it does not, that material belongs in content.
 - **A picked record is the other case.** When the task is to pick one item and then read or change it, the page is a list and its detail: the list pane is the narrower one and the detail fills, as the contract's [composition](../../INSTRUCTION.md#composition) rule already says. Do not use an action inspector there.
-- **Narrow tiers.** Where the shell shows one view at a time, an inspector that holds only actions must not be the only way to act: the primary action stays visible in the content view, in its title row or in the bottom dock that [Actions](functional-patterns.md#actions) describes. The rest of the module stays behind the shell's own switch.
+- **Narrow tiers.** Where the shell shows one view at a time, an inspector that holds only actions must not be the only way to act: the primary action stays visible in the content view, in its title row or in the bottom dock that [Actions](functional-patterns.md#actions) describes. It is still the page's one primary action there and is drawn as primary; moving it does not demote it to a secondary button. The rest of the module stays behind the shell's own switch.
 
 ## Page types
 
@@ -39,7 +39,7 @@ A content pane is a stack of sections, not a grid of boxes.
 - **One header row per section:** a heading, at most one line of description, and at most one trailing control, which opens the full collection. Every section on a page uses the same header row.
 - **The gutter is inside the section.** Text in every section, and the pane header's title, share one left edge. A hairline between sections and a chart may run the pane's full width; text never does.
 - **Sections separate by a hairline, groups inside a section by space.** Rows sit directly on the page with no border and no card around them, as [lists before cards](functional-patterns.md#lists-before-cards) says. A filled container is for a thing that is an object in itself (a promotional item, an account summary) and has no border and no shadow.
-- **A section previews; the full collection is one step away.** On an overview a section shows a short, fixed number of rows (five at most) and ends in one full-width secondary action that opens the whole collection. The page stays about two viewports tall at the widest tier; a longer one means a section should be its own page.
+- **A section previews; the full collection is one step away.** On an overview a section shows a short, fixed number of rows (five at most) and ends in one full-width secondary action that opens the whole collection. Every section of an overview ends in that action, including one whose collection fits in the preview today. It goes to the collection's own page or view; it never expands the section in place. The page stays about two viewports tall at the widest tier; a longer one means a section should be its own page.
 
 ## The figure and its chart
 

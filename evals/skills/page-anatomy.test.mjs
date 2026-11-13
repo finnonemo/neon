@@ -35,5 +35,10 @@ test('the reference states the pane, section and narrow-tier rules', async () =>
   assert.match(source, /A section previews; the full collection is one step away/);
   assert.match(source, /The gutter is inside the section/);
   assert.match(source, /changes form, never order or content/);
+  // The first home run (records/page-anatomy.md) gave one section of three an open-all action, which expanded in place,
+  // and drew the narrow-tier action as secondary.
+  assert.match(source, /Every section of an overview ends in that action/);
+  assert.match(source, /never expands the section in place/);
+  assert.match(source, /moving it does not demote it/);
   for (const type of ['Overview', 'Collection', 'Item page', 'Balance or status page', 'Activity', 'Settings']) assert.match(source, new RegExp(`\\| ${type} \\|`));
 });
