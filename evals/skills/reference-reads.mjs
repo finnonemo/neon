@@ -8,7 +8,7 @@
 //
 //   node evals/skills/reference-reads.mjs <case-dir>...
 import { readFile } from 'node:fs/promises';
-import { basename, dirname, join } from 'node:path';
+import { basename, dirname, join, normalize } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -108,11 +108,13 @@ export function referenceReads(events, read = path => readFile(path, 'utf8')) {
 
 // Best coverage per Core snapshot file, keyed from `core/`. The snapshot is the
 // `core/` beside the `skills/` directory the run read from, so an app's own
-// `src/core/` is not one.
+// `src/core/` is not one. Not listed: a path relative to the Neon root
+// (`cd <root> && cat core/…`), a shell glob and a search of a whole directory.
 export function coreReads(events, read = path => readFile(path, 'utf8')) {
   const commands = commandOutputs(events);
-  const neonRoots = new Set(commands.flatMap(item => item.command.match(SKILL_TOKEN) ?? []).map(path => path.slice(0, path.lastIndexOf('skills/'))));
-  const pathsIn = command => [...new Set((command.match(CORE_TOKEN) ?? []).flatMap(expandBraces).filter(path => neonRoots.has(path.slice(0, path.lastIndexOf('core/')))))];
+  const neonRoots = new Set(commands.flatMap(item => item.command.match(SKILL_TOKEN) ?? []).map(path => normalize(path.slice(0, path.lastIndexOf('skills/')))));
+  // Normalized, so a skill's own relative link (`…/references/../../../core/index.json`) counts.
+  const pathsIn = command => [...new Set((command.match(CORE_TOKEN) ?? []).flatMap(expandBraces).map(normalize).filter(path => neonRoots.has(path.slice(0, path.lastIndexOf('core/')))))];
   return bestCoverage(commands, read, pathsIn, path => {
     const key = path.slice(path.lastIndexOf('core/'));
     return { key, repo: join(repoRoot, key) };

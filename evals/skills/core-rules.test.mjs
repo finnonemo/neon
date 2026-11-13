@@ -14,7 +14,7 @@ test('each skill reaches the Core rules behind one read condition, outside its w
   const conditions = {
     'neon-create': /About to choose a Neon item or one of its prop values/,
     'neon-redesign': /`composition: 'adapt'` on the Neon base/,
-    'neon-review': /finding about how a component is used/,
+    'neon-review': /On the Neon base, a finding about how a component is used/,
     'neon-audit': /which of the app's components have a Counterpart/,
   };
   for (const [skill, condition] of Object.entries(conditions)) {
@@ -80,7 +80,7 @@ test('a review finding on a component names the Core rule it breaks', async () =
   assert.match(example, /Core `hierarchy\.md`, rule 1/);
   assert.match(await read('core/hierarchy.md'), /^1\. \*\*One Primary per context\.\*\*/m);
   const skill = await read('skills/neon-review/SKILL.md');
-  assert.match(section(skill, 'Done'), /a finding on a component names the Core rule it breaks/);
+  assert.match(section(skill, 'Done'), /on the Neon base, a finding on a component names the Core rule it breaks/);
 });
 
 test('the audit report says which components have a Counterpart', async () => {
@@ -88,6 +88,8 @@ test('the audit report says which components have a Counterpart', async () => {
   const coverage = section(rules, 'Counterpart coverage');
   assert.match(coverage, /`src\/components\/ui\/`/);
   assert.match(coverage, /`why`/);
+  // The index is keyed by item name: a stock file of the same name is not that item.
+  assert.match(coverage, /even under a matching file name/);
   // Coverage comes from the index alone.
   assert.match(coverage, /reads no component doc/);
   const skill = await read('skills/neon-audit/SKILL.md');
@@ -104,6 +106,8 @@ test('the contract links Core for component rules instead of restating them', as
   assert.doesNotMatch(contract, /row and other actions are secondary or tertiary/);
   // Rule 5: rejecting a request removes no data, so it is not destructive.
   assert.doesNotMatch(contract, /reject action uses the appropriate destructive treatment/);
+  // Core's Sheet is not for a confirmation or a menu of actions.
+  assert.doesNotMatch(contract, /secondary tasks open in a bottom sheet/);
 
   const base = await read('skills/neon-create/references/neon-base.md');
   // The Neon base names which prop value is which Core value; when to use each is Core's.
@@ -123,6 +127,10 @@ test('where the patterns differed from Core, they link Core', async () => {
   assert.match(patterns, /\]\(\.\.\/\.\.\/\.\.\/core\/components\/button-dock\.md#usage\)/);
   // Core's sheet has 16px corners and no side sheet; a wide screen anchors a Popover or centres a sheet.
   assert.doesNotMatch(patterns, /largest shipped radius|side panel or dialog/);
+  // Core's Alert is not for a form, its Sheet not for a menu of actions, and its empty state takes one or two sentences.
+  assert.doesNotMatch(patterns, /centered dialog|a record's actions|one short sentence/);
+  assert.match(await read('core/components/alert.md'), /^- Not for: a form, long content or several steps/m);
+  assert.match(await read('core/components/sheet.md'), /^- Not for: .*a menu of actions/m);
   assert.match(patterns, /\]\(\.\.\/\.\.\/\.\.\/core\/components\/sheet\.md#usage\)/);
   assert.match(patterns, /\]\(\.\.\/\.\.\/\.\.\/core\/components\/popover\.md#usage\)/);
   assert.match(patterns, /\]\(\.\.\/\.\.\/\.\.\/core\/hierarchy\.md\)/);

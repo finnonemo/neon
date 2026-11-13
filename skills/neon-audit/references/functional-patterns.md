@@ -23,7 +23,7 @@ The rules hold in any framework and name no component library. Where Core holds 
 
 ## Overlays
 
-- On narrow tiers, secondary tasks (filters, a record's actions, a short form) open in a sheet from the bottom edge. On wider tiers Core picks the overlay by its content: a view anchored to its control, such as filters, is a popover; a form or long content is a centered dialog; a confirmation is an alert; a choice of actions is a menu. Core has no sheet from the side, so new work does not choose one. The rules are in the Usage of Core's [Sheet](../../../core/components/sheet.md#usage), [Popover](../../../core/components/popover.md#usage) and [Alert](../../../core/components/alert.md#usage).
+- Which overlay a secondary task opens in, and how that changes from narrow to wide tiers, is Core's choice by what the overlay holds: the "Not for" lines in the Usage of Core's [Sheet](../../../core/components/sheet.md#usage), [Popover](../../../core/components/popover.md#usage) and [Alert](../../../core/components/alert.md#usage). Those are Core's component names, not an app's: on the Neon base the snapshot's index gives each item's Counterpart. Core has no sheet from the side, so new work does not choose one.
 - A sheet or dialog has a title and a visible close control. Every overlay returns focus to its trigger on close.
 
 ## Typography in use
@@ -33,7 +33,7 @@ The rules hold in any framework and name no component library. Where Core holds 
 
 ## Empty and loading states
 
-- An empty state has a heading, one short sentence on why it is empty or what to do, an optional illustration, and at most one action, a secondary one (Core's [Empty state](../../../core/components/empty-state.md#usage)). Center it in the region it replaces, with a capped text width.
+- What an empty state says, where it sits and which button it takes are Core's [Empty state](../../../core/components/empty-state.md#usage), Usage and Hierarchy.
 - Loading shows placeholders shaped like the final layout. When data is already available, render the final content directly instead of flashing a placeholder.
 
 ## Icons

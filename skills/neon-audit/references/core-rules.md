@@ -39,4 +39,4 @@ A finding or a choice that rests on Core names the doc, the section and the rule
 
 ## Counterpart coverage
 
-An audit lists the files in the app's `src/components/ui/` and, for each, gives its Counterpart from the index, or "none" with the entry's `why`. A component with no index entry (a stock shadcn item, a CDS component, the app's own) has no Counterpart recorded: say that in one line and do not guess one. This reads no component doc.
+An audit lists the files in the app's `src/components/ui/` and, for each Neon item among them, gives its Counterpart from the index, or "none" with the entry's `why`. The index is keyed by Neon item name, so a file is matched to it only when it is the Neon item: the app's `components.json` names an `@neon` registry and the file carries Neon's header comment. A stock shadcn item, a CDS component or the app's own has no Counterpart recorded, even under a matching file name: say that in one line and do not guess one. This reads no component doc.

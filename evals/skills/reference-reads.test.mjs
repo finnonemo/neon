@@ -93,7 +93,8 @@ test('lists the Core snapshot files a run read, apart from an app path named cor
   const events = [
     use('c0', 'Read', { file_path: `${neonRoot}/skills/neon-audit/references/core-rules.md` }),
     result('c0', rules),
-    use('c1', 'Bash', { command: `cat ${neonRoot}/core/index.json` }),
+    // The path as the skill's own link spells it.
+    use('c1', 'Bash', { command: `cat ${neonRoot}/skills/neon-audit/references/../../../core/index.json` }),
     result('c1', installed[`${neonRoot}/core/index.json`]),
     use('c2', 'Bash', { command: `sed -n '/^## Usage/,$p' ${neonRoot}/core/components/button.md` }),
     result('c2', '## Usage\n\nBrand only on Primary, for a branded moment.\n'),
