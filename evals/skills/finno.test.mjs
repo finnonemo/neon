@@ -57,6 +57,14 @@ test('a Candidate set is the same twelve every time, and render draws the one pi
   assert.equal(recoloured.seed, picked.seed);
 });
 
+test('render reports the Pattern rules it kept and the Reference Pattern nearest the result', async () => {
+  const out = await scratch();
+  const drawn = await render({ format: 'screen-16-9', seed: 'reference-1', pngScale: 0.1, out });
+  assert.deepEqual(drawn.patternRules, { ok: true, violations: [] });
+  assert.ok(drawn.reference.iou > 0 && drawn.reference.iou <= 1);
+  assert.ok(['rising', 'hanging', 'mountain'].includes(drawn.reference.family));
+});
+
 test('a request outside the guideline or this release is refused in words, and nothing is written', async () => {
   const out = join(await scratch(), 'never');
   const refusals = [
