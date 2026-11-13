@@ -2,7 +2,7 @@
 // variant, with the same Thai messages. The button after them (unmeasured)
 // shows a new alert, for the a11y spec to hear it announced.
 import { useState } from "react"
-import { CircleXIcon, InfoIcon, MegaphoneIcon, TriangleAlertIcon } from "lucide-react"
+import { CircleCheckIcon, CircleXIcon, InfoIcon, MegaphoneIcon, TriangleAlertIcon } from "lucide-react"
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
@@ -48,6 +48,20 @@ export default function AlertSection() {
           </Alert>
         </Hook>
       ))}
+      {/* Core's Success and its 80px minimum height, which CDS has no baseline for. */}
+      <Hook name="alert-success">
+        <Alert variant="success">
+          <CircleCheckIcon />
+          <AlertTitle>โอนเงินสำเร็จ / Transfer complete</AlertTitle>
+          <AlertDescription>เงินเข้าบัญชีปลายทางแล้ว / The money has arrived</AlertDescription>
+        </Alert>
+      </Hook>
+      <Hook name="alert-title-only">
+        <Alert>
+          <InfoIcon />
+          <AlertTitle>บันทึกแล้ว / Saved</AlertTitle>
+        </Alert>
+      </Hook>
       <Hook name="alert-appears">
         <Button variant="secondary" size="sm" className="self-start" onClick={() => setSubmitted(true)}>
           ส่งคำขอ / Submit

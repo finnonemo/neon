@@ -17,13 +17,15 @@ function propValues(source, prop) {
 
 /**
  * The values any prop takes: a cva group's keys, or the members of the type the item's source
- * gives the prop (`size?: "xs" | "sm" | number`), or the values of a Radix prop the item reads
+ * gives the prop (`size?: "xs" | "sm" | number`, or a type it declares by name), or the values of a Radix prop the item reads
  * back in a `data-[<prop>=<value>]` class.
  */
 function valuesOf(source, prop) {
   if (new RegExp(`\\n {6}${prop}: \\{\\n`).test(source)) return propValues(source, prop);
   const union = source.match(new RegExp(`\\b${prop}\\?: ([^\\n;}]+)`));
-  if (union) return union[1].split('|').map(member => member.trim().replace(/^"|"$/g, ''));
+  // A prop typed by a name the source declares (`side?: Side`) takes that type's members.
+  const members = union && (source.match(new RegExp(`\\ntype ${union[1].trim()} = ([^\\n]+)`))?.[1] ?? union[1]);
+  if (members) return members.split('|').map(member => member.trim().replace(/^"|"$/g, ''));
   return [...new Set([...source.matchAll(new RegExp(`data-\\[${prop}=([\\w-]+)\\]`, 'g'))].map(([, value]) => value))];
 }
 
@@ -41,6 +43,16 @@ test('the Counterpart table marks a vertical separator and a numeric spinner siz
   const table = JSON.parse(await read('registry/core-counterparts.json'));
   assert.deepEqual(table.separator.notInCore, { orientation: ['vertical'] });
   assert.deepEqual(table.spinner.notInCore, { size: ['number'] });
+});
+
+test('the Counterpart table marks the promotional alert as not in Core', async () => {
+  const table = JSON.parse(await read('registry/core-counterparts.json'));
+  assert.deepEqual(table.alert.notInCore, { variant: ['promotional'] });
+});
+
+test('the Counterpart table marks a sheet from the top, the left or the right as not in Core', async () => {
+  const table = JSON.parse(await read('registry/core-counterparts.json'));
+  assert.deepEqual(table.sheet.notInCore, { side: ['top', 'left', 'right'] });
 });
 
 test('every value marked as not in Core is a value its item still has', async () => {

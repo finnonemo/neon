@@ -64,6 +64,7 @@
   --color-overlay: var(--color-bgOverlay);
   --color-positive-wash: var(--color-bgPositiveWash);
   --color-warning-wash: var(--color-bgWarningWash);
+  --color-info-wash: var(--color-bgInfoWash);
   --color-negative-wash: var(--color-bgNegativeWash);
   --color-tag-positive: var(--tag-positive);
   --color-tag-warning: var(--tag-warning);
@@ -91,6 +92,9 @@
   --color-button-inverse-active: var(--color-bgButtonInverseActive);
   --color-button-inverse-disabled: var(--color-bgButtonInverseDisabled);
   --color-button-inverse-disabled-foreground: var(--color-fgInverseDisabled);
+  --color-button-tertiary-inverse-hover: var(--color-bgButtonTertiaryInverseHover);
+  --color-button-tertiary-inverse-active: var(--color-bgButtonTertiaryInverseActive);
+  --color-ring-inverse: var(--color-bgLineFocusInverse);
   --color-button-disabled: var(--button-disabled);
   --color-button-disabled-foreground: var(--button-disabled-foreground);
   --color-link: var(--link);
@@ -251,8 +255,9 @@
    * Disabled; they stay for apps that use them. */
   --secondary-disabled: color-mix(in srgb, var(--secondary) 75%, var(--background));
   --destructive-disabled: color-mix(in srgb, var(--destructive) 92%, var(--background));
-  /* CDS Tray is bordered (1px bgLine) in dark only, so a sheet's border
-   * width switches with the mode; a width, not light-dark(), which Tailwind's
+  /* CDS Tray is bordered (1px bgLine) in dark only. Core's Sheet has no
+   * stroke, so the sheet no longer reads this; it stays for an app whose
+   * sheet predates Core's. A width, not light-dark(), which Tailwind's
    * polyfill breaks under AppRoot's inline color-scheme. */
   --sheet-border-width: 0px;
 }

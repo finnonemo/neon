@@ -80,7 +80,8 @@ function differences(expected, actual) {
 
 /** What a case is held to: the CDS baseline, with the Core baseline in place on the Neon target for each target that names a Core cell. */
 const expectedFor = async (entry) => {
-  const cds = baseline?.[caseKey(entry)];
+  // An overlay CDS has no trigger for is not in the CDS baseline: its targets are held to Core alone.
+  const cds = baseline?.[caseKey(entry)] ?? (baseline && entry.screen.open && !entry.screen.open.cds ? { elements: {}, gaps: {} } : undefined);
   return cds && target === 'neon' ? withCoreBaseline(cds, entry.screen.targets, entry.mode) : cds;
 };
 
@@ -91,7 +92,7 @@ if (capture) {
   test('capture the CDS baseline', async ({ page }) => {
     test.setTimeout(240_000);
     const out = {};
-    for (const entry of cases) out[caseKey(entry)] = await measureScreen(page, entry.screen, entry.viewport, entry.mode);
+    for (const entry of cases) if (!entry.screen.open || entry.screen.open[target]) out[caseKey(entry)] = await measureScreen(page, entry.screen, entry.viewport, entry.mode);
     const missing = Object.entries(out).flatMap(([key, value]) =>
       Object.entries(value.elements).filter(([, v]) => v === null).map(([name]) => `${key} ${name}`));
     writeFileSync(baselinePath, `${JSON.stringify(out, null, 2)}\n`);
