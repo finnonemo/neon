@@ -154,7 +154,8 @@ function slotProblem(path, paragraph) {
 // A component paragraph follows its preset's composition picks: a lead fact takes the layout's fact role
 // and no component without one reaches a display role; a feature component takes the feature radius;
 // only a component with the action role fills an action with the main action's color, and not on a fill
-// where that color does not read; no action is outlined, since Neon has no outlined button.
+// where that color does not read; no action is outlined, since Neon has no outlined button; a Secondary
+// Action on an accent or support fill is the ghost variant, never the palette fill.
 const DISPLAY_ROLE = /\bdisplay\d\b/;
 function compositionProblems(path, paragraph, component, layout, theme) {
   const problems = [];
@@ -166,6 +167,9 @@ function compositionProblems(path, paragraph, component, layout, theme) {
   const fill = paragraph.match(/--immersive-((?:palette|accent|support)-\d+)/)?.[1];
   if (theme && component.roles.includes('action') && offActionFills(theme).includes(fill) && paragraph.includes('--immersive-action')) {
     problems.push(`"${path}" fills its action with --immersive-action on --immersive-${fill}, where it does not read; fill it with --immersive-on-${fill} and set its label in --immersive-${fill}`);
+  }
+  if (/^(?:accent|support)-/.test(fill ?? '') && /secondary action/i.test(paragraph) && paragraph.includes('--immersive-palette-75')) {
+    problems.push(`"${path}" fills a Secondary Action with --immersive-palette-75 on --immersive-${fill}; on an accent or support fill it is the ghost variant, its label in --immersive-on-${fill}`);
   }
   const radius = component.feature ? layout.featureRadius : layout.blockRadius;
   if (/\b(?:corners?|radius)\b/i.test(paragraph) && !paragraph.includes(`--${radius}`)) problems.push(`"${path}" does not round to --${radius}, the ${component.feature ? 'feature block' : 'block and card'} radius`);

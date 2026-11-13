@@ -245,6 +245,7 @@ export async function render(settings) {
   doc = result.document;
   const page = doc.pages[0];
   const rules = e.checkPatternRules(page.pattern, e.gridFor(doc));
+  const nearest = e.patternSimilarity(page.pattern, e.gridFor(doc), { slope: doc.generator?.slope });
   if (!rules.ok) throw new ArtworkError(`The Pattern breaks the Pattern rules (${rules.violations.join('; ')}), so it was not written. Draw again with another seed.`);
 
   const { svg, typeface } = await svgOf(e, doc);
@@ -279,6 +280,8 @@ export async function render(settings) {
     colourway: doc.colourway,
     seed: doc.seed,
     typeface,
+    patternRules: { ok: rules.ok, violations: rules.violations },
+    reference: nearest.match ? { iou: Math.round(nearest.iou * 100) / 100, family: nearest.match.family, slope: nearest.match.slope, set: nearest.match.set } : null,
     warnings,
     openInBlock: share.tooLong ? null : `${blockUrl}/#p=${share.link}`,
   };

@@ -27,6 +27,7 @@
   "sectionGap": "space-10",
   "cardPadding": "space-4",
   "featureRadius": "borderRadius-700",
+  "nameRole": "display1",
   "factRole": "display3",
   "pageWidth": "full-bleed",
   "motion": "subtle",

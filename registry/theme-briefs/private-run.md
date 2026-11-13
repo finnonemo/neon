@@ -116,6 +116,7 @@ Membership ratio: Light Grey 60%, Yellow 30%, Navy 10%.
 - **Block and card radius:** `--borderRadius-500` (24px)
 - **Feature block radius:** `--borderRadius-700` (40px), for a block that spans the content column; cards inside it keep the block and card radius
 - **Lead fact role:** `display3` (54px/64px), for the one fact a component leads with; other component text stops at `title1`
+- **Hero name role:** `display1` (92px/102px), and `display2` (60px/70px) on narrow screens; nothing else in the hero is set larger than the name
 - **Section gap:** `--space-10` (80px)
 - **Card padding:** `--space-4` (32px)
 - **Page width:** full-bleed. Content sits in one centred column at most `--layout-contentMaxWidth` (1440px) wide, with `--layout-endMargin` (16px, then 24px from a 1440px viewport) inside it. Section fills span the viewport.
@@ -130,7 +131,7 @@ Neon `Button` filled with `--immersive-action`, its label in `--immersive-on-act
 ### Secondary Action
 **Role:** An alternative beside the main action
 
-Neon `Button` in its `secondary` variant: `--immersive-palette-75` fill with its label in `--immersive-on-palette-75`. On a block that already has that fill, the `ghost` variant: no fill, its label in the block's `on-` text variable. Neon has no outlined button.
+Neon `Button` in its `secondary` variant: `--immersive-palette-75` fill with its label in `--immersive-on-palette-75`. On an accent fill, or on a block that already has that fill, the `ghost` variant: no fill, its label in the fill's `on-` text variable. Neon has no outlined button.
 
 ### Logo
 **Role:** Brand identity
