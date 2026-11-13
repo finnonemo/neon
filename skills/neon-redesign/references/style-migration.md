@@ -275,6 +275,32 @@ Verify by toggling `.dark`: primary and destructive labels, the focus
 ring, input outlines, and secondary fills and hovers against their card
 in both modes.
 
+**After the values, the look.** Swapping values gives the app Finnomena
+colors, not yet the [design intent](../../INSTRUCTION.md#design-intent).
+Stock shadcn markup carries habits the variables do not reach: a shadow
+and a border on every card, a chromatic `--chart-*` or `--sidebar-primary`
+used as decoration, weight utilities doing the work of size, and a
+different radius per component. Look at the rendered result and name the
+ones a user would notice. What you may change follows the tier: at
+`colors`, report them as observations. At `visual-system`, change them in
+the stylesheet and leave component files alone:
+
+- **Shadows.** Stock shadcn declares no shadow variable; its components
+  use Tailwind's `shadow-xs` and `shadow-sm` utilities. Find which ones
+  the app's on-page components use, then override those steps of
+  Tailwind's shadow scale in a plain `@theme` block
+  (`--shadow-xs: 0 0 #0000;`). Keep the steps that only floating layers
+  use (popover, dialog, sheet, toast).
+- **Radius.** Set `--radius`. Where one multiplier cannot give each
+  footprint its radius, find which `rounded-*` class each component uses
+  and pin those `--radius-*` steps in `@theme inline`.
+- **What a variable cannot reach.** Components that share a class share
+  its value: when button and input both use `rounded-md`, a pill button
+  needs a component edit. Report it; a restyle does not make it.
+
+Only `composition: 'adapt'` edits markup. Which habit matters most on this screen is your judgment;
+say which you chose and why.
+
 ## Mode-specific values
 
 The literal values below illustrate light-mode conversions, not a complete theme for both schemes. Take actual declarations and applicable dark variants from the [canonical CSS adapter](../../../theme/css/theme.css), using the [design contract](../../INSTRUCTION.md#color-roles) for semantic roles. Preserve the app's existing mode selectors. Do not reuse a light-mode value for a dark surface without checking the actual pair. Hover values must come from established app behavior or a verified canonical role, not an invented ramp.

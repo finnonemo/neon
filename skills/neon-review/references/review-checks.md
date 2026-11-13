@@ -18,12 +18,15 @@ Describe evidence as supplied versus independently observed. If only source is a
 Apply the checks of the app's [base](../../neon-audit/references/project-inspection.md#base), from source only, with no installer and no `shadcn add`.
 
 - **Neon base:** every file in `src/components/ui/` is a Neon item, not a stock shadcn one, and no source imports CDS. Text uses Neon type roles (`text-body`, `text-label1`), with no stock size such as `text-sm` and no weight utility beside a role. Colors use Neon role utilities, with no `dark:` class or stock palette utility. `cn` comes from `@/lib/utils`, not the bare `cn` package. Suggest fixes with Neon items and their props, per [Neon base](../../neon-create/references/neon-base.md). ADR 0006 keeps three Radix behaviors, and none is a finding: Select closes on a pick, the toast is announced politely, and an open Dialog hides its siblings with `aria-hidden` instead of setting `aria-modal`. Focus still returns to the trigger when an overlay closes.
+  A finding about how a Neon item is used (which one, its hierarchy, a state) names the Core rule it breaks, read per [Core rules](../../neon-audit/references/core-rules.md#cite-a-rule) for that item only; a colors-only review reads no component doc.
 - **CDS:** check against [CDS integration](../../neon-create/references/cds-integration.md) and suggest CDS components, props or configuration, never a Neon item.
 - **Neither:** check brand roles through the app's CSS variables and the design contract, and suggest CSS fixes. Being off the Neon base is not a finding.
 
 ## Brand consistency
 
 Use the current design reference, not remembered values. Inspect the semantic role, not just a matching hex string: error/positive states and chart categories are not interchangeable decorative colors. Respect explicit colors-only scope and existing intentional structural dimensions. When a campaign page declares a reference design and Brand Intensity, judge it against that level and the Brand Floor in the design contract; reference colors at Reference-led are intended, not off-brand. On an immersive page, a white or other non-navy action with passing contrast, or a palette without navy or yellow, is not a finding. A CDS dependency or raw pixel value is not itself a review finding.
+
+For the overall look of a functional screen, judge against the contract's [design intent](../../INSTRUCTION.md#design-intent). A finding names the idea it rests on and the visible evidence: "color is content: four tiles each carry their own tint and none marks a status". A composition that no pattern lists is not a finding when it keeps the contract's fixed column and serves the main task; say so under Coverage if the screen is unusual. Where the build's report states a design choice and its reason, judge the reason.
 
 For typography reviews, distinguish a declared font from a loaded font. Check computed styles and font resources when available; inspect Thai and Latin glyphs, long labels, numeric alignment, and wrapping. Do not label a missing font from screenshot appearance alone.
 
@@ -62,6 +65,8 @@ Inspect loading, empty, error, disabled, selected, and success states only where
 
 ## Finding example
 
+**Medium — Transfer form footer (source and live UI, 1440px/light).** “ยืนยันการโอน” and “บันทึกแบบร่าง” are both `variant="default"`, so the form shows two primary actions and neither reads as the next step. Breaks Core `hierarchy.md`, rule 1: one Primary per context. Fix: keep `default` on “ยืนยันการโอน” and set “บันทึกแบบร่าง” to `secondary` (rule 3). Recheck: one filled navy button in the footer; both still submit.
+
 **High — Header menu trigger (keyboard test, 375px/light).** The menu trigger cannot be reached by Tab, preventing keyboard users from opening primary navigation. Evidence: observed tab sequence skips the trigger; verified source uses a clickable div without keyboard handling. Fix: use a semantic button with an accessible name and retain the existing open handler. Recheck: Tab reaches it; Enter/Space opens the menu; focus returns when closed.
 
-This is an illustrative format, not a finding about the reviewed app. Use verified source paths/lines or screenshot/DOM locations for actual reports; omit unavailable coordinates rather than fabricate them.
+These are illustrative formats, not findings about the reviewed app. A finding on a component names its Core rule as the first does; one on markup or behavior, as the second, has none to name. Use verified source paths/lines or screenshot/DOM locations for actual reports; omit unavailable coordinates rather than fabricate them.

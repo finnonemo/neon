@@ -3,7 +3,10 @@
     "core": "accordion"
   },
   "alert": {
-    "core": "banner"
+    "core": "banner",
+    "notInCore": {
+      "variant": ["promotional"]
+    }
   },
   "alert-dialog": {
     "core": "alert"
@@ -94,7 +97,10 @@
     }
   },
   "sheet": {
-    "core": "sheet"
+    "core": "sheet",
+    "notInCore": {
+      "side": ["top", "left", "right"]
+    }
   },
   "sonner": {
     "core": "snackbar"

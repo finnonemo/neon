@@ -17,10 +17,11 @@ Use this checklist for creation, restyling and composition changes. Check the af
 After items 1–4 and before reporting, look at your own screenshots and fix what a user would notice. A passing build or a clean probe is not this check.
 
 1. **Screenshot** the main task's screen at 375px and 1440px in its relevant states, such as loaded, selected, empty and error, in each existing or requested color scheme.
-2. **Critique** the screenshots in writing, in your messages, before editing. Write each problem as a finding in [neon-review's shape](../../neon-review/SKILL.md#done): severity, location, evidence (the screenshot's width and state), who is affected and how, fix and recheck. Ask:
+2. **Critique** the screenshots in writing, in your messages, before editing. Write what you see first, then add what the probe flagged, and mark each finding as seen or probe-reported: a list of flags read first narrows what you notice. Write each problem as a finding in [neon-review's shape](../../neon-review/SKILL.md#done): severity, location, evidence (the screenshot's width and state), who is affected and how, fix and recheck. Ask:
    - Is the main task's answer the most prominent, first-read element, per [one question, first screen](../../neon-create/references/new-ui-workflow.md#one-question-first-screen)?
    - Do neighboring blocks share edges and gutters?
    - Are color roles as the [design contract](../../INSTRUCTION.md#color-roles) assigns them?
+   - Does the screen match the design thesis you wrote, and the [design intent](../../INSTRUCTION.md#design-intent): is anything other than content asking for attention?
    - Does Thai text wrap without clipping or overlapping?
    - At 375px, can the user still reach the main task and its details?
    - On a functional screen, does it show any [functional screen habit](../../neon-review/references/review-checks.md#functional-screen-habits)? Name the habit in the finding and use its alternative as the fix.

@@ -27,6 +27,42 @@ export async function readCoreItem(root, item) {
   return { item, counterpart: entry.counterpart, sets: values.sets, theme, textStyles };
 }
 
+/**
+ * A registry item's Counterpart where the snapshot holds a doc alone (Alert, Sheet, Popover, Menu):
+ * the doc's text, with the Theme, the text styles and the Scales it names. Read it with docValue.
+ */
+export async function readCoreDoc(root, item) {
+  const entry = (await json(root, 'index.json'))[item];
+  if (!entry?.doc) throw new Error(`The Core snapshot has no doc for ${item}: ${entry ? 'it has no Counterpart' : 'the Counterpart table does not list it'}.`);
+  const [doc, theme, textStyles, scales] = await Promise.all([readFile(join(root, SNAPSHOT_DIR, entry.doc), 'utf8'), json(root, 'theme.json'), json(root, 'text-styles.json'), json(root, 'scales.json')]);
+  return { item, counterpart: entry.counterpart, doc, theme, textStyles, scales };
+}
+
+const escaped = text => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+// The doc writes a name whole (`Layer/layer-01`) or by its last part (`radius-lg`, `border-subtle`).
+const writes = (doc, name) => new RegExp(`(?<![\\w-])(${escaped(name)}|${escaped(name.slice(name.lastIndexOf('/') + 1))})(?![\\w-])`).test(doc);
+const colorOf = (token, modes) => ({ kind: 'color', token, ...Object.fromEntries(MODES.map(mode => [mode, cssColor(modes[mode].hex)])) });
+// A text style is named with its group (`Body/Subheadline`); the snapshot keys it without (`Subheadline`).
+const textStyleOf = (core, value) => {
+  const name = [value, value.slice(value.indexOf('/') + 1)].find(candidate => candidate in core.textStyles);
+  return name && { kind: 'textStyle', name, ...core.textStyles[name] };
+};
+
+/**
+ * What a name in a Counterpart's doc stands for: a Theme token's color in both modes, a Scale
+ * step's number or a text style's size and line height, in coreValue's shapes. Refuses a name the
+ * doc does not write, so a table cannot give a part a token Core did not.
+ */
+export function docValue(core, name) {
+  if (!core.doc) throw new Error(`${core.item}'s Counterpart ${core.counterpart} was read by its values, not its doc: read it with readCoreDoc.`);
+  if (!writes(core.doc, name)) throw new Error(`Core's ${core.counterpart} doc does not name ${name}.`);
+  if (name in core.theme) return colorOf(name, core.theme[name]);
+  if (name in core.scales) return { kind: 'number', value: core.scales[name] };
+  const style = textStyleOf(core, name);
+  if (!style) throw new Error(`Core's ${core.counterpart} doc names ${name}, which is no Theme token, Scale step or text style of the snapshot.`);
+  return style;
+}
+
 function setOf(core, name) {
   const set = core.sets.find(candidate => candidate.name === name);
   if (!set) throw new Error(`Core's ${core.counterpart} has no set ${name}: it has ${core.sets.map(candidate => candidate.name).join(', ')}.`);
@@ -51,17 +87,16 @@ function resolved(core, set, cell, binding) {
     const token = value.slice('Theme/'.length);
     const modes = core.theme[token];
     if (!modes) throw new Error(`Core's ${set.name} binds ${binding.layer} ${binding.property} to ${token}, a token the snapshot's Theme does not have.`);
-    return { kind: 'color', token, ...Object.fromEntries(MODES.map(mode => [mode, cssColor(modes[mode].hex)])) };
+    return colorOf(token, modes);
   }
   if (value.startsWith('Components/')) {
     const variable = value.slice('Components/'.length);
     if (!(variable in set.variables)) throw new Error(`Core's ${set.name} binds ${binding.layer} ${binding.property} to ${variable}, a variable the snapshot does not have.`);
     return { kind: 'number', value: set.variables[variable] };
   }
-  // A text style is named with its group (`Body/Subheadline`); the snapshot keys it without (`Subheadline`).
-  const name = [value, value.slice(value.indexOf('/') + 1)].find(candidate => candidate in core.textStyles);
-  if (!name) throw new Error(`Core's ${set.name} binds ${binding.layer} ${binding.property} to ${value}, which is no variable, Theme token or text style of the snapshot.`);
-  return { kind: 'textStyle', name, ...core.textStyles[name] };
+  const style = textStyleOf(core, value);
+  if (!style) throw new Error(`Core's ${set.name} binds ${binding.layer} ${binding.property} to ${value}, which is no variable, Theme token or text style of the snapshot.`);
+  return style;
 }
 
 /**

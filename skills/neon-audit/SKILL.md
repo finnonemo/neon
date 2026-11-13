@@ -29,6 +29,8 @@ Review requests go directly to [neon-review](../neon-review/SKILL.md). New React
 
 Read only the relevant section of [project inspection](references/project-inspection.md): [multiple apps](references/project-inspection.md#multiple-apps), [framework and dependencies](references/project-inspection.md#framework-and-dependencies), [base](references/project-inspection.md#base), [existing theme](references/project-inspection.md#existing-theme), [SSR](references/project-inspection.md#server-rendered-react), or [partial scope](references/project-inspection.md#partial-scope). Do not load the design guide merely to identify a framework.
 
+Reporting which of the app's components have a Counterpart: [Counterpart coverage](references/core-rules.md#counterpart-coverage), from the index alone.
+
 ## Done
 
-Return the recommended path and rationale, the app's base, preserved scope, and any unresolved choice. State what was inspected; do not imply an exhaustive hardcoded-style scan. Continue the authorized implementation through the selected skill without repeating onboarding.
+Return the recommended path and rationale, the app's base, preserved scope, and any unresolved choice. Where the app has a `src/components/ui/`, say which of its components have a Counterpart. Say what the path fixes (base, tier, preserved behavior) and what it leaves to the implementing skill to design, so a narrow recommendation is not read as a layout brief. State what was inspected; do not imply an exhaustive hardcoded-style scan. Continue the authorized implementation through the selected skill without repeating onboarding.

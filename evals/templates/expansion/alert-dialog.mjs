@@ -1,10 +1,10 @@
-// alert-dialog → CDS Alert, measured open: the overlay, the 318px card, the
-// centered title and muted body, and the two half-width actions. The gaps from
-// the card's edges pin where the title and actions sit inside it (gaps are
-// keyed by their pair, so each pair is measured along one axis). The two
-// actions are Neon Buttons, so on the Neon target they take Core's Button for
-// their label, padding and fill; their height grows with a wrapped label, which
-// is the alert's own and stays on the CDS baseline until alert-dialog is retuned.
+// alert-dialog → Core's Alert at iOS=False, measured open: the overlay, the 300px card, the
+// Headline title and Body message, and the two half-width Medium actions (Core's Tertiary
+// cancel and its Primary, here Danger). The card, its text block, the title and the message
+// take the Core baseline (core/alert.mjs), the actions Core's Button. Sizes that follow from
+// the wrapped Thai and English copy (the card's height, the text's and the actions' boxes) and
+// the gaps stay on the CDS baseline, their differences recorded in core-differences.json.
+import { alertCell } from '../core/alert.mjs';
 import { buttonCell } from '../core/button.mjs';
 
 const fromCore = ['font', 'color', 'pad', 'bg'];
@@ -16,12 +16,14 @@ export const screens = [
     name: 'expansion-alert-dialog-open',
     open: { action: 'click', cds: '[data-measure=alert-dialog] button', neon: '[data-measure=alert-dialog] [data-slot=alert-dialog-trigger]' },
     targets: {
-      alertOverlay: { cds: `${alert} [data-testid=modal-overlay]`, neon: '[data-slot=alert-dialog-overlay]', check: ['bg'] },
-      alertCard: { cds: `${alert} [data-testid=modal-dialog-motion] > div`, neon: '[data-slot=alert-dialog-content]', check: ['w', 'h', 'radius', 'bg'] },
-      alertTitle: { cds: `${alert} h3`, neon: '[data-slot=alert-dialog-title]', check: ['font', 'color', 'h', 'w'] },
-      alertBody: { cds: `${alert} p`, neon: '[data-slot=alert-dialog-description]', check: ['font', 'color', 'h', 'w'] },
-      alertCancel: { cds: `${alert} button[data-variant=secondary]`, neon: '[data-slot=alert-dialog-cancel]', check: ['h', 'w', 'font', 'color', 'pad', 'radius', 'bg'], core: buttonCell('Secondary'), coreProperties: fromCore },
-      alertAction: { cds: `${alert} button[data-variant=negative]`, neon: '[data-slot=alert-dialog-action]', check: ['h', 'w', 'font', 'color', 'pad', 'radius', 'bg'], core: buttonCell('Primary', { Type: 'Danger' }), coreProperties: fromCore },
+      alertOverlay: { cds: `${alert} [data-testid=modal-overlay]`, neon: '[data-slot=alert-dialog-overlay]', check: ['bg'], core: alertCell('overlay') },
+      alertCard: { cds: `${alert} [data-testid=modal-dialog-motion] > div`, neon: '[data-slot=alert-dialog-content]', check: ['w', 'h', 'radius', 'bg'], core: alertCell('card') },
+      alertCardPad: { neon: '[data-slot=alert-dialog-content]', check: ['pad'], core: alertCell('card') },
+      alertText: { neon: '[data-slot=alert-dialog-header]', check: ['pad'], core: alertCell('text') },
+      alertTitle: { cds: `${alert} h3`, neon: '[data-slot=alert-dialog-title]', check: ['font', 'color', 'h', 'w'], core: alertCell('title') },
+      alertBody: { cds: `${alert} p`, neon: '[data-slot=alert-dialog-description]', check: ['font', 'color', 'h', 'w'], core: alertCell('message') },
+      alertCancel: { cds: `${alert} button[data-variant=secondary]`, neon: '[data-slot=alert-dialog-cancel]', check: ['h', 'w', 'font', 'color', 'pad', 'radius', 'bg'], core: buttonCell('Tertiary', { Size: 'Medium' }), coreProperties: fromCore },
+      alertAction: { cds: `${alert} button[data-variant=negative]`, neon: '[data-slot=alert-dialog-action]', check: ['h', 'w', 'font', 'color', 'pad', 'radius', 'bg'], core: buttonCell('Primary', { Type: 'Danger', Size: 'Medium' }), coreProperties: fromCore },
     },
     gaps: [
       ['alertCard', 'alertTitle', 'y'],
@@ -37,7 +39,7 @@ export const screens = [
 const title = 'ลบบัญชีรับเงิน / Remove payout account';
 const trigger = (page) => page.locator('[data-measure=alert-dialog]').getByRole('button', { name: 'ลบบัญชี / Remove account' });
 
-// Radix's alert dialog, as CDS Alert behaves: named by its title and described
+// Radix's alert dialog, as Core's Alert behaves: named by its title and described
 // by its body, deaf to a click on the overlay, and returning focus to its
 // trigger however it closes. Axe reads it open, which the screen pass cannot.
 export function a11y({ test, expect, gotoExpansion }) {
