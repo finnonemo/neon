@@ -1,5 +1,5 @@
 // block-engine.mjs: the Block engine (Finnomena's Pattern builder) for Node: Patterns, composed Pages, the text
-// shaper and an SVG rasteriser. Built from Block (github.com/pawisssh/block) commit 3e08e9ef30f129fbb6b24c067e1794c03b3a4374
+// shaper and an SVG rasteriser. Built from Block (github.com/pawisssh/block) commit d0b1460ef3f47c04210793fc077b5ca305bcd5d9
 // by `npm run build:engine-bundle`. Do not edit: change Block and build again.
 //
 // Code: MIT License, Copyright (c) 2026 Pawish Gawinseth (Block's LICENSE). It bundles harfbuzzjs (MIT License,
@@ -6606,11 +6606,16 @@ function typicalColumns(grid) {
   const minColumns = Math.ceil(grid.cols / BASE_BLOCK_SIZES[BASE_BLOCK_SIZES.length - 1]);
   return Math.max(grid.cols >= 6 ? 3 : 2, minColumns, Math.round(grid.cols / TYPICAL_COLUMN_WIDTH));
 }
-function defaultBlockCountFor(grid) {
-  const half = halvedGrid(grid);
-  if (half) return defaultBlockCountFor(half);
+function cellBlockCountFor(grid) {
   const perColumn = Math.max(1, Math.round(TARGET_COVERAGE * grid.rows / TYPICAL_BLOCK_HEIGHT));
   return Math.max(MIN_DEFAULT_BLOCK_COUNT, Math.min(MAX_BLOCK_COUNT / 2, typicalColumns(grid) * perColumn));
+}
+var DEFAULT_COUNT_SHORT_SIDE = 16;
+function defaultBlockCountFor(grid) {
+  const short = Math.min(grid.cols, grid.rows);
+  if (short <= DEFAULT_COUNT_SHORT_SIDE) return cellBlockCountFor(grid);
+  const scale = DEFAULT_COUNT_SHORT_SIDE / short;
+  return cellBlockCountFor({ ...grid, cols: Math.round(grid.cols * scale), rows: Math.round(grid.rows * scale) });
 }
 var MIN_DEFAULT_BLOCK_COUNT = 3;
 var HALVE_FROM = 32;
@@ -6637,7 +6642,7 @@ function doubleBlocks(blocks, grid) {
   }).filter((b) => b.w > 0 && b.h > 0);
 }
 function blockCountRangeFor(grid) {
-  return { min: 1, max: Math.min(MAX_BLOCK_COUNT, Math.max(4, 2 * defaultBlockCountFor(grid))) };
+  return { min: 1, max: Math.min(MAX_BLOCK_COUNT, Math.max(4, 2 * cellBlockCountFor(halvedGrid(grid) ?? grid))) };
 }
 var DEFAULT_GUIDANCE = 90;
 function defaultGeneratorParams(grid) {

@@ -5,7 +5,7 @@ scenarios:
   - request: "`$neon-block` cover for a report, A4 portrait with a label, one result and no choosing, in a session with no tool server"
     observe: The run reaches the same tools through the command line, picks one Candidate and says which, writes the files in the working directory, and relays `finno.plexTypeface`.
   - request: Ten-slide Finnomena pitch deck with team photos on each slide
-    observe: The run loads `neon-block`, says a deck and photos are outside this release, draws nothing, and offers the cover, headline and closing frames.
+    observe: The run loads `neon-deck`, not `neon-block`, and builds the deck; the run recorded below predates `neon-deck`, whose own record has the deck runs.
 ---
 
 # neon-block
