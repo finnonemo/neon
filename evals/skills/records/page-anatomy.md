@@ -57,6 +57,20 @@ No run was void. The runner printed `failed (exit 1)` for each case after its re
 
 Misses in the revised runs: on the home page only one of three sections ends in an open-all action and it expands in place instead of opening a collection, and the narrow-tier action is not drawn as primary. No shell file was edited in any run, no on-page region has a shadow, each page has one `h1` and none scrolls sideways.
 
+## Rerun after tightening, 14 November 2026
+
+`7123fba` answers the two home misses: every overview section ends in an open-all action that goes to the collection's own page, and the narrow-tier action stays primary. One more sample of the home request at that commit, same runner and model: 5.13 USD, 74 turns, 9.1 minutes, 2 denied commands, not void; it read `page-anatomy.md` in full.
+
+| Item | Revised (`85790d8`) | Tightened (`7123fba`) |
+| --- | --- | --- |
+| Open-all | One section of three, expanding in place | All three sections end in one ("ดูกองทุนทั้งหมด", "ดูคำสั่งทั้งหมด", "ดูเป้าหมายทั้งหมด"), each going to a page of its own that is also a menu destination |
+| Primary action at 375px | In the pane header, drawn as secondary | "ลงทุน" in the pane header, drawn as primary |
+| Layout | `ContentLayout`, action module in the inspector | The same; no shell file edited |
+| First-read | Portfolio total as a figure above the sections | The holdings section, with the total in its heading row; section headings (22px) are the largest text |
+| Height at 1440×900 | 1488px | 1374px |
+
+Both misses are gone in this sample. The page no longer opens with a figure, which is what the reference asks of an overview; whether that follows from the tightening or from sample variation, one run cannot say. The three collection pages were not opened or measured.
+
 The colors-only row was not run: no fixture with tinted KPI tiles exists. It stays unverified.
 
 Limits: one sample per row, graded by the author of the change from each run's thesis, source and two screenshots on load; nothing was clicked, so the dock opening the buy module, the settings rows' edit flow and the empty states were not exercised. Limits of the research carry over: no viewport below 500px or above 1510px was measured, the account held nothing so a populated portfolio page and transaction list were not seen, and no flow (form, confirmation, error) was opened.
