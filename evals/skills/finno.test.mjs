@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
-import { mkdir, mkdtemp, readFile, readdir, writeFile } from 'node:fs/promises';
+import { existsSync, realpathSync } from 'node:fs';
+import { mkdir, mkdtemp, readFile, readdir, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { inflateRawSync } from 'node:zlib';
@@ -155,7 +155,7 @@ function fakeAgents(state = { marketplace: false, plugin: false, server: false }
     calls.push([command, ...args].join(' '));
     const line = args.join(' ');
     if (line === '--version') return { ok: true, output: '1.0.0' };
-    if (line === 'plugin marketplace list --json') return { ok: true, output: JSON.stringify(state.marketplace ? [{ name: 'finnomena-plugins' }] : []) };
+    if (line === 'plugin marketplace list --json') return { ok: true, output: JSON.stringify(state.marketplace ? [{ name: 'finnomena-plugins', ...(state.folder ? { source: 'directory', path: state.folder } : { source: 'github', repo: 'finnonemo/neon' }) }] : []) };
     if (line === 'plugin list --json') return { ok: true, output: JSON.stringify(state.plugin ? [{ id: 'neon@finnomena-plugins' }] : []) };
     if (line === 'plugin marketplace list') return { ok: true, output: `MARKETPLACE ROOT\n${state.marketplace ? 'finnomena-plugins /x\n' : ''}` };
     if (line === 'mcp list') return { ok: true, output: `Name Command\n${state.server ? 'finno npx\n' : ''}` };
@@ -223,17 +223,54 @@ test('setup leaves a Desktop file it cannot read as it is, says so, and exits 1'
 test('setup updates what is already there, and registers the published package through npx at this version', () => {
   const { run } = fakeAgents({ marketplace: true, plugin: true, server: true });
   const found = detect({ run, home: '/nowhere', platform: 'linux', env: {} });
-  const published = serverCommand({ root: '/home/u/.npm/_npx/abc/node_modules/finnomena', platform: 'linux', execPath: '/usr/bin/node' });
-  assert.deepEqual(published.args, ['-y', `finnomena@${VERSION}`, 'mcp']);
+  const published = serverCommand({ root: '/home/u/.npm/_npx/abc/node_modules/finnomena', platform: 'linux', execPath: '/usr/bin/node', env: { PATH: '' } });
+  // `npm:` keeps npx from taking a Neon checkout, whose package has this name and version, for the package itself.
+  assert.deepEqual(published.args, ['-y', `npm:finnomena@${VERSION}`, 'mcp']);
   assert.ok(published.env.PATH.startsWith('/usr/bin'));
   assert.deepEqual(serverCommand({ root: 'C:\\x\\node_modules\\finnomena'.split('\\').join(require_sep()), platform: 'win32' }).args.slice(0, 3), ['/c', 'npx', '-y']);
   const commands = planFor(found, { server: published }).map(step => step.command.join(' '));
   assert.deepEqual(commands.slice(0, 2), ['claude plugin marketplace update finnomena-plugins', 'claude plugin update neon@finnomena-plugins']);
   assert.ok(commands.includes('codex mcp remove finno'));
-  assert.ok(commands.at(-1).endsWith(`-- ${published.command} -y finnomena@${VERSION} mcp`));
+  assert.ok(commands.at(-1).endsWith(`-- ${published.command} -y npm:finnomena@${VERSION} mcp`));
   assert.ok(!commands.some(command => command.includes('marketplace add')));
 });
 function require_sep() { return process.platform === 'win32' ? '\\' : '/'; }
+
+test('the registered npx is the one PATH links to this Node, not a directory named after the Node version', { skip: process.platform === 'win32' }, async () => {
+  const home = realpathSync(await scratch());
+  const versioned = join(home, 'Cellar/node/26.7.0/bin');
+  const linked = join(home, 'bin');
+  await mkdir(versioned, { recursive: true });
+  await mkdir(linked);
+  for (const name of ['node', 'npx']) {
+    await writeFile(join(versioned, name), '');
+    await symlink(join(versioned, name), join(linked, name));
+  }
+  const root = '/home/u/.npm/_npx/abc/node_modules/finnomena';
+  const upgradeProof = serverCommand({ root, platform: 'darwin', execPath: join(versioned, 'node'), env: { PATH: `/nowhere:${versioned}:${linked}` } });
+  assert.equal(upgradeProof.command, join(linked, 'npx'));
+  assert.ok(upgradeProof.env.PATH.startsWith(`${linked}:`));
+  assert.ok(!upgradeProof.env.PATH.includes('26.7.0'), upgradeProof.env.PATH);
+  // With no such link on PATH (nvm, a plain install), Node's own directory is all there is.
+  assert.equal(serverCommand({ root, platform: 'darwin', execPath: join(versioned, 'node'), env: { PATH: '/nowhere' } }).command, join(versioned, 'npx'));
+});
+
+test('setup names the step it is running, and warns when Claude Code would copy a marketplace folder', async () => {
+  const { run } = fakeAgents({ marketplace: true, plugin: false, server: false, folder: '/Users/u/neon' });
+  const lines = [];
+  const order = [];
+  const watched = (command, args) => { order.push(`run ${args.join(' ')}`); return run(command, args); };
+  const code = await setup(['--yes', '--agent', 'claude-code'], { run: watched, home: '/nowhere', platform: 'linux', log: line => { lines.push(line); order.push(line); }, interactive: false, test: async () => ({ tools: ['options', 'candidates', 'render'], formats: 7, colourways: 29 }) });
+  assert.equal(code, 0, lines.join('\n'));
+  assert.match(lines[0], /This marketplace is a folder on this computer \(\/Users\/u\/neon\)/);
+  assert.match(lines[0], /claude plugin marketplace remove finnomena-plugins/);
+  const announced = order.indexOf('… 2. Claude Code: Install the neon plugin (the five skills and the finno tools)');
+  assert.ok(announced >= 0 && announced < order.indexOf('run plugin install neon@finnomena-plugins'), order.join('\n'));
+
+  const fromGitHub = [];
+  await setup(['--agent', 'claude-code'], { run: fakeAgents({ marketplace: true, plugin: false, server: false }).run, home: '/nowhere', platform: 'linux', log: line => fromGitHub.push(line), interactive: false });
+  assert.doesNotMatch(fromGitHub.join('\n'), /is a folder/);
+});
 
 test('the plugin zip holds the packaged plugin, readable by any unzip', async () => {
   const directory = await scratch();

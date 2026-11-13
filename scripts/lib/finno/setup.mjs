@@ -1,7 +1,7 @@
 // `finno setup` (ADR 0010): installs Neon into the agents on this computer. It shows its plan and changes nothing
 // until told to, keeps a backup of a configuration file it rewrites, and checks afterwards that the tools answer.
 import { spawn, spawnSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
+import { existsSync, realpathSync } from 'node:fs';
 import { copyFile, mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { homedir, tmpdir } from 'node:os';
 import { delimiter, dirname, join, resolve, sep } from 'node:path';
@@ -30,18 +30,34 @@ export function desktopConfigPath({ home = homedir(), platform = process.platfor
 }
 
 /**
- * How an agent starts the tool server. From the published package it is `npx finnomena@<this version>`, so the agent
- * keeps working after this run's files are gone. From a checkout it is this checkout's own file, which is not on npm.
+ * The directory to name for `npx`. Node's own directory can name its version (Homebrew's
+ * `Cellar/node/<version>/bin`), and an entry that names it dies at the next Node upgrade. So prefer a directory on
+ * PATH that links to this Node, such as `/opt/homebrew/bin`.
  */
-export function serverCommand({ root = NEON_ROOT, platform = process.platform, execPath = process.execPath } = {}) {
+function npxDirectory(execPath, env) {
+  const real = file => { try { return realpathSync(file); } catch { return null; } };
+  const nodeDir = dirname(execPath);
+  const node = real(execPath);
+  const linked = node && (env.PATH ?? '').split(delimiter)
+    .find(dir => dir && dir !== nodeDir && real(join(dir, 'node')) === node && existsSync(join(dir, 'npx')));
+  return linked || nodeDir;
+}
+
+/**
+ * How an agent starts the tool server. From the published package it is `npx npm:finnomena@<this version>`, so the
+ * agent keeps working after this run's files are gone. The `npm:` matters: in a directory whose own package has that
+ * name and version (a Neon checkout), `npx finnomena@<version>` takes the directory for the package and finds no
+ * command in it. From a checkout the server is this checkout's own file, which is not on npm.
+ */
+export function serverCommand({ root = NEON_ROOT, platform = process.platform, execPath = process.execPath, env = process.env } = {}) {
   const published = root.split(sep).includes('node_modules');
   if (!published) return { command: execPath, args: [join(root, 'scripts/finno.mjs'), 'mcp'], env: {}, published };
-  const args = ['-y', `${NPM_PACKAGE}@${VERSION}`, 'mcp'];
+  const args = ['-y', `npm:${NPM_PACKAGE}@${VERSION}`, 'mcp'];
   if (platform === 'win32') return { command: 'cmd', args: ['/c', 'npx', ...args], env: {}, published };
   // A desktop app does not start with the shell's PATH, so name where this Node is.
-  const nodeDir = dirname(execPath);
-  const path = [...new Set([nodeDir, '/opt/homebrew/bin', '/usr/local/bin', '/usr/bin', '/bin'])].join(delimiter);
-  return { command: existsSync(join(nodeDir, 'npx')) ? join(nodeDir, 'npx') : 'npx', args, env: { PATH: path }, published };
+  const directory = npxDirectory(execPath, env);
+  const path = [...new Set([directory, '/opt/homebrew/bin', '/usr/local/bin', '/usr/bin', '/bin'])].join(delimiter);
+  return { command: existsSync(join(directory, 'npx')) ? join(directory, 'npx') : 'npx', args, env: { PATH: path }, published };
 }
 
 /** What is on this computer: which agents, and what of Neon each already has. */
@@ -49,8 +65,11 @@ export function detect({ run = defaultRun, ...where } = {}) {
   const found = {};
   if (run('claude', ['--version']).ok) {
     const json = (args) => { try { return JSON.parse(run('claude', args).output); } catch { return []; } };
+    const marketplace = json(['plugin', 'marketplace', 'list', '--json']).find(entry => entry.name === MARKETPLACE);
     found['claude-code'] = {
-      marketplace: json(['plugin', 'marketplace', 'list', '--json']).some(entry => entry.name === MARKETPLACE),
+      marketplace: Boolean(marketplace),
+      // A marketplace added from a folder: Claude Code copies the whole folder to install a plugin from it.
+      folder: marketplace?.source === 'directory' ? marketplace.path ?? marketplace.installLocation ?? 'a folder' : null,
       plugin: json(['plugin', 'list', '--json']).some(entry => entry.id === PLUGIN),
     };
   }
@@ -104,6 +123,11 @@ export function describePlan(found, steps, { published }) {
     for (const step of own) {
       lines.push(`  ${steps.indexOf(step) + 1}. ${step.what}`);
       lines.push(step.command ? `     ${step.command.map(quoted).join(' ')}` : `     ${step.file}\n     mcpServers.finno = ${JSON.stringify(step.entry)}`);
+    }
+    if (agent === 'claude-code' && found[agent].folder) {
+      lines.push(`  This marketplace is a folder on this computer (${found[agent].folder}), and Claude Code copies that whole`,
+        '  folder to install the plugin: a checkout with worktrees or node_modules can take many minutes and gigabytes.',
+        `  To install from GitHub instead, run "claude plugin marketplace remove ${MARKETPLACE}" and then setup again.`);
     }
     if (agent === 'claude-desktop') {
       lines.push('  Only the tools reach Claude Desktop this way. Its skills come from your organization\'s plugin',
@@ -237,6 +261,7 @@ export async function setup(argv, { run = defaultRun, log = console.log, interac
     if (failed.has(step.agent)) { log(`- ${label}: skipped, an earlier step for ${NAMES[step.agent]} failed.`); continue; }
     try {
       if (step.command) {
+        log(`… ${label}`);
         const result = run(step.command[0], step.command.slice(1));
         if (!result.ok) throw new Error(result.output.trim() || 'the command failed');
       } else {
