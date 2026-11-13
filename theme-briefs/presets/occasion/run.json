@@ -11,7 +11,8 @@
       "roles": [
         "palette",
         "action"
-      ]
+      ],
+      "leadFact": "the distance"
     },
     {
       "name": "Route overview",
@@ -19,7 +20,8 @@
       "contentNotes": "a labelled map image slot, checkpoints with distance markers and water stations",
       "roles": [
         "palette"
-      ]
+      ],
+      "feature": true
     },
     {
       "name": "Race-day schedule",
@@ -27,7 +29,8 @@
       "contentNotes": "time, item and place for check-in, warm-up, start, finish and awards",
       "roles": [
         "palette"
-      ]
+      ],
+      "leadFact": "the start time"
     },
     {
       "name": "Registration call-out",
@@ -36,14 +39,18 @@
       "roles": [
         "accent",
         "action"
-      ]
+      ],
+      "leadFact": "the registration deadline",
+      "feature": true
     }
   ],
   "dos": [
-    "show the registration deadline next to every main action"
+    "show the registration deadline next to every main action",
+    "set each distance and the registration deadline as the largest thing in its block"
   ],
   "donts": [
-    "use the route map as a decorative background, because runners need to read it"
+    "use the route map as a decorative background, because runners need to read it",
+    "give the distances, the route and the schedule one card recipe, because the page then reads as one texture"
   ],
   "promptInputs": [
     "a set of race distance cards for three distances",

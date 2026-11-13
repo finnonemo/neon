@@ -18,8 +18,8 @@ const valid = {
     taglineIntent: 'a members running event with a shared start line',
     moodIntent: 'a weekend race members train for together',
     components: [
-      { name: 'Race distance card', role: 'compare the distances on offer', contentNotes: 'distance, start time, one select action', roles: ['palette', 'action'] },
-      { name: 'Registration call-out', role: 'carry the main registration action', contentNotes: 'deadline and the main action', roles: ['accent', 'action'] },
+      { name: 'Race distance card', role: 'compare the distances on offer', contentNotes: 'distance, start time, one select action', roles: ['palette', 'action'], leadFact: 'the distance' },
+      { name: 'Registration call-out', role: 'carry the main registration action', contentNotes: 'deadline and the main action', roles: ['accent', 'action'], feature: true },
     ],
     dos: ['show the registration deadline next to every main action'],
     donts: ['use the route map as a decorative background'],
@@ -29,8 +29,10 @@ const valid = {
   'theme-briefs/presets/layout/event-landing.json': {
     kind: 'layout', slug: 'event-landing',
     sections: ['hero', 'detail-list', 'call-out', 'form', 'footer'],
+    grounds: ['pattern', 'canvas', 'accent', 'tint', 'canvas'],
     heroPattern: 'split headline and lead image', navigation: 'none', footer: 'minimal',
     density: 'comfortable', blockRadius: 'borderRadius-500', sectionGap: 'space-10', cardPadding: 'space-4',
+    featureRadius: 'borderRadius-700', factRole: 'display3',
     pageWidth: 'full-bleed', motion: 'subtle', brandPattern: { section: 'hero' },
   },
   'theme-briefs/presets/imagery/people-in-action.json': {
@@ -151,6 +153,14 @@ Object.assign(SCHEMA_REFUSALS, {
   'a spacing step for the block radius': [edit(LAYOUT, (p) => ({ ...p, blockRadius: 'space-4' })), /"blockRadius" must be a borderRadius-\* step name$/m],
   'a step that is not on the scale': [edit(LAYOUT, (p) => ({ ...p, cardPadding: 'space-11' })), /"cardPadding" must be a space-\* step name$/m],
   'a step written as a variable': [edit(LAYOUT, (p) => ({ ...p, cardPadding: 'var(--space-4)' })), /"cardPadding" must be a space-\* step name$/m],
+  'a spacing step for the feature radius': [edit(LAYOUT, (p) => ({ ...p, featureRadius: 'space-4' })), /"featureRadius" must be a borderRadius-\* step name$/m],
+  'a fact role below the display roles': [edit(LAYOUT, (p) => ({ ...p, factRole: 'title1' })), /event-landing\.json: "factRole" must be one of display1, display2, display3$/m],
+  'a ground that is not one of the four': [edit(LAYOUT, (p) => ({ ...p, grounds: ['pattern', 'canvas', 'accent', 'navy', 'canvas'] })), /event-landing\.json: "grounds\.3" must be one of canvas, tint, accent, pattern$/m],
+  'grounds that do not match the sections': [edit(LAYOUT, (p) => ({ ...p, grounds: ['pattern', 'canvas', 'accent'] })), /event-landing\.json: "grounds" has 3 items; it gives one ground per section, and there are 5$/m],
+  'a pattern ground off the Brand Pattern section': [edit(LAYOUT, (p) => ({ ...p, grounds: ['pattern', 'pattern', 'accent', 'tint', 'canvas'] })), /event-landing\.json: "grounds\.1" is "pattern", but the Brand Pattern section is section 1$/m],
+  'a Brand Pattern section on another ground': [edit(LAYOUT, (p) => ({ ...p, grounds: ['canvas', 'canvas', 'accent', 'tint', 'canvas'] })), /event-landing\.json: "grounds\.0" must be "pattern": the Brand Pattern section takes the ground its picks file chooses$/m],
+  'a page left on the canvas throughout': [edit(LAYOUT, (p) => ({ ...p, grounds: ['pattern', 'canvas', 'canvas', 'canvas', 'canvas'] })), /event-landing\.json: "grounds" leaves every section on the canvas; give at least one section a tint or accent ground$/m],
+  'a feature flag that is not true or false': [edit(OCCASION, (p) => { p.components[1].feature = 'yes'; return p; }), /run\.json: "components\.1\.feature" must be true or false$/m],
   'a picks file named apart from its brief': [{ [PICKS]: null, 'theme-briefs/picks/club-race.json': valid[PICKS] }, /^theme-briefs\/picks\/club-race\.json: file name must be "club-run\.json" \(theme and brief name\)$/m],
   'a brief name that is not plain English': [edit(PICKS, (p) => ({ ...p, briefName: 'วิ่ง' })), /"briefName" must be an English name/m],
   'a theme text for no theme': [{ 'theme-briefs/themes/neon.json': valid[CLUB_TEXT] }, /^theme-briefs\/themes\/neon\.json: no Immersive Theme "neon"$/m],
@@ -195,6 +205,7 @@ const COMPATIBILITY_REFUSALS = {
   'a ground that is not a step of the colourway': [edit(PICKS, (p) => ({ ...p, brandPattern: { colourway: 'accent', ground: 30 } })), /^theme-briefs\/picks\/club-run\.json: ground 30 is not a step of accent \(25, 50, 75, 100\)$/m],
   'a Brand Pattern on the bare canvas': [{ 'theme/immersive-themes.json': withCanvasAccent(), ...edit(PICKS, (p) => ({ ...p, brandPattern: { colourway: 'accent', ground: 25 } })) }, /^theme-briefs\/picks\/club-run\.json: accent 25 is Club's bare canvas; a Brand Pattern sits on the canvas only as palette 100$/m],
   'a Brand Pattern section the layout lacks': [edit(LAYOUT, (p) => ({ ...p, brandPattern: { section: 'proof' } })), /^theme-briefs\/presets\/layout\/event-landing\.json: Brand Pattern section "proof" is not one of its sections$/m],
+  'an accent ground with no accent component': [edit(OCCASION, (p) => { p.components[1].roles = ['palette', 'action']; return p; }), /^theme-briefs\/picks\/club-run\.json: layout "event-landing" gives a section an accent ground, but no component of occasion "run" takes the accent role$/m],
   'a missing preset': [edit(PICKS, (p) => ({ ...p, presets: { ...p.presets, imagery: 'still-life' } })), /^theme-briefs\/picks\/club-run\.json: imagery preset "still-life" not found under theme-briefs\/presets\/imagery$/m],
   'a third-party source with no review record': [edit(LAYOUT, (p) => ({ ...p, source: source('https://www.example-run.com/events') })), /^theme-briefs\/picks\/club-run\.json: layout "event-landing" has a third-party source, so the picks file needs a review record$/m],
   'a source URL that does not parse, as a third party': [edit(LAYOUT, (p) => ({ ...p, source: source('https://[x]/events') })), /^theme-briefs\/picks\/club-run\.json: layout "event-landing" has a third-party source, so the picks file needs a review record$/m],
@@ -647,8 +658,8 @@ const GOOD = {
   },
   'occasion-components': {
     components: [
-      { name: 'Race distance card', role: 'Compare the distances on offer', paragraph: 'Each card sits on var(--immersive-palette-50) with var(--immersive-on-palette-50) text, no border, var(--borderRadius-500) corners and var(--space-4) padding. The distance leads in title2 above the start time in body, then one select action. A distance that has filled up says so in body text and offers no action.' },
-      { name: 'Registration call-out', role: 'Carry the main registration action', paragraph: 'The call-out sits on var(--immersive-accent-100) with var(--immersive-on-accent-100) text, no border, var(--borderRadius-500) corners and var(--space-4) padding. The deadline sits in title3 above one main action. It appears once, after the distances.' },
+      { name: 'Race distance card', role: 'Compare the distances on offer', paragraph: 'Each card sits on var(--immersive-palette-50) with var(--immersive-on-palette-50) text, no border, var(--borderRadius-500) corners and var(--space-4) padding. The distance leads in display3 above the start time in body, then one select action. A distance that has filled up says so in body text and offers no action.' },
+      { name: 'Registration call-out', role: 'Carry the main registration action', paragraph: 'The call-out sits on var(--immersive-accent-100) with var(--immersive-on-accent-100) text, no border, var(--borderRadius-700) corners and var(--space-4) padding. The deadline sits in title3 above one main action. It appears once, after the distances.' },
     ],
   },
   'preset-dos-donts': {
@@ -659,12 +670,12 @@ const GOOD = {
     paragraph: 'Photography of members running together leads every screen, framed close and mid so faces and stride carry the energy. Subjects are real members in candid moments on the course, set on the canvas or a soft grey block and never tinted with the accent. Spot illustrations mark small blocks only, such as a distance badge or a water station, drawn in the text color. Icons stay simple line marks beside labels. Images sit beside the hero and its Brand Pattern, never over it, with one large image per screen at most. The page should feel open and unhurried.',
   },
   layout: {
-    paragraph: 'A full-bleed page opens on a split hero, its headline beside one lead image, with the Brand Pattern carried by the hero section. Below it a detail list sets out the Race distance card set on soft grey blocks, then a call-out section holds the Registration call-out on its accent block. A short form follows for sign-up details, and a minimal footer closes the page. There is no navigation bar, so the hero carries the page title. Sections alternate between the canvas and tinted blocks at var(--space-10) gaps, with var(--borderRadius-500) corners on every block and var(--space-4) padding inside cards, keeping a comfortable rhythm from top to bottom.',
+    paragraph: 'A full-bleed page opens on a split hero, its headline beside one lead image, on the pattern ground: the hero is the Brand Pattern section, and the event name is the largest thing on the first screen. Below it a detail list on the canvas sets out the Race distance card set as equal cards, the one set of peers on the page, each led by its distance in display3. A call-out section on the accent ground holds the Registration call-out, a feature block that spans the content column at borderRadius-700. A short form follows on the tint ground for sign-up details, and a minimal footer on the canvas closes the page. There is no navigation bar, so the hero carries the page title. Sections sit at var(--space-10) gaps, with var(--borderRadius-500) corners on every card and var(--space-4) padding inside cards, keeping a comfortable rhythm from top to bottom.',
   },
   'example-prompts': {
     prompts: [
-      'Create a Race distance card: var(--immersive-palette-50) fill with var(--immersive-on-palette-50) text, var(--borderRadius-500) corners, var(--space-4) padding, the distance in title2 and the start time in body, with one select action.',
-      'Create a Registration call-out: var(--immersive-accent-100) fill with var(--immersive-on-accent-100) text, var(--borderRadius-500) corners, var(--space-4) padding, the deadline in title3 above one main action on var(--immersive-action) with a var(--immersive-on-action) label.',
+      'Create a Race distance card: var(--immersive-palette-50) fill with var(--immersive-on-palette-50) text, var(--borderRadius-500) corners, var(--space-4) padding, the distance in display3 and the start time in body, with one select action.',
+      'Create a Registration call-out: var(--immersive-accent-100) fill with var(--immersive-on-accent-100) text, var(--borderRadius-700) corners, var(--space-4) padding, the deadline in title3 above one main action on var(--immersive-action) with a var(--immersive-on-action) label.',
       'Create a hero section: the canvas with var(--immersive-text) headline in display2, a lead image beside it, and one main action on var(--immersive-action) with a var(--immersive-on-action) label.',
     ],
   },
@@ -740,11 +751,48 @@ test('the review report gives each entry hash, the scripted-section check and pe
 test('soft checks send back a Do longer than one sentence and component slots out of order', (t) => {
   const twoSentences = { ...GOOD['preset-dos-donts'], dos: ['Show the deadline beside every main action on the Race distance card. Members should never hunt for the date at all.'] };
   const outOfOrder = components([]);
-  outOfOrder.components[0] = { ...outOfOrder.components[0], paragraph: 'Each card sits on var(--immersive-palette-50) with var(--immersive-on-palette-50) text and var(--space-4) padding, no border and var(--borderRadius-500) corners. The distance leads in title2 above the start time in body, then one select action. A distance that has filled up says so in body text and offers no action.' };
+  outOfOrder.components[0] = { ...outOfOrder.components[0], paragraph: 'Each card sits on var(--immersive-palette-50) with var(--immersive-on-palette-50) text and var(--space-4) padding, no border and var(--borderRadius-500) corners. The distance leads in display3 above the start time in body, then one select action. A distance that has filled up says so in body text and offers no action.' };
   const { fake, status, out } = draft(t, { answers: { 'preset-dos-donts': [twoSentences, GOOD['preset-dos-donts']], 'occasion-components': [outOfOrder, GOOD['occasion-components']] } });
   assert.equal(status, 0, out);
   assert.match(calls(fake, 'preset-dos-donts')[1].prompt, /^- "dos\.0" has 2 sentences; each bullet is one$/m);
   assert.match(calls(fake, 'occasion-components')[1].prompt, /^- "components\.0\.paragraph" gives padding before border; the slot order is fill, border, radius, padding$/m);
+});
+
+test('soft checks send back a component that misses its composition picks, and a Layout that names no ground', (t) => {
+  const plain = components([]);
+  plain.components[0] = { ...plain.components[0], paragraph: plain.components[0].paragraph.replace('leads in display3', 'leads in title2') };
+  plain.components[1] = { ...plain.components[1], paragraph: plain.components[1].paragraph.replace('var(--borderRadius-700)', 'var(--borderRadius-500)').replace('sits in title3', 'sits in display3') };
+  const flat = { paragraph: GOOD.layout.paragraph.replace('on the tint ground ', '').replace('in display3', 'in large type') };
+  const { fake, status, out } = draft(t, { answers: { 'occasion-components': [plain, GOOD['occasion-components']], layout: [flat, GOOD.layout] } });
+  assert.equal(status, 0, out);
+  const sent = calls(fake, 'occasion-components')[1].prompt;
+  assert.match(sent, /^- "components\.0\.paragraph" does not set its lead fact \(the distance\) in display3$/m);
+  assert.match(sent, /^- "components\.1\.paragraph" names a display role, but the component has no lead fact$/m);
+  assert.match(sent, /^- "components\.1\.paragraph" does not round to --borderRadius-700, the feature block radius$/m);
+  const layout = calls(fake, 'layout')[1].prompt;
+  assert.match(layout, /^- "paragraph" does not name the tint ground$/m);
+  assert.match(layout, /^- "paragraph" does not say which facts take display3$/m);
+});
+
+test('a soft check sends back a Do that names a display role other than the layout\'s fact role', (t) => {
+  const wrong = { ...GOOD['preset-dos-donts'], dos: GOOD['preset-dos-donts'].dos.map((line, index) => index ? line : line.replace(/\.$/, ' in display1.')) };
+  const { fake, status, out } = draft(t, { answers: { 'preset-dos-donts': [wrong, GOOD['preset-dos-donts']] } });
+  assert.equal(status, 0, out);
+  assert.match(calls(fake, 'preset-dos-donts')[1].prompt, /^- "dos\.0" names display1; the layout's lead fact role is display3$/m);
+});
+
+test('Layout opens on the scripted section table, theme by theme, and its prose reads back without it', (t) => {
+  assert.match(briefText, /^## Layout\n\n\| # \| Section \| Ground \| Fill \| Text \|\n\|---\|---\|---\|---\|---\|\n\| 1 \| hero \| pattern \| `--immersive-accent-50` \| `--immersive-on-accent-50` \|\n\| 2 \| detail-list \| canvas \| `--immersive-canvas` \| `--immersive-text` \|\n\| 3 \| call-out \| accent \| `--immersive-accent-100` \| `--immersive-on-accent-100` \|\n\| 4 \| form \| tint \| `--immersive-palette-100` \| `--immersive-on-palette-100` \|\n\| 5 \| footer \| canvas \| `--immersive-canvas` \| `--immersive-text` \|\n\nRows are in page order\. A `tint`, `accent` or `pattern` ground fills its section edge to edge, with the content column inside it; on `canvas` the section's blocks carry the fills\.\n\nThe page opens on a split hero/m);
+  assert.match(briefText, /^- \*\*Feature block radius:\*\* `--borderRadius-700` \(40px\), for a block that spans the content column; cards inside it keep the block and card radius$/m);
+  assert.match(briefText, /^- \*\*Lead fact role:\*\* `display3` \(54px\/64px\), for the one fact a component leads with; other component text stops at `title1`$/m);
+  // A second scripted-only pass leaves the brief as it is: the prose is read back without the table.
+  const root = fixture(t, { ...THEME_TEXTS, [BRIEF]: briefText });
+  const { status, out } = run(['scripted-only', '--root', root]);
+  assert.equal(status, 0, out);
+  assert.equal(readFileSync(join(root, BRIEF), 'utf8'), briefText);
+  // On a theme whose canvas is a palette step, the tint ground is the next step down.
+  const contained = renderBrief({ ...edit(LAYOUT, (p) => ({ ...p, pageWidth: 'contained' })) });
+  assert.match(contained, /ground fills its section to the content column, with the block radius; on `canvas`/);
 });
 
 const calls = (fake, name) => fake.calls().filter(({ entry }) => entry === name);
@@ -785,13 +833,13 @@ const withoutLocal = (files) => Object.fromEntries(Object.entries(files).filter(
 const untouched = (t, root) => snapshot(fixture(t, { ...THEME_TEXTS, ...libraryFiles() }));
 
 test('a persistent hard failure leaves a marked local draft, writes no brief or record, and exits 1', (t) => {
-  const hex = { paragraph: GOOD.layout.paragraph.replace('soft grey blocks', 'soft #e6eef2 blocks') };
+  const hex = { paragraph: GOOD.layout.paragraph.replace('as equal cards', 'as equal #e6eef2 cards') };
   const { root, fake, status, out } = draft(t, { answers: { layout: [hex] } });
   assert.equal(status, 1, out);
   assert.match(out, /^club-run: checks failed; not written\. Draft \.local\/theme-briefs\/club-run\/draft\.md; review \.local\/theme-briefs\/club-run\/review\.md$/m);
   assert.equal(calls(fake, 'layout').length, 3);
   const text = readFileSync(local(root, 'draft.md'), 'utf8');
-  assert.match(text, /^## Layout\n\n\*\*Hard checks failed — layout:\*\* prose holds #e6eef2; prose names colors by variable or role, never by value\n\n\[not drafted\]$/m);
+  assert.match(text, /^## Layout\n\n\*\*Hard checks failed — layout:\*\* prose holds #e6eef2; prose names colors by variable or role, never by value\n\n\| # \| Section \| Ground \| Fill \| Text \|\n[^]*?\n\nRows are in page order\.[^\n]*\n\n\[not drafted\]$/m);
   const report = readFileSync(local(root, 'review.md'), 'utf8');
   assert.match(report, /No attempt of 3 passed its hard checks\./);
   assert.match(report, /^Scripted sections not compared: the draft has failed sections\.$/m);
@@ -827,8 +875,8 @@ const DRAFT_REFUSALS = {
   'imagery that opens like the Brand Floor': ['imagery', { paragraph: `Imagery never carries another brand's look. ${imagery}` }, /— imagery:\*\* "paragraph" opens like the Brand Floor sentence, which the tool adds/],
   'a variable the theme does not define': ['occasion-components', components([]), /— occasion-components:\*\* names --immersive-support-50, which Club does not define/, (answer) => { answer.components[0].paragraph = answer.components[0].paragraph.replace('palette-50) with var(--immersive-on-palette-50)', 'support-50) with var(--immersive-on-support-50)'); }],
   'a px value no table holds': ['example-prompts', { prompts: GOOD['example-prompts'].prompts.map((prompt) => prompt.replace('var(--space-4) padding', '11px padding')) }, /— example-prompts:\*\* prose gives 11px, which no table in the brief holds/],
-  'a type size off the scale': ['example-prompts', { prompts: GOOD['example-prompts'].prompts.map((prompt) => prompt.replace('the distance in title2', 'the distance at 17px/23px')) }, /prose gives 17px\/23px, which is not a Type Scale size and line height/],
-  'a foreign font name': ['example-prompts', { prompts: GOOD['example-prompts'].prompts.map((prompt) => prompt.replace('the distance in title2', 'the distance in Inter')) }, /— example-prompts:\*\* prose names "Inter", a font other than IBM Plex Sans Thai; type comes from the theme/],
+  'a type size off the scale': ['example-prompts', { prompts: GOOD['example-prompts'].prompts.map((prompt) => prompt.replace('the distance in display3', 'the distance at 17px/23px')) }, /prose gives 17px\/23px, which is not a Type Scale size and line height/],
+  'a foreign font name': ['example-prompts', { prompts: GOOD['example-prompts'].prompts.map((prompt) => prompt.replace('the distance in display3', 'the distance in Inter')) }, /— example-prompts:\*\* prose names "Inter", a font other than IBM Plex Sans Thai; type comes from the theme/],
   'text from another fill': ['occasion-components', components([]), /— occasion-components:\*\* names --immersive-accent-100 as a fill with --immersive-on-palette-50 text; text on it is --immersive-on-accent-100/, (answer) => { answer.components[1].paragraph = answer.components[1].paragraph.replace('on-accent-100', 'on-palette-50'); }],
   'a gradient': ['imagery', { paragraph: imagery.replace('never tinted with the accent', 'never under a gradient') }, /— imagery:\*\* prose names a gradient; Immersive Themes have none/],
   'motion beyond the level': ['layout', { paragraph: GOOD.layout.paragraph.replace('keeping a comfortable rhythm', 'with staggered entrances, keeping a comfortable rhythm') }, /— layout:\*\* prose names "staggered", which the subtle motion level does not allow/],
@@ -1091,15 +1139,16 @@ test('redraft refuses an unknown entry, a discard it would not rewrite, and a br
 
 // A draft whose layout failed its hard checks: a marker and a placeholder under ## Layout.
 function failedLayout(t) {
-  const hex = { paragraph: GOOD.layout.paragraph.replace('soft grey blocks', 'soft #e6eef2 blocks') };
+  const hex = { paragraph: GOOD.layout.paragraph.replace('as equal cards', 'as equal #e6eef2 cards') };
   const { root, status, out } = draft(t, { answers: { layout: [hex] } });
   assert.equal(status, 1, out);
   return root;
 }
-const FAILED_LAYOUT = /\*\*Hard checks failed — layout:\*\*[^\n]*\n\n\[not drafted\]/;
+// The marker sits under the heading and the placeholder under the scripted section table.
+const FAILED_LAYOUT = /\*\*Hard checks failed — layout:\*\*[^\n]*\n\n/;
 function fixLayout(root, paragraph) {
   const path = local(root, 'draft.md');
-  writeFileSync(path, readFileSync(path, 'utf8').replace(FAILED_LAYOUT, paragraph));
+  writeFileSync(path, readFileSync(path, 'utf8').replace(FAILED_LAYOUT, '').replace('[not drafted]', paragraph));
 }
 const accept = (root) => run(['accept', 'club-run', '--root', root]);
 
@@ -1129,7 +1178,7 @@ test('accept writes a hand-fixed draft once every check passes, and records the 
 
 test('accept refuses a draft with a remaining hard failure, and writes nothing', (t) => {
   const root = failedLayout(t);
-  fixLayout(root, GOOD.layout.paragraph.replace('soft grey blocks', 'soft #e6eef2 blocks'));
+  fixLayout(root, GOOD.layout.paragraph.replace('as equal cards', 'as equal #e6eef2 cards'));
   const before = snapshot(root);
   const { status, out } = accept(root);
   assert.equal(status, 1, out);

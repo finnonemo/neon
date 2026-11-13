@@ -149,6 +149,19 @@ function slotProblem(path, paragraph) {
   return [];
 }
 
+// A component paragraph follows its preset's composition picks: a lead fact takes the layout's fact role
+// and no component without one reaches a display role; a feature component takes the feature radius.
+const DISPLAY_ROLE = /\bdisplay\d\b/;
+function compositionProblems(path, paragraph, component, layout) {
+  const problems = [];
+  if (!component) return problems;
+  if (component.leadFact && !paragraph.includes(layout.factRole)) problems.push(`"${path}" does not set its lead fact (${component.leadFact}) in ${layout.factRole}`);
+  if (!component.leadFact && DISPLAY_ROLE.test(paragraph)) problems.push(`"${path}" names a display role, but the component has no lead fact`);
+  const radius = component.feature ? layout.featureRadius : layout.blockRadius;
+  if (/\b(?:corners?|radius)\b/i.test(paragraph) && !paragraph.includes(`--${radius}`)) problems.push(`"${path}" does not round to --${radius}, the ${component.feature ? 'feature block' : 'block and card'} radius`);
+  return problems;
+}
+
 const band = (path, count, [low, high], unit = 'words') => count < low || count > high ? [`"${path}" has ${count} ${unit}; the target is ${low}–${high}`] : [];
 
 // The hard and soft checks on one entry's answer, normalized. ctx: brief, entry data, output schema,
@@ -201,11 +214,12 @@ export function entryChecks(name, answer, { brief, data, schema, bands, placemen
   }
   if (name === 'mood-occasion') soft.push(...band('paragraph', words(answer.paragraph), bands.paragraphWords));
   if (name === 'occasion-components') {
-    answer.components.forEach(({ role, paragraph }, index) => soft.push(
+    answer.components.forEach(({ name: component, role, paragraph }, index) => soft.push(
       ...band(`components.${index}.role`, words(role), bands.roleWords),
       ...band(`components.${index}.paragraph`, words(paragraph), bands.paragraphWords),
       ...band(`components.${index}.paragraph`, sentences(paragraph), bands.paragraphSentences, 'sentences'),
       ...slotProblem(`components.${index}.paragraph`, paragraph),
+      ...compositionProblems(`components.${index}.paragraph`, paragraph, occasion.components.find((preset) => preset.name === component), layout),
     ));
   }
   if (name === 'preset-dos-donts') {
@@ -217,6 +231,10 @@ export function entryChecks(name, answer, { brief, data, schema, bands, placemen
       });
     }
     answer.donts.forEach((line, index) => { if (!line.startsWith('Do not ') || !line.includes(' — ')) soft.push(`"donts.${index}" must start "Do not" and give its reason after " — "`); });
+    for (const [path, line] of all) {
+      const other = (line.match(/\bdisplay\d\b/g) ?? []).find((role) => role !== layout.factRole);
+      if (other) soft.push(`"${path}" names ${other}; the layout's lead fact role is ${layout.factRole}`);
+    }
   }
   if (name === 'imagery' || name === 'layout') soft.push(...band('paragraph', words(answer.paragraph), bands.words));
   if (name === 'example-prompts') {
@@ -231,6 +249,9 @@ export function entryChecks(name, answer, { brief, data, schema, bands, placemen
     const paragraph = answer.paragraph.toLowerCase();
     for (const component of componentNames) if (!paragraph.includes(component.toLowerCase())) soft.push(`"paragraph" does not place the component "${component}"`);
     if (!paragraph.includes(layout.brandPattern.section)) soft.push(`"paragraph" does not name the Brand Pattern section, "${layout.brandPattern.section}"`);
+    if (occasion.components.some(({ leadFact }) => leadFact) && !paragraph.includes(layout.factRole)) soft.push(`"paragraph" does not say which facts take ${layout.factRole}`);
+    for (const ground of new Set(layout.grounds)) if (ground !== 'canvas' && !paragraph.includes(ground)) soft.push(`"paragraph" does not name the ${ground} ground`);
+    if (/--immersive-/.test(answer.paragraph)) soft.push('"paragraph" names a color variable; Layout names grounds by word, and the section table gives their variables');
   }
   return { hard, soft };
 }

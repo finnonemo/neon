@@ -4,9 +4,12 @@
     "occasion.promptInputs",
     "occasion-components.components",
     "layout.sections",
+    "sectionGrounds",
     "colorVars",
     "typeRoles",
     "layout.blockRadius",
+    "layout.featureRadius",
+    "layout.factRole",
     "layout.cardPadding",
     "layout.sectionGap",
     "theme.kind",
@@ -17,7 +20,8 @@
   ],
   "formula": [
     "each prompt starts 'Create a <component or section>:'",
-    "then fills and text as var(--…) pairs, type roles, radius and padding as var(--…), and contents"
+    "then fills and text as var(--…) pairs, type roles, radius and padding as var(--…), and contents",
+    "a section prompt takes its fill and text from that section's row in sectionGrounds and names the element that dominates it"
   ],
   "targets": {
     "count": [
@@ -26,13 +30,15 @@
     ],
     "words": [
       25,
-      55
+      60
     ]
   },
   "rules": [
     "var(--…) names only for colors, radius and spacing",
     "at least one prompt per supplied prompt input",
     "at least one prompt names an occasion component exactly",
+    "at least one prompt builds a whole section on a tint or accent ground from sectionGrounds",
+    "a lead fact takes the supplied fact role, as its component paragraph has it",
     "one line each"
   ],
   "output": {

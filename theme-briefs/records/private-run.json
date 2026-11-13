@@ -1,16 +1,16 @@
 {
   "brief": "private-run",
   "tool": {
-    "commit": "126c0f8271e2909ecc3fde99a28a34e2c69c1d26",
-    "version": "8426a03676d63873cd1209c45d05265deea1121baf47c0c25dcfdb4673a398df"
+    "commit": "4ed912db5d59e705339f5b78dd87f42772ee52e2",
+    "version": "b815fed7cbc94bde65d2803ca80bbad91312bcbfe454f8fc2f30d8973c8114e5"
   },
   "claudeCode": {
-    "version": "2.1.316",
+    "version": "2.1.323",
     "model": "claude-opus-5-5",
     "effort": "high",
     "modelOverride": false
   },
-  "account": "neutral-account",
+  "account": "maintainer-sign-in",
   "entries": {
     "tagline": {
       "entry": "277ed470247b5530430c890dae0fe63505254300fcb6645033d3deb9bd111023",
@@ -39,22 +39,30 @@
       "output": "3d8b58e278a1360995490c4807d469b1e09e5f55c66f210e8485b1e33d7d1ed6"
     },
     "occasion-components": {
-      "entry": "0c4641fc8d581b775f590ec1c2f7ab14f6a8aa55fff1042ec8c318b495585cbf",
+      "entry": "c0d0edde3b0284b3843b7d9c10ed2e21cd65a5530e0a9c4761caa58a93800880",
       "shared": "935d2a8c01c5a85ebc05a23cc765299676c01eddbf0fac2e6901efb45ef6a880",
-      "inputs": "b0f9637b07a4f5880b7c1da9f8de34c876444afddd40d2de18228025f5305f5d",
+      "inputs": "28566b9c5c0a3563ea7264c1d3c9cfc743815e2f3a1ffc061a5eabdb07e893cd",
       "attempts": [
+        {
+          "hard": 0,
+          "soft": 1
+        },
+        {
+          "hard": 0,
+          "soft": 1
+        },
         {
           "hard": 0,
           "soft": 0
         }
       ],
-      "kept": 1,
-      "output": "b297d1c6092607c7a382a683937e6cf2cd76669f86405994878d8fd43b8e456c"
+      "kept": 3,
+      "output": "0cf967a33188503e9d9fbb63fa8f6d1c719edb325c436d0647fb047fa069c796"
     },
     "preset-dos-donts": {
-      "entry": "a660a7da8b8b46289a688ac235825d531f24112fa361a255d6539968e483fe94",
+      "entry": "382754d83d3750ee2a88981be8f71810f7a0ee084b0fc382a246d25d8fae6fc1",
       "shared": "935d2a8c01c5a85ebc05a23cc765299676c01eddbf0fac2e6901efb45ef6a880",
-      "inputs": "a469af212ec689c56f3365cfdebca44e908996cd5e66c56adb2af07f68f61e33",
+      "inputs": "2b46a45e735da7a3652e3fee1ec50b4091635f1ff23b50ff48421a1a7375c033",
       "attempts": [
         {
           "hard": 0,
@@ -62,13 +70,12 @@
         }
       ],
       "kept": 1,
-      "output": "2d86aa71f82d7867cae85883907bf76a7d82868da793679ca3c34b557c327512",
-      "handEdited": true
+      "output": "b35ee07791ce24b9442ebdfc8335f40dc3b42d3f0a2abfdc75231acb4ea8a909"
     },
     "imagery": {
-      "entry": "a0fd62b0277becfc675feef7cb9350bf95caf7285a9df2ccd521cab8ac489061",
+      "entry": "437ec358242f1bcbaa6baa1d96e81e59d4d4adbee7fd4604a760a3da0e4b971e",
       "shared": "935d2a8c01c5a85ebc05a23cc765299676c01eddbf0fac2e6901efb45ef6a880",
-      "inputs": "eaae6ccdfad0fed3d74229a55fff25efbc0c4d429aed4b46acaaea7be3257674",
+      "inputs": "5de896fe94d4e1cc35037a7ad50b21de706486545434abaee191476373d41d68",
       "attempts": [
         {
           "hard": 0,
@@ -76,16 +83,16 @@
         }
       ],
       "kept": 1,
-      "output": "c9f0f7da7fdf03d25f1a6c7b70dbef71c65f74e816efba36c95e457288863dc2"
+      "output": "e58ba1e7f715b665cdc023bc1dca22fae50ca86b6fbb2381a3106a270d27d384"
     },
     "layout": {
-      "entry": "8852bf33ed87b1a07d5ad85b69687dcd64689652ef2e7a66ca94ace4ee88887b",
+      "entry": "5de4f77e3adcfa21d9909089b1148e5639d3485007df7e7e417c8b3d4378b16a",
       "shared": "935d2a8c01c5a85ebc05a23cc765299676c01eddbf0fac2e6901efb45ef6a880",
-      "inputs": "0870b859628d4a759d1868965dc0f09ac7f0a3d323f39a96d665ffe603353af4",
+      "inputs": "116928a83b159b090ae265b289a0df81b0cbb78e6f46d3118f6b53a9c6f0155c",
       "attempts": [
         {
           "hard": 0,
-          "soft": 3
+          "soft": 1
         },
         {
           "hard": 0,
@@ -93,12 +100,12 @@
         }
       ],
       "kept": 2,
-      "output": "e249efd5a65b8e26f296199040bab55416a6420cc5452ea8c040aa62aa258fbc"
+      "output": "49d3cc7e64e71e7d2f89cc15c60652b7246d904260160718b691bb9eb1c08808"
     },
     "example-prompts": {
-      "entry": "83dd9f072dea36f8f2ee5630f413654e6b9d4ad4c04d77b9300b2179021f9326",
+      "entry": "0589dc0146632bac6575ff5e3eb6fef367eec1b26a45b8f20078741df4d62230",
       "shared": "935d2a8c01c5a85ebc05a23cc765299676c01eddbf0fac2e6901efb45ef6a880",
-      "inputs": "e5dc9fbd2ca663aaff24584a9f9903486ab488efca0cb660c22ab66320166e9f",
+      "inputs": "08ad2d2cfce9ae024e6b4ae558052ad6dd5e4bbea45f8dd6294c4fc610d1b550",
       "attempts": [
         {
           "hard": 0,
@@ -106,7 +113,7 @@
         }
       ],
       "kept": 1,
-      "output": "9f23f20f07c35c334ab40ce95a61f7525569a597df15585955b9f47e2647503c"
+      "output": "e534214235a80387be88ec56f9fb5d55c3ac0e4f9bf95ea541f73ab22bbc0aa5"
     }
   },
   "accentPlacement": "Registration call-out"

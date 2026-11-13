@@ -7,6 +7,7 @@
 // tagline { tagline }, mood-occasion { paragraph }, occasion-components
 // { components: [{ name, role, paragraph }] }, preset-dos-donts { dos, donts },
 // imagery { paragraph }, layout { paragraph }, example-prompts { prompts }.
+// Layout opens on a scripted table of each section's ground; its prose follows.
 import { FIXED_COMPONENTS } from './schemas.mjs';
 
 const SECTIONS = ['Tokens — Colors', 'Tokens — Typography', 'Tokens — Spacing & Shapes', 'Components', "Do's and Don'ts", 'Surfaces', 'Elevation', 'Imagery', 'Brand Pattern', 'Layout', 'Motion', 'Agent Prompt Guide', 'Sibling Themes', 'Quick Start'];
@@ -104,6 +105,11 @@ function typography({ facts }) {
   ].join('\n');
 }
 
+const factSize = (facts, role) => {
+  const { size, line } = facts.scale.type.find((row) => row.role === role) ?? {};
+  return `${size}/${line}`;
+};
+
 function spacing({ facts, layout }) {
   const { space, borderRadius, contentMaxWidth, endMargin, wideEndMargin } = facts.scale;
   const valueOf = (name) => [...space, ...borderRadius].find((step) => step.name === name)?.value;
@@ -139,6 +145,8 @@ function spacing({ facts, layout }) {
     '',
     `- **Density:** ${layout.density}`,
     `- **Block and card radius:** ${step(layout.blockRadius)}`,
+    `- **Feature block radius:** ${step(layout.featureRadius)}, for a block that spans the content column; cards inside it keep the block and card radius`,
+    `- **Lead fact role:** ${code(layout.factRole)} (${factSize(facts, layout.factRole)}), for the one fact a component leads with; other component text stops at ${code('title1')}`,
     `- **Section gap:** ${step(layout.sectionGap)}`,
     `- **Card padding:** ${step(layout.cardPadding)}`,
     `- **Page width:** ${width}`,
@@ -269,8 +277,36 @@ function imagery({ facts }, prose) {
   return `## Imagery\n\n${prose.imagery.paragraph}\n\n${brandFloor(facts)}`;
 }
 
-function layoutSection(_, prose) {
-  return `## Layout\n\n${prose.layout.paragraph}`;
+// Each section's ground, in page order, as { section, ground, fill, text }: the fill and its text by variable
+// name. The Brand Pattern section takes the ground its picks file chooses.
+export function sectionGrounds({ theme, picks, layout }) {
+  const fills = {
+    canvas: 'canvas',
+    tint: `palette-${blockSteps(theme, 'palette')[0]}`,
+    accent: `accent-${blockSteps(theme, 'accent')[0]}`,
+    pattern: `${picks.brandPattern.colourway}-${picks.brandPattern.ground}`,
+  };
+  return layout.sections.map((section, index) => {
+    const ground = layout.grounds[index];
+    const fill = fills[ground];
+    return { section, ground, fill: `--immersive-${fill}`, text: `--immersive-${fill === 'canvas' ? 'text' : `on-${fill}`}` };
+  });
+}
+
+// Its opening is fixed, so the prose after it is found even when the grounds have changed.
+export const GROUNDS_OPENING = 'Rows are in page order.';
+function layoutSection(brief, prose) {
+  const rows = sectionGrounds(brief).map(({ section, ground, fill, text }, index) => [String(index + 1), section, ground, code(fill), code(text)]);
+  const reach = brief.layout.pageWidth === 'contained' ? 'fills its section to the content column, with the block radius' : 'fills its section edge to edge, with the content column inside it';
+  return [
+    '## Layout',
+    '',
+    table(['#', 'Section', 'Ground', 'Fill', 'Text'], rows),
+    '',
+    `${GROUNDS_OPENING} A ${code('tint')}, ${code('accent')} or ${code('pattern')} ground ${reach}; on ${code('canvas')} the section's blocks carry the fills.`,
+    '',
+    prose.layout.paragraph,
+  ].join('\n');
 }
 
 // Prose of the right shape for a brief, every text set to `text`: for a section no entry has drafted.
@@ -365,7 +401,8 @@ export function readProse(markdown, brief) {
   const imageryParts = paragraphs(body(section('Imagery')));
   if (imageryParts.length < 2) problems.push('Imagery must keep its prose and the Brand Floor sentence as separate paragraphs');
   else if (imageryParts.slice(0, -1).some((part) => part.startsWith(BRAND_FLOOR_OPENING))) problems.push('Imagery has text after its Brand Floor sentence, which must come last');
-  const layout = body(section('Layout'));
+  // The section table and the grounds sentence are scripted; every other paragraph is prose.
+  const layout = paragraphs(body(section('Layout'))).filter((part) => !part.startsWith('|') && !part.startsWith(GROUNDS_OPENING)).join('\n\n');
   const guide = section('Agent Prompt Guide').split(PROMPTS_LABEL);
   if (guide.length < 2) problems.push(`Agent Prompt Guide has no ${PROMPTS_LABEL} label`);
   const prompts = (guide[1] ?? '').trim().split(/\n\s*\n(?=\d+\. )/).filter(Boolean).map((item) => item.replace(/^\d+\. /, ''));

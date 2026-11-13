@@ -523,18 +523,31 @@ export function layoutPreset(sweep, { slug, url, measuredOn, robotsDisallowed })
   const cardPaddingPx = themeSteps.space.find(entry => entry.name === cardPadding).px;
   const roles = sections.map(section => section.role);
   if (!roles.length) unmeasured.push('sections');
+  const patternRole = roles.includes('hero') ? 'hero' : roles[0] ?? 'hero';
+  // Grounds: a section the page fills edge to edge drafts as a tint; which ones take the accent is the maintainer's call.
+  const grounds = (roles.length ? sections : [{ role: 'hero' }]).map((section, index) => (index === Math.max(roles.indexOf(patternRole), 0) ? 'pattern' : section.fullBleed && section.role !== 'footer' ? 'tint' : 'canvas'));
+  if (!grounds.includes('tint')) {
+    unmeasured.push('grounds');
+    const first = grounds.findIndex((ground, index) => ground === 'canvas' && roles[index] !== 'footer');
+    if (first >= 0) grounds[first] = 'tint';
+  }
+  // The feature radius and the lead fact role are picks, not measurements.
+  unmeasured.push('featureRadius', 'factRole');
   const preset = {
     kind: 'layout',
     slug,
     sections: roles.length ? roles : ['hero'],
+    grounds,
     ...INTENT_PLACEHOLDERS,
     density: cardPaddingPx <= 16 ? 'compact' : cardPaddingPx <= 32 ? 'comfortable' : 'spacious',
     blockRadius: blockRadius ?? 'borderRadius-0',
     sectionGap: step('sectionGap', measuredPx.sectionGap, 'space-8'),
     cardPadding,
+    featureRadius: blockRadius ?? 'borderRadius-0',
+    factRole: 'display3',
     pageWidth: sections.some(section => section.fullBleed) ? 'full-bleed' : 'contained',
     motion: motionLevel(measuredPx.motionMs),
-    brandPattern: { section: roles.includes('hero') ? 'hero' : roles[0] ?? 'hero' },
+    brandPattern: { section: patternRole },
     source: { url, measuredOn, kept: ['structure', 'geometry', 'motion'], robotsDisallowed },
   };
   return { preset, measuredPx, unmeasured };
@@ -682,7 +695,7 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
     console.log(`  blockRadius ${preset.blockRadius}; cardPadding ${preset.cardPadding} (${was(measuredPx.cardPadding, 'px')}); sectionGap ${preset.sectionGap} (${was(measuredPx.sectionGap, 'px')}); motion ${preset.motion} (${was(measuredPx.motionMs, 'ms')})`);
     if (unmeasured.length) console.log(`  Not measured, so set by hand: ${unmeasured.join(', ')}.`);
     console.log(`  Screenshot and raw measurements: ${out}`);
-    console.log(`  Before committing it to theme-briefs/presets/layout/${slug}.json: write heroPattern, navigation and footer as your own intent notes, check each field against the screenshot, and run the Theme Brief check.`);
+    console.log(`  Before committing it to theme-briefs/presets/layout/${slug}.json: write heroPattern, navigation and footer as your own intent notes, choose each section's ground, the feature radius and the lead fact role, check each field against the screenshot, and run the Theme Brief check.`);
     console.log(`Preset draft: ${file}`);
     process.exit(0);
   }
