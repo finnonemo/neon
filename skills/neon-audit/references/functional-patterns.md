@@ -2,13 +2,12 @@
 
 Read when building a functional screen (Back Office or Product Feature) with lists, overlays, mobile actions or empty states, or when `composition: 'adapt'` reorganizes one. These rules shape new UI and adapted composition only. Under `composition: 'preserve'` or colors-only scope, report a miss as an observation; it does not license restructuring. Campaign Pages keep their own composition and motion.
 
-The rules hold in any framework and name no component library. Build them from the app's own components. They do not authorize adopting a component library in a CSS-only restyle.
+The rules hold in any framework and name no component library. Where Core holds a component's rule, they name the Core doc instead of restating it. Read [Core rules](core-rules.md) before opening one: it says which part of a doc holds the rule, and to open only the doc of a component the task uses. Build them from the app's own components. They do not authorize adopting a component library in a CSS-only restyle.
 
 ## Actions
 
-- One primary action per screen, or per panel in a multi-panel tool. Other actions are secondary; dismissive actions (cancel, skip) are tertiary. Row actions are secondary or tertiary, even when they are the most frequent action.
-- A destructive flow starts from a secondary negative action; the primary negative action appears only inside its confirmation.
-- On narrow tiers, a form, confirmation or other focused flow puts its primary action in a dock fixed to the bottom of the viewport. Stack its buttons full width, primary nearest the bottom edge, so the dock never holds side-by-side buttons at tier `sm`. When the shell shows a bottom tab bar, the dock sits above it, or the flow hides the tab bar while it is open; the two never overlap. Leave room at the end of the content so the dock does not cover the last field.
+- Which action is primary, secondary or tertiary, how many primaries a screen, panel, sheet or dialog holds, and the destructive flow are Core's [hierarchy rules](../../../core/hierarchy.md): rules 1–6, and the owner's call H2 for the destructive flow. Row actions are secondary or tertiary, even when they are the most frequent action.
+- On narrow tiers, a form, confirmation or other focused flow puts its actions in a dock fixed to the bottom of the viewport. Their order, when they stack or sit side by side and how many the dock holds are Core's [Button dock](../../../core/components/button-dock.md#usage), Usage and Hierarchy. When the shell shows a bottom tab bar, the dock sits above it, or the flow hides the tab bar while it is open; the two never overlap. Leave room at the end of the content so the dock does not cover the last field.
 
 ## Lists before cards
 
@@ -20,11 +19,12 @@ The rules hold in any framework and name no component library. Build them from t
 ## Surfaces, elevation and radius
 
 - Shadows belong only to layers that float above the page: sheet, modal, popover, toast and a dock while content scrolls beneath it. Separate on-page regions with `bgAlternate`, `bgLine` dividers or spacing, not shadows.
-- Radius follows footprint: overlays and sheets take the largest shipped radius, cards a medium one, items nested inside a card a smaller one. Keep component radii as the app's components ship them, including pill buttons.
+- Keep component radii as the app's components ship them, including pill buttons and overlays. On a surface the app draws itself, a card takes a medium radius and items nested inside it a smaller one.
 
 ## Overlays
 
-- On narrow tiers, secondary tasks (filters, a record's actions, a short form) open in a sheet from the bottom edge; on wider tiers the same content opens as a side panel or dialog. Give it a title and a visible close control, and return focus to the trigger on close.
+- Which overlay a secondary task opens in, and how that changes from narrow to wide tiers, is Core's choice by what the overlay holds: the "Not for" lines in the Usage of Core's [Sheet](../../../core/components/sheet.md#usage), [Popover](../../../core/components/popover.md#usage) and [Alert](../../../core/components/alert.md#usage). Those are Core's component names, not an app's: on the Neon base the snapshot's index gives each item's Counterpart. Core has no sheet from the side, so new work does not choose one.
+- A sheet or dialog has a title and a visible close control. Every overlay returns focus to its trigger on close.
 
 ## Typography in use
 
@@ -33,7 +33,7 @@ The rules hold in any framework and name no component library. Build them from t
 
 ## Empty and loading states
 
-- An empty state has a heading, one short sentence on why it is empty or what to do, an optional illustration, and at most one action. Center it in the region it replaces, with a capped text width.
+- What an empty state says, where it sits and which button it takes are Core's [Empty state](../../../core/components/empty-state.md#usage), Usage and Hierarchy.
 - Loading shows placeholders shaped like the final layout. When data is already available, render the final content directly instead of flashing a placeholder.
 
 ## Icons

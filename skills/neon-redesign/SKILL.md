@@ -28,6 +28,7 @@ When target, scope and theme variables are known, begin with the affected styles
 ## Conditional references
 
 - Neon base: restyle through Neon role utilities and Neon item props, per the styling rules in [Neon base](../neon-create/references/neon-base.md). `index.css`, `src/theme/` and Neon item files stay as installed; colors-only changes only color role utilities.
+- `composition: 'adapt'` on the Neon base that changes which Neon item or prop value an element takes: [Core rules](../neon-audit/references/core-rules.md), for that item only. `colors` and `visual-system` restyles read no component doc.
 - CDS: restyle the app's own CSS-styled UI through CSS tokens here; CDS component colors go to [neon-create](../neon-create/SKILL.md).
 - Neither: the CSS path below, plain shadcn included, with no Neon items.
 - Plain CSS/shadcn formats or mapping examples: relevant sections of [style migration](references/style-migration.md).

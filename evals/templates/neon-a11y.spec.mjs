@@ -22,6 +22,27 @@ for (const [layout, mode] of ['approval', 'extras', 'expansion'].flatMap((layout
   });
 }
 
+// Axe reads each overlay open, which the screen pass above cannot. An alert dialog and a sheet
+// read theirs in their own expansion files.
+const overlays = [
+  ['dialog', 'click', '[data-measure=actions] button:nth-of-type(1)', '[data-slot=dialog-content]'],
+  ['popover', 'click', '[data-measure=core-popover] button', '[data-slot=popover-content]'],
+  ['menu', 'click', '[data-measure=core-menu] button', '[data-slot=dropdown-menu-content]'],
+  ['tooltip', 'focus', '[data-measure=help] button', '[data-slot=tooltip-content]'],
+  ['toast', 'click', '[data-measure=toast-action] button', '[data-sonner-toast]'],
+];
+for (const [name, action, trigger, surface] of overlays) for (const mode of ['light', 'dark']) {
+  test(`an open ${name} passes axe in ${mode}`, async ({ page }) => {
+    await page.goto(`/?layout=extras${mode === 'dark' ? '&mode=dark' : ''}`);
+    await page.evaluate(() => document.fonts.ready);
+    await page.locator(trigger)[action]();
+    await expect(page.locator(surface)).toBeVisible();
+    await settled(page);
+    const { violations } = await new AxeBuilder({ page }).include(surface).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
+    expect(violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);
+  });
+}
+
 test('every tag reads at 4.5:1 or more on its wash in light', async ({ page }) => {
   await page.goto('/?layout=approval');
   const ratios = await page.$$eval('[data-slot=tag]', (tags) => {
@@ -127,6 +148,85 @@ test('the dialog and the row menu return focus to their triggers', async ({ page
   await expect(more).toBeFocused();
 });
 
+// Core's Layer/layer-hover-01 and Layer/layer-active-01 (core/theme.json).
+const layerFill = { light: { hover: 'rgba(1, 23, 43, 0.05)', active: 'rgba(1, 23, 43, 0.08)' }, dark: { hover: 'rgba(255, 255, 255, 0.08)', active: 'rgba(255, 255, 255, 0.12)' } };
+
+test('a menu row fills Layer/layer-hover-01 under the pointer and draws the Focus/focus stroke, with no fill, from the keyboard', async ({ page }) => {
+  for (const mode of ['light', 'dark']) {
+    await page.goto(`/?layout=extras${mode === 'dark' ? '&mode=dark' : ''}`);
+    const trigger = page.locator('[data-measure=core-menu] button');
+    const row = page.getByRole('menuitem', { name: 'แก้ไข' });
+    const drawn = () => row.evaluate((el) => {
+      const style = getComputedStyle(el);
+      return { bg: style.backgroundColor, outline: `${style.outlineWidth} ${style.outlineColor}` };
+    });
+    const clear = 'rgba(0, 0, 0, 0)';
+    // The pointer: the hover fill and no stroke, then the pressed fill; the press picks the row and closes the menu.
+    await trigger.click();
+    await row.hover();
+    await settled(page);
+    expect(await drawn(), `${mode} pointer`).toEqual({ bg: layerFill[mode].hover, outline: `2px ${clear}` });
+    await page.mouse.down();
+    await settled(page);
+    expect((await drawn()).bg, `${mode} pressed`).toBe(layerFill[mode].active);
+    await page.mouse.up();
+    await expect(page.getByRole('menu')).toBeHidden();
+    await expect(trigger).toBeFocused();
+
+    // Opened from the keyboard, Radix moves focus to the first row: the stroke, and no fill.
+    await page.mouse.move(0, 0);
+    await page.keyboard.press('Enter');
+    await expect(row).toBeFocused();
+    await settled(page);
+    expect(await drawn(), `${mode} keyboard`).toEqual({ bg: clear, outline: `2px ${await focusColor(page)}` });
+    // A disabled row is skipped: the next key lands on the row after it.
+    await page.keyboard.press('ArrowDown');
+    await expect(page.getByRole('menuitem', { name: 'ลบ' })).toBeFocused();
+    await page.keyboard.press('Escape');
+    await expect(page.getByRole('menu')).toBeHidden();
+    await expect(trigger).toBeFocused();
+  }
+});
+
+test('a popover is a dialog its trigger opens, and Escape or a press outside closes it with focus back on the trigger', async ({ page }) => {
+  await page.goto('/?layout=extras');
+  const trigger = page.locator('[data-measure=core-popover] button');
+  const popover = page.locator('[data-slot=popover-content]');
+  await trigger.click();
+  await expect(popover).toBeVisible();
+  await expect(popover).toHaveRole('dialog');
+  await expect(trigger).toHaveAttribute('aria-expanded', 'true');
+  await page.keyboard.press('Escape');
+  await expect(popover).toBeHidden();
+  await expect(trigger).toBeFocused();
+
+  await trigger.click();
+  await expect(popover).toBeVisible();
+  await page.locator('[data-measure=title] h1').click();
+  await expect(popover).toBeHidden();
+  await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+});
+
+test('a tooltip names its icon button, its caret meets the trigger, and Esc closes it with focus still on the trigger', async ({ page }) => {
+  await page.goto('/?layout=extras');
+  for (const [hook, caret] of [['help', { width: 16, height: 8 }], ['help-sm', { width: 8, height: 4 }], ['help-lg', { width: 16, height: 8 }]]) {
+    const trigger = page.locator(`[data-measure=${hook}] button`);
+    await trigger.focus();
+    const tip = page.locator('[data-slot=tooltip-content]');
+    await expect(tip).toBeVisible();
+    await settled(page);
+    const arrow = await tip.locator('[data-slot=tooltip-arrow]').boundingBox();
+    const box = await trigger.boundingBox();
+    expect({ width: Math.round(arrow.width), height: Math.round(arrow.height) }).toEqual(caret);
+    // The tip sits above its trigger, the caret's point on the trigger's top edge and at its center.
+    expect(Math.abs(arrow.y + arrow.height - box.y)).toBeLessThanOrEqual(1);
+    expect(Math.abs(arrow.x + arrow.width / 2 - (box.x + box.width / 2))).toBeLessThanOrEqual(1);
+    await page.keyboard.press('Escape');
+    await expect(tip).toBeHidden();
+    await expect(trigger).toBeFocused();
+  }
+});
+
 test('picking an option closes the select', async ({ page }) => {
   await page.goto('/?layout=extras');
   await page.getByRole('combobox', { name: 'ประเภท / Type' }).click();
@@ -140,6 +240,29 @@ test('the toast is announced politely without a provider in the screen', async (
   await page.getByRole('button', { name: 'บันทึก', exact: true }).click();
   await expect(page.locator('[data-sonner-toast]')).toHaveText('บันทึกแล้ว / Saved');
   await expect(page.locator('section[aria-live]')).toHaveAttribute('aria-live', 'polite');
+});
+
+test('a toast leaves focus on its trigger, sets its icon 16px from its text, and its action fills on hover', async ({ page }) => {
+  await page.goto('/?layout=extras');
+  const trigger = page.locator('[data-measure=toast-action] button');
+  await trigger.focus();
+  await page.keyboard.press('Enter');
+  const toast = page.locator('[data-sonner-toast]');
+  await expect(toast).toBeVisible();
+  await expect(trigger).toBeFocused();
+  await settled(page);
+  const icon = await toast.locator('[data-icon]').boundingBox();
+  const text = await toast.locator('[data-title]').boundingBox();
+  expect(Math.round(text.x - (icon.x + icon.width))).toBe(16);
+  // Core's Medium glyph, 18px in a 24px box that stays by the first line: 16px below the toast's top.
+  expect(Math.round(icon.y - (await toast.boundingBox()).y)).toBe(16);
+  expect(await toast.locator('[data-icon] svg').evaluate((el) => el.getBoundingClientRect().width)).toBe(18);
+  const action = toast.getByRole('button', { name: 'เลิกทำ' });
+  await action.hover();
+  await settled(page);
+  expect(await action.evaluate((el) => getComputedStyle(el).backgroundColor)).toBe(await computed(page, 'var(--color-bgButtonTertiaryInverseHover)'));
+  await action.click();
+  await expect(toast).toBeHidden();
 });
 
 for (const mode of ['light', 'dark']) test(`${mode}: a button reached from the keyboard draws Core's focus color and its Hover fill`, async ({ page }) => {

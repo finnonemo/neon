@@ -7,10 +7,11 @@ import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { DatePicker } from "@/components/ui/date-picker"
 import { Dialog, DialogBody, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { List, ListRow, ListRowContent, ListRowDescription, ListRowTitle } from "@/components/ui/list-row"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { SegmentedControl, SegmentedControlItem } from "@/components/ui/segmented-control"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
@@ -52,6 +53,19 @@ export function Extras() {
             </TooltipTrigger>
             <TooltipContent>ช่วยเหลือ / Help</TooltipContent>
           </Tooltip>
+        </Hook>
+        {(["sm", "lg"] as const).map((size) => (
+          <Hook key={size} name={`help-${size}`}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="ghost" size="icon" aria-label={`ช่วยเหลือ ${size}`}><InfoIcon /></Button>
+              </TooltipTrigger>
+              <TooltipContent size={size}>มูลค่าทรัพย์สินสุทธิต่อหน่วย / Net asset value per unit</TooltipContent>
+            </Tooltip>
+          </Hook>
+        ))}
+        <Hook name="toast-action">
+          <Button variant="secondary" size="sm" onClick={() => toast.success("ลบแล้ว / Removed", { action: { label: "เลิกทำ", onClick: () => {} } })}>ลบ</Button>
         </Hook>
       </div>
       <div className="flex flex-wrap items-center gap-4">
@@ -220,6 +234,27 @@ export function Extras() {
           </ListRow>
         </List>
       </Hook>
+      {/* Core's Menu parts the row menu has none of (a Section Title, a Separator, a disabled row), and a popover of its own content. */}
+      <div className="flex flex-wrap gap-2">
+        <Hook name="core-menu">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild><Button variant="secondary" size="md">จัดการ</Button></DropdownMenuTrigger>
+            <DropdownMenuContent align="start">
+              <DropdownMenuLabel>คำขอ / Request</DropdownMenuLabel>
+              <DropdownMenuItem>แก้ไข</DropdownMenuItem>
+              <DropdownMenuItem disabled>ทำสำเนา</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem variant="destructive">ลบ</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </Hook>
+        <Hook name="core-popover">
+          <Popover>
+            <PopoverTrigger asChild><Button variant="secondary" size="md">เงื่อนไข</Button></PopoverTrigger>
+            <PopoverContent align="start">คำขอที่เกิน 50,000 บาทต้องมีผู้อนุมัติสองคน / Requests over 50,000 THB need two approvers</PopoverContent>
+          </Popover>
+        </Hook>
+      </div>
     </main>
   )
 }

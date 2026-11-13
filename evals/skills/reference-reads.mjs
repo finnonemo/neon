@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-// Lists the skill files each Codex or Claude case read, from its run.jsonl. A command
+// Lists the skill files, then the Core snapshot files (`core/…`), each Codex or
+// Claude case read, from its run.jsonl. A command
 // can name a file without printing it (`rg -g`, a failed path) or read several
 // through brace expansion (`references/{rebuild,scaffold}.md`), so a name in a
 // command is not a read. Each file counts as read by the share of its lines
@@ -7,11 +8,12 @@
 //
 //   node evals/skills/reference-reads.mjs <case-dir>...
 import { readFile } from 'node:fs/promises';
-import { basename, dirname, join } from 'node:path';
+import { basename, dirname, join, normalize } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-const repoSkills = join(dirname(fileURLToPath(import.meta.url)), '../../skills');
+const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '../..');
 const SKILL_TOKEN = /[^\s'"`\\;|&<>()]*skills\/[^\s'"`\\;|&<>()]*/g;
+const CORE_TOKEN = /[^\s'"`\\;|&<>()]*core\/[^\s'"`\\;|&<>()]*\.(?:md|json)/g;
 
 export function expandBraces(token) {
   const open = token.indexOf('{');
@@ -48,7 +50,8 @@ export function coverage(text, output) {
 const resultText = content => (typeof content === 'string' ? content : (content ?? []).map(part => part.text ?? '').join('\n'));
 
 // Each command and its output: Codex logs both in one completed item; Claude
-// logs a Read or Bash tool_use and, in a later event, its tool_result.
+// logs a Read, Bash or Grep tool_use and, in a later event, its tool_result. A
+// Grep names its files by `path`, or by `path` and `glob`.
 export function commandOutputs(events) {
   const pending = new Map();
   const commands = [];
@@ -58,19 +61,21 @@ export function commandOutputs(events) {
     for (const part of event.message?.content ?? []) {
       if (part.type === 'tool_use' && part.name === 'Read') pending.set(part.id, part.input.file_path);
       if (part.type === 'tool_use' && part.name === 'Bash') pending.set(part.id, part.input.command);
+      if (part.type === 'tool_use' && part.name === 'Grep') pending.set(part.id, [part.input.path, part.input.glob].filter(Boolean).join('/'));
       if (part.type === 'tool_result' && pending.has(part.tool_use_id)) commands.push({ command: pending.get(part.tool_use_id), output: resultText(part.content) });
     }
   }
   return commands;
 }
 
-// Best coverage per skill file, keyed by its path below `skills/`.
-export async function referenceReads(events, read = path => readFile(path, 'utf8')) {
+// Best coverage per file a command names. `pathsIn` picks the paths from a
+// command; `locate` gives a path's key in the listing and its copy in this repository.
+async function bestCoverage(commands, read, pathsIn, locate) {
   const files = new Map();
-  for (const item of commandOutputs(events)) {
-    for (const path of skillPaths(item.command)) {
-      const key = path.slice(path.lastIndexOf('skills/') + 'skills/'.length);
-      // Prefer the copy the run installed; fall back to this repository's skills.
+  for (const item of commands) {
+    for (const path of pathsIn(item.command)) {
+      const { key, repo } = locate(path);
+      // Prefer the copy the run installed; fall back to this repository's.
       let text;
       let source = 'installed';
       try {
@@ -78,7 +83,7 @@ export async function referenceReads(events, read = path => readFile(path, 'utf8
       } catch {
         source = 'repo';
         try {
-          text = await read(join(repoSkills, key));
+          text = await read(repo);
         } catch {
           continue;
         }
@@ -93,6 +98,31 @@ export async function referenceReads(events, read = path => readFile(path, 'utf8
   return [...files.values()].sort((a, b) => a.file.localeCompare(b.file));
 }
 
+// Best coverage per skill file, keyed by its path below `skills/`.
+export function referenceReads(events, read = path => readFile(path, 'utf8')) {
+  return bestCoverage(commandOutputs(events), read, skillPaths, path => {
+    const key = path.slice(path.lastIndexOf('skills/') + 'skills/'.length);
+    return { key, repo: join(repoRoot, 'skills', key) };
+  });
+}
+
+// Best coverage per Core snapshot file, keyed from `core/`. The snapshot is the
+// `core/` beside the `skills/` directory the run read from, so an app's own
+// `src/core/` is not one. Not listed: a path with no Neon root in it
+// (`cd <root> && cat core/…`), a shell glob and a search of a whole directory.
+export function coreReads(events, read = path => readFile(path, 'utf8')) {
+  const commands = commandOutputs(events);
+  // A Neon root is known by its directory's name: one run spells it both from `/` and from the app (`../plugin/`).
+  const rootName = (path, directory) => basename(path.slice(0, path.lastIndexOf(directory)));
+  const neonRoots = new Set(commands.flatMap(item => item.command.match(SKILL_TOKEN) ?? []).map(path => rootName(normalize(path), 'skills/')));
+  // Normalized, so a skill's own relative link (`…/references/../../../core/index.json`) counts.
+  const pathsIn = command => [...new Set((command.match(CORE_TOKEN) ?? []).flatMap(expandBraces).map(normalize).filter(path => neonRoots.has(rootName(path, 'core/'))))];
+  return bestCoverage(commands, read, pathsIn, path => {
+    const key = path.slice(path.lastIndexOf('core/'));
+    return { key, repo: join(repoRoot, key) };
+  });
+}
+
 export const status = share => (share >= 0.9 ? 'read' : share > 0 ? 'partial' : 'named only');
 
 if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
@@ -105,7 +135,7 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
     const log = await readFile(join(caseDirectory, 'run.jsonl'), 'utf8');
     const events = log.split('\n').filter(Boolean).map(line => JSON.parse(line));
     console.log(basename(caseDirectory));
-    for (const entry of await referenceReads(events)) {
+    for (const entry of [...await referenceReads(events), ...await coreReads(events)]) {
       // A repo copy may differ from what the run installed.
       const note = entry.source === 'repo' ? ' (repo copy)' : '';
       console.log(`  ${status(entry.coverage).padEnd(10)} ${String(Math.round(entry.coverage * 100)).padStart(3)}%  ${entry.file}${note}`);

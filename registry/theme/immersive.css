@@ -28,8 +28,8 @@
  * progress bar's and a spinner's track and a table's header row are palette
  * 75, the indicator, the arc and an avatar the action (its initial in
  * on-action), and a chevron the theme's text. The
- * fgPrimary role (the informational alert's icon, a ghost
- * input button) is the theme's text, or Ultra would draw it navy on navy.
+ * fgPrimary role (a ghost input button) is the theme's text, or Ultra would
+ * draw it navy on navy.
  * The Button's states are restated, since Core's are for its own colors. The
  * primary's Hover and Active let 10% of what is behind show through, and its
  * Disabled is the action at half strength on the canvas under a label at half
