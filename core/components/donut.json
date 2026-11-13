@@ -1,0 +1,102 @@
+{
+"component": "Donut",
+"sets": [
+{
+  "name": "Donut",
+  "axes": [
+    {
+      "name": "Size",
+      "values": [
+        "Large",
+        "Small"
+      ]
+    },
+    {
+      "name": "State",
+      "values": [
+        "Data",
+        "Empty",
+        "Skeleton"
+      ]
+    }
+  ],
+  "exclude": [],
+  "properties": [
+    {
+      "name": "Segments",
+      "type": "SLOT"
+    }
+  ],
+  "variables": {
+    "Donut/Container/Large/Layout width": 120,
+    "Donut/Container/Large/Layout height": 120,
+    "Donut/Container/Small/Layout width": 20,
+    "Donut/Container/Small/Layout height": 20
+  },
+  "bindings": [
+    {"layer":"Container","property":"layoutSizingHorizontal","when":"{{Size=*}}{{State=*}}","value":"FIXED","literal":true},
+    {"layer":"Container","property":"layoutSizingVertical","when":"{{Size=*}}{{State=*}}","value":"FIXED","literal":true},
+    {"layer":"Container","property":"width","when":"{{Size=*}}","value":"Components/Donut/Container/{{Size=*}}/Layout width"},
+    {"layer":"Container","property":"height","when":"{{Size=*}}","value":"Components/Donut/Container/{{Size=*}}/Layout height"},
+    {"layer":"Container / Track","property":"fills.0","when":"{{Size=*}}{{State=*}}","value":"Theme/Chart/chart-empty"},
+    {"layer":"Container / Track","property":"fills.0","when":"{{State=Skeleton}}","value":"Theme/Skeleton/skeleton-background"},
+    {"layer":"Container / Segments","property":"visible","when":"{{Size=*}}{{State=*}}","value":"false","literal":true},
+    {"layer":"Container / Segments","property":"visible","when":"{{State=Data}}","value":"true","literal":true}
+  ]
+},
+{
+  "name": "_Donut segment",
+  "axes": [
+    {
+      "name": "Series",
+      "values": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08",
+        "Other"
+      ]
+    },
+    {
+      "name": "Size",
+      "values": [
+        "Large",
+        "Small"
+      ]
+    }
+  ],
+  "exclude": [],
+  "properties": [],
+  "variables": {
+    "Donut/Item/Large/Layout width": 120,
+    "Donut/Item/Large/Layout height": 120,
+    "Donut/Item/Large/Stroke weight": 1,
+    "Donut/Item/Small/Layout width": 20,
+    "Donut/Item/Small/Layout height": 20,
+    "Donut/Item/Small/Stroke weight": 1
+  },
+  "bindings": [
+    {"layer":"Container","property":"layoutSizingHorizontal","when":"{{Series=*}}{{Size=*}}","value":"FIXED","literal":true},
+    {"layer":"Container","property":"layoutSizingVertical","when":"{{Series=*}}{{Size=*}}","value":"FIXED","literal":true},
+    {"layer":"Container","property":"width","when":"{{Size=*}}","value":"Components/Donut/Item/{{Size=*}}/Layout width"},
+    {"layer":"Container","property":"height","when":"{{Size=*}}","value":"Components/Donut/Item/{{Size=*}}/Layout height"},
+    {"layer":"Container / Arc","property":"arcShare","when":"{{Series=*}}{{Size=*}}","value":"0.25","literal":true},
+    {"layer":"Container / Arc","property":"fills.0","when":"{{Series=01}}","value":"Categorical/Full/01"},
+    {"layer":"Container / Arc","property":"fills.0","when":"{{Series=02}}","value":"Categorical/Full/02"},
+    {"layer":"Container / Arc","property":"fills.0","when":"{{Series=03}}","value":"Categorical/Full/03"},
+    {"layer":"Container / Arc","property":"fills.0","when":"{{Series=04}}","value":"Categorical/Full/04"},
+    {"layer":"Container / Arc","property":"fills.0","when":"{{Series=05}}","value":"Categorical/Full/05"},
+    {"layer":"Container / Arc","property":"fills.0","when":"{{Series=06}}","value":"Categorical/Full/06"},
+    {"layer":"Container / Arc","property":"fills.0","when":"{{Series=07}}","value":"Categorical/Full/07"},
+    {"layer":"Container / Arc","property":"fills.0","when":"{{Series=08}}","value":"Categorical/Full/08"},
+    {"layer":"Container / Arc","property":"fills.0","when":"{{Series=Other}}","value":"Theme/Chart/chart-other"},
+    {"layer":"Container / Arc","property":"strokeWeight","when":"{{Size=*}}","value":"Components/Donut/Item/{{Size=*}}/Stroke weight"},
+    {"layer":"Container / Arc","property":"strokes.0","when":"{{Series=*}}{{Size=*}}","value":"Theme/Layer/layer-01"}
+  ]
+}
+]
+}

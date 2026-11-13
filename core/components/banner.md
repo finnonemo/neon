@@ -60,9 +60,15 @@ Raw values, mode `Value`, `ALL_SCOPES`, like the rest of the collection. Shaped 
 ## Usage
 
 - Use an In-line banner for a message about the state of one page or feature, at the top of the page or next to the content it is about: form validation, inline callouts, Warning, Success and Failure states (Uber, Usage).
-- Don't use it for an app-wide system message (Uber's System banner; we have none), or for short-lived feedback after an action, such as "Copied": use a [Snackbar](snackbar.md) (Uber, Usage).
+- Don't use it for global system messaging that affects more than one experience of an app, such as upcoming maintenance or a lost connection: that is Uber's System banner, which Core doesn't have (Uber, Usage). Don't use it for short-lived feedback after an action, such as "Copied": use a [Snackbar](snackbar.md) (Uber, Usage).
 - Show one at a time. When several fields have errors, put them all in one banner at the top or bottom of the form (Uber, Usage).
 - Keep it inset from the screen edges; don't stretch it edge to edge (Uber, Usage).
+- **Placement** (Uber's Usage, Insets and Breakpoints): in the page's scrolling content, never an overlay and never pinned. A Pattern places it; the placement isn't an axis.
+  - **Where**: under the Toolbar - Top, as a part of the page component, at the beginning of the page or in line next to the content it is about. It scrolls with the page, covers nothing and is not modal.
+  - **Width**: the width of the main content. On a phone that is the screen minus a 16 inset on each side; wider screens take the content column's width, not the screen's. Top and bottom insets may be dropped where the neighbours already space it.
+  - **One at a time**: several messages become one banner; a Pattern with several statuses shows a Grouped banner (Plan banner).
+  - **A form**: its errors go in one banner at the top of the form, or at the bottom as the last part of the page component, above the Button dock. It is never inside the Button dock.
+  - **With a Snackbar**: nothing is added. A Snackbar is a top overlay and covers the banner while it shows.
 - Copy: keep it under three lines on mobile, and give a clear next step. Use end punctuation only between two sentences (Uber, Content).
 
 ### Hierarchy

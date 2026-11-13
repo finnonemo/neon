@@ -105,6 +105,8 @@ function typography({ facts }) {
   ].join('\n');
 }
 
+// The display role one below a role: what a hero name takes on narrow screens.
+const roleBelow = (facts, role) => facts.scale.type[facts.scale.type.findIndex((row) => row.role === role) + 1].role;
 const factSize = (facts, role) => {
   const { size, line } = facts.scale.type.find((row) => row.role === role) ?? {};
   return `${size}/${line}`;
@@ -147,6 +149,7 @@ function spacing({ facts, layout }) {
     `- **Block and card radius:** ${step(layout.blockRadius)}`,
     `- **Feature block radius:** ${step(layout.featureRadius)}, for a block that spans the content column; cards inside it keep the block and card radius`,
     `- **Lead fact role:** ${code(layout.factRole)} (${factSize(facts, layout.factRole)}), for the one fact a component leads with; other component text stops at ${code('title1')}`,
+    `- **Hero name role:** ${code(layout.nameRole)} (${factSize(facts, layout.nameRole)}), and ${code(roleBelow(facts, layout.nameRole))} (${factSize(facts, roleBelow(facts, layout.nameRole))}) on narrow screens; nothing else in the hero is set larger than the name`,
     `- **Section gap:** ${step(layout.sectionGap)}`,
     `- **Card padding:** ${step(layout.cardPadding)}`,
     `- **Page width:** ${width}`,
@@ -174,7 +177,7 @@ function components({ theme }, prose) {
   const fills = (name) => `${stepRange(name, blockSteps(theme, name))} fills, each with its own ${code('on-')} text variable`;
   const fixed = [
     ['Main Action', 'The main action of a section', `Neon ${code('Button')} filled with ${variable('action')}, its label in ${variable('on-action')}, with ${code('--borderRadius-1000')} corners.${offActionNote(theme)}`],
-    ['Secondary Action', 'An alternative beside the main action', `Neon ${code('Button')} in its ${code('secondary')} variant: ${variable('palette-75')} fill with its label in ${variable('on-palette-75')}. On a block that already has that fill, the ${code('ghost')} variant: no fill, its label in the block's ${code('on-')} text variable. Neon has no outlined button.`],
+    ['Secondary Action', 'An alternative beside the main action', `Neon ${code('Button')} in its ${code('secondary')} variant: ${variable('palette-75')} fill with its label in ${variable('on-palette-75')}. On ${theme.families.includes('support') ? 'an accent or support fill' : 'an accent fill'}, or on a block that already has that fill, the ${code('ghost')} variant: no fill, its label in the fill's ${code('on-')} text variable. Neon has no outlined button.`],
     ['Logo', 'Brand identity', `Neon's logo item, the ${theme.kind === 'dark' ? 'dark-surface' : 'light-surface'} mark. Never recreate the wordmark as text.`],
     ['Tint Block', 'Group a section or a set of details', `${fills('palette')}. Flat: no border and no shadow; step lighter for nested emphasis.`],
     ['Accent Block', 'Highlight an offer or call-out', `${fills('accent')}. Flat, like the Tint Block.`],

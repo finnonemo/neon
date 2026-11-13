@@ -6,9 +6,12 @@ const container = (property) => ({ layer: 'Container', property });
 const label = (property) => ({ layer: 'Container / Label', property });
 const pad = padding(container);
 
-/** The Neon Segmented control's track in a cell of Core's: Medium and Enabled unless said. */
+/**
+ * The Neon Segmented control's track in a cell of Core's: Medium and Enabled unless said.
+ * Floating is False: the Neon item sits in the page and has no value for Core's track over scrolling content.
+ */
 export function segmentedCell({ Size = 'Medium', State = 'Enabled' } = {}) {
-  return { item: 'segmented-control', part: 'track', cell: { Size, State } };
+  return { item: 'segmented-control', part: 'track', cell: { Size, State, Floating: 'False' } };
 }
 
 /** One segment in a cell of Core's _Segmented control item: Medium, Enabled and not chosen unless said. */

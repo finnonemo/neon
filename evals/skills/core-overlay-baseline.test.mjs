@@ -65,7 +65,7 @@ const subtle = { light: 'rgba(0, 0, 0, 0.122)', dark: 'rgba(255, 255, 255, 0.18)
 const inBoth = (value) => ({ light: value('light'), dark: value('dark') });
 
 test('an alert dialog is Core\'s Alert at iOS=False: a 300px card on Layer/layer-01 with 16px corners, over the overlay', async () => {
-  assert.deepEqual(await both(alertCell('card')), inBoth((mode) => ({ w: 300, pad: [14, 14, 14, 14], radius: 16, bg: layer01[mode] })));
+  assert.deepEqual(await both(alertCell('card')), inBoth((mode) => ({ w: 300, pad: [16, 16, 16, 16], radius: 16, bg: layer01[mode] })));
   assert.deepEqual(await both(alertCell('overlay')), { light: { bg: 'rgba(0, 0, 0, 0.2)' }, dark: { bg: 'rgba(0, 0, 0, 0.502)' } });
   assert.deepEqual(await both(alertCell('text')), inBoth(() => ({ pad: [8, 8, 24, 8] })));
   for (const part of ['title', 'message']) {

@@ -112,14 +112,14 @@ Snackbar (variant root)        Fill × Hug, no fill, no padding, VERTICAL
 
 | Transition | Token | Reduced form | Haptic |
 | --- | --- | --- | --- |
-| Enters: slides up and fades in | `moderate-02 · entrance · slide-full` | crossfade | None |
-| Leaves: slides down and fades out | `moderate-01 · exit · slide-full` | crossfade | None |
+| Enters: slides down and fades in | `moderate-02 · entrance · slide-full` | crossfade | None |
+| Leaves: slides up and fades out | `moderate-01 · exit · slide-full` | crossfade | None |
 | A Loading Snackbar's outcome replaces it | the old leaves, the new enters | crossfade | None |
 | The next Snackbar in the queue | enters after the current one has left | crossfade | None |
 
 - **Haptic**: none on appearing. An outcome's `Success` or `Error` haptic is the Pattern's.
-- **Movement**: `slide-full`, the Snackbar's own height up from the bottom edge, with its fade. Movement from Motion and haptics, the owner's D6 (ads-tokens.md § 5), edited in place at the owner's word ("Edit directly", #811, 2026-11-11).
-- **Direction**: from the bottom edge, where a Pattern places it (Usage): the Finnomena apps show it above the Tab bar or Button dock, so Uber's top placement is not taken.
+- **Movement**: `slide-full`, the Snackbar's own height down from the top edge, with its fade. Movement from Motion and haptics, the owner's D6 (ads-tokens.md § 5), edited in place at the owner's word ("Edit directly", #811, 2026-11-11).
+- **Direction**: from the top edge, where Usage places it: it enters sliding down and leaves sliding up (over).
 - **Not Uber's 1000 ms quintic ease-out**: Core's motion is Carbon's six durations and productive easings, the longest `slow-02`, 700 ms (Motion). On iOS `moderate-02` stands for a `.smooth` spring.
 
 **Time on screen** (Q4,), timing under WCAG 2.2.1, not motion:
@@ -153,7 +153,11 @@ Snackbar (variant root)        Fill × Hug, no fill, no padding, VERTICAL
 
 ## Usage
 
-- **Placement**: one Snackbar at a time, at the bottom, 16 from each side, above a Tab bar or a Button dock, where the Finnomena apps show it. A Pattern places it; the placement isn't an axis.
+- **Placement** (Uber's): at the **top**, never the bottom. One Snackbar at a time. A Pattern places it; the placement isn't an axis.
+  - **Phone** (up to 600 wide): top centre, flush under the status bar, 8 from each side, over the Navigation bar; it takes the width minus the 8 gutters.
+  - **Wider than 600**: top centre, 16 below the Navigation bar (16 from the top edge when the screen has none), 320 to 540 wide.
+  - **Desktop web only** may move it to bottom centre, top left or right, or bottom left or right, 16 from the bar or screen edge; keep one position across an app.
+  - The bottom stays free for the Tab bar, a Button dock and the keyboard: a screen never lifts a Snackbar over them. A Toast (v2's name for it) is this Snackbar, so it goes at the top too.
 - **Use it** only after a user action, for feedback, an acknowledgement or a follow-up (Uber).
   - It sits over the content and follows the user forward and back through navigation.
   - One at a time: the next waits until the current one leaves. A Loading Snackbar is the one that is replaced, by its outcome, as soon as it lands.

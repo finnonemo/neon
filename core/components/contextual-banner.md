@@ -51,6 +51,7 @@ Shared with In-line Banner, nothing new: every color binds `Theme/Banner/{{Statu
 
 - Use a Contextual banner where In-line banner's uses apply but the action needs a full line under the message: a long button label, two stacked buttons, or a Badge on top. This is Uber's layout for long labels, where "the button drops to the next line below the message" (Usage, Wrapping and truncation).
 - The rest is as for [In-line banner](banner.md): what to use it for and not, one at a time, inset, under three lines (Uber, Usage and Content).
+- **Placement**: the same as In-line banner's, in the page's scrolling content under the Toolbar - Top, inset 16 on a phone, never an overlay or in the Button dock: [In-line banner › Usage](banner.md), Placement. Core has no System banner (Uber's global message) either.
 
 ### Hierarchy
 

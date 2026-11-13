@@ -27,8 +27,9 @@ Segmented control (variant root)     Fill × Hug, no fill, no padding; min heigh
 | --- | --- | --- |
 | `Size` | Medium · Small · Large (call 3; Large added last by , V5, first on the grid) | Container min height 48 · 36 · 56 and padding 6 · 4 · 4, the Root's Hit target |
 | `State` | Enabled · Disabled · Skeleton (call 8 reversed) | track fill; Disabled is the root at opacity 0.5 over the Enabled look (U2); Skeleton hides `Segments` |
+| `Floating` | False · True (R2) | Skeleton and the Items are unchanged |
 
-Properties: SLOT `Segments`, added by hand. 3 × 3 × 2 = **18 variants** (12 before , 8 before).
+Properties: SLOT `Segments`, added by hand. 3 × 3 × 2 × 2 = **36 variants** (18 before , 12 before , 8 before). `Floating` sits before `iOS`, since `iOS` is always last (ADR 0005); every instance placed before is `Floating=False`.
 
 `_Segmented control item` (private):
 
@@ -83,6 +84,8 @@ Track (`Segmented control › Container`):
 | --- | --- |
 | Enabled | `Button/button-secondary` |
 | Skeleton | `Skeleton/skeleton-background` |
+
+Disabled takes Enabled's track.
 
 Item (`_Segmented control item › Container` fill, its stroke, `Label`), `iOS=False` since .
 
@@ -189,5 +192,6 @@ Motion and haptics, the Segmented control row, made specific:
 - The Amount entry case, `บาท · หน่วย`, above an Amount field (Amount entry). Amount field isn't built, so the sample uses Text field with `Unit` on (` ฿`), its Thai title and helper set by override; swap it once Amount field exists.
 - The period selector: `Size=Small`, nine Latin labels `1D … MAX`, at 375 wide, with `1Y` selected.
 - The Focus ring once, on `iOS=False`.
+- A `Floating=True` Medium control, 280 wide, `ภาพรวม · ปรับพอร์ต` (R2), centred 16 above the bottom of a 375 × 296 screen over a scrolled list of `List item` rows.
 
-Use it to switch between two to five views or filters of the same content, where every option fits on one line at standard text sizes. It isn't for navigation between sections (that's Tabs), for a choice inside a form with many options (Select or Radio), or for an on/off (Toggle).
+Use it to switch between two to five views or filters of the same content, where every option fits on one line at standard text sizes. Two closely related views of one object, such as a plan's Overview and Rebalance, take a Segmented control, `Floating=True` when it sits over scrolling content. Separate sections of the app are Navigation. It isn't for navigation between sections (that's Tabs), for a choice inside a form with many options (Select or Radio), or for an on/off (Toggle).
