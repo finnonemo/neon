@@ -62,7 +62,7 @@ Properties: `Number` TEXT (the marker's), `Step label` TEXT, `Optional label` TE
 | --- | --- | --- |
 | `Direction` | Vertical · Horizontal | the Steps' layout and which `_Progress step` Direction its default items are |
 
-Properties: `Steps` SLOT. **2 variants**. (Reversed by `Sublayout`, 3 variants; reversed again by `Size` × `Artwork` from the item, 18 variants; reversed again by `Direction` gains Vertical reverse, 27 variants; .)
+Properties: `Steps` SLOT. **2 variants**. (Reversed by `Sublayout`, 3 variants; reversed again by `Size` × `Artwork` from the item, 18 variants; reversed again by `Direction` gains Vertical reverse, 27 variants; `Artwork` gains Bar on Horizontal by , 29 variants, .)
 
 - `State` is Carbon's axis name and value list (Carbon's `Completed`, not v11 docs' "Complete"; `Error`, not "Invalid"). The Inventory keeps `Status` for a feedback message's kind, and Core's other sets use `State` for Enabled · Disabled · Skeleton, which this list contains (Q5).
 - **Disabled**: a step that can't be reached now (an order that was cancelled before it). **Skeleton**: the steps while an order's status loads, IC's Loading.

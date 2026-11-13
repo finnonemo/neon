@@ -198,4 +198,5 @@ These use our local Typography styles (Localisation), the same in both looks. Li
   - No result (`iOS=False`,): Core's `Empty state` `Size=Medium` in the Slot, Artwork and Button off: "No results found", "Try another word or check the spelling."
 - Notes:
   - that look is for mockups. Android + web use `iOS=False`.
-  - A menu holds actions and choices, never a form. A list of more than about 10 rows, or rows with controls, goes in a Sheet (Bottom sheet on Android + web).
+  - **Placement**: a menu **opens from its trigger's corner and covers the trigger** (`iOS=False` covers it too,). `Anchor` Top right for a trigger at the trailing edge, Top left at the leading edge, so it never leaves the screen. A Pattern places it over the screen, never in the Page component (screen-rules). One open at a time.
+- A menu holds actions and choices, never a form. A list of more than about 10 rows, or rows with controls, goes in a Sheet (Bottom sheet on Android + web).

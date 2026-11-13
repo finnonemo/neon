@@ -135,14 +135,14 @@ Timing, not motion (as Snackbar's time on screen): it opens after 100 ms of hove
 
 Samples in Thai, both Theme modes, in the page's `Usage` frame:
 
-- An icon-only button named: a header's search Icon button with `ค้นหากองทุน`, Bottom · End, since the button sits at the screen's right edge.
+- An icon-only button named: a web page header's search Icon button with `ค้นหากองทุน`, Bottom · End, since the button sits at the screen's right edge.
 - A term defined on web: `NAV` with `มูลค่าทรัพย์สินสุทธิต่อหน่วย`, Top · Start, beside its figure.
 - Left and Right once each: a `house` button at the left edge (Right, `หน้าหลัก`) and a `gear` button at the right edge (Left, `ตั้งค่า`).
 - Don'ts: a link or a button in a tip (use Toggletip); a status or an error (use Snackbar or the field's helper text); a tooltip on iPhone; a tip on a button that already has a visible label, or holding what the user needs to finish the task.
 
 The proposal's fourth sample, a truncated fund name in a table cell, is dropped (owner, 2026-11-10, on #745: "1", drop it rather than add a trigger): the set's triggers are an Icon button and a Definition term, and a cut-off cell is neither. Text cut off by overflow (Uber's second use) has no Tooltip trigger; a table shows the full name its own way.
 
-Where it goes: one at a time, 16 or more from the screen's edge, never cut off; a tip that would leave the screen takes the opposite Position. Content: a few words; no full stop on one sentence, no `?` or `!`; nothing the user needs to finish the task.
+**Placement**: **web and Mac only**; a screen on iOS or Android never places a Tooltip (Uber and HIG both limit it: use a labelled Button, or a Toggletip). Where it goes: one at a time, 16 or more from the screen's edge, never cut off; a tip that would leave the screen takes the opposite Position. Content: a few words; no full stop on one sentence, no `?` or `!`; nothing the user needs to finish the task.
 
 ### Hierarchy
 

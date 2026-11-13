@@ -19,6 +19,13 @@
         "Disabled",
         "Skeleton"
       ]
+    },
+    {
+      "name": "Floating",
+      "values": [
+        "False",
+        "True"
+      ]
     }
   ],
   "exclude": [],
@@ -73,6 +80,8 @@
     {"layer":"Container","property":"cornerRadius","when":"{{Size=*}}","value":12,"literal":true},
     {"layer":"Container","property":"fills.0","when":"{{State=Enabled,Disabled}}{{Size=*}}","value":"Theme/Button/button-secondary"},
     {"layer":"Container","property":"fills.0","when":"{{State=Skeleton}}{{Size=*}}","value":"Theme/Skeleton/skeleton-background"},
+    {"layer":"Container","property":"fills.0","when":"{{State=Enabled,Disabled}}{{Size=*}}{{Floating=True}}","value":"Theme/Layer/layer-01"},
+    {"layer":"Container / Background","property":"visible","when":"{{State=*}}{{Size=*}}{{Floating=*}}","value":"false","literal":true},
     {"layer":"Container / Segments","property":"visible","when":"{{State=Enabled,Disabled}}","value":"true","literal":true},
     {"layer":"Container / Segments","property":"visible","when":"{{State=Skeleton}}","value":"false","literal":true},
     {"layer":"Container / Segments","property":"counterAxisAlignItems","when":"{{State=*}}","value":"CENTER","literal":true},

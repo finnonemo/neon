@@ -10,14 +10,15 @@ Navigation (variant root)            Fill × Fill on an instance (the main is Fi
    │                                   Bottom: VERTICAL, bottom, centred · Top: VERTICAL, top, centred
    └─ Bar                            the replaced set's variant tree, root and all, renamed `Bar`:
       Bottom   Tab Bar - iPhone's    402 × 96 (Minimized 88), Fill wide on wider SM screens
-               Container › Tab Bar Buttons (BG/Surface, Item 1…n) · Search (Type ≠ Default)
+               Container › Tab Bar Buttons (BG/Surface, Item 1…n) · Button platter (Type ≠ Default)
       Top      Tab Bar - iPad's      Hug × 48: Container › BG/Surface · Sidebar button · Items (Item 1…n) · Search button
       Sidebar  Sidebar's             width bound to `Sidebar View width` (Expanded=True), 64 (Expanded=False), Fill tall:
                Container › Header (SLOT) · Items (Item 1…n, then More SLOT, from the top) · Footer (SLOT)
 ```
 
 - **`Item 1…5`**: `_Navigation Item` instances, exposed, the same layer names in every variant, so a designer's Title, Symbol and Selected carry across Layouts (the prototype's result 3). `Items=n` shows `Item 1…n`; on Bottom's Search Role and Prominent Tab, Search counts as one (Assumptions).
-- **`Search`, `Sidebar button`**: `_Navigation Button` instances (Bottom and Rail `Type ≠ Default`; Top's two symbol buttons).
+- **`Button platter`**: the frame around the trailing button on Bottom and Rail `Type ≠ Default`, named for the `Navigation/Button platter/…` variables it binds, in `Search Role` and `Prominent Tab` alike.
+- **`Search`, `Sidebar button`**: `_Navigation Button` instances (inside `Button platter` on Bottom and Rail `Type ≠ Default`; Top's two symbol buttons). On `Type=Prominent Tab` the trailing button is named `Prominent Tab` and draws `plus`; `Search Role` keeps `Search`.
 - **`More`** (`Layout=Sidebar` only): a SLOT after `Item n` for what only a Sidebar has: `_Navigation Section Header`s and indented rows (`_Navigation Item Layout=Sidebar`, `Indent Level` 1 · 2). Empty by default (N6).
 - Sidebar's old `Items` SLOT becomes the `Items` frame: fixed items, then `More`. Its rows start under the Header, `Items` MIN (the owner's, 2026-11-10, ; centred, the owner's 2026-11-09, until then).
 
@@ -144,3 +145,7 @@ One `Title` property, where Tab Bar's parts called it `Label`: the property is w
 - Bottom and Rail exist only at `Expanded=False`: don't set `Layout` to Bottom or Rail by hand at XL or wider, where `Expanded` resolves true and no variant matches (owner, 2026-11-11).
 - iPhone Duo's side bar (Apple's [Designing for iPhone Duo](https://developer.apple.com/design/human-interface-guidelines/designing-for-iphone-duo), read 2026-11-11): when the `Vertical Bar` has no room for both the toolbar's items and the Rail, a navigation-focused screen (the default) sends toolbar items to the overflow menu and keeps the Rail; a task-focused one (a form, an editor) minimises the Rail, `Layout=Rail` `Minimized=True`, and keeps the toolbar. Set every Rail item's `Title` though Rail hides it: overflow and expanded forms show it. The toolbar's item order and overflow: toolbars.md.
 - Not for a screen's own sections: Tabs or a Segmented control in the page.
+- Tab titles are one short word: Bottom's and Top's titles don't truncate and don't grow at large text sizes (Assumptions), so a long title overflows its tab (owner, 2026-11-13).
+- A Dark sample or template built from a Light one: run `dark-copy.js` after the Theme `Mode` swap, which drops its parts' overrides (titles, symbols); on the Usage columns it read 64 pairs and 0 differences (2026-11-10, #684).
+
+- **Placement**: `Layout` is picked by the frame's modes. `Bottom` (SM, up to 600): fixed to the bottom edge, always visible, absolute over `Screen`, with the 96 spacer under the content; only a modal goes above it, the keyboard covers it, and a screen with a Button dock has none. `Top` (iPad): the top of the screen. `Rail` (iPhone Duo): the side bar. A Snackbar sits at the top over the Toolbar - Top, never over this bar.

@@ -146,6 +146,8 @@ Built 2026-11-06 in the `Usage` frame on `Button docks`: Light and Dark columns,
 - Where it sits: pinned to a screen's bottom edge, full width. The Pattern or screen sets its max width and its placement on a wide screen; the set has no width axis (ADR 0013).
 - What not to use it for, as first proposed: "more than two actions (a Menu or a second screen; Base's Button 3–4 and v2 Compact's Leading pair aren't carried over, assumption)" (reversed by Button 3 and Button 4, four at most).
 
+- **Placement**: the bottom edge, sticky, with the Home indicator inside it. A screen with a Button dock has no tab bar (a pushed form): the dock is the bottom edge's only bar (R1). On the keyboard it rides up and sits on top of it (R2).
+
 ### Hierarchy
 
 Which `Hierarchy` and `Type` its nested buttons take, and why. The rules (1–6) and the owner's calls (H1–H7) are in [hierarchy.md](../hierarchy.md); Button's own values are in [button.md › Hierarchy](button.md). Source: Uber Base [Button dock, Usage](https://base.uber.com/6d2425e9f/p/46ed03-button-dock/b/46994b), read 2026-11-09. "Agrees" checks the spec's pin; the set is built from the spec.
