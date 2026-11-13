@@ -8,7 +8,7 @@ scenarios:
 
 # Theme Brief composition
 
-What a page built from a Theme Brief looks like once the brief carries [composition picks](../../../docs/design/theme-briefs.md#presets-and-picks-files): a ground per section, a lead fact role and a feature radius. These are the page-layer runs for the `event-poster` layout and for `event-landing` with its new fields. Two requests ran once each at the same time, November 2026, on the working tree later committed as `59792c7`, with the four briefs as that commit holds them. The runs used Claude Code 2.1.323 with `run-claude-case.mjs --model claude-opus-5-5 --serve-registry`, the runner's allowlist and permission note, and the browser tool, each in a workspace holding only `.gitkeep`.
+What a page built from a Theme Brief looks like once the brief carries [composition picks](../../../docs/design/theme-briefs.md#presets-and-picks-files): a ground per section, a lead fact role and a feature radius. These are the page-layer runs for the `event-poster` layout and for `event-landing` with its new fields. Two requests ran once each at the same time, November 2026, on the working tree later committed as `59792c7`, with the four briefs as that commit holds them; the briefs changed once more after the runs, as noted below. The runs used Claude Code 2.1.323 with `run-claude-case.mjs --model claude-opus-5-5 --serve-registry`, the runner's allowlist and permission note, and the browser tool, each in a workspace holding only `.gitkeep`.
 
 Requests, verbatim; the Club request named `./club-run`, Club and port 5222:
 
@@ -30,7 +30,7 @@ The Club page of the [campaign direction](campaign-direction.md) record kept one
 
 What the runs showed the briefs still get wrong:
 
-- Each brief's Race distance card gives its select action `--immersive-action`. The Exclusive run refused it, since two main actions would sit side by side, and used the secondary action. The occasion component prompt should say a repeated card's action is the secondary one.
+- Each brief's Race distance card gave its select action `--immersive-action`. The Exclusive run refused it, since two main actions would sit side by side, and used the secondary action. The briefs were redrafted afterwards: the card no longer takes the `action` role, the prompt makes its action the Secondary Action, and a soft check holds a component without the role to that. No page was built from the redrafted briefs.
 - On Exclusive and Ultra the Pattern's ground is the canvas, so with no Pattern file the hero is the bare canvas.
 
 Run logs, reports and apps are in `.local/evals/format-{exclusive,club}`; captures and the measuring script are in `.local/evals/format-shots`.

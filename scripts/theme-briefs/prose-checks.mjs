@@ -150,13 +150,15 @@ function slotProblem(path, paragraph) {
 }
 
 // A component paragraph follows its preset's composition picks: a lead fact takes the layout's fact role
-// and no component without one reaches a display role; a feature component takes the feature radius.
+// and no component without one reaches a display role; a feature component takes the feature radius;
+// only a component with the action role fills an action with the main action's color.
 const DISPLAY_ROLE = /\bdisplay\d\b/;
 function compositionProblems(path, paragraph, component, layout) {
   const problems = [];
   if (!component) return problems;
   if (component.leadFact && !paragraph.includes(layout.factRole)) problems.push(`"${path}" does not set its lead fact (${component.leadFact}) in ${layout.factRole}`);
   if (!component.leadFact && DISPLAY_ROLE.test(paragraph)) problems.push(`"${path}" names a display role, but the component has no lead fact`);
+  if (!component.roles.includes('action') && paragraph.includes('--immersive-action')) problems.push(`"${path}" names --immersive-action, but the component does not take the action role; its action is the Secondary Action`);
   const radius = component.feature ? layout.featureRadius : layout.blockRadius;
   if (/\b(?:corners?|radius)\b/i.test(paragraph) && !paragraph.includes(`--${radius}`)) problems.push(`"${path}" does not round to --${radius}, the ${component.feature ? 'feature block' : 'block and card'} radius`);
   return problems;

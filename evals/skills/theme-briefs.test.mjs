@@ -18,7 +18,7 @@ const valid = {
     taglineIntent: 'a members running event with a shared start line',
     moodIntent: 'a weekend race members train for together',
     components: [
-      { name: 'Race distance card', role: 'compare the distances on offer', contentNotes: 'distance, start time, one select action', roles: ['palette', 'action'], leadFact: 'the distance' },
+      { name: 'Race distance card', role: 'compare the distances on offer', contentNotes: 'distance, start time, one select action', roles: ['palette'], leadFact: 'the distance' },
       { name: 'Registration call-out', role: 'carry the main registration action', contentNotes: 'deadline and the main action', roles: ['accent', 'action'], feature: true },
     ],
     dos: ['show the registration deadline next to every main action'],
@@ -760,13 +760,14 @@ test('soft checks send back a Do longer than one sentence and component slots ou
 
 test('soft checks send back a component that misses its composition picks, and a Layout that names no ground', (t) => {
   const plain = components([]);
-  plain.components[0] = { ...plain.components[0], paragraph: plain.components[0].paragraph.replace('leads in display3', 'leads in title2') };
+  plain.components[0] = { ...plain.components[0], paragraph: `${plain.components[0].paragraph.replace('leads in display3', 'leads in title2')} Its action sits on var(--immersive-action) with a var(--immersive-on-action) label.` };
   plain.components[1] = { ...plain.components[1], paragraph: plain.components[1].paragraph.replace('var(--borderRadius-700)', 'var(--borderRadius-500)').replace('sits in title3', 'sits in display3') };
   const flat = { paragraph: GOOD.layout.paragraph.replace('on the tint ground ', '').replace('in display3', 'in large type') };
   const { fake, status, out } = draft(t, { answers: { 'occasion-components': [plain, GOOD['occasion-components']], layout: [flat, GOOD.layout] } });
   assert.equal(status, 0, out);
   const sent = calls(fake, 'occasion-components')[1].prompt;
   assert.match(sent, /^- "components\.0\.paragraph" does not set its lead fact \(the distance\) in display3$/m);
+  assert.match(sent, /^- "components\.0\.paragraph" names --immersive-action, but the component does not take the action role; its action is the Secondary Action$/m);
   assert.match(sent, /^- "components\.1\.paragraph" names a display role, but the component has no lead fact$/m);
   assert.match(sent, /^- "components\.1\.paragraph" does not round to --borderRadius-700, the feature block radius$/m);
   const layout = calls(fake, 'layout')[1].prompt;

@@ -7,10 +7,9 @@
     {
       "name": "Race distance card",
       "role": "compare the distances on offer and pick one",
-      "contentNotes": "distance, start time, cut-off time, member price and one select action per card",
+      "contentNotes": "distance, start time, cut-off time, member price and one select action per card, a secondary action",
       "roles": [
-        "palette",
-        "action"
+        "palette"
       ],
       "leadFact": "the distance"
     },
@@ -45,7 +44,7 @@
     }
   ],
   "dos": [
-    "show the registration deadline next to every main action",
+    "show the registration deadline next to the main action, and next to each distance card's select action, which is a secondary action",
     "set each distance and the registration deadline as the largest thing in its block"
   ],
   "donts": [

@@ -1,8 +1,8 @@
 {
   "brief": "club-run",
   "tool": {
-    "commit": "4ed912db5d59e705339f5b78dd87f42772ee52e2",
-    "version": "b815fed7cbc94bde65d2803ca80bbad91312bcbfe454f8fc2f30d8973c8114e5"
+    "commit": "9b3905d281e92a7746b9fa79bba64031ba171a15",
+    "version": "c8db70ff85af45d20233edde011ce4abe6f06c33a666649d0e1ff8b04c80f3dd"
   },
   "claudeCode": {
     "version": "2.1.323",
@@ -39,9 +39,9 @@
       "output": "2275827233ef5ab6f439c22e5b62cc5ecc7730c58d5d69f9c8a5a72aa785c632"
     },
     "occasion-components": {
-      "entry": "c0d0edde3b0284b3843b7d9c10ed2e21cd65a5530e0a9c4761caa58a93800880",
+      "entry": "19d3e2dcf52c4e89b3cc4cf6c0a8476b1a678682ab38e3a029597d7b7f525f3a",
       "shared": "935d2a8c01c5a85ebc05a23cc765299676c01eddbf0fac2e6901efb45ef6a880",
-      "inputs": "8721cb7e1ccccbf260a2825821ebcb2624d0d4bc0d3abe926534783c9521a2a3",
+      "inputs": "bd7e18ae920472968647a685b55bd16ab2cf6673623248c231445fbe838ea77e",
       "attempts": [
         {
           "hard": 0,
@@ -49,12 +49,12 @@
         }
       ],
       "kept": 1,
-      "output": "6f36c3b03343f389c89665f907f696943b81d6126e4f02ff831c802e6dee963c"
+      "output": "e5c0d48208bc7a0abe27c36fb5cc914108a5561dd725a17bb8b39ffc1a2e43e5"
     },
     "preset-dos-donts": {
       "entry": "382754d83d3750ee2a88981be8f71810f7a0ee084b0fc382a246d25d8fae6fc1",
       "shared": "935d2a8c01c5a85ebc05a23cc765299676c01eddbf0fac2e6901efb45ef6a880",
-      "inputs": "5c1b58385d50b6f638788441ef7f3b69a0cd6f6b377551b04449c47b6c5a2326",
+      "inputs": "988c819c95e1a28de209cbe57632ed9d8d55f2a2e3933fa6cfea3a9a54c29a7c",
       "attempts": [
         {
           "hard": 0,
@@ -66,7 +66,7 @@
         }
       ],
       "kept": 2,
-      "output": "29389003d589326c3070b005cef5db3c0852147a265f58994d09285b41826b67"
+      "output": "ce31d57b36d3d6c1d1ea44b3489168f2f18836790bdaddb144df047bd55479bd"
     },
     "imagery": {
       "entry": "437ec358242f1bcbaa6baa1d96e81e59d4d4adbee7fd4604a760a3da0e4b971e",
@@ -84,7 +84,7 @@
     "layout": {
       "entry": "5de4f77e3adcfa21d9909089b1148e5639d3485007df7e7e417c8b3d4378b16a",
       "shared": "935d2a8c01c5a85ebc05a23cc765299676c01eddbf0fac2e6901efb45ef6a880",
-      "inputs": "106db0d872a70e7685d56fe7f1c2c37d88aa55e35cdc36c495d20145c93f0368",
+      "inputs": "c3dd6c02ca1b65f1e755013ad546cee6968b32bf62a13d5f2af39d20c3b8e1bd",
       "attempts": [
         {
           "hard": 0,
@@ -92,24 +92,20 @@
         }
       ],
       "kept": 1,
-      "output": "bdff8440072c53d0849649e4bf2381fce95688f4ab4e0e169abe2dddd82d4926"
+      "output": "b3cd09ec4562b89d52ba4b7cff83ca3c534ea8cb9a9033f51e45e4addc5e2060"
     },
     "example-prompts": {
       "entry": "0589dc0146632bac6575ff5e3eb6fef367eec1b26a45b8f20078741df4d62230",
       "shared": "935d2a8c01c5a85ebc05a23cc765299676c01eddbf0fac2e6901efb45ef6a880",
-      "inputs": "8a46641c7063ee4b55df21f790edb1312f4859e7a4e9dc9099f757264ea9e2ef",
+      "inputs": "0466332492bea43d46d022b8125a0f6e8ea5852fea3e192629b594a5e9dc35a4",
       "attempts": [
-        {
-          "hard": 0,
-          "soft": 1
-        },
         {
           "hard": 0,
           "soft": 0
         }
       ],
-      "kept": 2,
-      "output": "f6bda92e2958989c626484431932ee6a60e0feae188f7fa0ad74418f331a5c60"
+      "kept": 1,
+      "output": "78a9158b74e58a6647935ce58dcd7e371338e19b0f3798c31bfafb857506d56c"
     }
   },
   "accentPlacement": "Registration call-out"
