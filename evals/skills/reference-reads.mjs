@@ -108,13 +108,15 @@ export function referenceReads(events, read = path => readFile(path, 'utf8')) {
 
 // Best coverage per Core snapshot file, keyed from `core/`. The snapshot is the
 // `core/` beside the `skills/` directory the run read from, so an app's own
-// `src/core/` is not one. Not listed: a path relative to the Neon root
+// `src/core/` is not one. Not listed: a path with no Neon root in it
 // (`cd <root> && cat core/…`), a shell glob and a search of a whole directory.
 export function coreReads(events, read = path => readFile(path, 'utf8')) {
   const commands = commandOutputs(events);
-  const neonRoots = new Set(commands.flatMap(item => item.command.match(SKILL_TOKEN) ?? []).map(path => normalize(path.slice(0, path.lastIndexOf('skills/')))));
+  // A Neon root is known by its directory's name: one run spells it both from `/` and from the app (`../plugin/`).
+  const rootName = (path, directory) => basename(path.slice(0, path.lastIndexOf(directory)));
+  const neonRoots = new Set(commands.flatMap(item => item.command.match(SKILL_TOKEN) ?? []).map(path => rootName(normalize(path), 'skills/')));
   // Normalized, so a skill's own relative link (`…/references/../../../core/index.json`) counts.
-  const pathsIn = command => [...new Set((command.match(CORE_TOKEN) ?? []).flatMap(expandBraces).map(normalize).filter(path => neonRoots.has(path.slice(0, path.lastIndexOf('core/')))))];
+  const pathsIn = command => [...new Set((command.match(CORE_TOKEN) ?? []).flatMap(expandBraces).map(normalize).filter(path => neonRoots.has(rootName(path, 'core/'))))];
   return bestCoverage(commands, read, pathsIn, path => {
     const key = path.slice(path.lastIndexOf('core/'));
     return { key, repo: join(repoRoot, key) };

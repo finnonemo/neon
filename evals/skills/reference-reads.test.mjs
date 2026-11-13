@@ -81,10 +81,12 @@ test('counts the skill files a Claude run read through Read and Bash', async () 
 test('lists the Core snapshot files a run read, apart from an app path named core', async () => {
   const neonRoot = '/case/plugin';
   const doc = '# Button\n\n## Anatomy and layer tree\n\nA Capsule holding a label and an optional glyph.\n\n## Usage\n\nBrand only on Primary, for a branded moment.\n';
-  const installed = { [`${neonRoot}/core/index.json`]: '{\n  "button": { "counterpart": "Button", "doc": "components/button.md" }\n}\n', [`${neonRoot}/core/components/button.md`]: doc, [`${neonRoot}/core/components/alert.md`]: '# Alert\n\n## Usage\n\nNot for a form or long content.\n', [`${neonRoot}/core/components/sheet.md`]: '# Sheet\n\n## Usage\n\nA short task that keeps the page behind it.\n', [`${neonRoot}/core/hierarchy.md`]: '## Rules every component keeps\n\n1. **One Primary per context.** Context means a screen, a sheet or a dialog.\n' };
+  const installed = { [`${neonRoot}/core/index.json`]: '{\n  "button": { "counterpart": "Button", "doc": "components/button.md" }\n}\n', [`${neonRoot}/core/components/button.md`]: doc, [`${neonRoot}/core/components/alert.md`]: '# Alert\n\n## Usage\n\nNot for a form or long content.\n', [`${neonRoot}/core/components/sheet.md`]: '# Sheet\n\n## Usage\n\nA short task that keeps the page behind it.\n', [`${neonRoot}/core/components/tooltip.md`]: '# Tooltip\n\n## Usage\n\nNames a control that has no visible label.\n', [`${neonRoot}/core/hierarchy.md`]: '## Rules every component keeps\n\n1. **One Primary per context.** Context means a screen, a sheet or a dialog.\n' };
+  // A relative path does not open from here, so the tool falls back to this repository's copy.
+  const repoCopy = path => path.replace(new URL('../../', import.meta.url).pathname, `${neonRoot}/`);
   const readInstalled = async path => {
-    if (!(path in installed)) throw new Error(`ENOENT ${path}`);
-    return installed[path];
+    if (!(repoCopy(path) in installed) || path.startsWith('..')) throw new Error(`ENOENT ${path}`);
+    return installed[repoCopy(path)];
   };
   const use = (id, name, input) => ({ type: 'assistant', message: { content: [{ type: 'tool_use', id, name, input }] } });
   const result = (id, content) => ({ type: 'user', message: { content: [{ type: 'tool_result', tool_use_id: id, content }] } });
@@ -107,12 +109,16 @@ test('lists the Core snapshot files a run read, apart from an app path named cor
     result('c5', '34:1. **One Primary per context.** Context means a screen, a sheet or a dialog.'),
     use('c6', 'Grep', { pattern: '^## Usage', path: `${neonRoot}/core/components`, glob: '{alert,sheet}.md', output_mode: 'content' }),
     result('c6', `${neonRoot}/core/components/alert.md:3:## Usage`),
+    // The same Neon root, spelled from the app's directory.
+    use('c7', 'Bash', { command: 'cat ../plugin/core/components/tooltip.md' }),
+    result('c7', installed[`${neonRoot}/core/components/tooltip.md`]),
   ];
   const reads = await coreReads(events, readInstalled);
   assert.deepEqual(reads.map(entry => [entry.file, status(entry.coverage)]), [
     ['core/components/alert.md', 'named only'],
     ['core/components/button.md', 'partial'],
     ['core/components/sheet.md', 'named only'],
+    ['core/components/tooltip.md', 'read'],
     ['core/hierarchy.md', 'partial'],
     ['core/index.json', 'read'],
   ]);
