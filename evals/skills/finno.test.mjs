@@ -162,6 +162,7 @@ function fakeAgents(state = { marketplace: false, plugin: false, server: false }
   const run = (command, args) => {
     calls.push([command, ...args].join(' '));
     const line = args.join(' ');
+    if (command === 'ps') return { ok: true, output: `COMM\nclaude\nClaude Helper\n${state.desktopOpen ? 'Claude\n' : ''}` };
     if (line === '--version') return { ok: true, output: '1.0.0' };
     if (line === 'plugin marketplace list --json') return { ok: true, output: JSON.stringify(state.marketplace ? [{ name: 'finnomena-plugins', ...(state.folder ? { source: 'directory', path: state.folder } : { source: 'github', repo: 'finnonemo/neon' }) }] : []) };
     if (line === 'plugin list --json') return { ok: true, output: JSON.stringify(state.plugin ? [{ id: 'neon@finnomena-plugins' }] : []) };
@@ -190,7 +191,7 @@ test('setup shows its plan and changes nothing until told to', async () => {
   assert.match(shown, /codex mcp add finno/);
   assert.match(shown, /claude_desktop_config\.json/);
   assert.match(shown, /Nothing has been changed/);
-  assert.ok(calls.every(call => /--version| list/.test(call)), `setup ran a changing command before approval: ${calls.join('; ')}`);
+  assert.ok(calls.every(call => /--version| list|^ps /.test(call)), `setup ran a changing command before approval: ${calls.join('; ')}`);
   assert.equal(existsSync(desktopConfigPath({ home, platform: 'darwin' })), false);
 });
 
@@ -214,6 +215,36 @@ test('setup --yes installs through each agent\'s own commands, keeps a backup of
   const backups = (await readdir(join(config, '..'))).filter(name => name.includes('.finno-backup-'));
   assert.equal(backups.length, 1);
   assert.equal(await readFile(join(config, '..', backups[0]), 'utf8'), before);
+});
+
+test('setup leaves the Desktop file alone while Claude Desktop is open, and says how to register once it is quit', async () => {
+  const home = await scratch();
+  const config = desktopConfigPath({ home, platform: 'darwin' });
+  await mkdir(join(config, '..'), { recursive: true });
+  const before = `${JSON.stringify({ preferences: { theme: 'dark' } })}\n`;
+  await writeFile(config, before);
+  const { run, calls } = fakeAgents({ marketplace: false, plugin: false, server: false, desktopOpen: true });
+  const selfTest = async () => ({ tools: ['options', 'candidates', 'render'], formats: 7, colourways: 29 });
+
+  const plan = [];
+  await setup([], { run, home, platform: 'darwin', log: line => plan.push(line), interactive: false });
+  assert.match(plan.join('\n'), /Claude Desktop is open, so setup will leave this file as it is/);
+  assert.match(plan.join('\n'), /setup --agent claude-desktop --yes/);
+
+  const lines = [];
+  const code = await setup(['--yes'], { run, home, platform: 'darwin', log: line => lines.push(line), interactive: false, test: selfTest });
+  const shown = lines.join('\n');
+  assert.equal(code, 0, shown);
+  assert.equal(await readFile(config, 'utf8'), before, 'the open app would write over the entry, so the file stays as it was');
+  assert.deepEqual((await readdir(join(config, '..'))).filter(name => name.includes('.finno-backup-')), []);
+  assert.match(shown, /Claude Desktop is open, so its finno tools are not registered\. Quit it, then run:\n {2}.*setup --agent claude-desktop --yes/);
+  assert.doesNotMatch(shown, /✔ Claude Desktop/);
+  assert.match(shown, /Done, except Claude Desktop/);
+  assert.ok(calls.some(call => call.startsWith('codex mcp add finno')), 'the other agents are still set up');
+
+  const alone = [];
+  assert.equal(await setup(['--yes', '--agent', 'claude-desktop'], { run, home, platform: 'darwin', log: line => alone.push(line), interactive: false, test: selfTest }), 0);
+  assert.match(alone.join('\n'), /Nothing has been changed\./);
 });
 
 test('setup leaves a Desktop file it cannot read as it is, says so, and exits 1', async () => {
