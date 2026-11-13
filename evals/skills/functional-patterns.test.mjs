@@ -19,8 +19,9 @@ test('each skill links the functional patterns reference behind one condition', 
 
 test('the contract states the short rules and their scope', async () => {
   const source = await read('INSTRUCTION.md');
-  assert.match(source, /one primary action per screen/);
-  assert.match(source, /row and other actions are secondary or tertiary/);
+  // Action hierarchy is Core's (core-rules.test.mjs): the contract links it and keeps the screen-level rules.
+  assert.match(source, /which action is primary, secondary or tertiary.*are Core's \[hierarchy rules\]\(\.\.\/core\/hierarchy\.md\)/);
+  assert.match(source, /Prefer list rows to cards/);
   assert.match(source, /Shadows mark only layers that float/);
   assert.match(source, /preserve and colors-only work keep existing structure/);
   assert.match(source, /without overlapping a tab bar/);
