@@ -1,6 +1,6 @@
 ---
 name: neon-redesign
-description: Use when restyling existing Finnomena or neon UI through CSS tokens or Neon role utilities, keeping the app on its base, including non-React apps, partial changes, pages restyled from a supplied reference design and explicitly requested layout or hierarchy redesign. Applies to established Finnomena intent. Use neon-create for new components, a rebuild or CDS component colors.
+description: Use when restyling existing Finnomena or neon UI through CSS tokens or Neon role utilities, keeping the app on its base, including non-React apps, partial changes, pages restyled from a supplied reference design and explicitly requested layout or hierarchy redesign. Applies to established Finnomena intent. Use neon-create for new components, a rebuild or component colors in an app already on CDS.
 ---
 
 # Restyle Finnomena UI
@@ -29,7 +29,7 @@ When target, scope and theme variables are known, begin with the affected styles
 
 - Neon base: restyle through Neon role utilities and Neon item props, per the styling rules in [Neon base](../neon-create/references/neon-base.md). `index.css`, `src/theme/` and Neon item files stay as installed; colors-only changes only color role utilities.
 - `composition: 'adapt'` on the Neon base that changes which Neon item or prop value an element takes: [Core rules](../neon-audit/references/core-rules.md), for that item only. `colors` and `visual-system` restyles read no component doc.
-- CDS: restyle the app's own CSS-styled UI through CSS tokens here; CDS component colors go to [neon-create](../neon-create/SKILL.md).
+- App already on CDS: restyle its own CSS-styled UI through CSS tokens here; the colors of its CDS components go to [neon-create](../neon-create/SKILL.md).
 - Neither: the CSS path below, plain shadcn included, with no Neon items.
 - Plain CSS/shadcn formats or mapping examples: relevant sections of [style migration](references/style-migration.md).
 - shadcn/ui on Tailwind v4 (v0, Lovable; `@theme inline` over `:root`/`.dark`): its [style migration format](references/style-migration.md#5-shadcn-style-on-tailwind-v4); edit values by role and pair in both modes.
@@ -37,9 +37,9 @@ When target, scope and theme variables are known, begin with the affected styles
 - `composition: 'adapt'` on a functional screen: [functional patterns](../neon-audit/references/functional-patterns.md), principles only; do not adopt CDS to apply them.
 - Missing CSS asset: [CSS setup](references/css-integration.md#css-setup); whole-app installation differs from a local override.
 - Typography expansion: [fonts](../neon-audit/references/theme-integration.md#font-loading). Reusing the asset still requires font loading and layout checks.
-- Mode selectors, CSS-to-CDS upgrade or customized-file conflict: relevant sections of [theme integration](../neon-audit/references/theme-integration.md).
+- Mode selectors or customized-file conflict: relevant sections of [theme integration](../neon-audit/references/theme-integration.md).
 - CSS adapter gaps or regeneration: [adapter limits](references/css-integration.md#adapter-limits).
 
 ## Done
 
-Report changed scope/tokens, observed visual and behavior checks, and exceptions or unavailable checks, as item 5 of the [shared checklist](references/verification.md#shared-checklist) asks, with each [Look and fix](references/verification.md#look-and-fix) round or its not-run line. State Ship-ready or Brand-ready per [readiness and handoff](../neon-audit/references/readiness.md), with a Handoff Summary for Brand-ready work. Color mapping is provisional; identify relevant discrepancies without inventing replacement brand values. Read-only review is a separate task, not a mandatory extra gate.
+Report changed scope/tokens, observed visual and behavior checks, and exceptions or unavailable checks, as item 5 of the [shared checklist](references/verification.md#shared-checklist) asks, with each [Look and fix](references/verification.md#look-and-fix) round or its not-run line. State Ship-ready or Brand-ready per [readiness and handoff](../neon-audit/references/readiness.md), with a Handoff Summary for Brand-ready work. A color that traces to a Core Theme token is settled, and a color role with no Core token stays provisional; identify relevant discrepancies without inventing replacement brand values. Read-only review is a separate task, not a mandatory extra gate.

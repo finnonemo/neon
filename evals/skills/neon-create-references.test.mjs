@@ -75,7 +75,7 @@ test('neon-create keeps the two bases apart and names the items it added', async
   // The components tier: Neon items on a new or Neon-base app, CDS components on an app already on CDS.
   assert.match(skill, /Neon registry items \(`@neon\/<item>`\) in a new or Neon-base app, CDS components in an app already on CDS\. One app never mixes the two/);
   assert.match(skill, /`@neon` registry entry marks the Neon base/);
-  assert.match(skill, /On CDS use verified CDS exports and prop types, never a Neon or shadcn item/);
+  assert.match(skill, /In an app already on CDS use verified CDS exports and prop types, never a Neon or shadcn item/);
   assert.match(skill.split('## Done')[1], /Name every `@neon\/` item the work added, in the Handoff Summary/);
   // Routing for apps already on CDS stays with neon-create.
   assert.match(skill.match(/^description: .*$/m)[0], /already on Coinbase Design System/);
