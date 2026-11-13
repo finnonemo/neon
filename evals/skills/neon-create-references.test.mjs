@@ -154,3 +154,50 @@ test('the shared routing sends brief-only Campaign Pages down the Theme Brief pa
   const instruction = await readFile(new URL('../../skills/INSTRUCTION.md', import.meta.url), 'utf8');
   assert.match(instruction, /A themed Campaign Page starts from a Theme Brief when the employee brings no Reference Design/);
 });
+
+test('neon-create reaches campaign direction from the thesis, the checklist, the contract and a brief', async () => {
+  const skill = await readFile(new URL('../../skills/neon-create/SKILL.md', import.meta.url), 'utf8');
+  const lines = skill.split('## Conditional references')[1].split('\n').filter(line => line.includes('(references/campaign-direction.md)'));
+  assert.equal(lines.length, 1);
+  assert.match(lines[0], /new or rebuilt Campaign Page on an Immersive Theme/);
+  assert.match(lines[0], /looks plain/);
+  assert.match(skill.match(/\*\*Design thesis\.\*\*.*$/m)[0], /\(references\/campaign-direction\.md#direction-lines\)/);
+
+  const verification = await readFile(new URL('../../skills/neon-redesign/references/verification.md', import.meta.url), 'utf8');
+  assert.match(verification.split('## Look and fix')[1].split('\n## ')[0], /campaign-direction\.md#look-at-it/);
+  const contract = await readFile(new URL('../../skills/INSTRUCTION.md', import.meta.url), 'utf8');
+  assert.match(contract, /contrast from scale, ground and position.*\(neon-create\/references\/campaign-direction\.md\)/);
+  // A brief fixes values and section order; composing stays with the build.
+  const brief = await readFile(`${references}theme-brief.md`, 'utf8');
+  assert.match(brief, /not its composition.*\(campaign-direction\.md\).*inside the brief's picks and motion level/);
+});
+
+test('campaign direction keeps its direction lines, composition moves and motion budget', async () => {
+  const source = await readFile(`${references}campaign-direction.md`, 'utf8');
+  const part = heading => source.split(`\n## ${heading}\n`)[1]?.split('\n## ')[0] ?? '';
+  // The four published briefs gave every occasion component one radius, one padding and title2 at most: values alone made one page in four colors.
+  for (const line of ['Register', 'Scale', 'Grounds', 'Motion', 'Assets']) assert.match(part('Direction lines'), new RegExp('- `' + line + ': <'));
+  assert.match(part('Direction lines'), /before the first component file/);
+  const composition = part('Composition');
+  assert.match(composition, /One dominant element per screenful/);
+  assert.match(composition, /`display1` to `display3` are for the page's facts/);
+  assert.match(composition, /runs edge to edge on a saturated step/);
+  assert.match(composition, /row of equal cards for true peers.*once per page/);
+  assert.match(composition, /accent family's strongest step.*action/);
+  // The moves stay inside the theme's rules and the type roles as shipped.
+  assert.match(composition, /text White or Navy, tints by step, one color family per block, no gradient/);
+  assert.match(composition, /No letter-spacing.*no tightened line height/);
+  // A brief's picks stand; a value it did not pick is a reported departure.
+  assert.match(composition, /radius and padding picks stand/);
+  assert.match(composition, /departure from the brief/);
+  const motion = part('Motion');
+  assert.match(motion, /At most two moments of motion per page/);
+  assert.match(motion, /never above the brief's level/);
+  assert.match(motion, /what moves, what that tells the reader.*its limit.*reduced motion/);
+  assert.match(motion, /`transform` and `opacity` only/);
+  assert.match(motion, /nothing animates a Brand Pattern/);
+  assert.match(part('Look at it'), /verification\.md#look-and-fix/);
+  assert.match(part('When it misses'), /changes a direction line first/);
+  // A Reference Design's geometry and motion outrank the moves here.
+  assert.match(source, /Reference Design at Blended or Reference-led, its geometry and motion replace/);
+});
