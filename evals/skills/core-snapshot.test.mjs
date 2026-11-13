@@ -4,7 +4,7 @@ import { mkdtemp, mkdir, writeFile, readFile, readdir, rm } from 'node:fs/promis
 import { execFileSync } from 'node:child_process';
 import { dirname, join } from 'node:path';
 import { tmpdir } from 'node:os';
-import { syncCore, checkCoreSnapshot } from '../../scripts/lib/core-snapshot.mjs';
+import { syncCore, checkCoreSnapshot, checkCounterpartTable, movedReport } from '../../scripts/lib/core-snapshot.mjs';
 
 // A Core checkout small enough to read here: one approved component with a spec,
 // one draft, one deprecated, and the records the sync resolves numbers from.
@@ -363,6 +363,54 @@ test('sync refuses a Counterpart table that misses a registry item, names a stal
   await assert.rejects(synced(t, { counterparts: { ...COUNTERPARTS, card: { core: 'checkbox' } } }), /card.*checkbox.*draft/s);
   await assert.rejects(synced(t, { counterparts: { ...COUNTERPARTS, card: { core: 'tile' } } }), /card.*tile.*no such doc/s);
   await assert.rejects(synced(t, { counterparts: { ...COUNTERPARTS, card: { core: null } } }), /card.*why/s);
+});
+
+test('an item with no Counterpart and the name of an approved Core doc names that doc as unmatched', async t => {
+  const items = [...ITEMS, 'alert'];
+  const row = { core: null, why: 'The item is a banner; dialog is the one that follows Alert.' };
+  await assert.rejects(synced(t, { items, counterparts: { ...COUNTERPARTS, alert: row } }), /alert: Core has an approved doc of this name.*unmatched/s);
+  const named = { ...COUNTERPARTS, alert: { ...row, unmatched: 'alert' } };
+  const { out, json } = await synced(t, { items, counterparts: named });
+  assert.deepEqual((await json('index.json')).alert, { counterpart: null, why: row.why });
+  await assert.rejects(synced(t, { counterparts: { ...COUNTERPARTS, button: { core: 'button', unmatched: 'button' } } }), /button: it has the Counterpart button/);
+  await assert.rejects(synced(t, { counterparts: { ...COUNTERPARTS, card: { ...COUNTERPARTS.card, unmatched: 'checkbox' } } }), /card: its unmatched doc checkbox is not an approved doc/);
+  // The repository check reads the same rule from the snapshot, with no Core checkout.
+  await checkCounterpartTable(named, out);
+  await assert.rejects(checkCounterpartTable({ ...COUNTERPARTS, alert: row }, out), /Counterpart table.*alert: Core has an approved doc of this name/s);
+});
+
+test('sync reports what moved since the snapshot it replaces: Core\'s commits on what it reads, and the files', async t => {
+  const { from, out, result } = await synced(t);
+  assert.equal(result.moved, null);
+  assert.deepEqual(movedReport(result.moved, result.commit), []);
+  const first = result.commit;
+  const again = () => syncCore({ from, out, items: ITEMS.map(name => ({ name, supporting: false })), counterparts: COUNTERPARTS });
+  const same = await again();
+  assert.deepEqual(movedReport(same.moved, same.commit), [`Core has not moved: the snapshot was already at ${first.slice(0, 8)}.`, 'No snapshot file changed.']);
+  // One commit on docs the sync reads, then one on a file it does not read.
+  await writeFile(join(from, 'docs/components/tile.md'), '# Tile — proposal\n\n> Status: Approved 2026-11-12 by the owner.\n\n## Usage\n\n- One Tile.\n');
+  await writeFile(join(from, 'docs/components/alert.md'), `${CORE_FILES['docs/components/alert.md']}- Its title is one line.\n`);
+  git(from, 'add', '-A');
+  git(from, 'commit', '-q', '-m', 'Tile approved');
+  await writeFile(join(from, 'README.md'), 'Not read by the sync.\n');
+  git(from, 'add', '-A');
+  git(from, 'commit', '-q', '-m', 'Readme');
+  const { moved, commit } = await again();
+  assert.equal(moved.from, first);
+  assert.equal(moved.commits.length, 1);
+  assert.match(moved.commits[0], /^[0-9a-f]+ Tile approved$/);
+  assert.ok(moved.added.includes('components/tile.md') && moved.changed.includes('components/alert.md'));
+  assert.deepEqual(moved.removed, []);
+  const report = movedReport(moved, commit).join('\n');
+  assert.match(report, new RegExp(`^Core moved ${first.slice(0, 8)} → ${commit.slice(0, 8)}\\. Commits that touch what the sync reads: 1\\.\\n  [0-9a-f]+ Tile approved\\nAdded in the snapshot: .*components/tile\\.md`));
+  assert.match(report, /Changed in the snapshot: .*components\/alert\.md/);
+  // A snapshot from a commit this checkout does not hold: the files are still compared.
+  const manifest = JSON.parse(await readFile(join(out, 'snapshot.json'), 'utf8'));
+  await writeFile(join(out, 'snapshot.json'), JSON.stringify({ ...manifest, core: { ...manifest.core, commit: '0'.repeat(40) }, files: { ...manifest.files, 'components/gone.md': 'x' } }));
+  const lost = await again();
+  assert.equal(lost.moved.commits, null);
+  assert.deepEqual(lost.moved.removed, ['components/gone.md']);
+  assert.match(movedReport(lost.moved, lost.commit).join('\n'), /does not hold 00000000.*\nRemoved in the snapshot: components\/gone\.md\./s);
 });
 
 // Toggle draws differently in each look, so its spec keys variables by the look and its doc sets the two side by side.

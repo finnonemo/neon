@@ -5,13 +5,15 @@
 // committed. Which Core doc each registry item matches is Neon's own table,
 // registry/core-counterparts.json. The snapshot is never edited by hand: the
 // repository check compares each file with the hash the sync recorded.
+// It prints the Core commits since the snapshot it replaces and the files that
+// changed: the pull request lists both.
 // The same run writes what follows the snapshot's Theme: the Theme token export
 // and the CSS adapter's colors (scripts/lib/core-theme.mjs); and what follows its
 // text styles: the adapter's type sizes and line heights (scripts/lib/core-type.mjs).
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
-import { syncCore, SNAPSHOT_DIR, COUNTERPARTS_FILE } from './lib/core-snapshot.mjs';
+import { syncCore, movedReport, SNAPSHOT_DIR, COUNTERPARTS_FILE } from './lib/core-snapshot.mjs';
 import { writeCoreTheme, THEME_EXPORT, ADAPTER } from './lib/core-theme.mjs';
 import { writeCoreType } from './lib/core-type.mjs';
 import { registryComponents } from './lib/registry.mjs';
@@ -24,13 +26,14 @@ if (!from) {
   process.exit(2);
 }
 try {
-  const { commit, files, leftOut } = await syncCore({
+  const { commit, files, leftOut, moved } = await syncCore({
     from: resolve(from),
     out: resolve(root, SNAPSHOT_DIR),
     items: await registryComponents(root),
     counterparts: JSON.parse(await readFile(resolve(root, COUNTERPARTS_FILE), 'utf8')),
   });
   console.log(`Wrote ${files.length} files to ${SNAPSHOT_DIR}/ from Core ${commit}.`);
+  for (const line of movedReport(moved, commit)) console.log(line);
   const byStatus = Object.groupBy(Object.keys(leftOut), name => leftOut[name]);
   for (const [status, names] of Object.entries(byStatus)) console.log(`Left out, ${status}: ${names.join(', ')}.`);
   await writeCoreTheme(root);

@@ -8,7 +8,7 @@ import { checkMarkdownLinks } from './lib/markdown-links.mjs';
 import { checkPlainTextReferences, referenceFiles } from './lib/plain-text-references.mjs';
 import { checkAdrNumbers } from './lib/adr-numbers.mjs';
 import { checkMarkdownEncoding, checkSkillMetadata, checkStepReads } from './lib/skill-files.mjs';
-import { checkCoreSnapshot, SNAPSHOT_DIR } from './lib/core-snapshot.mjs';
+import { checkCoreSnapshot, checkCounterpartTable, SNAPSHOT_DIR, COUNTERPARTS_FILE } from './lib/core-snapshot.mjs';
 import { checkBlockSnapshot, BLOCK_SNAPSHOT_DIR } from './lib/block-snapshot.mjs';
 import { checkCoreTheme } from './lib/core-theme.mjs';
 import { checkCoreType } from './lib/core-type.mjs';
@@ -53,6 +53,7 @@ async function check(root, { sourceTree = false } = {}) {
   await checkCodexManifest(root);
   // The registry does not ship, so only the source tree can say which items the index must cover.
   await checkCoreSnapshot(join(root, SNAPSHOT_DIR), sourceTree ? { items: (await registryComponents(root)).map(item => item.name) } : {});
+  if (sourceTree) await checkCounterpartTable(JSON.parse(await readFile(join(root, COUNTERPARTS_FILE), 'utf8')), join(root, SNAPSHOT_DIR));
   await checkBlockSnapshot(join(root, BLOCK_SNAPSHOT_DIR));
   await checkCoreTheme(root);
   await checkCoreType(root);
