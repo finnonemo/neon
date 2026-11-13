@@ -10,7 +10,7 @@ import { packagePlugin } from '../../scripts/package-plugin.mjs';
 import { candidates, options, render } from '../../scripts/lib/finno/artwork.mjs';
 import { handle } from '../../scripts/lib/finno/mcp.mjs';
 import { TOOLS, VERSION } from '../../scripts/lib/finno/tools.mjs';
-import { desktopConfigPath, detect, planFor, selfTest, serverCommand, setup } from '../../scripts/lib/finno/setup.mjs';
+import { NPM_PACKAGE, desktopConfigPath, detect, planFor, selfTest, serverCommand, setup } from '../../scripts/lib/finno/setup.mjs';
 import { zipDirectory } from '../../scripts/lib/finno/zip.mjs';
 
 const root = join(import.meta.dirname, '../..');
@@ -138,7 +138,8 @@ test('the command line refuses an unknown setting and exits 1 without a stack tr
 
 test('the npm package is the plugin: one version, the command, and never the Trek font files', async () => {
   const pkg = JSON.parse(await readFile(join(root, 'package.json'), 'utf8'));
-  assert.equal(pkg.name, 'finno');
+  assert.equal(pkg.name, NPM_PACKAGE);
+  assert.deepEqual(Object.keys(pkg.bin), ['finno'], 'one command, so npx runs it whatever the package is called');
   assert.equal(pkg.version, VERSION);
   assert.equal(pkg.version, JSON.parse(await readFile(join(root, '.codex-plugin/plugin.json'), 'utf8')).version);
   assert.ok(existsSync(join(root, pkg.bin.finno)));
@@ -222,14 +223,14 @@ test('setup leaves a Desktop file it cannot read as it is, says so, and exits 1'
 test('setup updates what is already there, and registers the published package through npx at this version', () => {
   const { run } = fakeAgents({ marketplace: true, plugin: true, server: true });
   const found = detect({ run, home: '/nowhere', platform: 'linux', env: {} });
-  const published = serverCommand({ root: '/home/u/.npm/_npx/abc/node_modules/finno', platform: 'linux', execPath: '/usr/bin/node' });
-  assert.deepEqual(published.args, ['-y', `finno@${VERSION}`, 'mcp']);
+  const published = serverCommand({ root: '/home/u/.npm/_npx/abc/node_modules/finnomena', platform: 'linux', execPath: '/usr/bin/node' });
+  assert.deepEqual(published.args, ['-y', `finnomena@${VERSION}`, 'mcp']);
   assert.ok(published.env.PATH.startsWith('/usr/bin'));
-  assert.deepEqual(serverCommand({ root: 'C:\\x\\node_modules\\finno'.split('\\').join(require_sep()), platform: 'win32' }).args.slice(0, 3), ['/c', 'npx', '-y']);
+  assert.deepEqual(serverCommand({ root: 'C:\\x\\node_modules\\finnomena'.split('\\').join(require_sep()), platform: 'win32' }).args.slice(0, 3), ['/c', 'npx', '-y']);
   const commands = planFor(found, { server: published }).map(step => step.command.join(' '));
   assert.deepEqual(commands.slice(0, 2), ['claude plugin marketplace update finnomena-plugins', 'claude plugin update neon@finnomena-plugins']);
   assert.ok(commands.includes('codex mcp remove finno'));
-  assert.ok(commands.at(-1).endsWith(`-- ${published.command} -y finno@${VERSION} mcp`));
+  assert.ok(commands.at(-1).endsWith(`-- ${published.command} -y finnomena@${VERSION} mcp`));
   assert.ok(!commands.some(command => command.includes('marketplace add')));
 });
 function require_sep() { return process.platform === 'win32' ? '\\' : '/'; }
