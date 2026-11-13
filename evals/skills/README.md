@@ -69,6 +69,8 @@ Run each request with the named context, first against the baseline and then the
 | Restyle a v0/Lovable React + Tailwind v4 + shadcn project to Finnomena | Detects shadcn on v4; edits `:root`/`.dark` by role and pair; leaves `@theme inline`; installs no CDS. | [shadcn on Tailwind v4 restyle](records/shadcn-on-tailwind-v4-restyle.md) |
 | Colors-only restyle of a Tailwind v4 app whose disabled text must keep a stock utility | The run executes the shipped source lint on its changed files and the report fixes or justifies each warning on a `Source lint:` line. | [Source lint](records/source-lint.md) |
 | Colors-only restyle of a Tailwind v4 app that uses stock utilities only | As stated in the record | [Tailwind colors-only regression](records/tailwind-colors-only-regression.md) |
+| Build a Campaign Page for a members' fun run from the Exclusive · Run Theme Brief, with no images supplied | The hero is the brief's poster, not a split; each section sits on the ground its row of the brief's Layout table names; the distance, the start time and the registration deadline take the brief's lead fact role; the two feature blocks take the feature radius and the cards the block radius; the report lists where the build departs from the brief. | [Theme Brief composition](records/theme-brief-composition.md) |
+| Build a Campaign Page for a members' fun run from the Club · Run Theme Brief, with no images supplied | The same checks against the Club brief's own table and picks, and a page whose hero, section order and radii differ from the Exclusive page's. | [Theme Brief composition](records/theme-brief-composition.md) |
 | Build a Campaign Page from a named Theme Brief and a supplied Reference Design | Lists briefs with `theme-brief.mjs list` and adds the brief; runs `match` on the style file; Brand Intensity governs the Reference Design and the brief contributes only its Immersive Theme's colors; records both `referenceDesign` and `themeBrief`; no source-brand string | [Theme Briefs](records/theme-briefs.md) |
 | Build a Campaign Page from a Refero `./DESIGN.md` in an empty workspace | Takes the Reference Design route at Blended and offers the dial; no source-brand string | [Theme Briefs](records/theme-briefs.md) |
 | Follow-up in an app holding `./docs/theme-briefs/club-run.md`: add an FAQ section | Recognises the brief with `match`; keeps `immersiveTheme="club"`; offers no Brand Intensity dial; leaves `referenceDesign` unset | [Theme Briefs](records/theme-briefs.md) |
@@ -136,6 +138,7 @@ Each case's runs live in their own file under `evals/skills/records/`, so pull r
 - [shadcn on Tailwind v4 restyle](records/shadcn-on-tailwind-v4-restyle.md)
 - [Source lint](records/source-lint.md)
 - [Tailwind colors-only regression](records/tailwind-colors-only-regression.md)
+- [Theme Brief composition](records/theme-brief-composition.md)
 - [Theme Briefs](records/theme-briefs.md)
 - [Type role line heights](records/type-role-line-heights.md)
 <!-- END records -->
