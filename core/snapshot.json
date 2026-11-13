@@ -1,7 +1,7 @@
 {
   "core": {
     "repository": "pawisssh/design-system",
-    "commit": "f7f701a9c9397edbd2a75d87e2a4df0be4df7144"
+    "commit": "88ea62f47448ef023382503ac4cf820e10ff6eb7"
   },
   "look": {
     "iOS": false,
@@ -26,8 +26,8 @@
     "components/breadcrumbs.md": "7c5beaede9342a543a9bff5f3d42891e71f0863711aba33576cb45a1a159eecc",
     "components/button-dock.json": "cedff5bee591f4abe710c24988923fb5f72c723b068a67964f75c2cbba3d7452",
     "components/button-dock.md": "f1e68c3f6026b4d21f8ba2f2fab33269ca7199468b4b96f6f2986b4089aa3041",
-    "components/button.json": "bc4c788658c307bd816ed934484c1811822c6db42eef8f96508824509685c9a7",
-    "components/button.md": "15917079766465c47bd53c738c7415cd3a997f9b29186c956ce672d91818a634",
+    "components/button.json": "751b4a7da6b463e368dd771a8cd020274be890c0bc783afd511e46547371d97a",
+    "components/button.md": "84fc43c0d2f347bb52d39f2feb418ddf4c3e0eae04731f54d82d481f099df34e",
     "components/checkbox.json": "029fa251233191f58a8053dcb6babfdf9939a0a72bb28bbb0d5cc5835132f9c1",
     "components/checkbox.md": "4793569bcff89535821d5226aec548909f29e3df07c4bec5b72168cc37cb9377",
     "components/contextual-banner.json": "3fbbbe0a95af3115bb513ea762df53412d2d7e05da79e5190fdaaf4134660be0",
@@ -36,7 +36,7 @@
     "components/date-field.json": "bd9f04f2cba11203bdd66ffe21ff4fa20ed7b98d1fba783a5c6bf30aad39c8a8",
     "components/date-field.md": "87f4f644032ef48debb598634d28d31dd619d263ec478fb108920a43c99350d1",
     "components/date-picker.json": "f5b3406bfdbcc90a4c90b5ebc2cceca99a4db75ac85be144484987837df84ca2",
-    "components/date-picker.md": "b6d81175bac91236b7e87481a1a04942604bbc996f7c7ee46eff186bc8be91e3",
+    "components/date-picker.md": "964f4bf5650fdecce0f5690da72736fb0d2a4ea68229016fbe66931b0287b7e4",
     "components/display-tag.json": "ef7870618b635cfc8d63803b2af18db732bef0ae76da172dd566ef6a81192cfa",
     "components/display-tag.md": "00119e31d0e2d3eb73dfca368af4000bb2cdbb711324bd8d8f177f69762331f9",
     "components/divider.json": "c8b6fba40cf9494b0bcec59b3587170d98f419ed4a7700acaa605a0b4cb61048",
@@ -121,5 +121,5 @@
     "text-styles.json": "50f32ae4b3d6afeb7defae0b08901699909986d970b14db672064928bc079810",
     "theme.json": "3b2f501468b66ac63606e6805d093acb42f5864bdb7212938387ab43f9e1b200"
   },
-  "seal": "50f759b1c27e33292663082a5cd292bcaf1a62cb1ee805a7874709427116bce0"
+  "seal": "757dcd64064b59a28adafde9845d72a14e6a5399cc5808fab66b1b50d890dae8"
 }

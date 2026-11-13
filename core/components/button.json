@@ -50,6 +50,15 @@
   ],
   "properties": [
     {
+      "name": "Artwork",
+      "type": "BOOLEAN",
+      "default": false
+    },
+    {
+      "name": "Leading artwork",
+      "type": "INSTANCE_SWAP"
+    },
+    {
       "name": "Leading Icon",
       "type": "BOOLEAN",
       "default": true
@@ -201,6 +210,8 @@
     {"layer":"Container","property":"strokes.0","when":"{{State=Focus}}","value":"Theme/Focus/focus"},
     {"layer":"Container","property":"strokes.0","when":"{{Hierarchy=Tertiary}}{{Type=Inverse}}{{State=Focus}}","value":"Theme/Focus/focus-inverse"},
     {"layer":"Container","property":"strokes.0","when":"{{Hierarchy=Secondary}}{{Type=Inverse}}{{State=Enabled, Hover, Active, Loading}}","value":"Theme/Border/border-subtle"},
+    {"layer":"Container / Artwork","property":"opacity","when":"{{State=Enabled, Hover, Focus, Active}}","value":"1","literal":true},
+    {"layer":"Container / Artwork","property":"opacity","when":"{{State=Disabled}}","value":"0.45","literal":true},
     {"layer":"Container / Leading Icon","property":"textStyleId","when":"{{State=Enabled, Hover, Focus, Active, Disabled}}{{Size=XSmall}}","value":"fa-sharp fa-solid/Small"},
     {"layer":"Container / Leading Icon","property":"textStyleId","when":"{{State=Enabled, Hover, Focus, Active, Disabled}}{{Size=Small}}","value":"fa-sharp fa-solid/Medium"},
     {"layer":"Container / Leading Icon","property":"textStyleId","when":"{{State=Enabled, Hover, Focus, Active, Disabled}}{{Size=Medium}}","value":"fa-sharp fa-solid/Medium"},
@@ -299,6 +310,15 @@
     "{{Type=Brand}}{{Hierarchy=Secondary, Tertiary}}"
   ],
   "properties": [
+    {
+      "name": "Artwork",
+      "type": "BOOLEAN",
+      "default": false
+    },
+    {
+      "name": "Leading artwork",
+      "type": "INSTANCE_SWAP"
+    },
     {
       "name": "Leading Icon",
       "type": "BOOLEAN",
@@ -435,6 +455,8 @@
     {"layer":"Container","property":"fills.0","when":"{{Hierarchy=Tertiary}}{{State=Disabled}}","value":"Theme/Button/button-disabled"},
     {"layer":"Container","property":"fills.0","when":"{{State=Skeleton}}","value":"Theme/Skeleton/skeleton-element"},
     {"layer":"Container","property":"strokes.0","when":"{{State=Focus}}","value":"Theme/Focus/focus"},
+    {"layer":"Container / Artwork","property":"opacity","when":"{{State=Enabled, Hover, Focus, Active}}","value":"1","literal":true},
+    {"layer":"Container / Artwork","property":"opacity","when":"{{State=Disabled}}","value":"0.45","literal":true},
     {"layer":"Container / Leading Icon","property":"textStyleId","when":"{{State=Enabled, Hover, Focus, Active, Disabled}}{{Size=XSmall}}","value":"fa-sharp fa-solid/Small"},
     {"layer":"Container / Leading Icon","property":"textStyleId","when":"{{State=Enabled, Hover, Focus, Active, Disabled}}{{Size=Small}}","value":"fa-sharp fa-solid/Medium"},
     {"layer":"Container / Leading Icon","property":"textStyleId","when":"{{State=Enabled, Hover, Focus, Active, Disabled}}{{Size=Medium}}","value":"fa-sharp fa-solid/Medium"},

@@ -7,6 +7,7 @@
 ```
 Button | Rect button (variant root)   Hug × Hug, no fill, no padding; min width and height Interactive/<Size>, Container centred
 └─ Container                          HORIZONTAL, Hug × Hug, min height Button/Container/<Round | Rect>/<Size>/Layout height (Fixed on Loading), centred, stroke 2 on Focus
+   ├─ Artwork                         instance, hidden; shown by `Artwork`, swapped by `Leading artwork` (default Avatar 3XSmall, 18 × 18); hugs; opacity 45% on Disabled; none on Loading and Skeleton
    ├─ Leading Icon                    TEXT glyph (Icons library), shown by `Leading Icon`
    ├─ Label                           TEXT, `Label Text`
    ├─ Trailing Icon                   TEXT glyph, shown by `Trailing Icon`
@@ -28,7 +29,7 @@ Button | Rect button (variant root)   Hug × Hug, no fill, no padding; min width
 
 `Rect button`: `Type` · `Hierarchy` · `Size` · `State` in that order, the same values, no `iOS`.
 
-Properties (both): `Leading Icon`, `Trailing Icon` (BOOLEAN), `Label Text`, `L. Icon Text`, `T. Icon Text` (TEXT). `Label Text` is new on `Rect button` (#126).
+Properties (both): `Leading Icon`, `Trailing Icon` (BOOLEAN), `Label Text`, `L. Icon Text`, `T. Icon Text` (TEXT). `Label Text` is new on `Rect button` (#126). Since : `Artwork` (BOOLEAN, off) and `Leading artwork` (INSTANCE_SWAP, default Avatar `Size=3XSmall, Artwork=Image`, preferred values Avatar's variants), on the 600 and 210 cells that have a `Leading Icon`.
 (3 × 3 − 2 Brand cells) × 6 × 7 = **294 variants** per look: 588 on `Button` plus 252 Inverse (3 Hierarchies × 6 Sizes × 7 States × 2 `iOS`) = **840**, and 294 on `Rect button`, whose `Type` keeps Default · Brand · Danger.
 
 ## Component variables and Theme tokens
@@ -120,6 +121,8 @@ Item 5 is open: the nine-point criterion of #126 is not met.
 | Announced states | `disabled`, `aria-busy` on Loading |
 | Focus order | one stop |
 
+A leading artwork is decorative: the Label names the button. Where the artwork carries data the Label doesn't say (a donut's split), the screen states it elsewhere. On Disabled it dims to 45%, with the label and icons (item 4).
+
 ## Usage
 
 - It has no Focus ring example yet.
@@ -127,6 +130,7 @@ Item 5 is open: the nine-point criterion of #126 is not met.
 - Which `Hierarchy` and `Type` to pick, pairs and the destructive flow: Hierarchy below.
 - Brand only on Primary. Danger for a destructive action: Secondary Danger at the entry point, Primary Danger only on the confirmation step ([H2](../hierarchy.md), owner 2026-11-09; replaces "prefer Primary Danger until the contrast issue is fixed"). Secondary Danger passes contrast since 2026-11-09 (Accessibility item 1).
 - Expressive for a fixed 256 action; a full-width button is the nester's Fill.
+- Leading artwork: turn `Artwork` on and `Leading Icon` off, then swap the artwork into `Leading artwork`. An artwork is at most 20 tall at XSmall and 24 at the other Sizes; a taller one grows the capsule. The gap to the Label is the Container's (4 · 8). A Donut is swapped in from the Charts library in the product file: it can't be a preferred value (ADR 0009). First case: Port's Today chip, Donut `Size=Small` with one segment per asset class ([donut.md](donut.md), Usage).
 - Tertiary Inverse only on `Background/background-inverse` (Snackbar), for a single quiet action or Close; Primary Inverse there for a filled call (P2).
 - Primary and Secondary Inverse are also the white buttons over maps, photos and headers; Toolbars, Tab bars and Segmented controls use them on `iOS=False`. Primary Inverse on `iOS=False` carries the effect style `Elevation/Button inverse` (Elevation). In Dark both are dark grey (`Grey/90`, `Grey/80`), following `background-secondary` and `background-tertiary`.
 
