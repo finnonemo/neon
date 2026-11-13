@@ -128,7 +128,7 @@ No text under 13 (Localisation). Breadcrumbs never wraps to a second line (Carbo
 
 ## Usage
 
-- Top left of a deep web page, under the top bar (Toolbar - Top, which Top navigation bar folded into on 2026-11-08) and above the page title (Regular width; Carbon's placement). Port's Plan Detail: `พอร์ตลงทุน › Definit Global Select` (Port's copy is English, "Port"), on every web breakpoint, 320 to 1584 (Q8).
+- Top left of a deep web page, under the top bar ([Toolbar - Top](toolbars.md), which Top navigation bar folded into on 2026-11-08) and above the page title (Regular width; Carbon's placement). Port's Plan Detail: `พอร์ตลงทุน › Definit Global Select` (Port's copy is English, "Port"), on every web breakpoint, 320 to 1584 (Q8).
 - A long path: the first link, Overflow, then the last two links and Current (Carbon's rule, Q5): `หน้าแรก › ⋯ › พอร์ตลงทุน › แผนเกษียณ › Definit Global Select`.
 - Loading: Skeleton items in place of the links and Current.
 - Don't use it for steps in a flow (Progress steps), for switching views (Tabs, Segmented control), or on iOS and Android apps (the back button in Toolbar - Top).

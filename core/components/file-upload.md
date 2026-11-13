@@ -19,10 +19,10 @@ File upload (variant root)       Fill × Hug, no fill, no padding, no min size (
    ├─ Detail                     HORIZONTAL, Fill × Hug, gap 4; Error only
    │  ├─ Error glyph             TEXT ligature `circle-exclamation`, `fa-sharp fa-solid/Medium`, Support/support-error
    │  └─ Error message           TEXT, Fill × Hug, wraps
-   ├─ File list                  SLOT, VERTICAL, Fill × Hug, gap 8; List=Item; BOOLEAN "File list" (on); hidden on Skeleton
+   ├─ File list                  SLOT, VERTICAL, Fill × Hug, gap 8; List=Item; BOOLEAN "Show File list" (on); hidden on Skeleton
    │  ├─ _File item              State=Uploaded (default content)
    │  └─ _File item              State=Uploading (default content)
-   └─ Media list                 SLOT, HORIZONTAL, WRAP, Fill × Hug, gap 8 · 8; List=Media; BOOLEAN "File list" (on); hidden on Skeleton
+   └─ Media list                 SLOT, HORIZONTAL, WRAP, Fill × Hug, gap 8 · 8; List=Media; BOOLEAN "Show File list" (on); hidden on Skeleton
       ├─ _File media item        State=Uploaded (default content)
       └─ _File media item        State=Uploading (default content)
 ```
@@ -95,7 +95,7 @@ _File media item (variant root)  80 × 80, VERTICAL, no fill
 
 Grid (Grid order): rows `State`; columns `List` (Item, Media, Single) × `iOS` (False, True) (owner, 2026-11-05: "มันควรเป็น ios=false แล้วตามด้วย column ios=true"); 6 × 6, gaps 20, 6 holes (Uploading × Item and Media, Drag over × Single) since (5 × 6 with 2 holes from , 5 × 4 with none from , 9 × 4 with 10 holes before); `MANUAL`; a Fill grid: the set Fixed 2198, columns FLEX, roots Fill × Hug. `_File item`: rows `State`, columns `Type` × `iOS` (7 × 4). `_File media item`: rows `State`, columns `iOS` (6 × 2). Ids for `grid-args.mjs`: set `File upload`, set `_File item`, set `_File media item`.
 
-Properties: `Title` (BOOLEAN, on), `Description` (BOOLEAN, off), `Zone` (BOOLEAN, on), `File list` (BOOLEAN, on), `Title text` = "Name-change certificate", `Description text` = "(Bank account name matching the new full name)", `Helper text` = "Files up to 5 MB" and "(.jpg / .jpeg, .png, .pdf)" on a second line, `Error text` = "Please upload a document"; the nested Button exposed for its label.
+Properties: `Title` (BOOLEAN, on), `Description` (BOOLEAN, off), `Zone` (BOOLEAN, on), `Show File list` (BOOLEAN, on), `Title text` = "Name-change certificate", `Description text` = "(Bank account name matching the new full name)", `Helper text` = "Files up to 5 MB" and "(.jpg / .jpeg, .png, .pdf)" on a second line, `Error text` = "Please upload a document"; the nested Button exposed for its label.
 
 The screen breaks its constraints line with a U+2028 line separator. The generator writes a plain `\n`: U+2028 in a `use_figma` result breaks the MCP stream.
 
@@ -273,5 +273,5 @@ Which `Hierarchy` and `Type` its nested buttons take, and why. The rules (1–6)
 
 |  | Call | Recommendation | Status |
 | --- | --- | --- | --- |
-| FU1 | **The zone Button on `Primary · Inverse`.** The owner asked for a white button, and Primary · Inverse is the white look. But it counts toward rule 1, and E-KYC has two upload zones and a Button dock on one screen: three Primaries. Toolbar - Top's white Icon buttons have the same cause (toolbars.md TB1). | Say that `Primary · Inverse` is Uber's Background safe look and doesn't take the screen's main action, so it doesn't count toward rule 1. That needs a new call in hierarchy.md from the owner (became H6). Option: `Secondary · Default`, rule 3, and drop the white look | decided by the owner 2026-11-09 ("Surface look, not counted"): H6; stays as built |
+| FU1 | **The zone Button on `Primary · Inverse`.** The owner asked for a white button, and Primary · Inverse is the white look. But it counts toward rule 1, and E-KYC has two upload zones and a Button dock on one screen: three Primaries. Toolbar - Top's white Icon buttons have the same cause ([toolbars.md](toolbars.md) TB1). | Say that `Primary · Inverse` is Uber's Background safe look and doesn't take the screen's main action, so it doesn't count toward rule 1. That needs a new call in hierarchy.md from the owner (became H6). Option: `Secondary · Default`, rule 3, and drop the white look | decided by the owner 2026-11-09 ("Surface look, not counted"): H6; stays as built |
 | FU2 | **Cancel on `Primary · Inverse`.** "Cancel" during upload is a way out. | `Tertiary · Default` (rule 4); `Tertiary · Inverse` if the zone keeps a dark fill | decided by the owner 2026-11-09 ("Surface look, not counted"): H6; stays as built |

@@ -2371,12 +2371,12 @@
           "prefix": "color"
         },
         "cash": {
-          "value": "{Green.160}",
+          "value": "{Green.165}",
           "type": "color",
           "prefix": "color"
         },
         "mutual-fund": {
-          "value": "{Navy.110}",
+          "value": "{Navy.65}",
           "type": "color",
           "prefix": "color"
         },
@@ -2386,7 +2386,7 @@
           "prefix": "color"
         },
         "esavings": {
-          "value": "{Green.130}",
+          "value": "{Green.135}",
           "type": "color",
           "prefix": "color"
         },
@@ -2413,7 +2413,7 @@
           "prefix": "color"
         },
         "fixed-income": {
-          "value": "{Green.130}",
+          "value": "{Green.135}",
           "type": "color",
           "prefix": "color"
         },
@@ -2428,14 +2428,14 @@
           "prefix": "color"
         },
         "commodities": {
-          "value": "{Yellow.150}",
+          "value": "{Yellow.160}",
           "type": "color",
           "prefix": "color"
         }
       },
       "Tax saving": {
         "ssf": {
-          "value": "{Blue.135}",
+          "value": "{Blue.140}",
           "type": "color",
           "prefix": "color"
         },
@@ -2445,17 +2445,17 @@
           "prefix": "color"
         },
         "thaiesg": {
-          "value": "{Green.130}",
+          "value": "{Green.135}",
           "type": "color",
           "prefix": "color"
         },
         "thaiesgx": {
-          "value": "{Green.160}",
+          "value": "{Green.165}",
           "type": "color",
           "prefix": "color"
         },
         "ltf": {
-          "value": "{Navy.140}",
+          "value": "{Navy.65}",
           "type": "color",
           "prefix": "color"
         }
@@ -4894,7 +4894,7 @@
       },
       "Multi-asset": {
         "equity": {
-          "value": "{Purple.110}",
+          "value": "{Purple.100}",
           "type": "color",
           "prefix": "color"
         },
@@ -4904,7 +4904,7 @@
           "prefix": "color"
         },
         "gold": {
-          "value": "{Yellow.90}",
+          "value": "{Yellow.125}",
           "type": "color",
           "prefix": "color"
         },
@@ -4946,7 +4946,7 @@
       },
       "Mutual fund": {
         "equity": {
-          "value": "{Purple.110}",
+          "value": "{Purple.100}",
           "type": "color",
           "prefix": "color"
         },
@@ -4966,7 +4966,7 @@
           "prefix": "color"
         },
         "commodities": {
-          "value": "{Yellow.65}",
+          "value": "{Yellow.125}",
           "type": "color",
           "prefix": "color"
         }
@@ -4978,7 +4978,7 @@
           "prefix": "color"
         },
         "rmf": {
-          "value": "{Purple.110}",
+          "value": "{Purple.100}",
           "type": "color",
           "prefix": "color"
         },
@@ -4993,7 +4993,7 @@
           "prefix": "color"
         },
         "ltf": {
-          "value": "{Navy.65}",
+          "value": "{Navy.60}",
           "type": "color",
           "prefix": "color"
         }
