@@ -1,6 +1,6 @@
 # Finnomena product design contract
 
-This is the shared visual direction for Neon feature building, based on the maintainer's September 2026 brief. It defines intended usage. Colors and type sizes that trace to Core are Core's decisions; the Immersive Themes, the gradient recipes and a color role with no Core token are provisional, with no design approval claimed.
+This is the shared visual direction for Neon feature building, based on the maintainer's September 2026 brief. It defines intended usage. Colors and type sizes that trace to Core are Core's decisions; the Immersive Themes, the gradient recipes, a color role with no Core token and the frozen CDS theme's color mapping are provisional, with no design approval claimed.
 
 ## Ownership
 

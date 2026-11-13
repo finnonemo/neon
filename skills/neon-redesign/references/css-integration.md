@@ -22,7 +22,7 @@ The CSS asset contains typography and geometry variables, so reuse it when expan
 
 ## Component adoption
 
-Route a request for Finnomena components in a React app to `neon-create`, which adds Neon items. CDS is frozen for apps already on it and is never added to another app.
+Route a request for Finnomena components in a React app to `neon-create`: Neon items, or CDS components in an app already on CDS, after the [checks for moving CSS-styled UI](../../neon-create/references/cds-integration.md#moving-css-styled-ui-to-cds-components) and before its CSS import is removed. CDS is frozen for apps already on it and is never added to another app.
 
 ## Adapter limits
 

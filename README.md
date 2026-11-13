@@ -133,11 +133,11 @@ Bring an outside reference design, for example from [Refero Styles](https://styl
 
 The assistant shows twelve Patterns on one numbered sheet, drawn by the Block engine from the Format, Colourway and words it read from the request. Pick a number and it writes the artwork as SVG and PNG into a `finnomena-artwork` folder, with a link that opens the same artwork in Block for adjusting by hand. This release draws one picture at a time, without photos.
 
-### Restyle an existing screen without adopting CDS
+### Restyle an existing screen without changing its components
 
 ```text
 Apply Finnomena colors and typography to this Vue screen. Keep Vue,
-the existing components, layout, routes and behavior. Do not install CDS.
+the existing components, layout, routes and behavior. Do not add a component library.
 ```
 
 This uses CSS theme variables while preserving the existing framework and component library.
@@ -167,16 +167,16 @@ Start with the task: create a feature, redesign existing UI, or review the resul
 
 | Skill / command | When to use it | What it does |
 | --- | --- | --- |
-| [`/neon:neon-create`](skills/neon-create/SKILL.md) | Build a feature, screen, component or new React app | Uses real CDS components and Finnomena tokens; reuses existing setup or prepares a new app |
+| [`/neon:neon-create`](skills/neon-create/SKILL.md) | Build a feature, screen, component or new React app | Uses Neon components (shadcn/ui matched to Core) and Finnomena tokens; reuses existing setup or prepares a new app |
 | [`/neon:neon-audit`](skills/neon-audit/SKILL.md) | An existing app needs Finnomena branding, but the approach is unclear | Inspects the app without editing it, selects or clarifies the theming depth, then hands off |
-| [`/neon:neon-redesign`](skills/neon-redesign/SKILL.md) | Change existing UI styling or explicitly requested composition without adopting CDS | Applies scoped CSS changes, supports requested layout/hierarchy adaptation, and preserves product behavior |
+| [`/neon:neon-redesign`](skills/neon-redesign/SKILL.md) | Change existing UI styling or explicitly requested composition without changing its components | Applies scoped CSS changes, supports requested layout/hierarchy adaptation, and preserves product behavior |
 | [`/neon:neon-review`](skills/neon-review/SKILL.md) | Check existing UI or screenshots | Reports findings, evidence, suggested fixes and unavailable checks; review-only requests do not edit the app |
 | [`/neon:neon-block`](skills/neon-block/SKILL.md) | Make an ad, a post, a cover or a Pattern background as an image file | Shows twelve Patterns to pick from, then writes the artwork as SVG and PNG, drawn by the Block engine within the brand guideline |
 
 **Typical paths**
 
 - New React app → `neon-create`.
-- New feature in an already themed CDS app → `neon-create`, reusing the current setup.
+- New feature in an app on the Neon base, or already on CDS (frozen) → `neon-create`, reusing the current setup.
 - Existing app with unclear theming needs → `neon-audit` → `neon-create` or `neon-redesign`.
 - Colors-only change → `neon-redesign`; on CDS components in an app already on CDS (frozen) → `neon-create`, still colors only.
 - Landing page from a reference design → `neon-create` for a new page, `neon-redesign` for an existing one.
@@ -187,21 +187,21 @@ Start with the task: create a feature, redesign existing UI, or review the resul
 
 When an existing app needs theming, Neon supports three levels:
 
-| Level | What changes | CDS required? |
+| Level | What changes | Needs React? |
 | --- | --- | --- |
 | Colors only | Semantic color variables | No |
 | Visual system | Colors, typography, spacing and radius within the agreed scope | No |
-| Full CDS | Finnomena theme plus real CDS components | Yes; React |
+| Components | Finnomena theme plus the real components of the app's base: Neon items, or CDS in an app already on it | Yes |
 
 Layout is a separate choice from these tiers. Existing composition is preserved by default. Ask explicitly to reorganize layout or hierarchy when you want that changed; an ambiguous “make it Finnomena” request changes styling. Even a composition redesign preserves framework, routes, handlers, services and data meaning.
 
 ```text
 Reorganize this Finnomena Vue request page: place filters above results and
 stack the controls on mobile. Keep the current theme, routes, filter handlers
-and service contracts. Do not adopt CDS or add new product behavior.
+and service contracts. Do not add components or new product behavior.
 ```
 
-Your explicit request takes priority. “Change only the colors” stays colors-only even if the app already has CDS installed. Vue, Svelte and other non-React apps use the CSS path; Neon does not silently convert them to React.
+Your explicit request takes priority. “Change only the colors” stays colors-only even if the app already has Neon or CDS components. Vue, Svelte and other non-React apps use the CSS path; Neon does not silently convert them to React.
 
 New apps default to the included Vite + React + TypeScript starter unless you explicitly request another framework. The starter itself does not scaffold other frameworks.
 
@@ -225,14 +225,14 @@ You do not have to specify everything. The assistant should infer routine choice
 Neon guides the assistant to:
 
 - Build requested content and working UI interactions, beyond an empty themed shell.
-- Use Finnomena tokens and appropriate semantic colors, with real CDS APIs for CDS work.
+- Use Finnomena tokens and appropriate semantic colors, with the real components of the app's base.
 - Preserve existing routes, providers, services, customized themes and dark-mode ownership.
 - Include relevant loading, empty, validation, error and success states.
 - Check build/typecheck, narrow and wide layouts, Thai/English text and primary interactions when the environment supports them.
 - Explain mock behavior, incomplete integrations and checks that could not be performed.
 - Say whether the result is **Ship-ready** or **Brand-ready**. Only a campaign or landing page with no investment content, and no personal-data form outside an approved company form service, can be Ship-ready; you get a static build and a pre-launch checklist, and any item Neon could not pass or verify becomes a to-do you finish before publishing. Back office screens, product features and pages that mention investment products or returns are Brand-ready: they match the brand and come with a handoff file (`./NEON-HANDOFF.md`) for engineering and compliance review.
 
-Skills guide an AI assistant; they are not a runtime enforcement layer. Review the resulting app before relying on it. Colors that trace to a Core Theme token are Core's; the Immersive Themes, the gradient recipes and the few color roles with no Core token are provisional and still need design review. See the [design contract](skills/INSTRUCTION.md) for visual policy and mapping boundaries.
+Skills guide an AI assistant; they are not a runtime enforcement layer. Review the resulting app before relying on it. Colors that trace to a Core Theme token are Core's; the Immersive Themes, the gradient recipes, the few color roles with no Core token and the frozen CDS theme's color mapping are provisional and still need design review. See the [design contract](skills/INSTRUCTION.md) for visual policy and mapping boundaries.
 
 ## Troubleshooting
 
@@ -286,7 +286,7 @@ Packaging does not publish a release. Full contribution, token update and releas
 | [`.codex-plugin/`](.codex-plugin/) | Codex plugin manifest, read by `codex plugin add` |
 | [`skills/`](skills/) | Five skill entrypoints and their supporting references |
 | [`skills/INSTRUCTION.md`](skills/INSTRUCTION.md) | Shared functional and immersive design direction |
-| [`theme/`](theme/) | Exported tokens, CDS adapters, CSS theme and the Finnomena logo SVGs |
+| [`theme/`](theme/) | Exported tokens, the CSS theme, the frozen CDS theme and the Finnomena logo SVGs |
 | [`core/`](core/) | The Core snapshot: Core's component rules, specs and Theme tokens compiled for the web, generated by `scripts/sync-core.mjs` |
 | [`block/`](block/) | The Block snapshot: Block's engine built into one file, with the open fonts it draws text in, generated by `scripts/sync-block.mjs` |
 | [`scripts/finno.mjs`](scripts/finno.mjs) | `finno`: the command, the local tool server and `finno setup`; published to npm as `finno` |
