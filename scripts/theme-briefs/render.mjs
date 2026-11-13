@@ -8,7 +8,7 @@
 // { components: [{ name, role, paragraph }] }, preset-dos-donts { dos, donts },
 // imagery { paragraph }, layout { paragraph }, example-prompts { prompts }.
 // Layout opens on a scripted table of each section's ground; its prose follows.
-import { FIXED_COMPONENTS } from './schemas.mjs';
+import { blockColourway, colorVariable, FIXED_COMPONENTS } from './schemas.mjs';
 
 const SECTIONS = ['Tokens — Colors', 'Tokens — Typography', 'Tokens — Spacing & Shapes', 'Components', "Do's and Don'ts", 'Surfaces', 'Elevation', 'Imagery', 'Brand Pattern', 'Layout', 'Motion', 'Agent Prompt Guide', 'Sibling Themes', 'Quick Start'];
 const HEADER = 'Header';
@@ -157,11 +157,24 @@ function spacing({ facts, layout }) {
 const blockSteps = (theme, name) => descending(theme.steps[name]).filter((step) => theme.steps[name][step].bg !== theme.canvas);
 const stepRange = (name, steps) => steps.length === 1 ? variable(`${name}-${steps[0]}`) : `${variable(`${name}-${steps[0]}`)} to ${variable(`${name}-${steps.at(-1)}`)}`;
 
+// Block fills whose text is not the main action's color: a button in the action color does not read there.
+// Each family is named whole when every one of its block steps is such a fill.
+export const offActionFills = (theme) => theme.families.flatMap((family) => blockSteps(theme, family).filter((step) => theme.steps[family][step].fg !== theme.action).map((step) => `${family}-${step}`));
+function offActionNote(theme) {
+  const fills = offActionFills(theme);
+  if (!fills.length) return '';
+  const named = theme.families.flatMap((family) => {
+    const own = fills.filter((fill) => fill.startsWith(`${family}-`));
+    return own.length === blockSteps(theme, family).length ? [`every ${code(family)} fill`] : own.map(variable);
+  });
+  return ` On ${named.join(', ').replace(/, ([^,]*)$/, ' and $1')}, ${variable('action')} does not read: fill the button with that fill's ${code('on-')} text variable and set its label in the fill's own variable.`;
+}
+
 function components({ theme }, prose) {
   const fills = (name) => `${stepRange(name, blockSteps(theme, name))} fills, each with its own ${code('on-')} text variable`;
   const fixed = [
-    ['Main Action', 'The main action of a section', `Neon ${code('Button')} filled with ${variable('action')}, its label in ${variable('on-action')}, with ${code('--borderRadius-1000')} corners.`],
-    ['Secondary Action', 'An alternative beside the main action', `Neon ${code('Button')} with no fill, its label and outline in ${variable('text')} on the canvas. On a filled block, label and outline take that block's ${code('on-')} text variable.`],
+    ['Main Action', 'The main action of a section', `Neon ${code('Button')} filled with ${variable('action')}, its label in ${variable('on-action')}, with ${code('--borderRadius-1000')} corners.${offActionNote(theme)}`],
+    ['Secondary Action', 'An alternative beside the main action', `Neon ${code('Button')} in its ${code('secondary')} variant: ${variable('palette-75')} fill with its label in ${variable('on-palette-75')}. On a block that already has that fill, the ${code('ghost')} variant: no fill, its label in the block's ${code('on-')} text variable. Neon has no outlined button.`],
     ['Logo', 'Brand identity', `Neon's logo item, the ${theme.kind === 'dark' ? 'dark-surface' : 'light-surface'} mark. Never recreate the wordmark as text.`],
     ['Tint Block', 'Group a section or a set of details', `${fills('palette')}. Flat: no border and no shadow; step lighter for nested emphasis.`],
     ['Accent Block', 'Highlight an offer or call-out', `${fills('accent')}. Flat, like the Tint Block.`],
@@ -210,17 +223,26 @@ function surfaces({ theme }) {
 }
 
 function brandPattern({ theme, picks, layout }) {
-  const { colourway, ground } = picks.brandPattern;
+  const { colourway, ground, blockColourway: id } = picks.brandPattern;
   const label = theme.familyLabels[colourway];
-  const onCanvas = theme.steps[colourway][ground].bg === theme.canvas;
+  const fill = theme.steps[colourway][ground].bg;
+  const onCanvas = fill === theme.canvas;
+  const drawn = blockColourway(id);
+  const name = (color) => color.split('.')[0];
+  const section = layout.brandPattern.section;
+  // Block draws on Navy, Light Grey or White only: on any other ground the Pattern sits in a panel of its own.
+  const placed = drawn.ground === fill
+    ? `The ${section} section carries the Brand Pattern on its ground: Block draws it in ${code(id)}, ${name(drawn.blocks)} blocks on the section's own ${name(drawn.ground)}.`
+    : `The ${section} section carries the Brand Pattern in a panel on its ground: Block draws it in ${code(id)}, ${name(drawn.blocks)} blocks on ${name(drawn.ground)} (${variable(colorVariable(theme, drawn.ground))}), and the panel takes the block and card radius.`;
   return [
     '## Brand Pattern',
     '',
     `- **Section:** ${layout.brandPattern.section}`,
     `- **Colourway:** ${label} (${code(colourway)})`,
     `- **Ground:** ${variable(`${colourway}-${ground}`)} fill with ${variable(`on-${colourway}-${ground}`)} text${onCanvas ? ', the canvas itself' : ''}`,
+    `- **Block Colourway:** ${code(id)}, ${name(drawn.blocks)} blocks on ${name(drawn.ground)}`,
     '',
-    `The ${layout.brandPattern.section} section carries the Brand Pattern on its ground, and the Pattern keeps to the ${label} family. Block's Brand Pattern procedure makes it as a static SVG: never hand-draw it, imitate it in CSS or animate it.`,
+    `${placed} It runs as a strip beside or under the section's text, never behind it. Block's Brand Pattern procedure makes it as a static SVG: never hand-draw it, imitate it in CSS or animate it.`,
   ].join('\n');
 }
 
@@ -303,7 +325,7 @@ function layoutSection(brief, prose) {
     '',
     table(['#', 'Section', 'Ground', 'Fill', 'Text'], rows),
     '',
-    `${GROUNDS_OPENING} A ${code('tint')}, ${code('accent')} or ${code('pattern')} ground ${reach}; on ${code('canvas')} the section's blocks carry the fills.`,
+    `${GROUNDS_OPENING} A ${code('tint')}, ${code('accent')} or ${code('pattern')} ground ${reach}; on ${code('canvas')} the section's blocks carry the fills. A component whose fill is its section's ground steps one lighter in the same family, so the block and its radius show against the ground.`,
     '',
     prose.layout.paragraph,
   ].join('\n');

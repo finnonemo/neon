@@ -6,7 +6,7 @@ import { contrast, matchToken, paletteTokens } from '../lib/colors.mjs';
 import { loadInputs, PRESET_KINDS } from './inputs.mjs';
 import { accentPlacements, accentProblems, pairingProblems, proseText, valueProblems } from './prose-checks.mjs';
 import { assembleBrief, freshBrief, readProse, splitSections } from './render.mjs';
-import { isThirdParty, sourceHost } from './schemas.mjs';
+import { blockColourway, BLOCK_COLOURWAYS, colorVariable, isThirdParty, sourceHost } from './schemas.mjs';
 
 // Where authoring records live: draft mode writes them and CI reads them.
 export const RECORDS = 'theme-briefs/records';
@@ -50,6 +50,12 @@ function compatibility({ path, data }, presets, facts) {
     else if (!steps[ground]) problems.push(`ground ${ground} is not a step of ${colourway} (${Object.keys(steps).join(', ')})`);
     else if (steps[ground].bg === theme.canvas && !(colourway === 'palette' && ground === 100)) {
       problems.push(`${colourway} ${ground} is ${theme.label}'s bare canvas; a Brand Pattern sits on the canvas only as palette 100`);
+    }
+  }
+  const drawn = data.brandPattern?.blockColourway;
+  if (BLOCK_COLOURWAYS.includes(drawn)) {
+    for (const [part, color] of Object.entries(blockColourway(drawn))) {
+      if (!colorVariable(theme, color)) problems.push(`Block Colourway "${drawn}" draws its ${part} in ${color.split('.')[0]}, which is not one of ${theme.label}'s colors at full strength`);
     }
   }
   const thirdParty = thirdPartyKinds(chosen);

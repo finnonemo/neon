@@ -2,8 +2,8 @@
 // placement) run in draft mode on each entry's answer and in CI on the prose read back from a committed brief;
 // the rest run in draft mode only.
 // Hard checks refuse an answer; soft checks only send it back for another attempt.
-import { BRAND_FLOOR_OPENING, placeholderProse, renderBrief } from './render.mjs';
-import { jsonSchemaProblems } from './schemas.mjs';
+import { BRAND_FLOOR_OPENING, offActionFills, placeholderProse, renderBrief } from './render.mjs';
+import { blockColourway, jsonSchemaProblems } from './schemas.mjs';
 
 const PX = /\b\d+(?:\.\d+)?px\b/g;
 // Words: whitespace-separated tokens holding a letter or digit, so a dash is not one.
@@ -108,10 +108,12 @@ export function pairingProblems(text, theme) {
 }
 
 // Where the accent may go: each occasion component with the accent role, and the Brand Pattern section
-// when its colourway is the accent.
-export const accentPlacements = ({ occasion, picks }) => [
-  ...occasion.components.filter(({ roles }) => roles.includes('accent')).map(({ name }) => name),
-  ...(picks.brandPattern.colourway === 'accent' ? ['Brand Pattern section'] : []),
+// when its ground is an accent step or Block draws the Pattern with the accent's color.
+const patternInAccent = ({ theme, picks }) => picks.brandPattern.colourway === 'accent'
+  || Object.values(blockColourway(picks.brandPattern.blockColourway)).includes(theme?.steps.accent?.['100']?.bg);
+export const accentPlacements = (brief) => [
+  ...brief.occasion.components.filter(({ roles }) => roles.includes('accent')).map(({ name }) => name),
+  ...(patternInAccent(brief) ? ['Brand Pattern section'] : []),
 ];
 
 // Check 10: the accent placement is one of the brief's and the mood paragraph names it.
@@ -151,14 +153,20 @@ function slotProblem(path, paragraph) {
 
 // A component paragraph follows its preset's composition picks: a lead fact takes the layout's fact role
 // and no component without one reaches a display role; a feature component takes the feature radius;
-// only a component with the action role fills an action with the main action's color.
+// only a component with the action role fills an action with the main action's color, and not on a fill
+// where that color does not read; no action is outlined, since Neon has no outlined button.
 const DISPLAY_ROLE = /\bdisplay\d\b/;
-function compositionProblems(path, paragraph, component, layout) {
+function compositionProblems(path, paragraph, component, layout, theme) {
   const problems = [];
   if (!component) return problems;
   if (component.leadFact && !paragraph.includes(layout.factRole)) problems.push(`"${path}" does not set its lead fact (${component.leadFact}) in ${layout.factRole}`);
   if (!component.leadFact && DISPLAY_ROLE.test(paragraph)) problems.push(`"${path}" names a display role, but the component has no lead fact`);
   if (!component.roles.includes('action') && paragraph.includes('--immersive-action')) problems.push(`"${path}" names --immersive-action, but the component does not take the action role; its action is the Secondary Action`);
+  if (/\boutlined?\b/i.test(paragraph.replace(/\b(?:no|never|without)\s+(?:an?\s+)?outlined?\b/gi, ''))) problems.push(`"${path}" outlines an action; Neon has no outlined button, and a Secondary Action is the secondary or ghost variant`);
+  const fill = paragraph.match(/--immersive-((?:palette|accent|support)-\d+)/)?.[1];
+  if (theme && component.roles.includes('action') && offActionFills(theme).includes(fill) && paragraph.includes('--immersive-action')) {
+    problems.push(`"${path}" fills its action with --immersive-action on --immersive-${fill}, where it does not read; fill it with --immersive-on-${fill} and set its label in --immersive-${fill}`);
+  }
   const radius = component.feature ? layout.featureRadius : layout.blockRadius;
   if (/\b(?:corners?|radius)\b/i.test(paragraph) && !paragraph.includes(`--${radius}`)) problems.push(`"${path}" does not round to --${radius}, the ${component.feature ? 'feature block' : 'block and card'} radius`);
   return problems;
@@ -221,7 +229,7 @@ export function entryChecks(name, answer, { brief, data, schema, bands, placemen
       ...band(`components.${index}.paragraph`, words(paragraph), bands.paragraphWords),
       ...band(`components.${index}.paragraph`, sentences(paragraph), bands.paragraphSentences, 'sentences'),
       ...slotProblem(`components.${index}.paragraph`, paragraph),
-      ...compositionProblems(`components.${index}.paragraph`, paragraph, occasion.components.find((preset) => preset.name === component), layout),
+      ...compositionProblems(`components.${index}.paragraph`, paragraph, occasion.components.find((preset) => preset.name === component), layout, theme),
     ));
   }
   if (name === 'preset-dos-donts') {

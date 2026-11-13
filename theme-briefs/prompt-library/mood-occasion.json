@@ -25,7 +25,7 @@
   "rules": [
     "no values: no var(--…) and no px",
     "one paragraph with no line breaks",
-    "when the colourway is accent, the Brand Pattern section carries the accent too; never claim the accent appears only once"
+    "when accentPlacements lists the Brand Pattern section, that section carries the accent too; never claim the accent appears only once"
   ],
   "output": {
     "type": "object",

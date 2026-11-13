@@ -64,14 +64,25 @@ What these runs showed:
 - **The Secondary Action has no Neon button.** The brief words it as a `Button` with no fill and an outline. Neon's `outline` variant has no value in Core, so it is not chosen for new work. Club and Ultra took the filled `secondary` button and listed it as a departure; Exclusive and Private drew the outline themselves. The brief's wording predates this branch; which button the Secondary Action is, is the design owner's call.
 - **Ultra's main action is unreadable on its accent ground.** The call-out sits on Yellow, and Ultra's main action is White with about 1.1:1 against it. The run filled that button with Navy and reported it. The brief does not say what the main action takes on an accent ground.
 - **A feature block on an edge-to-edge ground shows no radius.** On `event-poster` the call-out is a feature component on the accent section, which fills edge to edge, so its 48px corners never show (Exclusive and Ultra both reported it). On Ultra the route block did not take the feature radius either.
-- **The Pattern departs from its picks.** Each run drew a Pattern with Block's engine and then changed it: the brief's colourway vanishes on Exclusive's canvas, Club's sits in a white panel because the engine draws on white, and Ultra's is navy on light grey because the engine has no navy ground. All four cut it down to a strip after looking at the first render.
+- **The Pattern departs from its picks.** Each run drew a Pattern with Block's engine and then changed it: the brief's colourway vanishes on Exclusive's canvas, Club's sits in a white panel because the engine draws on white, and Ultra's is navy on light grey because the engine draws no navy blocks on navy. All four cut it down to a strip after looking at the first render.
 - **The narrow-screen name is uneven.** `event-poster` says the name drops one display role; Exclusive did, Ultra did not. On `event-landing`, which does not say, Club and Private dropped to 28px.
 
 Run logs, reports and apps are in `.local/evals/final-{exclusive,club,ultra,private}`; captures and the measuring script are in `.local/evals/final-shots`.
 
+## Brief changes after these runs
+
+The five findings above changed the brief tool and the four briefs. No page was built from the changed briefs, so each line below is what a brief now says, not what a page did.
+
+- **Secondary Action.** Neon's `secondary` button: `--immersive-palette-75` fill with its `on-` label. On a block that already has that fill, `ghost`. A component paragraph that outlines an action is sent back.
+- **Main action on a fill where it does not read.** The Main Action entry lists the block fills whose text is not the action's color. There the button takes the fill's `on-` text variable and its label the fill's own. Only Ultra has such fills: its lighter palette steps, its accent and its support. A component with the action role that names `--immersive-action` on one of them is sent back.
+- **Feature block on an edge-to-edge ground.** The Layout section says a component whose fill is its section's ground steps one lighter in the same family. The skill reference says a feature component is one block spanning the content column.
+- **Brand Pattern.** A picks file names a Block Colourway from Block's primary group, checked against the theme's colors: Club `white__yellow-100`, Exclusive and Private `grey__yellow-100`, Ultra `navy__grey-100`. The brief places the Pattern on the section when Block draws on its fill and in a panel when it does not, as a strip beside or under the text.
+- **Narrow-screen name.** `event-landing` now says the name drops one display role, as `event-poster` did. Ultra's miss on `event-poster` was against a brief that already said so, and stays one sample.
+
 ## Limits
 
 - One sample per brief in each set of runs.
+- The brief changes after the second set are unobserved on a page.
 - The four briefs are trial drafts under `maintainer-sign-in`. A redraft under a neutral account changes their prose, and these runs do not cover it.
 - The evaluator wrote the change and judged the captures. No blind judge compared them.
 - The runner reported every case as failed: its diff step met the app's own repository inside the workspace. Each run had already ended on its result event, with no void.

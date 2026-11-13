@@ -59,6 +59,8 @@ function themeFacts(root, problems) {
       label: theme.label,
       kind: String(theme.text).startsWith('White') ? 'dark' : 'light',
       canvas: theme.canvas,
+      text: theme.text,
+      action: theme.action?.bg ?? theme.text,
       canvasIsPalette: theme.palette?.['100']?.bg === theme.canvas,
       ratio: theme.ratio ?? {},
       families,
