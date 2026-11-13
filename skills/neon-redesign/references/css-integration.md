@@ -20,9 +20,9 @@ Customized assets must be diffed and merged; see [installer conflicts](../../neo
 
 The CSS asset contains typography and geometry variables, so reuse it when expanding from colors to the visual system. This still requires [font loading](../../neon-audit/references/theme-integration.md#font-loading), affected token application and wrapping/layout checks. It is not a zero-work upgrade.
 
-## CDS adoption
+## Component adoption
 
-Route authorized React/CDS adoption to `neon-create`. Matching variable names do not prove migration compatibility; perform the [CSS-to-CDS checks](../../neon-audit/references/theme-integration.md#css-to-cds-migration) before removing the CSS import.
+Route a request for Finnomena components in a React app to `neon-create`, which adds Neon items. CDS is frozen for apps already on it and is never added to another app.
 
 ## Adapter limits
 

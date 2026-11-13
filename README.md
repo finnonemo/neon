@@ -232,7 +232,7 @@ Neon guides the assistant to:
 - Explain mock behavior, incomplete integrations and checks that could not be performed.
 - Say whether the result is **Ship-ready** or **Brand-ready**. Only a campaign or landing page with no investment content, and no personal-data form outside an approved company form service, can be Ship-ready; you get a static build and a pre-launch checklist, and any item Neon could not pass or verify becomes a to-do you finish before publishing. Back office screens, product features and pages that mention investment products or returns are Brand-ready: they match the brand and come with a handoff file (`./NEON-HANDOFF.md`) for engineering and compliance review.
 
-Skills guide an AI assistant; they are not a runtime enforcement layer. Review the resulting app before relying on it. The current CDS color mapping is provisional, and some exported or inherited values still need design review. See the [design contract](skills/INSTRUCTION.md) for visual policy and mapping boundaries.
+Skills guide an AI assistant; they are not a runtime enforcement layer. Review the resulting app before relying on it. Colors that trace to a Core Theme token are Core's; the Immersive Themes, the gradient recipes and the few color roles with no Core token are provisional and still need design review. See the [design contract](skills/INSTRUCTION.md) for visual policy and mapping boundaries.
 
 ## Troubleshooting
 

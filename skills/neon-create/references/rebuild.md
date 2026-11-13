@@ -4,7 +4,7 @@ Read only when the employee explicitly asks to rebuild or move a whole existing 
 
 ## Prepare
 
-1. **Check the source.** Mock data and simulated services proceed. A real backend, authentication or shared service contract gets one question: rebuild, or migrate incrementally per [CSS-to-CDS migration](../../neon-audit/references/theme-integration.md#css-to-cds-migration).
+1. **Check the source.** Mock data and simulated services proceed. A real backend, authentication or shared service contract gets one question: rebuild, or keep the app and restyle it in place with [neon-redesign](../../neon-redesign/SKILL.md).
 2. **Choose a new destination.** Use an empty sibling directory such as `<app>-neon` and create it per [scaffold](scaffold.md). The source app stays read-only: no edits, deletions or dependency changes.
 3. **Write the parity inventory** in the conversation: every route and screen, feature and action, filter and search, list/form state (loading, empty, no-match, error, success), user-facing text in each language, displayed data and status meanings, responsive rules (each element the source hides, resizes or rearranges at a breakpoint, such as `.phc-add-column-zone { display: none }` under the mobile media query or columns sized at `100vw`), and timed or simulated demo behavior. Done when every source route has been opened (in a browser when available) and each item names its source location.
 

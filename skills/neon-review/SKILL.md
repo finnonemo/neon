@@ -34,7 +34,7 @@ Start from the supplied screenshot, source or URL and known scope. No tier selec
 
 ## Conditional references
 
-Use [review checks](references/review-checks.md) for the requested dimensions, and [color mapping](../../theme/cds/color-overrides.ts) only for disputed CDS assignments. Source-only risks remain hypotheses until reproduced.
+Use [review checks](references/review-checks.md) for the requested dimensions, and the [Role table](../../theme/css/core-roles.json) only for a disputed color role. Source-only risks remain hypotheses until reproduced.
 
 On the Neon base, a finding about how a component is used (which one, its hierarchy, a state): [Core rules](../neon-audit/references/core-rules.md), for the doc of that component only.
 

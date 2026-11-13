@@ -27,7 +27,7 @@ Use `NeonContext.tier` from the contract, not a separate vocabulary:
   `<Neon root>/skills/INSTRUCTION.md`
   . Composition remains `preserve` unless explicitly requested as `adapt`;
   tier alone never grants layout redesign.
-- `tier: 'cds'` doesn't apply here — that's `neon-create`'s job.
+- `tier: 'components'` doesn't apply here — that's `neon-create`'s job.
 
 ## Chart and status colors
 
@@ -83,7 +83,7 @@ palette (`bg-slate-900`, `text-blue-600`) with no brand tokens yet.
   (placeholder, caption, secondary text), decide per call site and report
   the steps that collapse. Text lighter than `fgMuted` (disabled,
   placeholder, inactive icons) keeps its stock utility; never darken it.
-  Do not invent extra tokens; the mapping is provisional.
+  Do not invent extra tokens.
 - **Map state, not just shade.** A selected tab or chip takes the indigo
   interaction signal (`bgLinePrimary` border or indicator), not navy text
   alone. One shade-threshold table applied across a file is value
@@ -253,8 +253,7 @@ Change each role together with its `-foreground`, in both `:root` and
 so replacing only the background leaves dark text on a dark button. Do
 not copy the dark `fgInverse` for that label: it is black, for text on
 the white dark-mode `bgInverse`, and measures 2.4:1 on dark `bgPrimary`.
-Text on a colored fill is `fgInverse` in light and `fg` in dark, per
-`onColorLabel` in `<Neon root>/theme/cds/color-overrides.ts`.
+Text on a colored fill is `fgInverse` in light and `fg` in dark.
 
 Current shadcn has no `--destructive-foreground`: its destructive button
 and badge use `text-white`, over `dark:bg-destructive/60` in dark. At

@@ -11,17 +11,17 @@ Resolve an unclear target or theming decision through a short, read-only inspect
 
 ## When to use
 
-Use for unresolved integration choices or explicit assessment requests. Brand intent must come from the request, established context or project instructions; CDS alone is not enough.
+Use for unresolved integration choices or explicit assessment requests. Brand intent must come from the request, established context or project instructions; an installed component library alone is not enough.
 
 ## Fast path
 
-Review requests go directly to [neon-review](../neon-review/SKILL.md). New React apps, and features in an app on the Neon base or already themed on CDS, go to [neon-create](../neon-create/SKILL.md). Explicit CSS-only restyles go to [neon-redesign](../neon-redesign/SKILL.md). Do not reopen settled choices because a theme file exists.
+Review requests go directly to [neon-review](../neon-review/SKILL.md). New React apps, and features in an app on the Neon base or already on CDS, go to [neon-create](../neon-create/SKILL.md). Explicit CSS-only restyles go to [neon-redesign](../neon-redesign/SKILL.md). Do not reopen settled choices because a theme file exists.
 
 ## Workflow
 
 1. Reuse known target and scope. If routing is unsettled, read the [shared contract](references/workflow-contract.md). Resolve the Neon root from this skill's real directory, two levels up; never from the target app's working directory.
 2. Inspect only missing evidence: target manifest/lockfile and the app's [base](references/project-inspection.md#base), relevant entry/theme/provider usage, styling mechanism and local/shared consumers. Read source, not generated/vendor files. A dependency alone does not prove active wiring.
-3. Apply explicit scope first. Non-React stays on the CSS path. An app keeps its base: a new React app starts on the Neon base, a CDS app stays on CDS, and plain shadcn takes `@neon/` items only for requested components. Existing working theme/providers are reused. Recommend one approach with a short reason.
+3. Apply explicit scope first. Non-React stays on the CSS path. An app keeps its base: a new React app starts on the Neon base, an app already on CDS stays on CDS, and plain shadcn takes `@neon/` items only for requested components. Existing working theme/providers are reused. Recommend one approach with a short reason.
 4. Ask one focused question only if the app target is unresolved or a material adoption/scope choice remains. Do not offer a React base for non-React, or CDS to an app not already on it, ask an automatic upgrade question, or request approval for an obvious reuse decision.
 5. Pass target, base, tier, preserved behavior and useful evidence to the chosen skill. If the request was assessment-only, stop with the recommendation instead of starting edits.
 
