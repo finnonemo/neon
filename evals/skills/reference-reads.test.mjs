@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { expandBraces, referenceReads, skillPaths, status } from './reference-reads.mjs';
+import { coreReads, expandBraces, referenceReads, skillPaths, status } from './reference-reads.mjs';
 
 const home = '/private/hc-s1/codex-home/plugins/cache/neon/skills';
 const files = {
@@ -75,4 +75,39 @@ test('counts the skill files a Claude run read through Read and Bash', async () 
     ['neon-create/references/rebuild.md', 'read'],
     ['neon-create/references/scaffold.md', 'named only'],
   ]);
+});
+
+// finnonemo/neon#219: a run reads the Core doc of the component it uses, and from `## Usage` on.
+test('lists the Core snapshot files a run read, apart from an app path named core', async () => {
+  const plugin = '/case/plugin';
+  const doc = '# Button\n\n## Anatomy and layer tree\n\nA Capsule holding a label and an optional glyph.\n\n## Usage\n\nBrand only on Primary, for a branded moment.\n';
+  const snapshot = { [`${plugin}/core/index.json`]: '{\n  "button": { "counterpart": "Button", "doc": "components/button.md" }\n}\n', [`${plugin}/core/components/button.md`]: doc, [`${plugin}/core/components/alert.md`]: '# Alert\n\n## Usage\n\nNot for a form or long content.\n' };
+  const readSnapshot = async path => {
+    if (!(path in snapshot)) throw new Error(`ENOENT ${path}`);
+    return snapshot[path];
+  };
+  const use = (id, name, input) => ({ type: 'assistant', message: { content: [{ type: 'tool_use', id, name, input }] } });
+  const result = (id, content) => ({ type: 'user', message: { content: [{ type: 'tool_result', tool_use_id: id, content }] } });
+  const rules = '# Core component rules\n\nLook up only the items the task is about to use.\n';
+  snapshot[`${plugin}/skills/neon-audit/references/core-rules.md`] = rules;
+  const events = [
+    use('c0', 'Read', { file_path: `${plugin}/skills/neon-audit/references/core-rules.md` }),
+    result('c0', rules),
+    use('c1', 'Bash', { command: `cat ${plugin}/core/index.json` }),
+    result('c1', snapshot[`${plugin}/core/index.json`]),
+    use('c2', 'Bash', { command: `sed -n '/^## Usage/,$p' ${plugin}/core/components/button.md` }),
+    result('c2', '## Usage\n\nBrand only on Primary, for a branded moment.\n'),
+    use('c3', 'Bash', { command: `ls ${plugin}/core/components/alert.md /app/src/core/components/widget.md` }),
+    result('c3', `${plugin}/core/components/alert.md`),
+    use('c4', 'Read', { file_path: '/app/src/core/index.json' }),
+    result('c4', '{}'),
+  ];
+  const reads = await coreReads(events, readSnapshot);
+  assert.deepEqual(reads.map(entry => [entry.file, status(entry.coverage)]), [
+    ['core/components/alert.md', 'named only'],
+    ['core/components/button.md', 'partial'],
+    ['core/index.json', 'read'],
+  ]);
+  // Skill files stay a separate list.
+  assert.deepEqual((await referenceReads(events, readSnapshot)).map(entry => entry.file), ['neon-audit/references/core-rules.md']);
 });

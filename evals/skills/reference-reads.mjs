@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-// Lists the skill files each Codex or Claude case read, from its run.jsonl. A command
+// Lists the skill files, then the Core snapshot files (`core/…`), each Codex or
+// Claude case read, from its run.jsonl. A command
 // can name a file without printing it (`rg -g`, a failed path) or read several
 // through brace expansion (`references/{rebuild,scaffold}.md`), so a name in a
 // command is not a read. Each file counts as read by the share of its lines
@@ -10,8 +11,9 @@ import { readFile } from 'node:fs/promises';
 import { basename, dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-const repoSkills = join(dirname(fileURLToPath(import.meta.url)), '../../skills');
+const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '../..');
 const SKILL_TOKEN = /[^\s'"`\\;|&<>()]*skills\/[^\s'"`\\;|&<>()]*/g;
+const CORE_TOKEN = /[^\s'"`\\;|&<>()]*core\/[^\s'"`\\;|&<>()]*\.(?:md|json)/g;
 
 export function expandBraces(token) {
   const open = token.indexOf('{');
@@ -64,13 +66,14 @@ export function commandOutputs(events) {
   return commands;
 }
 
-// Best coverage per skill file, keyed by its path below `skills/`.
-export async function referenceReads(events, read = path => readFile(path, 'utf8')) {
+// Best coverage per file a command names. `pathsIn` picks the paths from a
+// command; `locate` gives a path's key in the listing and its copy in this repository.
+async function bestCoverage(commands, read, pathsIn, locate) {
   const files = new Map();
-  for (const item of commandOutputs(events)) {
-    for (const path of skillPaths(item.command)) {
-      const key = path.slice(path.lastIndexOf('skills/') + 'skills/'.length);
-      // Prefer the copy the run installed; fall back to this repository's skills.
+  for (const item of commands) {
+    for (const path of pathsIn(item.command)) {
+      const { key, repo } = locate(path);
+      // Prefer the copy the run installed; fall back to this repository's.
       let text;
       let source = 'installed';
       try {
@@ -78,7 +81,7 @@ export async function referenceReads(events, read = path => readFile(path, 'utf8
       } catch {
         source = 'repo';
         try {
-          text = await read(join(repoSkills, key));
+          text = await read(repo);
         } catch {
           continue;
         }
@@ -93,6 +96,27 @@ export async function referenceReads(events, read = path => readFile(path, 'utf8
   return [...files.values()].sort((a, b) => a.file.localeCompare(b.file));
 }
 
+// Best coverage per skill file, keyed by its path below `skills/`.
+export function referenceReads(events, read = path => readFile(path, 'utf8')) {
+  return bestCoverage(commandOutputs(events), read, skillPaths, path => {
+    const key = path.slice(path.lastIndexOf('skills/') + 'skills/'.length);
+    return { key, repo: join(repoRoot, 'skills', key) };
+  });
+}
+
+// Best coverage per Core snapshot file, keyed from `core/`. The snapshot is the
+// `core/` beside the `skills/` directory the run read from, so an app's own
+// `src/core/` is not one.
+export function coreReads(events, read = path => readFile(path, 'utf8')) {
+  const commands = commandOutputs(events);
+  const roots = new Set(commands.flatMap(item => item.command.match(SKILL_TOKEN) ?? []).map(path => path.slice(0, path.lastIndexOf('skills/'))));
+  const pathsIn = command => [...new Set((command.match(CORE_TOKEN) ?? []).flatMap(expandBraces).filter(path => roots.has(path.slice(0, path.lastIndexOf('core/')))))];
+  return bestCoverage(commands, read, pathsIn, path => {
+    const key = path.slice(path.lastIndexOf('core/'));
+    return { key, repo: join(repoRoot, key) };
+  });
+}
+
 export const status = share => (share >= 0.9 ? 'read' : share > 0 ? 'partial' : 'named only');
 
 if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
@@ -105,7 +129,7 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
     const log = await readFile(join(caseDirectory, 'run.jsonl'), 'utf8');
     const events = log.split('\n').filter(Boolean).map(line => JSON.parse(line));
     console.log(basename(caseDirectory));
-    for (const entry of await referenceReads(events)) {
+    for (const entry of [...await referenceReads(events), ...await coreReads(events)]) {
       // A repo copy may differ from what the run installed.
       const note = entry.source === 'repo' ? ' (repo copy)' : '';
       console.log(`  ${status(entry.coverage).padEnd(10)} ${String(Math.round(entry.coverage * 100)).padStart(3)}%  ${entry.file}${note}`);
