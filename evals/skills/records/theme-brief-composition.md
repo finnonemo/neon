@@ -160,6 +160,10 @@ Outside the brief: Club's report says the layout starter renders an empty 64px r
 
 None overflowed sideways at either width. Run logs, reports and apps are in `.local/evals/name-{exclusive,club,ultra,private}`; captures are in `.local/evals/name-shots`.
 
+## Skill change after the fourth set
+
+The three-line name changed `skills/neon-create/references/theme-brief.md`: a name that takes more than two lines at the hero name role keeps the role, and the organisation's name that opens it moves to a line above in a label or title role. A name still past two lines keeps the role and the report gives its line count. `campaign-content.md` points its two-line rule there. No brief changed. No page was built from this change.
+
 ## Limits
 
 - One sample per brief in each set of runs.
