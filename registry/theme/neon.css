@@ -223,10 +223,11 @@
   --icon: var(--color-fgIcon);
   --icon-disabled: var(--color-fgIconDisabled);
   --disabled-foreground: var(--color-fgDisabled);
-  /* The switch, from Core's Toggle: grey off, Support/support-success on, a white thumb. */
+  /* The switch, from Core's Toggle: grey off, Layer/layer-selected-inverse on (black, white in
+   * dark), and a thumb in Icon/icon-inverse (white, dark in dark). */
   --switch-off: var(--color-bgToggleOff);
-  --switch-on: var(--color-bgPositive);
-  --switch-thumb: var(--color-fgIconOnColor);
+  --switch-on: var(--color-bgToggleOn);
+  --switch-thumb: var(--color-fgIconInverse);
   --switch-thumb-disabled: var(--color-fgIconOnColorDisabled);
   /* Core's layer-hover-01 and layer-active-01. */
   --layer-hover: var(--color-bgElevation1Hover);

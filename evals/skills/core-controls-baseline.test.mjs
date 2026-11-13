@@ -104,14 +104,16 @@ test('a radio is Core\'s Radio: a 24px box with no paint, the glyph in the icon 
   assert.deepEqual(await coreBaseline(radioCell('value', { State: 'Disabled' }), 'dark', ['color']), { color: 'rgba(255, 255, 255, 0.451)' });
 });
 
-// Toggle: a 48 × 24 track (an 18px thumb in 3px of padding), grey off and green on.
-test('a switch is Core\'s Toggle: a 48 by 24 track, toggle-off and support-success, an 18px white thumb', async () => {
+// Toggle: a 48 × 24 track (an 18px thumb in 3px of padding), grey off; on, the track is black under a
+// white thumb, and white under a dark thumb in dark.
+test('a switch is Core\'s Toggle: a 48 by 24 track, toggle-off and layer-selected-inverse, an 18px icon-inverse thumb', async () => {
   const track = { h: 24, w: 48, pad: [3, 3, 3, 3], radius: 12, opacity: 1 };
   assert.deepEqual(await both(toggleCell('track', { Toggled: 'False' })), {
     light: { ...track, bg: 'rgb(128, 128, 128)' }, dark: { ...track, bg: 'rgb(128, 128, 128)' },
   });
-  assert.deepEqual(await both(toggleCell('track', { Toggled: 'True' }), ['bg']), { light: { bg: 'rgb(0, 150, 70)' }, dark: { bg: 'rgb(0, 196, 91)' } });
+  assert.deepEqual(await both(toggleCell('track', { Toggled: 'True' }), ['bg']), { light: { bg: 'rgb(0, 0, 0)' }, dark: { bg: 'rgb(255, 255, 255)' } });
   assert.deepEqual(await coreBaseline(toggleCell('thumb'), 'light'), { h: 18, w: 18, radius: 9, bg: 'rgb(255, 255, 255)', border: { width: 0, color: 'rgba(0, 0, 0, 0)' }, opacity: 1 });
+  assert.deepEqual(await coreBaseline(toggleCell('thumb', { Toggled: 'True' }), 'dark', ['bg']), { bg: 'rgba(0, 0, 0, 0.851)' });
   assert.deepEqual(await both(toggleCell('track', { State: 'Disabled' }), ['bg', 'opacity']), {
     light: { bg: 'rgba(1, 23, 43, 0.102)', opacity: 1 }, dark: { bg: 'rgba(255, 255, 255, 0.102)', opacity: 1 },
   });

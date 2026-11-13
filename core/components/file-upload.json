@@ -45,12 +45,12 @@
       "default": true
     },
     {
-      "name": "File list",
+      "name": "Show File list",
       "type": "BOOLEAN",
       "default": true
     },
     {
-      "name": "File list",
+      "name": "Show File list",
       "type": "BOOLEAN",
       "default": true
     },
