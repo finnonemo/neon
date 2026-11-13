@@ -531,8 +531,8 @@ export function layoutPreset(sweep, { slug, url, measuredOn, robotsDisallowed })
     const first = grounds.findIndex((ground, index) => ground === 'canvas' && roles[index] !== 'footer');
     if (first >= 0) grounds[first] = 'tint';
   }
-  // The feature radius and the lead fact role are picks, not measurements.
-  unmeasured.push('featureRadius', 'factRole');
+  // The feature radius, the lead fact role and the hero name role are picks, not measurements.
+  unmeasured.push('featureRadius', 'factRole', 'nameRole');
   const preset = {
     kind: 'layout',
     slug,
@@ -545,6 +545,7 @@ export function layoutPreset(sweep, { slug, url, measuredOn, robotsDisallowed })
     cardPadding,
     featureRadius: blockRadius ?? 'borderRadius-0',
     factRole: 'display3',
+    nameRole: 'display1',
     pageWidth: sections.some(section => section.fullBleed) ? 'full-bleed' : 'contained',
     motion: motionLevel(measuredPx.motionMs),
     brandPattern: { section: patternRole },

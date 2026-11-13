@@ -51,7 +51,7 @@ Drafts and review reports go to `.local/` and are never committed.
 | 0 | Header | title, `**Theme:**` and `**Immersive Theme:**` labels, status paragraph, the mood's theme half (the theme text) and membership ratio line | tagline (`tagline`); the mood's occasion half (`mood-occasion`) |
 | 1 | Tokens — Colors | the theme's roles and steps, canvas first, and the shared secondary table | — |
 | 2 | Tokens — Typography | the typeface and every type role | — |
-| 3 | Tokens — Spacing & Shapes | the space and radius scales, a Layout table with `--layout-contentMaxWidth` and `--layout-endMargin` in px, and the layout picks, with the feature block radius and the lead fact role | — |
+| 3 | Tokens — Spacing & Shapes | the space and radius scales, a Layout table with `--layout-contentMaxWidth` and `--layout-endMargin` in px, and the layout picks, with the feature block radius, the lead fact role and the hero name role | — |
 | 4 | Components | Main Action, Secondary Action, Logo, Tint Block, Accent Block, and Support Block on a theme with `support` | the occasion's components (`occasion-components`) |
 | 5 | Do's and Don'ts | the stock bullets, first in each list | the preset bullets, last in each list (`preset-dos-donts`) |
 | 6 | Surfaces | canvas, block steps and the first accent and support steps | — |
@@ -64,7 +64,7 @@ Drafts and review reports go to `.local/` and are never committed.
 | 13 | Sibling Themes | each other theme's label, light or dark, canvas and its `sibling` text | — |
 | 14 | Quick Start | registry items and Tailwind v4 `@theme inline` aliases | — |
 
-Scripted wording holds for every colourway, and fixed components name tokens and steps, never px. The Main Action entry lists the fills whose text is not the action's color, where the button swaps to the fill's `on-` text variable; on Ultra those are the lighter palette steps, the accent and the support. The Secondary Action is Neon's `secondary` button, or `ghost` on a block with the same fill: Neon's `outline` variant has no value in Core, so no brief asks for an outline. Every px value appears in the brief's own tables.
+Scripted wording holds for every colourway, and fixed components name tokens and steps, never px. The Main Action entry lists the fills whose text is not the action's color, where the button swaps to the fill's `on-` text variable; on Ultra those are the lighter palette steps, the accent and the support. The Secondary Action is Neon's `secondary` button, or `ghost` on an accent or support fill and on a block with the same fill: Neon's `outline` variant has no value in Core, so no brief asks for an outline. Every px value appears in the brief's own tables.
 
 To refresh a brief after its theme, tokens or picks change, run:
 
@@ -86,11 +86,12 @@ It rewrites the scripted parts of every brief in `registry/theme-briefs` (or `--
 
 **Layout presets** list generic section roles (`hero`, `proof`, `detail-list`, `call-out`, `form`, `footer`) and a density. They give block radius, section gap and card padding as steps, a page width of `contained` or `full-bleed`, and a motion level of `still`, `subtle` or `lively`. The Brand Pattern's section must be one of the layout's own roles.
 
-A layout also makes three composition picks:
+A layout also makes four composition picks:
 
 - `grounds`, one per section in page order: `canvas`, `tint` (the palette's strongest block step), `accent` (the accent's strongest step) or `pattern`. `pattern` goes on the Brand Pattern's section and nowhere else, where the picks file's colourway and ground fill it. At least one section takes `tint` or `accent`. The tool resolves each ground to the theme's variables, so one layout reads differently on each theme.
 - `featureRadius`, a radius step for a feature component.
 - `factRole`, the `display` role a component's lead fact takes. No other component text goes above `title1`.
+- `nameRole`, the `display` role the hero's name takes: `display1` or `display2`, since narrow screens take the next role down. Nothing else in the hero is set larger, a date's numeral block included.
 
 **Imagery presets** describe what leads, framing, subject, illustration and density.
 
@@ -101,7 +102,7 @@ A **picks file** is named after its theme and brief name: theme `club` with brie
 - Every role an occasion component uses exists on the theme. Every theme has `action` and its own families; only some have `support`.
 - A layout with an `accent` ground needs an occasion component that takes the `accent` role, since an accent ground holds nothing else.
 - The colourway is one of the theme's own families, never a secondary color, and the ground is a step of it.
-- `blockColourway` is one of Block's nine primary Colourways, the only ones its generator draws: a Navy, Light Grey or White ground with blocks in one other of Navy, Light Grey, White and Yellow. Both colors must be the theme's at full strength (its canvas, its text or a family's 100 step). When the Block Colourway's ground is the section's fill, the Pattern sits on the section itself; otherwise the brief places it in a panel of that ground with the block radius. Either way it runs as a strip beside or under the text.
+- `blockColourway` is one of Block's nine primary Colourways, the only ones its generator draws: a Navy, Light Grey or White ground with blocks in one other of Navy, Light Grey, White and Yellow. Both colors must be the theme's at full strength (its canvas, its text or a family's 100 step). When the Block Colourway's ground is the section's fill, the Pattern sits on the section itself; otherwise the brief places it in a panel of that ground with the block radius, and the blocks must not be the section's own color, which would cut the panel's edge away. Either way it runs as a strip beside or under the text.
 - A Brand Pattern sits on the bare canvas only as `palette` 100. A ground whose fill is the theme's canvas color under any other colourway or step is refused. On Club, whose palette 100 is a grey tint, every Pattern therefore sits on a tinted section.
 
 When any chosen preset has a source outside finnomena.com, the picks file needs a `review` record in the [example library](example-library.md) shape. It holds `status`, `source_revision`, `reviewer`, `reviewed_on` and `approved_properties`. Its status must be past `illustrative`, with the reviewer and date filled in, and a `partially-reviewed` record lists its approved properties. A source URL the tool cannot read counts as third-party. A picks file with no such source carries no review record.
@@ -220,6 +221,7 @@ The check module in `scripts/theme-briefs` is shared by the tool's `check-only` 
 | `holds a hex-like value`, `holds a px value`, `is a font field` | An input carries a value the theme owns. Describe the intent instead, and use a step name. |
 | `compares or ranks themes`, `holds a ratio or percentage` | A theme text will go stale when themes change. Describe the theme on its own terms. |
 | `uses role … which <Theme> lacks`, `is not one of <Theme>'s families`, `is not a step of`, `bare canvas` | The picks file does not fit its theme. Choose another preset, colourway or ground. |
+| `Block Colourway "…" draws … blocks in a panel on a … section, where the panel loses its edge` | The Pattern sits in a panel and its blocks are the section's fill. Choose a Block Colourway whose blocks are another of the theme's colors. |
 | `Block Colourway "…" draws its … in …, which is not one of <Theme>'s colors at full strength` | The Block Colourway uses a color the theme lacks. Choose one whose ground and blocks are the theme's canvas, text or a family's 100 step. |
 | `has the same occasion, layout and imagery presets as` | Check 9: two picks files of one theme share all three presets, so they would be one design; a different colourway does not make them distinct. Change at least one preset in the file named first. |
 | `Brand Pattern section … is not one of its sections` | A layout places the Pattern in a section it does not have. |

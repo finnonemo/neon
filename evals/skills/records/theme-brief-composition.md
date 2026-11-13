@@ -113,10 +113,20 @@ What these runs showed:
 
 None overflowed sideways at either width. Run logs, reports and apps are in `.local/evals/gaps-{exclusive,club,ultra,private}`; captures and the two measuring scripts are in `.local/evals/gaps-shots`.
 
+## Brief changes after the third set
+
+The three findings changed the brief tool and the four briefs. No page was built from these changes.
+
+- **Panel edge.** A picks file is refused when its Pattern sits in a panel and the Block Colourway's blocks are the section's fill. Exclusive's pick is now `grey__navy-100`, Navy blocks on Light Grey.
+- **Hero name role.** A layout preset names `nameRole`, `display1` or `display2`. The Picks list gives it with the role one below for narrow screens, and says nothing else in the hero is set larger. Both layouts take `display1`.
+- **Secondary Action on an accent or support fill.** The entry now says `ghost` there, as on a block with the `--immersive-palette-75` fill. A component paragraph that fills a Secondary Action with that variable on an accent or support fill is sent back.
+
+Only scripted sections changed. No prose was redrafted: the records show `occasion-components` and `layout` drafted from the earlier entry and presets, and no component paragraph puts a Secondary Action on an accent or support fill.
+
 ## Limits
 
 - One sample per brief in each set of runs.
-- The third set observes each brief change once. Its three findings changed no brief.
+- The third set observes each brief change once. The brief changes after it are unobserved on a page.
 - The four briefs are trial drafts under `maintainer-sign-in`. A redraft under a neutral account changes their prose, and these runs do not cover it.
 - The evaluator wrote the change and judged the captures. No blind judge compared them.
 - The runner reported every case as failed: its diff step met the app's own repository inside the workspace. Each run had already ended on its result event, with no void.
