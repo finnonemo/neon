@@ -1,0 +1,21 @@
+Block snapshot
+
+Built from Block (github.com/pawisssh/block), Finnomena's Pattern builder, at commit 3e08e9ef30f129fbb6b24c067e1794c03b3a4374
+by scripts/sync-block.mjs. Do not edit these files: change Block and sync again.
+
+Code: MIT License
+  block-engine.mjs: Copyright (c) 2026 Pawish Gawinseth. It bundles harfbuzzjs, Copyright (c) 2019 Ebrahim
+  Byagowi, MIT License; hb.wasm is HarfBuzz built by that project.
+
+Finnomena brand assets: all rights reserved
+  Copyright (c) Finnomena. Used under the Finnomena brand guideline; no licence to them is granted here.
+  The Finnomena logo and the Reference Patterns embedded in block-engine.mjs, and the artwork it draws.
+
+IBM Plex: SIL Open Font License 1.1
+  fonts/IBMPlexSansThai-*.ttf and fonts/IBMPlexMono-Regular.ttf
+  Copyright (c) 2017 IBM Corp. with Reserved Font Name "Plex". The licence text is beside the fonts.
+
+FinnomenaTrek: not included
+  Fontcraft's licence forbids distributing the typeface without written permission, so its files are not part
+  of this snapshot. Where fonts/FinnomenaTrek-Regular.otf and fonts/FinnomenaTrek-Medium.otf are present, or
+  FINNO_FONTS_DIR names a directory that holds them, artwork text is drawn in Trek; otherwise in IBM Plex Sans Thai.

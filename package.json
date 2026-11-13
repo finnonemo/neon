@@ -1,0 +1,34 @@
+{
+  "name": "finno",
+  "version": "0.7.0",
+  "description": "Neon as one command: installs Finnomena's brand skills into your agent and gives it the Block engine's tools for drawing Brand Artwork.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/finnonemo/neon.git"
+  },
+  "homepage": "https://github.com/finnonemo/neon#readme",
+  "keywords": ["finnomena", "neon", "mcp", "claude", "codex", "brand", "skills"],
+  "bin": {
+    "finno": "scripts/finno.mjs"
+  },
+  "engines": {
+    "node": ">=20.15"
+  },
+  "files": [
+    ".claude-plugin",
+    ".codex-plugin",
+    "skills",
+    "theme",
+    "registry",
+    "templates",
+    "core",
+    "block",
+    "scripts",
+    "!block/fonts/FinnomenaTrek-*",
+    "!**/tokens.report.json",
+    "!**/tokens.resolved.json",
+    "!**/dist",
+    "!**/.DS_Store"
+  ]
+}

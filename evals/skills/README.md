@@ -41,6 +41,9 @@ Run each request with the named context, first against the baseline and then the
 | Create a Finnomena request tracker with mock data | Scaffolds in an empty destination and builds the feature; no demo/mock banner or state switcher in the UI; the report names what is mocked; relevant states exist | [Mock labeling](records/mock-labeling.md) |
 | Build a Finnomena request tracker demo with mock data, labeled as a demo | Demo/mock labeling appears in the UI | [Mock labeling](records/mock-labeling.md) |
 | Blended event page from a motion-heavy reference design | Under reduced motion every section is visible, no content waits on a reveal script, and the heading is readable at first paint; Ship-ready checklist evidence names the production preview for 375px and 1440px. | [Motion safety](records/motion-safety.md) |
+| Thai request for an Instagram story ad with given words, wanting to see several before choosing | The run loads `neon-block`, calls the finno tools `options` and `candidates`, and asks for a Candidate number; the follow-up pick calls `render` with that `set` and `pick` and reports the three files, the warning and the compliance note. | [neon-block](records/neon-block.md) |
+| `$neon-block` cover for a report, A4 portrait with a label, one result and no choosing, in a session with no tool server | The run reaches the same tools through the command line, picks one Candidate and says which, writes the files in the working directory, and relays `finno.plexTypeface`. | [neon-block](records/neon-block.md) |
+| Ten-slide Finnomena pitch deck with team photos on each slide | The run loads `neon-block`, says a deck and photos are outside this release, draws nothing, and offers the cover, headline and closing frames. | [neon-block](records/neon-block.md) |
 | Create a Finnomena Back Office, Product Feature or Campaign Page app from an empty workspace | The app is created with `install.mjs --new` and grows with `--add` only; `grade-neon-app.mjs` passes: no CDS, no stock shadcn item or mark, no stock utility in the app's own sources, scoped stylesheets, typecheck and build; a Campaign Page passes its Immersive Theme to `ImmersiveLayout`; the report names each `@neon/` item added | [neon-create on the Neon base](records/neon-create-base.md) |
 | Rebuild an existing React prototype on the Neon base | The rebuild is a new app created with `install.mjs --new`; `grade-rebuild.mjs` passes its Neon base check: an `@neon` registry in `components.json`, no CDS package or import, and every file in `src/components/ui/` a Neon item without stock shadcn marks (`dark:` classes, a bare `cn` import, weight utilities). The CDS rebuild record's checks carry over. | [Neon rebuild](records/neon-rebuild.md) |
 | Finnomena event page and Back Office approvals screen, baseline against revised skills (blind) | A judge who cannot tell the packages apart prefers one output per pair, or neither, at 375px and 1440px and names problems with the Look and fix questions and habits table; no numeric score; never feeds readiness. | [Output quality (blind)](records/output-quality-blind.md) |
@@ -126,6 +129,7 @@ Each case's runs live in their own file under `evals/skills/records/`, so pull r
 - [Look and fix](records/look-and-fix.md)
 - [Mock labeling](records/mock-labeling.md)
 - [Motion safety](records/motion-safety.md)
+- [neon-block](records/neon-block.md)
 - [neon-create on the Neon base](records/neon-create-base.md)
 - [Neon rebuild](records/neon-rebuild.md)
 - [Output quality (blind)](records/output-quality-blind.md)
