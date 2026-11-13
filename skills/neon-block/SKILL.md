@@ -39,12 +39,14 @@ The Neon root is two levels above this skill's real directory. Run the command f
 3. Call `candidates` with those settings and show the employee the numbered sheet it returns. Ask which number they want. For twelve more, call it again without `set`. When the employee asked for a single result with no choosing, pick the Candidate whose blocks leave the headline clearest and say which you picked.
 4. Call `render` with the same settings plus the `set` and the `pick`. A change of words or Colourway keeps the picked Pattern: render again with the same `set` and `pick`. A change of Format, layout or Slope draws different Patterns, so return to step 3.
 5. Look at the preview `render` returns before reporting. Text that is clipped, crowded by blocks or hard to read is fixed by another Candidate, a shorter headline or another Colourway, then rendered again.
-6. To place the artwork in Figma, Slides or a document, use the connector the employee already has for that product and give it the SVG, which stays vector. Without one, hand over the file paths.
+6. Place the SVG whole: ask `finno` for the size the slot has (a panel, strip or half page is its own `width` and `height`; render at that size, then pick a Candidate), and never crop, stretch or overlay the file. A crop breaks the Pattern rules the engine kept.
+7. To place the artwork in Figma, Slides or a document, use the connector the employee already has for that product and give it the SVG, which stays vector. Without one, hand over the file paths.
 
 ## Reading the answer
 
 - **Refused**: the engine refuses a setting outside the guideline and says why. Choose again from `options`; the refusal is the guideline speaking, so it is settled by a different choice, never by another route to the same result.
 - **Warnings**: relay each one in plain words. `finno.plexTypeface` means the Finnomena Trek font files are absent from this computer, so the text is in IBM Plex Sans Thai: the artwork is a draft for review, and the final is drawn once the employee sets `FINNO_FONTS_DIR` to the directory that holds the Trek files.
+- **Pattern rules**: `patternRules` is `ok` on every file `finno` writes, since it refuses a Pattern that breaks one. `reference` names the nearest Reference Pattern and its `iou`; a cover or closing scores lower because its text zone cuts the Pattern. A placed file that no longer matches its `patternRules` (cropped, stretched, covered) is relayed like a warning.
 - **Open in Block**: the link opens the same artwork in Block's web app, where a designer can adjust it by hand.
 
 ## Done
