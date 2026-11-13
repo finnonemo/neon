@@ -92,7 +92,7 @@ export function ResponsivePanes({
 
   return (
     <>
-      <Box as="section" borderedEnd={!compact && inspectorWidth === undefined}
+      <Box as="section" borderedEnd={!compact}
         ref={contentRef} tabIndex={-1} aria-label={labels.content}
         hidden={compact && current !== "content"}
         onFocusCapture={(event) => {
@@ -100,8 +100,7 @@ export function ResponsivePanes({
         }}
         style={{ display: compact && current !== "content" ? "none" : "flex",
           flex: compact || contentWidth === undefined ? 1 : undefined,
-          width: compact ? undefined : contentWidth, flexShrink: 0, minWidth: 0, minHeight: 0, height: "100%",
-          order: inspectorWidth === undefined ? 0 : 1 }}
+          width: compact ? undefined : contentWidth, flexShrink: 0, minWidth: 0, minHeight: 0, height: "100%" }}
       >
         <ContentView width="100%" capAt={compact ? undefined : contentCapAt} toolbar={<div className="neon-pane-header">
           <div className="neon-pane-heading">{contentHeader}</div>
@@ -110,7 +109,7 @@ export function ResponsivePanes({
           {content}
         </ContentView>
       </Box>
-      <Box as="section" borderedEnd={!compact && inspectorWidth !== undefined}
+      <Box as="section"
         ref={inspectorRef} tabIndex={-1} aria-label={labels.inspector}
         hidden={compact && current !== "inspector"}
         style={{ display: compact && current !== "inspector" ? "none" : "flex",

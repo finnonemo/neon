@@ -10,7 +10,8 @@
  * `navigation` (see ./navItems.ts's `NavItem`) drives the nav rail and
  * defaults to an empty list — no items render until a layout is given one.
  * `children` (the `sidebar` prop threaded in from App.tsx) renders below
- * the nav — use it for anything app-specific.
+ * the nav, for app-level items that belong beside the menu. A list of
+ * records is content, never sidebar.
  */
 import type { ReactNode } from "react"
 import { cn } from "@/lib/utils"
