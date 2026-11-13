@@ -11,13 +11,10 @@
     "detailsBody: font.lineHeight 24 ≠ 22",
     "detailsCaption: font.size 15 ≠ 14",
     "detailsCaption: font.lineHeight 24 ≠ 20",
-    "checkboxLabel: font.lineHeight 24 ≠ 22",
     "gap notesLabel→notes: 8 ≠ 4"
   ],
   "extras@375-light": [
     "title: font.lineHeight 32 ≠ 28",
-    "disabledCheckboxLabel: color rgba(0, 0, 0, 0.45) ≠ rgba(0, 0, 0, 0.85)",
-    "disabledCheckboxLabel: opacity 1 ≠ 0.5",
     "gap selectLabel→selectTrigger: 8 ≠ 4"
   ],
   "select-open@375-light": [
@@ -257,13 +254,10 @@
     "detailsBody: font.lineHeight 24 ≠ 22",
     "detailsCaption: font.size 15 ≠ 14",
     "detailsCaption: font.lineHeight 24 ≠ 20",
-    "checkboxLabel: font.lineHeight 24 ≠ 22",
     "gap notesLabel→notes: 8 ≠ 4"
   ],
   "extras@375-dark": [
     "title: font.lineHeight 32 ≠ 28",
-    "disabledCheckboxLabel: color rgba(255, 255, 255, 0.45) ≠ rgb(255, 255, 255)",
-    "disabledCheckboxLabel: opacity 1 ≠ 0.5",
     "gap selectLabel→selectTrigger: 8 ≠ 4"
   ],
   "select-open@375-dark": [
@@ -508,13 +502,10 @@
     "detailsBody: font.lineHeight 24 ≠ 22",
     "detailsCaption: font.size 15 ≠ 14",
     "detailsCaption: font.lineHeight 24 ≠ 20",
-    "checkboxLabel: font.lineHeight 24 ≠ 22",
     "gap notesLabel→notes: 8 ≠ 4"
   ],
   "extras@1440-light": [
     "title: font.lineHeight 32 ≠ 28",
-    "disabledCheckboxLabel: color rgba(0, 0, 0, 0.45) ≠ rgba(0, 0, 0, 0.85)",
-    "disabledCheckboxLabel: opacity 1 ≠ 0.5",
     "gap selectLabel→selectTrigger: 8 ≠ 4"
   ],
   "select-open@1440-light": [
@@ -756,13 +747,10 @@
     "detailsBody: font.lineHeight 24 ≠ 22",
     "detailsCaption: font.size 15 ≠ 14",
     "detailsCaption: font.lineHeight 24 ≠ 20",
-    "checkboxLabel: font.lineHeight 24 ≠ 22",
     "gap notesLabel→notes: 8 ≠ 4"
   ],
   "extras@1440-dark": [
     "title: font.lineHeight 32 ≠ 28",
-    "disabledCheckboxLabel: color rgba(255, 255, 255, 0.45) ≠ rgb(255, 255, 255)",
-    "disabledCheckboxLabel: opacity 1 ≠ 0.5",
     "gap selectLabel→selectTrigger: 8 ≠ 4"
   ],
   "select-open@1440-dark": [

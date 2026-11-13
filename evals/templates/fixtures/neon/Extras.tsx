@@ -21,6 +21,16 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { Hook } from "./Hook"
 import { requests, statusLabel, types } from "./shared/data"
 
+// Core's Checkbox in each Selection, Enabled then Disabled.
+const checkboxes: [string, string, boolean | "indeterminate", boolean][] = [
+  ["unchecked", "รับข่าวสาร / News", false, false],
+  ["checked", "ยอมรับเงื่อนไข / Terms", true, false],
+  ["indeterminate", "ทุกบัญชี / All accounts", "indeterminate", false],
+  ["disabled-unchecked", "ส่งอีเมล / Email", false, true],
+  ["disabled-checked", "ส่ง SMS / SMS", true, true],
+  ["disabled-indeterminate", "ทุกช่องทาง / All channels", "indeterminate", true],
+]
+
 export function Extras() {
   const [type, setType] = useState<string>()
   const [date, setDate] = useState<Date>()
@@ -198,6 +208,17 @@ export function Extras() {
             <SegmentedControlItem value="sell" disabled>ขาย</SegmentedControlItem>
             <SegmentedControlItem value="switch">สับเปลี่ยน</SegmentedControlItem>
           </SegmentedControl>
+        </div>
+      </Hook>
+      {/* Core's Checkbox Selections, Enabled and Disabled, which CDS has no baseline for. */}
+      <Hook name="core-checkboxes">
+        <div className="flex flex-wrap items-center gap-4">
+          {checkboxes.map(([id, text, checked, disabled]) => (
+            <div key={id} data-check={id} className="flex items-center gap-2">
+              <Checkbox id={`check-${id}`} defaultChecked={checked} disabled={disabled} />
+              <Label htmlFor={`check-${id}`} className="text-body text-foreground">{text}</Label>
+            </div>
+          ))}
         </div>
       </Hook>
       {/* Core's Button values CDS has no baseline for; Inverse sits on the inverse background. */}
