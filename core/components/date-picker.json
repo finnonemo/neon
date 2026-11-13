@@ -1,0 +1,69 @@
+{
+"component": "Date picker",
+"sets": [
+{
+  "name": "Date picker",
+  "axes": [
+    {
+      "name": "Type",
+      "values": [
+        "Single",
+        "Range"
+      ]
+    },
+    {
+      "name": "Open",
+      "values": [
+        "False",
+        "True"
+      ]
+    },
+    {
+      "name": "Size",
+      "values": [
+        "Large",
+        "Medium",
+        "Small"
+      ]
+    }
+  ],
+  "exclude": [],
+  "properties": [],
+  "variables": {
+    "Date picker/Container/Default/Gap vertical": 4,
+    "Date picker/Container/Default/Gap horizontal": 8
+  },
+  "bindings": [
+    {"layer":"Container","property":"itemSpacing","when":"{{Type=*}}{{Open=*}}{{Size=*}}","value":"Components/Date picker/Container/Default/Gap vertical"},
+    {"layer":"Container","property":"layoutSizingHorizontal","when":"{{Type=*}}{{Open=*}}{{Size=*}}","value":"FILL","literal":true},
+    {"layer":"Container","property":"layoutSizingVertical","when":"{{Type=*}}{{Open=*}}{{Size=*}}","value":"HUG","literal":true},
+    {"layer":"Container / Fields","property":"itemSpacing","when":"{{Type=*}}{{Open=*}}{{Size=*}}","value":"Components/Date picker/Container/Default/Gap horizontal"},
+    {"layer":"Container / Fields","property":"layoutSizingHorizontal","when":"{{Type=*}}{{Open=*}}{{Size=*}}","value":"FILL","literal":true},
+    {"layer":"Container / Fields","property":"layoutSizingVertical","when":"{{Type=*}}{{Open=*}}{{Size=*}}","value":"HUG","literal":true},
+    {"layer":"Container / Fields / Date field","property":"visible","when":"{{Type=*}}{{Open=*}}{{Size=*}}","value":"false","literal":true},
+    {"layer":"Container / Fields / Date field","property":"visible","when":"{{Type=Single}}{{Open=*}}{{Size=*}}","value":"true","literal":true},
+    {"layer":"Container / Fields / Date field","property":"isExposedInstance","when":"{{Type=*}}{{Open=*}}{{Size=*}}","value":"true","literal":true},
+    {"layer":"Container / Fields / Date field","property":"componentProperties.Size","when":"{{Type=*}}{{Open=*}}{{Size=*}}","value":"{{Size=*}}"},
+    {"layer":"Container / Fields / Date field","property":"layoutSizingHorizontal","when":"{{Type=Single}}{{Open=*}}{{Size=*}}","value":"FILL","literal":true},
+    {"layer":"Container / Fields / Date field","property":"layoutSizingVertical","when":"{{Type=Single}}{{Open=*}}{{Size=*}}","value":"HUG","literal":true},
+    {"layer":"Container / Fields / Start date","property":"visible","when":"{{Type=*}}{{Open=*}}{{Size=*}}","value":"false","literal":true},
+    {"layer":"Container / Fields / Start date","property":"visible","when":"{{Type=Range}}{{Open=*}}{{Size=*}}","value":"true","literal":true},
+    {"layer":"Container / Fields / Start date","property":"isExposedInstance","when":"{{Type=*}}{{Open=*}}{{Size=*}}","value":"true","literal":true},
+    {"layer":"Container / Fields / Start date","property":"componentProperties.Size","when":"{{Type=*}}{{Open=*}}{{Size=*}}","value":"{{Size=*}}"},
+    {"layer":"Container / Fields / Start date","property":"layoutSizingHorizontal","when":"{{Type=Range}}{{Open=*}}{{Size=*}}","value":"FILL","literal":true},
+    {"layer":"Container / Fields / Start date","property":"layoutSizingVertical","when":"{{Type=Range}}{{Open=*}}{{Size=*}}","value":"HUG","literal":true},
+    {"layer":"Container / Fields / End date","property":"visible","when":"{{Type=*}}{{Open=*}}{{Size=*}}","value":"false","literal":true},
+    {"layer":"Container / Fields / End date","property":"visible","when":"{{Type=Range}}{{Open=*}}{{Size=*}}","value":"true","literal":true},
+    {"layer":"Container / Fields / End date","property":"isExposedInstance","when":"{{Type=*}}{{Open=*}}{{Size=*}}","value":"true","literal":true},
+    {"layer":"Container / Fields / End date","property":"componentProperties.Size","when":"{{Type=*}}{{Open=*}}{{Size=*}}","value":"{{Size=*}}"},
+    {"layer":"Container / Fields / End date","property":"layoutSizingHorizontal","when":"{{Type=Range}}{{Open=*}}{{Size=*}}","value":"FILL","literal":true},
+    {"layer":"Container / Fields / End date","property":"layoutSizingVertical","when":"{{Type=Range}}{{Open=*}}{{Size=*}}","value":"HUG","literal":true},
+    {"layer":"Container / Calendar","property":"visible","when":"{{Type=*}}{{Open=*}}{{Size=*}}","value":"false","literal":true},
+    {"layer":"Container / Calendar","property":"visible","when":"{{Type=*}}{{Open=True}}{{Size=*}}","value":"true","literal":true},
+    {"layer":"Container / Calendar","property":"componentProperties.Style","when":"{{Type=*}}{{Open=*}}{{Size=*}}","value":"Compact","literal":true},
+    {"layer":"Container / Calendar","property":"componentProperties.Mode","when":"{{Type=Single}}{{Open=*}}{{Size=*}}","value":"Date","literal":true},
+    {"layer":"Container / Calendar","property":"componentProperties.Mode","when":"{{Type=Range}}{{Open=*}}{{Size=*}}","value":"Range","literal":true}
+  ]
+}
+]
+}

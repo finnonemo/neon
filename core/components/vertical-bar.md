@@ -39,7 +39,7 @@ None of its own. Back is `fa-sharp fa-solid` chevron-left, Overflow the ellipsis
 
 ## Text styles, wrapping and truncation
 
-N/A: no text of its own. Every item keeps a title for the overflow menu, as toolbars.md says; the Slot's buttons carry them.
+N/A: no text of its own. Every item keeps a title for the overflow menu, as [toolbars.md](toolbars.md) says; the Slot's buttons carry them.
 
 ## Hit target and Skeleton
 

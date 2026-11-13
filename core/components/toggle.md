@@ -66,11 +66,11 @@ Components/Interactive/Medium/Interactive min-height
 | --- | --- | --- | --- | --- |
 | Title | `Text/text-secondary` | `Text/text-disabled` | `Text/text-secondary` | — |
 | Detail | `Text/text-primary` | `Text/text-disabled` | `Text/text-primary` | — |
-| Track, off | `Miscellaneous/toggle-off` (Grey/50, both modes) | `Button/button-disabled` | none, stroke `Border/border-subtle` | `Skeleton/skeleton-element` |
-| Track, on | `Support/support-success`, both looks | `Button/button-disabled` | as off | `Skeleton/skeleton-element` |
-| Thumb | `Icon/icon-on-color` | `Icon/icon-on-color-disabled` | `Icon/icon-primary` | `Skeleton/skeleton-element` |
+| Track, off | `iOS=False`: `Miscellaneous/toggle-off` (Grey/50, both modes) | `Button/button-disabled` | none, stroke `Border/border-subtle` | `Skeleton/skeleton-element` |
+| Track, on | `iOS=False`: `Layer/layer-selected-inverse` (Grey/100 · Grey/0,) | `Button/button-disabled` | as off | `Skeleton/skeleton-element` |
+| Thumb | `iOS=False`: `Icon/icon-inverse` (White/100 · Black/85A,) | `Icon/icon-on-color-disabled` | `Icon/icon-primary` | `Skeleton/skeleton-element` |
 
-Both looks bind the same Semantic tokens; nothing binds a remote kit variable. The kit's own faint off track and `Accents/Green` on track failed 3:1, so the owner chose Carbon's tokens with a darker off track (#128, option c).
+Nothing binds a remote kit variable. The kit's own faint off track and `Accents/Green` on track failed 3:1, so the owner chose Carbon's tokens with a darker off track for both looks (#128, option c). `iOS=False` went black and white to reach 3:1 (R1 (a)): no white thumb passes in Dark on an on track that passes on the surface, so its thumb is `icon-inverse`, dark in Dark.
 
 Pairs (the spec's `contrast` list): Title and Detail on the Base surfaces; the track (non-text) on the surfaces; the thumb (non-text) on the track; Read-only's hairline (decorative); the Focus colour.
 
@@ -100,16 +100,17 @@ None: no icon.
 
 ## Accessibility
 
-Items 2, 5 and 6 are not met; each is in #198. Item 2 is down to one pair.
+Items 2, 5 and 6 are not met; each is in #198. Item 2: `iOS=False` passes since ;
 
 - [x] 1. Title (`text-secondary`) and Detail (`text-primary`) pass on the Base surfaces, both modes (the contrast lint, 2026-11-01).
-- [ ] 2. Non-text: one pair under 3:1 (lowest over the Base surfaces, Light / Dark; issues.md):
+- [ ] 2. Non-text: `iOS=False` passes;
 
   | Pair | Light | Dark |
   | --- | --- | --- |
-  | White thumb on `support-success` | 3.85 | **2.32** |
+  | `iOS=False` off track (`toggle-off`) on the surface | 3.53 | 3.83 |
+  | `iOS=False` on track (`layer-selected-inverse`) vs off track | 5.32 | 3.95 |
+  | `iOS=False` thumb (`icon-inverse`) on off / on | 3.95 / 21.00 | 4.70 / 15.13 |
 
-The lint lists it as a known defect on both looks (`check-specs.sh`, 2026-11-01). Fixable by a darker Dark `support-success` (shared with other components) or by a thumb stroke or a Dark thumb token; both are the owner's look calls. It stays open. The rest pass since `toggle-off` went to Grey/50: off track on the surface 3.53 / 3.83, white thumb on it 3.95, on track `support-success` on the surface 3.44 / 6.52.
 - [x] 3. N/A: not a field.
 - [x] 4. No state by colour alone: the thumb moves end to end; Read-only adds an outline; Disabled dims the labels; Skeleton drops them.
 - [ ] 5. **No Focus state**: `iOS=False` has no `State=Focus`, as before #128, so no Focus ring is drawn; the spec lints only the Focus colour.
