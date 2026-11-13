@@ -66,7 +66,7 @@ _Avoid_: Block copy, vendored Block
 
 **finno**:
 Neon as one command: it installs Neon into an employee's agent and gives that agent, or a person at a terminal, the Block engine's tools.
-_Avoid_: Neon CLI, Installer (which puts theme assets into an app), fena (only the name finno is published under on npm)
+_Avoid_: Neon CLI, Installer (which puts theme assets into an app)
 
 ### Installing
 

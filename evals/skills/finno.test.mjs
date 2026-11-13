@@ -223,14 +223,14 @@ test('setup leaves a Desktop file it cannot read as it is, says so, and exits 1'
 test('setup updates what is already there, and registers the published package through npx at this version', () => {
   const { run } = fakeAgents({ marketplace: true, plugin: true, server: true });
   const found = detect({ run, home: '/nowhere', platform: 'linux', env: {} });
-  const published = serverCommand({ root: '/home/u/.npm/_npx/abc/node_modules/fena', platform: 'linux', execPath: '/usr/bin/node' });
-  assert.deepEqual(published.args, ['-y', `fena@${VERSION}`, 'mcp']);
+  const published = serverCommand({ root: '/home/u/.npm/_npx/abc/node_modules/finnomena', platform: 'linux', execPath: '/usr/bin/node' });
+  assert.deepEqual(published.args, ['-y', `finnomena@${VERSION}`, 'mcp']);
   assert.ok(published.env.PATH.startsWith('/usr/bin'));
-  assert.deepEqual(serverCommand({ root: 'C:\\x\\node_modules\\fena'.split('\\').join(require_sep()), platform: 'win32' }).args.slice(0, 3), ['/c', 'npx', '-y']);
+  assert.deepEqual(serverCommand({ root: 'C:\\x\\node_modules\\finnomena'.split('\\').join(require_sep()), platform: 'win32' }).args.slice(0, 3), ['/c', 'npx', '-y']);
   const commands = planFor(found, { server: published }).map(step => step.command.join(' '));
   assert.deepEqual(commands.slice(0, 2), ['claude plugin marketplace update finnomena-plugins', 'claude plugin update neon@finnomena-plugins']);
   assert.ok(commands.includes('codex mcp remove finno'));
-  assert.ok(commands.at(-1).endsWith(`-- ${published.command} -y fena@${VERSION} mcp`));
+  assert.ok(commands.at(-1).endsWith(`-- ${published.command} -y finnomena@${VERSION} mcp`));
   assert.ok(!commands.some(command => command.includes('marketplace add')));
 });
 function require_sep() { return process.platform === 'win32' ? '\\' : '/'; }

@@ -9,8 +9,8 @@ import { createInterface } from 'node:readline';
 import { NEON_ROOT } from './artwork.mjs';
 import { VERSION } from './tools.mjs';
 
-/** The name Neon is published under on npm. npm refused `finno` as too close to `pino` and `minio` (ADR 0010); the command keeps that name. */
-export const NPM_PACKAGE = 'fena';
+/** The name Neon is published under on npm. npm refused `finno` and then `fena` as too close to other packages (ADR 0010); the command keeps that name. */
+export const NPM_PACKAGE = 'finnomena';
 
 const MARKETPLACE = 'finnomena-plugins';
 const PLUGIN = `neon@${MARKETPLACE}`;
@@ -30,7 +30,7 @@ export function desktopConfigPath({ home = homedir(), platform = process.platfor
 }
 
 /**
- * How an agent starts the tool server. From the published package it is `npx fena@<this version>`, so the agent
+ * How an agent starts the tool server. From the published package it is `npx finnomena@<this version>`, so the agent
  * keeps working after this run's files are gone. From a checkout it is this checkout's own file, which is not on npm.
  */
 export function serverCommand({ root = NEON_ROOT, platform = process.platform, execPath = process.execPath } = {}) {
