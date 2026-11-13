@@ -1,6 +1,6 @@
 {
   "name": "neon",
-  "description": "Applies Finnomena's brand so any employee's vibe-coded apps, UI mockups and artwork follow company branding. Ships neon-create (builds on the Neon base, or in an app already on the Coinbase Design System), neon-redesign (colors and typography through CSS variables), neon-audit (recommends a theming depth for an existing project), neon-review (read-only, evidence-backed UI review) and neon-block (draws Brand Artwork such as ads, posts and covers with the Block engine, through the finno tools).",
+  "description": "Applies Finnomena's brand so any employee's vibe-coded apps, UI mockups and artwork follow company branding. Ships neon-create (builds on the Neon base, or in an app already on the Coinbase Design System), neon-redesign (colors and typography through CSS variables), neon-audit (recommends a theming depth for an existing project), neon-review (read-only, evidence-backed UI review), neon-block (draws Brand Artwork such as ads, posts and covers with the Block engine, through the finno tools) and neon-deck (builds a deck of 16:9 slides as one HTML file, with its cover, closing and Patterns drawn by the same engine).",
   "version": "1.0.1",
   "author": {
     "name": "Finnomena"
@@ -10,7 +10,8 @@
     "./skills/neon-redesign",
     "./skills/neon-audit",
     "./skills/neon-review",
-    "./skills/neon-block"
+    "./skills/neon-block",
+    "./skills/neon-deck"
   ],
   "mcpServers": {
     "finno": {
