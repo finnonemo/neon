@@ -10,7 +10,7 @@ import { join, relative } from 'node:path';
 import { briefProblems, checkInputs, RECORDS, renderable, sourceNamesOf } from './checks.mjs';
 import { askClaude, ClaudeError, claudeVersion, EFFORT, MODEL } from './model.mjs';
 import { accentPlacements, entryChecks, proseText, words } from './prose-checks.mjs';
-import { freshBrief, placeholderProse, readProse, renderBrief, SCRIPTED_SECTIONS, sectionGrounds, splitSections } from './render.mjs';
+import { freshBrief, offActionFills, placeholderProse, readProse, renderBrief, SCRIPTED_SECTIONS, sectionGrounds, splitSections } from './render.mjs';
 import { ENTRIES, entryOrder } from './schemas.mjs';
 import { paletteTokens } from '../lib/colors.mjs';
 
@@ -49,6 +49,7 @@ function inputValue(input, brief, outputs) {
   if (input === 'brandPattern.colourway') return picks.brandPattern.colourway;
   if (input === 'brandPattern.section') return layout.brandPattern.section;
   if (input === 'accentPlacements') return accentPlacements(brief);
+  if (input === 'offActionFills') return offActionFills(theme).map((name) => `--immersive-${name}`);
   if (input === 'colorVars') return [...theme.vars.keys()].map((name) => `--immersive-${name}`);
   if (input === 'typeRoles') return facts.scale.type.map(({ role }) => role);
   if (input === 'sectionGrounds') return sectionGrounds(brief);

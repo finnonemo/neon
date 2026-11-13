@@ -129,12 +129,12 @@ Membership ratio: Navy 60%, Light Grey 15%, Yellow 15%, White 10%.
 ### Main Action
 **Role:** The main action of a section
 
-Neon `Button` filled with `--immersive-action`, its label in `--immersive-on-action`, with `--borderRadius-1000` corners.
+Neon `Button` filled with `--immersive-action`, its label in `--immersive-on-action`, with `--borderRadius-1000` corners. On `--immersive-palette-50`, `--immersive-palette-25`, every `accent` fill and every `support` fill, `--immersive-action` does not read: fill the button with that fill's `on-` text variable and set its label in the fill's own variable.
 
 ### Secondary Action
 **Role:** An alternative beside the main action
 
-Neon `Button` with no fill, its label and outline in `--immersive-text` on the canvas. On a filled block, label and outline take that block's `on-` text variable.
+Neon `Button` in its `secondary` variant: `--immersive-palette-75` fill with its label in `--immersive-on-palette-75`. On a block that already has that fill, the `ghost` variant: no fill, its label in the block's `on-` text variable. Neon has no outlined button.
 
 ### Logo
 **Role:** Brand identity
@@ -221,8 +221,9 @@ Imagery never carries another brand's logo, copy or look, and the Finnomena logo
 - **Section:** hero
 - **Colourway:** Navy (`palette`)
 - **Ground:** `--immersive-palette-100` fill with `--immersive-on-palette-100` text, the canvas itself
+- **Block Colourway:** `navy__grey-100`, Light Grey blocks on Navy
 
-The hero section carries the Brand Pattern on its ground, and the Pattern keeps to the Navy family. Block's Brand Pattern procedure makes it as a static SVG: never hand-draw it, imitate it in CSS or animate it.
+The hero section carries the Brand Pattern on its ground: Block draws it in `navy__grey-100`, Light Grey blocks on the section's own Navy. It runs as a strip beside or under the section's text, never behind it. Block's Brand Pattern procedure makes it as a static SVG: never hand-draw it, imitate it in CSS or animate it.
 
 ## Layout
 
@@ -236,7 +237,7 @@ The hero section carries the Brand Pattern on its ground, and the Pattern keeps 
 | 6 | form | tint | `--immersive-palette-75` | `--immersive-on-palette-75` |
 | 7 | footer | canvas | `--immersive-canvas` | `--immersive-text` |
 
-Rows are in page order. A `tint`, `accent` or `pattern` ground fills its section edge to edge, with the content column inside it; on `canvas` the section's blocks carry the fills.
+Rows are in page order. A `tint`, `accent` or `pattern` ground fills its section edge to edge, with the content column inside it; on `canvas` the section's blocks carry the fills. A component whose fill is its section's ground steps one lighter in the same family, so the block and its radius show against the ground.
 
 A full-bleed page opens on a poster hero, the Brand Pattern section on the pattern ground, where the stacked event name dominates the first screen above its date, place and main action. The first detail list, on the tint ground, holds the Race distance card set, the one group of equal cards, each with borderRadius-400 and space-5 padding. The second detail list, on the canvas, holds the Route overview, dominated by its map image, then the Race-day schedule. The call-out, on the accent ground, holds the Registration call-out, dominated by its main action. Route overview and Registration call-out are the unequal feature blocks, spanning the content column at borderRadius-800. The proof section, on the canvas, is led by a runner quotation, and the form, on the tint ground, by the submit action. The distance, the start time and the registration deadline take display2. There is no navigation; a sticky main action appears on narrow screens after the hero. The minimal footer, on the canvas, carries the logo, organiser line and legal links. Every section is parted by space-10 for a spacious rhythm.
 

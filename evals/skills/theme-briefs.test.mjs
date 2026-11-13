@@ -43,7 +43,7 @@ const valid = {
   'theme-briefs/picks/club-run.json': {
     theme: 'club', briefName: 'Run',
     presets: { occasion: 'run', layout: 'event-landing', imagery: 'people-in-action' },
-    brandPattern: { colourway: 'accent', ground: 50 },
+    brandPattern: { colourway: 'accent', ground: 50, blockColourway: 'white__yellow-100' },
   },
   'theme-briefs/themes/club.json': {
     mood: 'Club opens the membership on a white canvas with navy ink. Light grey steps build quiet section blocks.',
@@ -126,12 +126,13 @@ const SCHEMA_REFUSALS = {
   'a section role': [edit(LAYOUT, (p) => ({ ...p, sections: ['hero', 'gallery'] })), /"sections\.1" must be one of hero, proof, detail-list, call-out, form, footer$/m],
   'a component theme role': [edit(OCCASION, (p) => { p.components[0].roles = ['green']; return p; }), /"components\.0\.roles\.0" must be one of palette, accent, support, action$/m],
   'a secondary highlight': [edit(OCCASION, (p) => ({ ...p, secondaryHighlights: ['teal'] })), /"secondaryHighlights\.0" must be one of green, blue, purple, red, orange$/m],
-  'a colourway that is no theme family': [edit(PICKS, (p) => ({ ...p, brandPattern: { colourway: 'green', ground: 50 } })), /"brandPattern\.colourway" must be one of palette, accent, support$/m],
+  'a colourway that is no theme family': [edit(PICKS, (p) => ({ ...p, brandPattern: { ...p.brandPattern, colourway: 'green', ground: 50 } })), /"brandPattern\.colourway" must be one of palette, accent, support$/m],
+  'a Block Colourway Block does not draw': [edit(PICKS, (p) => ({ ...p, brandPattern: { ...p.brandPattern, blockColourway: 'yellow__navy-100' } })), /"brandPattern\.blockColourway" must be one of navy__yellow-100, .*white__navy-100$/m],
   'too few components': [edit(OCCASION, (p) => ({ ...p, components: p.components.slice(0, 1) })), /"components" must have 2–6 items, has 1$/m],
   'too many components': [edit(OCCASION, (p) => ({ ...p, components: Array(7).fill(p.components[0]) })), /"components" must have 2–6 items, has 7$/m],
   'too many dos': [edit(OCCASION, (p) => ({ ...p, dos: ['a', 'b', 'c', 'd'] })), /"dos" must have 1–3 items, has 4$/m],
   'no donts': [edit(OCCASION, (p) => ({ ...p, donts: [] })), /"donts" must have 1–3 items, has 0$/m],
-  'a wrong type': [edit(PICKS, (p) => ({ ...p, brandPattern: { colourway: 'accent', ground: '50' } })), /"brandPattern\.ground" must be a positive integer$/m],
+  'a wrong type': [edit(PICKS, (p) => ({ ...p, brandPattern: { ...p.brandPattern, colourway: 'accent', ground: '50' } })), /"brandPattern\.ground" must be a positive integer$/m],
   'a kind that does not match its folder': [edit(IMAGERY, (p) => ({ ...p, kind: 'layout' })), /people-in-action\.json: "kind" must be one of imagery$/m],
   'a slug that does not match its file name': [edit(LAYOUT, (p) => ({ ...p, slug: 'landing' })), /event-landing\.json: "slug" must match the file name "event-landing"$/m],
 };
@@ -201,9 +202,9 @@ const review = (status) => ({ status, source_revision: '2026-10-30', reviewer: s
 
 const COMPATIBILITY_REFUSALS = {
   'a support component on Club': [edit(OCCASION, (p) => { p.components[1].roles = ['support']; return p; }), /^theme-briefs\/picks\/club-run\.json: occasion "run" component "Registration call-out" uses role "support", which Club lacks \(roles: action, palette, accent\)$/m],
-  'a colourway from a family the theme lacks': [edit(PICKS, (p) => ({ ...p, brandPattern: { colourway: 'support', ground: 50 } })), /^theme-briefs\/picks\/club-run\.json: colourway "support" is not one of Club's families \(palette, accent\)$/m],
-  'a ground that is not a step of the colourway': [edit(PICKS, (p) => ({ ...p, brandPattern: { colourway: 'accent', ground: 30 } })), /^theme-briefs\/picks\/club-run\.json: ground 30 is not a step of accent \(25, 50, 75, 100\)$/m],
-  'a Brand Pattern on the bare canvas': [{ 'theme/immersive-themes.json': withCanvasAccent(), ...edit(PICKS, (p) => ({ ...p, brandPattern: { colourway: 'accent', ground: 25 } })) }, /^theme-briefs\/picks\/club-run\.json: accent 25 is Club's bare canvas; a Brand Pattern sits on the canvas only as palette 100$/m],
+  'a colourway from a family the theme lacks': [edit(PICKS, (p) => ({ ...p, brandPattern: { ...p.brandPattern, colourway: 'support', ground: 50 } })), /^theme-briefs\/picks\/club-run\.json: colourway "support" is not one of Club's families \(palette, accent\)$/m],
+  'a ground that is not a step of the colourway': [edit(PICKS, (p) => ({ ...p, brandPattern: { ...p.brandPattern, colourway: 'accent', ground: 30 } })), /^theme-briefs\/picks\/club-run\.json: ground 30 is not a step of accent \(25, 50, 75, 100\)$/m],
+  'a Brand Pattern on the bare canvas': [{ 'theme/immersive-themes.json': withCanvasAccent(), ...edit(PICKS, (p) => ({ ...p, brandPattern: { ...p.brandPattern, colourway: 'accent', ground: 25 } })) }, /^theme-briefs\/picks\/club-run\.json: accent 25 is Club's bare canvas; a Brand Pattern sits on the canvas only as palette 100$/m],
   'a Brand Pattern section the layout lacks': [edit(LAYOUT, (p) => ({ ...p, brandPattern: { section: 'proof' } })), /^theme-briefs\/presets\/layout\/event-landing\.json: Brand Pattern section "proof" is not one of its sections$/m],
   'an accent ground with no accent component': [edit(OCCASION, (p) => { p.components[1].roles = ['palette', 'action']; return p; }), /^theme-briefs\/picks\/club-run\.json: layout "event-landing" gives a section an accent ground, but no component of occasion "run" takes the accent role$/m],
   'a missing preset': [edit(PICKS, (p) => ({ ...p, presets: { ...p.presets, imagery: 'still-life' } })), /^theme-briefs\/picks\/club-run\.json: imagery preset "still-life" not found under theme-briefs\/presets\/imagery$/m],
@@ -224,7 +225,7 @@ const twin = (change = (p) => p) => ({ 'theme-briefs/picks/club-race.json': chan
 const DISTINCTNESS_REFUSALS = {
   'two picks files of one theme with the same presets': [twin(), /^theme-briefs\/picks\/club-run\.json: has the same occasion, layout and imagery presets as theme-briefs\/picks\/club-race\.json; briefs on one theme differ in at least one preset$/m],
   'two picks files of one theme that differ only in ground': [twin((p) => ({ ...p, brandPattern: { ...p.brandPattern, ground: 75 } })), /^theme-briefs\/picks\/club-run\.json: has the same occasion, layout and imagery presets as theme-briefs\/picks\/club-race\.json; briefs on one theme differ in at least one preset$/m],
-  'two picks files of one theme that differ only in colourway': [twin((p) => ({ ...p, brandPattern: { colourway: 'palette', ground: 75 } })), /^theme-briefs\/picks\/club-run\.json: has the same occasion, layout and imagery presets as theme-briefs\/picks\/club-race\.json; briefs on one theme differ in at least one preset, not only in colourway$/m],
+  'two picks files of one theme that differ only in colourway': [twin((p) => ({ ...p, brandPattern: { ...p.brandPattern, colourway: 'palette', ground: 75 } })), /^theme-briefs\/picks\/club-run\.json: has the same occasion, layout and imagery presets as theme-briefs\/picks\/club-race\.json; briefs on one theme differ in at least one preset, not only in colourway$/m],
 };
 
 for (const [name, [changes, expected]] of Object.entries(DISTINCTNESS_REFUSALS)) {
@@ -246,7 +247,7 @@ test('the same presets may serve two themes, and one changed preset makes a dist
 test('palette 100 may be the bare canvas, and a Finnomena source needs no review', (t) => {
   const root = fixture(t, {
     'theme-briefs/picks/club-run.json': null,
-    'theme-briefs/picks/ultra-run.json': { ...valid[PICKS], theme: 'ultra', brandPattern: { colourway: 'palette', ground: 100 } },
+    'theme-briefs/picks/ultra-run.json': { ...valid[PICKS], theme: 'ultra', brandPattern: { colourway: 'palette', ground: 100, blockColourway: 'navy__grey-100' } },
     ...edit(LAYOUT, (p) => ({ ...p, source: source('https://www.finnomena.com/campaign/run') })),
   });
   const { status, out } = checkOnly(root);
@@ -523,6 +524,7 @@ test('scripted-only leaves a brief alone when its prose or inputs cannot be read
 // Every theme with each of its colourways and, on its palette, every page width and motion level, rendered in one scripted-only run.
 const LABELS = { club: 'Club', exclusive: 'Exclusive', private: 'Private', ultra: 'Ultra' };
 const COLOURWAYS = { club: ['palette', 'accent'], exclusive: ['palette', 'accent'], private: ['palette', 'accent'], ultra: ['palette', 'accent', 'support'] };
+const BLOCK_COLOURWAY = { club: 'white__yellow-100', exclusive: 'grey__yellow-100', private: 'grey__yellow-100', ultra: 'navy__grey-100' };
 const LAYOUT_VARIANTS = ['contained', 'full-bleed'].flatMap((pageWidth) => ['still', 'subtle', 'lively'].map((motion) => ({ pageWidth, motion })));
 const MATRIX = Object.entries(COLOURWAYS).flatMap(([theme, colourways]) => [
   ...colourways.map((colourway) => ({ colourway, ...LAYOUT_VARIANTS[colourways.indexOf(colourway) + 1] })),
@@ -541,7 +543,7 @@ function renderMatrix(t) {
   for (const colourway of ['accent', 'support']) files[`theme-briefs/presets/imagery/people-in-action-${colourway}.json`] = { ...valid[IMAGERY], slug: `people-in-action-${colourway}` };
   for (const { theme, colourway, briefName, slug, layout } of MATRIX) {
     const imagery = colourway === 'palette' ? 'people-in-action' : `people-in-action-${colourway}`;
-    files[`theme-briefs/picks/${slug}.json`] = { theme, briefName, presets: { occasion: 'run', layout, imagery }, brandPattern: { colourway, ground: 50 } };
+    files[`theme-briefs/picks/${slug}.json`] = { theme, briefName, presets: { occasion: 'run', layout, imagery }, brandPattern: { colourway, ground: 50, blockColourway: BLOCK_COLOURWAY[theme] } };
     files[`theme-briefs/records/${slug}.json`] = { brief: slug, accentPlacement: 'Registration call-out' };
     files[`registry/theme-briefs/${slug}.md`] = staleBrief(PROSE, { theme: LABELS[theme], name: briefName });
   }
@@ -568,6 +570,11 @@ test('scripted rendering holds for every theme, colourway, page width and motion
     assert.match(section(text, 'Tokens — Spacing & Shapes'), pageWidth === 'contained' ? /Section fills stop at that column/ : /Section fills span the viewport/, at);
     assert.match(section(text, 'Motion'), MOTION[motion], at);
     assert.match(section(text, 'Brand Pattern'), new RegExp(`^- \\*\\*Ground:\\*\\* \`--immersive-${colourway}-50\` fill with \`--immersive-on-${colourway}-50\` text$`, 'm'), at);
+    assert.match(section(text, 'Brand Pattern'), new RegExp(`^- \\*\\*Block Colourway:\\*\\* \`${BLOCK_COLOURWAY[theme]}\`, `, 'm'), at);
+    // Only where the main action's color is not the text of a block fill does its entry name the swap.
+    assert.equal(/`--immersive-action` does not read/.test(section(text, 'Components')), theme === 'ultra', at);
+    assert.match(section(text, 'Components'), /^Neon `Button` in its `secondary` variant: `--immersive-palette-75` fill with its label in `--immersive-on-palette-75`\./m, at);
+    assert.doesNotMatch(text.replace('Neon has no outlined button.', ''), /outline/i, at);
     // No block may be capped at a count that a colourway's Brand Pattern ground could break.
     assert.doesNotMatch(text, /\bone per (screen|page)\b|\bonly one\b/i, at);
     // Every px value outside a table repeats one of the brief's own table values.
@@ -783,7 +790,7 @@ test('a soft check sends back a Do that names a display role other than the layo
 });
 
 test('Layout opens on the scripted section table, theme by theme, and its prose reads back without it', (t) => {
-  assert.match(briefText, /^## Layout\n\n\| # \| Section \| Ground \| Fill \| Text \|\n\|---\|---\|---\|---\|---\|\n\| 1 \| hero \| pattern \| `--immersive-accent-50` \| `--immersive-on-accent-50` \|\n\| 2 \| detail-list \| canvas \| `--immersive-canvas` \| `--immersive-text` \|\n\| 3 \| call-out \| accent \| `--immersive-accent-100` \| `--immersive-on-accent-100` \|\n\| 4 \| form \| tint \| `--immersive-palette-100` \| `--immersive-on-palette-100` \|\n\| 5 \| footer \| canvas \| `--immersive-canvas` \| `--immersive-text` \|\n\nRows are in page order\. A `tint`, `accent` or `pattern` ground fills its section edge to edge, with the content column inside it; on `canvas` the section's blocks carry the fills\.\n\nThe page opens on a split hero/m);
+  assert.match(briefText, /^## Layout\n\n\| # \| Section \| Ground \| Fill \| Text \|\n\|---\|---\|---\|---\|---\|\n\| 1 \| hero \| pattern \| `--immersive-accent-50` \| `--immersive-on-accent-50` \|\n\| 2 \| detail-list \| canvas \| `--immersive-canvas` \| `--immersive-text` \|\n\| 3 \| call-out \| accent \| `--immersive-accent-100` \| `--immersive-on-accent-100` \|\n\| 4 \| form \| tint \| `--immersive-palette-100` \| `--immersive-on-palette-100` \|\n\| 5 \| footer \| canvas \| `--immersive-canvas` \| `--immersive-text` \|\n\nRows are in page order\. A `tint`, `accent` or `pattern` ground fills its section edge to edge, with the content column inside it; on `canvas` the section's blocks carry the fills\. A component whose fill is its section's ground steps one lighter in the same family, so the block and its radius show against the ground\.\n\nThe page opens on a split hero/m);
   assert.match(briefText, /^- \*\*Feature block radius:\*\* `--borderRadius-700` \(40px\), for a block that spans the content column; cards inside it keep the block and card radius$/m);
   assert.match(briefText, /^- \*\*Lead fact role:\*\* `display3` \(54px\/64px\), for the one fact a component leads with; other component text stops at `title1`$/m);
   // A second scripted-only pass leaves the brief as it is: the prose is read back without the table.
@@ -1255,4 +1262,39 @@ test('a brief themes the page through ImmersiveLayout, never an attribute set by
   assert.match(section('Quick Start'), /^Build on the Neon base\. Add `@neon\/theme`, `@neon\/immersive-themes` and this brief's item, `@neon\/theme-brief-club-run`, then pass `immersiveTheme="club"` to `ImmersiveLayout`\./m);
   assert.match(section("Do's and Don'ts"), /^- Pass `immersiveTheme="club"` to `ImmersiveLayout`/m);
   assert.doesNotMatch(briefText, /on the page root/);
+});
+
+test('the Block Colourways a picks file may name are the ones Block\'s engine draws in its primary group', async () => {
+  const { BLOCK_COLOURWAYS, blockColourway } = await import(join(repo, 'scripts/theme-briefs/schemas.mjs'));
+  const { COLOURWAYS_LIST } = await import(join(repo, 'block/block-engine.mjs'));
+  assert.deepEqual(BLOCK_COLOURWAYS, COLOURWAYS_LIST.filter(({ group }) => group === 'primary').map(({ id }) => id));
+  assert.deepEqual(blockColourway('grey__yellow-100'), { ground: 'Light Grey.100', blocks: 'Yellow.100' });
+});
+
+test('check-only refuses a Block Colourway that draws in a color the theme lacks', (t) => {
+  const exclusive = { ...valid[PICKS], theme: 'exclusive', brandPattern: { colourway: 'palette', ground: 100, blockColourway: 'white__navy-100' } };
+  assertRefused(t, { ...THEME_TEXTS, [PICKS]: null, 'theme-briefs/picks/exclusive-run.json': exclusive },
+    /^theme-briefs\/picks\/exclusive-run\.json: Block Colourway "white__navy-100" draws its ground in White, which is not one of Exclusive's colors at full strength$/m);
+});
+
+test('the Brand Pattern sits on the section when Block draws on its fill, and in a panel when it does not', (t) => {
+  const { briefs } = renderMatrix(t);
+  const pattern = (theme, colourway) => section(briefs.find((brief) => brief.theme === theme && brief.colourway === colourway).text, 'Brand Pattern');
+  assert.match(pattern('club', 'accent'), /^The hero section carries the Brand Pattern in a panel on its ground: Block draws it in `white__yellow-100`, Yellow blocks on White \(`--immersive-canvas`\), and the panel takes the block and card radius\. It runs as a strip beside or under the section's text, never behind it\./m);
+  for (const text of briefs.map((brief) => section(brief.text, 'Layout'))) assert.match(text, /A component whose fill is its section's ground steps one lighter in the same family/);
+});
+
+test('soft checks send back an outlined action, and a main action in the action color on a fill where it does not read', (t) => {
+  // Club with Ultra's action: White, which is not the text of any of Club's block fills.
+  const themes = JSON.parse(readFileSync(join(repo, 'theme/immersive-themes.json'), 'utf8'));
+  themes.themes.club.action = { bg: 'White.100', fg: 'Navy.100' };
+  const bad = components([]);
+  bad.components[0] = { ...bad.components[0], paragraph: bad.components[0].paragraph.replace('then one select action', 'then one outlined select action') };
+  bad.components[1] = { ...bad.components[1], paragraph: bad.components[1].paragraph.replace('above one main action', 'above one main action in var(--immersive-action) with var(--immersive-on-action)') };
+  const { fake, status, out } = draft(t, { changes: { 'theme/immersive-themes.json': themes }, answers: { 'occasion-components': [bad, GOOD['occasion-components']] } });
+  assert.equal(status, 0, out);
+  const sent = calls(fake, 'occasion-components')[1].prompt;
+  assert.match(sent, /^- "components\.0\.paragraph" outlines an action; Neon has no outlined button, and a Secondary Action is the secondary or ghost variant$/m);
+  assert.match(sent, /^- "components\.1\.paragraph" fills its action with --immersive-action on --immersive-accent-100, where it does not read; fill it with --immersive-on-accent-100 and set its label in --immersive-accent-100$/m);
+  assert.match(sent, /"offActionFills": ?\[/);
 });

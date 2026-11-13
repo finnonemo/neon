@@ -8,6 +8,7 @@
   },
   "brandPattern": {
     "colourway": "accent",
-    "ground": 50
+    "ground": 50,
+    "blockColourway": "white__yellow-100"
   }
 }

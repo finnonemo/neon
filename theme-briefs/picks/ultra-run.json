@@ -8,6 +8,7 @@
   },
   "brandPattern": {
     "colourway": "palette",
-    "ground": 100
+    "ground": 100,
+    "blockColourway": "navy__grey-100"
   }
 }
