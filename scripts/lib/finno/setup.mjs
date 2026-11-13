@@ -9,6 +9,9 @@ import { createInterface } from 'node:readline';
 import { NEON_ROOT } from './artwork.mjs';
 import { VERSION } from './tools.mjs';
 
+/** The name Neon is published under on npm. npm refused `finno` and then `fena` as too close to other packages (ADR 0010); the command keeps that name. */
+export const NPM_PACKAGE = 'finnomena';
+
 const MARKETPLACE = 'finnomena-plugins';
 const PLUGIN = `neon@${MARKETPLACE}`;
 const DEFAULT_SOURCE = 'finnonemo/neon';
@@ -27,13 +30,13 @@ export function desktopConfigPath({ home = homedir(), platform = process.platfor
 }
 
 /**
- * How an agent starts the tool server. From the published package it is `npx finno@<this version>`, so the agent
+ * How an agent starts the tool server. From the published package it is `npx finnomena@<this version>`, so the agent
  * keeps working after this run's files are gone. From a checkout it is this checkout's own file, which is not on npm.
  */
 export function serverCommand({ root = NEON_ROOT, platform = process.platform, execPath = process.execPath } = {}) {
   const published = root.split(sep).includes('node_modules');
   if (!published) return { command: execPath, args: [join(root, 'scripts/finno.mjs'), 'mcp'], env: {}, published };
-  const args = ['-y', `finno@${VERSION}`, 'mcp'];
+  const args = ['-y', `${NPM_PACKAGE}@${VERSION}`, 'mcp'];
   if (platform === 'win32') return { command: 'cmd', args: ['/c', 'npx', ...args], env: {}, published };
   // A desktop app does not start with the shell's PATH, so name where this Node is.
   const nodeDir = dirname(execPath);
