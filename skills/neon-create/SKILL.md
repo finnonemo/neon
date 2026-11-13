@@ -39,6 +39,7 @@ If the app already has a working Finnomena theme, on the Neon base or already on
 - Components, theme, provider or dependency changes in an app already on CDS: [CDS integration](references/cds-integration.md). Preserve customized files and theme-mode ownership.
 - Complex feature states, mock figures or a comparison table on a functional screen, or existing-app integration: [new UI workflow](references/new-ui-workflow.md).
 - New or adapted functional screen with lists, overlays, mobile actions or empty states: [functional patterns](../neon-audit/references/functional-patterns.md).
+- A whole new functional page in an app with a shell (which layout, what each pane holds, the order of its regions): [page anatomy](../neon-audit/references/page-anatomy.md).
 - Font, mode, migration or installer conflict: the matching section of [theme integration](../neon-audit/references/theme-integration.md).
 
 ## Done
