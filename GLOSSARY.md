@@ -1,6 +1,6 @@
 # Neon
 
-Neon distributes Finnomena's brand theme, Neon's components and the skills that apply them to employees' apps. New work is built on the Neon base; CDS is kept, frozen, for apps already on it.
+Neon distributes Finnomena's brand theme, Neon's components and the skills that apply them to employees' apps, and carries Block's engine so the same skills can draw Brand Artwork. New work is built on the Neon base; CDS is kept, frozen, for apps already on it.
 
 The package and installing terms describe Neon itself. The employee work terms describe what employees bring and ask for.
 
@@ -51,6 +51,22 @@ _Avoid_: type mapping, type scale mapping
 **Supporting item**:
 A Neon registry item that exists only for other Neon items to depend on, such as the toggle a toggle group is built from. It has no Counterpart of its own, is shaped to fit the items that use it, and is not listed as a component for employees to choose.
 _Avoid_: internal component, helper component
+
+**Block**:
+Finnomena's Pattern builder, a separate product with its own repository and web app, where designers draw and review Patterns and Pages within the guideline.
+_Avoid_: block (lower case, which in Block's own language is one rectangle of a Pattern), pattern builder
+
+**Block engine**:
+The part of Block that draws Patterns and Pages and refuses anything outside the guideline; the same engine runs in Block's web app and in Neon.
+_Avoid_: core (Core is the design system), generator (one part of the engine)
+
+**Block snapshot**:
+The built copy of the Block engine that Neon carries, pinned to one Block commit, with the open typeface it draws text in when Finnomena Trek is not on the computer.
+_Avoid_: Block copy, vendored Block
+
+**finno**:
+Neon as one command: it installs Neon into an employee's agent and gives that agent, or a person at a terminal, the Block engine's tools.
+_Avoid_: Neon CLI, Installer (which puts theme assets into an app)
 
 ### Installing
 
@@ -123,6 +139,14 @@ _Avoid_: texture, background, Page (Block's full composition)
 **Brand Pattern colourway**:
 The one Immersive Theme color family (its palette, accent or support) whose steps a Brand Pattern and the block beneath it use.
 _Avoid_: pattern palette, pattern color, secondary color
+
+**Brand Artwork**:
+A finished Finnomena picture drawn by the Block engine from an employee's request: a Pattern alone, or one Page with a headline and the logo, for an ad, a post or a cover. Unlike a Brand Pattern it is a file of its own, not part of an app's screen.
+_Avoid_: block, image, graphic, Campaign Page (which is a web page)
+
+**Candidate**:
+One of the twelve Patterns the Block engine draws side by side from the same settings, for the employee to pick the one that becomes their Brand Artwork.
+_Avoid_: option, variant, draft
 
 ### Reference designs
 

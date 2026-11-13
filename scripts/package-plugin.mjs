@@ -12,6 +12,7 @@ const PAYLOAD_ENTRIES = [
   "skills",
   "theme",
   "core",
+  "block",
   "templates/vitejs-cds",
 
   "scripts/install.mjs",
@@ -19,6 +20,8 @@ const PAYLOAD_ENTRIES = [
   "scripts/source-lint.mjs",
   "scripts/probe-page.mjs",
   "scripts/theme-brief.mjs",
+  "scripts/finno.mjs",
+  "scripts/package-plugin.mjs",
   "scripts/lib",
   "LICENSE",
 ];
@@ -33,9 +36,12 @@ const EXCLUDED_NAMES = new Set([
   "notes",
 ]);
 
+// Finnomena Trek's licence forbids distributing it, so a maintainer's local copy never enters the artifact (ADR 0010).
+const LOCAL_ONLY = /^FinnomenaTrek-/;
+
 function copyFilter(src) {
   const parts = src.split(/[\\/]/);
-  return !parts.some((part) => EXCLUDED_NAMES.has(part));
+  return !parts.some((part) => EXCLUDED_NAMES.has(part) || LOCAL_ONLY.test(part));
 }
 
 export async function packagePlugin({ sourceRoot = defaultSourceRoot, destination } = {}) {

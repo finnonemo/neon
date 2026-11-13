@@ -9,10 +9,12 @@ import { checkPlainTextReferences, referenceFiles } from './lib/plain-text-refer
 import { checkAdrNumbers } from './lib/adr-numbers.mjs';
 import { checkMarkdownEncoding, checkSkillMetadata, checkStepReads } from './lib/skill-files.mjs';
 import { checkCoreSnapshot, SNAPSHOT_DIR } from './lib/core-snapshot.mjs';
+import { checkBlockSnapshot, BLOCK_SNAPSHOT_DIR } from './lib/block-snapshot.mjs';
 import { checkCoreTheme } from './lib/core-theme.mjs';
 import { checkCoreType } from './lib/core-type.mjs';
 import { registryComponents } from './lib/registry.mjs';
 
+const SKILLS = ['neon-create', 'neon-redesign', 'neon-audit', 'neon-review', 'neon-block'];
 const sourceRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 // Ignored paths are local or generated, so naming them in prose is expected.
 const ignored = (await readFile(join(sourceRoot, '.gitignore'), 'utf8'))
@@ -36,6 +38,14 @@ async function checkCodexManifest(root) {
 }
 async function check(root, { sourceTree = false } = {}) {
   const manifest = JSON.parse(await readFile(join(root, '.claude-plugin/plugin.json'), 'utf8'));
+  // Adding a skill or the tool server must never drop one employees already call (ADR 0010).
+  for (const skill of SKILLS) {
+    if (!manifest.skills.includes(`./skills/${skill}`)) throw new Error(`.claude-plugin/plugin.json no longer lists the ${skill} skill`);
+    await access(join(root, 'skills', skill, 'SKILL.md')).catch(() => { throw new Error(`Missing skill: skills/${skill}/SKILL.md`); });
+  }
+  const server = manifest.mcpServers?.finno;
+  if (!server || !server.args?.some(argument => argument.endsWith('/scripts/finno.mjs'))) throw new Error('.claude-plugin/plugin.json must start the finno tool server from scripts/finno.mjs');
+  await access(join(root, 'scripts/finno.mjs')).catch(() => { throw new Error('Missing scripts/finno.mjs, which the plugin starts as its tool server'); });
   for (const skill of manifest.skills) {
     await checkSkillMetadata(join(root, skill, 'SKILL.md'));
     await checkStepReads(join(root, skill, 'SKILL.md'));
@@ -43,6 +53,7 @@ async function check(root, { sourceTree = false } = {}) {
   await checkCodexManifest(root);
   // The registry does not ship, so only the source tree can say which items the index must cover.
   await checkCoreSnapshot(join(root, SNAPSHOT_DIR), sourceTree ? { items: (await registryComponents(root)).map(item => item.name) } : {});
+  await checkBlockSnapshot(join(root, BLOCK_SNAPSHOT_DIR));
   await checkCoreTheme(root);
   await checkCoreType(root);
   const files = [...await markdownFiles(join(root, 'skills')), ...await markdownFiles(join(root, SNAPSHOT_DIR))];
@@ -70,4 +81,4 @@ await packagePlugin({ sourceRoot, destination });
 await check(destination);
 // Everything in the packaged artifact ships, including theme and starter Markdown.
 for (const file of await markdownFiles(destination)) await checkMarkdownEncoding(file);
-console.log('Skill metadata, Markdown encoding, resource links, the Core snapshot and ADR numbers pass in source and packaged artifact.');
+console.log('Skill metadata, Markdown encoding, resource links, the Core and Block snapshots and ADR numbers pass in source and packaged artifact.');
