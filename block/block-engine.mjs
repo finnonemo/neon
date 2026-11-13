@@ -1,5 +1,5 @@
 // block-engine.mjs: the Block engine (Finnomena's Pattern builder) for Node: Patterns, composed Pages, the text
-// shaper and an SVG rasteriser. Built from Block (github.com/pawisssh/block) commit ff66fdca6644ddd95972e306fbcf501393d444c5
+// shaper and an SVG rasteriser. Built from Block (github.com/pawisssh/block) commit 707d47ddd91313042acb95f3f30d65d6bbb39416
 // by `npm run build:engine-bundle`. Do not edit: change Block and build again.
 //
 // Code: MIT License, Copyright (c) 2026 Pawish Gawinseth (Block's LICENSE). It bundles harfbuzzjs (MIT License,
@@ -1090,22 +1090,22 @@ var require_hbjs = __commonJS({
 var BRAND_COLOUR_TABLE = {
   navy: ["#01172B", "#415160", "#808B95", "#C0C5CA"],
   grey: ["#A6BFCC", "#BCCFD9", "#D3DFE6", "#E9EFF2"],
-  yellow: ["#F2F93C", "#F5FB6D", "#F8FC9E", "#FCFECE"],
+  yellow: ["#F2F93C", "#F5FB6D", "#F9FC9E", "#FCFECE"],
   white: ["#FFFFFF"],
   green: ["#00E76B", "#2EFF8F", "#74FFB4", "#B9FFDA"],
-  blue: ["#50CFFF", "#7CDBFF", "#A7E7FF", "#D3F3FF"],
-  purple: ["#AA46C3", "#BF74D2", "#D4A3E1", "#EAD1F0"],
+  blue: ["#50CFFF", "#7CDBFF", "#A8E7FF", "#D3F3FF"],
+  purple: ["#AA46C3", "#BF74D2", "#D5A3E1", "#EAD1F0"],
   red: ["#F73232", "#F96565", "#FB9999", "#FDCCCC"],
   orange: ["#F26414", "#F58B4F", "#F9B28A", "#FCD8C4"]
 };
 var BRAND_COLOURS = {
   navy: { 100: "#01172B", 75: "#415160", 50: "#808B95", 25: "#C0C5CA" },
   grey: { 100: "#A6BFCC", 75: "#BCCFD9", 50: "#D3DFE6", 25: "#E9EFF2" },
-  yellow: { 100: "#F2F93C", 75: "#F5FB6D", 50: "#F8FC9E", 25: "#FCFECE" },
+  yellow: { 100: "#F2F93C", 75: "#F5FB6D", 50: "#F9FC9E", 25: "#FCFECE" },
   white: { 100: "#FFFFFF" },
   green: { 100: "#00E76B", 75: "#2EFF8F", 50: "#74FFB4", 25: "#B9FFDA" },
-  blue: { 100: "#50CFFF", 75: "#7CDBFF", 50: "#A7E7FF", 25: "#D3F3FF" },
-  purple: { 100: "#AA46C3", 75: "#BF74D2", 50: "#D4A3E1", 25: "#EAD1F0" },
+  blue: { 100: "#50CFFF", 75: "#7CDBFF", 50: "#A8E7FF", 25: "#D3F3FF" },
+  purple: { 100: "#AA46C3", 75: "#BF74D2", 50: "#D5A3E1", 25: "#EAD1F0" },
   red: { 100: "#F73232", 75: "#F96565", 50: "#FB9999", 25: "#FDCCCC" },
   orange: { 100: "#F26414", 75: "#F58B4F", 50: "#F9B28A", 25: "#FCD8C4" }
 };

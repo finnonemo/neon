@@ -1,11 +1,11 @@
 {
   "block": {
     "repository": "github.com/pawisssh/block",
-    "commit": "ff66fdca6644ddd95972e306fbcf501393d444c5"
+    "commit": "707d47ddd91313042acb95f3f30d65d6bbb39416"
   },
   "files": {
-    "NOTICE": "f765677c2876ce110b6c9f7c84e9c6cdd369d4b7ea96cee24f89d9c635fb712a",
-    "block-engine.mjs": "0112920e07ed4ca5c934c518039cf1f9d46a07710f69758329a757eec76c4128",
+    "NOTICE": "44170e59fb4b2ba50d63be03c31a89b736c64432da1f50a852e6bb2c10486238",
+    "block-engine.mjs": "d49627adb97059ff9c4b5cf40a3a01c8ce633263df230f041129dd03719ab6be",
     "fonts/IBMPlexMono-LICENSE.txt": "7e6b2818edbd8f6a01ae80641cc8f16a51080d08fb4e532be3a0b6f74adb07da",
     "fonts/IBMPlexMono-Regular.ttf": "d71c5e8ce165981d5d0c9c62f2e2c046adfcdfd507e209bd1e641cb1c9849aeb",
     "fonts/IBMPlexSansThai-LICENSE.txt": "7e6b2818edbd8f6a01ae80641cc8f16a51080d08fb4e532be3a0b6f74adb07da",
@@ -13,5 +13,5 @@
     "fonts/IBMPlexSansThai-Regular.ttf": "daa1e3024598fc137aa2b96716cce8607923ae80a3a83687174034f36bdd6a4f",
     "hb.wasm": "90c0bd6c34d54ac8730366f4ed7f7ce870e4b6b9260cbe92e728ffa6c4694c0a"
   },
-  "seal": "f363d75a762e34a14a5b325deade1203bb6eeb3d625254211f828411c51c83fe"
+  "seal": "5d9b9fcd084efd11491bb3102f12f2f31054a960423a22a4ffd8fe21e90becde"
 }
