@@ -4504,228 +4504,82 @@
       "hex": "#333333FF"
     }
   },
-  "Chart/chart-categorical-01": {
-    "light": {
-      "primitive": "Blue/155",
-      "hex": "#006D97FF"
-    },
-    "dark": {
-      "primitive": "Blue/155",
-      "hex": "#006D97FF"
-    }
-  },
-  "Chart/chart-categorical-02": {
-    "light": {
-      "primitive": "Orange/145",
-      "hex": "#893608FF"
-    },
-    "dark": {
-      "primitive": "Orange/130",
-      "hex": "#AE450AFF"
-    }
-  },
-  "Chart/chart-categorical-03": {
-    "light": {
-      "primitive": "Yellow/150",
-      "hex": "#919605FF"
-    },
-    "dark": {
-      "primitive": "Yellow/150",
-      "hex": "#919605FF"
-    }
-  },
-  "Chart/chart-categorical-04": {
-    "light": {
-      "primitive": "Purple/75",
-      "hex": "#BF74D2FF"
-    },
-    "dark": {
-      "primitive": "Purple/80",
-      "hex": "#BB6BCFFF"
-    }
-  },
-  "Chart/chart-categorical-05": {
-    "light": {
-      "primitive": "Teal/120",
-      "hex": "#34A085FF"
-    },
-    "dark": {
-      "primitive": "Teal/115",
-      "hex": "#37AA8EFF"
-    }
-  },
-  "Chart/chart-categorical-06": {
-    "light": {
-      "primitive": "Red/90",
-      "hex": "#F84747FF"
-    },
-    "dark": {
-      "primitive": "Red/90",
-      "hex": "#F84747FF"
-    }
-  },
-  "Chart/chart-categorical-07": {
-    "light": {
-      "primitive": "Indigo/80",
-      "hex": "#4645ECFF"
-    },
-    "dark": {
-      "primitive": "Indigo/55",
-      "hex": "#807FF2FF"
-    }
-  },
-  "Chart/chart-categorical-08": {
-    "light": {
-      "primitive": "Green/140",
-      "hex": "#008B40FF"
-    },
-    "dark": {
-      "primitive": "Green/125",
-      "hex": "#00AD50FF"
-    }
-  },
-  "Chart/chart-sequential-01": {
-    "light": {
-      "primitive": "Blue/160",
-      "hex": "#006186FF"
-    },
-    "dark": {
-      "primitive": "Blue/80",
-      "hex": "#73D9FFFF"
-    }
-  },
-  "Chart/chart-sequential-02": {
-    "light": {
-      "primitive": "Blue/150",
-      "hex": "#007AA8FF"
-    },
-    "dark": {
-      "primitive": "Blue/110",
-      "hex": "#2FC6FFFF"
-    }
-  },
-  "Chart/chart-sequential-03": {
-    "light": {
-      "primitive": "Blue/140",
-      "hex": "#0092C9FF"
-    },
-    "dark": {
-      "primitive": "Blue/130",
-      "hex": "#00AAEBFF"
-    }
-  },
-  "Chart/chart-sequential-04": {
-    "light": {
-      "primitive": "Blue/130",
-      "hex": "#00AAEBFF"
-    },
-    "dark": {
-      "primitive": "Blue/145",
-      "hex": "#0086B8FF"
-    }
-  },
-  "Chart/chart-sequential-05": {
-    "light": {
-      "primitive": "Blue/115",
-      "hex": "#1EC1FFFF"
-    },
-    "dark": {
-      "primitive": "Blue/155",
-      "hex": "#006D97FF"
-    }
-  },
   "Chart/Asset allocation/equity": {
     "light": {
-      "via": "Chart/chart-categorical-01",
       "primitive": "Blue/155",
       "hex": "#006D97FF"
     },
     "dark": {
-      "via": "Chart/chart-categorical-01",
       "primitive": "Blue/155",
       "hex": "#006D97FF"
     }
   },
   "Chart/Asset allocation/fixed-income": {
     "light": {
-      "via": "Chart/chart-categorical-02",
       "primitive": "Orange/145",
       "hex": "#893608FF"
     },
     "dark": {
-      "via": "Chart/chart-categorical-02",
       "primitive": "Orange/130",
       "hex": "#AE450AFF"
     }
   },
   "Chart/Asset allocation/gold": {
     "light": {
-      "via": "Chart/chart-categorical-03",
       "primitive": "Yellow/150",
       "hex": "#919605FF"
     },
     "dark": {
-      "via": "Chart/chart-categorical-03",
       "primitive": "Yellow/150",
       "hex": "#919605FF"
     }
   },
   "Chart/Asset allocation/cash": {
     "light": {
-      "via": "Chart/chart-categorical-04",
       "primitive": "Purple/75",
       "hex": "#BF74D2FF"
     },
     "dark": {
-      "via": "Chart/chart-categorical-04",
       "primitive": "Purple/80",
       "hex": "#BB6BCFFF"
     }
   },
   "Chart/Asset allocation/government-bond": {
     "light": {
-      "via": "Chart/chart-categorical-05",
       "primitive": "Teal/120",
       "hex": "#34A085FF"
     },
     "dark": {
-      "via": "Chart/chart-categorical-05",
       "primitive": "Teal/115",
       "hex": "#37AA8EFF"
     }
   },
   "Chart/Asset allocation/unit-trust": {
     "light": {
-      "via": "Chart/chart-categorical-06",
       "primitive": "Red/90",
       "hex": "#F84747FF"
     },
     "dark": {
-      "via": "Chart/chart-categorical-06",
       "primitive": "Red/90",
       "hex": "#F84747FF"
     }
   },
   "Chart/Asset allocation/derivatives": {
     "light": {
-      "via": "Chart/chart-categorical-07",
       "primitive": "Indigo/80",
       "hex": "#4645ECFF"
     },
     "dark": {
-      "via": "Chart/chart-categorical-07",
       "primitive": "Indigo/55",
       "hex": "#807FF2FF"
     }
   },
   "Chart/Asset allocation/warrant": {
     "light": {
-      "via": "Chart/chart-categorical-08",
       "primitive": "Green/140",
       "hex": "#008B40FF"
     },
     "dark": {
-      "via": "Chart/chart-categorical-08",
       "primitive": "Green/125",
       "hex": "#00AD50FF"
     }
@@ -4744,242 +4598,202 @@
   },
   "Chart/Multi-asset/equity": {
     "light": {
-      "via": "Chart/chart-categorical-01",
-      "primitive": "Blue/155",
-      "hex": "#006D97FF"
+      "primitive": "Purple/90",
+      "hex": "#B359C9FF"
     },
     "dark": {
-      "via": "Chart/chart-categorical-01",
-      "primitive": "Blue/155",
-      "hex": "#006D97FF"
+      "primitive": "Purple/110",
+      "hex": "#9C3AB4FF"
     }
   },
   "Chart/Multi-asset/thai-equity": {
     "light": {
-      "via": "Chart/chart-categorical-02",
-      "primitive": "Orange/145",
-      "hex": "#893608FF"
+      "primitive": "Indigo/145",
+      "hex": "#0D0D7FFF"
     },
     "dark": {
-      "via": "Chart/chart-categorical-02",
-      "primitive": "Orange/130",
-      "hex": "#AE450AFF"
+      "primitive": "Indigo/45",
+      "hex": "#9797F4FF"
     }
   },
   "Chart/Multi-asset/gold": {
     "light": {
-      "via": "Chart/chart-categorical-03",
-      "primitive": "Yellow/150",
-      "hex": "#919605FF"
+      "primitive": "Yellow/160",
+      "hex": "#747804FF"
     },
     "dark": {
-      "via": "Chart/chart-categorical-03",
-      "primitive": "Yellow/150",
-      "hex": "#919605FF"
+      "primitive": "Yellow/90",
+      "hex": "#F3FA50FF"
     }
   },
   "Chart/Multi-asset/cash": {
     "light": {
-      "via": "Chart/chart-categorical-04",
-      "primitive": "Purple/75",
-      "hex": "#BF74D2FF"
+      "primitive": "Green/160",
+      "hex": "#005C2BFF"
     },
     "dark": {
-      "via": "Chart/chart-categorical-04",
-      "primitive": "Purple/80",
-      "hex": "#BB6BCFFF"
+      "primitive": "Green/135",
+      "hex": "#009646FF"
     }
   },
   "Chart/Multi-asset/mutual-fund": {
     "light": {
-      "via": "Chart/chart-categorical-05",
-      "primitive": "Teal/120",
-      "hex": "#34A085FF"
+      "primitive": "Navy/110",
+      "hex": "#011527FF"
     },
     "dark": {
-      "via": "Chart/chart-categorical-05",
-      "primitive": "Teal/115",
-      "hex": "#37AA8EFF"
+      "primitive": "Navy/60",
+      "hex": "#677480FF"
     }
   },
   "Chart/Multi-asset/tax-saving": {
     "light": {
-      "via": "Chart/chart-categorical-06",
-      "primitive": "Red/90",
-      "hex": "#F84747FF"
+      "primitive": "Blue/140",
+      "hex": "#0092C9FF"
     },
     "dark": {
-      "via": "Chart/chart-categorical-06",
-      "primitive": "Red/90",
-      "hex": "#F84747FF"
+      "primitive": "Blue/120",
+      "hex": "#0DBDFFFF"
     }
   },
   "Chart/Multi-asset/esavings": {
     "light": {
-      "via": "Chart/chart-categorical-07",
-      "primitive": "Indigo/80",
-      "hex": "#4645ECFF"
+      "primitive": "Green/130",
+      "hex": "#00A24BFF"
     },
     "dark": {
-      "via": "Chart/chart-categorical-07",
-      "primitive": "Indigo/55",
-      "hex": "#807FF2FF"
+      "primitive": "Green/110",
+      "hex": "#00D060FF"
     }
   },
   "Chart/Multi-asset/cryptocurrency": {
     "light": {
-      "via": "Chart/chart-categorical-08",
-      "primitive": "Green/140",
-      "hex": "#008B40FF"
+      "primitive": "Red/155",
+      "hex": "#810505FF"
     },
     "dark": {
-      "via": "Chart/chart-categorical-08",
-      "primitive": "Green/125",
-      "hex": "#00AD50FF"
+      "primitive": "Red/120",
+      "hex": "#E50909FF"
     }
   },
   "Chart/Multi-asset/crowdfunding": {
     "light": {
-      "via": "Chart/chart-other",
-      "primitive": "Navy/50",
-      "hex": "#808B95FF"
+      "primitive": "Red/110",
+      "hex": "#F61515FF"
     },
     "dark": {
-      "via": "Chart/chart-other",
-      "primitive": "Grey/40",
-      "hex": "#999999FF"
+      "primitive": "Red/40",
+      "hex": "#FCADADFF"
     }
   },
   "Chart/Multi-asset/p2p-lending": {
     "light": {
-      "via": "Chart/chart-other",
-      "primitive": "Navy/50",
-      "hex": "#808B95FF"
+      "primitive": "Orange/160",
+      "hex": "#632705FF"
     },
     "dark": {
-      "via": "Chart/chart-other",
-      "primitive": "Grey/40",
-      "hex": "#999999FF"
+      "primitive": "Orange/50",
+      "hex": "#F9B28AFF"
     }
   },
   "Chart/Mutual fund/equity": {
     "light": {
-      "via": "Chart/chart-categorical-01",
-      "primitive": "Blue/155",
-      "hex": "#006D97FF"
+      "primitive": "Purple/90",
+      "hex": "#B359C9FF"
     },
     "dark": {
-      "via": "Chart/chart-categorical-01",
-      "primitive": "Blue/155",
-      "hex": "#006D97FF"
+      "primitive": "Purple/110",
+      "hex": "#9C3AB4FF"
     }
   },
   "Chart/Mutual fund/fixed-income": {
     "light": {
-      "via": "Chart/chart-categorical-02",
-      "primitive": "Orange/145",
-      "hex": "#893608FF"
+      "primitive": "Green/130",
+      "hex": "#00A24BFF"
     },
     "dark": {
-      "via": "Chart/chart-categorical-02",
-      "primitive": "Orange/130",
-      "hex": "#AE450AFF"
+      "primitive": "Green/125",
+      "hex": "#00AD50FF"
     }
   },
   "Chart/Mutual fund/balanced": {
     "light": {
-      "via": "Chart/chart-categorical-05",
-      "primitive": "Teal/120",
-      "hex": "#34A085FF"
+      "primitive": "Light Grey/155",
+      "hex": "#3D5A6AFF"
     },
     "dark": {
-      "via": "Chart/chart-categorical-05",
-      "primitive": "Teal/115",
-      "hex": "#37AA8EFF"
+      "primitive": "Light Grey/65",
+      "hex": "#C5D5DEFF"
     }
   },
   "Chart/Mutual fund/reits": {
     "light": {
-      "via": "Chart/chart-categorical-06",
-      "primitive": "Red/90",
-      "hex": "#F84747FF"
+      "primitive": "Blue/160",
+      "hex": "#006186FF"
     },
     "dark": {
-      "via": "Chart/chart-categorical-06",
-      "primitive": "Red/90",
-      "hex": "#F84747FF"
+      "primitive": "Blue/70",
+      "hex": "#85DDFFFF"
     }
   },
   "Chart/Mutual fund/commodities": {
     "light": {
-      "via": "Chart/chart-categorical-07",
-      "primitive": "Indigo/80",
-      "hex": "#4645ECFF"
+      "primitive": "Yellow/150",
+      "hex": "#919605FF"
     },
     "dark": {
-      "via": "Chart/chart-categorical-07",
-      "primitive": "Indigo/55",
-      "hex": "#807FF2FF"
+      "primitive": "Yellow/65",
+      "hex": "#F7FB80FF"
     }
   },
   "Chart/Tax saving/ssf": {
     "light": {
-      "via": "Chart/chart-categorical-01",
-      "primitive": "Blue/155",
-      "hex": "#006D97FF"
+      "primitive": "Blue/135",
+      "hex": "#009EDAFF"
     },
     "dark": {
-      "via": "Chart/chart-categorical-01",
-      "primitive": "Blue/155",
-      "hex": "#006D97FF"
+      "primitive": "Blue/130",
+      "hex": "#00AAEBFF"
     }
   },
   "Chart/Tax saving/rmf": {
     "light": {
-      "via": "Chart/chart-categorical-02",
-      "primitive": "Orange/145",
-      "hex": "#893608FF"
+      "primitive": "Purple/130",
+      "hex": "#792D8CFF"
     },
     "dark": {
-      "via": "Chart/chart-categorical-02",
-      "primitive": "Orange/130",
-      "hex": "#AE450AFF"
+      "primitive": "Purple/110",
+      "hex": "#9C3AB4FF"
     }
   },
   "Chart/Tax saving/thaiesg": {
     "light": {
-      "via": "Chart/chart-categorical-03",
-      "primitive": "Yellow/150",
-      "hex": "#919605FF"
+      "primitive": "Green/130",
+      "hex": "#00A24BFF"
     },
     "dark": {
-      "via": "Chart/chart-categorical-03",
-      "primitive": "Yellow/150",
-      "hex": "#919605FF"
+      "primitive": "Green/45",
+      "hex": "#8CF4BCFF"
     }
   },
   "Chart/Tax saving/thaiesgx": {
     "light": {
-      "via": "Chart/chart-categorical-04",
-      "primitive": "Purple/75",
-      "hex": "#BF74D2FF"
+      "primitive": "Green/160",
+      "hex": "#005C2BFF"
     },
     "dark": {
-      "via": "Chart/chart-categorical-04",
-      "primitive": "Purple/80",
-      "hex": "#BB6BCFFF"
+      "primitive": "Green/120",
+      "hex": "#00B956FF"
     }
   },
   "Chart/Tax saving/ltf": {
     "light": {
-      "via": "Chart/chart-categorical-05",
-      "primitive": "Teal/120",
-      "hex": "#34A085FF"
+      "primitive": "Navy/140",
+      "hex": "#010E1AFF"
     },
     "dark": {
-      "via": "Chart/chart-categorical-05",
-      "primitive": "Teal/115",
-      "hex": "#37AA8EFF"
+      "primitive": "Navy/65",
+      "hex": "#5A6875FF"
     }
   },
   "Chart/Super sector/Cyclical/basic-materials": {
@@ -5100,96 +4914,6 @@
     "dark": {
       "primitive": "Green/130",
       "hex": "#00A24BFF"
-    }
-  },
-  "Chart/chart-diverging-01": {
-    "light": {
-      "primitive": "Red/135",
-      "hex": "#BA0707FF"
-    },
-    "dark": {
-      "primitive": "Red/70",
-      "hex": "#F97070FF"
-    }
-  },
-  "Chart/chart-diverging-02": {
-    "light": {
-      "primitive": "Red/120",
-      "hex": "#E50909FF"
-    },
-    "dark": {
-      "primitive": "Red/95",
-      "hex": "#F73C3CFF"
-    }
-  },
-  "Chart/chart-diverging-03": {
-    "light": {
-      "primitive": "Red/95",
-      "hex": "#F73C3CFF"
-    },
-    "dark": {
-      "primitive": "Red/120",
-      "hex": "#E50909FF"
-    }
-  },
-  "Chart/chart-diverging-04": {
-    "light": {
-      "primitive": "Red/70",
-      "hex": "#F97070FF"
-    },
-    "dark": {
-      "primitive": "Red/135",
-      "hex": "#BA0707FF"
-    }
-  },
-  "Chart/chart-diverging-05": {
-    "light": {
-      "primitive": "Grey/10",
-      "hex": "#E6E6E6FF"
-    },
-    "dark": {
-      "primitive": "Grey/75",
-      "hex": "#404040FF"
-    }
-  },
-  "Chart/chart-diverging-06": {
-    "light": {
-      "primitive": "Indigo/45",
-      "hex": "#9797F4FF"
-    },
-    "dark": {
-      "primitive": "Indigo/85",
-      "hex": "#3B3AEBFF"
-    }
-  },
-  "Chart/chart-diverging-07": {
-    "light": {
-      "primitive": "Indigo/55",
-      "hex": "#807FF2FF"
-    },
-    "dark": {
-      "primitive": "Indigo/70",
-      "hex": "#5D5DEEFF"
-    }
-  },
-  "Chart/chart-diverging-08": {
-    "light": {
-      "primitive": "Indigo/70",
-      "hex": "#5D5DEEFF"
-    },
-    "dark": {
-      "primitive": "Indigo/55",
-      "hex": "#807FF2FF"
-    }
-  },
-  "Chart/chart-diverging-09": {
-    "light": {
-      "primitive": "Indigo/85",
-      "hex": "#3B3AEBFF"
-    },
-    "dark": {
-      "primitive": "Indigo/45",
-      "hex": "#9797F4FF"
     }
   },
   "Miscellaneous/segmented-control-selected": {

@@ -13,20 +13,20 @@
     },
     "iconLibrary": "lucide",
     "registries": {
-      "@neon": "https://raw.githubusercontent.com/finnonemo/neon/neon--v0.7.1/registry/r/{name}.json"
+      "@neon": "https://raw.githubusercontent.com/finnonemo/neon/neon--v1.0.0/registry/r/{name}.json"
     }
   },
   "dependencies": [
     "@fontsource/ibm-plex-sans-thai@^5.3.0"
   ],
   "registryDependencies": [
-    "https://raw.githubusercontent.com/finnonemo/neon/neon--v0.7.1/registry/r/theme.json",
-    "https://raw.githubusercontent.com/finnonemo/neon/neon--v0.7.1/registry/r/utils.json",
-    "https://raw.githubusercontent.com/finnonemo/neon/neon--v0.7.1/registry/r/button.json",
-    "https://raw.githubusercontent.com/finnonemo/neon/neon--v0.7.1/registry/r/tooltip.json",
-    "https://raw.githubusercontent.com/finnonemo/neon/neon--v0.7.1/registry/r/sonner.json",
-    "https://raw.githubusercontent.com/finnonemo/neon/neon--v0.7.1/registry/r/logo.json",
-    "https://raw.githubusercontent.com/finnonemo/neon/neon--v0.7.1/registry/r/layouts.json"
+    "https://raw.githubusercontent.com/finnonemo/neon/neon--v1.0.0/registry/r/theme.json",
+    "https://raw.githubusercontent.com/finnonemo/neon/neon--v1.0.0/registry/r/utils.json",
+    "https://raw.githubusercontent.com/finnonemo/neon/neon--v1.0.0/registry/r/button.json",
+    "https://raw.githubusercontent.com/finnonemo/neon/neon--v1.0.0/registry/r/tooltip.json",
+    "https://raw.githubusercontent.com/finnonemo/neon/neon--v1.0.0/registry/r/sonner.json",
+    "https://raw.githubusercontent.com/finnonemo/neon/neon--v1.0.0/registry/r/logo.json",
+    "https://raw.githubusercontent.com/finnonemo/neon/neon--v1.0.0/registry/r/layouts.json"
   ],
   "files": [
     {

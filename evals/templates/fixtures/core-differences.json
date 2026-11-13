@@ -51,19 +51,20 @@
     "gap openTitle→openCaret: 8 ≠ 16"
   ],
   "expansion-alert-dialog-open@375-light": [
+    "alertCard: h 242 ≠ 238",
     "alertTitle: font.weight 500 ≠ 400",
     "alertTitle: h 48 ≠ 54",
-    "alertTitle: w 256 ≠ 270",
+    "alertTitle: w 252 ≠ 270",
     "alertBody: h 48 ≠ 44",
-    "alertBody: w 256 ≠ 270",
+    "alertBody: w 252 ≠ 270",
     "alertCancel: h 72 ≠ 76",
     "alertCancel: radius 36 ≠ 38",
     "alertAction: h 72 ≠ 76",
     "alertAction: radius 36 ≠ 38",
-    "gap alertCard→alertTitle: -216 ≠ -214",
-    "gap alertTitle→alertCard: -278 ≠ -294",
+    "gap alertCard→alertTitle: -218 ≠ -214",
+    "gap alertTitle→alertCard: -276 ≠ -294",
     "gap alertTitle→alertBody: 10 ≠ 0",
-    "gap alertAction→alertCard: -224 ≠ -222"
+    "gap alertAction→alertCard: -226 ≠ -222"
   ],
   "expansion-alert@375-light": [
     "informationalBox: h 128 ≠ 96",
@@ -297,19 +298,20 @@
     "gap openTitle→openCaret: 8 ≠ 16"
   ],
   "expansion-alert-dialog-open@375-dark": [
+    "alertCard: h 242 ≠ 238",
     "alertTitle: font.weight 500 ≠ 400",
     "alertTitle: h 48 ≠ 54",
-    "alertTitle: w 256 ≠ 270",
+    "alertTitle: w 252 ≠ 270",
     "alertBody: h 48 ≠ 44",
-    "alertBody: w 256 ≠ 270",
+    "alertBody: w 252 ≠ 270",
     "alertCancel: h 72 ≠ 76",
     "alertCancel: radius 36 ≠ 38",
     "alertAction: h 72 ≠ 76",
     "alertAction: radius 36 ≠ 38",
-    "gap alertCard→alertTitle: -216 ≠ -214",
-    "gap alertTitle→alertCard: -278 ≠ -294",
+    "gap alertCard→alertTitle: -218 ≠ -214",
+    "gap alertTitle→alertCard: -276 ≠ -294",
     "gap alertTitle→alertBody: 10 ≠ 0",
-    "gap alertAction→alertCard: -224 ≠ -222"
+    "gap alertAction→alertCard: -226 ≠ -222"
   ],
   "expansion-alert@375-dark": [
     "informationalBox: h 128 ≠ 96",
@@ -549,19 +551,20 @@
     "gap openTitle→openCaret: 8 ≠ 16"
   ],
   "expansion-alert-dialog-open@1440-light": [
+    "alertCard: h 242 ≠ 238",
     "alertTitle: font.weight 500 ≠ 400",
     "alertTitle: h 48 ≠ 54",
-    "alertTitle: w 256 ≠ 270",
+    "alertTitle: w 252 ≠ 270",
     "alertBody: h 48 ≠ 44",
-    "alertBody: w 256 ≠ 270",
+    "alertBody: w 252 ≠ 270",
     "alertCancel: h 72 ≠ 76",
     "alertCancel: radius 36 ≠ 38",
     "alertAction: h 72 ≠ 76",
     "alertAction: radius 36 ≠ 38",
-    "gap alertCard→alertTitle: -216 ≠ -214",
-    "gap alertTitle→alertCard: -278 ≠ -294",
+    "gap alertCard→alertTitle: -218 ≠ -214",
+    "gap alertTitle→alertCard: -276 ≠ -294",
     "gap alertTitle→alertBody: 10 ≠ 0",
-    "gap alertAction→alertCard: -224 ≠ -222"
+    "gap alertAction→alertCard: -226 ≠ -222"
   ],
   "expansion-alert@1440-light": [
     "informationalBox: h 128 ≠ 96",
@@ -797,19 +800,20 @@
     "gap openTitle→openCaret: 8 ≠ 16"
   ],
   "expansion-alert-dialog-open@1440-dark": [
+    "alertCard: h 242 ≠ 238",
     "alertTitle: font.weight 500 ≠ 400",
     "alertTitle: h 48 ≠ 54",
-    "alertTitle: w 256 ≠ 270",
+    "alertTitle: w 252 ≠ 270",
     "alertBody: h 48 ≠ 44",
-    "alertBody: w 256 ≠ 270",
+    "alertBody: w 252 ≠ 270",
     "alertCancel: h 72 ≠ 76",
     "alertCancel: radius 36 ≠ 38",
     "alertAction: h 72 ≠ 76",
     "alertAction: radius 36 ≠ 38",
-    "gap alertCard→alertTitle: -216 ≠ -214",
-    "gap alertTitle→alertCard: -278 ≠ -294",
+    "gap alertCard→alertTitle: -218 ≠ -214",
+    "gap alertTitle→alertCard: -276 ≠ -294",
     "gap alertTitle→alertBody: 10 ≠ 0",
-    "gap alertAction→alertCard: -224 ≠ -222"
+    "gap alertAction→alertCard: -226 ≠ -222"
   ],
   "expansion-alert@1440-dark": [
     "informationalBox: h 128 ≠ 96",

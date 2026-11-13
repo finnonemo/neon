@@ -108,6 +108,7 @@ A sheet keeps an explicit Cancel; the scrim, Esc and swipe-down are supplemental
   - With a message (the title alone isn't enough): "ลบรูปภาพนี้?", Message "รูปภาพจะถูกลบออกจากอัลบั้มนี้ แต่ยังอยู่ในคลังภาพ", "ลบจากอัลบั้ม" (`Type=Danger`, Primary), "ย้ายไปอัลบั้มอื่น" (Secondary), Cancel "ยกเลิก".
 - Not for: a question that needs an answer, or a confirmation with two or three actions (Alert); a form, long content or several steps (Sheet); a choice from a control on a pointer device, or one with its own state (Menu); feedback that needs no answer (Snackbar, the banners).
 - Two to four choices besides Cancel, as the HIG's four buttons (watchOS) and its "avoid letting an action sheet scroll": the sheet hugs its content, and a longer list is Sheet or Menu. The title says what the choice is about and fits one line; a message only where the title isn't enough; the choices are verbs, a destructive one first, Cancel last.
+- **Placement**: at **Compact width** it slides up from the **bottom edge** over the dimming, hugging its content, Cancel last. On **iPad (Regular width)** the same choices sit in a **popover anchored to the control** that opened them (see [Popover](popover.md)), `Show Cancel` off. A Pattern places it as a sibling layer (screen-rules). One at a time.
 
 ### Hierarchy
 

@@ -51,7 +51,7 @@ Templates: `Components/Allocation bar/<Group>/{{Size=*}}/<Property>`. Every valu
 
 | Theme token | Light | Dark | Paired with |
 | --- | --- | --- | --- |
-| `Chart/chart-categorical-01` … `-08` (segment, swatch) | Blue/155 … (charts.md) | per charts.md | 3:1 on `Layer/layer-01`: Light 3.16–8.09, Dark 3.01–6.05 ([List item R4](list-item.md)) |
+| `Categorical/Full/01` … `08` (Extension collection; segment, swatch) | Carbon's Categorical, Option 1 (charts.md, ADR 0016) | none (Option modes) | 3:1 on `Layer/layer-01`: Light 3.16–8.09, Dark 3.01–6.05 ([List item R4](list-item.md)) |
 | `Chart/chart-other` (the Other segment) | Navy/50 | Grey/40 | 3.47 Light, 6.11 Dark on `layer-01` |
 | `Chart/chart-empty` (the track) | Navy/8 | Grey/80 | decorative: it marks missing data, never meaning |
 | `Text/text-primary` (legend label) | as List item | as List item | `text`, on the Base surfaces |
