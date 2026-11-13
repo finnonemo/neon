@@ -28,6 +28,8 @@ Every value comes from the theme and Neon's tokens, and CI checks committed brie
 
 A Theme Brief is a Markdown file in the Refero Styles section order, one per Immersive Theme and occasion, headed `# Finnomena <Theme> · <Brief name> — Theme Brief`. It combines one occasion, one layout and one imagery Preset with a theme and a Brand Pattern colourway. The value sections are scripted from the theme and tokens. The prose comes from a model, through the prompt library, and a maintainer reviews it.
 
+A brief fixes a page's values, components and section order. It does not compose the page: which element dominates a screenful, which band runs edge to edge and what moves are decided at build time, by `neon-create`'s [campaign direction](../../skills/neon-create/references/campaign-direction.md). Every occasion component in the four published briefs takes the layout's one radius and one padding and no type role above `title2`, so a page built from the values alone comes out as equal cards.
+
 A published brief is the Markdown `<theme>-<slug>.md` in `registry/theme-briefs`, plus its registry entry `theme-brief-<theme>-<slug>`. Its maintainer files stay under `theme-briefs/`:
 
 | Maintainer term | File | Holds |
