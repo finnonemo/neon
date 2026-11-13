@@ -17,7 +17,7 @@ Colors-only and visual-system work reads no component doc, and neither does a re
 - `counterpart` and `doc`: the item's Counterpart and its Core doc, a path under `core/`. `values`, where present, is the doc's measurements. The Neon item already carries them, so skip that file.
 - `counterpart: null` with `why`: the item has no Counterpart. Use it by the [design contract](../../INSTRUCTION.md) and its installed file.
 
-Look up only the items the task is about to use. Leave alone the docs of items the task does not touch, and do not browse `core/components/`.
+Start from the index, even when a reference already names a doc: it says whether the item has a Counterpart. Look up only the items the task is about to use. Leave alone the docs of items the task does not touch, and do not list or browse `core/components/`.
 
 ## Read the rule
 

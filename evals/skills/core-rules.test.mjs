@@ -1,13 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { access, readFile } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
+import { section } from './markdown-section.mjs';
 
 // Static guards for how the skills read component rules from the Core snapshot
 // (records/core-component-rules.md). They check the rule is stated and reachable,
 // not that a run follows it.
 const root = new URL('../../', import.meta.url).pathname;
 const read = path => readFile(`${root}${path}`, 'utf8');
-const section = (source, heading) => source.split(`\n## ${heading}\n`)[1]?.split('\n## ')[0] ?? '';
 const linesNaming = (source, name) => source.split('\n').filter(line => line.includes(name));
 
 test('each skill reaches the Core rules behind one read condition, outside its workflow steps', async () => {
@@ -46,6 +46,7 @@ test('the Core rules reference reads the snapshot through its index, one compone
   const rules = await read('skills/neon-audit/references/core-rules.md');
   assert.match(rules, /\]\(\.\.\/\.\.\/\.\.\/core\/index\.json\)/);
   assert.match(rules, /\]\(\.\.\/\.\.\/\.\.\/core\/hierarchy\.md\)/);
+  assert.match(rules, /Start from the index/);
   assert.match(rules, /only the items the task is about to use/);
   assert.match(rules, /`## Usage`/);
   assert.match(rules, /`### Hierarchy`/);
@@ -108,9 +109,9 @@ test('the contract links Core for component rules instead of restating them', as
   // The Neon base names which prop value is which Core value; when to use each is Core's.
   assert.doesNotMatch(base, /for the one action the screen is for|for most other actions|for the way out/);
   assert.match(base, /\]\(\.\.\/\.\.\/neon-audit\/references\/core-rules\.md\)/);
-  const header = await read('registry/ui/button.tsx');
+  const buttonItem = await read('registry/ui/button.tsx');
   for (const [variant, core] of [['default', 'Primary Default'], ['secondary', 'Secondary Default'], ['ghost', 'Tertiary Default'], ['destructive', 'Primary Danger'], ['brand', 'Primary Brand'], ['inverse', 'Primary Inverse']]) {
-    assert.match(header, new RegExp(`//.*\\b${variant}\\s+${core}`), `button.tsx: ${variant}`);
+    assert.match(buttonItem, new RegExp(`//.*\\b${variant}\\s+${core}`), `button.tsx: ${variant}`);
     assert.match(base, new RegExp(`\`${variant}\` (?:is )?${core}`), `neon-base.md: ${variant}`);
   }
 });
@@ -119,11 +120,16 @@ test('where the patterns differed from Core, they link Core', async () => {
   const patterns = await read('skills/neon-audit/references/functional-patterns.md');
   // Core's Button dock puts Cancel at the bottom of a stack and allows two labels side by side.
   assert.doesNotMatch(patterns, /primary nearest the bottom edge|never holds side-by-side buttons/);
-  assert.match(patterns, /\]\(\.\.\/\.\.\/\.\.\/core\/components\/button-dock\.md\)/);
+  assert.match(patterns, /\]\(\.\.\/\.\.\/\.\.\/core\/components\/button-dock\.md#usage\)/);
   // Core's sheet has 16px corners and no side sheet; a wide screen anchors a Popover or centres a sheet.
   assert.doesNotMatch(patterns, /largest shipped radius|side panel or dialog/);
-  assert.match(patterns, /\]\(\.\.\/\.\.\/\.\.\/core\/components\/sheet\.md\)/);
-  assert.match(patterns, /\]\(\.\.\/\.\.\/\.\.\/core\/components\/popover\.md\)/);
+  assert.match(patterns, /\]\(\.\.\/\.\.\/\.\.\/core\/components\/sheet\.md#usage\)/);
+  assert.match(patterns, /\]\(\.\.\/\.\.\/\.\.\/core\/components\/popover\.md#usage\)/);
   assert.match(patterns, /\]\(\.\.\/\.\.\/\.\.\/core\/hierarchy\.md\)/);
-  for (const doc of ['button-dock', 'sheet', 'popover', 'alert', 'empty-state']) await access(`${root}core/components/${doc}.md`);
+  // Each pattern link lands on the section that holds the rule.
+  for (const doc of ['button-dock', 'sheet', 'popover', 'alert', 'empty-state']) {
+    assert.match(patterns, new RegExp(`core/components/${doc}\\.md#usage\\)`), doc);
+    assert.match(await read(`core/components/${doc}.md`), /^## Usage$/m, doc);
+  }
+  assert.match(patterns, /Read \[Core rules\]\(core-rules\.md\) before opening one/);
 });

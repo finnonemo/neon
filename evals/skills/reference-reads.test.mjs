@@ -79,35 +79,42 @@ test('counts the skill files a Claude run read through Read and Bash', async () 
 
 // finnonemo/neon#219: a run reads the Core doc of the component it uses, and from `## Usage` on.
 test('lists the Core snapshot files a run read, apart from an app path named core', async () => {
-  const plugin = '/case/plugin';
+  const neonRoot = '/case/plugin';
   const doc = '# Button\n\n## Anatomy and layer tree\n\nA Capsule holding a label and an optional glyph.\n\n## Usage\n\nBrand only on Primary, for a branded moment.\n';
-  const snapshot = { [`${plugin}/core/index.json`]: '{\n  "button": { "counterpart": "Button", "doc": "components/button.md" }\n}\n', [`${plugin}/core/components/button.md`]: doc, [`${plugin}/core/components/alert.md`]: '# Alert\n\n## Usage\n\nNot for a form or long content.\n' };
-  const readSnapshot = async path => {
-    if (!(path in snapshot)) throw new Error(`ENOENT ${path}`);
-    return snapshot[path];
+  const installed = { [`${neonRoot}/core/index.json`]: '{\n  "button": { "counterpart": "Button", "doc": "components/button.md" }\n}\n', [`${neonRoot}/core/components/button.md`]: doc, [`${neonRoot}/core/components/alert.md`]: '# Alert\n\n## Usage\n\nNot for a form or long content.\n', [`${neonRoot}/core/components/sheet.md`]: '# Sheet\n\n## Usage\n\nA short task that keeps the page behind it.\n', [`${neonRoot}/core/hierarchy.md`]: '## Rules every component keeps\n\n1. **One Primary per context.** Context means a screen, a sheet or a dialog.\n' };
+  const readInstalled = async path => {
+    if (!(path in installed)) throw new Error(`ENOENT ${path}`);
+    return installed[path];
   };
   const use = (id, name, input) => ({ type: 'assistant', message: { content: [{ type: 'tool_use', id, name, input }] } });
   const result = (id, content) => ({ type: 'user', message: { content: [{ type: 'tool_result', tool_use_id: id, content }] } });
   const rules = '# Core component rules\n\nLook up only the items the task is about to use.\n';
-  snapshot[`${plugin}/skills/neon-audit/references/core-rules.md`] = rules;
+  installed[`${neonRoot}/skills/neon-audit/references/core-rules.md`] = rules;
   const events = [
-    use('c0', 'Read', { file_path: `${plugin}/skills/neon-audit/references/core-rules.md` }),
+    use('c0', 'Read', { file_path: `${neonRoot}/skills/neon-audit/references/core-rules.md` }),
     result('c0', rules),
-    use('c1', 'Bash', { command: `cat ${plugin}/core/index.json` }),
-    result('c1', snapshot[`${plugin}/core/index.json`]),
-    use('c2', 'Bash', { command: `sed -n '/^## Usage/,$p' ${plugin}/core/components/button.md` }),
+    use('c1', 'Bash', { command: `cat ${neonRoot}/core/index.json` }),
+    result('c1', installed[`${neonRoot}/core/index.json`]),
+    use('c2', 'Bash', { command: `sed -n '/^## Usage/,$p' ${neonRoot}/core/components/button.md` }),
     result('c2', '## Usage\n\nBrand only on Primary, for a branded moment.\n'),
-    use('c3', 'Bash', { command: `ls ${plugin}/core/components/alert.md /app/src/core/components/widget.md` }),
-    result('c3', `${plugin}/core/components/alert.md`),
+    use('c3', 'Bash', { command: `ls ${neonRoot}/core/components/alert.md /app/src/core/components/widget.md` }),
+    result('c3', `${neonRoot}/core/components/alert.md`),
     use('c4', 'Read', { file_path: '/app/src/core/index.json' }),
     result('c4', '{}'),
+    // The Grep tool reads too: a file by its path, several by a path and a glob.
+    use('c5', 'Grep', { pattern: 'Primary', path: `${neonRoot}/core/hierarchy.md`, output_mode: 'content' }),
+    result('c5', '34:1. **One Primary per context.** Context means a screen, a sheet or a dialog.'),
+    use('c6', 'Grep', { pattern: '^## Usage', path: `${neonRoot}/core/components`, glob: '{alert,sheet}.md', output_mode: 'content' }),
+    result('c6', `${neonRoot}/core/components/alert.md:3:## Usage`),
   ];
-  const reads = await coreReads(events, readSnapshot);
+  const reads = await coreReads(events, readInstalled);
   assert.deepEqual(reads.map(entry => [entry.file, status(entry.coverage)]), [
     ['core/components/alert.md', 'named only'],
     ['core/components/button.md', 'partial'],
+    ['core/components/sheet.md', 'named only'],
+    ['core/hierarchy.md', 'partial'],
     ['core/index.json', 'read'],
   ]);
   // Skill files stay a separate list.
-  assert.deepEqual((await referenceReads(events, readSnapshot)).map(entry => entry.file), ['neon-audit/references/core-rules.md']);
+  assert.deepEqual((await referenceReads(events, readInstalled)).map(entry => entry.file), ['neon-audit/references/core-rules.md']);
 });

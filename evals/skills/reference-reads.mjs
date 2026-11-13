@@ -50,7 +50,8 @@ export function coverage(text, output) {
 const resultText = content => (typeof content === 'string' ? content : (content ?? []).map(part => part.text ?? '').join('\n'));
 
 // Each command and its output: Codex logs both in one completed item; Claude
-// logs a Read or Bash tool_use and, in a later event, its tool_result.
+// logs a Read, Bash or Grep tool_use and, in a later event, its tool_result. A
+// Grep names its files by `path`, or by `path` and `glob`.
 export function commandOutputs(events) {
   const pending = new Map();
   const commands = [];
@@ -60,6 +61,7 @@ export function commandOutputs(events) {
     for (const part of event.message?.content ?? []) {
       if (part.type === 'tool_use' && part.name === 'Read') pending.set(part.id, part.input.file_path);
       if (part.type === 'tool_use' && part.name === 'Bash') pending.set(part.id, part.input.command);
+      if (part.type === 'tool_use' && part.name === 'Grep') pending.set(part.id, [part.input.path, part.input.glob].filter(Boolean).join('/'));
       if (part.type === 'tool_result' && pending.has(part.tool_use_id)) commands.push({ command: pending.get(part.tool_use_id), output: resultText(part.content) });
     }
   }
@@ -109,8 +111,8 @@ export function referenceReads(events, read = path => readFile(path, 'utf8')) {
 // `src/core/` is not one.
 export function coreReads(events, read = path => readFile(path, 'utf8')) {
   const commands = commandOutputs(events);
-  const roots = new Set(commands.flatMap(item => item.command.match(SKILL_TOKEN) ?? []).map(path => path.slice(0, path.lastIndexOf('skills/'))));
-  const pathsIn = command => [...new Set((command.match(CORE_TOKEN) ?? []).flatMap(expandBraces).filter(path => roots.has(path.slice(0, path.lastIndexOf('core/')))))];
+  const neonRoots = new Set(commands.flatMap(item => item.command.match(SKILL_TOKEN) ?? []).map(path => path.slice(0, path.lastIndexOf('skills/'))));
+  const pathsIn = command => [...new Set((command.match(CORE_TOKEN) ?? []).flatMap(expandBraces).filter(path => neonRoots.has(path.slice(0, path.lastIndexOf('core/')))))];
   return bestCoverage(commands, read, pathsIn, path => {
     const key = path.slice(path.lastIndexOf('core/'));
     return { key, repo: join(repoRoot, key) };

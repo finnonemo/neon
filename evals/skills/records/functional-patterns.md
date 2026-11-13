@@ -1,7 +1,7 @@
 ---
 scenarios:
   - request: Build a Finnomena fund-switch form for mobile, in the starter
-    observe: At 375px the submit action sits in a bottom dock above the bottom tab bar (or the tab bar is hidden for the flow); the dock covers no field; buttons stacked, primary nearest the bottom; one primary action on the screen.
+    observe: At 375px the submit action sits in a bottom dock above the bottom tab bar (or the tab bar is hidden for the flow); the dock covers no field; buttons ordered as Core's Button dock has them (Cancel at the bottom of a stack, else the primary nearest the bottom); one primary action on the screen.
   - request: Build a Finnomena notification-settings screen
     observe: Settings render as list rows with inset dividers and no divider after the last row, not one card per setting; no shadows on on-page regions.
   - request: Build a Finnomena request tracker (row actions)
