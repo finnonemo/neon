@@ -76,4 +76,37 @@ Each round costs money. The owner agrees the budget first. Past records put a ru
 
 ## Rounds
 
-None yet.
+### November 2026 baseline
+
+Round `2026-11-baseline-4f523bf`: main's package at `4f523bf`, before either change. The eight runs used Claude Code 2.1.325 with `claude-opus-5-5`, through `run-claude-case.mjs --serve-registry`, four at once. Every run ended on its own report, none at the cap, none void. Together they cost $29.41. The owner judged on 2026-11-14, and their notes are verbatim in [verdicts.json](verdicts.json).
+
+**One of eight passed.** Every Campaign Page failed, and three of four notes name the missing or wrong Brand Pattern before anything about motion.
+
+| Case | Verdict | Owner's tags and note, shortened | Cost, turns, time |
+| --- | --- | --- | --- |
+| review-01 approvals | ✗ | The detail opens as a bottom sheet at desktop width; a web modal belongs in the centre (Core's Sheet). Unless the request says the product stands alone, the screen sits in our sidebar navigation, and the agent asks whether it stands alone. | $4.60, 120, 21 min |
+| review-02 Club Run | ✗ | habit, motion. The Blocks are off-guideline, the Brand Pattern is too small, and there is no space for images. | $3.89, 105, 18 min |
+| review-03 portfolio | ✗ | Nearly right. The buy-more action belongs in each list row, and the list spans the container. | $4.43, 122, 23 min |
+| review-04 fifteen years | ✗ | No Brand Pattern illustration. | $2.31, 77, 12 min |
+| review-05 KYC | ✗ | Too many columns: four. | $4.18, 121, 20 min |
+| review-06 night run | ✗ | Off-guideline, no Brand Pattern. The run's report says it drew one with the Block engine, so the drawn strip did not read as one. | $3.48, 107, 27 min |
+| review-07 auto-invest | ✓ | | $4.14, 110, 23 min |
+| review-08 learning week | ✗ | No Brand Pattern. | $2.38, 90, 13 min |
+
+What this round adds to the plan:
+
+- **The Brand Pattern comes first on Campaign Pages.** The owner's first complaint is the missing or off-guideline Brand Pattern, and the room for images, not motion. ADR 0013's scroll patterns alone will not turn these verdicts.
+- **Functional screens have specific misses:**
+  - a mobile bottom sheet at desktop width
+  - no app navigation
+  - a row action placed outside its row
+  - a list narrower than its container
+  - too many panes
+
+  Four of the five Q20 items had no tag in this round. The later round's tags and notes say whether the checklist moved them.
+
+Limits:
+- **One sample per case.**
+- **Denied commands.** Every run had at least one denied command, mostly `cd … &&` chains and variable assignments. Each run carried on.
+- **Harness label.** The harness printed "failed (exit 1)" for every case after its run ended, because the app the run created is a git repository of its own. The step that writes `diff.patch` hit it, and the app itself was not affected.
+- **What the owner judged.** Production builds, served by `review-server.mjs` at 375px and 1440px and full size, in light mode.

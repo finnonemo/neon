@@ -1,4 +1,61 @@
 {
   "version": 1,
-  "rounds": {}
+  "rounds": {
+    "2026-11-baseline-4f523bf": {
+      "done": "2026-11-14T18:09:42.460Z",
+      "cases": {
+        "review-01": {
+          "verdict": "fail",
+          "tags": [],
+          "note": "modal ของเว็บ มันไม่ควรขึ้นมาจาก bottom แบบ mobile size มันควรอยู่กลางจอ  ลองเช็คกับ COmponent sheet ใน figma, ถ้า user ไม่ได้ request ว่ามันเป็น standalone product ก็ให้ใส่ sidebar navigation ของเราไป https://www.figma.com/design/C9Usn2yP1dRpE9iTxyW3B2/-v3--Components---Core?node-id=2863-643&t=0F5ftyrq0Lp6T7V1-11 แล้วถาม user ว่า มันเป็น standalone หรือมันเป็นส่วนหนึ่งของหน้าไหนไหม",
+          "at": "2026-11-14T18:00:02.375Z"
+        },
+        "review-02": {
+          "verdict": "fail",
+          "tags": [
+            "habit",
+            "motion"
+          ],
+          "note": "block ที่ gen มาผิด ci, block pattern น้อยไป ขาดที่เว้นว้างสำหรับใส่รูปภาพ",
+          "at": "2026-11-14T18:04:24.167Z"
+        },
+        "review-03": {
+          "verdict": "fail",
+          "tags": [],
+          "note": "เกือบถูก แต่ ui ของปุ่มซื้อเพิ่ม มันควรอยู่ใน list , list ควรขยายเต็มความกว้างของ Container",
+          "at": "2026-11-14T18:07:29.159Z"
+        },
+        "review-04": {
+          "verdict": "fail",
+          "tags": [],
+          "note": "ขาด illustration ที่เป็น block pattern",
+          "at": "2026-11-14T18:07:46.941Z"
+        },
+        "review-05": {
+          "verdict": "fail",
+          "tags": [],
+          "note": "column เกิน ตอนนี้มี 4 column",
+          "at": "2026-11-14T18:08:33.007Z"
+        },
+        "review-06": {
+          "verdict": "fail",
+          "tags": [],
+          "note": "ci ผิด ไม่มี block pattern",
+          "at": "2026-11-14T18:08:46.324Z"
+        },
+        "review-07": {
+          "verdict": "pass",
+          "tags": [],
+          "note": "",
+          "at": "2026-11-14T18:08:55.584Z"
+        },
+        "review-08": {
+          "verdict": "fail",
+          "tags": [],
+          "note": "ขาด block pattern",
+          "at": "2026-11-14T18:09:42.366Z"
+        }
+      }
+    }
+  }
 }
