@@ -4,7 +4,7 @@
 
 ## Anatomy and layer tree
 
-Since the variant root is the trigger's 48 × 48, and the open menu is drawn past it from the anchored corner:
+The variant root is the trigger's 48 × 48, and the open menu is drawn past it from the anchored corner:
 
 ```
 Menu (variant)                         Fixed 48 × 48, no fill, clip off, no auto-layout
@@ -163,7 +163,7 @@ These use our local Typography styles (Localisation), the same in both looks. Li
 - `iOS=False`:
   - Opening: fades and scales from its `Anchor` corner, over the button, `moderate-02 · entrance · scale-in`.
   - Closing: `moderate-01 · exit · scale-in`.
-  - Movement from Motion and haptics, the owner's D6 (ads-tokens.md § 5), edited in place at the owner's word ("Edit directly", #811, 2026-11-11).
+  - Movement from Motion and haptics, the owner's D6 (ads-tokens.md § 5), edited in place at the owner's word ("Edit directly", pawisssh/design-system#811, 2026-11-11).
   - Reduced motion: a crossfade.
   - Haptic: none.
   - Items change state with `fast-01 · standard`, kept under reduced motion.
@@ -194,9 +194,9 @@ These use our local Typography styles (Localisation), the same in both looks. Li
   - A sort menu: a `เรียงตาม` section with `ชื่อ`, `ราคาล่าสุด` and `ผลตอบแทน 1 ปี`, one of them checked.
   - An actions menu: `แชร์`, `เพิ่มในรายการโปรด`, a separator, then `ลบ` as `Danger`.
   - The `iOS=False` sample shows a hovered row and `เพิ่มในรายการโปรด` at `State=Focus`.
-  - A profile list (`iOS=False`,): `สมชาย ใจดี` (checked) and `สมหญิง รักเรียน` on `_Menu Profile Item`, `Menu has Selection=True`, Subtitle off, then a separator and `เพิ่มบัญชี` (glyph `plus`).
-  - No result (`iOS=False`,): Core's `Empty state` `Size=Medium` in the Slot, Artwork and Button off: "No results found", "Try another word or check the spelling."
+  - A profile list (`iOS=False`): `สมชาย ใจดี` (checked) and `สมหญิง รักเรียน` on `_Menu Profile Item`, `Menu has Selection=True`, Subtitle off, then a separator and `เพิ่มบัญชี` (glyph `plus`).
+  - No result (`iOS=False`): Core's `Empty state` `Size=Medium` in the Slot, Artwork and Button off: "No results found", "Try another word or check the spelling."
 - Notes:
   - that look is for mockups. Android + web use `iOS=False`.
-  - **Placement**: a menu **opens from its trigger's corner and covers the trigger** (`iOS=False` covers it too,). `Anchor` Top right for a trigger at the trailing edge, Top left at the leading edge, so it never leaves the screen. A Pattern places it over the screen, never in the Page component (screen-rules). One open at a time.
+  - **Placement**: a menu **opens from its trigger's corner and covers the trigger** (`iOS=False` covers it too). `Anchor` Top right for a trigger at the trailing edge, Top left at the leading edge, so it never leaves the screen. A Pattern places it over the screen, never in the Page component (screen-rules). One open at a time.
 - A menu holds actions and choices, never a form. A list of more than about 10 rows, or rows with controls, goes in a Sheet (Bottom sheet on Android + web).

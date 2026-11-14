@@ -52,7 +52,7 @@ Right content
    ├─ Checkbox | Radio          List item control: Checkbox · Radio Type=Icon only (Trailing = Checkbox · Radio)
    ├─ Disclosure                TEXT `angle-right`, fa-sharp fa-solid/Large, icon-secondary (Trailing = Disclosure)
    ├─ Pop-up · Pop-up icon      TEXT Body/Body, text-secondary · TEXT `angles-up-down`, Large, icon-secondary (Trailing = Pop-up)
-   ├─ Button                    Link instance, Style=Primary, Size=Large, its `Label` "Button" and `Trailing icon` off (#729) (Trailing = Button)
+   ├─ Button                    Link instance, Style=Primary, Size=Large, its `Label` "Button" and `Trailing icon` off (pawisssh/design-system#729) (Trailing = Button)
    ├─ Stepper                   List item control: HORIZONTAL (Trailing = Stepper): Decrement · Divider (1 × 24, border-subtle) · Increment,
    │                            Icon button Tertiary Small `minus` · `plus`, {{iOS=*}}
    ├─ Picker                    HORIZONTAL, gap 8 (Trailing = Picker - Date · Time · Date and Time)
@@ -66,7 +66,7 @@ Right content
 ```
 
 - The row, its padding, gap, radius, states and Divider are Checkbox Full-bleed's, so a List item and a Checkbox row share their sides, row, line and states in one list; their titles differ in weight (List item `Headings/Headline`, Checkbox `Body/Body`). The text starts 16 in (8 + 8), or 48 beside a 24 leading icon. Its heights are List item's own (owner, 2026-11-03; two lines 72 on 2026-11-05, Table cell Large's height): one line 56 (Checkbox's row stays 48), two lines 72 (14 + Headline 24 + Footnote 20 + 14), with the leading part and the trailing control centred on the row, as iOS's subtitle cell.
-- `Label + Subtitle` and `Label line` follow the Label block rule under the Table cell's names (in `List item`, `Label` and `Subtitle` each sit in a Fill row, , R2); the title takes `Headings/Headline` as a row's title (Label block), the Subtitle `Utility/Footnote` (`labelBlock.descriptionType`, owner 2026-11-03).
+- `Label + Subtitle` and `Label line` follow the Label block rule under the Table cell's names (in `List item`, `Label` and `Subtitle` each sit in a Fill row, R2); the title takes `Headings/Headline` as a row's title (Label block), the Subtitle `Utility/Footnote` (`labelBlock.descriptionType`, owner 2026-11-03).
 - The nested Toggle, Checkbox and Radio show the state; the row takes the tap.
 - A plain list of checkboxes is Checkbox `Type=Full-bleed`, `Alignment=Right`, not List items: `Trailing=Checkbox` is for a row that needs a leading part, a Chevron or a Detail beside its box (owner, 2026-11-02).
 - Swipe actions are an Item, `_List item swipe actions`, out of this doc (Calls).
@@ -83,9 +83,9 @@ Right content
 | `Trailing` | `List item`: None · Label · Value · Disclosure · Pop-up · Button · Picker - Date · Picker - Time · Picker - Date and Time. `List item control`: Toggle · Checkbox · Radio · Stepper. `Draggable list` has none | which of `Right content`'s parts shows (R1, R2) |
 | `State` | Enabled · Active · Focus · Disabled · Skeleton | the row's fill (Active) and stroke (Focus), text and icon colours (Disabled), `Skeleton` in place of `Label + Subtitle` and `Right content`; the Divider hides on Active and Focus. All five on each set (R4) |
 
-Properties on all three sets: TEXT `Label text` ("Title"), `Subtitle text` ("Subtitle"): placeholder names, not mock Thai copy (owner, 2026-11-03); BOOLEAN `Subtitle` (on: a fresh row is two lines, 72; owner, 2026-11-03, 72 since 2026-11-05), `Bottom border` (on), `Edit control` (off), `Subtitle value` (off, Medium, not Skeleton; , R3); INSTANCE_SWAP `Leading artwork` (`Leading=Custom`, default `_List item image`). The leading glyph is the `Icon` layer's text, not an instance swap. The `Grabber` BOOLEAN is gone: the Grabber is `Draggable list` (R3).
+Properties on all three sets: TEXT `Label text` ("Title"), `Subtitle text` ("Subtitle"): placeholder names, not mock Thai copy (owner, 2026-11-03); BOOLEAN `Subtitle` (on: a fresh row is two lines, 72; owner, 2026-11-03, 72 since 2026-11-05), `Bottom border` (on), `Edit control` (off), `Subtitle value` (off, Medium, not Skeleton; R3); INSTANCE_SWAP `Leading artwork` (`Leading=Custom`, default `_List item image`). The leading glyph is the `Icon` layer's text, not an instance swap. The `Grabber` BOOLEAN is gone: the Grabber is `Draggable list` (R3).
 
-`List item` adds TEXT `Detail text` ("Detail", `Trailing=Label · Disclosure`), `Pop-up text` ("Option"); BOOLEAN `Chevron`, `Symbol`, `Info`, `Checkmark` (all off, beside None · Label · Value), `Second value` (off, `Trailing=Value`), `Change` (off, Medium, `Trailing=Value`; , R5), `Change percent` (on, Medium, `Trailing=Value`; , R1), `Detail icon` (off, `Trailing=Label`), `Title icon` (off, not Skeleton) and `Subtitle button` (off, Medium, not Skeleton; , R3, R6). `Value`, `Second value`, `Change value`, `Change percent` and `Subtitle value` are exposed, so a designer sets each one's `Change`, `Unit` and `Percent` from the row's panel (R2). The pickers' date and time are each exposed Button's `Label Text`, set from the instance's panel.
+`List item` adds TEXT `Detail text` ("Detail", `Trailing=Label · Disclosure`), `Pop-up text` ("Option"); BOOLEAN `Chevron`, `Symbol`, `Info`, `Checkmark` (all off, beside None · Label · Value), `Second value` (off, `Trailing=Value`), `Change` (off, Medium, `Trailing=Value`; R5), `Change percent` (on, Medium, `Trailing=Value`; R1), `Detail icon` (off, `Trailing=Label`), `Title icon` (off, not Skeleton) and `Subtitle button` (off, Medium, not Skeleton; R3, R6). `Value`, `Second value`, `Change value`, `Change percent` and `Subtitle value` are exposed, so a designer sets each one's `Change`, `Unit` and `Percent` from the row's panel (R2). The pickers' date and time are each exposed Button's `Label Text`, set from the instance's panel.
 
 | Set | Axes | Grid |
 | --- | --- | --- |
@@ -93,7 +93,7 @@ Properties on all three sets: TEXT `Label text` ("Title"), `Subtitle text` ("Sub
 | `List item control` | `Size` 2 × `Leading` 5 × `Trailing` 4 × `State` 5 × `iOS` 2 | 20 by 20 |
 | `Draggable list` | `Size` 2 × `Leading` 5 × `State` 5 × `iOS` 2 | 20 by 5 (`State`) |
 
-The `Trailing` values Disclosure to the Pickers ('s, after Radio) are the iOS kit's `_Trailing` types, appended so the first 180 variants kept their ids (owner, 2026-11-03: "trailing เพิ่ม column ให้เท่ากับ ios … แต่ไม่ต้องสร้าง item", so each is drawn in the row, no new Item):
+The `Trailing` values Disclosure to the Pickers (after Radio) are the iOS kit's `_Trailing` types, appended so the first 180 variants kept their ids (owner, 2026-11-03: "trailing เพิ่ม column ให้เท่ากับ ios … แต่ไม่ต้องสร้าง item", so each is drawn in the row, no new Item):
 
 - **Disclosure**: the Detail, then an `angle-right` in `Icon/icon-secondary` (owner, 2026-11-03: "เปลี่ยน angle-right เป็น icon-secondary"); its own layer, so `Chevron` stays the row's navigation.
 - **Pop-up**: the chosen option and an up-down glyph, as iOS's pop-up button.
@@ -109,8 +109,8 @@ The `Trailing` values Disclosure to the Pickers ('s, after Radio) are the iOS ki
 
 | Group | Keyed by | Properties | Values |
 | --- | --- | --- | --- |
-| `List item/Container/Medium`, `/Small` | `Size` | Layout horizontal, Layout vertical, Gap horizontal, Gap vertical, Padding left / right · top / bottom, Radius, Stroke weight, Layout min-height | `Fill container`, `Hug contents`, 8 (`Spacing/spacing-03 = 8`), 0 (`Spacing/spacing-00 = 0`), 8 (`spacing-03`) · 14 (raw, off the Spacing scale), `Radius/12px (radius-md) = 12`, 2 (`Sizing/focus-ring = 2`), 56 (raw). Small: top / bottom 12 (`Spacing/spacing-04 = 12`), min height 48 (`Sizing/hit-target = 48`). `Medium` was `Container/Default` before |
-| `List item/Leading/Small`, `/Medium`, `/Large` | `Leading` | Layout width, Layout height | `Medium` was `Leading/Default` before ; None and Custom keep Medium's on the hidden glyph |
+| `List item/Container/Medium`, `/Small` | `Size` | Layout horizontal, Layout vertical, Gap horizontal, Gap vertical, Padding left / right · top / bottom, Radius, Stroke weight, Layout min-height | `Fill container`, `Hug contents`, 8 (`Spacing/spacing-03 = 8`), 0 (`Spacing/spacing-00 = 0`), 8 (`spacing-03`) · 14 (raw, off the Spacing scale), `Radius/12px (radius-md) = 12`, 2 (`Sizing/focus-ring = 2`), 56 (raw). Small: top / bottom 12 (`Spacing/spacing-04 = 12`), min height 48 (`Sizing/hit-target = 48`). `Medium` was `Container/Default` |
+| `List item/Leading/Small`, `/Medium`, `/Large` | `Leading` | Layout width, Layout height | `Medium` was `Leading/Default`; None and Custom keep Medium's on the hidden glyph |
 | `List item/Icon/Small`, `/Large`, `/2XLarge` | Icon step | Type token | `fa-sharp fa-solid/Small` · `/Large` · `/2XLarge` |
 | `List item/Label/Label`, `/Subtitle`, `/Detail` | role | Type token, Type emphasis, Align horizontal, Align vertical, Decoration | `$headline` · `$footnote` · `$body`, `Regular`, `Left` (Detail `Right`), `Top`, `-`. `Detail` is `List item`'s |
 | `List item/Title/Default`, `/Subtitle/Default` | none varies | Layout horizontal, Layout vertical, Gap horizontal | `Fill container`, `Hug contents`; Title 4 (`Spacing/spacing-02 = 4`), Subtitle 0 (`Spacing/spacing-00 = 0`): `Title` and `Subtitle row` (R12). `Subtitle button`'s height binds `Footnote/Line height`; `Title icon` reuses `List item/Icon/Large` |
@@ -121,7 +121,7 @@ The `Trailing` values Disclosure to the Pickers ('s, after Radio) are the iOS ki
 | `List item/Icon/Large` | Icon step | Layout width, Layout height |  |
 | `List item/Artwork/Image` | none varies | Layout width, Layout height, Radius | 36, 36 (raw), `Radius/8px (radius-sm) = 8`: `_List item image` |
 
-As on Checkbox: `Padding left / right` is both Container's side margin and the row's inset; `Padding top / bottom` sits on `Label + Subtitle`, `Skeleton` and the control's `Values` (`Leading` is literal 0 since , R3), and `Layout min-height` on `Label + Subtitle`, `Skeleton` and the control's Container; the three sets share the `List item/*` variables (`variablePrefix` `List item`, , R6), so none was renamed; `Radius` and `Stroke weight` bind on Container and the row. The Root's min width and the row's min height bind the shared `Interactive/Medium/Interactive min-height` (ADR 0003, row components amendment).
+As on Checkbox: `Padding left / right` is both Container's side margin and the row's inset; `Padding top / bottom` sits on `Label + Subtitle`, `Skeleton` and the control's `Values` (`Leading` is literal 0, R3), and `Layout min-height` on `Label + Subtitle`, `Skeleton` and the control's Container; the three sets share the `List item/*` variables (`variablePrefix` `List item`, R6), so none was renamed; `Radius` and `Stroke weight` bind on Container and the row. The Root's min width and the row's min height bind the shared `Interactive/Medium/Interactive min-height` (ADR 0003, row components amendment).
 
 `Theme`: the Semantic tokens Checkbox's row and Carbon's Table cell bind; none minted.
 
@@ -194,7 +194,7 @@ Contrast list: Label, Subtitle and Detail on `layer-01` and `layer-active-01`; t
 | Reorder | Move up and Move down buttons in the row's menu (WCAG 2.5.7) |
 
 - **Title icon and Subtitle button** (R13): a row with `Title icon` is a menu button (iOS `Menu`, button trait, a hint such as "Shows plans"; Android `Button`, its `contentDescription` ending "menu"; web `<button aria-haspopup="menu" aria-expanded>`); the glyph is decorative. `Subtitle button` is its own stop after the row, named from what it copies ("Copy Port ID"), and confirms with a [Snackbar](snackbar.md) "Copied", announced. Focus order: row, copy button, next row. At most one glyph per line.
-- **Rows that do nothing** (Accordion , R4; everywhere since Detail row's deprecation, 2026-11-09): a List item with no action, such as a term and its detail on an order screen, keeps the Hit target, Active and Focus in Figma, but code renders it as text, not a button or link: no button role, not a focus stop, so a screen reader doesn't announce a read-only value as a button.
+- **Rows that do nothing** (Accordion, R4; everywhere since Detail row's deprecation, 2026-11-09): a List item with no action, such as a term and its detail on an order screen, keeps the Hit target, Active and Focus in Figma, but code renders it as text, not a button or link: no button role, not a focus stop, so a screen reader doesn't announce a read-only value as a button.
 
 ## Usage
 

@@ -29,7 +29,7 @@ Button | Rect button (variant root)   Hug × Hug, no fill, no padding; min width
 
 `Rect button`: `Type` · `Hierarchy` · `Size` · `State` in that order, the same values, no `iOS`.
 
-Properties (both): `Leading Icon`, `Trailing Icon` (BOOLEAN), `Label Text`, `L. Icon Text`, `T. Icon Text` (TEXT). `Label Text` is new on `Rect button` (#126). Since : `Artwork` (BOOLEAN, off) and `Leading artwork` (INSTANCE_SWAP, default Avatar `Size=3XSmall, Artwork=Image`, preferred values Avatar's variants), on the 600 and 210 cells that have a `Leading Icon`.
+Properties (both): `Leading Icon`, `Trailing Icon` (BOOLEAN), `Label Text`, `L. Icon Text`, `T. Icon Text` (TEXT). `Label Text` is new on `Rect button` (pawisssh/design-system#126). `Artwork` (BOOLEAN, off) and `Leading artwork` (INSTANCE_SWAP, default Avatar `Size=3XSmall, Artwork=Image`, preferred values Avatar's variants), on the 600 and 210 cells that have a `Leading Icon`.
 (3 × 3 − 2 Brand cells) × 6 × 7 = **294 variants** per look: 588 on `Button` plus 252 Inverse (3 Hierarchies × 6 Sizes × 7 States × 2 `iOS`) = **840**, and 294 on `Rect button`, whose `Type` keeps Default · Brand · Danger.
 
 ## Component variables and Theme tokens
@@ -102,14 +102,14 @@ Pairs (the spec's `contrast` list): Label (text) and Leading Icon (non-text) on 
 
 ## Accessibility
 
-Item 5 is open: the nine-point criterion of #126 is not met.
+Item 5 is open: the nine-point criterion of pawisssh/design-system#126 is not met.
 
-- [x] 1. Text pairs: Danger on Secondary passes in both sets since 2026-11-09 ([H2](../hierarchy.md)): `text-negative` moved to `Red/145` · `Red/50`, so `text-negative` on `button-secondary` / `-hover` / `-active` is 6.19 / 5.91 / 5.56:1 Light and 5.00 / 4.55 / 4.55:1 Dark (issues.md, Fixed). Every pair passes the contrast lint (`check-specs.sh`) with no known defect left; the spec's `contrast` `knownDefects` entry (#126) is gone. It composites the tokens' alpha (the translucent Secondary fills over each Base surface).
+- [x] 1. Text pairs: Danger on Secondary passes in both sets since 2026-11-09 ([H2](../hierarchy.md)): `text-negative` moved to `Red/145` · `Red/50`, so `text-negative` on `button-secondary` / `-hover` / `-active` is 6.19 / 5.91 / 5.56:1 Light and 5.00 / 4.55 / 4.55:1 Dark (issues.md, Fixed). Every pair passes the contrast lint (`check-specs.sh`) with no known defect left; the spec's `contrast` `knownDefects` entry (pawisssh/design-system#126) is gone. It composites the tokens' alpha (the translucent Secondary fills over each Base surface).
 - [x] 2. Non-text: the Danger Secondary icon (`icon-negative`, `Red/145` · `Red/50` since 2026-11-09, with the label) is 6.19 / 5.91 / 5.56:1 Light and 5.00 / 4.55 / 4.55:1 Dark (Dark was 3.49 / 3.18 / 3.18 on `Red/75`, 2.40 / 2.18 / 2.18 on `Red/115`). Other icons and the Focus stroke pass.
 - [x] 3. N/A: not a field.
 - [x] 4. No state by colour alone: Disabled dims label and icons, Loading shows a spinner, Skeleton drops the content, Focus adds a stroke.
 - [ ] 5. **The Focus ring isn't outside the Container**: `State=Focus` draws a 2 px `Focus/focus` stroke `INSIDE` the Container (all 126 Focus variants: 84 Button, 42 Rect button), not the 2 px ring with a 2 px gap outside it (Accessibility). Owner's call; not changed here.
-- [x] 6. **Reflows since .** A long label wraps at 200 and stays inside: Large 104 · 140 · 368, Medium 96 · 120 · 284, Small 84 · 108 · 272, XSmall 68 · 92 · 248. Clean in Button dock and Alert too ([Button dock](button-dock.md) and [Alert](alert.md) item 6).
+- [x] 6. **Reflows.** A long label wraps at 200 and stays inside: Large 104 · 140 · 368, Medium 96 · 120 · 284, Small 84 · 108 · 272, XSmall 68 · 92 · 248. Clean in Button dock and Alert too ([Button dock](button-dock.md) and [Alert](alert.md) item 6).
 - [x] 7. No text under 11 pt: the smallest is Footnote.
 - [x] 8. The Motion part names each transition.
 - [x] 9. Role, name, states and focus order:

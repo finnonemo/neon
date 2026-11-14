@@ -14,7 +14,7 @@ _Progress step (variant root)   Fill × Hug, no fill, no padding
       └─ Optional label         Body/Subheadline 15/24, Fill × Hug, wraps; BOOLEAN `Optional label`
 ```
 
-Skeleton swaps `Text` for `Skeleton` (VERTICAL, Fill × Hug, padding top 14, bottom spacing-07 (32)) › `Step label line` (80 × 8, `Skeleton/skeleton-background`), the Label block's bar (structure.md). The 14 centres the bar on the marker; the 32 keeps a Line's length between skeleton steps. The Marker stays, filled `skeleton-background`, empty. (Reversed by padding 38 · 38 on Standard, 20 · 20 on Compact, so the bar sits centred on the row's height.)
+Skeleton swaps `Text` for `Skeleton` (VERTICAL, Fill × Hug, padding top 14, bottom spacing-07 (32)) › `Step label line` (80 × 8, `Skeleton/skeleton-background`), the Label block's bar (structure.md). The 14 centres the bar on the marker; the 32 keeps a Line's length between skeleton steps. The Marker stays, filled `skeleton-background`, empty. (Reversed: padding 38 · 38 on Standard, 20 · 20 on Compact, so the bar sits centred on the row's height.)
 
 Horizontal step (`Direction=Horizontal`), form B:
 
@@ -43,7 +43,7 @@ Progress steps (variant root)   Fill × Hug, no fill, no padding
 
 - **Carbon's structure, and one departure.** The layer names, the single `State` axis, the `Optional label` BOOLEAN and the Skeleton bar are Carbon's. Carbon draws the line as the item root's left or top stroke, beside a 16 icon. Under a 36 marker a stroke can't sit centred, so the line is a layer in a `Path` column, as Base and v2 draw it. Carbon's `Min-width` / `Min-height` spacers aren't drawn: the step is Fill in its set, and the Text's padding gives the height.
 - Steps is a Slot (figma-instances.md). Its default content is four `_Progress step` instances, numbered 1–4, with their `State` and text pinned per Direction, as Segmented control's three default items. A designer sets `State`, `Number` and the texts on each item, and turns the end lines off.
-- Horizontal A (segments + the current step's label, the map's form) is in 's frame for Q1; it would add a `Segment` tree and a Label block on the set.
+- Horizontal A (segments + the current step's label, the map's form) is in the frame for Q1; it would add a `Segment` tree and a Label block on the set.
 
 ## Axes
 
@@ -54,7 +54,7 @@ Progress steps (variant root)   Fill × Hug, no fill, no padding
 | `Direction` | Vertical · Horizontal | the tree above |
 | `State` | Incomplete · Current · Completed · Error · Disabled · Skeleton | Marker fill and content, Line colour, Step label and Optional label colour; Skeleton's bar |
 
-Properties: `Number` TEXT (the marker's), `Step label` TEXT, `Optional label` TEXT and BOOLEAN, `Path line` BOOLEAN (Vertical), `Line start` and `Line end` BOOLEAN (Horizontal). 2 × 6 = **12 variants**. (Reversed by `Size`, `Artwork` and `Trailing` on Vertical, `Top line` and `Bottom line`, 282 variants; . Reversed again by `Size` and `Artwork` on Horizontal too, 330 variants; . Reversed again by `Direction` is Vertical · Vertical reverse · Horizontal, Vertical reverse on `Trailing=None` only, 384 variants; .)
+Properties: `Number` TEXT (the marker's), `Step label` TEXT, `Optional label` TEXT and BOOLEAN, `Path line` BOOLEAN (Vertical), `Line start` and `Line end` BOOLEAN (Horizontal). 2 × 6 = **12 variants**. (Reversed: `Size`, `Artwork` and `Trailing` on Vertical, `Top line` and `Bottom line`, 282 variants; Reversed again: `Size` and `Artwork` on Horizontal too, 330 variants; Reversed again: `Direction` is Vertical · Vertical reverse · Horizontal, Vertical reverse on `Trailing=None` only, 384 variants)
 
 `Progress steps`:
 
@@ -62,14 +62,14 @@ Properties: `Number` TEXT (the marker's), `Step label` TEXT, `Optional label` TE
 | --- | --- | --- |
 | `Direction` | Vertical · Horizontal | the Steps' layout and which `_Progress step` Direction its default items are |
 
-Properties: `Steps` SLOT. **2 variants**. (Reversed by `Sublayout`, 3 variants; reversed again by `Size` × `Artwork` from the item, 18 variants; reversed again by `Direction` gains Vertical reverse, 27 variants; `Artwork` gains Bar on Horizontal by , 29 variants, .)
+Properties: `Steps` SLOT. **2 variants**. (Reversed: `Sublayout`, 3 variants; reversed again: `Size` × `Artwork` from the item, 18 variants; reversed again: `Direction` gains Vertical reverse, 27 variants; `Artwork` gains Bar on Horizontal, 29 variants)
 
 - `State` is Carbon's axis name and value list (Carbon's `Completed`, not v11 docs' "Complete"; `Error`, not "Invalid"). The Inventory keeps `Status` for a feedback message's kind, and Core's other sets use `State` for Enabled · Disabled · Skeleton, which this list contains (Q5).
 - **Disabled**: a step that can't be reached now (an order that was cancelled before it). **Skeleton**: the steps while an order's status loads, IC's Loading.
 
 ## Component variables and Theme tokens
 
-`Components`, Tag's three-level shape keyed by `Direction` (no `Size` axis). (Reversed by the variables built are in , with 's third `Container` key.)
+`Components`, Tag's three-level shape keyed by `Direction` (no `Size` axis).
 
 | Group | Keyed by | Properties | Values (Vertical · Horizontal) |
 | --- | --- | --- | --- |
