@@ -186,7 +186,7 @@ test('an item with no Counterpart and the name of an approved Core doc names tha
 });
 
 test('an entry names the library its item passes props through to only when the item depends on it and imports it', async t => {
-  const button = { name: 'button', supporting: false, dependencies: ['radix-ui', 'day-grid'], imports: ['react', 'radix-ui', '@/lib/utils'] };
+  const button = { name: 'button', supporting: false, dependencies: ['radix-ui', 'day-grid'], imports: ['react', 'radix-ui'] };
   const items = [button, ...ITEMS.slice(1).map(name => ({ name, supporting: false }))];
   const marked = library => ({ ...COUNTERPARTS, button: { core: 'button', notInCorePassThrough: library } });
   // The mark is the table's alone: the index is the one the unmarked table gives.
