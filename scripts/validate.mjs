@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
  * validate.mjs — the repository's one validation command, run by CI and by
- * maintainers: the eval tests (evals/skills/*.test.mjs) and the repository
- * check (scripts/check-repository.mjs). Both always run. A passing step
+ * maintainers: the repository check (scripts/check-repository.mjs) and the
+ * eval tests (evals/skills/*.test.mjs). Both always run. A passing step
  * prints one summary line; a failing step prints its full output. Exits 1
  * if either fails, so its status is safe to trust without reading the log.
  *
@@ -35,8 +35,9 @@ function count(output, name) {
   return output.match(new RegExp(`^(?:ℹ|#) ${name} (\\d+)`, "m"))?.[1] ?? "?";
 }
 
+// The repository check takes under a second and the tests half a minute, so its result prints first.
 const results = [
-  run("tests", ["--test", "--test-reporter=spec", ...testFiles], (out) => `${count(out, "pass")} pass, ${count(out, "fail")} fail`),
   run("repository check", ["scripts/check-repository.mjs"], (out) => out.trim().split("\n").at(-1)),
+  run("tests", ["--test", "--test-reporter=spec", ...testFiles], (out) => `${count(out, "pass")} pass, ${count(out, "fail")} fail`),
 ];
 process.exit(results.every(Boolean) ? 0 : 1);
