@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils"
 // with 12px corners and a 1px Border/border-subtle stroke, its content padded 16, opening 8px
 // from its anchor. It is never wider than the room beside its anchor. Core's doc both draws and
 // hides an Arrow at iOS=False: none is drawn. The snapshot has no Elevation token, so the shadow
-// is Neon's. The DatePicker's calendar opens in one.
+// is Neon's. The DatePicker's calendar opens in one, at Core's Compact surface's width and corners.
 function Popover(props: React.ComponentProps<typeof PopoverPrimitive.Root>) {
   return <PopoverPrimitive.Root data-slot="popover" {...props} />
 }

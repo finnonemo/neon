@@ -9,6 +9,9 @@
 // names the Theme token, Scale step or text style the doc gives each part ({ doc: 'Layer/layer-01' }),
 // or states the doc's raw number ({ literal: 300 }).
 //
+// A Counterpart built from other Core components (Date picker's fields are Date field's) names
+// their docs (nested: ['date-field']): their sets are read beside its own, and a part names its set.
+//
 // To add an item: write core/<counterpart>.mjs, list it in tables below, and give
 // the item's targets in measure.mjs or expansion/<item>.mjs a core cell. A
 // property the table leaves out stays on the CDS baseline.
@@ -42,6 +45,7 @@ import sheet from './core/sheet.mjs';
 import popover from './core/popover.mjs';
 import menu from './core/menu.mjs';
 import dateAndTime from './core/date-and-time.mjs';
+import datePicker from './core/date-picker.mjs';
 
 // By registry item. Input, label, field and input-group are the parts of one Counterpart, Text field.
 const tables = {
@@ -76,12 +80,13 @@ const tables = {
   popover,
   'dropdown-menu': menu,
   calendar: dateAndTime,
+  'date-picker': datePicker,
 };
 // The snapshot writes a literal as text ("2", "0.5"); a measured number is a number.
 const asNumber = (value) => (typeof value === 'string' && value.trim() !== '' && !Number.isNaN(Number(value)) ? Number(value) : value);
 const root = fileURLToPath(new URL('../..', import.meta.url));
 const items = new Map();
-const coreItem = (item) => items.get(item) ?? items.set(item, (tables[item].doc ? readCoreDoc : readCoreItem)(root, item)).get(item);
+const coreItem = (item) => items.get(item) ?? items.set(item, tables[item].doc ? readCoreDoc(root, item) : readCoreItem(root, item, { nested: tables[item].nested })).get(item);
 
 /**
  * One table entry as measure.mjs would measure it: a number, a color, a font's size and line height,
