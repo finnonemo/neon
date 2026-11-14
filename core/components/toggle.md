@@ -5,21 +5,22 @@
 ## Anatomy and layer tree
 
 ```
-Toggle, Style=Default (variant root)   Fill × Hug, no fill, no padding; min width and height Interactive/Medium (48), Container centred
+Toggle, Style=Default (variant root)   Fixed 343 × Hug in the set, Fill where placed; no fill, no padding; min width and height Interactive/Medium (48), Container centred
 └─ Container                           VERTICAL, gap 8, Fill × Hug        Skeleton: HORIZONTAL, gap 0
    ├─ Title                            TEXT, Headings/Headline
-   └─ Toggle + Value                   HORIZONTAL, gap 8, Hug × Hug
-      ├─ _Toggle Item                  iOS={{iOS=*}}, State Enabled | Read-only
+   └─ Toggle + Value                   HORIZONTAL, gap 8, Fill × Hug, top-aligned
       │  └─ Container (the track)      Fixed Track/<iOS>/Layout width × Hug, Round
-      │     └─ _Toggle Switch (thumb)  Fixed Thumb/<iOS>/Layout width × height
-      └─ Detail                        TEXT, Body/Subheadline, Strong
+      │     └─ _Toggle Switch (thumb)  Fixed Thumb/<iOS>/Layout width × height; Disabled, Pressed
+      └─ Detail                        TEXT, Body/Subheadline, Strong, Fill + HEIGHT (wraps)
 
 Toggle, Style=Toggle only              Hug × Hug, min 48 × 48
 └─ Container                           HORIZONTAL, gap 0, Hug × Hug, centred
-   └─ _Toggle Item | _Toggle Skeleton Item
+   └─ _Toggle Item | _Toggle Skeleton Item (iOS={{iOS=*}})
 ```
 
 no fill. The kit's `Toggle - Switch` no longer appears in any Toggle variant.
+
+`_Toggle Skeleton Item` (`iOS` True · False): `False` Carbon's 18 circle and 22 × 8 bar, 48 × 28; `True` one 64 × 28 capsule in `skeleton-element`, width `Track/True/Layout width`, radius `Round`.
 
 ## Axes
 
@@ -60,17 +61,17 @@ Components/Toggle/Thumb/{{iOS=*}}/<Property>
 Components/Interactive/Medium/Interactive min-height
 ```
 
-`Theme`: the Semantic tokens Carbon's Toggle binds, straight on the layer, the owner's 2026-10-30 call and the exception in Tokens. No `Toggle/` Theme tokens.
+`Theme`: the Semantic tokens Carbon's Toggle binds, straight on the layer, the owner's 2026-10-30 call and the exception in Tokens.
 
 | Layer | Enabled · Pressed | Disabled | Read-only | Skeleton |
 | --- | --- | --- | --- | --- |
 | Title | `Text/text-secondary` | `Text/text-disabled` | `Text/text-secondary` | — |
 | Detail | `Text/text-primary` | `Text/text-disabled` | `Text/text-primary` | — |
-| Track, off | `Miscellaneous/toggle-off` (Grey/50, both modes) | `Button/button-disabled` | none, stroke `Border/border-subtle` | `Skeleton/skeleton-element` |
-| Track, on | `Support/support-success`, both looks | `Button/button-disabled` | as off | `Skeleton/skeleton-element` |
-| Thumb | `Icon/icon-on-color` | `Icon/icon-on-color-disabled` | `Icon/icon-primary` | `Skeleton/skeleton-element` |
+| Track, off | `iOS=False`: `Miscellaneous/toggle-off` (Grey/50, both modes) | `iOS=False`: `Button/button-disabled` | none, stroke `Border/border-subtle` | `Skeleton/skeleton-element` |
+| Track, on | `iOS=False`: `Layer/layer-selected-inverse` (Grey/100 · Grey/0) | `iOS=False`: `Button/button-disabled` | as off | `Skeleton/skeleton-element` |
+| Thumb | `iOS=False`: `Icon/icon-inverse` (White/100 · Black/85A) | `iOS=False`: `Icon/icon-on-color-disabled` | `Icon/icon-primary` | `Skeleton/skeleton-element` |
 
-Both looks bind the same Semantic tokens; nothing binds a remote kit variable. The kit's own faint off track and `Accents/Green` on track failed 3:1, so the owner chose Carbon's tokens with a darker off track (#128, option c).
+Nothing binds a remote kit variable. The kit's own faint off track and `Accents/Green` on track failed 3:1, so the owner chose Carbon's tokens with a darker off track for both looks (pawisssh/design-system#128, option c). `iOS=False` went black and white to reach 3:1 (R1 (a)): no white thumb passes in Dark on an on track that passes on the surface, so its thumb is `icon-inverse`, dark in Dark.
 
 Pairs (the spec's `contrast` list): Title and Detail on the Base surfaces; the track (non-text) on the surfaces; the thumb (non-text) on the track; Read-only's hairline (decorative); the Focus colour.
 
@@ -83,37 +84,37 @@ None: no icon.
 | Layer | Text style | Lines | Text property |
 | --- | --- | --- | --- |
 | `Title` | `Headings/Headline` (`$headline`) | wraps (Fill, auto height) | `Title Text` |
-| `Detail` | `Body/Subheadline`, Strong (`$subhead`) | one line, auto width (live; see Accessibility item 6) | `Label Text` |
+| `Detail` | `Body/Subheadline`, Strong (`$subhead`) | wraps (Fill, auto height) | `Label Text` |
 
 ## Hit target and Skeleton
 
 - **Hit target**: `Interactive/Medium` (48) on the Root of both Styles, Container centred (ADR 0003). No `Size` axis. `Style=Toggle only` is 48 × 48 around its 28 row; `Style=Default` rows already pass 48 (60 at Large).
-- **Skeleton**: `State=Skeleton`, `_Toggle Skeleton Item` 48 × 28 on both looks (Skeleton True and False are the same).
 
 ## Motion
 
 | Transition | Token | Reduced form | Haptic |
 | --- | --- | --- | --- |
 | Thumb travels, track fills, `iOS=False` | `fast-01 · standard` | thumb jumps, track crossfades | None |
-| Pressed | `fast-01 · standard` | kept (colour only) | None |
+| Pressed, `iOS=False` | `fast-01 · standard` | kept (colour only) | None |
 | Skeleton | the Skeleton's own | static shape, no shimmer | None |
 
 ## Accessibility
 
-Items 2, 5 and 6 are not met; each is in #198. Item 2 is down to one pair.
+Item 2 is not met (pawisssh/design-system#198); met items 5 and 6. Item 2: `iOS=False` passes;
 
 - [x] 1. Title (`text-secondary`) and Detail (`text-primary`) pass on the Base surfaces, both modes (the contrast lint, 2026-11-01).
-- [ ] 2. Non-text: one pair under 3:1 (lowest over the Base surfaces, Light / Dark; issues.md):
+- [ ] 2. Non-text: `iOS=False` passes;
 
   | Pair | Light | Dark |
   | --- | --- | --- |
-  | White thumb on `support-success` | 3.85 | **2.32** |
+  | `iOS=False` off track (`toggle-off`) on the surface | 3.53 | 3.83 |
+  | `iOS=False` on track (`layer-selected-inverse`) vs off track | 5.32 | 3.95 |
+  | `iOS=False` thumb (`icon-inverse`) on off / on | 3.95 / 21.00 | 4.70 / 15.13 |
 
-The lint lists it as a known defect on both looks (`check-specs.sh`, 2026-11-01). Fixable by a darker Dark `support-success` (shared with other components) or by a thumb stroke or a Dark thumb token; both are the owner's look calls. It stays open. The rest pass since `toggle-off` went to Grey/50: off track on the surface 3.53 / 3.83, white thumb on it 3.95, on track `support-success` on the surface 3.44 / 6.52.
 - [x] 3. N/A: not a field.
 - [x] 4. No state by colour alone: the thumb moves end to end; Read-only adds an outline; Disabled dims the labels; Skeleton drops them.
-- [ ] 5. **No Focus state**: `iOS=False` has no `State=Focus`, as before #128, so no Focus ring is drawn; the spec lints only the Focus colour.
-- [ ] 6. **Detail doesn't reflow** (scratch frame, 320 wide, Thai copy, 2026-11-01). Title 17 / 23 / 40 and wraps. `Toggle only` rows stay 48; the track stays 48 or 64 × 28, as `UISwitch` does.
+- [x] 5. The Focus ring on `iOS=False`: 2 `Focus/focus`, a 2 gap, round the track (56 × 32 round 48 × 24), on both Styles; shown once in Usage (`Focus ring`, Light and Dark), not a `State` value.
+- [x] 6. Detail reflows: Fill + `HEIGHT` in a Fill, top-aligned `Toggle + Value`, the Root Fixed 343 in the set and Fill where placed. `Toggle only` rows stay 48; the track stays 48 or 64 × 28, as `UISwitch` does.
 - [x] 7. No text under 11 pt: 15 is the smallest.
 - [x] 8. The Motion part names each transition.
 - [x] 9. Role, name, states and focus order:
@@ -127,7 +128,9 @@ The lint lists it as a known defect on both looks (`check-specs.sh`, 2026-11-01)
 
 ## Usage
 
-- `Style=Default` for a setting with a title in a form or list; `Toggle only` where the row already names it (banners, a List item's trailing Toggle).
+- `Style=Default` for a setting with a title in a form; `Toggle only` where the row already names it (banners, a List item's trailing Toggle). A titled settings row in a list is List item control `Trailing=Toggle`, not `Style=Default`.
+- Place `Style=Default` at Fill: it is Fixed 343 only in the set, and its label wraps.
+- Focus ring (`iOS=False`, web): 2 `Focus/focus` with a 2 gap round the track, never round the row, which stays one focus stop (the `Focus ring` sample).
 - Pin `iOS` (ADR 0005).
 - The Toggle changes a setting at once. For a choice confirmed by a button, use Checkbox.
 - Don't use Read-only for "not available yet": that's Disabled.

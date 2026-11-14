@@ -56,7 +56,7 @@ Button, Icon button and Rect button: [button.md › Hierarchy](components/button
 
 ## Components
 
-Each component gets a `### Hierarchy` section in its own doc, from its own Uber Base docs page and Apple's page for it, not inferred from Button's. Draft every new call in its component's doc with the component's prefix (BD1, FU1). A call that binds one component stays there; one that binds several gets its H number when it lands in Owner's calls on main, so two sessions drafting at once never take the same number (#696).
+Each component gets a `### Hierarchy` section in its own doc, from its own Uber Base docs page and Apple's page for it, not inferred from Button's. Draft every new call in its component's doc with the component's prefix (BD1, FU1). A call that binds one component stays there; one that binds several gets its H number when it lands in Owner's calls on main, so two sessions drafting at once never take the same number (pawisssh/design-system#696).
 
 | Component | Values | `### Hierarchy` in | Left to do |
 | --- | --- | --- | --- |
@@ -74,10 +74,11 @@ Each component gets a `### Hierarchy` section in its own doc, from its own Uber 
 | Empty state | Secondary, Small (rule 3) | [empty-state.md](components/empty-state.md) |  |
 | File upload, File item, File media item | the zone Button and Cancel on `Primary · Inverse` (H6); Remove and Retry on Secondary | [file-upload.md](components/file-upload.md) |  |
 | In-line banner, Contextual banner | close Tertiary, action Secondary, the same on both banner Hierarchies; `2 Icon Buttons` and `2 Buttons` kept by the owner past Uber's one action | [banner.md](components/banner.md), [contextual-banner.md](components/contextual-banner.md) | none: pins verified 2026-11-10 (BN4, CB5), the second `2 Icon Buttons` instance by hand |
+| Toolbars | iPhone and iPad bars Secondary, a top bar's own Primary `add` (H1); Toolbar - Top `Primary · Inverse` (H6) | [toolbars.md](components/toolbars.md) |  |
 | List item, List item control | Picker on Secondary; Stepper on Tertiary (H3, rows) | [list-item.md](components/list-item.md) |  |
 | Table row, Table cell | Expand and the cell Button on Tertiary (H3, rows) | [table.md](components/table.md) |  |
 | Progress step | Secondary (rule 3) | [progress-steps.md](components/progress-steps.md) |  |
 | Message card | CTA Tertiary (`arrow-right`) or Secondary, Inverse on Dark (Secondary Inverse on Light too); the card is the target, so its CTA doesn't count toward rule 1 or 4; Dismiss Secondary over the artwork (H3) | [message-card.md](components/message-card.md) | MC5, MC6 decided 2026-11-10 (as recommended); not built yet |
-| Alert | Preferred Primary (`Type=Danger` when destructive), Other Secondary, Dismiss Tertiary (rules 1, 4; H2) | [alert.md](components/alert.md) | none: approved (A4 (a)) and built 2026-11-09 (#678); every variant read back Dismiss Tertiary, Other Secondary, Preferred Primary |
-| Action Sheet | choices Secondary; a destructive choice that confirms the action Primary `Type=Danger`, below the Secondaries (the Button dock's order); Cancel Tertiary (rules 1, 3, 4; H2, H7; Destructive flow step 2) | [action-sheet.md](components/action-sheet.md) | none: Q4 approved 2026-11-11 and built 2026-11-11 (#151); the base and the Usage samples read Secondaries, then Primary Danger, then Cancel Tertiary |
+| Alert | Preferred Primary (`Type=Danger` when destructive), Other Secondary, Dismiss Tertiary (rules 1, 4; H2) | [alert.md](components/alert.md) | none: approved (A4 (a)) and built 2026-11-09 (pawisssh/design-system#678); every variant read back Dismiss Tertiary, Other Secondary, Preferred Primary |
+| Action Sheet | choices Secondary; a destructive choice that confirms the action Primary `Type=Danger`, below the Secondaries (the Button dock's order); Cancel Tertiary (rules 1, 3, 4; H2, H7; Destructive flow step 2) | [action-sheet.md](components/action-sheet.md) | none: Q4 approved 2026-11-11 and built 2026-11-11 (pawisssh/design-system#151); the base and the Usage samples read Secondaries, then Primary Danger, then Cancel Tertiary |
 | Toggletip actions, the ⓘ trigger | "Got it" Primary (a dialog's own context); the ⓘ Tertiary (H3's exception) | [toggletip.md](components/toggletip.md) | none: the ⓘ pinned to `Tertiary · Default · Small` 2026-11-09 (TT2) |

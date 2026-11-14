@@ -147,6 +147,6 @@ Choosing a row fires no haptic from Select (Motion and haptics: `Selection` is S
 - The Title always shows; the prompt inside ("เลือกบัญชีธนาคาร") is not the label. Thai copy in every case (บัญชีรับเงิน / เลือกบัญชีธนาคาร).
 - A tap opens Menu on iOS, Dropdown menu on Android + web; the screen places the list under the field.
 - Short lists only. A long or searchable list is a Search field over a list, or a Sheet with List items and a trailing Radio (Inventory).
-- A country picker is a Select case, a Pattern component (#49).
+- A country picker is a Select case, a Pattern component (pawisssh/design-system#49).
 - Read-only for a chosen value the user can't change in this form; Disabled only for "can't interact".
 - The Focus ring once, outside the field.

@@ -1,12 +1,13 @@
 // The controls' property tables against Core's documented values, from core/components/<name>.md
-// at the pinned commit: text-field, text-area, select, radio, toggle, segmented-control and
-// selection-tag. Each expected value is the doc's, never read back through the table.
+// at the pinned commit: text-field, text-area, select, checkbox, radio, toggle,
+// segmented-control and selection-tag. Each expected value is the doc's, never read back through the table.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { coreBaseline, withCoreBaseline } from '../templates/core-baseline.mjs';
 import { fieldCell } from '../templates/core/text-field.mjs';
 import { textAreaCell } from '../templates/core/text-area.mjs';
 import { selectCell } from '../templates/core/select.mjs';
+import { checkboxCell } from '../templates/core/checkbox.mjs';
 import { radioCell } from '../templates/core/radio.mjs';
 import { toggleCell } from '../templates/core/toggle.mjs';
 import { segmentedCell, segmentCell } from '../templates/core/segmented-control.mjs';
@@ -93,6 +94,26 @@ test('a select trigger is Core\'s Select: the field, and Active when open', asyn
   assert.deepEqual(await both(selectCell('chevron', { State: 'Disabled' }), ['color']), { light: { color: 'rgba(0, 0, 0, 0.451)' }, dark: { color: 'rgba(255, 255, 255, 0.451)' } });
 });
 
+// Checkbox: the glyph in a 24 × 24 Box that paints nothing, in Icon/icon-primary whatever the
+// Selection; the Value beside it is Body. Icon/Large is 17px type, and a square glyph is 448 of
+// its 512 em: 14.875px.
+test('a checkbox is Core\'s Checkbox: a square 24px box with no paint, the glyph in the icon ink in every Selection', async () => {
+  assert.deepEqual(await coreBaseline(checkboxCell('box'), 'light'), { h: 24, w: 24, radius: 0, bg: NONE, border: { width: 0, color: NONE }, opacity: 1 });
+  assert.deepEqual(await coreBaseline(checkboxCell('box', { State: 'Disabled', Selection: 'Checked' }), 'dark'), { h: 24, w: 24, radius: 0, bg: NONE, border: { width: 0, color: NONE }, opacity: 1 });
+  for (const Selection of ['Unchecked', 'Checked', 'Indeterminate']) {
+    assert.deepEqual(await both(checkboxCell('glyph', { Selection })), {
+      light: { h: 14.875, w: 14.875, color: 'rgba(0, 0, 0, 0.851)', opacity: 1 }, dark: { h: 14.875, w: 14.875, color: 'rgb(255, 255, 255)', opacity: 1 },
+    }, Selection);
+    assert.deepEqual(await both(checkboxCell('glyph', { State: 'Disabled', Selection }), ['color', 'opacity']), {
+      light: { color: 'rgba(0, 0, 0, 0.451)', opacity: 1 }, dark: { color: 'rgba(255, 255, 255, 0.451)', opacity: 1 },
+    }, Selection);
+  }
+  assert.deepEqual(await coreBaseline(checkboxCell('value', { Selection: 'Checked' }), 'light'), { font: { size: 17, lineHeight: 24, weight: 400 }, color: 'rgba(0, 0, 0, 0.851)', opacity: 1 });
+  assert.deepEqual(await both(checkboxCell('value', { State: 'Disabled', Selection: 'Indeterminate' }), ['color', 'opacity']), {
+    light: { color: 'rgba(0, 0, 0, 0.451)', opacity: 1 }, dark: { color: 'rgba(255, 255, 255, 0.451)', opacity: 1 },
+  });
+});
+
 // Radio: the glyph in a 24 × 24 Box, in Icon/icon-primary; the Value beside it is Body.
 test('a radio is Core\'s Radio: a 24px box with no paint, the glyph in the icon ink', async () => {
   assert.deepEqual(await coreBaseline(radioCell('box'), 'light'), { h: 24, w: 24, radius: 12, bg: NONE, border: { width: 0, color: NONE }, opacity: 1 });
@@ -104,14 +125,16 @@ test('a radio is Core\'s Radio: a 24px box with no paint, the glyph in the icon 
   assert.deepEqual(await coreBaseline(radioCell('value', { State: 'Disabled' }), 'dark', ['color']), { color: 'rgba(255, 255, 255, 0.451)' });
 });
 
-// Toggle: a 48 × 24 track (an 18px thumb in 3px of padding), grey off and green on.
-test('a switch is Core\'s Toggle: a 48 by 24 track, toggle-off and support-success, an 18px white thumb', async () => {
+// Toggle: a 48 × 24 track (an 18px thumb in 3px of padding), grey off; on, the track is black under a
+// white thumb, and white under a dark thumb in dark.
+test('a switch is Core\'s Toggle: a 48 by 24 track, toggle-off and layer-selected-inverse, an 18px icon-inverse thumb', async () => {
   const track = { h: 24, w: 48, pad: [3, 3, 3, 3], radius: 12, opacity: 1 };
   assert.deepEqual(await both(toggleCell('track', { Toggled: 'False' })), {
     light: { ...track, bg: 'rgb(128, 128, 128)' }, dark: { ...track, bg: 'rgb(128, 128, 128)' },
   });
-  assert.deepEqual(await both(toggleCell('track', { Toggled: 'True' }), ['bg']), { light: { bg: 'rgb(0, 150, 70)' }, dark: { bg: 'rgb(0, 196, 91)' } });
+  assert.deepEqual(await both(toggleCell('track', { Toggled: 'True' }), ['bg']), { light: { bg: 'rgb(0, 0, 0)' }, dark: { bg: 'rgb(255, 255, 255)' } });
   assert.deepEqual(await coreBaseline(toggleCell('thumb'), 'light'), { h: 18, w: 18, radius: 9, bg: 'rgb(255, 255, 255)', border: { width: 0, color: 'rgba(0, 0, 0, 0)' }, opacity: 1 });
+  assert.deepEqual(await coreBaseline(toggleCell('thumb', { Toggled: 'True' }), 'dark', ['bg']), { bg: 'rgba(0, 0, 0, 0.851)' });
   assert.deepEqual(await both(toggleCell('track', { State: 'Disabled' }), ['bg', 'opacity']), {
     light: { bg: 'rgba(1, 23, 43, 0.102)', opacity: 1 }, dark: { bg: 'rgba(255, 255, 255, 0.102)', opacity: 1 },
   });

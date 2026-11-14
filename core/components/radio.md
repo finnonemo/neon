@@ -4,7 +4,7 @@
 
 ## Anatomy and layer tree
 
-Checkbox's tree (checkbox.md), same sizing, padding, gaps and bindings, with three differences: `Radio button margin` for `Checkbox margin` (Carbon's name), the glyph, and a round Focus ring.
+Checkbox's tree ([checkbox.md](checkbox.md)), same sizing, padding, gaps and bindings, with three differences: `Radio button margin` for `Checkbox margin` (Carbon's name), the glyph, and a round Focus ring.
 
 ```
 Radio (variant root)                 Full-bleed: Fixed × Hug (240 × 72, Skeleton 48) · Inset: Hug × Hug · Icon only: 48 × 48;
@@ -69,7 +69,7 @@ Properties, Checkbox's names, defaults and conditions; Icon only has none:
 
 36 + 6 + 1 + 5 + 3 = 51 new; 15 kept: **66 variables**, as Checkbox. Deleted once nothing binds them: `Radio/Container/Default/*` and `Radio/Container/Radio only/*` (20), `Radio/Icon/Large/Layout *` (4), each checked with `usage.js` first. The Focus ring's radius binds `Radio/Box/Default/Radius` (round), where Checkbox's is a literal 0 (Carbon's square ring).
 
-`Theme`: Checkbox's bindings exactly (checkbox.md), the Semantic tokens Carbon's Radio button binds too; none minted (ADR 0001). The glyph is `Icon/icon-primary` (Disabled `icon-disabled`) on `layer-01`, `layer-active-01` and the Base surfaces, the same pairs as Checkbox's, so the same ratios: 10.37:1 or more for the glyph, 3.48:1 or more for the Focus ring.
+`Theme`: Checkbox's bindings exactly ([checkbox.md](checkbox.md)), the Semantic tokens Carbon's Radio button binds too; none minted (ADR 0001). The glyph is `Icon/icon-primary` (Disabled `icon-disabled`) on `layer-01`, `layer-active-01` and the Base surfaces, the same pairs as Checkbox's, so the same ratios: 10.37:1 or more for the glyph, 3.48:1 or more for the Focus ring.
 
 ## Icon records
 
@@ -92,7 +92,7 @@ As Checkbox: `Label` `$subhead` one line; `Value` `$body`, Full-bleed wraps, Ins
 
 ## Accessibility
 
-As Checkbox, items 1–8 (checkbox.md); Selection is shape (an empty ring, a ring around a hole). Item 9:
+As Checkbox, items 1–8 ([checkbox.md](checkbox.md)); Selection is shape (an empty ring, a ring around a hole). Item 9:
 
 |  | Web |
 | --- | --- |

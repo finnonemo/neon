@@ -20,7 +20,7 @@ Navigation (variant root)            Fill × Fill on an instance (the main is Fi
 - **`Button platter`**: the frame around the trailing button on Bottom and Rail `Type ≠ Default`, named for the `Navigation/Button platter/…` variables it binds, in `Search Role` and `Prominent Tab` alike.
 - **`Search`, `Sidebar button`**: `_Navigation Button` instances (inside `Button platter` on Bottom and Rail `Type ≠ Default`; Top's two symbol buttons). On `Type=Prominent Tab` the trailing button is named `Prominent Tab` and draws `plus`; `Search Role` keeps `Search`.
 - **`More`** (`Layout=Sidebar` only): a SLOT after `Item n` for what only a Sidebar has: `_Navigation Section Header`s and indented rows (`_Navigation Item Layout=Sidebar`, `Indent Level` 1 · 2). Empty by default (N6).
-- Sidebar's old `Items` SLOT becomes the `Items` frame: fixed items, then `More`. Its rows start under the Header, `Items` MIN (the owner's, 2026-11-10, ; centred, the owner's 2026-11-09, until then).
+- Sidebar's old `Items` SLOT becomes the `Items` frame: fixed items, then `More`. Its rows start under the Header, `Items` MIN (the owner's, 2026-11-10; centred, the owner's 2026-11-09, until then).
 
 Parts (Items frame):
 
@@ -59,8 +59,8 @@ Properties:
 | `Navigation/Layout` (STRING) | `Breakpoint` | SM `Bottom`; MD and wider `Sidebar` | `Layout` |
 | `Navigation/Expanded` (BOOLEAN) | `Breakpoint` | SM, MD, LG False (the 64 rail); XL and wider True, as `Sidebar View width` | `Expanded` |
 | `iOS` (BOOLEAN) | `Platform` (new; modes iOS · Android · Web) | True · False · False | `iOS` |
-| `Window inset top` (FLOAT) | `Presentation` (modes Full Screen · Window,) | 0 · 10 | `Layout=Top`'s `Container` `paddingTop` |
-| `Sidebar inset` (FLOAT) | `Presentation` | 0 · 8 | the floating Sidebar's root `Container` padding, 4 sides (no template pins `Window` now: the iPad Window is docked, Screen templates) |
+| `Window inset top` (FLOAT) | `Presentation` (modes Full Screen · Window) | 0 · 10 | `Layout=Top`'s `Container` `paddingTop` |
+| `Sidebar inset` (FLOAT) | `Presentation` | 0 · 8 | the floating Sidebar's root `Container` padding, 4 sides (no template pins `Window` now: the iPad Window is docked, Screen templates R8) |
 | `Sidebar radius` (FLOAT) | `Presentation` | 0 · 34 | the floating Sidebar `BG`'s two layers' radii |
 | `Sidebar scrim` (BOOLEAN) | `Presentation` | True · False | the floating Sidebar `Overlay`'s `visible` |
 | `Safe area left` · `Safe area right` (FLOAT) | `Safe area` (new; modes None · Landscape) | 0 · 62 | the floating Sidebar `Bar`'s `paddingLeft` (right not bound yet) |
@@ -85,9 +85,9 @@ New in `Components`:
 
 | Variable | Value | Bound on |
 | --- | --- | --- |
-| `Navigation/Container/Rail/Padding right` | 24, raw (the 48 bar at x 12 of the kit's 84 `Vertical Bar`, as the kit's three rail poses; 14 until R5) | the overlay Container, `Layout=Rail` (N5) |
+| `Navigation/Container/Rail/Padding right` | 24, raw (the 48 bar at x 12 of the kit's 84 `Vertical Bar`, as the kit's three rail poses) | the overlay Container, `Layout=Rail` (N5) |
 
-`Navigation/Platter/Rail/Padding top` and `bottom` are a raw 6 now (the Tab platter,), `left` and `right` `Spacing/spacing-00`; they were `spacing-02` (4) until then.
+`Navigation/Platter/Rail/Padding top` and `bottom` are a raw 6 now (the Tab platter), `left` and `right` `Spacing/spacing-00`; they were `spacing-02` (4) until then.
 
 The Sidebar `Bar`'s width binds `Layout`'s `Sidebar View width` (not a `Components` variable). New `Breakpoint` and `Platform` variables: Modes, above.
 
@@ -143,9 +143,10 @@ One `Title` property, where Tab Bar's parts called it `Label`: the property is w
 - iPad 834 with `Layout=Top`; Duo with `Layout=Rail`; Web XL (Sidebar 240) and Web SM.
 - A note: set the frame's `Breakpoint` and `Platform` modes, not `Layout`; override `Layout` only on iPad (Top) and Duo (Rail).
 - Bottom and Rail exist only at `Expanded=False`: don't set `Layout` to Bottom or Rail by hand at XL or wider, where `Expanded` resolves true and no variant matches (owner, 2026-11-11).
-- iPhone Duo's side bar (Apple's [Designing for iPhone Duo](https://developer.apple.com/design/human-interface-guidelines/designing-for-iphone-duo), read 2026-11-11): when the `Vertical Bar` has no room for both the toolbar's items and the Rail, a navigation-focused screen (the default) sends toolbar items to the overflow menu and keeps the Rail; a task-focused one (a form, an editor) minimises the Rail, `Layout=Rail` `Minimized=True`, and keeps the toolbar. Set every Rail item's `Title` though Rail hides it: overflow and expanded forms show it. The toolbar's item order and overflow: toolbars.md.
+- iPhone Duo's side bar (Apple's [Designing for iPhone Duo](https://developer.apple.com/design/human-interface-guidelines/designing-for-iphone-duo), read 2026-11-11): when the `Vertical Bar` has no room for both the toolbar's items and the Rail, a navigation-focused screen (the default) sends toolbar items to the overflow menu and keeps the Rail; a task-focused one (a form, an editor) minimises the Rail, `Layout=Rail` `Minimized=True`, and keeps the toolbar. Set every Rail item's `Title` though Rail hides it: overflow and expanded forms show it. The toolbar's item order and overflow: [toolbars.md](toolbars.md).
 - Not for a screen's own sections: Tabs or a Segmented control in the page.
 - Tab titles are one short word: Bottom's and Top's titles don't truncate and don't grow at large text sizes (Assumptions), so a long title overflows its tab (owner, 2026-11-13).
-- A Dark sample or template built from a Light one: run `dark-copy.js` after the Theme `Mode` swap, which drops its parts' overrides (titles, symbols); on the Usage columns it read 64 pairs and 0 differences (2026-11-10, #684).
+- A Dark sample or template built from a Light one: run `dark-copy.js` after the Theme `Mode` swap, which drops its parts' overrides (titles, symbols); on the Usage columns it read 64 pairs and 0 differences (2026-11-10, pawisssh/design-system#684).
+- A Screen sets `Title` and `Symbol` on every shown `Item`, on its own instance, even where the template's default already reads right (R1). In Dark the tab Layouts' items swap to their `Mode=Dark` variant, which keeps only the overrides set on the outermost instance. A label left to a template or a main reads "Title" and `house` in Dark.
 
 - **Placement**: `Layout` is picked by the frame's modes. `Bottom` (SM, up to 600): fixed to the bottom edge, always visible, absolute over `Screen`, with the 96 spacer under the content; only a modal goes above it, the keyboard covers it, and a screen with a Button dock has none. `Top` (iPad): the top of the screen. `Rail` (iPhone Duo): the side bar. A Snackbar sits at the top over the Toolbar - Top, never over this bar.

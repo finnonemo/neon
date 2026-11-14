@@ -65,7 +65,7 @@ The item draws its own states, as Carbon's (R4, reversing the exposed nested Lin
 
 The Root's min width and height bind the existing `Interactive/Small/Interactive min-height` (`Sizing/hit-target = 48`, 48) again (R7). Templates: `Components/Breadcrumb item/<Group>/{{Type=*}}/<Property>`. **45 variables** as built: 42 `Breadcrumb item/…`, 3 `Breadcrumbs/…` (2026-11-06, after the slash separator). `Bar/Current` and `Label/Current` stay as records the generator declares; the old `Breadcrumb item/Container/Current/*` (3) was deleted with the old set.
 
-`Theme`: no Component-scoped token (ADR 0001, 2026-11-01). Since the item binds its own states (R4), with the tokens Carbon binds and Link `Style=Primary` uses; the ink stays `text-primary` (Q1). Resolved 2026-11-06:
+`Theme`: no Component-scoped token (ADR 0001, 2026-11-01). The item binds its own states (R4), with the tokens Carbon binds and Link `Style=Primary` uses; the ink stays `text-primary` (Q1). Resolved 2026-11-06:
 
 | Theme token | Where | Light · Dark | Paired with |
 | --- | --- | --- | --- |
@@ -80,7 +80,7 @@ The Root's min width and height bind the existing `Interactive/Small/Interactive
 ## Icon records
 
 - No icon on `Separator` since 2026-11-06: the owner redrew it as a "/" in the label's style (Carbon's), so `Breadcrumb item/Icon/Small/Type token` (`chevron-right`) was deleted.
-- `Breadcrumb item/Icon/Medium/Type token = fa-sharp fa-solid/Medium`, glyph `ellipsis` on `Overflow` › `Icon` (R5; Icon button's record until).
+- `Breadcrumb item/Icon/Medium/Type token = fa-sharp fa-solid/Medium`, glyph `ellipsis` on `Overflow` › `Icon` (R5).
 
 ## Text styles, wrapping and truncation
 
@@ -94,7 +94,7 @@ No text under 13 (Localisation). Breadcrumbs never wraps to a second line (Carbo
 
 ## Hit target and Skeleton
 
-- **Hit target**: each link 48 tall and at least 48 wide (Q3). Link's Root reads 36 with no min size, so the item's Root takes `Interactive/Small/Interactive min-height` (48) as min width and min height, Container centred. With its chevron inside, a Link item is wider than 48 already ("พอร์ต" + 8 + chevron ≈ 55), so the min width binds only on a short Overflow or Current. The bar comes out 48 tall against Base's 52 (16 · 0 padding around 20 text): a Pattern that wants Base's air pads the bar. Overflow's Icon button brings its own 48 Root (reversed by Overflow is drawn, and the item's min size makes it 48 × 48, R7). Done 2026-11-05: Link has its own 48 since #356 PR 2, and the item dropped its min size, so Current is 24 tall and the Skeletons 20 (Link) and 8 (Current); a bar holding one Link or Overflow stays 48. Since (R7) the item binds the min size again in every variant: Link 103 × 48 with the default label, Overflow 48 × 48, Current and Skeleton 48 tall.
+- **Hit target**: each link 48 tall and at least 48 wide (Q3). Link's Root reads 36 with no min size, so the item's Root takes `Interactive/Small/Interactive min-height` (48) as min width and min height, Container centred. With its chevron inside, a Link item is wider than 48 already ("พอร์ต" + 8 + chevron ≈ 55), so the min width binds only on a short Overflow or Current. The bar comes out 48 tall against Base's 52 (16 · 0 padding around 20 text): a Pattern that wants Base's air pads the bar. Overflow's Icon button brings its own 48 Root (reversed: Overflow is drawn, and the item's min size makes it 48 × 48, R7). Done 2026-11-05: Link has its own 48 since pawisssh/design-system#356 PR 2, and the item dropped its min size, so Current is 24 tall and the Skeletons 20 (Link) and 8 (Current); a bar holding one Link or Overflow stays 48. (R7) the item binds the min size again in every variant: Link 103 × 48 with the default label, Overflow 48 × 48, Current and Skeleton 48 tall.
 - **Skeleton**: `State=Skeleton` on Link and Current (Q7): a plan name arrives with the plan, so Port's Plan Detail can show the bar before its data.
 
 ## Motion
@@ -110,7 +110,7 @@ No text under 13 (Localisation). Breadcrumbs never wraps to a second line (Carbo
 - [x] 2. `Separator` is `text-primary` text since 2026-11-06 ("/"), so item 1's pairs cover it. Before, `icon-secondary` at 3:1 on the Base surfaces: 6.73:1 or more in Light, 7.22:1 or more in Dark (`contrast.mjs`, 2026-11-05). Decorative either way.
 - [x] 3. N/A: not a field.
 - [ ] 4. Current is told apart from the links by more than colour: under Q1's recommendation, by the links' underline and Current's missing separator, and in code by `aria-current="page"`. Under Q1's option B, Current and the links differ by colour only.
-- [x] 5. The item's own Focus ring since a 2 `Focus/focus` stroke inside `Text`'s and `Overflow`'s box (at least 32, growing with the text), so Focus doesn't grow the item; web only.
+- [x] 5. The item's own Focus ring: a 2 `Focus/focus` stroke inside `Text`'s and `Overflow`'s box (at least 32, growing with the text), so Focus doesn't grow the item; web only.
 - [x] 6. `Text` 32 · 40 · 60 and `Overflow` 32 · 42 · 66, so Hover's fill and the Focus ring grow with the text. 18 `overflow`, all one kind:
   - Link and Current run past a 343 column with the check's long unspaced phrase, at every size. A Link label is never cut (Q6), and Current cuts only when a designer sets it Fill, which the check doesn't. So this is the one-line rule meeting a phrase longer than the column, which Overflow (Q5) handles in product.
   - With a short Thai label (a probe, same day), nothing overflows at any size. fixed by the min height (owner, 2026-11-06: "Yes, min height").
@@ -128,11 +128,11 @@ No text under 13 (Localisation). Breadcrumbs never wraps to a second line (Carbo
 
 ## Usage
 
-- Top left of a deep web page, under the top bar (Toolbar - Top, which Top navigation bar folded into on 2026-11-08) and above the page title (Regular width; Carbon's placement). Port's Plan Detail: `พอร์ตลงทุน › Definit Global Select` (Port's copy is English, "Port"), on every web breakpoint, 320 to 1584 (Q8).
+- Top left of a deep web page, under the top bar ([Toolbar - Top](toolbars.md), which Top navigation bar folded into on 2026-11-08) and above the page title (Regular width; Carbon's placement). Port's Plan Detail: `พอร์ตลงทุน › Definit Global Select` (Port's copy is English, "Port"), on every web breakpoint, 320 to 1584 (Q8).
 - A long path: the first link, Overflow, then the last two links and Current (Carbon's rule, Q5): `หน้าแรก › ⋯ › พอร์ตลงทุน › แผนเกษียณ › Definit Global Select`.
 - Loading: Skeleton items in place of the links and Current.
 - Don't use it for steps in a flow (Progress steps), for switching views (Tabs, Segmented control), or on iOS and Android apps (the back button in Toolbar - Top).
-- No Focus ring of its own to show: Link's and Icon button's (reversed by the item draws its own Focus ring, `State=Focus`).
+- No Focus ring of its own to show: Link's and Icon button's (reversed: the item draws its own Focus ring, `State=Focus`).
 - Don't use the Overflow item in product until Dropdown menu (group D) ships (Q15).
 - Links never show Visited (Q13).
 - Samples, 2026-11-06, in `Samples`, Light and Dark columns (`Theme` mode on each), 1024 web screens under a plain Top navigation bar placeholder (not built yet), Thai copy: Placement (`หน้าแรก / พอร์ตลงทุน / แผนเกษียณ / Definit Global Select` above the title), Loading (four Skeleton items, the last with `Separator` off), Focus (`Item 2` `State=Focus`), Long path (after Placement: `Item 4` on, `Item 2` `Type=Overflow`, `หน้าแรก / ⋯ / พอร์ตลงทุน / แผนเกษียณ / Definit Global Select`, its note saying Overflow waits for Dropdown menu, Q15), and two Don'ts: Not Breadcrumbs (Tabs switching a page's views) and Not on apps (Toolbar - Top's back button, 375).

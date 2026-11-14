@@ -34,7 +34,7 @@ Snackbar (variant root)        Fill × Hug, no fill, no padding, VERTICAL
 | --- | --- | --- |
 | `Leading` | Icon · None · Loading | which of `Icon`, `Loading` or nothing shows (Q2) |
 | `Status` | Info · Success · Warning · Error | the glyph and its colour; the announcement (Accessibility). Only Info at Leading=None and Loading |
-| `Action` | None · Button | which buttons show, Container padding right (Q3,): Button brings Close |
+| `Action` | None · Button | which buttons show, Container padding right (Q3): Button brings Close |
 
 - **Sparse**: Leading=Icon takes all four Statuses; None and Loading take Info only, since nothing on the surface shows a Status there. As Button's Brand cells, the other combinations are not built.
 - **Count**: (4 + 1 + 1) × 2 × 2 = **24 variants** (36 before).
@@ -48,7 +48,7 @@ Snackbar (variant root)        Fill × Hug, no fill, no padding, VERTICAL
 | Group | Keyed by | Properties | Values |
 | --- | --- | --- | --- |
 | `Snackbar/Container/<Action>` | `Action` | Layout horizontal, Layout vertical, Min height, Gap horizontal, Padding left, Padding right, Padding top / bottom, Radius | `Fill container`, `Hug contents`, 56 (raw), 8 (`Spacing/spacing-03 = 8`), 16 (`Spacing/spacing-05 = 16`), None 16 (`spacing-05`) · Button 4 (`Spacing/spacing-02 = 4`), 0 (`Spacing/spacing-00 = 0`), `Radius/16px (radius-lg) = 16` |
-| `Snackbar/Leading/Default` | none varies | Padding top / bottom, Padding right | 16 (`spacing-05`), 8 (`Spacing/spacing-03 = 8`,) |
+| `Snackbar/Leading/Default` | none varies | Padding top / bottom, Padding right | 16 (`spacing-05`), 8 (`Spacing/spacing-03 = 8`) |
 | `Snackbar/Text/Default` | none varies | Layout horizontal, Padding top / bottom, Gap vertical | `Fill container`, 16 (`spacing-05`), 0 (`spacing-00`) |
 | `Snackbar/Label/Description` | role | Type token, Type emphasis, Align horizontal, Align vertical, Decoration | `$callout`, `Regular`, `Left`, `Top`, `-` |
 | `Snackbar/Icon/Medium` | Icon step | Type token, Layout width, Layout height | `fa-sharp fa-solid/Medium`, 24, 24 (the Icon box) |
@@ -89,7 +89,7 @@ Snackbar (variant root)        Fill × Hug, no fill, no padding, VERTICAL
   - By Status: Info `circle-info`, Success `circle-check`, Warning `triangle-exclamation`, Error `circle-exclamation` (v2 Snackbar's glyphs).
   - Colour `icon-inverse` for every Status: the glyph tells them apart.
   - Other glyphs are the designer's text, e.g. v2's `circle-xmark` (Failure) or `trash-can` (Deleted), keeping the Status that sets the announcement.
-- **Icon box**: fixed 24 × 24, so the glyph and the 24 `_Loading` swap without moving the text. This is #109's fixed-width rule where glyphs swap.
+- **Icon box**: fixed 24 × 24, so the glyph and the 24 `_Loading` swap without moving the text. This is pawisssh/design-system#109's fixed-width rule where glyphs swap.
 - **Close**: the Icon button's own record (`xmark`, Medium, `fa-sharp fa-solid/Large`).
 
 ## Text styles, wrapping and truncation
@@ -105,7 +105,7 @@ Snackbar (variant root)        Fill × Hug, no fill, no padding, VERTICAL
 
 ## Hit target and Skeleton
 
-- **Hit target**: the nested Button and Icon button bring their own 48 on their Root (ADR 0003). The Snackbar body is not a target; a tap on it does nothing. #109's "Hit target inside a box under 48": N/A, the Container is 56.
+- **Hit target**: the nested Button and Icon button bring their own 48 on their Root (ADR 0003). The Snackbar body is not a target; a tap on it does nothing. pawisssh/design-system#109's "Hit target inside a box under 48": N/A, the Container is 56.
 - **Skeleton**: none. Feedback appears on an event (Visuals).
 
 ## Motion
@@ -118,11 +118,11 @@ Snackbar (variant root)        Fill × Hug, no fill, no padding, VERTICAL
 | The next Snackbar in the queue | enters after the current one has left | crossfade | None |
 
 - **Haptic**: none on appearing. An outcome's `Success` or `Error` haptic is the Pattern's.
-- **Movement**: `slide-full`, the Snackbar's own height down from the top edge, with its fade. Movement from Motion and haptics, the owner's D6 (ads-tokens.md § 5), edited in place at the owner's word ("Edit directly", #811, 2026-11-11).
+- **Movement**: `slide-full`, the Snackbar's own height down from the top edge, with its fade. Movement from Motion and haptics, the owner's D6 (ads-tokens.md § 5), edited in place at the owner's word ("Edit directly", pawisssh/design-system#811, 2026-11-11).
 - **Direction**: from the top edge, where Usage places it: it enters sliding down and leaves sliding up (over).
 - **Not Uber's 1000 ms quintic ease-out**: Core's motion is Carbon's six durations and productive easings, the longest `slow-02`, 700 ms (Motion). On iOS `moderate-02` stands for a `.smooth` spring.
 
-**Time on screen** (Q4,), timing under WCAG 2.2.1, not motion:
+**Time on screen** (Q4), timing under WCAG 2.2.1, not motion:
 
 | Action | Leaves | Who can keep it |
 | --- | --- | --- |

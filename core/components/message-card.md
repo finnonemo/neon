@@ -107,7 +107,7 @@ None of its own. The Tertiary CTA's arrow is the nested Button's `Trailing Icon`
 | --- | --- | --- | --- |
 | `Heading` | `Headings/Title 3` (20/28 Bold) | wraps, no `maxLines` | `Heading text` |
 | `Paragraph` | `Body/Subheadline` (15/24) | wraps, no `maxLines` | `Paragraph text` |
-| Button label | the Button's (Small) | hugs, wraps past 200 (the Button's rule,); **keep it short**: up to about 170 wide at the label size, or it runs over a Trailing artwork (MC9) | the Button's `Label Text` |
+| Button label | the Button's (Small) | hugs, wraps past 200 (the Button's rule); **keep it short**: up to about 170 wide at the label size, or it runs over a Trailing artwork (MC9) | the Button's `Label Text` |
 
 Uber: heading and paragraph wrap and are not truncated. CDS caps them at 2 and 3 lines; a Carousel Pattern that needs equal heights sets its own.
 
@@ -156,7 +156,7 @@ Samples in Thai, both Theme modes, on `background-secondary`:
 - Skeleton cards, Top and Trailing; `State=Focus` once.
 - A Don't: a status message ("ชำระเงินไม่สำเร็จ") as a Message card; use a Contextual banner.
 
-Where it goes: in a feed or under a section heading, full width with the screen's 16 inset; several in a row are a Carousel (#665), all the same `Artwork`, 16 apart. Not for system messages (Banner / Contextual banner), brief feedback (Snackbar), or holding content (Tile).
+Where it goes: in a feed or under a section heading, full width with the screen's 16 inset; several in a row are a Carousel (pawisssh/design-system#665), all the same `Artwork`, 16 apart. Not for system messages (Banner / Contextual banner), brief feedback (Snackbar), or holding content (Tile).
 
 ### Hierarchy
 

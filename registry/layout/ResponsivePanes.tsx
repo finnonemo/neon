@@ -93,16 +93,15 @@ export function ResponsivePanes({
 
   return (
     <>
-      <section className={!compact && inspectorWidth === undefined ? "border-e border-border" : undefined}
+      <section className={!compact ? "border-e border-border" : undefined}
         ref={contentRef} tabIndex={-1} aria-label={labels.content}
         hidden={compact && current !== "content"}
         onFocusCapture={(event) => {
           if (event.target !== contentRef.current) returnFocus.current = event.target as HTMLElement
         }}
         style={{ boxSizing: "border-box", display: compact && current !== "content" ? "none" : "flex",
-          flex: compact || contentWidth === undefined ? 1 : undefined,
-          width: compact ? undefined : contentWidth, flexShrink: 0, minWidth: 0, minHeight: 0, height: "100%",
-          order: inspectorWidth === undefined ? 0 : 1 }}
+          flexGrow: compact || contentWidth === undefined ? 1 : undefined, flexBasis: compact || contentWidth === undefined ? "0%" : undefined,
+          width: compact ? undefined : contentWidth, flexShrink: 0, minWidth: 0, minHeight: 0, height: "100%" }}
       >
         <ContentView width="100%" capAt={compact ? undefined : contentCapAt} toolbar={<div className="neon-pane-header">
           <div className="neon-pane-heading">{contentHeader}</div>
@@ -111,11 +110,11 @@ export function ResponsivePanes({
           {content}
         </ContentView>
       </section>
-      <section className={!compact && inspectorWidth !== undefined ? "border-e border-border" : undefined}
+      <section
         ref={inspectorRef} tabIndex={-1} aria-label={labels.inspector}
         hidden={compact && current !== "inspector"}
         style={{ boxSizing: "border-box", display: compact && current !== "inspector" ? "none" : "flex",
-          flex: compact || inspectorWidth === undefined ? 1 : undefined,
+          flexGrow: compact || inspectorWidth === undefined ? 1 : undefined, flexBasis: compact || inspectorWidth === undefined ? "0%" : undefined,
           width: compact ? undefined : inspectorWidth, flexShrink: 0, minWidth: 0, minHeight: 0, height: "100%" }}
       >
         <InspectorView pane={{ capAt: compact ? undefined : capAt }} toolbar={<div className="neon-pane-header">

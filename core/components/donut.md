@@ -24,7 +24,7 @@ _Donut segment                   vertical auto layout, Hug × Hug, no fill
 
 | Axis | Values (default first) | Drives |
 | --- | --- | --- |
-| `Size` | Large · Small | the box 120 · 20 and the ring 16.8 · 4 (Q1, Q7,) |
+| `Size` | Large · Small | the box 120 · 20 and the ring 16.8 · 4 (Q1, Q7) |
 | `State` | Data · Empty · Skeleton | Data: segments over the track. Empty: the track alone. Skeleton: the track in the skeleton colour, no segments |
 
 `_Donut segment`: `Series` = 01 · 02 · 03 · 04 · 05 · 06 · 07 · 08 · Other (9) × `Size` Large · Small = **18 variants**. The part takes `Size` because the ring is an inner-radius ratio of the ellipse (0.72 · 0.6), which no scaling of a Large arc gives at Small.
@@ -72,12 +72,12 @@ None: no text. A centre figure or a legend is the host's text.
 | Segments sweep clockwise from 12 o'clock when data arrives | `moderate-01 · entrance · expand` (each end angle from the start to its share) | instant | None |
 | Skeleton to Data | `fast-02 · standard` crossfade | instant | None |
 
-The sweep is an app behaviour, not a Figma variant, as the bar's grow. The compare document's donuts arrive with the paper's `unfold` (#926) and need no sweep of their own there: the host decides.
+The sweep is an app behaviour, not a Figma variant, as the bar's grow. The compare document's donuts arrive with the paper's `unfold` (pawisssh/design-system#926) and need no sweep of their own there: the host decides.
 
 ## Accessibility
 
 - [ ] 1. N/A: no text.
-- [x] 2. Large: every slot 01–06 and Other passes 3:1 on `layer-01` (Light 3.16–8.09, Dark 3.01–6.05); the compare document's paper is a `Layer/*` surface (#923 decides which, and these figures are checked again then). Small, on the chip's `button-secondary`, is decorative: slots 03–06 and Other fall to 2.55–2.83 in Light, 01 and 02 to 2.85–2.87 in Dark; The chip's label carries the meaning ("วันนี้ +4.27%" opens Analysis, where the full split is labelled).
+- [x] 2. Large: every slot 01–06 and Other passes 3:1 on `layer-01` (Light 3.16–8.09, Dark 3.01–6.05); the compare document's paper is a `Layer/*` surface (pawisssh/design-system#923 decides which, and these figures are checked again then). Small, on the chip's `button-secondary`, is decorative: slots 03–06 and Other fall to 2.55–2.83 in Light, 01 and 02 to 2.85–2.87 in Dark; The chip's label carries the meaning ("วันนี้ +4.27%" opens Analysis, where the full split is labelled).
 - [x] 3. N/A: not a field.
 - [x] 4. No meaning by colour alone: Large always sits beside labels that name each part (the compare document's rows name each fund and its percentage); Small is decorative and the chip's text says what it opens.
 - [x] 5. N/A: not focusable.
@@ -96,7 +96,7 @@ The sweep is an app behaviour, not a Figma variant, as the bar's grow. The compa
 ## Usage
 
 - Both modes, Light and its Dark twin, with Thai copy around it (Localisation).
-- **The Today chip** (Overview): `Size=Small`, one segment per asset class (สินทรัพย์หลัก), each Arc's fill overridden to `Chart/Asset allocation/<member>` (equity, fixed-income, gold, cash, government-bond, miscellaneous). It can't sit in Button's leading place until Button takes leading artwork (Q2); until then the chip keeps `chart-pie` (#803's Out of scope).
+- **The Today chip** (Overview): `Size=Small`, one segment per asset class (สินทรัพย์หลัก), each Arc's fill overridden to `Chart/Asset allocation/<member>` (equity, fixed-income, gold, cash, government-bond, miscellaneous). It can't sit in Button's leading place until Button takes leading artwork (Q2); until then the chip keeps `chart-pie` (pawisssh/design-system#803's Out of scope). Since 2026-11-14 it does: is built and published, and Port's chip holds the donut in `Leading artwork` with `Artwork` on and `Leading Icon` off (plan-value.md).
 - **Current vs new** (Rebalance compare): two `Size=Large` donuts under the column labels สัดส่วนปัจจุบัน | สัดส่วนที่แนะนำ (rebalance-compare.md, DES-13 Q15), one segment per fund. The same fund takes the same `Series` in both, so a fund keeps its colour from current to new (Q5, Q6); a fund at 0% keeps no segment.
 - Use it for a whole split into 2–9 parts at a glance, beside labels or as a decoration of a labelled control. Fold a ninth and later part into `Other`. Don't use it to compare parts precisely (a bar or rows read lengths better), for a trend, or for one amount.
 - Set each share by the segment's Arc end angle, from 12 o'clock clockwise: every Arc starts at `−90°` and ends at `−90° + 360·T`, where `T` (0–1) is its share plus every share before it; the first segment sits on top, the last at the bottom.
@@ -110,4 +110,4 @@ Samples on Usage (each Light with its Dark twin):
 | Empty | `Size=Large, State=Empty` |  |
 | Skeleton | `Size=Large, State=Skeleton` |  |
 
-The chip around the Small donut is drawn by hand (`Button/button-secondary`, Body/Subheadline วันนี้ +4.27%) for scale until Button takes leading artwork (Q2). Every segment's `arcData` is an override, and the chip's fills are too: `usage-overrides.js` lists them as `gaps` (36, by design: Anatomy).
+The chip around the Small donut was drawn by hand (`Button/button-secondary`, Body/Subheadline วันนี้ +4.27%) for scale until Button took leading artwork (Q2). Every segment's `arcData` is an override, and the chip segments' fills are too: `usage-overrides.js` lists them as `gaps` (36, by design: Anatomy).

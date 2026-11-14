@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Deck title</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* A slide is 1920 x 1080 px (Block's Screen 16:9). Every size below is in those px; the script scales the slide to the window. */
+:root{--navy:#01172B;--yellow:#F2F93C;--grey:#A6BFCC;--white:#FFFFFF;--panel:720px}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%;background:#000;overflow:hidden}
+body{font-family:'IBM Plex Sans Thai',sans-serif;color:var(--navy)}
+#deck{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:center}
+.slide{position:absolute;inset:0;display:none;overflow:hidden;background:var(--white);color:var(--navy)}
+.slide.on{display:block}
+.slide.navy{background:var(--navy);color:var(--white)}
+.slide.grey{background:var(--grey)}
+
+/* Brand Artwork: the whole slide (.art) or a side panel. One file per slot, drawn at the slot's size, placed whole. */
+.slide.art>img{position:absolute;inset:0;width:1920px;height:1080px;display:block}
+.slide>img.panel{position:absolute;right:0;top:0;width:var(--panel);height:1080px;display:block}
+
+/* The text box never reaches under a panel. */
+.body{position:absolute;left:120px;right:120px;top:96px;bottom:120px;display:flex;flex-direction:column;justify-content:center;gap:40px}
+.slide.has-panel .body{right:calc(var(--panel) + 96px)}
+.body.top{justify-content:flex-start}
+
+.label{font-family:'IBM Plex Mono',monospace;font-size:24px;letter-spacing:.02em;text-transform:uppercase}
+h1{font-size:112px;line-height:1.15;font-weight:500}
+h2{font-size:72px;line-height:1.2;font-weight:500}
+h3{font-size:40px;line-height:1.3;font-weight:600}
+p,li,td,th{font-size:32px;line-height:1.5}
+.lead{font-size:40px;line-height:1.45}
+mark{background:var(--yellow);color:var(--navy);padding:0 .15em}
+ul{padding-left:1.1em;display:grid;gap:16px}
+.cols{display:grid;grid-template-columns:repeat(var(--n,3),1fr);gap:40px}
+.cols>div{border-top:8px solid currentColor;padding-top:24px;display:grid;gap:12px;align-content:start}
+.stat{font-size:128px;line-height:1;font-weight:500}
+table{border-collapse:collapse;width:100%}
+th,td{text-align:left;padding:18px 24px;border-bottom:2px solid currentColor}
+th{font-weight:600}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.note{position:absolute;left:120px;bottom:44px;font-family:'IBM Plex Mono',monospace;font-size:22px}
+.page{position:absolute;right:120px;bottom:44px;font-family:'IBM Plex Mono',monospace;font-size:22px}
+.slide.has-panel .page,.slide.art .page{display:none}
+.slide.overflow{outline:12px solid #FF3B30;outline-offset:-12px}
+
+@page{size:1920px 1080px;margin:0}
+@media print{
+  html,body{height:auto;overflow:visible;background:none}
+  #deck{position:static;transform:none!important;width:auto;height:auto}
+  .slide{display:block;position:relative;width:1920px;height:1080px;break-after:page;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<main id="deck">
+
+<!-- Cover: finno render --format screen-16-9 --layout cover. Its words are in the file; repeat them in alt. -->
+<section class="slide art">
+  <img src="finnomena-artwork/cover.svg" alt="Deck title. Label, month and year.">
+</section>
+
+<!-- Statement: one idea, large. -->
+<section class="slide navy">
+  <div class="body">
+    <p class="label">Section</p>
+    <h1>One idea with a <mark>highlight</mark></h1>
+  </div>
+  <span class="page"></span>
+</section>
+
+<!-- Text beside a Pattern panel: finno render --width 720 --height 1080 --layout pattern. -->
+<section class="slide has-panel">
+  <div class="body">
+    <h2>Slide title</h2>
+    <p class="lead">A supporting sentence.</p>
+    <ul><li>First point</li><li>Second point</li><li>Third point</li></ul>
+  </div>
+  <img class="panel" src="finnomena-artwork/panel-1.svg" alt="">
+</section>
+
+<!-- Columns: 2 to 4, set --n. -->
+<section class="slide">
+  <div class="body">
+    <h2>Slide title</h2>
+    <div class="cols" style="--n:3">
+      <div><h3>First</h3><p>Short text.</p></div>
+      <div><h3>Second</h3><p>Short text.</p></div>
+      <div><h3>Third</h3><p>Short text.</p></div>
+    </div>
+  </div>
+  <span class="page"></span>
+</section>
+
+<!-- Figures: 2 to 4, set --n. -->
+<section class="slide grey">
+  <div class="body">
+    <h2>Slide title</h2>
+    <div class="cols" style="--n:3">
+      <div><p class="stat">00</p><p>What the figure counts</p></div>
+      <div><p class="stat">00</p><p>What the figure counts</p></div>
+      <div><p class="stat">00</p><p>What the figure counts</p></div>
+    </div>
+  </div>
+  <p class="note">Sample figures</p>
+</section>
+
+<!-- Table: at most six rows. -->
+<section class="slide">
+  <div class="body top">
+    <h2>Slide title</h2>
+    <table>
+      <tr><th>Item</th><th class="n">Figure</th></tr>
+      <tr><td>Row</td><td class="n">0</td></tr>
+    </table>
+  </div>
+  <span class="page"></span>
+</section>
+
+<!-- Closing: finno render --format screen-16-9 --layout closing. -->
+<section class="slide art">
+  <img src="finnomena-artwork/closing.svg" alt="Closing line.">
+</section>
+
+</main>
+<script>
+// Arrow keys, space, Page Up/Down, Home/End and a click move between slides; #5 opens slide 5.
+// ?check outlines in red every slide whose text runs past its box, and deckCheck() returns their numbers.
+const deck = document.getElementById('deck');
+const slides = [...deck.querySelectorAll('.slide')];
+let at = 0;
+const fit = () => { deck.style.transform = `translate(-50%,-50%) scale(${Math.min(innerWidth / 1920, innerHeight / 1080)})`; };
+const show = (i) => {
+  at = Math.max(0, Math.min(slides.length - 1, i));
+  slides.forEach((s, n) => s.classList.toggle('on', n === at));
+  history.replaceState(null, '', `${location.search}#${at + 1}`);
+};
+slides.forEach((s, n) => { const p = s.querySelector('.page'); if (p) p.textContent = `${n + 1} / ${slides.length}`; });
+addEventListener('resize', fit);
+addEventListener('keydown', (e) => {
+  if (['ArrowRight', 'ArrowDown', 'PageDown', ' '].includes(e.key)) show(at + 1);
+  else if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(e.key)) show(at - 1);
+  else if (e.key === 'Home') show(0);
+  else if (e.key === 'End') show(slides.length - 1);
+});
+deck.addEventListener('click', (e) => show(at + (e.clientX < innerWidth / 3 ? -1 : 1)));
+window.deckCheck = () => slides.flatMap((s, n) => {
+  s.classList.add('on');
+  const box = s.getBoundingClientRect();
+  const body = s.querySelector('.body');
+  const out = body && (body.scrollHeight > body.clientHeight + 1 || body.scrollWidth > body.clientWidth + 1
+    || [...body.querySelectorAll('*')].some((el) => { const r = el.getBoundingClientRect(); return r.right > box.right + 1 || r.bottom > box.bottom + 1; }));
+  const missing = [...s.querySelectorAll('img')].some((img) => !img.complete || !img.naturalWidth);
+  s.classList.toggle('on', n === at);
+  s.classList.toggle('overflow', !!(out || missing));
+  return out || missing ? [{ slide: n + 1, overflow: !!out, missingArtwork: missing }] : [];
+});
+fit();
+show((parseInt(location.hash.slice(1), 10) || 1) - 1);
+if (new URLSearchParams(location.search).has('check')) addEventListener('load', () => console.log('deckCheck', JSON.stringify(deckCheck())));
+</script>
+</body>
+</html>

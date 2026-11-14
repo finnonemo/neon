@@ -129,7 +129,7 @@ The Field grows with the value and has no max height in Figma. Code caps the gro
 | Field height as a line wraps | none: it follows the text | the same | None |
 | Skeleton | the Skeleton's own | static shape, no shimmer | None |
 
-The stroke is 3, not the 2 that #171 and the Motion table name. The owner set Text field to stroke 3 on 2026-11-01 ([text-field.md](text-field.md)), and Text area copies it. The token, reduced form and haptic are as #171 asks.
+The stroke is 3, not the 2 that pawisssh/design-system#171 and the Motion table name. The owner set Text field to stroke 3 on 2026-11-01 ([text-field.md](text-field.md)), and Text area copies it. The token, reduced form and haptic are as pawisssh/design-system#171 asks.
 
 ## Accessibility
 

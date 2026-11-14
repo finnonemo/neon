@@ -102,10 +102,18 @@ test('an unknown token has no consumers', async t => {
   assert.deepEqual(await findRegistryConsumers(registry, ['blue60']), []);
 });
 
-test("the repository's registry: Checkbox reads bgLineHeavy, Input its invalid stroke through a slot, Button the headline role", async () => {
+test("the repository's registry: Button reads bgLineHeavy, Input its invalid stroke through a slot, Button the headline role", async () => {
   const registry = fileURLToPath(new URL('../../registry', import.meta.url));
   const items = async token => new Set((await findRegistryConsumers(registry, [token])).map(m => m.item));
-  assert.ok((await items('bgLineHeavy')).has('checkbox'));
+  assert.ok((await items('bgLineHeavy')).has('button'));
+  // Checkbox took Core's Checkbox (#261): its Box has no stroke, so it reads no bgLineHeavy but the icon role.
+  assert.ok(!(await items('bgLineHeavy')).has('checkbox'));
+  assert.ok((await items('fgIcon')).has('checkbox'));
+  // Calendar took Core's Date and time (#275): a range's band is the highlight role, the picked day's
+  // disc the role the switch's On track reads, and no day takes the primary fill.
+  assert.deepEqual([...await items('bgHighlight')], ['calendar']);
+  assert.ok((await items('bgToggleOn')).has('calendar'));
+  assert.ok(!(await items('bgPrimary')).has('calendar'));
   // Input took Core's Field (#216): it reads no bgLineHeavy, and its invalid stroke is the invalid slot.
   assert.ok(!(await items('bgLineHeavy')).has('input'));
   assert.ok((await items('bgLineNegative')).has('input'));

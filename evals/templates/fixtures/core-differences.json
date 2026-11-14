@@ -11,21 +11,14 @@
     "detailsBody: font.lineHeight 24 ≠ 22",
     "detailsCaption: font.size 15 ≠ 14",
     "detailsCaption: font.lineHeight 24 ≠ 20",
-    "checkboxLabel: font.lineHeight 24 ≠ 22",
     "gap notesLabel→notes: 8 ≠ 4"
   ],
   "extras@375-light": [
     "title: font.lineHeight 32 ≠ 28",
-    "disabledCheckboxLabel: color rgba(0, 0, 0, 0.45) ≠ rgba(0, 0, 0, 0.85)",
-    "disabledCheckboxLabel: opacity 1 ≠ 0.5",
     "gap selectLabel→selectTrigger: 8 ≠ 4"
   ],
   "select-open@375-light": [
     "option: font.lineHeight 24 ≠ 22"
-  ],
-  "date-open@375-light": [
-    "month: font.lineHeight 24 ≠ 22",
-    "day: font.lineHeight 24 ≠ 22"
   ],
   "menu-open@375-light": [
     "menuItem: font.weight 400 ≠ 500",
@@ -257,22 +250,15 @@
     "detailsBody: font.lineHeight 24 ≠ 22",
     "detailsCaption: font.size 15 ≠ 14",
     "detailsCaption: font.lineHeight 24 ≠ 20",
-    "checkboxLabel: font.lineHeight 24 ≠ 22",
     "gap notesLabel→notes: 8 ≠ 4"
   ],
   "extras@375-dark": [
     "title: font.lineHeight 32 ≠ 28",
-    "disabledCheckboxLabel: color rgba(255, 255, 255, 0.45) ≠ rgb(255, 255, 255)",
-    "disabledCheckboxLabel: opacity 1 ≠ 0.5",
     "gap selectLabel→selectTrigger: 8 ≠ 4"
   ],
   "select-open@375-dark": [
     "listbox: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
     "option: font.lineHeight 24 ≠ 22"
-  ],
-  "date-open@375-dark": [
-    "month: font.lineHeight 24 ≠ 22",
-    "day: font.lineHeight 24 ≠ 22"
   ],
   "menu-open@375-dark": [
     "menuItem: font.weight 400 ≠ 500",
@@ -508,21 +494,14 @@
     "detailsBody: font.lineHeight 24 ≠ 22",
     "detailsCaption: font.size 15 ≠ 14",
     "detailsCaption: font.lineHeight 24 ≠ 20",
-    "checkboxLabel: font.lineHeight 24 ≠ 22",
     "gap notesLabel→notes: 8 ≠ 4"
   ],
   "extras@1440-light": [
     "title: font.lineHeight 32 ≠ 28",
-    "disabledCheckboxLabel: color rgba(0, 0, 0, 0.45) ≠ rgba(0, 0, 0, 0.85)",
-    "disabledCheckboxLabel: opacity 1 ≠ 0.5",
     "gap selectLabel→selectTrigger: 8 ≠ 4"
   ],
   "select-open@1440-light": [
     "option: font.lineHeight 24 ≠ 22"
-  ],
-  "date-open@1440-light": [
-    "month: font.lineHeight 24 ≠ 22",
-    "day: font.lineHeight 24 ≠ 22"
   ],
   "menu-open@1440-light": [
     "menuItem: font.weight 400 ≠ 500",
@@ -756,22 +735,15 @@
     "detailsBody: font.lineHeight 24 ≠ 22",
     "detailsCaption: font.size 15 ≠ 14",
     "detailsCaption: font.lineHeight 24 ≠ 20",
-    "checkboxLabel: font.lineHeight 24 ≠ 22",
     "gap notesLabel→notes: 8 ≠ 4"
   ],
   "extras@1440-dark": [
     "title: font.lineHeight 32 ≠ 28",
-    "disabledCheckboxLabel: color rgba(255, 255, 255, 0.45) ≠ rgb(255, 255, 255)",
-    "disabledCheckboxLabel: opacity 1 ≠ 0.5",
     "gap selectLabel→selectTrigger: 8 ≠ 4"
   ],
   "select-open@1440-dark": [
     "listbox: bg rgb(26, 26, 26) ≠ rgb(51, 51, 51)",
     "option: font.lineHeight 24 ≠ 22"
-  ],
-  "date-open@1440-dark": [
-    "month: font.lineHeight 24 ≠ 22",
-    "day: font.lineHeight 24 ≠ 22"
   ],
   "menu-open@1440-dark": [
     "menuItem: font.weight 400 ≠ 500",

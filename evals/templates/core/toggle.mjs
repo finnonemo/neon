@@ -4,7 +4,7 @@ import { padding } from './entries.mjs';
 
 const TRACK = 'Container / _Toggle Item / Container';
 const item = (property) => ({ set: '_Toggle Item', at: { Size: 'Medium', State: 'Enabled' }, layer: 'Container', property });
-const thumb = (property) => ({ set: '_Toggle Switch', at: { Disabled: 'False' }, layer: '(root)', property });
+const thumb = (property) => ({ set: '_Toggle Switch', at: { Disabled: 'False', Pressed: 'False' }, layer: '(root)', property });
 
 /** A measured part of the Neon Switch in a cell of Core's Toggle: Enabled and off unless said. */
 export function toggleCell(part, { State = 'Enabled', Toggled = 'False' } = {}) {

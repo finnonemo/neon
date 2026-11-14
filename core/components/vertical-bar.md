@@ -14,7 +14,7 @@ Vertical Bar (variant root)        Fixed 84 × Fill, no fill, no padding
 └─ Navigation                      instance, `Layout=Rail`, `Items=5`, `Type=Search Role`, `Minimized` pinned by `Compression`; absolute, Stretch × Bottom; `Show Navigation`
 ```
 
-The Camera Punchout sits where the outer camera is: bottom in Outer Landscape, top in Outer Portrait, absent on the inner display (its camera is hidden until used). The Rail's bar is Navigation's own 48 × 270, or 48 × 108 at `Minimized=True` ([navigation.md](navigation.md),), at x 12 of the strip; this component places it, it does not redraw it. With the camera at the bottom the Rail ends 74 above the strip's foot (24 otherwise), and Back and the status bar are off, since 466 has no room for them beside the Rail (Build log).
+The Camera Punchout sits where the outer camera is: bottom in Outer Landscape, top in Outer Portrait, absent on the inner display (its camera is hidden until used). The Rail's bar is Navigation's own 48 × 270, or 48 × 108 at `Minimized=True` ([navigation.md](navigation.md)), at x 12 of the strip; this component places it, it does not redraw it. With the camera at the bottom the Rail ends 74 above the strip's foot (24 otherwise), and Back and the status bar are off, since 466 has no room for them beside the Rail (Build log).
 
 ## Axes
 
@@ -39,7 +39,7 @@ None of its own. Back is `fa-sharp fa-solid` chevron-left, Overflow the ellipsis
 
 ## Text styles, wrapping and truncation
 
-N/A: no text of its own. Every item keeps a title for the overflow menu, as toolbars.md says; the Slot's buttons carry them.
+N/A: no text of its own. Every item keeps a title for the overflow menu, as [toolbars.md](toolbars.md) says; the Slot's buttons carry them.
 
 ## Hit target and Skeleton
 

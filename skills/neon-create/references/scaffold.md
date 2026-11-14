@@ -23,10 +23,10 @@ Choose based on the task, not the default `App.tsx`:
 | `AppShell` | List and selected-detail/action workspace |
 | `ContentLayout` | Content-dominant workspace with supporting detail |
 | `SimpleLayout` | Navigation and content without an inspector |
-| `MultiColumnLayout` | Explicit board/kanban task |
+| `MultiColumnLayout` | Columns side by side, 400px each, that each scroll on their own: a board, or records compared in columns |
 | `ImmersiveLayout` | Focused content or landing page; full-bleed except at the widest tier, where content caps at 1440px. `immersiveTheme` sets a Campaign Page's [Immersive Theme](../../INSTRUCTION.md#composition) |
 
-Import them from `@/layout/<name>`. These are starter exports, not guaranteed imports in other apps. Inspect `src/layout/layoutPanes.ts` for corroborated versus extrapolated geometry. Supply navigation for actual destinations; ecosystem links are opt-in. Use the shipped `Logo` and SVG marks appropriate to the surface, not a recreated text wordmark.
+Import them from `@/layout/<name>`. These are starter exports, not guaranteed imports in other apps. Inspect `src/layout/layoutPanes.ts` for corroborated versus extrapolated geometry. Supply navigation for actual destinations; ecosystem links are opt-in. The sidebar holds that navigation and nothing that is a record: a list of advisors, requests or funds goes in content, in `AppShell`'s list pane with the record's detail beside it. Choose `AppShell` as soon as the task has a list and a detail, not `SimpleLayout`. Use the shipped `Logo` and SVG marks appropriate to the surface, not a recreated text wordmark.
 
 ## Content and details on narrow screens
 

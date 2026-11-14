@@ -4,8 +4,8 @@ import { Switch as SwitchPrimitive } from "radix-ui"
 import { cn } from "@/lib/utils"
 
 // Core's Toggle (Style=Toggle only): a 48x24 pill track with 3px of padding round an 18px thumb
-// that slides 24px when on. The track is Miscellaneous/toggle-off, and Support/support-success
-// when on; the thumb is Icon/icon-on-color. Disabled takes Core's disabled tokens with no
+// that slides 24px when on. The track is Miscellaneous/toggle-off, and Layer/layer-selected-inverse
+// when on; the thumb is Icon/icon-inverse. Disabled takes Core's disabled tokens with no
 // opacity: the track Button/button-disabled, on or off, and the thumb icon-on-color-disabled; a
 // Label beside the switch follows it (peer-disabled). Core's web Toggle draws no Focus state and
 // has no invalid one: keyboard focus shows the Button's indicator, Focus/focus 2px wide and 2px

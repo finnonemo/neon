@@ -19,6 +19,7 @@ import button from './core/button.mjs';
 import textField from './core/text-field.mjs';
 import textArea from './core/text-area.mjs';
 import select from './core/select.mjs';
+import checkbox from './core/checkbox.mjs';
 import radio from './core/radio.mjs';
 import toggle from './core/toggle.mjs';
 import segmentedControl from './core/segmented-control.mjs';
@@ -40,6 +41,7 @@ import alert from './core/alert.mjs';
 import sheet from './core/sheet.mjs';
 import popover from './core/popover.mjs';
 import menu from './core/menu.mjs';
+import dateAndTime from './core/date-and-time.mjs';
 
 // By registry item. Input, label, field and input-group are the parts of one Counterpart, Text field.
 const tables = {
@@ -50,6 +52,7 @@ const tables = {
   'input-group': textField,
   textarea: textArea,
   select,
+  checkbox,
   'radio-group': radio,
   switch: toggle,
   'segmented-control': segmentedControl,
@@ -72,6 +75,7 @@ const tables = {
   sheet,
   popover,
   'dropdown-menu': menu,
+  calendar: dateAndTime,
 };
 // The snapshot writes a literal as text ("2", "0.5"); a measured number is a number.
 const asNumber = (value) => (typeof value === 'string' && value.trim() !== '' && !Number.isNaN(Number(value)) ? Number(value) : value);
