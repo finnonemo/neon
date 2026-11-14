@@ -1,8 +1,7 @@
 {
   "core": {
     "repository": "pawisssh/design-system",
-    "commit": "88ea62f47448ef023382503ac4cf820e10ff6eb7",
-    "compiler": "5eede0bdaba76acd0c117d4f05715878060c2ce7"
+    "commit": "c56f00218b31b19e682aaebba8b35b58ce216536"
   },
   "look": {
     "iOS": false,
@@ -27,8 +26,8 @@
     "components/breadcrumbs.md": "d6f5ce22aa06340a7c0db2a41dd8a300dc22d6c1250f0b4509c0e9722093f1aa",
     "components/button-dock.json": "cedff5bee591f4abe710c24988923fb5f72c723b068a67964f75c2cbba3d7452",
     "components/button-dock.md": "e06c745e1f0ebf310ddb238d9788bce192908d15f457ba300cd41bf714ce9a85",
-    "components/button.json": "751b4a7da6b463e368dd771a8cd020274be890c0bc783afd511e46547371d97a",
-    "components/button.md": "fcbba08eb40cedcf6683dfa1a8f307b0a0029485c612ce35d201c34053f2c1b3",
+    "components/button.json": "75cd4fd9cd64f569215af258e8d0d0f70e51e2066cf23c54d88193309b495cb5",
+    "components/button.md": "545db2d85fe12d2c78ba7dba2a09b8ea8f1169bc535fa18972e2b29919d488fc",
     "components/checkbox.json": "029fa251233191f58a8053dcb6babfdf9939a0a72bb28bbb0d5cc5835132f9c1",
     "components/checkbox.md": "4793569bcff89535821d5226aec548909f29e3df07c4bec5b72168cc37cb9377",
     "components/contextual-banner.json": "3fbbbe0a95af3115bb513ea762df53412d2d7e05da79e5190fdaaf4134660be0",
@@ -43,7 +42,7 @@
     "components/divider.json": "c8b6fba40cf9494b0bcec59b3587170d98f419ed4a7700acaa605a0b4cb61048",
     "components/divider.md": "0f5adc003168680d443dc2c4e5c440537abde6990109a825ceaf521ff307a77a",
     "components/donut.json": "1741898b8169863253f610c2427593f546fdbe1b88f41959e087a2474f2a526f",
-    "components/donut.md": "4c7e5b52a56d2b1a8fa977a525c5d13b32f3107ee4201f44f660d889d8591bb4",
+    "components/donut.md": "2b6e72311ab71268e990db08615548e63d6b4aad7bd0da24be6589f9da501f51",
     "components/empty-state.json": "fde46ffbc98ea0240e750baeafb463808764f1abb48f5e86b4cf8210559f2298",
     "components/empty-state.md": "31a0c49f0e004000ed09cab7744156f51044b27cba3babd9feb89da215f8f104",
     "components/file-upload.json": "cf3e0751e86a2d390635ab3e0fd5a6d076947f4c17374c2d5cf9c17bf6c3870c",
@@ -104,8 +103,8 @@
     "components/text-field.md": "e8603b6d329d43f5d8861ff71afe006b06e99ee08c4fb7a7429b0fff4b63497c",
     "components/tile.json": "419ff8a9dfd5bb5a921f34dcc774bb5315b590497787a6f51f9347b27cb062da",
     "components/tile.md": "0cdaf05fa5a08f1fbff1ce6b7ed8f5ffd32eb9fbf75fc66a4f1cd59f7f644cb8",
-    "components/toggle.json": "3fdb7883bad1516687c78fa0e9af50d4e0f1b108e05a7b9196f77147b9c26fa9",
-    "components/toggle.md": "582b227ac1e2d8f57cfb80c302e80b1c60f89fc16ec07f511a75bff3171d456c",
+    "components/toggle.json": "26e4a1a06f24f33511939f7589821956fc6af6b35e8f2861bfe79124e5a7c85f",
+    "components/toggle.md": "7b00674173b1acf7a7af9221fd7e48011872525936f0a27d8904eebd680e5377",
     "components/toggletip.json": "9a5a4e1ae044b52b8ad3e1f6edba3114dc20bb067ff35bfc5acc1e6446d07917",
     "components/toggletip.md": "c66336e0f0091c40dbdbe4c84335a70b845ec0c7d0a4e2b2ceef055adceeccc9",
     "components/toolbars.md": "abb322b28f49f2cf7c9fdd55a2d2feac9b1434889ac7c9f06c32bd38f2785669",
@@ -120,7 +119,7 @@
     "index.json": "4cddd5b943c2358072148bbbdefbbcdcc9a592c4ee0b073e3ed14f65f172da03",
     "scales.json": "bb99d45e34a21778d526432dade7592009bc77bf4eded9aeebaecbd647cd309d",
     "text-styles.json": "50f32ae4b3d6afeb7defae0b08901699909986d970b14db672064928bc079810",
-    "theme.json": "3b2f501468b66ac63606e6805d093acb42f5864bdb7212938387ab43f9e1b200"
+    "theme.json": "9c9810e3b17175d39d89acb70bcd1b537d90524691457708c120d3548e8f10e5"
   },
-  "seal": "e6f7d801b8666f3739cdc10751269b1700c1526e7c8ad07c868fb6ebcbab0b12"
+  "seal": "78474cab008ddd4148e88fed4421782b0d1f4b619c21f1b97b073a1d7068adf8"
 }

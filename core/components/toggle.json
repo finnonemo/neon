@@ -53,6 +53,11 @@
     }
   ],
   "variables": {
+    "Toggle/Thumb/True/Layout horizontal": "Fixed",
+    "Toggle/Thumb/True/Layout vertical": "Fixed",
+    "Toggle/Thumb/True/Layout width": 38,
+    "Toggle/Thumb/True/Layout height": 24,
+    "Toggle/Thumb/True/Radius": 200,
     "Toggle/Track/False/Layout horizontal": "Fixed",
     "Toggle/Track/False/Layout vertical": "Hug contents",
     "Toggle/Track/False/Layout width": 48,
@@ -85,42 +90,59 @@
     {"layer":"(root)","property":"minHeight","when":"{{Style=*}}","value":"Components/Interactive/Medium/Interactive min-height"},
     {"layer":"(root)","property":"primaryAxisAlignItems","when":"{{Style=*}}","value":"CENTER","literal":true},
     {"layer":"(root)","property":"counterAxisAlignItems","when":"{{Style=*}}","value":"CENTER","literal":true},
+    {"layer":"(root)","property":"layoutSizingHorizontal","when":"{{Style=Default}}","value":"FIXED","literal":true},
+    {"layer":"(root)","property":"layoutSizingHorizontal","when":"{{Style=Toggle only}}","value":"HUG","literal":true},
+    {"layer":"(root)","property":"width","when":"{{Style=Default}}","value":"343","literal":true},
+    {"layer":"Container / Toggle + Value","property":"layoutSizingHorizontal","when":"{{Style=Default}}{{State=Enabled, Pressed, Disabled, Read-only}}","value":"FILL","literal":true},
+    {"layer":"Container / Toggle + Value","property":"counterAxisAlignItems","when":"{{Style=Default}}{{State=Enabled, Pressed, Disabled, Read-only}}","value":"MIN","literal":true},
     {"layer":"Container / Title","property":"textStyleId","when":"{{Style=Default}}{{State=Enabled, Pressed, Disabled, Read-only}}","value":"Headings/Headline"},
     {"layer":"Container / Title","property":"fills.0","when":"{{Style=Default}}{{State=Enabled, Pressed, Disabled, Read-only}}","value":"Theme/Text/text-secondary"},
     {"layer":"Container / Title","property":"fills.0","when":"{{Style=Default}}{{State=Disabled}}","value":"Theme/Text/text-disabled"},
     {"layer":"Container / Toggle + Value / Detail","property":"textStyleId","when":"{{Style=Default}}{{State=Enabled, Pressed, Disabled, Read-only}}","value":"Body/Subheadline"},
+    {"layer":"Container / Toggle + Value / Detail","property":"layoutSizingHorizontal","when":"{{Style=Default}}{{State=Enabled, Pressed, Disabled, Read-only}}","value":"FILL","literal":true},
+    {"layer":"Container / Toggle + Value / Detail","property":"textAutoResize","when":"{{Style=Default}}{{State=Enabled, Pressed, Disabled, Read-only}}","value":"HEIGHT","literal":true},
     {"layer":"Container / Toggle + Value / Detail","property":"fills.0","when":"{{Style=Default}}{{State=Enabled, Pressed, Disabled, Read-only}}","value":"Theme/Text/text-primary"},
     {"layer":"Container / Toggle + Value / Detail","property":"fills.0","when":"{{Style=Default}}{{State=Disabled}}","value":"Theme/Text/text-disabled"},
-    {"layer":"Container / Toggle + Value / _Toggle Item","property":"componentProperties.State","when":"{{Style=Default}}{{State=Enabled, Pressed, Disabled, Read-only}}","value":"Enabled"},
+    {"layer":"Container / Toggle + Value / _Toggle Item","property":"componentProperties.State","when":"{{Style=Default}}{{State=Enabled, Disabled}}","value":"Enabled"},
+    {"layer":"Container / Toggle + Value / _Toggle Item","property":"componentProperties.State","when":"{{Style=Default}}{{State=Pressed}}","value":"Enabled"},
     {"layer":"Container / Toggle + Value / _Toggle Item","property":"componentProperties.State","when":"{{Style=Default}}{{State=Read-only}}","value":"Read-only"},
+    {"layer":"Container / Toggle + Value / _Toggle Item","property":"opacity","when":"{{Style=Default}}{{State=Enabled, Pressed, Read-only}}","value":"1","literal":true},
+    {"layer":"Container / Toggle + Value / _Toggle Item","property":"opacity","when":"{{Style=Default}}{{State=Disabled}}","value":"1","literal":true},
     {"layer":"Container / Toggle + Value / _Toggle Item / Container","property":"primaryAxisAlignItems","when":"{{Style=Default}}{{State=Enabled, Pressed, Disabled, Read-only}}{{Toggled=False}}","value":"MIN","literal":true},
     {"layer":"Container / Toggle + Value / _Toggle Item / Container","property":"primaryAxisAlignItems","when":"{{Style=Default}}{{State=Enabled, Pressed, Disabled, Read-only}}{{Toggled=True}}","value":"MAX","literal":true},
     {"layer":"Container / Toggle + Value / _Toggle Item / Container","property":"fills.0","when":"{{Style=Default}}{{State=Enabled, Pressed}}{{Toggled=False}}","value":"Theme/Miscellaneous/toggle-off"},
     {"layer":"Container / Toggle + Value / _Toggle Item / Container","property":"fills.0","when":"{{Style=Default}}{{State=Enabled, Pressed}}{{Toggled=True}}","value":"Theme/Layer/layer-selected-inverse"},
     {"layer":"Container / Toggle + Value / _Toggle Item / Container","property":"fills.0","when":"{{Style=Default}}{{State=Disabled}}","value":"Theme/Button/button-disabled"},
     {"layer":"Container / Toggle + Value / _Toggle Item / Container","property":"strokes.0","when":"{{Style=Default}}{{State=Read-only}}","value":"Theme/Border/border-subtle"},
-    {"layer":"Container / Toggle + Value / _Toggle Item / Container / _Toggle Switch","property":"componentProperties.Disabled","when":"{{Style=Default}}{{State=Enabled, Pressed, Disabled, Read-only}}","value":"False"},
+    {"layer":"Container / Toggle + Value / _Toggle Item / Container / _Toggle Switch","property":"componentProperties.Disabled","when":"{{Style=Default}}{{State=Enabled, Pressed, Read-only}}","value":"False"},
     {"layer":"Container / Toggle + Value / _Toggle Item / Container / _Toggle Switch","property":"componentProperties.Disabled","when":"{{Style=Default}}{{State=Disabled}}","value":"True"},
+    {"layer":"Container / Toggle + Value / _Toggle Item / Container / _Toggle Switch","property":"componentProperties.Pressed","when":"{{Style=Default}}{{State=Disabled}}","value":"False"},
     {"layer":"Container / Toggle + Value / _Toggle Item / Container / _Toggle Switch","property":"width","when":"{{Style=Default}}{{State=Disabled}}","value":"Components/Toggle/Thumb/False/Layout width"},
     {"layer":"Container / Toggle + Value / _Toggle Item / Container / _Toggle Switch","property":"height","when":"{{Style=Default}}{{State=Disabled}}","value":"Components/Toggle/Thumb/False/Layout height"},
     {"layer":"Container / Toggle + Value / _Toggle Item / Container / _Toggle Switch","property":"cornerRadius","when":"{{Style=Default}}{{State=Disabled}}","value":"Components/Toggle/Thumb/False/Radius"},
-    {"layer":"Container / Toggle + Value / _Toggle Item / Container / _Toggle Switch","property":"fills.0","when":"{{Style=Default}}{{State=Enabled, Pressed}}","value":"Theme/Icon/icon-inverse"},
+    {"layer":"Container / Toggle + Value / _Toggle Item / Container / _Toggle Switch","property":"fills.0","when":"{{Style=Default}}{{State=Enabled}}","value":"Theme/Icon/icon-inverse"},
+    {"layer":"Container / Toggle + Value / _Toggle Item / Container / _Toggle Switch","property":"fills.0","when":"{{Style=Default}}{{State=Pressed}}","value":"Theme/Icon/icon-inverse"},
     {"layer":"Container / Toggle + Value / _Toggle Item / Container / _Toggle Switch","property":"fills.0","when":"{{Style=Default}}{{State=Disabled}}","value":"Theme/Icon/icon-on-color-disabled"},
     {"layer":"Container / Toggle + Value / _Toggle Item / Container / _Toggle Switch","property":"fills.0","when":"{{Style=Default}}{{State=Read-only}}","value":"Theme/Icon/icon-primary"},
-    {"layer":"Container / _Toggle Item","property":"componentProperties.State","when":"{{Style=Toggle only}}{{State=Enabled, Pressed, Disabled, Read-only}}","value":"Enabled"},
+    {"layer":"Container / _Toggle Item","property":"componentProperties.State","when":"{{Style=Toggle only}}{{State=Enabled, Disabled}}","value":"Enabled"},
+    {"layer":"Container / _Toggle Item","property":"componentProperties.State","when":"{{Style=Toggle only}}{{State=Pressed}}","value":"Enabled"},
     {"layer":"Container / _Toggle Item","property":"componentProperties.State","when":"{{Style=Toggle only}}{{State=Read-only}}","value":"Read-only"},
+    {"layer":"Container / _Toggle Item","property":"opacity","when":"{{Style=Toggle only}}{{State=Enabled, Pressed, Read-only}}","value":"1","literal":true},
+    {"layer":"Container / _Toggle Item","property":"opacity","when":"{{Style=Toggle only}}{{State=Disabled}}","value":"1","literal":true},
     {"layer":"Container / _Toggle Item / Container","property":"primaryAxisAlignItems","when":"{{Style=Toggle only}}{{State=Enabled, Pressed, Disabled, Read-only}}{{Toggled=False}}","value":"MIN","literal":true},
     {"layer":"Container / _Toggle Item / Container","property":"primaryAxisAlignItems","when":"{{Style=Toggle only}}{{State=Enabled, Pressed, Disabled, Read-only}}{{Toggled=True}}","value":"MAX","literal":true},
     {"layer":"Container / _Toggle Item / Container","property":"fills.0","when":"{{Style=Toggle only}}{{State=Enabled, Pressed}}{{Toggled=False}}","value":"Theme/Miscellaneous/toggle-off"},
     {"layer":"Container / _Toggle Item / Container","property":"fills.0","when":"{{Style=Toggle only}}{{State=Enabled, Pressed}}{{Toggled=True}}","value":"Theme/Layer/layer-selected-inverse"},
     {"layer":"Container / _Toggle Item / Container","property":"fills.0","when":"{{Style=Toggle only}}{{State=Disabled}}","value":"Theme/Button/button-disabled"},
     {"layer":"Container / _Toggle Item / Container","property":"strokes.0","when":"{{Style=Toggle only}}{{State=Read-only}}","value":"Theme/Border/border-subtle"},
-    {"layer":"Container / _Toggle Item / Container / _Toggle Switch","property":"componentProperties.Disabled","when":"{{Style=Toggle only}}{{State=Enabled, Pressed, Disabled, Read-only}}","value":"False"},
+    {"layer":"Container / _Toggle Item / Container / _Toggle Switch","property":"componentProperties.Disabled","when":"{{Style=Toggle only}}{{State=Enabled, Pressed, Read-only}}","value":"False"},
     {"layer":"Container / _Toggle Item / Container / _Toggle Switch","property":"componentProperties.Disabled","when":"{{Style=Toggle only}}{{State=Disabled}}","value":"True"},
+    {"layer":"Container / _Toggle Item / Container / _Toggle Switch","property":"componentProperties.Pressed","when":"{{Style=Toggle only}}{{State=Disabled}}","value":"False"},
     {"layer":"Container / _Toggle Item / Container / _Toggle Switch","property":"width","when":"{{Style=Toggle only}}{{State=Disabled}}","value":"Components/Toggle/Thumb/False/Layout width"},
     {"layer":"Container / _Toggle Item / Container / _Toggle Switch","property":"height","when":"{{Style=Toggle only}}{{State=Disabled}}","value":"Components/Toggle/Thumb/False/Layout height"},
     {"layer":"Container / _Toggle Item / Container / _Toggle Switch","property":"cornerRadius","when":"{{Style=Toggle only}}{{State=Disabled}}","value":"Components/Toggle/Thumb/False/Radius"},
-    {"layer":"Container / _Toggle Item / Container / _Toggle Switch","property":"fills.0","when":"{{Style=Toggle only}}{{State=Enabled, Pressed}}","value":"Theme/Icon/icon-inverse"},
+    {"layer":"Container / _Toggle Item / Container / _Toggle Switch","property":"fills.0","when":"{{Style=Toggle only}}{{State=Enabled}}","value":"Theme/Icon/icon-inverse"},
+    {"layer":"Container / _Toggle Item / Container / _Toggle Switch","property":"fills.0","when":"{{Style=Toggle only}}{{State=Pressed}}","value":"Theme/Icon/icon-inverse"},
     {"layer":"Container / _Toggle Item / Container / _Toggle Switch","property":"fills.0","when":"{{Style=Toggle only}}{{State=Disabled}}","value":"Theme/Icon/icon-on-color-disabled"},
     {"layer":"Container / _Toggle Item / Container / _Toggle Switch","property":"fills.0","when":"{{Style=Toggle only}}{{State=Read-only}}","value":"Theme/Icon/icon-primary"},
     {"layer":"Container / _Toggle Skeleton Item / _Toggle Switch","property":"fills.0","when":"{{State=Skeleton}}","value":"Theme/Skeleton/skeleton-element"},
@@ -140,11 +162,14 @@
       "name": "State",
       "values": [
         "Enabled",
+        "Pressed",
         "Read-only"
       ]
     }
   ],
-  "exclude": [],
+  "exclude": [
+    "{{State=Pressed}}"
+  ],
   "properties": [],
   "variables": {
     "Toggle/Track/False/Stroke weight": 1,
@@ -171,8 +196,10 @@
     {"layer":"Container","property":"paddingBottom","when":"","value":"Components/Toggle/Track/False/Padding bottom"},
     {"layer":"Container","property":"cornerRadius","when":"","value":"Components/Toggle/Track/False/Radius"},
     {"layer":"Container","property":"strokeWeight","when":"","value":"Components/Toggle/Track/False/Stroke weight"},
-    {"layer":"Container","property":"fills.0","when":"{{State=Enabled}}","value":"Theme/Miscellaneous/toggle-off"},
+    {"layer":"Container","property":"fills.0","when":"{{State=Enabled, Pressed}}","value":"Theme/Miscellaneous/toggle-off"},
     {"layer":"Container","property":"strokes.0","when":"{{State=Read-only}}","value":"Theme/Border/border-subtle"},
+    {"layer":"Container / _Toggle Switch","property":"componentProperties.Pressed","when":"{{State=Enabled, Read-only}}","value":"False"},
+    {"layer":"Container / _Toggle Switch","property":"componentProperties.Pressed","when":"{{State=Pressed}}","value":"True"},
     {"layer":"Container / _Toggle Switch","property":"width","when":"","value":"Components/Toggle/Thumb/False/Layout width"},
     {"layer":"Container / _Toggle Switch","property":"height","when":"","value":"Components/Toggle/Thumb/False/Layout height"},
     {"layer":"Container / _Toggle Switch","property":"cornerRadius","when":"","value":"Components/Toggle/Thumb/False/Radius"},
@@ -189,20 +216,35 @@
         "False",
         "True"
       ]
+    },
+    {
+      "name": "Pressed",
+      "values": [
+        "False",
+        "True"
+      ]
     }
   ],
-  "exclude": [],
+  "exclude": [
+    "{{Disabled=True}}{{Pressed=True}}"
+  ],
   "properties": [],
   "variables": {
     "Toggle/Thumb/False/Layout width": 18,
+    "Toggle/Thumb/True/Layout width": 38,
     "Toggle/Thumb/False/Layout height": 18,
-    "Toggle/Thumb/False/Radius": 200
+    "Toggle/Thumb/True/Layout height": 24,
+    "Toggle/Thumb/False/Radius": 200,
+    "Toggle/Thumb/True/Radius": 200
   },
   "bindings": [
-    {"layer":"(root)","property":"width","when":"{{Disabled=*}}","value":"Components/Toggle/Thumb/False/Layout width"},
-    {"layer":"(root)","property":"height","when":"{{Disabled=*}}","value":"Components/Toggle/Thumb/False/Layout height"},
-    {"layer":"(root)","property":"cornerRadius","when":"{{Disabled=*}}","value":"Components/Toggle/Thumb/False/Radius"},
-    {"layer":"(root)","property":"fills.0","when":"{{Disabled=False}}","value":"Theme/Icon/icon-inverse"},
+    {"layer":"(root)","property":"width","when":"{{Pressed=False}}","value":"Components/Toggle/Thumb/False/Layout width"},
+    {"layer":"(root)","property":"width","when":"{{Pressed=True}}","value":"Components/Toggle/Thumb/True/Layout width"},
+    {"layer":"(root)","property":"height","when":"{{Pressed=False}}","value":"Components/Toggle/Thumb/False/Layout height"},
+    {"layer":"(root)","property":"height","when":"{{Pressed=True}}","value":"Components/Toggle/Thumb/True/Layout height"},
+    {"layer":"(root)","property":"cornerRadius","when":"{{Pressed=False}}","value":"Components/Toggle/Thumb/False/Radius"},
+    {"layer":"(root)","property":"cornerRadius","when":"{{Pressed=True}}","value":"Components/Toggle/Thumb/True/Radius"},
+    {"layer":"(root)","property":"fills.0","when":"{{Disabled=False}}{{Pressed=False}}","value":"Theme/Icon/icon-inverse"},
     {"layer":"(root)","property":"fills.0","when":"{{Disabled=True}}","value":"Theme/Icon/icon-on-color-disabled"}
   ]
 },

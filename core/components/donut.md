@@ -96,7 +96,7 @@ The sweep is an app behaviour, not a Figma variant, as the bar's grow. The compa
 ## Usage
 
 - Both modes, Light and its Dark twin, with Thai copy around it (Localisation).
-- **The Today chip** (Overview): `Size=Small`, one segment per asset class (สินทรัพย์หลัก), each Arc's fill overridden to `Chart/Asset allocation/<member>` (equity, fixed-income, gold, cash, government-bond, miscellaneous). It can't sit in Button's leading place until Button takes leading artwork (Q2); until then the chip keeps `chart-pie` (pawisssh/design-system#803's Out of scope).
+- **The Today chip** (Overview): `Size=Small`, one segment per asset class (สินทรัพย์หลัก), each Arc's fill overridden to `Chart/Asset allocation/<member>` (equity, fixed-income, gold, cash, government-bond, miscellaneous). It can't sit in Button's leading place until Button takes leading artwork (Q2); until then the chip keeps `chart-pie` (pawisssh/design-system#803's Out of scope). Since 2026-11-14 it does: is built and published, and Port's chip holds the donut in `Leading artwork` with `Artwork` on and `Leading Icon` off (plan-value.md).
 - **Current vs new** (Rebalance compare): two `Size=Large` donuts under the column labels สัดส่วนปัจจุบัน | สัดส่วนที่แนะนำ (rebalance-compare.md, DES-13 Q15), one segment per fund. The same fund takes the same `Series` in both, so a fund keeps its colour from current to new (Q5, Q6); a fund at 0% keeps no segment.
 - Use it for a whole split into 2–9 parts at a glance, beside labels or as a decoration of a labelled control. Fold a ninth and later part into `Other`. Don't use it to compare parts precisely (a bar or rows read lengths better), for a trend, or for one amount.
 - Set each share by the segment's Arc end angle, from 12 o'clock clockwise: every Arc starts at `−90°` and ends at `−90° + 360·T`, where `T` (0–1) is its share plus every share before it; the first segment sits on top, the last at the bottom.
@@ -110,4 +110,4 @@ Samples on Usage (each Light with its Dark twin):
 | Empty | `Size=Large, State=Empty` |  |
 | Skeleton | `Size=Large, State=Skeleton` |  |
 
-The chip around the Small donut is drawn by hand (`Button/button-secondary`, Body/Subheadline วันนี้ +4.27%) for scale until Button takes leading artwork (Q2). Every segment's `arcData` is an override, and the chip's fills are too: `usage-overrides.js` lists them as `gaps` (36, by design: Anatomy).
+The chip around the Small donut was drawn by hand (`Button/button-secondary`, Body/Subheadline วันนี้ +4.27%) for scale until Button took leading artwork (Q2). Every segment's `arcData` is an override, and the chip segments' fills are too: `usage-overrides.js` lists them as `gaps` (36, by design: Anatomy).

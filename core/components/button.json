@@ -69,6 +69,11 @@
       "default": true
     },
     {
+      "name": "Value",
+      "type": "BOOLEAN",
+      "default": false
+    },
+    {
       "name": "Label Text",
       "type": "TEXT",
       "default": "Label"
@@ -244,6 +249,17 @@
     {"layer":"Container / Label","property":"fills.0","when":"{{Hierarchy=Primary, Tertiary}}{{Type=Inverse}}{{State=Disabled}}","value":"Theme/Text/text-inverse-disabled"},
     {"layer":"Container / Label","property":"maxWidth","when":"{{State=Enabled, Hover, Focus, Active, Disabled}}","value":"200","literal":true},
     {"layer":"Container / Label","property":"textAlignHorizontal","when":"{{State=Enabled, Hover, Focus, Active, Disabled}}","value":"CENTER","literal":true},
+    {"layer":"Container / Value","property":"isExposedInstance","when":"{{Hierarchy=Secondary, Tertiary}}{{Type=Default}}{{State=Enabled, Hover, Focus, Active, Disabled}}","value":"true","literal":true},
+    {"layer":"Container / Value","property":"componentProperties.Unit","when":"{{Hierarchy=Secondary, Tertiary}}{{Type=Default}}{{State=Enabled, Hover, Focus, Active, Disabled}}","value":"Percent"},
+    {"layer":"Container / Value","property":"componentProperties.Change","when":"{{Hierarchy=Secondary, Tertiary}}{{Type=Default}}{{State=Enabled, Hover, Focus, Active, Disabled}}","value":"Positive"},
+    {"layer":"Container / Value","property":"componentProperties.Text style","when":"{{Hierarchy=Secondary, Tertiary}}{{Type=Default}}{{State=Enabled, Hover, Focus, Active, Disabled}}{{Size=XSmall}}","value":"Footnote"},
+    {"layer":"Container / Value","property":"componentProperties.Text style","when":"{{Hierarchy=Secondary, Tertiary}}{{Type=Default}}{{State=Enabled, Hover, Focus, Active, Disabled}}{{Size=Small}}","value":"Subheadline"},
+    {"layer":"Container / Value","property":"componentProperties.Text style","when":"{{Hierarchy=Secondary, Tertiary}}{{Type=Default}}{{State=Enabled, Hover, Focus, Active, Disabled}}{{Size=Medium}}","value":"Subheadline"},
+    {"layer":"Container / Value","property":"componentProperties.Text style","when":"{{Hierarchy=Secondary, Tertiary}}{{Type=Default}}{{State=Enabled, Hover, Focus, Active, Disabled}}{{Size=Medium (Expressive)}}","value":"Subheadline"},
+    {"layer":"Container / Value","property":"componentProperties.Text style","when":"{{Hierarchy=Secondary, Tertiary}}{{Type=Default}}{{State=Enabled, Hover, Focus, Active, Disabled}}{{Size=Large}}","value":"Body"},
+    {"layer":"Container / Value","property":"componentProperties.Text style","when":"{{Hierarchy=Secondary, Tertiary}}{{Type=Default}}{{State=Enabled, Hover, Focus, Active, Disabled}}{{Size=Large (Expressive)}}","value":"Body"},
+    {"layer":"Container / Value","property":"componentProperties.State","when":"{{Hierarchy=Secondary, Tertiary}}{{Type=Default}}{{State=Enabled, Hover, Focus, Active}}","value":"Enabled"},
+    {"layer":"Container / Value","property":"componentProperties.State","when":"{{Hierarchy=Secondary, Tertiary}}{{Type=Default}}{{State=Disabled}}","value":"Disabled"},
     {"layer":"Container / Trailing Icon","property":"textStyleId","when":"{{State=Enabled, Hover, Focus, Active, Disabled}}{{Size=XSmall}}","value":"fa-sharp fa-solid/Small"},
     {"layer":"Container / Trailing Icon","property":"textStyleId","when":"{{State=Enabled, Hover, Focus, Active, Disabled}}{{Size=Small}}","value":"fa-sharp fa-solid/Medium"},
     {"layer":"Container / Trailing Icon","property":"textStyleId","when":"{{State=Enabled, Hover, Focus, Active, Disabled}}{{Size=Medium}}","value":"fa-sharp fa-solid/Medium"},
@@ -328,6 +344,11 @@
       "name": "Trailing Icon",
       "type": "BOOLEAN",
       "default": true
+    },
+    {
+      "name": "Value",
+      "type": "BOOLEAN",
+      "default": false
     },
     {
       "name": "Label Text",
@@ -483,6 +504,17 @@
     {"layer":"Container / Label","property":"fills.0","when":"{{State=Disabled}}","value":"Theme/Text/text-disabled"},
     {"layer":"Container / Label","property":"maxWidth","when":"{{State=Enabled, Hover, Focus, Active, Disabled}}","value":"200","literal":true},
     {"layer":"Container / Label","property":"textAlignHorizontal","when":"{{State=Enabled, Hover, Focus, Active, Disabled}}","value":"CENTER","literal":true},
+    {"layer":"Container / Value","property":"isExposedInstance","when":"{{Type=Default}}{{Hierarchy=Secondary, Tertiary}}{{State=Enabled, Hover, Focus, Active, Disabled}}","value":"true","literal":true},
+    {"layer":"Container / Value","property":"componentProperties.Unit","when":"{{Type=Default}}{{Hierarchy=Secondary, Tertiary}}{{State=Enabled, Hover, Focus, Active, Disabled}}","value":"Percent"},
+    {"layer":"Container / Value","property":"componentProperties.Change","when":"{{Type=Default}}{{Hierarchy=Secondary, Tertiary}}{{State=Enabled, Hover, Focus, Active, Disabled}}","value":"Positive"},
+    {"layer":"Container / Value","property":"componentProperties.Text style","when":"{{Type=Default}}{{Hierarchy=Secondary, Tertiary}}{{State=Enabled, Hover, Focus, Active, Disabled}}{{Size=XSmall}}","value":"Footnote"},
+    {"layer":"Container / Value","property":"componentProperties.Text style","when":"{{Type=Default}}{{Hierarchy=Secondary, Tertiary}}{{State=Enabled, Hover, Focus, Active, Disabled}}{{Size=Small}}","value":"Subheadline"},
+    {"layer":"Container / Value","property":"componentProperties.Text style","when":"{{Type=Default}}{{Hierarchy=Secondary, Tertiary}}{{State=Enabled, Hover, Focus, Active, Disabled}}{{Size=Medium}}","value":"Subheadline"},
+    {"layer":"Container / Value","property":"componentProperties.Text style","when":"{{Type=Default}}{{Hierarchy=Secondary, Tertiary}}{{State=Enabled, Hover, Focus, Active, Disabled}}{{Size=Large}}","value":"Body"},
+    {"layer":"Container / Value","property":"componentProperties.Text style","when":"{{Type=Default}}{{Hierarchy=Secondary, Tertiary}}{{State=Enabled, Hover, Focus, Active, Disabled}}{{Size=Medium (Expressive)}}","value":"Subheadline"},
+    {"layer":"Container / Value","property":"componentProperties.Text style","when":"{{Type=Default}}{{Hierarchy=Secondary, Tertiary}}{{State=Enabled, Hover, Focus, Active, Disabled}}{{Size=Large (Expressive)}}","value":"Body"},
+    {"layer":"Container / Value","property":"componentProperties.State","when":"{{Type=Default}}{{Hierarchy=Secondary, Tertiary}}{{State=Enabled, Hover, Focus, Active}}","value":"Enabled"},
+    {"layer":"Container / Value","property":"componentProperties.State","when":"{{Type=Default}}{{Hierarchy=Secondary, Tertiary}}{{State=Disabled}}","value":"Disabled"},
     {"layer":"Container / Trailing Icon","property":"textStyleId","when":"{{State=Enabled, Hover, Focus, Active, Disabled}}{{Size=XSmall}}","value":"fa-sharp fa-solid/Small"},
     {"layer":"Container / Trailing Icon","property":"textStyleId","when":"{{State=Enabled, Hover, Focus, Active, Disabled}}{{Size=Small}}","value":"fa-sharp fa-solid/Medium"},
     {"layer":"Container / Trailing Icon","property":"textStyleId","when":"{{State=Enabled, Hover, Focus, Active, Disabled}}{{Size=Medium}}","value":"fa-sharp fa-solid/Medium"},

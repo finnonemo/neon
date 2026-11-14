@@ -10,6 +10,7 @@ Button | Rect button (variant root)   Hug × Hug, no fill, no padding; min width
    ├─ Artwork                         instance, hidden; shown by `Artwork`, swapped by `Leading artwork` (default Avatar 3XSmall, 18 × 18); hugs; opacity 45% on Disabled; none on Loading and Skeleton
    ├─ Leading Icon                    TEXT glyph (Icons library), shown by `Leading Icon`
    ├─ Label                           TEXT, `Label Text`
+   ├─ Value                           exposed Value instance, hidden; shown by `Value`; `Unit=Percent`, `Change` Positive by default, `Text style` the Label's step, `State=Disabled` on Disabled; Secondary and Tertiary Default only, none on Loading and Skeleton
    ├─ Trailing Icon                   TEXT glyph, shown by `Trailing Icon`
    └─ _Loading                        instance, State=Loading only, Size pinned Medium
 ```
@@ -29,7 +30,7 @@ Button | Rect button (variant root)   Hug × Hug, no fill, no padding; min width
 
 `Rect button`: `Type` · `Hierarchy` · `Size` · `State` in that order, the same values, no `iOS`.
 
-Properties (both): `Leading Icon`, `Trailing Icon` (BOOLEAN), `Label Text`, `L. Icon Text`, `T. Icon Text` (TEXT). `Label Text` is new on `Rect button` (pawisssh/design-system#126). `Artwork` (BOOLEAN, off) and `Leading artwork` (INSTANCE_SWAP, default Avatar `Size=3XSmall, Artwork=Image`, preferred values Avatar's variants), on the 600 and 210 cells that have a `Leading Icon`.
+Properties (both): `Leading Icon`, `Trailing Icon` (BOOLEAN), `Label Text`, `L. Icon Text`, `T. Icon Text` (TEXT). `Label Text` is new on `Rect button` (pawisssh/design-system#126). `Artwork` (BOOLEAN, off) and `Leading artwork` (INSTANCE_SWAP, default Avatar `Size=3XSmall, Artwork=Image`, preferred values Avatar's variants), on the 600 and 210 cells that have a `Leading Icon`. `Value` (BOOLEAN, off) on the 120 and 60 cells of `Hierarchy` Secondary and Tertiary at `Type=Default` with a Label (not Loading or Skeleton); the nested [Value](value.md) is exposed, so its `Change`, `Unit` and `Value text` sit in the Button's panel.
 (3 × 3 − 2 Brand cells) × 6 × 7 = **294 variants** per look: 588 on `Button` plus 252 Inverse (3 Hierarchies × 6 Sizes × 7 States × 2 `iOS`) = **840**, and 294 on `Rect button`, whose `Type` keeps Default · Brand · Danger.
 
 ## Component variables and Theme tokens
@@ -123,6 +124,8 @@ Item 5 is open: the nine-point criterion of pawisssh/design-system#126 is not me
 
 A leading artwork is decorative: the Label names the button. Where the artwork carries data the Label doesn't say (a donut's split), the screen states it elsewhere. On Disabled it dims to 45%, with the label and icons (item 4).
 
+A trailing value: the name is the Label, then the figure as Value reads it ("วันนี้ บวก 4.27 เปอร์เซ็นต์"). `Change` always draws the sign, so colour is never the only cue (item 4). The figure is text, 4.5:1: `text-positive` (`Green/155` · `Green/110` since R4) is 5.08 Light · 5.03 Dark at its lowest on `button-secondary` and 4.57 · 4.58 on `button-secondary-active`; `text-negative` and `text-secondary` pass too, and the spec's `contrast` entries check all three with no known defect. On Disabled the figure is `text-disabled`, exempt;
+
 ## Usage
 
 - It has no Focus ring example yet.
@@ -131,6 +134,7 @@ A leading artwork is decorative: the Label names the button. Where the artwork c
 - Brand only on Primary. Danger for a destructive action: Secondary Danger at the entry point, Primary Danger only on the confirmation step ([H2](../hierarchy.md), owner 2026-11-09; replaces "prefer Primary Danger until the contrast issue is fixed"). Secondary Danger passes contrast since 2026-11-09 (Accessibility item 1).
 - Expressive for a fixed 256 action; a full-width button is the nester's Fill.
 - Leading artwork: turn `Artwork` on and `Leading Icon` off, then swap the artwork into `Leading artwork`. An artwork is at most 20 tall at XSmall and 24 at the other Sizes; a taller one grows the capsule. The gap to the Label is the Container's (4 · 8). A Donut is swapped in from the Charts library in the product file: it can't be a preferred value (ADR 0009). First case: Port's Today chip, Donut `Size=Small` with one segment per asset class ([donut.md](donut.md), Usage).
+- Trailing value: for a change figure beside a short label, as Port's Today chip. Type the label alone ("วันนี้"), turn `Value` on, then on the nested Value pick `Change` (Positive · Negative · Zero) and type the unsigned digits into `Value text` ("4.27"); `Unit` stays Percent and `Text style` the Size's. Never type a figure with its sign into `Label Text` where its direction matters. One figure per Button, on Secondary and Tertiary Default only, and only beside a label that stays on one line (Accessibility); a row of figures is a List item's. The gap to the Label is the Container's (4 · 8); a Small Secondary grows from 94 to 147 wide with "+4.27%".
 - Tertiary Inverse only on `Background/background-inverse` (Snackbar), for a single quiet action or Close; Primary Inverse there for a filled call (P2).
 - Primary and Secondary Inverse are also the white buttons over maps, photos and headers; Toolbars, Tab bars and Segmented controls use them on `iOS=False`. Primary Inverse on `iOS=False` carries the effect style `Elevation/Button inverse` (Elevation). In Dark both are dark grey (`Grey/90`, `Grey/80`), following `background-secondary` and `background-tertiary`.
 

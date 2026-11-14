@@ -85,7 +85,7 @@
   --color-fgInverse: rgb(255, 255, 255);
   --color-fgPrimary: rgb(1, 23, 43);
   --color-fgWarning: rgb(211, 84, 12);
-  --color-fgPositive: rgb(0, 116, 53);
+  --color-fgPositive: rgb(0, 104, 48);
   --color-fgNegative: rgb(157, 6, 6);
 
   --color-bg: rgb(255, 255, 255);
@@ -302,7 +302,7 @@
     --color-fgPrimary: rgb(230, 232, 234);
     --color-fgWarning: rgb(242, 100, 20);
     --color-fgNegative: rgb(251, 153, 153);
-    --color-fgPositive: rgb(0, 196, 91);
+    --color-fgPositive: rgb(0, 208, 96);
 
     --color-bg: rgb(0, 0, 0);
     --color-bgAlternate: rgb(26, 26, 26);
@@ -390,7 +390,7 @@
   --color-fgPrimary: rgb(230, 232, 234);
   --color-fgWarning: rgb(242, 100, 20);
   --color-fgNegative: rgb(251, 153, 153);
-  --color-fgPositive: rgb(0, 196, 91);
+  --color-fgPositive: rgb(0, 208, 96);
 
   --color-bg: rgb(0, 0, 0);
   --color-bgAlternate: rgb(26, 26, 26);
