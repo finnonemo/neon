@@ -1,4 +1,4 @@
-// What the Core snapshot gives one cell of a Counterpart, as the lines scripts/core-cell.mjs prints.
+// What the Core snapshot gives one cell of a Counterpart, as the lines core-cell.mjs prints.
 import { coreValue } from './core-cell.mjs';
 
 /** `Axis=Value` words as a cell: ['Type=Icon only', 'State=Focus'] → { Type: 'Icon only', State: 'Focus' }. */
