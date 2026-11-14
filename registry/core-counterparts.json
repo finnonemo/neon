@@ -41,6 +41,7 @@
   },
   "date-picker": {
     "core": null,
+    "unmatched": "date-picker",
     "why": "It is composed from calendar, which has no Counterpart."
   },
   "dialog": {
@@ -127,6 +128,7 @@
   },
   "toggle": {
     "core": null,
+    "unmatched": "toggle",
     "why": "Supporting item: toggle-group is built from it."
   },
   "toggle-group": {
