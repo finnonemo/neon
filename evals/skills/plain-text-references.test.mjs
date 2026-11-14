@@ -55,6 +55,15 @@ test('accepts existing references, prose slashes, URLs, packages and app-relativ
   await checkPlainTextReferences(root, ['skills/demo/SKILL.md', 'theme/cds/map.ts']);
 });
 
+test('accepts another repository\'s file written after its checkout, and says so when it refuses the bare path', async t => {
+  const root = await fixture(t, {
+    'theme/cds/sync.ts': '// Runs <Core checkout>/theme/agents/compile.mjs and reads `<Block checkout>/theme/build.md`.\nexport {};\n',
+    'theme/cds/bare.ts': '// Runs theme/agents/compile.mjs.\nexport {};\n',
+  });
+  await checkPlainTextReferences(root, ['theme/cds/sync.ts']);
+  await assert.rejects(checkPlainTextReferences(root, ['theme/cds/bare.ts']), /theme\/cds\/bare.ts:1: theme\/agents\/compile.mjs[\s\S]*after its checkout \(<Core checkout>\//);
+});
+
 test('does not resolve a bare filename against an ignored local copy', async t => {
   const root = await fixture(t, { 'skills/demo/SKILL.md': 'See DESIGN.md for the palette.\n' });
   await mkdir(join(root, '.local/design'), { recursive: true });
