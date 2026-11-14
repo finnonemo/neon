@@ -167,6 +167,51 @@ export function undeclaredSiblings(items, readFile) {
   return problems;
 }
 
+// Packages the app's own scaffold installs, so no item lists them.
+const APP_PACKAGES = ['react', 'react-dom', 'tailwindcss'];
+const packageOf = (specifier) => specifier.split('/').slice(0, specifier.startsWith('@') ? 2 : 1).join('/');
+const registryName = (dependency) => dependency.split('/').pop().replace(/\.json$/, '');
+
+/**
+ * Where an item's `dependencies` and the packages its files import differ: a package it lists and no file
+ * imports, which shadcn add installs for nothing, and a package a file imports that neither the item nor an
+ * item it pulls in lists, which leaves a broken import. A package is named by an import in a script file or
+ * an @import in a stylesheet. `listedFor` names the packages an item lists for a file outside the item, as
+ * { item: ['package'] }.
+ */
+export function dependencyProblems(items, readFile, listedFor = {}) {
+  const byName = new Map(items.map((item) => [item.name, item]));
+  const listed = (item) => (item.dependencies ?? []).map((dependency) => dependency.replace(/(?!^)@.*$/, ''));
+  const within = (item, seen = new Set()) => {
+    if (!item || seen.has(item.name)) return [];
+    seen.add(item.name);
+    return [...listed(item), ...(item.registryDependencies ?? []).flatMap((dependency) => within(byName.get(registryName(dependency)), seen))];
+  };
+  const problems = [];
+  for (const item of items) {
+    const imported = new Set();
+    for (const { path } of item.files ?? []) {
+      const pattern = /\.css$/.test(path) ? /@import\s+["']([^"']+)["']/g
+        : /\.[cm]?[jt]sx?$/.test(path) ? /(?:\bfrom|\bimport)\s*\(?\s*["']([^"']+)["']/g
+        : null;
+      if (!pattern) continue;
+      for (const [, specifier] of readFile(path).matchAll(pattern)) {
+        // A relative or absolute file, the app's @/ alias and a Node built-in are not packages.
+        if (!/^(\.{0,2}\/|@\/|\.{1,2}$|node:)/.test(specifier)) imported.add(packageOf(specifier));
+      }
+    }
+    const kept = listedFor[item.name] ?? [];
+    for (const name of listed(item)) {
+      if (!imported.has(name) && !kept.includes(name)) problems.push(`${item.name} lists ${name}, which none of its files import`);
+    }
+    const available = new Set([...APP_PACKAGES, ...within(item)]);
+    for (const name of imported) {
+      if (!available.has(name)) problems.push(`${item.name} imports ${name} without listing it`);
+    }
+  }
+  return problems;
+}
+
 /**
  * Components the CDS-match suite never measures (#164: no component without a
  * Counterpart). A registry:ui item is measured when the approval or extras
