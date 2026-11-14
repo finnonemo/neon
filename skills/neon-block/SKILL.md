@@ -34,6 +34,7 @@ The Neon root is two levels above this skill's real directory. Run the command f
    | Layout | `headline` for an ad or post with words, `cover` for the front of a document or deck (it also takes a short `label`), `closing` for a sign-off, `pattern` for a background with no words. |
    | Colourway | The primary group (navy, grey, white with yellow) unless the employee names a colour or the piece belongs to a product with a secondary colour. |
    | Slope | `half` by default, `75` for growth and momentum, `flat` for calm and stability. |
+   | Density | Leave out for the Format's default. A small square, such as an avatar, takes `coarse`: the 4×4 Grid keeps a few Blocks big enough to read at that size. |
 
    Mark the words the headline turns on with [square brackets] to Highlight them, within the limit `options` states.
 3. Call `candidates` with those settings and show the employee the numbered sheet it returns. Ask which number they want. For twelve more, call it again without `set`. When the employee asked for a single result with no choosing, pick the Candidate whose blocks leave the headline clearest and say which you picked.

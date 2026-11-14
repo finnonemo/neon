@@ -72,6 +72,7 @@ function documentFor(e, settings) {
     if (settings.format === 'custom') throw new ArtworkError('For a size of your own give width and height in px, not format "custom".');
     doc = run(e, doc, { type: 'setFormat', format: settings.format }).document;
   }
+  if (settings.density !== undefined) doc = run(e, doc, { type: 'setDensity', density: settings.density }).document;
   if (settings.colourway !== undefined) doc = run(e, doc, { type: 'setColourway', colourway: settings.colourway }).document;
   const params = {};
   if (settings.slope !== undefined) params.slope = settings.slope;
@@ -120,8 +121,11 @@ export async function options() {
   const doc = run(e, null, { type: 'createDocument' }).document;
   const { typeface } = await loadShaper();
   return {
-    formats: e.listFormats().filter(format => format.id !== 'custom').map(({ id, label, widthPx, heightPx }) => ({ id, label, width: widthPx, height: heightPx })),
-    customSize: 'Instead of a format, give width and height in px, each from 64 to 8000.',
+    formats: e.listFormats().filter(format => format.id !== 'custom').map(({ id, label, widthPx, heightPx }) => ({
+      id, label, width: widthPx, height: heightPx,
+      densities: e.densityLevelsFor(id).map(({ id: density, cols, rows }) => ({ id: density, grid: `${cols}x${rows}` })),
+    })),
+    customSize: 'Instead of a format, give width and height in px, each from 64 to 8000. Its densities follow its shape: coarse is 4 cells along the short side.',
     colourways: e.COLOURWAYS_LIST.map(({ id, group, background, tints }) => ({ id, group, background, blocks: tints })),
     slopes: [
       { id: 'flat', note: 'Level steps: calm and stable.' },
@@ -134,7 +138,7 @@ export async function options() {
       languages: 'Thai and English.',
       typeface,
     },
-    defaults: { format: doc.format, colourway: doc.colourway, slope: doc.generator.slope, layout: 'pattern', guidance: doc.generator.guidance },
+    defaults: { format: doc.format, density: doc.density, colourway: doc.colourway, slope: doc.generator.slope, layout: 'pattern', guidance: doc.generator.guidance },
     candidatesPerSet: e.CANDIDATE_COUNT,
   };
 }
