@@ -75,10 +75,30 @@ function unmatchedProblems(counterparts, approved) {
 }
 
 /**
+ * An entry may name the library its item hands its other props on to (`notInCorePassThrough: 'react-day-picker'`).
+ * The item takes that library's props whole and the library draws from them, so the table cannot list them as
+ * `notInCore` lists values: what they draw beyond what the item's own header describes has no Core cell. The
+ * library is one the item depends on and imports; `items` carry both, as { name, dependencies, imports }.
+ * Returns the problems, one line each.
+ */
+function passThroughProblems(counterparts, items) {
+  const registry = new Map(items.map(item => [item.name, item]));
+  return Object.entries(counterparts).flatMap(([name, { notInCorePassThrough: library }]) => {
+    if (library === undefined) return [];
+    if (typeof library !== 'string' || !library) return [`${name}: notInCorePassThrough names one library, as the item's dependencies name it.`];
+    const { dependencies = [], imports = [] } = registry.get(name) ?? {};
+    if (!dependencies.includes(library)) return [`${name}: notInCorePassThrough names ${library}, which is not a dependency of the item${dependencies.length ? ` (it has ${dependencies.join(', ')})` : ''}.`];
+    if (!imports.includes(library)) return [`${name}: notInCorePassThrough names ${library}, which the item's files do not import.`];
+    return [];
+  });
+}
+
+/**
  * The repository check for the Counterpart table against the snapshot at `directory`: the `unmatched` rule, and,
- * where the registry is at hand (`items`, as { name, supporting }), the index. Both are read from the files the
- * snapshot holds, so the check needs no Core checkout. The index is the table read against those files, so a table
- * that moved without a sync leaves every hash as recorded: the index is built again here and compared.
+ * where the registry is at hand (`items`, as registryComponents gives them), the `notInCorePassThrough` rule and
+ * the index. The docs are read from the files the snapshot holds, so the check needs no Core checkout. The index is
+ * the table read against those files, so a table that moved without a sync leaves every hash as recorded: the index
+ * is built again here and compared.
  */
 export async function checkCounterpartTable(counterparts, directory, { items } = {}) {
   const read = path => readFile(join(directory, path), 'utf8');
@@ -105,8 +125,9 @@ export async function checkCounterpartTable(counterparts, directory, { items } =
  * The index: each registry item's Counterpart (GLOSSARY) with the snapshot files that hold it, or why it has none.
  * `counterparts` is the Counterpart table, { item: { core: '<doc>', why? } | { core: null, why } }; it must cover
  * `items` exactly. A Supporting item (GLOSSARY) has no Counterpart of its own.
- * An entry may also list the prop values with no Core cell (`notInCore: { variant: ['outline'] }`), for the
- * Catalog site to mark; the skills leave them out of new work (ADR 0009). The index does not carry them.
+ * An entry may also list the prop values with no Core cell (`notInCore: { variant: ['outline'] }`), and name the
+ * library whose props the item hands on unnamed (`notInCorePassThrough`, passThroughProblems), for the Catalog site
+ * to mark; the skills leave both out of new work (ADR 0009). The index carries neither.
  * An entry with no Counterpart whose item has the name of an approved Core doc names that doc (`unmatched`);
  * the index does not carry it either.
  */
@@ -118,6 +139,8 @@ function counterpartIndex({ items, counterparts, files, leftOut }) {
   if (missing.length) throw new Error(`The Counterpart table has no Counterpart entry for: ${missing.join(', ')}.`);
   const stale = Object.keys(counterparts).filter(name => !names.includes(name));
   if (stale.length) throw new Error(`The Counterpart table names items that are not registry items: ${stale.join(', ')}.`);
+  const passThrough = passThroughProblems(counterparts, items);
+  if (passThrough.length) throw new Error(passThrough.join('\n'));
   return Object.fromEntries(items.map(({ name, supporting }) => {
     const { core, why } = counterparts[name];
     if (supporting && core !== null) throw new Error(`${name} is a Supporting item, which has no Counterpart of its own: the Counterpart table gives it ${core}.`);
@@ -169,9 +192,10 @@ async function coreAt({ from, at }, use) {
  * there. `at` names the commit or ref to compile, in a temporary worktree of the checkout; without it the checkout's
  * own working tree is compiled, at whatever it has checked out. `compiler` is the Core checkout whose compile runs:
  * what is compiled unless that commit is older than the compile, and then the snapshot records the compiler's commit
- * too. `items` are the registry's components, as { name, supporting }. Returns the commit, the files written, the
- * Core docs the compile left out, by standing, and what moved since the snapshot it replaced (movedReport). With
- * `write` false it compiles, refuses what a sync refuses and returns the same, and leaves `out` as it was.
+ * too. `items` are the registry's components, as registryComponents gives them. Returns the commit, the files
+ * written, the Core docs the compile left out, by standing, and what moved since the snapshot it replaced
+ * (movedReport). With `write` false it compiles, refuses what a sync refuses and returns the same, and leaves `out`
+ * as it was.
  */
 export async function syncCore({ at, ...options }) {
   if (at === undefined) return syncCheckout(options);
