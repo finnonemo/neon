@@ -2,6 +2,7 @@
 //   node run.mjs [playwright args]                 the CDS starter (default)
 //   node run.mjs --target neon [playwright args]   the Neon base, from this checkout's registry
 //   --keep leaves the assembled app in place and prints its path, for screenshots.
+// The preview takes a free port; NEON_TEMPLATE_PORT fixes it.
 import { mkdtemp, readFile, readdir, writeFile, copyFile, cp, rm, mkdir } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import { tmpdir } from 'node:os';
@@ -9,6 +10,7 @@ import { join, relative, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawn } from 'node:child_process';
 import { assembleStarter } from '../../scripts/lib/assemble-starter.mjs';
+import { freePort } from '../../scripts/lib/free-port.mjs';
 import { SHADCN, bareCnImports, browserSuiteItems, buildRegistry } from '../../scripts/lib/registry.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -104,7 +106,9 @@ async function assembleNeon() {
 
 try {
   await (target === 'neon' ? assembleNeon() : assembleCds());
-  await run(process.execPath, [join(here, 'node_modules/@playwright/test/cli.js'), 'test', ...args], here, { NEON_TEST_APP: app, NEON_TARGET: target });
+  // Picked after the app is assembled, so the port is free when the preview binds it.
+  const port = process.env.NEON_TEMPLATE_PORT ?? String(await freePort());
+  await run(process.execPath, [join(here, 'node_modules/@playwright/test/cli.js'), 'test', ...args], here, { NEON_TEST_APP: app, NEON_TARGET: target, NEON_TEMPLATE_PORT: port });
 } finally {
   if (keep) console.log(`Kept the assembled app at ${app}`); else await rm(work, { recursive: true, force: true });
 }
