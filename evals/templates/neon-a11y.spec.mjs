@@ -563,12 +563,14 @@ test.describe("the date picker's calendar", () => {
     expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBe(0);
   });
 
-  // Narrower than the grid's 336px the surface scrolls sideways, so the last weekday and the next month stay in reach.
-  test('scrolls sideways on a 320px screen', async ({ page }) => {
+  // Narrower than the grid's 336px the calendar's columns close up, so the whole month and the next
+  // month's arrow are in view with no sideways scroll.
+  test('fits a 320px screen with its grid whole', async ({ page }) => {
     const [, calendar, grid] = await openAt(page, 320, 700);
+    expect(calendar.x).toBeGreaterThanOrEqual(0);
     expect(calendar.x + calendar.width).toBeLessThanOrEqual(320);
-    expect(grid.width).toBeGreaterThan(calendar.width);
-    await page.locator(`${surface} .rdp-button_next`).scrollIntoViewIfNeeded();
+    expect(grid.x + grid.width).toBeLessThanOrEqual(calendar.x + calendar.width);
+    expect(await page.locator(surface).evaluate((node) => node.scrollWidth - node.clientWidth)).toBe(0);
     await expect(page.locator(`${surface} .rdp-button_next`)).toBeInViewport({ ratio: 1 });
   });
 
