@@ -11,7 +11,8 @@
  *   node install.mjs <app-dir> --add <item>...         # add Neon registry
  *                                                      # items to an app
  *   node install.mjs <target-dir> --css-only           # copy theme.css only
- *   node install.mjs <target-dir>                      # CDS theme (frozen)
+ *   node install.mjs <target-dir>                      # CDS theme (frozen,
+ *                                                      # deprecated)
  *
  * --new:          runs the pinned shadcn CLI's init from the Neon base item
  *                 of the Neon registry pinned to this package's release, in
@@ -37,7 +38,11 @@
  *                 (or --theme-dir). No dependency install, no React
  *                 provider needed — just CSS custom properties.
  *
- * (default):      the CDS install mode, frozen for apps already on CDS.
+ * (default):      the CDS install mode, frozen for apps already on CDS and
+ *                 deprecated: the next major version removes it. Every run
+ *                 in this mode prints one deprecation line on stderr, after
+ *                 its other output, whether it succeeds or is refused; the
+ *                 line changes no exit status.
  *                 Copies the 4 canonical CDS files (theme/cds/) into
  *                 <target-dir>/src/theme/ (or --theme-dir, if given),
  *                 installs @coinbase/cds-web (pinned to the version range
@@ -85,7 +90,7 @@
  */
 import { resolve } from "node:path";
 import { parseArgs } from "node:util";
-import { install } from "./lib/install.mjs";
+import { cdsDeprecationNotice, install } from "./lib/install.mjs";
 
 const USAGE =
   "Usage: node install.mjs <target-dir> [--new | --add <item>... | --css-only] [--theme-dir <dir>] [--package-manager <npm|pnpm|yarn|bun>] [--skip-install]";
@@ -143,7 +148,9 @@ try {
     log: console.log,
   });
 } catch (err) {
-  fail(err.message, err.exitCode ?? 1);
+  if (mode === "cds") console.error(`${err.message}\n\n${cdsDeprecationNotice()}`);
+  else console.error(err.message);
+  process.exit(err.exitCode ?? 1);
 }
 
 if (mode === "css-only") {
@@ -165,4 +172,5 @@ if (mode === "css-only") {
   console.log(
     `\nDone. Theme files copied into ${result.themeDir}. Wire up MediaQueryProvider -> ThemeProvider -> ComponentConfigProvider -> PortalProvider next.${installedNote}`
   );
+  console.error(`\n${cdsDeprecationNotice()}`);
 }
