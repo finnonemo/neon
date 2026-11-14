@@ -43,6 +43,14 @@ The sync compiles what the checkout has checked out, and another session may mov
 
 To see what a sync would bring without moving the pin, add `--dry-run`: it compiles, refuses what a sync refuses and prints the same report, and writes nothing. It does not write or check the Theme export or the adapter.
 
+An entry of the Counterpart table has five fields, and the sync and `validate` refuse any other:
+
+- `core`: the Core doc the item matches, or `null` for an item with no Counterpart.
+- `why`: why the item has no Counterpart, required with `"core": null`; beside a Counterpart, what the match rests on.
+- `unmatched`: for an item with no Counterpart, the approved Core doc that has its name.
+- `notInCore`: the item's prop values that have no Core cell, as `{ "variant": ["outline"] }`. They keep working and are not chosen for new work.
+- `notInCorePassThrough`: the library an item hands its other props on to, where that library draws from them, in place of a list. The same holds for those props.
+
 A change to the Counterpart table, the Role table or the Type role table alone needs no Core checkout:
 
 ```sh
@@ -64,7 +72,7 @@ The registry's built items in `registry/r/` carry a copy of every file they inst
 
 For registry, template or theme changes, run `node scripts/smoke-new-app.mjs`. It builds the registry, serves it locally, creates an app with the New install mode, adds an item and a Theme Brief with Add, and builds the app, once outside any repository and once under `.local/smoke/`. Then inspect the affected UI; `node scripts/preview-app.mjs <app dir>` serves a build and prints `Ready: <url>` only once it answers. Check relevant light/dark modes, narrow/wide layouts, Thai/English labels, keyboard interactions and task states. Record actual evidence, including blocked checks.
 
-For registry and starter changes, also run the [browser suite](evals/templates/README.md) with `--target neon`, which creates the app from the registry and holds it to the CDS baseline. A fix to the frozen CDS starter or CDS theme files runs the default CDS target. Each leaves its report under `.local/evals/templates/<target>/`; CI runs both targets and uploads the reports separately from the plugin.
+Before every push, `node .github/scripts/browser-changes.mjs origin/main HEAD` says whether the change needs the [browser suite](evals/templates/README.md): it prints the browser paths the branch changed, the list CI reads. When it prints one, run the suite with `--target neon`, which creates the app from the registry and holds it to the CDS baseline. A fix to the frozen CDS starter or CDS theme files runs the default CDS target. Each leaves its report under `.local/evals/templates/<target>/`; CI runs both targets and uploads the reports separately from the plugin.
 
 For changes to the browser probe, its runner or their fixtures, check on Linux before calling them done, not only on macOS. CI runs the browser job in `mcr.microsoft.com/playwright` with Linux Chrome and without macOS system fonts. Process cleanup, Chrome's temporary files and font fallbacks behaved differently there and failed CI twice after local runs passed. Use the image tag `template-browser.yml` names, or push early and read the CI result.
 

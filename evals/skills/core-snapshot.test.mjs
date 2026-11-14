@@ -202,6 +202,33 @@ test('an entry names the library its item passes props through to only when the 
   await assert.rejects(indexCore({ out, items, counterparts: marked('day-grid') }), /button: notInCorePassThrough names day-grid, which the item's files do not import\./);
 });
 
+// A misspelt field was read by nothing, so the mark it meant was dropped and nothing failed (#318).
+test('an entry holds only the fields of the Counterpart table', async t => {
+  const fields = /is not a field of a Counterpart table entry, which has core, why, unmatched, notInCore, notInCorePassThrough\./;
+  const button = { name: 'button', supporting: false, dependencies: ['radix-ui'], imports: ['react', 'radix-ui'] };
+  const items = [button, ...ITEMS.slice(1).map(name => ({ name, supporting: false }))];
+  const whole = { ...COUNTERPARTS, button: { core: 'button', why: 'Core\'s Button.', notInCore: { variant: ['outline'] }, notInCorePassThrough: 'radix-ui' } };
+  const { out } = await synced(t, { items, counterparts: whole });
+  await checkCounterpartTable(whole, out, { items });
+  const misspelt = field => ({ ...COUNTERPARTS, button: { core: 'button', [field]: 'radix-ui' } });
+  for (const field of ['notInCorePassThru', 'notIncore', 'Why']) {
+    const refused = new RegExp(`button: ${field} ${fields.source}`);
+    await assert.rejects(synced(t, { items, counterparts: misspelt(field) }), refused);
+    await assert.rejects(indexCore({ out, items, counterparts: misspelt(field) }), refused);
+    await assert.rejects(checkCounterpartTable(misspelt(field), out, { items }), refused);
+    // The repository check reads the fields with no registry at hand too.
+    await assert.rejects(checkCounterpartTable(misspelt(field), out), refused);
+  }
+  // A misspelt `unmatched` is named as the field it is, not as an entry that names no unmatched doc.
+  const alert = { core: null, why: 'The item is a banner.', unmatchd: 'alert' };
+  await assert.rejects(synced(t, { items: [...items, { name: 'alert', supporting: false }], counterparts: { ...COUNTERPARTS, alert } }), error => {
+    assert.match(error.message, new RegExp(`^alert: unmatchd ${fields.source}$`));
+    return true;
+  });
+  // Every problem is listed, one line each.
+  await assert.rejects(checkCounterpartTable({ ...misspelt('notIncore'), card: { ...COUNTERPARTS.card, reason: 'x' } }, out), /button: notIncore is not a field.*\ncard: reason is not a field/s);
+});
+
 test('sync compiles the commit it is told to, in a worktree it removes, and leaves the checkout as it was', async t => {
   const from = await coreCheckout(t);
   const first = git(from, 'rev-parse', 'HEAD');
