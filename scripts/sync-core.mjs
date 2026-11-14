@@ -12,6 +12,7 @@
 // Which Core doc each registry item matches is Neon's own table, registry/core-counterparts.json. The snapshot is
 // never edited by hand: the repository check compares each file with the hash the sync recorded.
 // It prints Core's commits since the snapshot it replaces and the files that changed: the pull request lists both.
+// It prints each color role whose value the run changed, per mode: the pull request names each and its contrast.
 // The same run writes what follows the snapshot's Theme: the Theme token export
 // and the CSS adapter's colors (scripts/lib/core-theme.mjs); and what follows its
 // text styles: the adapter's type sizes and line heights (scripts/lib/core-type.mjs).
@@ -19,7 +20,7 @@ import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
 import { syncCore, movedReport, SNAPSHOT_DIR, COUNTERPARTS_FILE } from './lib/core-snapshot.mjs';
-import { writeCoreTheme, THEME_EXPORT, ADAPTER } from './lib/core-theme.mjs';
+import { writeCoreTheme, changedRolesReport, THEME_EXPORT, ADAPTER } from './lib/core-theme.mjs';
 import { writeCoreType } from './lib/core-type.mjs';
 import { registryComponents } from './lib/registry.mjs';
 
@@ -44,9 +45,10 @@ try {
   for (const line of movedReport(moved, commit)) console.log(line);
   const byStanding = Object.groupBy(Object.keys(leftOut), name => leftOut[name]);
   for (const [standing, names] of Object.entries(byStanding)) console.log(`Left out, ${standing}: ${names.join(', ')}.`);
-  await writeCoreTheme(root);
+  const { changed } = await writeCoreTheme(root);
   await writeCoreType(root);
   console.log(`Wrote ${THEME_EXPORT} and the colors of ${ADAPTER} from the snapshot's Theme, and its type sizes and line heights from the snapshot's text styles. Rebuild the registry: node scripts/build-registry.mjs`);
+  for (const line of changedRolesReport(changed)) console.log(line);
 } catch (error) {
   console.error(error.message);
   process.exit(1);
