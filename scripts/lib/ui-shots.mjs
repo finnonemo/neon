@@ -19,6 +19,13 @@ export function parseSizes(value) {
   });
 }
 
+/** "2026-10-15T12:00" → the Date a page's clock is fixed at; a time with no offset is local, as the browser suite's is. */
+export function parseClock(value) {
+  const time = new Date(value);
+  if (Number.isNaN(time.getTime())) throw new Error(`Clock "${value}" is not an ISO time, such as 2026-10-15T12:00`);
+  return time;
+}
+
 /**
  * The box that covers `boxes` ({ x, y, width, height }), or null when none has an area: what an element with no
  * box of its own (display: contents) shows through its descendants.
