@@ -14,5 +14,5 @@ Applies to pull request bodies, eval records and review findings.
 
 Applies to pull request bodies, issues, commit messages and eval records. This repository is public; Core's repository is private.
 
-- Public text carries two things from Core: what the Core sync prints (`node scripts/sync-core.mjs`: Core's commit hashes and subjects, the snapshot files that changed, the docs the compile left out) and what `core/` holds.
-- Anything else of Core's is described by kind and count, with this repository's own paths: doc text the snapshot leaves out, the text of Core's issues and pull requests, and notes handed over from work in Core.
+- Public text carries two things from Core: from the Core sync's report (`node scripts/sync-core.mjs`), Core's commit hashes, the snapshot files that changed and the docs the compile left out; and what `core/` holds.
+- Anything else of Core's is described by kind and count, with this repository's own paths: the subjects of Core's commits, doc text the snapshot leaves out, the text of Core's issues and pull requests, and notes handed over from work in Core.
