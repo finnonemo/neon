@@ -4,9 +4,11 @@
 // full-resolution PNG. WebGL renders through SwiftShader, so three.js canvases
 // draw in headless Chromium instead of timing out a full-page capture.
 //   node scripts/ui-shots.mjs <url> [--sizes 375x812,1440x900] [--select <css>]...
-//     [--scale 0.5] [--tiles 4] [--wait 1500] [--out .local/shots]
+//     [--scale 0.5] [--tiles 4] [--wait 1500] [--out .local/shots] [--clock <ISO time>]
 // A selected element with no box of its own (display: contents, as the eval fixtures' data-measure hooks are) is
 // captured as the area its descendants cover. A selector that cannot be captured gets a line and the run goes on.
+// --clock fixes the page's clock before it loads, so a screen that draws today matches the browser suite's
+// (evals/templates: 2026-10-15T12:00).
 // Uses the Playwright that evals/templates installs:
 //   npm ci --prefix evals/templates && npx --prefix evals/templates playwright install chromium
 import { mkdir } from 'node:fs/promises';
@@ -14,7 +16,7 @@ import { createRequire } from 'node:module';
 import { join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { parseArgs } from 'node:util';
-import { coveringBox, parseSizes, tileOffsets, viewportClip } from './lib/ui-shots.mjs';
+import { coveringBox, parseClock, parseSizes, tileOffsets, viewportClip } from './lib/ui-shots.mjs';
 
 const { values, positionals } = parseArgs({
   allowPositionals: true,
@@ -25,11 +27,12 @@ const { values, positionals } = parseArgs({
     tiles: { type: 'string', default: '4' },
     wait: { type: 'string', default: '1500' },
     out: { type: 'string', default: '.local/shots' },
+    clock: { type: 'string' },
   },
 });
 const [url] = positionals;
 if (!url) {
-  console.error('Usage: node scripts/ui-shots.mjs <url> [--sizes 375x812,1440x900] [--select <css>]... [--scale 0.5] [--tiles 4] [--wait 1500] [--out .local/shots]');
+  console.error('Usage: node scripts/ui-shots.mjs <url> [--sizes 375x812,1440x900] [--select <css>]... [--scale 0.5] [--tiles 4] [--wait 1500] [--out .local/shots] [--clock <ISO time>]');
   process.exit(2);
 }
 
@@ -48,11 +51,13 @@ try {
 const out = resolve(values.out);
 await mkdir(out, { recursive: true });
 const scale = Number(values.scale);
+const clock = values.clock === undefined ? null : parseClock(values.clock);
 const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
 const written = [];
 try {
   for (const [width, height] of parseSizes(values.sizes)) {
     const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: scale });
+    if (clock) await page.clock.setFixedTime(clock);
     await page.goto(url, { waitUntil: 'load' });
     await page.waitForTimeout(Number(values.wait));
     const scrollHeight = await page.evaluate(() => document.documentElement.scrollHeight);

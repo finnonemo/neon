@@ -100,6 +100,7 @@ Sync the Core snapshot or the Block snapshot from a checkout of the source:
 
 ```sh
 node scripts/sync-core.mjs --from <Core checkout>
+node scripts/sync-core.mjs --from-snapshot   # Neon's own tables alone: no checkout, same Core commit
 node scripts/sync-block.mjs --from <Block checkout>
 ```
 
