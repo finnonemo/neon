@@ -13,8 +13,15 @@ The rules hold in any framework and name no component library. Where Core holds 
 
 - Use list rows for settings, search results and record or price rows; use cards for browsing a collection where each item has its own media or story. Tables stay the choice for comparing many records across the same attributes.
 - One leading-media size per list. A row has a title, up to two supporting lines, and a trailing column for the value or status. Show a chevron only when the row opens a deeper level.
+- An action on one record (buy more, open, retry) sits inside that record's row, in its trailing column, never as a button beside the row or in a column of its own.
+- A list spans the full width of the pane that holds it: no max width narrower than the pane, and no empty column beside it.
 - Separate rows with inset dividers or spacing; no divider after the last row. Do not put a card around each row.
 - Data-dense screens use condensed rows, compact controls and tables rather than smaller type or tighter custom spacing.
+
+## Panes
+
+- Beside the sidebar, a screen shows at most two panes: a list and the record selected in it. A deeper level of that record (one document, one order) replaces the detail pane with a back control, or opens in a sheet; it never adds a third column.
+- Columns side by side that each scroll on their own are for a board or for records compared in columns, not for drilling down.
 
 ## Surfaces, elevation and radius
 
@@ -24,6 +31,7 @@ The rules hold in any framework and name no component library. Where Core holds 
 ## Overlays
 
 - Which overlay a secondary task opens in, and how that changes from narrow to wide tiers, is Core's choice by what the overlay holds: the "Not for" lines in the Usage of Core's [Sheet](../../../core/components/sheet.md#usage), [Popover](../../../core/components/popover.md#usage) and [Alert](../../../core/components/alert.md#usage). Those are Core's component names, not an app's: on the Neon base the snapshot's index gives each item's Counterpart. Core has no sheet from the side, so new work does not choose one.
+- At desktop width a sheet is centred, never a mobile sheet rising from the bottom edge: Core's Sheet Placement centres it at Regular width. On the Neon base, the `sheet` item's bottom side does this itself from the `lg` tier (988px); do not override its placement or choose a left or right side to get a desktop look.
 - A sheet or dialog has a title and a visible close control. Every overlay returns focus to its trigger on close.
 
 ## Typography in use

@@ -26,7 +26,7 @@ Choose based on the task, not the default `App.tsx`:
 | `MultiColumnLayout` | Columns side by side, 400px each, that each scroll on their own: a board, or records compared in columns |
 | `ImmersiveLayout` | Focused content or landing page; full-bleed except at the widest tier, where content caps at 1440px. `immersiveTheme` sets a Campaign Page's [Immersive Theme](../../INSTRUCTION.md#composition) |
 
-Import them from `@/layout/<name>`. These are starter exports, not guaranteed imports in other apps. Inspect `src/layout/layoutPanes.ts` for corroborated versus extrapolated geometry. Supply navigation for actual destinations; ecosystem links are opt-in. The sidebar holds that navigation and nothing that is a record: a list of advisors, requests or funds goes in content, in `AppShell`'s list pane with the record's detail beside it. Choose `AppShell` as soon as the task has a list and a detail, not `SimpleLayout`. Use the shipped `Logo` and SVG marks appropriate to the surface, not a recreated text wordmark.
+Import them from `@/layout/<name>`. These are starter exports, not guaranteed imports in other apps. Inspect `src/layout/layoutPanes.ts` for corroborated versus extrapolated geometry. Supply navigation for actual destinations; ecosystem links are opt-in. A Back Office or Product Feature app takes the sidebar navigation unless the request says it stands alone: when the request does not say, ask the employee whether the product stands alone or is part of another product's screens, and which destinations its menu holds. Until they answer, pass `navigation` with the new screen as its active item and the destinations the request names, never invented ones, and repeat the question in the Done report. The sidebar holds that navigation and nothing that is a record: a list of advisors, requests or funds goes in content, in `AppShell`'s list pane with the record's detail beside it. Choose `AppShell` as soon as the task has a list and a detail, not `SimpleLayout`. Use the shipped `Logo` and SVG marks appropriate to the surface, not a recreated text wordmark.
 
 ## Content and details on narrow screens
 
@@ -39,6 +39,7 @@ const [activePane, setActivePane] = useState<"content" | "inspector">("content")
 
 <AppShell
   sidebar={null}
+  navigation={[{ label: "คำขอ", icon: Inbox, href: "/requests", active: true }]}
   content={<RequestList onSelect={(request) => {
     setSelectedRequest(request);
     setActivePane("inspector");
