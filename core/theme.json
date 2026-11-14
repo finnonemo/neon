@@ -4926,16 +4926,6 @@
       "hex": "#FFFFFF40"
     }
   },
-  "Miscellaneous/toggle-on-ios": {
-    "light": {
-      "primitive": "Green/115",
-      "hex": "#00C45BFF"
-    },
-    "dark": {
-      "primitive": "Green/115",
-      "hex": "#00C45BFF"
-    }
-  },
   "Avatar/background": {
     "light": {
       "primitive": "Indigo/70",

@@ -61,7 +61,7 @@ Components/Toggle/Thumb/{{iOS=*}}/<Property>
 Components/Interactive/Medium/Interactive min-height
 ```
 
-`Theme`: the Semantic tokens Carbon's Toggle binds, straight on the layer, the owner's 2026-10-30 call and the exception in Tokens.
+`Theme`: the Semantic tokens Carbon's Toggle binds, straight on the layer, the owner's 2026-10-30 call and the exception in Tokens. `toggle-on-ios` (Miscellaneous) was deleted 2026-11-14, the owner's call.
 
 | Layer | Enabled · Pressed | Disabled | Read-only | Skeleton |
 | --- | --- | --- | --- | --- |
@@ -71,7 +71,7 @@ Components/Interactive/Medium/Interactive min-height
 | Track, on | `iOS=False`: `Layer/layer-selected-inverse` (Grey/100 · Grey/0) | `iOS=False`: `Button/button-disabled` | as off | `Skeleton/skeleton-element` |
 | Thumb | `iOS=False`: `Icon/icon-inverse` (White/100 · Black/85A) | `iOS=False`: `Icon/icon-on-color-disabled` | `Icon/icon-primary` | `Skeleton/skeleton-element` |
 
-Nothing binds a remote kit variable. The kit's own faint off track and `Accents/Green` on track failed 3:1, so the owner chose Carbon's tokens with a darker off track for both looks (pawisssh/design-system#128, option c). `iOS=False` went black and white to reach 3:1 (R1 (a)): no white thumb passes in Dark on an on track that passes on the surface, so its thumb is `icon-inverse`, dark in Dark.
+what follows is how it got there. The kit's own faint off track and `Accents/Green` on track failed 3:1, so the owner chose Carbon's tokens with a darker off track for both looks (pawisssh/design-system#128, option c). `iOS=False` went black and white to reach 3:1 (R1 (a)): no white thumb passes in Dark on an on track that passes on the surface, so its thumb is `icon-inverse`, dark in Dark.
 
 Pairs (the spec's `contrast` list): Title and Detail on the Base surfaces; the track (non-text) on the surfaces; the thumb (non-text) on the track; Read-only's hairline (decorative); the Focus colour.
 
