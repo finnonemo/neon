@@ -22,10 +22,22 @@ export async function neonRegistryUrl({ registry, env = process.env, root }) {
   return registry ?? env.NEON_REGISTRY_URL ?? (await pinnedRegistryUrl(root));
 }
 
-/** The registry's components (not the base, theme or layouts), each with whether it is a Supporting item (GLOSSARY). */
+/**
+ * The registry's components (not the base, theme or layouts), each with whether it is a Supporting item (GLOSSARY),
+ * the packages it depends on (`dependencies`, without their versions) and the packages its files import (`imports`).
+ */
 export async function registryComponents(root) {
   const { items } = JSON.parse(await readFile(join(root, REGISTRY_DIR, 'registry.json'), 'utf8'));
-  return items.filter(item => item.type === 'registry:ui').map(item => ({ name: item.name, supporting: item.meta?.supporting === true }));
+  return Promise.all(items.filter(item => item.type === 'registry:ui').map(async item => {
+    const sources = await Promise.all((item.files ?? []).map(file => readFile(join(root, REGISTRY_DIR, file.path), 'utf8')));
+    return {
+      name: item.name,
+      supporting: item.meta?.supporting === true,
+      // A version follows the last @; a scoped package opens with one.
+      dependencies: (item.dependencies ?? []).map(dependency => dependency.replace(/(?!^)@[^@/]*$/, '')),
+      imports: [...new Set(sources.flatMap(source => [...source.matchAll(/^import\s[^"']*["']([^"']+)["']/gm)].map(([, from]) => from)))],
+    };
+  }));
 }
 
 /** Reads one registry file as JSON. */

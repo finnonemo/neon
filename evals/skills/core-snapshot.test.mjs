@@ -185,6 +185,23 @@ test('an item with no Counterpart and the name of an approved Core doc names tha
   await assert.rejects(checkCounterpartTable({ ...COUNTERPARTS, alert: row }, out), /Counterpart table.*alert: Core has an approved doc of this name/s);
 });
 
+test('an entry names the library its item passes props through to only when the item depends on it and imports it', async t => {
+  const button = { name: 'button', supporting: false, dependencies: ['radix-ui', 'day-grid'], imports: ['react', 'radix-ui', '@/lib/utils'] };
+  const items = [button, ...ITEMS.slice(1).map(name => ({ name, supporting: false }))];
+  const marked = library => ({ ...COUNTERPARTS, button: { core: 'button', notInCorePassThrough: library } });
+  // The mark is the table's alone: the index is the one the unmarked table gives.
+  const { out, json } = await synced(t, { items, counterparts: marked('radix-ui') });
+  assert.deepEqual((await json('index.json')).button, { counterpart: 'Button', doc: 'components/button.md', values: 'components/button.json' });
+  await checkCounterpartTable(marked('radix-ui'), out, { items });
+  await assert.rejects(synced(t, { items, counterparts: marked('sonner') }), /button: notInCorePassThrough names sonner, which is not a dependency of the item \(it has radix-ui, day-grid\)\./);
+  await assert.rejects(synced(t, { items, counterparts: marked('day-grid') }), /button: notInCorePassThrough names day-grid, which the item's files do not import\./);
+  await assert.rejects(synced(t, { items, counterparts: marked(['radix-ui']) }), /button: notInCorePassThrough names one library/);
+  await assert.rejects(synced(t, { items, counterparts: { ...COUNTERPARTS, card: { ...COUNTERPARTS.card, notInCorePassThrough: 'radix-ui' } } }), /card: notInCorePassThrough names radix-ui, which is not a dependency of the item\./);
+  // The repository check holds a table that moved without a sync to the same rule.
+  await assert.rejects(checkCounterpartTable(marked('sonner'), out, { items }), /Counterpart table.*button: notInCorePassThrough names sonner/s);
+  await assert.rejects(indexCore({ out, items, counterparts: marked('day-grid') }), /button: notInCorePassThrough names day-grid, which the item's files do not import\./);
+});
+
 test('sync compiles the commit it is told to, in a worktree it removes, and leaves the checkout as it was', async t => {
   const from = await coreCheckout(t);
   const first = git(from, 'rev-parse', 'HEAD');
