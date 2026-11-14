@@ -128,7 +128,7 @@ export function a11y({ test, expect, gotoExpansion, focusColor }) {
       for (const pin of sides) {
         const sheet = await open(page, pin);
         await settled(page);
-        const { violations } = await new AxeBuilder({ page }).include('[data-slot=sheet-content]').withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
+        const { violations } = await new AxeBuilder({ page }).include('[data-slot=sheet-content]').withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
         expect(violations.map((v) => `${pin} ${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);
         await page.keyboard.press('Escape');
         await expect(sheet).toBeHidden();
