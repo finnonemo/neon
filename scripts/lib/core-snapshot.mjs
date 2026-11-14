@@ -39,7 +39,9 @@ async function webCompile({ from, compiler }) {
   try {
     let printed;
     try {
-      printed = execFileSync(process.execPath, [script, '--out', built, '--from', from, '--committed'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
+      // The compile runs only as the script node was started with, which it knows by its real path: a checkout
+      // reached through a link (the system's temporary directory is one on macOS) would compile nothing and say nothing.
+      printed = execFileSync(process.execPath, [realpathSync(script), '--out', built, '--from', from, '--committed'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
     } catch (error) {
       throw new Error(`Core's Web compile failed, so nothing was written:\n${(error.stderr || error.message).trim()}`);
     }
@@ -120,13 +122,44 @@ function counterpartIndex({ items, counterparts, files, leftOut }) {
 }
 
 /**
- * Compiles the Core checkout at `from` with Core's Web compile and writes the snapshot to `out`, replacing what was
- * there. `compiler` is the Core checkout whose compile runs: `from` itself unless the commit to compile is older than
- * the compile, and then the snapshot records the compiler's commit too. `items` are the registry's components, as
- * { name, supporting }. Returns the commit, the files written, the Core docs the compile left out, by standing,
- * and what moved since the snapshot it replaced (movedReport).
+ * Runs `use` on a detached worktree of `at`, a commit or ref the Core checkout at `from` holds, and returns what it
+ * returns. The worktree is added in a temporary directory and removed after, also when `use` throws, so the checkout's
+ * own working tree and branch stay as they are: another session may be working in it.
  */
-export async function syncCore({ from, compiler = from, out, items, counterparts }) {
+async function coreAt({ from, at }, use) {
+  let commit;
+  try {
+    commit = execFileSync('git', ['-C', from, 'rev-parse', '--verify', '--quiet', `${at}^{commit}`], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
+  } catch {
+    throw new Error(`The Core checkout at ${from} does not hold ${at}, so nothing was written. Fetch it there (git -C ${from} fetch), or name a commit the checkout holds.`);
+  }
+  const parent = await mkdtemp(join(tmpdir(), 'neon-core-at-'));
+  const worktree = join(parent, 'core');
+  try {
+    git(from, 'worktree', 'add', '--quiet', '--detach', worktree, commit);
+    return await use(worktree);
+  } finally {
+    // The worktree may not have been added; either way the checkout is left with no record of it.
+    try { git(from, 'worktree', 'remove', '--force', worktree); } catch { /* not added */ }
+    await rm(parent, { recursive: true, force: true });
+    try { git(from, 'worktree', 'prune'); } catch { /* not a checkout: the compile says so */ }
+  }
+}
+
+/**
+ * Compiles the Core checkout at `from` with Core's Web compile and writes the snapshot to `out`, replacing what was
+ * there. `at` names the commit or ref to compile, in a temporary worktree of the checkout; without it the checkout's
+ * own working tree is compiled, at whatever it has checked out. `compiler` is the Core checkout whose compile runs:
+ * what is compiled unless that commit is older than the compile, and then the snapshot records the compiler's commit
+ * too. `items` are the registry's components, as { name, supporting }. Returns the commit, the files written, the
+ * Core docs the compile left out, by standing, and what moved since the snapshot it replaced (movedReport).
+ */
+export async function syncCore({ at, ...options }) {
+  if (at === undefined) return syncCheckout(options);
+  return coreAt({ from: options.from, at }, worktree => syncCheckout({ ...options, from: worktree }));
+}
+
+async function syncCheckout({ from, compiler = from, out, items, counterparts }) {
   const compiled = await webCompile({ from, compiler });
   const { repository, commit, leftOut } = compiled;
   const core = { repository, commit };

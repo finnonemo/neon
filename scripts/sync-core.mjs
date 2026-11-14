@@ -1,9 +1,12 @@
 #!/usr/bin/env node
 // Writes the Core snapshot (GLOSSARY, ADR 0009) from a Core checkout into core/:
-//   node scripts/sync-core.mjs --from <Core checkout> [--compiler <Core checkout>]
+//   node scripts/sync-core.mjs --from <Core checkout> [--at <commit or ref>] [--compiler <Core checkout>]
 // Core's repository compiles its docs for the web (ADR 0012): this runs the checkout's Web compile, as sync-block
 // runs Block's bundle build, copies what it wrote and records the commit the compile names and each file's hash.
 // The compile refuses a checkout whose docs are not committed.
+// --at compiles that commit in a temporary worktree of the checkout and removes it after, so the checkout's own
+// working tree and branch stay as they are, and the snapshot is pinned to the commit named, not to what the checkout
+// has checked out when the sync runs.
 // --compiler runs another Core checkout's compile on the --from checkout, for a Core commit older than the compile;
 // the snapshot then records the compiler's commit beside the docs'.
 // Which Core doc each registry item matches is Neon's own table, registry/core-counterparts.json. The snapshot is
@@ -25,13 +28,14 @@ const args = process.argv.slice(2);
 const option = name => (args.includes(name) ? args[args.indexOf(name) + 1] : undefined);
 const from = option('--from');
 if (!from) {
-  console.error('Usage: node scripts/sync-core.mjs --from <Core checkout> [--compiler <Core checkout>]');
+  console.error('Usage: node scripts/sync-core.mjs --from <Core checkout> [--at <commit or ref>] [--compiler <Core checkout>]');
   process.exit(2);
 }
 try {
   const { commit, compiler, files, leftOut, moved } = await syncCore({
     from: resolve(from),
-    compiler: resolve(option('--compiler') ?? from),
+    at: option('--at'),
+    compiler: option('--compiler') && resolve(option('--compiler')),
     out: resolve(root, SNAPSHOT_DIR),
     items: await registryComponents(root),
     counterparts: JSON.parse(await readFile(resolve(root, COUNTERPARTS_FILE), 'utf8')),
