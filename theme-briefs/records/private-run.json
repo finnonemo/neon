@@ -91,7 +91,8 @@
         }
       ],
       "kept": 1,
-      "output": "eef2934d5d91cd08baedfc02f3aa4a97748daeb4c46b7d589d20fb822814d839"
+      "output": "eef2934d5d91cd08baedfc02f3aa4a97748daeb4c46b7d589d20fb822814d839",
+      "handEdited": true
     },
     "layout": {
       "entry": "5de4f77e3adcfa21d9909089b1148e5639d3485007df7e7e417c8b3d4378b16a",
@@ -104,7 +105,8 @@
         }
       ],
       "kept": 1,
-      "output": "2b74a5f0d745c28ba7276d330f7b56a4788d7bd9ae732fb1cbca544bda799541"
+      "output": "2b74a5f0d745c28ba7276d330f7b56a4788d7bd9ae732fb1cbca544bda799541",
+      "handEdited": true
     },
     "example-prompts": {
       "entry": "0589dc0146632bac6575ff5e3eb6fef367eec1b26a45b8f20078741df4d62230",

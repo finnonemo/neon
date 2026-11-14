@@ -133,12 +133,16 @@ A maintainer's reusable choice for one part of a Theme Brief: its occasion, its 
 _Avoid_: Tailwind preset, Reference Design (which an employee brings), template
 
 **Brand Pattern**:
-Finnomena background artwork made by Block's generator from a locked seed, placed in a section that a Theme Brief or the employee names.
+Finnomena artwork made by Block's generator from a locked seed, which every Campaign Page carries as its illustration, in a section that a Theme Brief or the employee names.
 _Avoid_: texture, background, Page (Block's full composition)
 
 **Brand Pattern colourway**:
 The one Immersive Theme color family (its palette, accent or support) whose step fills the section a Theme Brief's Brand Pattern sits in.
 _Avoid_: pattern palette, pattern color, secondary color
+
+**Scroll pattern**:
+One of four named kinds of motion a Campaign Page may use to tell its story, each with its limit and the motion level it needs (ADR 0013): **Pinned story** (a pinned visual crossfades through 3–5 steps), **Scrubbed reveal** (one image or block scales and fades in with scroll), **Count-up figure** (a display figure counts up to its value once) and **Progress rail** (a thin bar grows with progress through a long section). One use of a pattern is one moment of the page's motion budget.
+_Avoid_: scroll animation, parallax, scrollytelling effect
 
 **Block Colourway**:
 One of the pairs of a ground color and a block color that Block's generator draws a Brand Pattern in. A Theme Brief names one from Block's primary group, whose two colors are its Immersive Theme's own.
