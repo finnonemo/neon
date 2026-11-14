@@ -41,6 +41,7 @@ import alert from './core/alert.mjs';
 import sheet from './core/sheet.mjs';
 import popover from './core/popover.mjs';
 import menu from './core/menu.mjs';
+import dateAndTime from './core/date-and-time.mjs';
 
 // By registry item. Input, label, field and input-group are the parts of one Counterpart, Text field.
 const tables = {
@@ -74,6 +75,7 @@ const tables = {
   sheet,
   popover,
   'dropdown-menu': menu,
+  calendar: dateAndTime,
 };
 // The snapshot writes a literal as text ("2", "0.5"); a measured number is a number.
 const asNumber = (value) => (typeof value === 'string' && value.trim() !== '' && !Number.isNaN(Number(value)) ? Number(value) : value);

@@ -3,7 +3,9 @@
 import { useState } from "react"
 import { InfoIcon, MoreHorizontalIcon } from "lucide-react"
 import { toast } from "sonner"
+import type { DateRange } from "react-day-picker"
 import { Button } from "@/components/ui/button"
+import { Calendar } from "@/components/ui/calendar"
 import { Checkbox } from "@/components/ui/checkbox"
 import { DatePicker } from "@/components/ui/date-picker"
 import { Dialog, DialogBody, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
@@ -31,9 +33,15 @@ const checkboxes: [string, string, boolean | "indeterminate", boolean][] = [
   ["disabled-indeterminate", "ทุกช่องทาง / All channels", "indeterminate", true],
 ]
 
+// Core's Pickers in October and November 2026: the suite's clock makes 15 October today.
+const october = new Date(2026, 9, 1)
+const november = new Date(2026, 10, 1)
+
 export function Extras() {
   const [type, setType] = useState<string>()
   const [date, setDate] = useState<Date>()
+  const [picked, setPicked] = useState<Date | undefined>(new Date(2026, 9, 10))
+  const [range, setRange] = useState<DateRange | undefined>({ from: new Date(2026, 10, 17), to: new Date(2026, 10, 24) })
   const [sending, setSending] = useState(false)
   return (
     <main className="flex min-h-svh flex-col gap-6 p-6">
@@ -219,6 +227,15 @@ export function Extras() {
               <Label htmlFor={`check-${id}`} className="text-body text-foreground">{text}</Label>
             </div>
           ))}
+        </div>
+      </Hook>
+      {/* Core's Pickers, which CDS has no baseline for: Mode Date with a Selected day, today and Disabled
+          days; today Selected, in a calendar whose first month is this one; Mode Range. 16px from the screen's edges, as Core's Inline, so the grid fits at 375. */}
+      <Hook name="core-calendar">
+        <div className="-mx-2 flex flex-wrap items-start gap-6">
+          <div data-calendar="date"><Calendar mode="single" selected={picked} onSelect={setPicked} defaultMonth={october} disabled={{ before: new Date(2026, 9, 5) }} /></div>
+          <div data-calendar="today"><Calendar mode="single" selected={new Date(2026, 9, 15)} defaultMonth={october} startMonth={october} /></div>
+          <div data-calendar="range"><Calendar mode="range" selected={range} onSelect={setRange} defaultMonth={november} /></div>
         </div>
       </Hook>
       {/* Core's Button values CDS has no baseline for; Inverse sits on the inverse background. */}
