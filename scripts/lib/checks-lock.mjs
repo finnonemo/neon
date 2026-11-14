@@ -1,4 +1,4 @@
-// One machine-wide lock for the heavy checks (scripts/validate.mjs and the browser suite), so
+// One machine-wide lock for the heavy checks (the validate command and the browser suite), so
 // runs started from several worktrees queue instead of slowing each other into timeouts.
 //
 // The lock is a queue of tickets in the OS temp directory, one file per run, named by a sequence
