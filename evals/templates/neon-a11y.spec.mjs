@@ -27,10 +27,6 @@ for (const [layout, mode] of ['approval', 'extras', 'expansion'].flatMap((layout
 // run past that box. A part inside a box that clips or scrolls on its own (a Table, a Progress
 // indicator) is exempt, as two-dimensional content is.
 const PHONE = 288;
-// Items known to need more than 288, at the width they need today: a finding to settle, not a pass.
-// Calendar's seven days are Core's 48 px Pickers cells (7 × 48 = 336). Pagination's previous, next and
-// page links at Large need 308. Either one growing, or any other item running past, fails.
-const KNOWN_WIDER = { calendar: 336, pagination: 308 };
 for (const layout of ['approval', 'extras', 'expansion']) {
   test(`${layout}: every item fits a 320px phone`, async ({ page }) => {
     await page.goto(`/?layout=${layout}`);
@@ -53,7 +49,7 @@ for (const layout of ['approval', 'extras', 'expansion']) {
       }
       return found;
     }, PHONE);
-    expect([...new Set(past.filter(([slot, needs]) => !(needs <= KNOWN_WIDER[slot])).map(([slot, needs]) => `${slot}: ${needs}px`))]).toEqual([]);
+    expect([...new Set(past.map(([slot, needs]) => `${slot}: ${needs}px`))]).toEqual([]);
   });
 }
 
