@@ -214,7 +214,7 @@ Imagery never carries another brand's logo, copy or look, and the Finnomena logo
 - **Ground:** `--immersive-palette-100` fill with `--immersive-on-palette-100` text, the canvas itself
 - **Block Colourway:** `grey__yellow-100`, Yellow blocks on Light Grey
 
-The hero section carries the Brand Pattern on its ground: Block draws it in `grey__yellow-100`, Yellow blocks on the section's own Light Grey. It runs as a strip beside or under the section's text, never behind it. Block's Brand Pattern procedure makes it as a static SVG: never hand-draw it, imitate it in CSS or animate it.
+The hero section carries the Brand Pattern on its ground: Block draws it in `grey__yellow-100`, Yellow blocks on the section's own Light Grey. It leads the section's screenful beside the text, never behind it and never as a strip, with its clear space left for a photo. Block draws it as a static SVG at the panel's size: never hand-draw it, imitate it in CSS, crop, stretch or animate it.
 
 ## Layout
 
@@ -236,7 +236,7 @@ A full-bleed page opens on a split hero on the pattern ground, the Brand Pattern
 
 **Level:** subtle
 
-Fades, or slides of 16px or less, as content enters view, over 150–250ms with ease-out.
+Fades, or slides of 16px or less, as content enters view, over 150–250ms with ease-out. Allowed scroll patterns: Pinned story, Count-up figure and Progress rail, two moments a page.
 
 Under `prefers-reduced-motion: reduce`, use the still level. Nothing animates the Brand Pattern. The motion values are provisional pending design owner review.
 

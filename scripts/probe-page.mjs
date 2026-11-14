@@ -455,7 +455,8 @@ async function draftSweep() {
     return { radius: full ? 'full' : px(radius), padding: [style.paddingTop, style.paddingRight, style.paddingBottom, style.paddingLeft].map(px) };
   }));
   const toMs = value => value.split(',').map(part => parseFloat(part) * (part.trim().endsWith('ms') ? 1 : 1000));
-  const durations = [...document.querySelectorAll('*')].filter(visible).map(element => {
+  // A Count-up figure (ADR 0013) counts for 600–1200ms but moves nothing, so its timing never sets the level.
+  const durations = [...document.querySelectorAll('*')].filter(visible).filter(element => !element.closest('[data-count-up]')).map(element => {
     const style = getComputedStyle(element);
     return Math.max(...toMs(style.transitionDuration), ...toMs(style.animationDuration));
   }).filter(duration => duration > 0);

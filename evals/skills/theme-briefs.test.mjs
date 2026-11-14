@@ -556,7 +556,7 @@ function renderMatrix(t) {
 }
 
 const section = (text, heading) => text.split(/^## /m).find((part) => part.startsWith(`${heading}\n`)) ?? '';
-const MOTION = { still: /150ms or less/, subtle: /16px or less, .* 150–250ms with ease-out/, lively: /200–400ms .* 32px or less\. No parallax/ };
+const MOTION = { still: /150ms or less/, subtle: /16px or less, .* 150–250ms with ease-out\. Allowed scroll patterns: Pinned story, Count-up figure and Progress rail/, lively: /200–400ms .* 32px or less\. No parallax behind text\. Allowed scroll patterns: all four, Scrubbed reveal included/ };
 
 test('scripted rendering holds for every theme, colourway, page width and motion level, and passes check-only', (t) => {
   const { root, briefs } = renderMatrix(t);
@@ -1289,7 +1289,7 @@ test('check-only refuses a panel whose blocks are the color of the section it si
 test('the Brand Pattern sits on the section when Block draws on its fill, and in a panel when it does not', (t) => {
   const { briefs } = renderMatrix(t);
   const pattern = (theme, colourway) => section(briefs.find((brief) => brief.theme === theme && brief.colourway === colourway).text, 'Brand Pattern');
-  assert.match(pattern('club', 'accent'), /^The hero section carries the Brand Pattern in a panel on its ground: Block draws it in `white__yellow-100`, Yellow blocks on White \(`--immersive-canvas`\), and the panel takes the block and card radius\. It runs as a strip beside or under the section's text, never behind it\./m);
+  assert.match(pattern('club', 'accent'), /^The hero section carries the Brand Pattern in a panel on its ground: Block draws it in `white__yellow-100`, Yellow blocks on White \(`--immersive-canvas`\), and the panel takes the block and card radius\. It leads the section's screenful beside the text, never behind it and never as a strip, with its clear space left for a photo\./m);
   for (const text of briefs.map((brief) => section(brief.text, 'Layout'))) assert.match(text, /A component whose fill is its section's ground steps one lighter in the same family/);
 });
 
