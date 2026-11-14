@@ -22,10 +22,23 @@ export async function neonRegistryUrl({ registry, env = process.env, root }) {
   return registry ?? env.NEON_REGISTRY_URL ?? (await pinnedRegistryUrl(root));
 }
 
-/** The registry's components (not the base, theme or layouts), each with whether it is a Supporting item (GLOSSARY). */
+/**
+ * The registry's components (not the base, theme or layouts), each with whether it is a Supporting item (GLOSSARY),
+ * the packages it lists (`dependencies`) and the packages its files import (`imports`), both as dependencyProblems
+ * reads them.
+ */
 export async function registryComponents(root) {
   const { items } = JSON.parse(await readFile(join(root, REGISTRY_DIR, 'registry.json'), 'utf8'));
-  return items.filter(item => item.type === 'registry:ui').map(item => ({ name: item.name, supporting: item.meta?.supporting === true }));
+  return Promise.all(items.filter(item => item.type === 'registry:ui').map(async item => {
+    const paths = (item.files ?? []).map(file => file.path);
+    const sources = new Map(await Promise.all(paths.map(async path => [path, await readFile(join(root, REGISTRY_DIR, path), 'utf8')])));
+    return {
+      name: item.name,
+      supporting: item.meta?.supporting === true,
+      dependencies: listedPackages(item),
+      imports: [...importedPackages(item, path => sources.get(path))],
+    };
+  }));
 }
 
 /** Reads one registry file as JSON. */
@@ -162,6 +175,61 @@ export function undeclaredSiblings(items, readFile) {
       for (const [, name] of readFile(file.path).matchAll(/from\s+["']@\/components\/ui\/([a-z-]+)["']/g)) {
         if (!declared.has(name)) problems.push(`${item.name} imports ${name} without declaring it`);
       }
+    }
+  }
+  return problems;
+}
+
+// Packages the app's own scaffold installs, so no item lists them.
+const APP_PACKAGES = ['react', 'react-dom', 'tailwindcss'];
+const packageOf = (specifier) => specifier.split('/').slice(0, specifier.startsWith('@') ? 2 : 1).join('/');
+const registryName = (dependency) => dependency.split('/').pop().replace(/\.json$/, '');
+/** The packages an item lists in `dependencies`, without their versions. */
+const listedPackages = (item) => (item.dependencies ?? []).map((dependency) => dependency.replace(/(?!^)@.*$/, ''));
+
+/**
+ * The packages an item's files import, as a Set: an import in a script file or an @import in a stylesheet,
+ * named without its subpath. `readFile` gives a file's text by its path in the item.
+ */
+function importedPackages(item, readFile) {
+  const imported = new Set();
+  for (const { path } of item.files ?? []) {
+    const pattern = /\.css$/.test(path) ? /@import\s+["']([^"']+)["']/g
+      : /\.[cm]?[jt]sx?$/.test(path) ? /(?:\bfrom|\bimport)\s*\(?\s*["']([^"']+)["']/g
+      : null;
+    if (!pattern) continue;
+    for (const [, specifier] of readFile(path).matchAll(pattern)) {
+      // A relative or absolute file, the app's @/ alias and a Node built-in are not packages.
+      if (!/^(\.{0,2}\/|@\/|\.{1,2}$|node:)/.test(specifier)) imported.add(packageOf(specifier));
+    }
+  }
+  return imported;
+}
+
+/**
+ * Where an item's `dependencies` and the packages its files import differ: a package it lists and no file
+ * imports, which shadcn add installs for nothing, and a package a file imports that neither the item nor an
+ * item it pulls in lists, which leaves a broken import. A package is named by an import in a script file or
+ * an @import in a stylesheet. `listedFor` names the packages an item lists for a file outside the item, as
+ * { item: ['package'] }.
+ */
+export function dependencyProblems(items, readFile, listedFor = {}) {
+  const byName = new Map(items.map((item) => [item.name, item]));
+  const within = (item, seen = new Set()) => {
+    if (!item || seen.has(item.name)) return [];
+    seen.add(item.name);
+    return [...listedPackages(item), ...(item.registryDependencies ?? []).flatMap((dependency) => within(byName.get(registryName(dependency)), seen))];
+  };
+  const problems = [];
+  for (const item of items) {
+    const imported = importedPackages(item, readFile);
+    const kept = listedFor[item.name] ?? [];
+    for (const name of listedPackages(item)) {
+      if (!imported.has(name) && !kept.includes(name)) problems.push(`${item.name} lists ${name}, which none of its files import`);
+    }
+    const available = new Set([...APP_PACKAGES, ...within(item)]);
+    for (const name of imported) {
+      if (!available.has(name)) problems.push(`${item.name} imports ${name} without listing it`);
     }
   }
   return problems;

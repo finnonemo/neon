@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { expansionItem, expansionItems } from '../templates/expansion.mjs';
 import { loadImmersiveThemes, resolveColor } from '../../theme/scripts/generate-immersive-themes.mjs';
 import { contrast } from '../../scripts/lib/colors.mjs';
-import { BUILD_DIR, bareCnImports, browserSuiteItems, buildRegistry, darkClasses, unguardedItemRoles, missingTypeRoles, nextThemes, pinnedRegistryUrl, supportingProblems, tabsAsSegmented, themeBriefItemProblems, undeclaredSiblings, unmeasuredComponents, unpinnedUrls, unreachedItems, weightOverrides } from '../../scripts/lib/registry.mjs';
+import { BUILD_DIR, bareCnImports, browserSuiteItems, buildRegistry, darkClasses, dependencyProblems, registryComponents, unguardedItemRoles, missingTypeRoles, nextThemes, pinnedRegistryUrl, supportingProblems, tabsAsSegmented, themeBriefItemProblems, undeclaredSiblings, unmeasuredComponents, unpinnedUrls, unreachedItems, weightOverrides } from '../../scripts/lib/registry.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '../..');
 const read = (path) => readFileSync(join(root, path), 'utf8');
@@ -113,6 +113,45 @@ test('every registry item that imports a Neon component declares it as a registr
   assert.deepEqual(undeclaredSiblings([item('registry:ui', ['@neon/utils', '@neon/button'])], () => source("'")), ['input-group imports input without declaring it'], 'single-quoted imports count');
   assert.deepEqual(undeclaredSiblings([item('registry:item', ['@neon/button'])], () => source("'")), ['input-group imports input without declaring it'], 'every item type is checked, not only components');
   assert.deepEqual(undeclaredSiblings([item('registry:base', ['{{registry}}/button.json', '{{registry}}/input.json'])], () => source("'")), [], 'a {{registry}} URL dependency declares the item');
+});
+
+// An item's packages follow its files (#297): the checkbox dropped lucide-react and still listed it, and
+// nothing failed. The theme lists the animation stylesheet for the app's own stylesheet to import, as the
+// base's index.css does.
+test('every registry item lists the packages its files import, and no other', () => {
+  const { items } = JSON.parse(read('registry/registry.json'));
+  assert.deepEqual(dependencyProblems(items, (path) => read(join('registry', path)), { theme: ['tw-animate-css'] }), []);
+  const checkbox = (dependencies, extra = {}) => ({ name: 'checkbox', dependencies, files: [{ path: 'ui/checkbox.tsx' }], ...extra });
+  const source = 'import * as React from "react"\nimport { Checkbox as Primitive } from "radix-ui"\nimport { cn } from "@/lib/utils"\nimport "./checkbox.css"';
+  assert.deepEqual(dependencyProblems([checkbox(['radix-ui@^1.8.1'])], () => source), [], 'react, the @/ alias and relative files are not packages to list');
+  assert.deepEqual(dependencyProblems([checkbox(['radix-ui@^1.8.1', 'lucide-react@^1.66.0'])], () => source), ['checkbox lists lucide-react, which none of its files import']);
+  assert.deepEqual(dependencyProblems([checkbox([])], () => source), ['checkbox imports radix-ui without listing it']);
+  assert.deepEqual(dependencyProblems([checkbox(['@fontsource/inter@^5.0.0'])], () => 'import "@fontsource/inter/400.css"\nconst icons = await import("lucide-react")'), ['checkbox imports lucide-react without listing it'], 'a scoped package is named by its first two parts, and a dynamic import counts');
+  const base = { name: 'base', registryDependencies: ['{{registry}}/theme.json'], files: [{ path: 'base/index.css' }] };
+  const theme = { name: 'theme', dependencies: ['tw-animate-css@^1.4.0'], files: [{ path: 'theme/neon.css' }] };
+  const css = (path) => (path === 'base/index.css' ? '@import "tailwindcss";\n@import "tw-animate-css";\n@import "./theme/neon.css";' : '@import "./theme.css";');
+  assert.deepEqual(dependencyProblems([base, theme], css, { theme: ['tw-animate-css'] }), [], 'a stylesheet import counts, and an item it pulls in may list the package');
+  assert.deepEqual(dependencyProblems([base, theme], css), ['theme lists tw-animate-css, which none of its files import']);
+  assert.deepEqual(dependencyProblems([{ ...base, registryDependencies: [] }, theme], css, { theme: ['tw-animate-css'] }), ['base imports tw-animate-css without listing it']);
+});
+
+// The Counterpart table's rules ask a component which library it depends on and imports (#291). They are
+// answered by the same reading, so a subpath import is the package's and a version is never part of a name.
+test('a registry component names its packages as the dependency check does', async (t) => {
+  const temp = mkdtempSync(join(tmpdir(), 'neon-components-'));
+  t.after(() => rmSync(temp, { recursive: true, force: true }));
+  mkdirSync(join(temp, 'registry/ui'), { recursive: true });
+  writeFileSync(join(temp, 'registry/registry.json'), JSON.stringify({ items: [
+    { name: 'toast', type: 'registry:ui', dependencies: ['sonner@^2.0.0', '@fontsource/inter@^5.0.0'], files: [{ path: 'ui/toast.tsx' }, { path: 'ui/toast.css' }], meta: { supporting: true } },
+    { name: 'plain', type: 'registry:ui' },
+    { name: 'theme', type: 'registry:theme', dependencies: ['tw-animate-css@^1.4.0'] },
+  ] }));
+  writeFileSync(join(temp, 'registry/ui/toast.tsx'), 'import * as React from "react"\nimport { Toaster } from "sonner/dist/index"\nimport { cn } from "@/lib/utils"\nimport "./toast.css"');
+  writeFileSync(join(temp, 'registry/ui/toast.css'), '@import "@fontsource/inter/400.css";');
+  assert.deepEqual(await registryComponents(temp), [
+    { name: 'toast', supporting: true, dependencies: ['sonner', '@fontsource/inter'], imports: ['react', 'sonner', '@fontsource/inter'] },
+    { name: 'plain', supporting: false, dependencies: [], imports: [] },
+  ]);
 });
 
 // The components the approval and extras screens measure. Every later
