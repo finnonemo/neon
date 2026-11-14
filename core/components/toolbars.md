@@ -4,7 +4,7 @@
 
 ## Anatomy and layer tree
 
-As copied from the kit, apart from the buttons and 's Search row. Top iPhone `Style=Default`, as on 2026-11-08; `Toolbar - Top` has the same tree, with the `iOS=False` parts:
+As copied from the kit, apart from the buttons and the Search row. Top iPhone `Style=Default`, as on 2026-11-08; `Toolbar - Top` has the same tree, with the `iOS=False` parts:
 
 ```
 Toolbar - Top - iPhone (variant)   402 × 58 (Search off), V, padding 0 · 0 · 10 · 0, Fixed × Hug
@@ -16,17 +16,17 @@ Toolbar - Top - iPhone (variant)   402 × 58 (Search off), V, padding 0 · 0 · 
 └─ Search                          `Show Search` (off), Fill × Hug, padding 8 · 16 · 0 · 16 (spacing-03, spacing-05)
 ```
 
-Title 2 Line and Title 2 Line Left hold `Title and Subtitle` (TEXT `Title`, `Subtitle`; `Show Subtitle`), Large Title holds them under `Controls`. Every title is one line, truncated at the end. Heights with Search off: 58, Large Title 133. `Toolbar - Top` since : padding 8 · 0 · 8 · 0 (`spacing-03`), so 64, Large Title 139 (115 without Subtitle), Search on 120. Since : `Controls` hugs with min height `control-medium` (48), every title is in its flow and hugs its height, and Leading and Trailing fill around Default's and Title 2 Line's title, so it stays centred; Default's title box hugs up to 258. Large Title 146 (122 without Subtitle).
+Title 2 Line and Title 2 Line Left hold `Title and Subtitle` (TEXT `Title`, `Subtitle`; `Show Subtitle`), Large Title holds them under `Controls`. Every title is one line, truncated at the end. Heights with Search off: 58, Large Title 133. `Toolbar - Top`: padding 8 · 0 · 8 · 0 (`spacing-03`), so 64, Large Title 139 (115 without Subtitle), Search on 120. `Controls` hugs with min height `control-medium` (48), every title is in its flow and hugs its height, and Leading and Trailing fill around Default's and Title 2 Line's title, so it stays centred; Default's title box hugs up to 258. Large Title 146 (122 without Subtitle).
 
-Top - iPad since : in Title 2 Line, Title 2 Line Left and Compact Large, Leading and Trailing hug, the title sits in the row between them, Fill, and the row's gap is 12 (`spacing-04`). Title 2 Line centres its title in the room left; the others start it at the leading end. 58 tall as before.
+Top - iPad: in Title 2 Line, Title 2 Line Left and Compact Large, Leading and Trailing hug, the title sits in the row between them, Fill, and the row's gap is 12 (`spacing-04`). Title 2 Line centres its title in the room left; the others start it at the leading end. 58 tall as before.
 
-Window controls: every `Toolbar - Top - iPad` variant's `Leading` Slot starts with a hidden `Frame` (51 × 22 shown, padding 10 · 0, since) holding `Window Controls`, an instance of the kit's `_Window Controls` (`Window State=Active`). A windowed iPad app shows that Frame on the leftmost bar's instance, as Screen Template's iPad Window does; an overlay of the kit's controls doubles them (#630). In a script, find it by that layer name, `Window Controls`, not the kit's `_Window Controls`.
+Window controls: every `Toolbar - Top - iPad` variant's `Leading` Slot starts with a hidden `Frame` (51 × 22 shown, padding 10 · 0) holding `Window Controls`, an instance of the kit's `_Window Controls` (`Window State=Active`). A windowed iPad app shows that Frame on the leftmost bar's instance, as Screen Template's iPad Window does; an overlay of the kit's controls doubles them (pawisssh/design-system#630). In a script, find it by that layer name, `Window Controls`, not the kit's `_Window Controls`.
 
-Layer order (Menu's , 2026-11-08): an absolute title is the bottom layer (in `Toolbar - Top`, an in-flow title before `Trailing`, which stays the last child of `Controls`, since ; likewise in Top - iPad's Title 2 Line, Title 2 Line Left and Compact Large, since), and a vertical variant whose first child holds `Trailing` (`Controls`) stacks first on top (`itemReverseZIndex`), so an open [Menu](menu.md) (`Expand=True`) in `Trailing` draws over the title, Tab Bar and Search.
+Layer order (2026-11-08): an absolute title is the bottom layer (in `Toolbar - Top`, an in-flow title before `Trailing`, which stays the last child of `Controls`; likewise in Top - iPad's Title 2 Line, Title 2 Line Left and Compact Large), and a vertical variant whose first child holds `Trailing` (`Controls`) stacks first on top (`itemReverseZIndex`), so an open [Menu](menu.md) (`Expand=True`) in `Trailing` draws over the title, Tab Bar and Search.
 
 ## Axes
 
-As the kit's: `Style` (Top iPhone, 5), `Type` (Bottom iPhone, 6) and the kit's iPad and Duo axes. `Toolbar - Top` has `Style` (the same 5). No set has an `iOS` axis since 28 variants across the five public sets (32 before). Top iPhone's and Toolbar - Top's grids: one column, rows `Style`, gaps 20; `Style=Default` the default.
+As the kit's: `Style` (Top iPhone, 5), `Type` (Bottom iPhone, 6) and the kit's iPad and Duo axes. `Toolbar - Top` has `Style` (the same 5). No set has an `iOS` axis: 28 variants across the five public sets. Top iPhone's and Toolbar - Top's grids: one column, rows `Style`, gaps 20; `Style=Default` the default.
 
 ## Component variables and Theme tokens
 
@@ -51,7 +51,7 @@ System: an iOS component (Motion and haptics).
 
 ## Accessibility
 
-Not reviewed beyond the contrast notes in .
+Not reviewed beyond the contrast notes.
 
 ## Usage
 

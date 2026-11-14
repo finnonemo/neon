@@ -4,7 +4,7 @@
 
 ## Anatomy and layer tree
 
-As built in:
+As built:
 
 ```
 Progress bar (variant root)     Fill × Hug, no fill, no padding
@@ -61,7 +61,7 @@ Properties: `Label` (BOOLEAN, on: shows Header), `Label text`, `Value text`, `He
 
 Templates: `Components/Progress bar/<Group>/{{Size=*}}/<Property>`, `Components/Progress bar/Label/<role>/<Property>`.
 
-`Theme`: no Component-scoped token; `Status` picks Theme tokens directly through rules (ADR 0001,). Measured 2026-11-04 with `skills/build-component/scripts/contrast.mjs` on the Theme snapshot.
+`Theme`: no Component-scoped token; `Status` picks Theme tokens directly through rules (ADR 0001). Measured 2026-11-04 with `skills/build-component/scripts/contrast.mjs` on the Theme snapshot.
 
 | Theme token | Light | Dark | Paired with |
 | --- | --- | --- | --- |
@@ -70,7 +70,7 @@ Templates: `Components/Progress bar/<Group>/{{Size=*}}/<Property>`, `Components/
 | `Text/text-primary` (Label) | 13.87–15.13 | 15.13–21.00 | `text`, on the Base surfaces |
 | `Text/text-secondary` (Value) | 6.73–7.00 | 7.22–8.63 | `text`, on the Base surfaces |
 
-The Status colours and the message texts are measured in 's Status colours table. The Segment's stops are `Transparent` and `support-info`: the static frame of a loop, measured as the Indicator.
+The Status colours and the message texts are measured in the Status colours table. The Segment's stops are `Transparent` and `support-info`: the static frame of a loop, measured as the Indicator.
 
 Carbon binds the fill to `border-interactive` and the track to `border-subtle-01`. Core's `Border/border-interactive` isn't Carbon's blue: it is 1.26 on `layer-03` in Light and 1.35 in Dark, and 1.21–1.37 on the surfaces, so it can't carry the fill. `Border/border-subtle` is a decorative hairline (1.12 / 1.58 on `layer-01`). Hence the spec's `support-info` and `layer-03` (Q4). `Miscellaneous/interactive` was rejected in the spec: 4.46 in Light against `border-interactive`, and it means "tap me".
 
@@ -108,7 +108,7 @@ The rows are in Motion and haptics' per-component table. Figma has no prototype 
 - [ ] 1. Label `text-primary` and Value `text-secondary` pass 4.5:1 on all four Base surfaces in both modes (table above).
 - [ ] 2. The Indicator `support-info` passes 3:1 on the track and on the surfaces in both modes (Dark 3.51 on the track is the lowest). The track is the stated exception.
 - [x] 3. N/A: not a field.
-- [ ] 4. Colour is never the only signal (revision 2): Success and Error each add a glyph and a message, and every pair a Status variant shows passes ('s Status colours table). The amount is in the Value text, on by default, as well as in the fill.
+- [ ] 4. Colour is never the only signal (revision 2): Success and Error each add a glyph and a message, and every pair a Status variant shows passes (the Status colours table). The amount is in the Value text, on by default, as well as in the fill.
 - [x] 5. N/A: not interactive.
 - [ ] 6. In code, at AX sizes the Value may stack under the Label, and Inline may fall back to Default.
 - [ ] 7. Smallest text 15 (Subheadline).

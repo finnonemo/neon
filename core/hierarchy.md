@@ -56,7 +56,7 @@ Button, Icon button and Rect button: [button.md › Hierarchy](components/button
 
 ## Components
 
-Each component gets a `### Hierarchy` section in its own doc, from its own Uber Base docs page and Apple's page for it, not inferred from Button's. Draft every new call in its component's doc with the component's prefix (BD1, FU1). A call that binds one component stays there; one that binds several gets its H number when it lands in Owner's calls on main, so two sessions drafting at once never take the same number (#696).
+Each component gets a `### Hierarchy` section in its own doc, from its own Uber Base docs page and Apple's page for it, not inferred from Button's. Draft every new call in its component's doc with the component's prefix (BD1, FU1). A call that binds one component stays there; one that binds several gets its H number when it lands in Owner's calls on main, so two sessions drafting at once never take the same number (pawisssh/design-system#696).
 
 | Component | Values | `### Hierarchy` in | Left to do |
 | --- | --- | --- | --- |
@@ -79,6 +79,6 @@ Each component gets a `### Hierarchy` section in its own doc, from its own Uber 
 | Table row, Table cell | Expand and the cell Button on Tertiary (H3, rows) | [table.md](components/table.md) |  |
 | Progress step | Secondary (rule 3) | [progress-steps.md](components/progress-steps.md) |  |
 | Message card | CTA Tertiary (`arrow-right`) or Secondary, Inverse on Dark (Secondary Inverse on Light too); the card is the target, so its CTA doesn't count toward rule 1 or 4; Dismiss Secondary over the artwork (H3) | [message-card.md](components/message-card.md) | MC5, MC6 decided 2026-11-10 (as recommended); not built yet |
-| Alert | Preferred Primary (`Type=Danger` when destructive), Other Secondary, Dismiss Tertiary (rules 1, 4; H2) | [alert.md](components/alert.md) | none: approved (A4 (a)) and built 2026-11-09 (#678); every variant read back Dismiss Tertiary, Other Secondary, Preferred Primary |
-| Action Sheet | choices Secondary; a destructive choice that confirms the action Primary `Type=Danger`, below the Secondaries (the Button dock's order); Cancel Tertiary (rules 1, 3, 4; H2, H7; Destructive flow step 2) | [action-sheet.md](components/action-sheet.md) | none: Q4 approved 2026-11-11 and built 2026-11-11 (#151); the base and the Usage samples read Secondaries, then Primary Danger, then Cancel Tertiary |
+| Alert | Preferred Primary (`Type=Danger` when destructive), Other Secondary, Dismiss Tertiary (rules 1, 4; H2) | [alert.md](components/alert.md) | none: approved (A4 (a)) and built 2026-11-09 (pawisssh/design-system#678); every variant read back Dismiss Tertiary, Other Secondary, Preferred Primary |
+| Action Sheet | choices Secondary; a destructive choice that confirms the action Primary `Type=Danger`, below the Secondaries (the Button dock's order); Cancel Tertiary (rules 1, 3, 4; H2, H7; Destructive flow step 2) | [action-sheet.md](components/action-sheet.md) | none: Q4 approved 2026-11-11 and built 2026-11-11 (pawisssh/design-system#151); the base and the Usage samples read Secondaries, then Primary Danger, then Cancel Tertiary |
 | Toggletip actions, the ⓘ trigger | "Got it" Primary (a dialog's own context); the ⓘ Tertiary (H3's exception) | [toggletip.md](components/toggletip.md) | none: the ⓘ pinned to `Tertiary · Default · Small` 2026-11-09 (TT2) |

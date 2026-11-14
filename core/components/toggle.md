@@ -67,10 +67,10 @@ Components/Interactive/Medium/Interactive min-height
 | Title | `Text/text-secondary` | `Text/text-disabled` | `Text/text-secondary` | — |
 | Detail | `Text/text-primary` | `Text/text-disabled` | `Text/text-primary` | — |
 | Track, off | `iOS=False`: `Miscellaneous/toggle-off` (Grey/50, both modes) | `Button/button-disabled` | none, stroke `Border/border-subtle` | `Skeleton/skeleton-element` |
-| Track, on | `iOS=False`: `Layer/layer-selected-inverse` (Grey/100 · Grey/0,) | `Button/button-disabled` | as off | `Skeleton/skeleton-element` |
-| Thumb | `iOS=False`: `Icon/icon-inverse` (White/100 · Black/85A,) | `Icon/icon-on-color-disabled` | `Icon/icon-primary` | `Skeleton/skeleton-element` |
+| Track, on | `iOS=False`: `Layer/layer-selected-inverse` (Grey/100 · Grey/0) | `Button/button-disabled` | as off | `Skeleton/skeleton-element` |
+| Thumb | `iOS=False`: `Icon/icon-inverse` (White/100 · Black/85A) | `Icon/icon-on-color-disabled` | `Icon/icon-primary` | `Skeleton/skeleton-element` |
 
-Nothing binds a remote kit variable. The kit's own faint off track and `Accents/Green` on track failed 3:1, so the owner chose Carbon's tokens with a darker off track for both looks (#128, option c). `iOS=False` went black and white to reach 3:1 (R1 (a)): no white thumb passes in Dark on an on track that passes on the surface, so its thumb is `icon-inverse`, dark in Dark.
+Nothing binds a remote kit variable. The kit's own faint off track and `Accents/Green` on track failed 3:1, so the owner chose Carbon's tokens with a darker off track for both looks (pawisssh/design-system#128, option c). `iOS=False` went black and white to reach 3:1 (R1 (a)): no white thumb passes in Dark on an on track that passes on the surface, so its thumb is `icon-inverse`, dark in Dark.
 
 Pairs (the spec's `contrast` list): Title and Detail on the Base surfaces; the track (non-text) on the surfaces; the thumb (non-text) on the track; Read-only's hairline (decorative); the Focus colour.
 
@@ -100,7 +100,7 @@ None: no icon.
 
 ## Accessibility
 
-Items 2, 5 and 6 are not met; each is in #198. Item 2: `iOS=False` passes since ;
+Items 2, 5 and 6 are not met; each is in pawisssh/design-system#198. Item 2: `iOS=False` passes;
 
 - [x] 1. Title (`text-secondary`) and Detail (`text-primary`) pass on the Base surfaces, both modes (the contrast lint, 2026-11-01).
 - [ ] 2. Non-text: `iOS=False` passes;
@@ -113,7 +113,7 @@ Items 2, 5 and 6 are not met; each is in #198. Item 2: `iOS=False` passes since 
 
 - [x] 3. N/A: not a field.
 - [x] 4. No state by colour alone: the thumb moves end to end; Read-only adds an outline; Disabled dims the labels; Skeleton drops them.
-- [ ] 5. **No Focus state**: `iOS=False` has no `State=Focus`, as before #128, so no Focus ring is drawn; the spec lints only the Focus colour.
+- [ ] 5. **No Focus state**: `iOS=False` has no `State=Focus`, as before pawisssh/design-system#128, so no Focus ring is drawn; the spec lints only the Focus colour.
 - [ ] 6. **Detail doesn't reflow** (scratch frame, 320 wide, Thai copy, 2026-11-01). Title 17 / 23 / 40 and wraps. `Toggle only` rows stay 48; the track stays 48 or 64 × 28, as `UISwitch` does.
 - [x] 7. No text under 11 pt: 15 is the smallest.
 - [x] 8. The Motion part names each transition.

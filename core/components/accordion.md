@@ -108,9 +108,9 @@ Properties: BOOLEAN `Bottom border` (on), SLOT `Content`, and the header's `Titl
 
 - **Chevron**: `Accordion header/Icon/Large/Type token = fa-sharp fa-solid/Large`. It sits beside the Headline title, which pairs with Large (17) (Icons).
   - The glyph is `angle-down` (`Expanded=False`) and `angle-up` (`True`), solid (Q4).
-  - It sits in a fixed 24 × 24 `Icon box`, so the swap doesn't move the summary. This is #109's fixed-width rule where glyphs swap.
+  - It sits in a fixed 24 × 24 `Icon box`, so the swap doesn't move the summary. This is pawisssh/design-system#109's fixed-width rule where glyphs swap.
 - **Value icon**: `Accordion header/Icon/Large/Type token = fa-sharp fa-solid/Large`. It sits beside Body, which pairs with Large (17/24), as List item's `Detail icon`.
-  - Its box is 24 × 24 on `Accordion header/Icon/Large/*`, the chevron's. It was Small in a 16 box before .
+  - Its box is 24 × 24 on `Accordion header/Icon/Large/*`, the chevron's. It was Small in a 16 box.
   - The glyph is the designer's, e.g. `clock`, `circle-xmark` or `credit-card`; the default is `clock`.
   - It is solid, colour `icon-secondary`. A status colour belongs to a Pattern (Assumptions).
 - **Leading glyph**: List item's. Small `fa-sharp fa-solid/Small` in 20, Medium `/Large` in 24, Large `/2XLarge` in 36; default `heart`, the designer's glyph; `icon-primary`, `icon-disabled` on Disabled; decorative, the title carries the meaning.
@@ -144,7 +144,7 @@ Properties: BOOLEAN `Bottom border` (on), SLOT `Content`, and the header's `Titl
 | Content expands and collapses; the chevron turns down / up | `moderate-01 · standard · expand` | content appears, chevron swaps | None |
 | Active fill in and out | `fast-01 · standard` | kept (colour only) | None |
 
-Movement from Motion and haptics, the owner's D6 (ads-tokens.md § 5), edited in place at the owner's word ("Edit directly", #811, 2026-11-11). `expand` grows the content from height 0 with opacity, and collapses in reverse; the chevron turns and names none.
+Movement from Motion and haptics, the owner's D6 (ads-tokens.md § 5), edited in place at the owner's word ("Edit directly", pawisssh/design-system#811, 2026-11-11). `expand` grows the content from height 0 with opacity, and collapses in reverse; the chevron turns and names none.
 
 ## Accessibility
 

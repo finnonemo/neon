@@ -58,7 +58,7 @@ Templates: `Components/Allocation bar/<Group>/{{Size=*}}/<Property>`. Every valu
 
 ## Icon records
 
-`Allocation bar/Icon/Small/Type token = fa-sharp fa-solid/Small`, the `square-small` swatch of `_Legend item`, a fixed-width layer so a label never shifts. In the List legend the swatch is List item's own `square` Icon, as built in #170.
+`Allocation bar/Icon/Small/Type token = fa-sharp fa-solid/Small`, the `square-small` swatch of `_Legend item`, a fixed-width layer so a label never shifts. In the List legend the swatch is List item's own `square` Icon, as built in pawisssh/design-system#170.
 
 ## Text styles, wrapping and truncation
 
