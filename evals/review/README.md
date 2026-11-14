@@ -122,7 +122,7 @@ Round `2026-11-after-c9554ab`: main at `c9554ab`, after [#321](https://github.co
 
 The eight runs used Claude Code 2.1.325 through `run-claude-case.mjs --serve-registry`, four at once. Every run ended on its own report, none at the cap, none void. Together they cost $48.62. The owner judged on 2026-11-15, and their notes are verbatim in [verdicts.json](verdicts.json).
 
-**None of eight passed**, and review-07 fell from ✓ to ✗. No note repeats a baseline complaint:
+**None of eight passed**, and review-07 fell from ✓ to ✗. Only the sidebar comes back, now as a template the owner wants shipped rather than a question. The other baseline complaints are gone:
 
 - The Brand Pattern is no longer missing.
 - No sheet rises from the bottom at desktop width.
