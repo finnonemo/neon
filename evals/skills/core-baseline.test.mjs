@@ -108,6 +108,26 @@ test('an item whose Counterpart has no values file, or that the Counterpart tabl
   await assert.rejects(readCoreItem(root, 'no-such-item'), /no-such-item: the Counterpart table does not list it/);
 });
 
+test('a Counterpart built from another Core component reads that component\'s sets beside its own, where its doc links it', async t => {
+  const core = await readCoreItem(root, 'date-picker', { nested: ['date-field'] });
+  assert.deepEqual(core.sets.map(set => set.name), ['Date picker', 'Date field']);
+  assert.equal(coreValue(core, 'Date field', { 'Text filled': 'True', State: 'Enabled', Size: 'Large' }, 'Container / Field', 'minHeight').value, 56);
+  assert.deepEqual((await readCoreItem(root, 'date-picker')).sets.map(set => set.name), ['Date picker']);
+  // Date picker's doc names Text field only through Date field's.
+  await assert.rejects(readCoreItem(root, 'date-picker', { nested: ['text-field'] }), /Core's Date picker doc does not link text-field\.md, so date-picker is not held to it/);
+  // A linked component the snapshot holds a doc for and no values.
+  const chip = await snapshot(t);
+  const dir = join(tmpdir(), `neon-core-nested-${process.pid}`);
+  t.after(() => rm(dir, { recursive: true, force: true }));
+  await mkdir(join(dir, 'core/components'), { recursive: true });
+  await writeFile(join(dir, 'core/index.json'), JSON.stringify({ chip: { counterpart: 'Chip', doc: 'components/chip.md', values: 'components/chip.json' } }));
+  await writeFile(join(dir, 'core/components/chip.md'), 'A Chip holds a [Tag](tag.md).');
+  await writeFile(join(dir, 'core/components/chip.json'), JSON.stringify({ sets: chip.sets }));
+  await writeFile(join(dir, 'core/theme.json'), '{}');
+  await writeFile(join(dir, 'core/text-styles.json'), '{}');
+  await assert.rejects(readCoreItem(dir, 'chip', { nested: ['tag'] }), /no values file for tag, which Core's Chip doc links/);
+});
+
 // Core's Button, from core/components/button.md at the pinned commit.
 test('the button baseline is Core\'s Primary Default at Large', async () => {
   const cell = button('Primary', 'Default', 'Large', 'Enabled');
