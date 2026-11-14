@@ -115,7 +115,7 @@ None overflowed sideways at either width. Run logs, reports and apps are in `.lo
 
 ## Brief changes after the third set
 
-The three findings changed the brief tool and the four briefs. No page was built from these changes.
+The three findings changed the brief tool and the four briefs. The [fourth set](#runs-after-the-third-sets-changes) was built from them.
 
 - **Panel edge.** A picks file is refused when its Pattern sits in a panel and the Block Colourway's blocks are the section's fill. Exclusive's pick is now `grey__navy-100`, Navy blocks on Light Grey.
 - **Hero name role.** A layout preset names `nameRole`, `display1` or `display2`. The Picks list gives it with the role one below for narrow screens, and says nothing else in the hero is set larger. Both layouts take `display1`.
@@ -123,13 +123,54 @@ The three findings changed the brief tool and the four briefs. No page was built
 
 Only scripted sections changed. No prose was redrafted: the records show `occasion-components` and `layout` drafted from the earlier entry and presets, and no component paragraph puts a Secondary Action on an accent or support fill.
 
+## Runs after the third set's changes
+
+All four briefs as `b3af6b3` holds them, one request each, two at a time, with the same requests, runner, model and measuring scripts as the third set. The package was that checkout at plugin 1.0.0.
+
+| Observed at 1440px | Exclusive · Run (`event-poster`) | Club · Run (`event-landing`) | Ultra · Run (`event-poster`) | Private · Run (`event-landing`) |
+| --- | --- | --- | --- | --- |
+| Hero | Poster: the name at 92px, with the date, place and main action in a column beside it | Split: the name at 92px beside a date block whose numeral is 60px | Poster: the name at 92px over the date and place | Split: the name at 92px beside a date block whose numeral is 60px |
+| Section grounds | The brief's table row for row | The brief's table row for row | The brief's table row for row | The brief's table row for row |
+| Lead facts | 60px (`display2`) | 54px (`display3`) | 60px | 54px |
+| Card select action | Neon's `secondary` button, `--immersive-palette-75` fill, no border | The same | The same | The same |
+| Hero's second action | None | `ghost`, on the accent 50 ground | `secondary`, on the Navy ground | None |
+| Main action in the call-out | Navy with a White label | Navy with a White label | Navy fill, label in the block's own fill | Navy with a White label |
+| Feature blocks | 48px; the route block two steps lighter than its ground, the call-out one | 40px; the call-out one step lighter, the route block two | 48px; both one step lighter | 40px; the call-out two steps lighter, the route block one |
+| Brand Pattern | `grey__navy-100` in a Light Grey panel under the hero's text | `white__yellow-100` in a White panel under the text | `navy__grey-100` on the ground, edge to edge under the text | `grey__yellow-100` on the ground, edge to edge under the text |
+| Name at 375px | 60px, one role down | 60px, one role down | 60px, one role down | 60px, one role down, on three lines |
+| Cost, turns, time | $4.30, 120 turns, 15 min | $4.14, 128 turns, 15 min | $4.19, 124 turns, 12 min | $3.91, 102 turns, 12 min |
+| Verdict | Pass | Pass | Pass | Pass, with the name on three lines at 375px |
+
+Each of the three changes shows on a page:
+
+- **Panel edge.** Exclusive's panel draws Navy blocks on Light Grey, and all four sides and corners show against the Yellow hero at both widths.
+- **Hero name role.** All four names are `display1` at 1440px and `display2` at 375px, and nothing in a hero is larger. Club's name went from 54px to 92px, and both date numerals dropped from 92px to 60px. Club's report says the numeral is larger than the brief gives it and smaller than the name.
+- **Secondary Action on an accent fill.** Club's hero, on accent 50, draws its second action as `ghost`, which the entry now names. Ultra's hero, on Navy, draws it as `secondary`.
+
+Ultra's call-out is one step lighter than its ground, where the third set's was three.
+
+What these runs showed:
+
+- **A long name takes three lines at 375px.** "Finnomena Private Run 2026" at `display2` wraps to three lines, where `skills/neon-create/references/campaign-content.md` asks for two or fewer. The run kept the brief's size and reported it. Exclusive moved "Finnomena" to a line above the name to stay at two.
+- **The date numeral equals the name at 375px on Private.** Both are 60px. The brief gives the date block no role, so "nothing larger" holds and the two tie.
+- **Feature blocks step one or two lighter.** The brief says one. Three of the eight blocks took two.
+- **Exclusive's report lists the main action in the hero and the form as a departure.** The brief's Main Action entry is the main action of a section, so the page is within the brief and the report over-reports.
+
+Outside the brief: Club's report says the layout starter renders an empty 64px row under the logo, which the run moved the page up over in its own CSS.
+
+None overflowed sideways at either width. Run logs, reports and apps are in `.local/evals/name-{exclusive,club,ultra,private}`; captures are in `.local/evals/name-shots`.
+
+## Skill change after the fourth set
+
+The three-line name changed `skills/neon-create/references/theme-brief.md`: a name that takes more than two lines at the hero name role keeps the role, and the organisation's name that opens it moves to a line above in a label or title role. A name still past two lines keeps the role and the report gives its line count. `campaign-content.md` points its two-line rule there. No brief changed. No page was built from this change.
+
 ## Limits
 
 - One sample per brief in each set of runs.
-- The third set observes each brief change once. The brief changes after it are unobserved on a page.
+- The third and fourth sets observe each brief change once.
 - The four briefs are trial drafts under `maintainer-sign-in`. A redraft under a neutral account changes their prose, and these runs do not cover it.
 - The evaluator wrote the change and judged the captures. No blind judge compared them.
 - The runner reported every case as failed: its diff step met the app's own repository inside the workspace. Each run had already ended on its result event, with no void.
-- No Brand Pattern file, photograph or map was supplied. The first runs had no Pattern; the second and third drew their own. A supplied lead image under the poster hero was not exercised.
+- No Brand Pattern file, photograph or map was supplied. The first runs had no Pattern; the later sets drew their own. A supplied lead image under the poster hero was not exercised.
 - Reduced motion was read from the CSS and script, not emulated.
 - Costs are each run's last reported `total_cost_usd`.
