@@ -24,6 +24,41 @@ for (const [layout, mode] of ['approval', 'extras', 'expansion'].flatMap((layout
   });
 }
 
+// WCAG 1.4.10 Reflow: an item fits a 320 CSS px phone, 288 inside its 16 gutters. The fixture screens
+// hold items in fixed frames, so each outermost item is given a 288 box itself and nothing in it may
+// run past that box. A part inside a box that clips or scrolls on its own (a Table, a Progress
+// indicator) is exempt, as two-dimensional content is.
+const PHONE = 288;
+// Items known to need more than 288, at the width they need today: a finding to settle, not a pass.
+// Calendar's seven days are Core's 48 px Pickers cells (7 × 48 = 336). Pagination's previous, next and
+// page links at Large need 308. Either one growing, or any other item running past, fails.
+const KNOWN_WIDER = { calendar: 336, pagination: 308 };
+for (const layout of ['approval', 'extras', 'expansion']) {
+  test(`${layout}: every item fits a 320px phone`, async ({ page }) => {
+    await page.goto(`/?layout=${layout}`);
+    await page.evaluate(() => document.fonts.ready);
+    const past = await page.evaluate((width) => {
+      const outermost = [...document.querySelectorAll('[data-slot]')].filter((el) => !el.parentElement.closest('[data-slot]') && el.getBoundingClientRect().width > 0);
+      for (const el of outermost) Object.assign(el.style, { width: `${width}px`, minWidth: '0', maxWidth: `${width}px`, flexShrink: '0' });
+      const found = [];
+      for (const el of outermost) {
+        const box = el.getBoundingClientRect();
+        const clipped = (part) => {
+          for (let up = part.parentElement; up && el.contains(up); up = up.parentElement) if (getComputedStyle(up).overflowX !== 'visible') return true;
+          return false;
+        };
+        const over = [el, ...el.querySelectorAll('*')].filter((part) => {
+          const r = part.getBoundingClientRect();
+          return r.width > 0 && r.right > box.left + width + 0.5 && !clipped(part);
+        });
+        if (over.length) found.push([el.dataset.slot, Math.round(Math.max(...over.map((part) => part.getBoundingClientRect().right)) - box.left)]);
+      }
+      return found;
+    }, PHONE);
+    expect([...new Set(past.filter(([slot, needs]) => !(needs <= KNOWN_WIDER[slot])).map(([slot, needs]) => `${slot}: ${needs}px`))]).toEqual([]);
+  });
+}
+
 // Axe reads each overlay open, which the screen pass above cannot. An alert dialog and a sheet
 // read theirs in their own expansion files.
 const overlays = [

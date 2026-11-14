@@ -159,6 +159,19 @@ export async function coreBaseline({ item, part, cell }, mode, names) {
   return Object.fromEntries((names ?? Object.keys(table.properties)).map((name) => [name, read(name)]));
 }
 
+/**
+ * An item's property table as a list: each part with the set its cell is read in and the properties it
+ * lists (one unnamed part for a table without parts), whether the Counterpart is a doc alone, which
+ * has no cells, and the docs of the Core components whose sets it reads beside its own (`nested`).
+ * Null for an item with no table.
+ */
+export function coreTable(item) {
+  const table = tables[item];
+  if (!table) return null;
+  const parts = table.parts ? Object.entries(table.parts).map(([part, { set, properties }]) => ({ part, set, properties: Object.keys(properties) })) : [{ set: table.set, properties: Object.keys(table.properties) }];
+  return { doc: Boolean(table.doc), nested: table.nested ?? [], parts };
+}
+
 /** The properties a target's table lists. */
 const listed = (cellRef) => Object.keys(tables[cellRef.item] ? tableOf(cellRef).properties : {});
 

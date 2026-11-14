@@ -12,10 +12,9 @@
 // Uses the Playwright that evals/templates installs:
 //   npm ci --prefix evals/templates && npx --prefix evals/templates playwright install chromium
 import { mkdir } from 'node:fs/promises';
-import { createRequire } from 'node:module';
 import { join, resolve } from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
 import { parseArgs } from 'node:util';
+import { INSTALL, loadChromium } from './lib/playwright.mjs';
 import { coveringBox, parseClock, parseSizes, tileOffsets, viewportClip } from './lib/ui-shots.mjs';
 
 const { values, positionals } = parseArgs({
@@ -36,15 +35,9 @@ if (!url) {
   process.exit(2);
 }
 
-const evalsPackage = fileURLToPath(new URL('../evals/templates/package.json', import.meta.url));
-let chromium;
-try {
-  const entry = createRequire(evalsPackage).resolve('@playwright/test');
-  const playwright = await import(pathToFileURL(entry).href);
-  // A CommonJS package: named exports may sit only on the default export.
-  chromium = playwright.chromium ?? playwright.default.chromium;
-} catch {
-  console.error('Playwright is not installed. Run `npm ci --prefix evals/templates && npx --prefix evals/templates playwright install chromium`.');
+const chromium = await loadChromium();
+if (!chromium) {
+  console.error(`Playwright is not installed. Run \`${INSTALL}\`.`);
   process.exit(2);
 }
 
