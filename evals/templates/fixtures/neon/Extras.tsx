@@ -41,6 +41,7 @@ export function Extras() {
   const [type, setType] = useState<string>()
   const [date, setDate] = useState<Date>()
   const [picked, setPicked] = useState<Date | undefined>(new Date(2026, 9, 10))
+  const [due, setDue] = useState<Date | undefined>(new Date(2026, 10, 17))
   const [range, setRange] = useState<DateRange | undefined>({ from: new Date(2026, 10, 17), to: new Date(2026, 10, 24) })
   const [sending, setSending] = useState(false)
   return (
@@ -236,6 +237,27 @@ export function Extras() {
           <div data-calendar="date"><Calendar mode="single" selected={picked} onSelect={setPicked} defaultMonth={october} disabled={{ before: new Date(2026, 9, 5) }} /></div>
           <div data-calendar="today"><Calendar mode="single" selected={new Date(2026, 9, 15)} defaultMonth={october} startMonth={october} /></div>
           <div data-calendar="range"><Calendar mode="range" selected={range} onSelect={setRange} defaultMonth={november} /></div>
+        </div>
+      </Hook>
+      {/* Core's Date picker cells the date hook has none of: a picked date, Error, and Disabled filled and empty. */}
+      <Hook name="core-dates">
+        <div className="flex flex-wrap items-start gap-4">
+          <div data-date="filled" className="flex w-64 flex-col gap-2">
+            <Label htmlFor="due">วันครบกำหนด / Due</Label>
+            <DatePicker id="due" value={due} onChange={setDue} />
+          </div>
+          <div data-date="invalid" className="flex w-64 flex-col gap-2">
+            <Label htmlFor="start">วันเริ่ม / Start</Label>
+            <DatePicker id="start" aria-invalid value={new Date(2026, 9, 1)} />
+          </div>
+          <div data-date="disabled" data-disabled="true" className="group flex w-64 flex-col gap-2">
+            <Label htmlFor="closed">วันปิดบัญชี / Closed</Label>
+            <DatePicker id="closed" disabled value={new Date(2026, 8, 30)} />
+          </div>
+          <div data-date="disabled-empty" data-disabled="true" className="group flex w-64 flex-col gap-2">
+            <Label htmlFor="renewed">วันต่ออายุ / Renewed</Label>
+            <DatePicker id="renewed" disabled />
+          </div>
         </div>
       </Hook>
       {/* Core's Button values CDS has no baseline for; Inverse sits on the inverse background. */}

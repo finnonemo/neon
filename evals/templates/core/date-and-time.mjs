@@ -9,6 +9,8 @@
 // Miscellaneous/highlight: all 48 of a day in the range, the inner 24 of each end.
 // The 8, the 48 of an arrow and of the band, the 36, the 24 and the 4 are raw numbers in the doc.
 // The arrows' ink and states are Icon button's, which this doc does not name.
+// The Compact style's surface at iOS=False is Layer/layer-01 with radius-lg corners. The calendar
+// item draws no surface: the date picker's popover is the one held to it.
 import { NO_PAINT, named, raw } from './entries.mjs';
 
 const hitTarget = named('Sizing/hit-target');
@@ -36,5 +38,6 @@ export default {
     dot: { properties: { h: raw(4), w: raw(4), bg: named('Link/link-primary') } },
     band: { properties: { ...band, w: raw(48) } },
     bandEnd: { properties: { ...band, w: raw(24) } },
+    compact: { properties: { radius: named('Radius/radius-lg'), bg: named('Layer/layer-01') } },
   },
 };

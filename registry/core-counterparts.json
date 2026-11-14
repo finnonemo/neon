@@ -40,9 +40,8 @@
     "why": "Collapsible is the disclosure behavior alone; Accordion is the Core component that discloses content."
   },
   "date-picker": {
-    "core": null,
-    "unmatched": "date-picker",
-    "why": "It is composed from calendar, which has no Counterpart."
+    "core": "date-picker",
+    "why": "Date picker is Core's Single at Large: one Date field with the calendar open under it. The field is a button that opens the calendar, not Core's typed input; the Range Type and the Medium and Small Sizes have no Neon prop."
   },
   "dialog": {
     "core": "alert",

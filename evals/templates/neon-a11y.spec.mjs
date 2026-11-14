@@ -4,6 +4,8 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { computedColor as computed, expansionItems, focusColor, gotoExpansion, keyboardFocus, settled } from './expansion.mjs';
+import { coreBaseline } from './core-baseline.mjs';
+import { datePickerCell } from './core/date-picker.mjs';
 
 test.skip(process.env.NEON_TARGET !== 'neon', 'The Neon base only');
 
@@ -27,6 +29,7 @@ for (const [layout, mode] of ['approval', 'extras', 'expansion'].flatMap((layout
 const overlays = [
   ['dialog', 'click', '[data-measure=actions] button:nth-of-type(1)', '[data-slot=dialog-content]'],
   ['popover', 'click', '[data-measure=core-popover] button', '[data-slot=popover-content]'],
+  ['date picker', 'click', '[data-measure=date] [data-slot=date-picker]', '[data-slot=popover-content]'],
   ['menu', 'click', '[data-measure=core-menu] button', '[data-slot=dropdown-menu-content]'],
   ['tooltip', 'focus', '[data-measure=help] button', '[data-slot=tooltip-content]'],
   ['toast', 'click', '[data-measure=toast-action] button', '[data-sonner-toast]'],
@@ -122,6 +125,8 @@ for (const mode of ['light', 'dark']) test(`${mode}: a field and a segment reach
   await inside(page.locator('[data-measure=notes] textarea'), 3);
   await page.goto(`/?layout=extras${dark}`);
   await inside(page.locator('[data-measure=select] [data-slot=select-trigger]'), 3);
+  await inside(page.locator('[data-measure=date] [data-slot=date-picker]'), 3);
+  await inside(page.locator('[data-measure=core-dates] [data-date=invalid] [data-slot=date-picker]'), 3);
   // Focus shows over invalid, and a read-only field's 2px stroke grows to the 3px Focus stroke.
   await inside(page.locator('[data-measure=core-fields] [data-field=invalid] input'), 3);
   await inside(page.locator('[data-measure=core-fields] [data-field=read-only] input'), 3);
@@ -503,6 +508,82 @@ test('the loading spinner turns once a second and stands still under reduced mot
   await expect(spinner).toHaveCSS('animation-duration', '1s');
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await expect(spinner).toHaveCSS('animation-name', 'none');
+});
+
+// Core's Date picker (core/components/date-picker.md): the calendar opens under the field at Core's
+// gap and width, as a dialog named by its month; focus goes to the picked day, else today, and Esc
+// returns it to the field. The suite's clock makes 15 October today.
+test.describe("the date picker's calendar", () => {
+  const empty = '[data-measure=date] [data-slot=date-picker]';
+  const surface = '[data-slot=popover-content]';
+  const openAt = async (page, width, height) => {
+    await page.setViewportSize({ width, height });
+    await page.clock.setFixedTime(new Date(2026, 9, 15, 12));
+    await page.goto('/?layout=extras');
+    await page.locator(empty).click();
+    await expect(page.locator(surface)).toBeVisible();
+    await settled(page);
+    return Promise.all([empty, surface, `${surface} [data-slot=calendar]`].map((selector) => page.locator(selector).boundingBox()));
+  };
+
+  test("opens under the field at Core's gap and width", async ({ page }) => {
+    const { gap, w } = await coreBaseline(datePickerCell('open'), 'light');
+    const [field, calendar] = await openAt(page, 1440, 900);
+    expect(calendar.y - (field.y + field.height)).toBe(gap);
+    expect(calendar.width).toBe(w);
+    expect(calendar.x).toBe(field.x);
+  });
+
+  test('fits a 375px screen with its grid whole', async ({ page }) => {
+    const [, calendar, grid] = await openAt(page, 375, 812);
+    expect(calendar.x).toBeGreaterThanOrEqual(0);
+    expect(calendar.x + calendar.width).toBeLessThanOrEqual(375);
+    expect(grid.x).toBeGreaterThanOrEqual(calendar.x);
+    expect(grid.x + grid.width).toBeLessThanOrEqual(calendar.x + calendar.width);
+    expect(await page.locator(surface).evaluate((node) => node.scrollWidth - node.clientWidth)).toBe(0);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBe(0);
+  });
+
+  // Narrower than the grid's 336px the surface scrolls sideways, so the last weekday and the next month stay in reach.
+  test('scrolls sideways on a 320px screen', async ({ page }) => {
+    const [, calendar, grid] = await openAt(page, 320, 700);
+    expect(calendar.x + calendar.width).toBeLessThanOrEqual(320);
+    expect(grid.width).toBeGreaterThan(calendar.width);
+    await page.locator(`${surface} .rdp-button_next`).scrollIntoViewIfNeeded();
+    await expect(page.locator(`${surface} .rdp-button_next`)).toBeInViewport({ ratio: 1 });
+  });
+
+  test('is a dialog named by its month, takes focus on the picked day, else today, and returns it on Esc', async ({ page }) => {
+    await page.clock.setFixedTime(new Date(2026, 9, 15, 12));
+    await page.goto('/?layout=extras');
+    const open = async (field, month, day) => {
+      await expect(field).toHaveAttribute('aria-haspopup', 'dialog');
+      await expect(field).toHaveAttribute('aria-expanded', 'false');
+      await field.focus();
+      const fill = await field.evaluate((node) => getComputedStyle(node).backgroundColor);
+      await page.keyboard.press('Enter');
+      const dialog = page.getByRole('dialog', { name: month });
+      await expect(dialog).toBeVisible();
+      await expect(field).toHaveAttribute('aria-expanded', 'true');
+      await expect(dialog.locator(`button[data-day="${day}"]`)).toBeFocused();
+      // Core shows Open by the calendar: the field keeps its Enabled fill.
+      await expect(field).toHaveCSS('background-color', fill);
+      return dialog;
+    };
+    const closed = async (field, dialog) => {
+      await page.keyboard.press('Escape');
+      await expect(dialog).toBeHidden();
+      await expect(field).toBeFocused();
+    };
+    const submitted = page.locator(empty);
+    await closed(submitted, await open(submitted, 'October 2026', '2026-10-15'));
+    const due = page.locator('[data-measure=core-dates] [data-date=filled] [data-slot=date-picker]');
+    const dialog = await open(due, 'November 2026', '2026-11-17');
+    // The dialog's name follows the month shown.
+    await dialog.locator('.rdp-button_next').click();
+    await expect(page.getByRole('dialog', { name: 'December 2026' })).toBeVisible();
+    await closed(due, page.getByRole('dialog'));
+  });
 });
 
 test.describe('in a Thai browser', () => {
