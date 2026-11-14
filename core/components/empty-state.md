@@ -96,7 +96,7 @@ Contrast (`contrast.mjs`, 2026-11-06), lowest across the Base surfaces: `text-pr
 
 ## Motion
 
-None (#162). Base's fade from a Progress circle to the Empty state is a screen transition, so it belongs to the host. The Button's state change is the Button's own (`fast-01 · standard`, Motion and haptics).
+None (pawisssh/design-system#162). Base's fade from a Progress circle to the Empty state is a screen transition, so it belongs to the host. The Button's state change is the Button's own (`fast-01 · standard`, Motion and haptics).
 
 | Transition | Token | Reduced form | Haptic |
 | --- | --- | --- | --- |
@@ -123,7 +123,7 @@ None (#162). Base's fade from a Progress circle to the Empty state is a screen t
 
 ## Usage
 
-- **Use it** to fill a region that has nothing to show: a list with no rows yet ("ยังไม่มีรายการ"), a search with no results, a page the user can't open (403), a failed load (4xx, 5xx), Maintenance, or a feature's first use. Each case in a product is a Pattern component over one Empty state (`<Context> Empty state / <Case>`, #73), not a new variant.
+- **Use it** to fill a region that has nothing to show: a list with no rows yet ("ยังไม่มีรายการ"), a search with no results, a page the user can't open (403), a failed load (4xx, 5xx), Maintenance, or a feature's first use. Each case in a product is a Pattern component over one Empty state (`<Context> Empty state / <Case>`, pawisssh/design-system#73), not a new variant.
 - **Don't** use it while content loads (Skeleton), for feedback after an action (Snackbar), or beside content that is still there (a Contextual banner). An account's `MAINTENANCE` status card is a Contextual banner or a Tile Pattern, not this.
 - **Placement**: centred in the empty region, both ways. On a phone it fills the width (36 in from each side); a web Pattern caps it (Base's 472 or 536).
 - **Copy** (Base's Content guidance, in Thai): a short title that says why it's empty, not a question; one or two sentences on what will show and how; a Button only when there's a clear next step ("ซื้อกองทุน", "ลองใหม่", "กลับหน้าหลัก"). The 5xx page turns the Button off.

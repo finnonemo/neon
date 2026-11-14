@@ -93,7 +93,7 @@ Contrast from the Theme snapshot (`docs/theme/theme.json`) with `skills/build-co
 | The ring against `Avatar/background` | 4.92 | 4.27 |
 | Without the ring: the Dot on `Avatar/background` | 1.09 | 1.14 |
 | Not taken: white on `Indigo/65`, Base's nearest step | 4.35 | 4.35 |
-| Not taken: #134's `text-secondary` on `Layer/layer-02`; `layer-02` against the four surfaces | 7.00; 1.00 / 1.12 / 1.00 / 1.00 | 7.22; 1.39 / 1.39 / 1.15 / 1.00 |
+| Not taken: pawisssh/design-system#134's `text-secondary` on `Layer/layer-02`; `layer-02` against the four surfaces | 7.00; 1.00 / 1.12 / 1.00 / 1.00 | 7.22; 1.39 / 1.39 / 1.15 / 1.00 |
 
 The spec's contrast list: Label `text` on `[Container]` where `{{Artwork=Initials}}`; Container and Icon `decorative`.
 

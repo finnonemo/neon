@@ -50,7 +50,7 @@ Properties: `Label` (TEXT), `Icon` (BOOLEAN, off), `Badge` (BOOLEAN, off). 2 × 
 | `Style` | Underline · Pill | the Track's fill (Pill: `Transparent`), the Tabs frame's gap (Pill: 8) and the default content's `Style` |
 | `Size` | Medium · Small | the default content's `Size`; Pill only |
 
-Properties: the SLOT `Tabs` on the inner frame, made by hand and listed in the spec since #357. Figma refuses to expose instances inside a Slot, so a designer selects a tab in the Slot to set its Label, Icon and Badge. Pill is Intrinsic only and Underline Medium only, as on `_Tab`: Underline Fixed, Underline Intrinsic, Pill Medium, Pill Small = **4 variants**, one a row. The slot's variables (its gap) sit under `Tabs/Container`.
+Properties: the SLOT `Tabs` on the inner frame, made by hand and listed in the spec since pawisssh/design-system#357. Figma refuses to expose instances inside a Slot, so a designer selects a tab in the Slot to set its Label, Icon and Badge. Pill is Intrinsic only and Underline Medium only, as on `_Tab`: Underline Fixed, Underline Intrinsic, Pill Medium, Pill Small = **4 variants**, one a row. The slot's variables (its gap) sit under `Tabs/Container`.
 
 `Width` sits on `_Tab` too: Slot content isn't pinned (Variant axes), so a designer sets each `_Tab`'s `Width` to match the bar's.
 

@@ -81,7 +81,7 @@ _File media item (variant root)  80 × 80, VERTICAL, no fill
 
 - Base's States map as on `_File item`: Enabled → Uploaded, Loading → Uploading, Preloading → Skeleton; Focus, Error and Disabled keep their names. Hover, Pressed (4% / 8% overlays, Web only) and Active (3 `borderSelected`) are left to code.
 - Base's trash button is opaque `backgroundTertiary`. Core's Icon button Secondary is `button-secondary` (10% navy) and vanishes on a photo, and no Hierarchy has an opaque light fill, so the `Backplate` disc sits under it while an image shows.
-- Uploading: Base puts its button in a progress circle. The Icon button's own Loading spinner stands in until Progress circle (#302) is built; Base's `borderTransparent` outline is `Border/border-subtle`.
+- Uploading: Base puts its button in a progress circle. The Icon button's own Loading spinner stands in until Progress circle (pawisssh/design-system#302) is built; Base's `borderTransparent` outline is `Border/border-subtle`.
 - The image is the designer's: set Image's fill on an instance. In code the image's alt is the file name; Remove reads "ลบ <file name>", as on `_File item`.
 
 ## Axes
@@ -93,13 +93,13 @@ _File media item (variant root)  80 × 80, VERTICAL, no fill
 | `State` | Enabled · Uploading · Drag over · Disabled · Error · Skeleton | Uploading: `List=Single` only; the zone shows in the Preview's place with the Progress bar and Cancel in place of the Prompt, Helper Text and Button. Drag over: the zone fills `Field/field-hover`; the Prompt, "Drop the file to upload" in `Text/text-primary`, shows on every zone. Disabled: text and the Button disabled, the zone's fill unchanged. Error: the Detail line shows with its glyph. Skeleton: bars in place of the Title and the zone, Detail and list hidden |
 | `List` | Item · Media · Single | Item: `File list` of rows; Media: `Media list` of tiles, wrapping; Single: one picked image in the zone's place, the `Preview`, no Drag over |
 
-Grid (Grid order): rows `State`; columns `List` (Item, Media, Single) × `iOS` (False, True) (owner, 2026-11-05: "มันควรเป็น ios=false แล้วตามด้วย column ios=true"); 6 × 6, gaps 20, 6 holes (Uploading × Item and Media, Drag over × Single) since (5 × 6 with 2 holes from , 5 × 4 with none from , 9 × 4 with 10 holes before); `MANUAL`; a Fill grid: the set Fixed 2198, columns FLEX, roots Fill × Hug. `_File item`: rows `State`, columns `Type` × `iOS` (7 × 4). `_File media item`: rows `State`, columns `iOS` (6 × 2). Ids for `grid-args.mjs`: set `File upload`, set `_File item`, set `_File media item`.
+Grid (Grid order): rows `State`; columns `List` (Item, Media, Single) × `iOS` (False, True) (owner, 2026-11-05: "มันควรเป็น ios=false แล้วตามด้วย column ios=true"); 6 × 6, gaps 20, 6 holes (Uploading × Item and Media, Drag over × Single); `MANUAL`; a Fill grid: the set Fixed 2198, columns FLEX, roots Fill × Hug. `_File item`: rows `State`, columns `Type` × `iOS` (7 × 4). `_File media item`: rows `State`, columns `iOS` (6 × 2). Ids for `grid-args.mjs`: set `File upload`, set `_File item`, set `_File media item`.
 
 Properties: `Title` (BOOLEAN, on), `Description` (BOOLEAN, off), `Zone` (BOOLEAN, on), `Show File list` (BOOLEAN, on), `Title text` = "Name-change certificate", `Description text` = "(Bank account name matching the new full name)", `Helper text` = "Files up to 5 MB" and "(.jpg / .jpeg, .png, .pdf)" on a second line, `Error text` = "Please upload a document"; the nested Button exposed for its label.
 
 The screen breaks its constraints line with a U+2028 line separator. The generator writes a plain `\n`: U+2028 in a `use_figma` result breaks the MCP stream.
 
-6 States × 3 `List` × 2 looks, less Drag over × Single and Uploading × Item and Media = **30 variants** (28 before , 20 before , 26 with `Platform` before).
+6 States × 3 `List` × 2 looks, less Drag over × Single and Uploading × Item and Media = **30 variants**.
 
 ### `_File item`
 
@@ -109,7 +109,7 @@ The screen breaks its constraints line with a U+2028 line separator. The generat
 | `Artwork` | Image · Icon | Image: the picked image fills the tile. Icon: the File icon for a file with no preview, in the tile (Standard) or bare before the name (Compact). Only Uploaded, Uploading (Icon: the plain `file` glyph), Success, Focus and Disabled differ; every variant is duplicated so switching State or Type keeps it (owner: "All 28 → 56") |
 | `State` | Uploaded · Uploading · Success · Focus · Error · Disabled · Skeleton | see the tree above. Skeleton is Base's Preloading |
 
-Properties: `File name` = "name-change-certificate.pdf", `File size` = "1.2 MB", `Uploading text` = "Uploading…", `Success text` = "Upload successful", `Error text` = "Upload failed". The file's image is the Artwork Image's fill; the file type for a file with no preview is the exposed File icon's Icon Text (`file-pdf`, `file-lines`, `file`). **56 variants** (14 before , 28 before the `Artwork` axis), grid Artwork × State rows (Image above Icon), Type × iOS columns (Standard left of Compact), 14 × 4.
+Properties: `File name` = "name-change-certificate.pdf", `File size` = "1.2 MB", `Uploading text` = "Uploading…", `Success text` = "Upload successful", `Error text` = "Upload failed". The file's image is the Artwork Image's fill; the file type for a file with no preview is the exposed File icon's Icon Text (`file-pdf`, `file-lines`, `file`). **56 variants** (28 before the `Artwork` axis), grid Artwork × State rows (Image above Icon), Type × iOS columns (Standard left of Compact), 14 × 4.
 
 ### `_File media item`
 
@@ -117,7 +117,7 @@ Properties: `File name` = "name-change-certificate.pdf", `File size` = "1.2 MB",
 | --- | --- | --- |
 | `State` | Uploaded · Uploading · Focus · Error · Disabled · Skeleton | see its tree above |
 
-No properties: the image is the Image layer's fill. **12 variants** (6 before), State rows × iOS columns.
+No properties: the image is the Image layer's fill. **12 variants**, State rows × iOS columns.
 
 ## Component variables and Theme tokens
 
@@ -135,7 +135,7 @@ No properties: the image is the Image layer's fill. **12 variants** (6 before), 
 | `File upload/Item` | item `Type` | Padding top, Padding right, Padding bottom, Padding left, Gap horizontal, Radius | Standard 12 all round (→ `spacing-04`), gap 12; Compact 0 · 8 · 0 · 16 (→ `spacing-03`, `spacing-05`), gap 8 (→ `spacing-03`); radius 12 |
 | `File upload/Content` | item `Type` | Gap vertical | Standard 4 (→ `spacing-02`), Compact 0 |
 | `File upload/Message` | item `Type` | Gap horizontal | 4 (→ `spacing-02`) |
-| `File upload/Focus ring` | item `State` | Stroke weight | 0 (Focus 2, `Sizing/focus-ring = 2`; 3 until #810) |
+| `File upload/Focus ring` | item `State` | Stroke weight | 0 (Focus 2, `Sizing/focus-ring = 2`; 3 until pawisssh/design-system#810) |
 | `File upload/Artwork` | item `State` | Radius, Stroke weight | 8 (→ `radius-sm`), 0 (Error 2) |
 | `File upload/Media` | media item `State` | Radius, Stroke weight | 8 (→ `radius-sm`), 0 (Uploading, Focus, Error 3) |
 | `File upload/Label` | role: `Title` · `Description` · `Prompt` · `Helper` · `Error` · `File name` · `File size` · `Uploading` · `Success` | Type token, Type emphasis, Align horizontal, Align vertical, Decoration | see Text styles |
@@ -171,7 +171,7 @@ Templates: `Components/File upload/<Group>/{{State=*}}/<Property>`, `Components/
 | `Border/border-subtle` | media Uploading outline (Base's `borderTransparent`) | — | — | decorative: the spinner carries Uploading |
 | `Skeleton/skeleton-background`, `Skeleton/skeleton-element` | Skeleton item and its blocks (Base's Preloading) | — | — | Text field's |
 
-Since the zone is a `Field/field` fill with no stroke (the Button white there until put it back to Secondary), and Drag over is `field-hover` with the Prompt's words; the history follows. The zone took Base's look on `App` and `Web` (Q5, revised): a `Field/field` fill and a dashed 2 `Border/border-interactive` stroke, both decorative; the Helper Text, the Prompt and the Button identify it. The Button was Primary (Secondary since , the owner's call over this reason): `Button/button-secondary` and `Field/field` are both `Navy/10A` / `White/12A`, so a Secondary one has no edge there (Base's Secondary pill sits on a lighter fill than ours). In Dark `button-primary` sits close to the zone (1.27–2.02), and its label identifies it, as on any Primary Button. Drag over follows Base's Hover: a blue fill (`notification-info-background`, the nearest Theme token to Base's `#eff4fe`, borrowed from Notifications: Open), Carbon's solid `Miscellaneous/interactive` stroke, and the Prompt in `Link/link-primary` (Carbon's box text). Before this revision the zone was the E-KYC screen's: no fill, a dashed `Border/border-tile` and a Secondary Button.
+The zone is a `Field/field` fill with no stroke, and Drag over is `field-hover` with the Prompt's words; the history follows. The zone took Base's look on `App` and `Web` (Q5, revised): a `Field/field` fill and a dashed 2 `Border/border-interactive` stroke, both decorative; the Helper Text, the Prompt and the Button identify it. The Button was Primary (Secondary, the owner's call over this reason): `Button/button-secondary` and `Field/field` are both `Navy/10A` / `White/12A`, so a Secondary one has no edge there (Base's Secondary pill sits on a lighter fill than ours). In Dark `button-primary` sits close to the zone (1.27–2.02), and its label identifies it, as on any Primary Button. Drag over follows Base's Hover: a blue fill (`notification-info-background`, the nearest Theme token to Base's `#eff4fe`, borrowed from Notifications: Open), Carbon's solid `Miscellaneous/interactive` stroke, and the Prompt in `Link/link-primary` (Carbon's box text). Before this revision the zone was the E-KYC screen's: no fill, a dashed `Border/border-tile` and a Secondary Button.
 
 Carbon's resting box stroke is `border-strong-01`, a mid grey that passes 3:1. Core's `Border/border-strong` is near black (16.19–21.00:1), too heavy beside Base's look. A Disabled zone keeps its fill and stroke: `Border/border-disabled` (3.01) is stronger than the resting one.
 
@@ -226,9 +226,9 @@ Add the row to Motion and haptics' per-component table when the set is built. Th
 
 - [ ] 1. Text pairs pass 4.5:1 on the Base surfaces and `layer-01` in both modes (table above; the lowest is `text-negative` 4.81 on `background-secondary`, Light).
 - [ ] 2. Error stroke and glyphs pass 3:1 (`support-error` Dark 4.02 on `layer-01` is the lowest). The zone's fill is decorative; it has no stroke.
-- [ ] 3. The zone is identified by its texts and Button, not by its fill. Drag over is told by the fill only since (1.29–1.60 against the page): the drag itself is the cue, and the drop handler announces the target (H2).
+- [ ] 3. The zone is identified by its texts and Button, not by its fill. Drag over is told by the fill only (1.29–1.60 against the page): the drag itself is the cue, and the drop handler announces the target (H2).
 - [ ] 4. An error is a glyph, a stroke and a message, never the red alone. Uploading is a progress bar plus "Uploading…". Drag over changes only the fill.
-- [x] 5. `_File item` State=Focus draws its own 2 `Focus/focus` outline (3 until #810, now `Sizing/focus-ring`) on the item (4.35 Light, 4.00 Dark on the page, past 3:1). The zone's Focus ring is the nested Button's; Remove and Retry keep their Icon button's.
+- [x] 5. `_File item` State=Focus draws its own 2 `Focus/focus` outline (3 until pawisssh/design-system#810, now `Sizing/focus-ring`) on the item (4.35 Light, 4.00 Dark on the page, past 3:1). The zone's Focus ring is the nested Button's; Remove and Retry keep their Icon button's.
 - [ ] 6. the file name stays one line and truncates; the row grows.
 - [ ] 7. Smallest text 15.
 - [ ] 8. Motion table above.

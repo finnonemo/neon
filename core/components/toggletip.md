@@ -4,7 +4,7 @@
 
 ## Anatomy and layer tree
 
-The public `Toggletip` (trigger plus overflowing tip) is in ; `_Toggletip definition` in R5. The tip, `_Toggletip item`, is Carbon's construction (Q11, owner 2026-11-05), as in Carbon Native Mobile's `_Tooltip item`:
+`_Toggletip definition` in R5. The tip, `_Toggletip item`, is Carbon's construction (Q11, owner 2026-11-05), as in Carbon Native Mobile's `_Tooltip item`:
 
 ```
 _Toggletip item (variant root)      Fill × Hug in the set (288 cells), no fill, no padding (Q6)
@@ -60,7 +60,7 @@ Properties: SLOT `Content`; BOOLEAN `Footer` (on). The proposal's BOOLEAN `Title
 | `Toggletip/Content/Default` | none varies | Gap vertical | 4 (`Spacing/spacing-02 = 4`) |
 | `Toggletip/Actions/Default` | none varies | Gap horizontal | 16 (`Spacing/spacing-05 = 16`, Carbon's `_Actions` gap; on `_Toggletip actions`) |
 | `Toggletip/Label/Title` · `Toggletip/Label/Description` | role | Type token | `Headings/Headline` · `Body/Subheadline` (Q7) |
-| `Toggletip/Definition/Container/Default` · `Line/Default` · `Label/Term` | none varies | Stroke weight (Focus ring) · Stroke weight (underline) · Type token | 2 (`Sizing/focus-ring = 2`) · 1 (`Sizing/stroke-default = 1`) · `$subhead` (on `_Toggletip definition`,) |
+| `Toggletip/Definition/Container/Default` · `Line/Default` · `Label/Term` | none varies | Stroke weight (Focus ring) · Stroke weight (underline) · Type token | 2 (`Sizing/focus-ring = 2`) · 1 (`Sizing/stroke-default = 1`) · `$subhead` (on `_Toggletip definition`) |
 
 `Caret`, `Surface` and `Actions` (the footer's Button row, Carbon's `_Actions`) are new Element words: groups that carry their own fill and border (structure.md). `Content` is Tile's.
 
@@ -115,7 +115,7 @@ The Motion and haptics row for Toggletip:
 | Open (fades and scales from the anchor) | `moderate-02 · entrance · scale-in` | crossfade | None |
 | Close (tap outside, the anchor again, Esc) | `fast-02 · exit · scale-in` | crossfade | None |
 
-Movement from Motion and haptics, the owner's D6 (ads-tokens.md § 5), edited in place at the owner's word ("Edit directly", #811, 2026-11-11).
+Movement from Motion and haptics, the owner's D6 (ads-tokens.md § 5), edited in place at the owner's word ("Edit directly", pawisssh/design-system#811, 2026-11-11).
 
 ## Accessibility
 
@@ -140,10 +140,10 @@ Movement from Motion and haptics, the owner's D6 (ads-tokens.md § 5), edited in
 
 - **Use it** to explain one thing beside it: a term ("ราคา NAV"), a rule ("ยกเลิกคำสั่งได้ก่อน 11.00 น."), or a short status list (Port's order steps). One at a time.
 - **Don't** put a form, a menu, navigation or a choice in it (a Menu or Dropdown menu, a Sheet). Don't use it for a page's main information, which belongs on the page, or for feedback after an action, which a Snackbar gives. Don't open it on hover or on its own: Tooltip is Out, and Base's onboarding popovers aren't Core.
-- **The anchor** is the host's: an Icon button (`circle-info`, Tertiary, Small) beside the term, or a tappable row (reversed by the public `Toggletip` carries its trigger and goes where the anchor was; the tip meets the trigger's 48 box, 12 below the glyph). The tip sits 4 from the anchor (Base's mobile gap) (reversed by it meets the trigger's 48 box, 12 from an Icon button's glyph; R7), and its caret points at the anchor's centre. At Start or End the caret's centre is 24 in, the centre of a 48 Icon button at the edge.
+- **The anchor** is the host's: an Icon button (`circle-info`, Tertiary, Small) beside the term, or a tappable row (reversed: the public `Toggletip` carries its trigger and goes where the anchor was; the tip meets the trigger's 48 box, 12 below the glyph). The tip sits 4 from the anchor (Base's mobile gap) (reversed: it meets the trigger's 48 box, 12 from an Icon button's glyph; R7), and its caret points at the anchor's centre. At Start or End the caret's centre is 24 in, the centre of a 48 Icon button at the edge.
 - **Placement**: Bottom by default (Carbon on mobile). Top when there's no room below, as with Port's status row near the bottom of a Tile. Pick the Alignment that keeps the tip 16 from the screen's edges. Center keeps it centred on the anchor (Base's default).
 - **Footer**: on when the tip leads to an action (a Link to more, a Button that acts or dismisses); off for a tip that only explains. What the Button does and the focus order with it are open (see Open).
-- The page's `Usage` frame holds Light and Dark columns of Thai cases, each with an English note. **A term explained**: a "ราคา NAV" row with an ⓘ anchor and a Bottom · Start tip with the Footer on. **Above the anchor**: Top · Center, Footer off. **Footer actions**: `Action` Tertiary + Primary, Primary alone and Tertiary alone. **Order status**: Top · Start with Progress steps in the Slot. The **Don'ts** are listed under them. Each tip's caret sits on its anchor's centre. Since the four screen samples are `Toggletip` instances (Type Standard, Visible True) in the row where the ⓘ was; the Footer actions stack is three as well (Standard · Bottom · Start, Visible True), spaced so each tip clears the next trigger.
+- The page's `Usage` frame holds Light and Dark columns of Thai cases, each with an English note. **A term explained**: a "ราคา NAV" row with an ⓘ anchor and a Bottom · Start tip with the Footer on. **Above the anchor**: Top · Center, Footer off. **Footer actions**: `Action` Tertiary + Primary, Primary alone and Tertiary alone. **Order status**: Top · Start with Progress steps in the Slot. The **Don'ts** are listed under them. Each tip's caret sits on its anchor's centre. The four screen samples are `Toggletip` instances (Type Standard, Visible True) in the row where the ⓘ was; the Footer actions stack is three as well (Standard · Bottom · Start, Visible True), spaced so each tip clears the next trigger.
 
 ### Hierarchy
 

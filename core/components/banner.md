@@ -32,7 +32,7 @@ Banner (VERTICAL, padding 0, no fill)
       └─ Toggle                    Style=Toggle only, Enabled, Toggled=True, iOS = variant's; Hug × Hug (64 × 48 | 48 × 48)
 ```
 
-Since #129 (2026-11-02) both looks hold one `Toggle` (Style=Toggle only) where `Toggle - Switch` and `Toggle` Style=Default (iOS=False) were, and the action instances take their main's min size.
+Since pawisssh/design-system#129 (2026-11-02) both looks hold one `Toggle` (Style=Toggle only) where `Toggle - Switch` and `Toggle` Style=Default (iOS=False) were, and the action instances take their main's min size.
 
 Container owns all vertical padding; Title and Description has none, so a one-line banner is 16 + 48 + 16 = 80 and long descriptions grow it instead of clipping.
 
@@ -46,15 +46,15 @@ Raw values, mode `Value`, `ALL_SCOPES`, like the rest of the collection. Shaped 
 - **Icon** is keyed by icon size, as in Tag and Link (`Tag/Icon/Large/Size = large`), not by the Artwork value: Badge uses `3XLarge`, Icon uses `Large`.
 - **Label** is keyed by Title · Description; Title's Type emphasis is Strong.
 - Groups are the generic Element words, not the Figma layer names (`Leading Icon` → `Icon`, `Title` / `Description` → `Label`). `Title and Description` (the vertical stack) has no group: its gap 0 and Hug sizing are fixed in the base.
-- Text and icon styles are bound directly; their String variables are records. Icon records are `Banner/In-line/Icon/<size>/Type token` (#129); the older `…/Style` and `…/Size` records are still in Figma, since the engine never deletes. Action instances take their main's own min width and height; before #129 they bound the shared `Interactive/Medium/Interactive min-height`.
+- Text and icon styles are bound directly; their String variables are records. Icon records are `Banner/In-line/Icon/<size>/Type token` (pawisssh/design-system#129); the older `…/Style` and `…/Size` records are still in Figma, since the engine never deletes. Action instances take their main's own min width and height; before pawisssh/design-system#129 they bound the shared `Interactive/Medium/Interactive min-height`.
 - **Element template addition:** `Component/Element/Text/Type emphasis` records the Type Emphasis mode, since Title's boldness otherwise has no record.
 
 ## `Theme` tokens
 
 `Banner/<Status>/<Hierarchy>/<role>` (background, border, text, icon), each an alias. The Banner group exists so one template `Theme/Banner/{{Status=*}}/{{Hierarchy=*}}/<role>` resolves for every Status.
 
-- **Primary** is Status-tinted: background and border both alias `Notifications/notification-<status>-background` in Light, so it reads borderless. In Dark the border is the hue's `/0A` (Caution: `White/0`), so it doesn't stack on the alpha fill (#119).
-- **Secondary** is neutral: `background-primary` with `border-subtle`. Its icon aliases the Status's `Support/support-<status>` in both modes, except Caution minor in Light, which keeps `Navy/150` (#82). It was aliased to primitives (Info `Indigo/100`, Cautions `Navy/150`, …) before the Dark audit.
+- **Primary** is Status-tinted: background and border both alias `Notifications/notification-<status>-background` in Light, so it reads borderless. In Dark the border is the hue's `/0A` (Caution: `White/0`), so it doesn't stack on the alpha fill (pawisssh/design-system#119).
+- **Secondary** is neutral: `background-primary` with `border-subtle`. Its icon aliases the Status's `Support/support-<status>` in both modes, except Caution minor in Light, which keeps `Navy/150` (pawisssh/design-system#82). It was aliased to primitives (Info `Indigo/100`, Cautions `Navy/150`, …) before the Dark audit.
 - Hierarchy lives only here: like Tag, Stroke weight is the same on both Hierarchies.
 
 ## Usage

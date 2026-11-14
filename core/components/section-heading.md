@@ -63,7 +63,7 @@ The AC's "trailing Slot for a Link or one to three `_Column label`" becomes the 
 | `Section heading/Artwork/Default` (on `Image`) | none varies | Layout width, Layout height, Radius | 48 (`spacing-09`), 48, 8 (`Radius/8px (radius-sm)`), Tile's Artwork custom |
 | `Section heading/Label/End`, `/Start` (on `_Column label › Label`) | `Alignment` | Type token, Type emphasis, Align horizontal, Align vertical, Decoration | `$footnote`, `Regular`, `Right` · `Left`, `Top`, `-` |
 
-`_Column label`'s values sit under `Section heading/*`, as `_PIN cell`'s under `PIN code/*`. `Text`'s gap 0 never varies and gets no group. Heights: Primary 64 (24 + 32 + 8, Base's), Secondary 60, Tertiary 56 with no description; `Trailing=Link` is 16 + the taller of the Title and Link's Root, 48 since Link #356 PR 2, so 64 at every `Hierarchy` (question 7; measured 2026-11-10, #730); Disclosure 16 + the Title, 48 / 44 / 40; Image and Button 16 + 48, so 64, Base's height. 74 variables in the spec.
+`_Column label`'s values sit under `Section heading/*`, as `_PIN cell`'s under `PIN code/*`. `Text`'s gap 0 never varies and gets no group. Heights: Primary 64 (24 + 32 + 8, Base's), Secondary 60, Tertiary 56 with no description; `Trailing=Link` is 16 + the taller of the Title and Link's Root, 48 since Link pawisssh/design-system#356 PR 2, so 64 at every `Hierarchy` (question 7; measured 2026-11-10, pawisssh/design-system#730); Disclosure 16 + the Title, 48 / 44 / 40; Image and Button 16 + 48, so 64, Base's height. 74 variables in the spec.
 
 `Theme`: the Semantic tokens Carbon binds; none minted.
 
@@ -96,7 +96,7 @@ Link and Icon button draw their own.
 
 ## Hit target and Skeleton
 
-- **Hit target**: None on the heading itself. The nested Link brings its own 48 Root (since Link #356 PR 2; it was 36, Sizing) and Icon button its 48 Root. `Disclosure` is drawn, not an instance: the Pattern makes it (or the whole heading) the tap target, at least 48 tall, in code.
+- **Hit target**: None on the heading itself. The nested Link brings its own 48 Root (since Link pawisssh/design-system#356 PR 2; it was 36, Sizing) and Icon button its 48 Root. `Disclosure` is drawn, not an instance: the Pattern makes it (or the whole heading) the tap target, at least 48 tall, in code.
 - **Skeleton**: None (question 6): the heading's copy is static and on screen before the rows' data; the rows show Skeleton.
 
 ## Motion

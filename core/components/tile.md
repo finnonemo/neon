@@ -68,12 +68,12 @@ Tile (variant root)              Fill × Hug, no fill, no padding; min width and
 Excluded:
 
 - On `Behavior=Selection`: Chevron, Thumbnail.
-- `Trailing content=Thumbnail` with `Leading content=Artwork custom` (two images in one row,).
+- `Trailing content=Thumbnail` with `Leading content=Artwork custom` (two images in one row).
 - On `Behavior=Action`: Toggle, Checkbox, Radio, and `Selected=On`.
 - `Selected=On` with Skeleton.
 - On `Layout=Inline`: `Leading content=Label`; `Trailing content=Label`, `Checkbox`, `Radio`.
 
-Action 4 × 4 = 16. 65 × 5 columns = **325** `Stacked`; `Inline` per column but Label: Selection None · Badge · Toggle = 28 + Action None · Badge · Chevron × 4 = 12, 40 × 4 = 160; 485 before . Thumbnail on Action: Stacked 4 columns (not Artwork custom) × 4 States = 16, Inline 3 × 4 = 12; **513 variants**.
+Action 4 × 4 = 16. 65 × 5 columns = **325** `Stacked`; `Inline` per column but Label: Selection None · Badge · Toggle = 28 + Action None · Badge · Chevron × 4 = 12, 40 × 4 = 160; Thumbnail on Action: Stacked 4 columns (not Artwork custom) × 4 States = 16, Inline 3 × 4 = 12; **513 variants**.
 
 Properties: TEXT `Title text`, `Description text`, `Leading label text`, `Trailing label text`, `Trailing description text`; BOOLEAN `Description` (on), `Trailing description` (on), `Show Slot` (off); SLOT `Slot`. The glyph is the `Icon` layer's text and the artwork is `Artwork`'s image fill, not instance swaps.
 
@@ -81,7 +81,7 @@ Grid: columns `Leading content`; rows `Layout`, `Behavior`, `Trailing content`, 
 
 ## Component variables and Theme tokens
 
-`Components`, Tag's shape (structure.md, Carbon structure); 78 `Tile/…` variables, listed in the spec (`Container`, `Content` and `Content top` keyed by `Layout` since):
+`Components`, Tag's shape (structure.md, Carbon structure); 78 `Tile/…` variables, listed in the spec (`Container`, `Content` and `Content top` keyed by `Layout`):
 
 | Group | Keyed by | Properties | Values |
 | --- | --- | --- | --- |

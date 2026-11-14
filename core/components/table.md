@@ -129,7 +129,7 @@ Theme: the Semantic tokens Carbon binds, by our names (Carbon structure). No `Ta
 ## Hit target and Skeleton
 
 - **Hit target**: none on `Table`, `Table row` and `Table cell` (`interactive: false`): nobody taps them, and a tapped row is [List item](list-item.md). A cell's Focus is keyboard focus on the web grid, not a tap. `Table header cell` is `interactive: true` (a `Sortable` one is tapped): its Root binds `Interactive/<Size>/Interactive min-height` (ADR 0003), which at 48 · 56 · 72 doesn't change its height.
-- **Skeleton**: `Table cell` and `Table row` have none yet (Decision 7). `Table toolbar` and [Pagination](pagination.md) got `State=Skeleton` in #659;
+- **Skeleton**: `Table cell` and `Table row` have none yet (Decision 7). `Table toolbar` and [Pagination](pagination.md) got `State=Skeleton` in pawisssh/design-system#659;
 
 ## Motion
 

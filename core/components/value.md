@@ -19,7 +19,7 @@ Value (variant root)          Hug × Hug, no fill, no padding
    └─ Bar                     State = Skeleton only: 80 × 8, radius 0, skeleton-background
 ```
 
-- The designer types only unsigned digits, in `Value text` and `Percent text`. `Change` draws the figure's sign, so it never disagrees with the colour (#71 D2); the bracketed percent takes `Change`'s colour but no sign (question 8).
+- The designer types only unsigned digits, in `Value text` and `Percent text`. `Change` draws the figure's sign, so it never disagrees with the colour (pawisssh/design-system#71 D2); the bracketed percent takes `Change`'s colour but no sign (question 8).
 - **Gaps are characters, not padding.** `_Unit suffix` starts with its own U+00A0 (none before `%`), and `Percent open` starts with one, so Container's gap is 0 and the spaces scale with the text style, as developers append them in code. The throwaway's gap 4 doubles the suffix's space.
 - One text style for every text layer in a variant, the suffix included. The percent is not a step smaller: (v2)'s `Value + Percent` set both parts in one style.
 - `Empty` replaces `Sign`, `Digits`, `Unit` and `Percent` in State=Empty. `Bar` replaces them all in Skeleton. Container keeps the line's height, so a row doesn't jump when the figure arrives.
@@ -69,7 +69,7 @@ Contrast list (`text`, 4.5:1): each colour above on `background-primary`, `backg
 
 ## Icon records
 
-None: no arrow; the sign carries the direction (#71 assumption 8).
+None: no arrow; the sign carries the direction (pawisssh/design-system#71 assumption 8).
 
 ## Text styles, wrapping and truncation
 

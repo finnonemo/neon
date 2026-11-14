@@ -44,7 +44,7 @@ Amount field (variant root)       Fill × Hug, no fill, no padding, min width an
 `State` has no `Success` and no `Read-only` (R1, R2): a valid amount shows no mark, and a read-only amount is a Value, or Text field's `State=Read-only` in a boxed form field (Amount entry).
 
 Properties:
-- BOOLEAN `Label` (default True), `Description` (default False), `Show Suggestion row` (default True), `Helper` (default True; linked to `Detail` on Enabled, Focus, Active and Disabled, never on Error, where `Detail` is the error message:). `Show Suggestion row` is named apart from the Slot, which the #388 SLOT name lint requires.
+- BOOLEAN `Label` (default True), `Description` (default False), `Show Suggestion row` (default True), `Helper` (default True; linked to `Detail` on Enabled, Focus, Active and Disabled, never on Error, where `Detail` is the error message). `Show Suggestion row` is named apart from the Slot, which the pawisssh/design-system#388 SLOT name lint requires.
 - TEXT `Label text` (`Amount`), `Description text` (`Minimum 1,000 ฿`), `Input text` (`10,000`), `Placeholder text` (`0`), `Helper text` (`Helper text`): English defaults (Localisation).
 - SLOT `Suggestion row`.
 - The nested `_Unit suffix`'s `Unit` shows on the instance panel.
@@ -110,12 +110,12 @@ Theme/<Semantic token>                one rule per token, over the States that b
 - **Display on a component.** Display 1 is a content style; Amount field's largest step is the one exception the map allows (architecture.md's Type line and Amount entry). It holds only digits.
 - **One step smaller.** Display 1's step under is Large Title, 34/48: IC's `฿` beside its 96-point digits is 34/48, so the map's rule lands on the product's own pair.
 - **Input Cursor class.** `Display 1` (96 tall) for Display 1 and `Title 1` (40) for Title 1. The set has no `Large Title` class, so Large Title pins `Display 3` (48 tall, Large Title's line height). that's the cursor's own limit, listed under Open.
-- **Tabular figures (#122).** The digit layers set `tnum`, ready for the font, as Value does. Finnomena Trek 1.002 has no `tnum`, so digits shift width while typing until #122 ships it. That font fix is the owner's. Carbon's Number input sets its value in IBM Plex Mono and Base has a Mono Display for the same reason. The handoff tells developers `font-variant-numeric: tabular-nums` / `.monospacedDigit` (Numbers and dates).
+- **Tabular figures (pawisssh/design-system#122).** The digit layers set `tnum`, ready for the font, as Value does. Finnomena Trek 1.002 has no `tnum`, so digits shift width while typing until pawisssh/design-system#122 ships it. That font fix is the owner's. Carbon's Number input sets its value in IBM Plex Mono and Base has a Mono Display for the same reason. The handoff tells developers `font-variant-numeric: tabular-nums` / `.monospacedDigit` (Numbers and dates).
 - Digits follow the map's entry rules: live comma grouping, whole baht allowed, decimals capped by the unit, no `.00` padding on blur. The Figma default `10,000` follows IC.
 
 ## Hit target and Skeleton
 
-- **Hit target**: the Root's min width and height bind `Components/Interactive/Medium/Interactive min-height` (48), Container centred, per #156 (a tap anywhere focuses the field). It matters at Title 1, whose line height is 40. This departs from Text field and Value, whose Root targets the owner removed on 2026-11-02 (Q5). Each chip in `Suggestion row` is a nested control and brings its own target (Q8).
+- **Hit target**: the Root's min width and height bind `Components/Interactive/Medium/Interactive min-height` (48), Container centred, per pawisssh/design-system#156 (a tap anywhere focuses the field). It matters at Title 1, whose line height is 40. This departs from Text field and Value, whose Root targets the owner removed on 2026-11-02 (Q5). Each chip in `Suggestion row` is a nested control and brings its own target (Q8).
 - **Skeleton**: `State=Skeleton`: an 80 × 8 `Skeleton label` for the Label block (the Label block rule's bar), an `Amount bar` in place of the amount (`Amount field/Bar/<Text style>`), and no suffix, cursor, chips or Detail.
 
 ## Motion
@@ -127,7 +127,7 @@ Theme/<Semantic token>                one rule per token, over the States that b
 | A chip's press | Button's own | Button's own | Button's own |
 | Skeleton | the Skeleton's own | static shape, no shimmer | None |
 
-The first row is the map's (Motion and haptics) and #156's.
+The first row is the map's (Motion and haptics) and pawisssh/design-system#156's.
 
 ## Accessibility
 
