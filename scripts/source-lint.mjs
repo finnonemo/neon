@@ -3,7 +3,11 @@
 // and never writes, and it always exits 0: each warning is for the agent to fix
 // or to justify in its report, not a gate.
 //
-//   node scripts/source-lint.mjs [<app-dir>] [<file>...]
+//   node scripts/source-lint.mjs [--json] [<app-dir>] [<file>...]
+//
+// --json prints one compact object instead of lines: `checked`, `total`, a
+// count per rule, and per warning its file, lines, rule, match, a plain `name`
+// and the `fix`. Without a run it prints `{ "notRun": <why> }`.
 //
 // In a git repository it checks the files changed against HEAD plus untracked
 // files under <app-dir> (default: the current directory). Files named after
@@ -124,15 +128,34 @@ export function formatReport({ notRun, checked, warnings }) {
   return lines.join('\n');
 }
 
+// The report as data: each message splits at its first `;` into what was found and how to fix it.
+export function jsonReport({ notRun, checked, warnings }) {
+  if (notRun) return { notRun };
+  const byRule = {};
+  for (const { rule } of warnings) byRule[rule] = (byRule[rule] ?? 0) + 1;
+  return {
+    checked,
+    total: warnings.length,
+    byRule,
+    warnings: warnings.map(({ path, rule, match, lines }) => {
+      const [name, ...fix] = messages[rule].split('; ');
+      return { path, lines, rule, match, name, fix: fix.join('; ') };
+    }),
+  };
+}
+
 // Real path, so a symlinked plugin or temp directory still runs as a script.
 if (process.argv[1] && import.meta.url === pathToFileURL(realpathSync(process.argv[1])).href) {
   try {
-    const [dirArgument = '.', ...paths] = process.argv.slice(2);
+    const args = process.argv.slice(2);
+    const json = args.includes('--json');
+    const [dirArgument = '.', ...paths] = args.filter(arg => arg !== '--json');
+    const print = report => console.log(json ? JSON.stringify(jsonReport(report)) : formatReport(report));
     const dir = resolve(dirArgument);
-    if (!existsSync(dir) || !statSync(dir).isDirectory()) console.log(`Source lint: not run; ${dirArgument} is not a directory`);
-    else console.log(formatReport(lintChanged(dir, paths)));
+    if (!existsSync(dir) || !statSync(dir).isDirectory()) print({ notRun: `${dirArgument} is not a directory` });
+    else print(lintChanged(dir, paths));
   } catch (error) {
-    console.log(`Source lint: not run; ${error.message}`);
+    console.log(json ? JSON.stringify({ notRun: error.message }) : `Source lint: not run; ${error.message}`);
   }
   process.exitCode = 0;
 }
