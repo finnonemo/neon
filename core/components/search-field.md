@@ -136,7 +136,7 @@ The issue and the map's table say "stroke 2 on Focus"; Text field is 3 since 202
 - [x] 3. Identified by more than its fill: the magnifier at 3:1 (Filled fields), the placeholder, and the optional Title.
 - [x] 4. No state by colour alone: Active shows the cursor (and Clear once filled), Focus the stroke, Loading a spinner, Disabled the dimmed text and glyph, Skeleton its shape.
 - [x] 5. `State=Focus` is the focused field, not the keyboard ring.
-- [ ] 6. **A long value overflows**: `Input text` is Hug, auto width (the owner's 2026-11-02 call for Text field, #206), so Figma doesn't truncate it. code still cuts it to one line. Placeholder text is Fill and truncates.
+- [ ] 6. **A long value overflows**: `Input text` is Hug, auto width (the owner's 2026-11-02 call for Text field, pawisssh/design-system#206), so Figma doesn't truncate it. code still cuts it to one line. Placeholder text is Fill and truncates.
 
   | Mode | Variant (Large · Medium · Small) | Field (L · M · S) | Clipped |
   | --- | --- | --- | --- |

@@ -29,7 +29,7 @@ Contextual Banner (288 wide, Hug)
          └─ Toggle                     Toggle only, Enabled, Toggled=True, iOS = variant's; Hug × Hug (64 × 48 | 48 × 48)
 ```
 
-Since #129 (2026-11-02) both looks hold one `Toggle` (Style=Toggle only) where `Toggle - Switch` and `Toggle` Style=Default, Fill × 24 (iOS=False) were, and the action instances take their main's min size.
+Since pawisssh/design-system#129 (2026-11-02) both looks hold one `Toggle` (Style=Toggle only) where `Toggle - Switch` and `Toggle` Style=Default, Fill × 24 (iOS=False) were, and the action instances take their main's min size.
 
 Every variant holds both buttons and the Icon Button, hidden unless its `Action` shows them. Only the 72 Toggle variants hold a toggle, the one that matches their `iOS`; the other variants' hidden `Toggle` was deleted when the iOS axis was added.
 
@@ -37,8 +37,8 @@ Every variant holds both buttons and the Icon Button, hidden unless its `Action`
 
 `Banner/Contextual/<Container|Icon|Label>/<key>/<Property>`, Tag's three levels under a two-part prefix. The old Banner vars were renamed in place to `Banner/In-line/…` (ids and bindings kept) so both banners sit under `Banner/`.
 
-- **Container** is keyed by `Artwork`. Only `Layout flow` differs (Badge and None Vertical, Icon Horizontal); the rest are the same as In-line: padding 16, radius `Radius/16px (radius-lg)`, stroke 1, min-height 80 (radius 12 and stroke 2 before #129).
-- **Icon** records are `…/Type token` since #129; the older `…/Style` and `…/Size` records are still in Figma.
+- **Container** is keyed by `Artwork`. Only `Layout flow` differs (Badge and None Vertical, Icon Horizontal); the rest are the same as In-line: padding 16, radius `Radius/16px (radius-lg)`, stroke 1, min-height 80 (radius 12 and stroke 2 before pawisssh/design-system#129).
+- **Icon** records are `…/Type token` since pawisssh/design-system#129; the older `…/Style` and `…/Size` records are still in Figma.
 - **Icon** is keyed by icon size: `3XLarge` (Badge), `Large` (Icon).
 - **Label**: Title (Strong) and Description (Regular), both `$subhead`.
 - `Content`, `Title and Description` and `Action` have no group: their gaps and padding are fixed in the base or set as literals, as in In-line.

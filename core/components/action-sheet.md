@@ -61,7 +61,7 @@ None: the kit's sheet draws no glyph; Carbon's row icon and checkbox stay out (Q
 | `Title` | `Headings/Headline` (17, kit 17 Semibold) | wraps, no limit (Localisation: content text) | `Title` |
 | `Message` | `Body/Body` (17) | wraps, no limit | `Message` |
 
-The Button labels are Button's: a control label is one line, and since [Button ](button.md) wraps at the column's width with the container growing. A choice's label that is long wraps in its full-width Button; it isn't cut.
+The Button labels are Button's: a control label is one line, and since [Button](button.md) wraps at the column's width with the container growing. A choice's label that is long wraps in its full-width Button; it isn't cut.
 
 ## Hit target and Skeleton
 

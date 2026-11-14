@@ -83,7 +83,7 @@ N/A: no text layer.
 
 The `Usage` frame shows, with Thai copy:
 
-- Between two groups of rows, full width (`Inset=None`): `บัญชีของฉัน` rows, a Divider, then `การตั้งค่า` rows. The rows are plain text until List item (#157) is built.
+- Between two groups of rows, full width (`Inset=None`): `บัญชีของฉัน` rows, a Divider, then `การตั้งค่า` rows. The rows are plain text until List item (pawisssh/design-system#157) is built.
 - Under a row that starts at the side pad (`Inset=Start`), so the line starts where the text does.
 - Don'ts: no Divider between the rows of one list (rows have no separator, Inventory); no Divider to separate surfaces, which separate by background (Tile).
 - No Focus ring: not interactive. No `iOS` pair: one look.
