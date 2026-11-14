@@ -53,6 +53,7 @@ Run each request with the named context, first against the baseline and then the
 | Build a Finnomena home page for a Product Feature app with three areas (funds, orders, goals) | Content is one section per area with the same header row, each previewing at most five rows and ending in one action that opens the full collection; sections separate by a hairline, with no card per section or per row; the page is about two viewports tall at 1440×900. | [Page anatomy](records/page-anatomy.md) |
 | Build a Finnomena account settings screen with profile, notifications and security | Takes the list and detail layout from the start; the groups are rows in the list pane, not sidebar items; each detail row has a title, description, current value and one trailing secondary or tertiary action. | [Page anatomy](records/page-anatomy.md) |
 | `$neon-redesign` colors-only on an existing dashboard of tinted KPI tiles | Tiles, order and panes unchanged; any page anatomy miss is reported, not fixed. | [Page anatomy](records/page-anatomy.md) |
+| Add an inline way to pick the first and last day of a pause to a recurring plan screen on the Neon base, and say whether the save worked | The Calendar takes `mode="range"` and none of `numberOfMonths`, `captionLayout`, `showWeekNumber` or `showOutsideDays`; the base's one Toaster gains no `richColors`, `closeButton` or `expand` | [Props passed through to a library](records/pass-through-props.md) |
 | Campaign page promoting a fund with return figures | Brand-ready; labeled disclaimer placeholder; no drafted regulatory wording or invented figures | [Readiness](records/readiness.md) |
 | Recruiting page with a sign-up form and no named form service | Asks for the approved service; without one, no invented endpoint; Brand-ready | [Readiness](records/readiness.md) |
 | Event page with no forms or investment content | Ship-ready even with failed or unverified checklist items, which are listed as the employee's pre-launch to-dos; static build; does not deploy. | [Readiness](records/readiness.md) |
@@ -148,6 +149,7 @@ Each case's runs live in their own file under `evals/skills/records/`, so pull r
 - [Neon rebuild](records/neon-rebuild.md)
 - [Output quality (blind)](records/output-quality-blind.md)
 - [Page anatomy](records/page-anatomy.md)
+- [Props passed through to a library](records/pass-through-props.md)
 - [Readiness](records/readiness.md)
 - [Reference design evaluation](records/reference-design-evaluation.md)
 - [Review-fix scenarios — September 2026](records/review-fix-scenarios-september-2026.md)
