@@ -159,7 +159,7 @@ export async function syncCore({ from, compiler = from, out, items, counterparts
 
 /**
  * Writes the index of the snapshot at `out` again from the Counterpart table, then its hash and the seal in the
- * manifest: what a change to the table alone needs, with no Core checkout. The compiled files are the ones the
+ * manifest: the snapshot's part of --from-snapshot, which needs no Core checkout. The compiled files are the ones the
  * snapshot holds, and each must still be the one the sync recorded, so this accepts no hand edit. Returns whether
  * the index changed.
  */
@@ -276,6 +276,6 @@ export async function checkCoreSnapshot(directory, { items } = {}) {
     }
   }
   if (problems.length) {
-    throw new Error(`The Core snapshot in ${directory} is not the one the sync wrote:\n${problems.join('\n')}\nThe snapshot is never edited by hand: change Core, or the Counterpart table, and re-run node scripts/sync-core.mjs --from <Core checkout>, or with --index when only the table changed.`);
+    throw new Error(`The Core snapshot in ${directory} is not the one the sync wrote:\n${problems.join('\n')}\nThe snapshot is never edited by hand: change Core, or the Counterpart table, and re-run node scripts/sync-core.mjs --from <Core checkout>, or with --from-snapshot when only the table changed.`);
   }
 }

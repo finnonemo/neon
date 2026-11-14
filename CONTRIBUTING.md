@@ -39,13 +39,13 @@ A Core commit older than Core's compile script has none to run: add `--compiler 
 
 To see what a sync would bring without moving the pin, add `--dry-run`: it compiles, refuses what a sync refuses and prints the same report, and writes nothing. It does not write or check the Theme export or the adapter.
 
-A change to the Counterpart table alone needs no Core checkout:
+A change to the Counterpart table, the Role table or the Type role table alone needs no Core checkout:
 
 ```sh
-node scripts/sync-core.mjs --index
+node scripts/sync-core.mjs --from-snapshot
 ```
 
-It writes `core/index.json` again from the table and the snapshot as checked in, then its hash and the seal in `core/snapshot.json`. The table rules of the sync apply, and it refuses when a compiled file differs from what the sync recorded. It also settles a merge conflict in `core/index.json` or `core/snapshot.json`: take both files whole from the side that moved Core (either side when neither did), then run it. When both sides moved Core, run the sync again.
+It takes the snapshot as checked in: it writes `core/index.json` again from the Counterpart table, then its hash and the seal in `core/snapshot.json`, then the Theme export and the adapter as the sync does (below). The table rules of the sync apply, and it refuses when a compiled file differs from what the sync recorded. It also settles a merge conflict in `core/index.json` or `core/snapshot.json`: take both files whole from the side that moved Core (either side when neither did), then run it. When both sides moved Core, run the sync again.
 
 The sync fails when Core's compile fails (it refuses uncommitted docs, a value Core states no number for, and a compiled file that would still hold the `iOS=True` look, Figma ids, Revision history or Dynamic Type), when a registry item has no entry in the Counterpart table, when an entry names a Core doc the compile left out or did not write, when a Supporting item is given a Counterpart, and when an item with no Counterpart has the name of an approved Core doc and its entry does not name that doc as `unmatched`; it then writes nothing. What a compiled doc holds is changed in Core's repository, not here. `validate` fails when a file under `core/`, or the commit `core/snapshot.json` names, differs from what the sync recorded, and when the Counterpart table breaks the `unmatched` rule against the snapshot. Review the snapshot's diff as Core's change. The sync prints how far Core moved since the snapshot it replaced (the count of Core's commits and their hashes) and the snapshot files added, changed and removed. Core's repository is private and this one is public: the pull request names the two Core commits, the count and those files, and says what changed for Neon in its own words. `--subjects` adds Core's commit subjects to the report for reading; they, and Core's issue numbers, stay out of pull requests, issues and commit messages.
 
