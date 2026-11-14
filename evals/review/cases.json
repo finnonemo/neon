@@ -1,0 +1,42 @@
+[
+  {
+    "case": "review-01",
+    "fixture": "evals/review/fixtures/empty",
+    "prompt": "/neon:neon-create Build a Finnomena Back Office approvals screen in ./approvals with mock data. Operations staff review pending customer requests: fund switches, redemptions over the daily limit and KYC updates. They filter the queue by type and by how long a request has waited, open one to see the customer, the request's figures and its history, then approve it, or reject it with a reason. Use port 5611 for any dev or preview server."
+  },
+  {
+    "case": "review-02",
+    "fixture": "evals/review/fixtures/empty",
+    "prompt": "/neon:neon-create Build a Campaign Page in ./club-run for Finnomena Club Run 2026 from the Club · Run Theme Brief. Headline in Thai. It is a 5 km and 10 km fun run for Finnomena Club members at Lumpini Park on Sunday 6 December 2026; check-in opens at 05:00, the 10 km starts at 05:45 and the 5 km at 06:00. The 10 km route passes four points: the start at the Rama IV gate, the lake bridge at 2.5 km, the water station at 5 km and the clock tower at 7.5 km, then back to the finish at the start gate. 1,200 runners took part last year, and this year 1,500 places are open. Registration is on https://example.com/club-run. No images are supplied. Use port 5612 for any dev or preview server."
+  },
+  {
+    "case": "review-03",
+    "fixture": "evals/review/fixtures/empty",
+    "prompt": "/neon:neon-create Build the home screen of a Finnomena Product Feature app in ./portfolio with mock data, where a customer checks their portfolio. They see its total value and change today, each fund they hold with its value, the change since they bought it and a small 30-day trend, their two pending orders, and their monthly auto-invest plan with its next date. From each fund they can open its detail or buy more. Use port 5613 for any dev or preview server."
+  },
+  {
+    "case": "review-04",
+    "fixture": "evals/review/fixtures/empty",
+    "prompt": "/neon:neon-create Build a Campaign Page in ./fifteen-years on the Exclusive Immersive Theme for Finnomena's 15th anniversary, telling the company's story. Headline in Thai. The story has four steps: 2011, a blog about funds written by three friends; 2016, the fund comparison website; 2020, the app and the first advisors; 2026, a team of 300 people. The page closes with an invitation to the anniversary evening for employees and their families on Saturday 23 January 2027, 17:00–21:00, at Finnomena HQ, Column Tower 22nd floor, Ratchadaphisek Road, Bangkok, with registration on https://example.com/fifteen. No images are supplied. Use port 5614 for any dev or preview server."
+  },
+  {
+    "case": "review-05",
+    "fixture": "evals/review/fixtures/empty",
+    "prompt": "/neon:neon-create Build a Finnomena Back Office screen in ./kyc with mock data where compliance staff review customers' KYC documents. Each customer has an ID card, a selfie and a proof of address, each with a status (waiting, accepted, rejected, expired) and the date it was sent. Staff open a customer, check each document, accept it or ask for a new one with a reason, and see what happened to the case before. The list loads from a service that can be slow or fail. Use port 5615 for any dev or preview server."
+  },
+  {
+    "case": "review-06",
+    "fixture": "evals/review/fixtures/empty",
+    "prompt": "/neon:neon-create Build a Campaign Page in ./night-run for Finnomena Ultra Night Run from the Ultra · Run Theme Brief. Headline in Thai. It is a 10 km night run for Finnomena Ultra members at Benjakitti Park on Saturday 13 February 2027. The evening runs: 18:00 check-in and bib pickup, 19:00 warm-up, 19:30 start, 21:00 finish line closes, 21:15 awards and dinner by the lake. The route is two laps of the lake on the sky walk, lit along its whole length. 400 places are open. Registration is on https://example.com/night-run. No images are supplied. Use port 5616 for any dev or preview server."
+  },
+  {
+    "case": "review-07",
+    "fixture": "evals/review/fixtures/empty",
+    "prompt": "/neon:neon-create Build a Finnomena Product Feature screen in ./auto-invest with mock data where a customer manages their monthly auto-invest plans. They see each plan's fund, amount, day of the month and next date, the last six runs with their result (bought, skipped for low balance, failed), and they can pause a plan, change its amount or day, or start a new plan. A customer with no plan sees how to start one. Use port 5617 for any dev or preview server."
+  },
+  {
+    "case": "review-08",
+    "fixture": "evals/review/fixtures/empty",
+    "prompt": "/neon:neon-create Build a Campaign Page in ./learning-week on the Private Immersive Theme for Finnomena Learning Week, five days of workshops for employees from Monday 8 to Friday 12 March 2027 at Finnomena HQ. Headline in Thai. Each day has one theme: Monday, writing; Tuesday, data; Wednesday, design; Thursday, leading a team; Friday, a demo afternoon where teams show what they built. The week has 18 workshops by 12 speakers, 40 hours in all, and each workshop takes 30 people. Sign-up is on https://example.com/learning-week. No images are supplied. Use port 5618 for any dev or preview server."
+  }
+]

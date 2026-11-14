@@ -191,8 +191,9 @@ test('campaign direction keeps its direction lines, composition moves and motion
   assert.match(composition, /radius and padding picks stand/);
   assert.match(composition, /departure from the brief/);
   const motion = part('Motion');
-  assert.match(motion, /At most two moments of motion per page/);
-  assert.match(motion, /never above the brief's level/);
+  assert.match(motion, /Up to three moments on a `lively` page and two on a `subtle` page, at most one of them a Pinned story/);
+  for (const pattern of ['Pinned story', 'Scrubbed reveal', 'Count-up figure', 'Progress rail']) assert.match(motion, new RegExp(`\\*\\*${pattern}\\*\\*`));
+  assert.match(motion, /Never go above the brief's level/);
   assert.match(motion, /what moves, what that tells the reader.*its limit.*reduced motion/);
   assert.match(motion, /`transform` and `opacity` only/);
   assert.match(motion, /nothing animates a Brand Pattern/);
