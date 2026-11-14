@@ -1,7 +1,8 @@
 // The Core snapshot (GLOSSARY): the copy of Core that Neon carries, pinned to one Core commit (ADR 0009).
 // Core's repository compiles it (ADR 0012): syncCore runs Core's Web compile from a Core checkout, copies what it
 // wrote, adds the index and records the commit and each file's hash; checkCoreSnapshot is the repository check that
-// refuses a hand edit. Nothing here reads Core's own docs.
+// refuses a hand edit, and checkCounterpartTable the one that holds the Counterpart table to the snapshot.
+// Nothing here reads Core's own docs.
 import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { existsSync, realpathSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
@@ -53,14 +54,45 @@ async function webCompile({ from, compiler }) {
   }
 }
 
+// The names of the docs among a snapshot's paths. Core's Web compile writes every approved doc and no other.
+const approvedDocs = paths => new Set([...paths].flatMap(path => path.match(/^components\/(.+)\.md$/)?.[1] ?? []));
+
+/**
+ * An item with no Counterpart and the name of an approved Core doc must name that doc as `unmatched`, so a doc
+ * Core approves later cannot leave the entry's `why` false with nothing failing. `approved` is the names of
+ * Core's approved docs. Returns the problems, one line each.
+ */
+function unmatchedProblems(counterparts, approved) {
+  return Object.entries(counterparts).flatMap(([name, { core, unmatched }]) => {
+    if (unmatched !== undefined && core !== null) return [`${name}: it has the Counterpart ${core}, so it names no unmatched doc.`];
+    if (unmatched !== undefined && !approved.has(unmatched)) return [`${name}: its unmatched doc ${unmatched} is not an approved doc in Core.`];
+    if (core === null && approved.has(name) && unmatched !== name) return [`${name}: Core has an approved doc of this name and the item has no Counterpart. Give it the Counterpart, or name the doc as unmatched and say in why what the item follows instead.`];
+    return [];
+  });
+}
+
+/**
+ * The repository check for the Counterpart table against the snapshot at `directory`: the `unmatched` rule,
+ * read from the docs the snapshot holds, so it needs no Core checkout.
+ */
+export async function checkCounterpartTable(counterparts, directory) {
+  const { files } = JSON.parse(await readFile(join(directory, MANIFEST), 'utf8'));
+  const problems = unmatchedProblems(counterparts, approvedDocs(Object.keys(files)));
+  if (problems.length) throw new Error(`The Counterpart table (${COUNTERPARTS_FILE}) does not follow the snapshot in ${directory}:\n${problems.join('\n')}`);
+}
+
 /**
  * The index: each registry item's Counterpart (GLOSSARY) with the snapshot files that hold it, or why it has none.
  * `counterparts` is the Counterpart table, { item: { core: '<doc>', why? } | { core: null, why } }; it must cover
  * `items` exactly. A Supporting item (GLOSSARY) has no Counterpart of its own.
  * An entry may also list the prop values with no Core cell (`notInCore: { variant: ['outline'] }`), for the
  * Catalog site to mark; the skills leave them out of new work (ADR 0009). The index does not carry them.
+ * An entry with no Counterpart whose item has the name of an approved Core doc names that doc (`unmatched`);
+ * the index does not carry it either.
  */
 function counterpartIndex({ items, counterparts, files, leftOut }) {
+  const unmatched = unmatchedProblems(counterparts, approvedDocs(files.keys()));
+  if (unmatched.length) throw new Error(unmatched.join('\n'));
   const names = items.map(item => item.name);
   const missing = names.filter(name => !(name in counterparts));
   if (missing.length) throw new Error(`The Counterpart table has no Counterpart entry for: ${missing.join(', ')}.`);
@@ -91,7 +123,8 @@ function counterpartIndex({ items, counterparts, files, leftOut }) {
  * Compiles the Core checkout at `from` with Core's Web compile and writes the snapshot to `out`, replacing what was
  * there. `compiler` is the Core checkout whose compile runs: `from` itself unless the commit to compile is older than
  * the compile, and then the snapshot records the compiler's commit too. `items` are the registry's components, as
- * { name, supporting }. Returns the commit, the files written and the Core docs the compile left out, by standing.
+ * { name, supporting }. Returns the commit, the files written, the Core docs the compile left out, by standing,
+ * and what moved since the snapshot it replaced (movedReport).
  */
 export async function syncCore({ from, compiler = from, out, items, counterparts }) {
   const compiled = await webCompile({ from, compiler });
@@ -111,12 +144,62 @@ export async function syncCore({ from, compiler = from, out, items, counterparts
   const hashes = Object.fromEntries([...files].sort(([a], [b]) => (a < b ? -1 : 1)).map(([path, content]) => [path, sha256(content)]));
   const manifest = { core, look: LOOK, files: hashes };
   files.set(MANIFEST, data({ ...manifest, seal: sealOf(manifest) }));
+  const moved = movedSince(await readFile(join(out, MANIFEST), 'utf8').then(JSON.parse, () => null), { from, core, hashes });
   await rm(out, { recursive: true, force: true });
   for (const [path, content] of files) {
     await mkdir(dirname(join(out, path)), { recursive: true });
     await writeFile(join(out, path), content);
   }
-  return { commit, compiler: core.compiler, files: [...files.keys()], leftOut };
+  return { commit, compiler: core.compiler, files: [...files.keys()], leftOut, moved };
+}
+
+/**
+ * What moved since the snapshot the sync replaces, whose manifest is `previous`: the commit it was at, Core's
+ * commits from there to the new one (null when the checkout at `from` does not hold the earlier commit), the
+ * compiler's commits when another compiler wrote this snapshot, and the snapshot files added, changed and removed.
+ * Null when there was no snapshot. Which paths Core's compile reads is Core's to know, so the commits are all of
+ * Core's between the two, not only those that change a compiled file.
+ */
+function movedSince(previous, { from, core, hashes }) {
+  if (!previous?.core?.commit) return null;
+  const was = previous.core.commit;
+  let commits = [];
+  if (was !== core.commit) {
+    try {
+      // git's own complaint about a commit it does not hold stays out of the terminal: the report says it.
+      commits = execFileSync('git', ['-C', from, 'log', '--format=%h %s', `${was}..${core.commit}`], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).split('\n').filter(Boolean);
+    } catch {
+      commits = null;
+    }
+  }
+  // A snapshot compiled by its own checkout names no compiler: its compiler moves with Core, and is not said twice.
+  const compilers = [previous.core.compiler ?? was, core.compiler ?? core.commit];
+  const named = (previous.core.compiler || core.compiler) && compilers[0] !== compilers[1];
+  const before = previous.files ?? {};
+  return {
+    from: was,
+    commits,
+    ...(named ? { compiler: compilers } : {}),
+    added: Object.keys(hashes).filter(path => !(path in before)),
+    changed: Object.keys(hashes).filter(path => path in before && before[path] !== hashes[path]),
+    removed: Object.keys(before).filter(path => !(path in hashes)),
+  };
+}
+
+/** What the sync prints about `moved` (syncCore's result), as lines: the pull request lists the same commits and files. */
+export function movedReport(moved, commit) {
+  if (!moved) return [];
+  const short = sha => sha.slice(0, 8);
+  const lines = [];
+  if (moved.from === commit) lines.push(`Core has not moved: the snapshot was already at ${short(commit)}.`);
+  else if (!moved.commits) lines.push(`Core moved ${short(moved.from)} → ${short(commit)}. This checkout does not hold ${short(moved.from)}, so the commits between them are not listed.`);
+  else lines.push(`Core moved ${short(moved.from)} → ${short(commit)}. Core's commits between them: ${moved.commits.length}.`, ...moved.commits.map(line => `  ${line}`));
+  if (moved.compiler) lines.push(`The compiler moved ${short(moved.compiler[0])} → ${short(moved.compiler[1])}.`);
+  for (const kind of ['added', 'changed', 'removed']) {
+    if (moved[kind].length) lines.push(`${kind[0].toUpperCase()}${kind.slice(1)} in the snapshot: ${moved[kind].join(', ')}.`);
+  }
+  if (!moved.added.length && !moved.changed.length && !moved.removed.length) lines.push('No snapshot file changed.');
+  return lines;
 }
 
 /**
