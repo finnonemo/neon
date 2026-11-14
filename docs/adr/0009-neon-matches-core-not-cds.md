@@ -1,5 +1,7 @@
 # Neon matches Core, not CDS
 
+> Status: Amended by [ADR 0012](0012-core-compiles-the-snapshot-and-holds-the-palette.md) on 2026-11-14: Core's repository compiles the snapshot, and Neon's sync runs that compile and carries what it writes. The rest stands.
+
 Neon's components, tokens and type scale are now matched to Core, Finnomena's own design system (`pawisssh/design-system`, "(v3) Components / Core"), in place of CDS 9.26.1. This supersedes [ADR 0008](0008-registry-grows-only-by-components-with-a-cds-counterpart.md), and the "look must match CDS" rule and sizing requirement of [ADR 0006](0006-new-work-on-shadcn-matched-to-cds.md). ADR 0006's base (shadcn/ui on Tailwind v4, Radix, React 19, the registry) stands, and CDS stays frozen for apps already on it. The change ships as Neon 1.0.0.
 
 Why: CDS was a stand-in for a look Finnomena did not yet own. Core now has approved docs and specs for about fifty components, and its design owner maintains Neon. Neon's `theme/tokens/theme.json` is an older export of the same Theme collection Core records in its own `theme.json`: on 2026-11-12, 64 of the 111 token names both hold had different values, and Core held about 388 names Neon lacks. Matching CDS left every unclear mapping "provisional, pending a design owner" (issues #194–#209); matching Core answers them from an approved doc.
