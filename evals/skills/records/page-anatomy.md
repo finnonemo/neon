@@ -71,6 +71,23 @@ Misses in the revised runs: on the home page only one of three sections ends in 
 
 Both misses are gone in this sample. The page no longer opens with a figure, which is what the reference asks of an overview; whether that follows from the tightening or from sample variation, one run cannot say. The three collection pages were not opened or measured.
 
+## Three more home samples, 14 November 2026
+
+Three more samples of the home request at `7123fba`, same runner, `claude-fable-5-2`, to see whether the missing figure repeats: 5.60, 4.92 and 5.73 USD (16.24 in all), 92, 81 and 81 turns, 8.3 to 9.8 minutes, none void; each read `page-anatomy.md` in full. Measured on load at 1440×900 and 375×812.
+
+| Item | Sample 3 | Sample 4 | Sample 5 |
+| --- | --- | --- | --- |
+| Figure | Portfolio total, 28px, a block of its own above the sections, change beneath | The same | Portfolio total, 28px, at the right of the first section's heading row, change beneath |
+| Largest text | The figure | The figure | The figure |
+| Open-all | All three sections, each to `#/funds`, `#/orders`, `#/goals` | The same | The same |
+| Primary action at 375px | "ลงทุนเพิ่ม" in a bottom dock, drawn as primary | "ลงทุน" in the pane header, drawn as primary | "ลงทุน" in the pane header, drawn as primary |
+| Layout | `ContentLayout` | `ContentLayout` | `ContentLayout` |
+| Content height at 1440×900 | 1701px | 1660px | 1455px |
+
+Across the four samples at `7123fba` the total is the largest text in three and opens content as its own block in two; only the first rerun set it at heading size. The missing figure is sample variation, not an effect of the tightening. The open-all and narrow-tier rules held in all four. No sideways page scroll at either width.
+
+These three were graded from measurements of the rendered page (text sizes and positions, button variants, link targets); their screenshots were saved and not looked at, and nothing was clicked.
+
 The colors-only row was not run: no fixture with tinted KPI tiles exists. It stays unverified.
 
 Limits: one sample per row, graded by the author of the change from each run's thesis, source and two screenshots on load; nothing was clicked, so the dock opening the buy module, the settings rows' edit flow and the empty states were not exercised. Limits of the research carry over: no viewport below 500px or above 1510px was measured, the account held nothing so a populated portfolio page and transaction list were not seen, and no flow (form, confirmation, error) was opened.
