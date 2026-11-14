@@ -23,9 +23,10 @@ export const screens = [{
   gaps: [...states.flatMap(([state]) => partGaps(state)), ['offTrack', 'onTrack', 'y'], ['onTrack', 'disabledOffTrack', 'y']],
 }];
 
-// Radix's keyboard model: Space flips a focused switch; a disabled one stays put. Core's web
-// Toggle draws no Focus state, so keyboard focus shows the Button's indicator: Focus/focus, 2px
-// wide, 2px out.
+// Radix's keyboard model: Space flips a focused switch; a disabled one stays put. Keyboard focus
+// shows Core's Toggle Focus ring (toggle.md, Accessibility 5): Focus/focus, 2px wide, a 2px gap
+// round the track. The ring is not a State value, so the compiled Toggle holds no row for it and
+// the widths here are written out, not read from the snapshot.
 export function a11y({ test, expect, gotoExpansion, keyboardFocus, focusColor }) {
   test('a switch reached from the keyboard shows a focus indicator', async ({ page }) => {
     await gotoExpansion(page);
