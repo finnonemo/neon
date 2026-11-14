@@ -19,6 +19,7 @@ import button from './core/button.mjs';
 import textField from './core/text-field.mjs';
 import textArea from './core/text-area.mjs';
 import select from './core/select.mjs';
+import checkbox from './core/checkbox.mjs';
 import radio from './core/radio.mjs';
 import toggle from './core/toggle.mjs';
 import segmentedControl from './core/segmented-control.mjs';
@@ -50,6 +51,7 @@ const tables = {
   'input-group': textField,
   textarea: textArea,
   select,
+  checkbox,
   'radio-group': radio,
   switch: toggle,
   'segmented-control': segmentedControl,

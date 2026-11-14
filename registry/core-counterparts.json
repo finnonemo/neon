@@ -33,9 +33,7 @@
     "why": "Core has no Card: a surface is composed from Layer tokens."
   },
   "checkbox": {
-    "core": null,
-    "unmatched": "checkbox",
-    "why": "Core approved its Checkbox on 2026-11-14; the item is not retuned to it yet and keeps its CDS tuning."
+    "core": "checkbox"
   },
   "collapsible": {
     "core": "accordion",

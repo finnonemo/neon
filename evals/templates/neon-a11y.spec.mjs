@@ -295,6 +295,46 @@ for (const mode of ['light', 'dark']) test(`${mode}: a button reached from the k
   await expect(save).toHaveCSS('background-color', await computed(page, 'var(--color-bgButtonSecondaryHover)'));
 });
 
+// Core's Checkbox: the Focus ring is square, Focus/focus 2px wide, its outer edge 4px out from the Box.
+for (const mode of ['light', 'dark']) test(`${mode}: a checkbox reached from the keyboard draws Core's square Focus ring`, async ({ page }) => {
+  await page.goto(`/?layout=extras${mode === 'dark' ? '&mode=dark' : ''}`);
+  const news = page.getByRole('checkbox', { name: 'รับข่าวสาร / News' });
+  const focus = await keyboardFocus(page, news);
+  await expect(news).toBeFocused();
+  expect(focus.focusVisible).toBe(true);
+  expect(focus.before).toBe('');
+  expect(focus.after).toBe(`outline 2px ${await focusColor(page)} 2px`);
+  await expect(news).toHaveCSS('border-radius', '0px');
+});
+
+// One glyph per Selection, always drawn: the outlined square, the square cut by a check, the square cut by a bar.
+test('a checkbox draws the glyph of its Selection, Space ticks it and a press takes indeterminate to checked', async ({ page }) => {
+  await page.goto('/?layout=extras');
+  const drawn = (box) => box.locator('[data-slot=checkbox-indicator] path').evaluateAll((paths) =>
+    paths.flatMap((path, at) => (getComputedStyle(path).display === 'none' ? [] : [at])));
+  const news = page.getByRole('checkbox', { name: 'รับข่าวสาร / News' });
+  await expect(news).toHaveAttribute('aria-checked', 'false');
+  expect(await drawn(news)).toEqual([0]);
+  await news.focus();
+  await page.keyboard.press('Space');
+  await expect(news).toHaveAttribute('aria-checked', 'true');
+  expect(await drawn(news)).toEqual([1]);
+  await page.keyboard.press('Space');
+  await expect(news).toHaveAttribute('aria-checked', 'false');
+
+  const all = page.getByRole('checkbox', { name: 'ทุกบัญชี / All accounts' });
+  await expect(all).toHaveAttribute('aria-checked', 'mixed');
+  expect(await drawn(all)).toEqual([2]);
+  await all.click();
+  await expect(all).toHaveAttribute('aria-checked', 'true');
+  expect(await drawn(all)).toEqual([1]);
+
+  const channels = page.getByRole('checkbox', { name: 'ทุกช่องทาง / All channels' });
+  await expect(channels).toBeDisabled();
+  await expect(channels).toHaveAttribute('aria-checked', 'mixed');
+  expect(await drawn(channels)).toEqual([2]);
+});
+
 test('a loading button keeps its size, focus and name, is announced as busy and ignores a press', async ({ page }) => {
   await page.goto('/?layout=extras');
   const send = page.getByRole('button', { name: 'ส่งรายงาน' });
