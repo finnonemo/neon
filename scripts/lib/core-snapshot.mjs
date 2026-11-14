@@ -1,7 +1,8 @@
 // The Core snapshot (GLOSSARY): the copy of Core that Neon carries, pinned to one Core commit (ADR 0009).
 // Core's repository compiles it (ADR 0012): syncCore runs Core's Web compile from a Core checkout, copies what it
 // wrote, adds the index and records the commit and each file's hash; checkCoreSnapshot is the repository check that
-// refuses a hand edit, and checkCounterpartTable the one that holds the Counterpart table to the snapshot.
+// refuses a hand edit, and checkCounterpartTable the one that holds the Counterpart table, and the index it gives,
+// to the snapshot.
 // Nothing here reads Core's own docs.
 import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { existsSync, realpathSync } from 'node:fs';
@@ -74,12 +75,29 @@ function unmatchedProblems(counterparts, approved) {
 }
 
 /**
- * The repository check for the Counterpart table against the snapshot at `directory`: the `unmatched` rule,
- * read from the docs the snapshot holds, so it needs no Core checkout.
+ * The repository check for the Counterpart table against the snapshot at `directory`: the `unmatched` rule, and,
+ * where the registry is at hand (`items`, as { name, supporting }), the index. Both are read from the files the
+ * snapshot holds, so the check needs no Core checkout. The index is the table read against those files, so a table
+ * that moved without a sync leaves every hash as recorded: the index is built again here and compared.
  */
-export async function checkCounterpartTable(counterparts, directory) {
-  const { files } = JSON.parse(await readFile(join(directory, MANIFEST), 'utf8'));
+export async function checkCounterpartTable(counterparts, directory, { items } = {}) {
+  const read = path => readFile(join(directory, path), 'utf8');
+  const { files } = JSON.parse(await read(MANIFEST));
   const problems = unmatchedProblems(counterparts, approvedDocs(Object.keys(files)));
+  if (!problems.length && items) {
+    const held = new Map(await Promise.all(Object.keys(files).filter(path => path !== INDEX).map(async path => [path, await read(path)])));
+    let given;
+    try {
+      given = counterpartIndex({ items, counterparts, files: held, leftOut: {} });
+    } catch (error) {
+      problems.push(error.message);
+    }
+    if (given) {
+      const index = JSON.parse(await read(INDEX));
+      const differs = Object.keys(given).filter(item => JSON.stringify(index[item]) !== JSON.stringify(given[item]));
+      if (differs.length) problems.push(`The index (${INDEX}) is not the one the table gives for: ${differs.join(', ')}. Re-run node scripts/sync-core.mjs --from <Core checkout>.`);
+    }
+  }
   if (problems.length) throw new Error(`The Counterpart table (${COUNTERPARTS_FILE}) does not follow the snapshot in ${directory}:\n${problems.join('\n')}`);
 }
 

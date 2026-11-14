@@ -303,6 +303,20 @@ test('the repository check refuses an index entry that points at a missing doc',
   await assert.rejects(checkCoreSnapshot(out, { items: ITEMS }), /dialog.*components\/alert\.md, which the snapshot does not hold/s);
 });
 
+test('the repository check refuses an index that is not the one the Counterpart table gives', async t => {
+  const { out } = await synced(t);
+  const items = ITEMS.map(name => ({ name, supporting: false }));
+  await checkCounterpartTable(COUNTERPARTS, out, { items });
+  // The table moved and the sync did not run: every file still has the hash the sync recorded.
+  const moved = { ...COUNTERPARTS, dialog: { core: 'menu' } };
+  await checkCoreSnapshot(out, { items: ITEMS });
+  await assert.rejects(checkCounterpartTable(moved, out, { items }), /index\.json.*not the one the table gives for: dialog\..*sync-core/s);
+  await assert.rejects(checkCounterpartTable({ ...COUNTERPARTS, card: { core: null, why: 'Card is Neon\'s own.' } }, out, { items }), /not the one the table gives for: card\./);
+  await assert.rejects(checkCounterpartTable({ ...COUNTERPARTS, card: { core: 'tile' } }, out, { items }), /Counterpart table.*card.*tile.*no such doc/s);
+  // Without the registry at hand there are no items to build the index for.
+  await checkCounterpartTable(moved, out);
+});
+
 test('the repository check refuses a file the sync did not write and a registry item the index leaves out', async t => {
   const { out } = await synced(t);
   await assert.rejects(checkCoreSnapshot(out, { items: [...ITEMS, 'tabs'] }), /index.*tabs/s);
