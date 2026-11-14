@@ -124,6 +124,10 @@
   --color-layer-hover: var(--layer-hover);
   --color-layer-active: var(--layer-active);
   --color-layer-selected: var(--layer-selected);
+  /* Core's tokens for the calendar item's days: the Selected disc is Layer/layer-selected-inverse
+   * (the switch's On track is the same token) and a range's band Miscellaneous/highlight. */
+  --color-layer-selected-inverse: var(--layer-selected-inverse);
+  --color-highlight: var(--highlight);
   /* Core's Selection tag in Secondary Navy, for the toggle and toggle-group items. */
   --color-selection-tag: var(--selection-tag);
   --color-selection-tag-hover: var(--selection-tag-hover);
@@ -234,6 +238,10 @@
   --layer-active: var(--color-bgElevation1Active);
   /* A selected table row: Core's layer-selected-01. */
   --layer-selected: var(--color-bgElevation1Selected);
+  /* The calendar's days: Core's layer-selected-inverse under the picked day's number, and
+   * Miscellaneous/highlight behind the days of a range. */
+  --layer-selected-inverse: var(--color-bgToggleOn);
+  --highlight: var(--color-bgHighlight);
   /* The toggle, from Core's Selection tag in Secondary Navy. Its Selected ring is the tag's ink
    * and its Disabled ring the Disabled fill, as Core's Tag tokens alias them. */
   --selection-tag: var(--color-bgTagNeutral);

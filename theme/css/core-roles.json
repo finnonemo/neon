@@ -100,5 +100,6 @@
   "bgTagWarning": "Tag/Orange/Secondary/background",
   "fgTagWarning": "Tag/Orange/Secondary/color",
   "bgTagNegative": "Tag/Red/Secondary/background",
-  "fgTagNegative": "Tag/Red/Secondary/color"
+  "fgTagNegative": "Tag/Red/Secondary/color",
+  "bgHighlight": "Miscellaneous/highlight"
 }

@@ -74,8 +74,9 @@
     "why": "Core has one modal: dialog follows Alert at the web look (ADR 0009)."
   },
   "calendar": {
-    "counterpart": null,
-    "why": "Core has no web calendar grid: Date and time is the iOS picker."
+    "counterpart": "Date and time",
+    "doc": "components/date-and-time.md",
+    "why": "Calendar is the month grid of Date and time's Pickers set: its Header, Weekdays and Weeks of days. Date and time - Collapsed and the Time row have no Neon item."
   },
   "date-picker": {
     "counterpart": null,
