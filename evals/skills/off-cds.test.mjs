@@ -102,7 +102,7 @@ test('every file that offers the CDS Install mode says it is deprecated, names t
   // finnonemo/neon#287: one release of notice before finnonemo/neon#258 removes the mode.
   const { version } = JSON.parse(await readFile(join(root, 'package.json'), 'utf8'));
   const removedIn = `${Number(version.split('.')[0]) + 1}.0.0`;
-  for (const path of ['skills/neon-create/SKILL.md', CDS_REFERENCE, 'skills/neon-audit/references/theme-integration.md', 'README.md', 'GLOSSARY.md']) {
+  for (const path of ['skills/neon-create/SKILL.md', CDS_REFERENCE, 'skills/neon-audit/SKILL.md', 'skills/neon-audit/references/theme-integration.md', 'README.md', 'GLOSSARY.md']) {
     const notice = (await lines(path)).filter(({ text }) => /CDS Install mode[^.]* is deprecated/.test(text));
     assert.equal(notice.length, 1, `${path} carries the notice once`);
     assert.ok(notice[0].text.includes(`Neon ${removedIn} removes it`), `${notice[0].at} names Neon ${removedIn}`);
