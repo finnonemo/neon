@@ -19,17 +19,18 @@ const INDEX = 'index.json';
 // Core's Web compile, in a Core checkout, and the directory its compiler lives in.
 const WEB_COMPILE = 'docs/agents/web-compile.mjs';
 const COMPILER_DIR = 'docs/agents';
-// The look Core's Web compile is compiled at: Core's web look (GLOSSARY).
-const LOOK = { iOS: false, textSize: 'Large' };
+// The look every doc was compiled at, as Core's Web compile reports it for the run: "Look: iOS=False, text size Large."
+// Which look that is is Core's to pick (its web look, GLOSSARY): Neon states none of its own.
+const LOOK_LINE = /^Look: iOS=(True|False), text size (.+)\.$/m;
 const sha256 = content => createHash('sha256').update(content).digest('hex');
 const sealOf = ({ core, look, files }) => sha256(JSON.stringify({ core, look, files }));
 const git = (cwd, ...args) => execFileSync('git', ['-C', cwd, ...args], { encoding: 'utf8' }).trim();
 
 /**
  * Runs Core's Web compile of the checkout at `from`, with the compiler in the checkout at `compiler`, and returns
- * what it wrote: { repository, commit, files: Map path → content, leftOut: { doc: standing } }. The repository and
- * the commit are the ones the compile prints; `--committed` has it refuse a source with uncommitted changes, so that
- * commit names what was compiled.
+ * what it wrote: { repository, commit, look: { iOS, textSize }, files: Map path → content, leftOut: { doc: standing } }.
+ * The repository, the commit and the look are the ones the compile prints; `--committed` has it refuse a source with
+ * uncommitted changes, so that commit names what was compiled. A compile from before Core's printed the look is refused.
  */
 async function webCompile({ from, compiler }) {
   const script = join(compiler, WEB_COMPILE);
@@ -48,10 +49,12 @@ async function webCompile({ from, compiler }) {
     }
     const wrote = printed.match(/^Wrote \d+ files to .* from (\S+) ([0-9a-f]{40})\.$/m);
     if (!wrote) throw new Error(`Core's Web compile did not print the commit it compiled ("Wrote N files to <dir> from <repository> <commit>."), so nothing was written. It printed:\n${printed.trim()}`);
+    const looked = printed.match(LOOK_LINE);
+    if (!looked) throw new Error(`Core's Web compile did not print the look it compiled at ("Look: iOS=<True|False>, text size <size>."), so nothing was written. The Core commit whose compile ran is too old: it is from before the compile printed the look. Sync a newer Core commit, or compile this one with a newer checkout's: --compiler <Core checkout>. It printed:\n${printed.trim()}`);
     const files = new Map();
     for (const path of (await listFiles(built)).map(path => path.split(sep).join('/')).sort()) files.set(path, await readFile(join(built, path), 'utf8'));
     const leftOut = Object.fromEntries([...printed.matchAll(/^Left out, (\w+): (.+)\.$/gm)].flatMap(([, standing, names]) => names.split(', ').map(name => [name, standing])));
-    return { repository: wrote[1], commit: wrote[2], files, leftOut };
+    return { repository: wrote[1], commit: wrote[2], look: { iOS: looked[1] === 'True', textSize: looked[2] }, files, leftOut };
   } finally {
     await rm(built, { recursive: true, force: true });
   }
@@ -209,8 +212,8 @@ async function coreAt({ from, at }, use) {
  * there. `at` names the commit or ref to compile, in a temporary worktree of the checkout; without it the checkout's
  * own working tree is compiled, at whatever it has checked out. `compiler` is the Core checkout whose compile runs:
  * what is compiled unless that commit is older than the compile, and then the snapshot records the compiler's commit
- * too. `items` are the registry's components, as registryComponents gives them. Returns the commit, the files
- * written, the Core docs the compile left out, by standing, and what moved since the snapshot it replaced
+ * too. `items` are the registry's components, as registryComponents gives them. Returns the commit, the look the compile
+ * reported, the files written, the Core docs the compile left out, by standing, and what moved since the snapshot it replaced
  * (movedReport). With `write` false it compiles, refuses what a sync refuses and returns the same, and leaves `out`
  * as it was.
  */
@@ -221,7 +224,7 @@ export async function syncCore({ at, ...options }) {
 
 async function syncCheckout({ from, compiler = from, out, items, counterparts, write = true }) {
   const compiled = await webCompile({ from, compiler });
-  const { repository, commit, leftOut } = compiled;
+  const { repository, commit, look, leftOut } = compiled;
   const core = { repository, commit };
   if (realpathSync(compiler) !== realpathSync(from)) {
     const uncommitted = git(compiler, 'status', '--porcelain', '--', COMPILER_DIR);
@@ -233,9 +236,9 @@ async function syncCheckout({ from, compiler = from, out, items, counterparts, w
   for (const reserved of [INDEX, MANIFEST]) if (files.has(reserved)) throw new Error(`Core's Web compile wrote ${reserved}, which is the snapshot's own file, so nothing was written.`);
   const data = value => `${JSON.stringify(value, null, 2)}\n`;
   files.set(INDEX, data(counterpartIndex({ items, counterparts, files, leftOut })));
-  // The manifest: where the snapshot came from, the look it was compiled at, each file's hash for the repository check, and a seal over all three.
+  // The manifest: where the snapshot came from, the look the compile reported for this run, each file's hash for the repository check, and a seal over all three.
   const hashes = Object.fromEntries([...files].sort(([a], [b]) => (a < b ? -1 : 1)).map(([path, content]) => [path, sha256(content)]));
-  const manifest = { core, look: LOOK, files: hashes };
+  const manifest = { core, look, files: hashes };
   files.set(MANIFEST, data({ ...manifest, seal: sealOf(manifest) }));
   const moved = movedSince(await readFile(join(out, MANIFEST), 'utf8').then(JSON.parse, () => null), { from, core, hashes });
   if (write) {
@@ -245,7 +248,7 @@ async function syncCheckout({ from, compiler = from, out, items, counterparts, w
       await writeFile(join(out, path), content);
     }
   }
-  return { commit, compiler: core.compiler, files: [...files.keys()], leftOut, moved };
+  return { commit, compiler: core.compiler, look, files: [...files.keys()], leftOut, moved };
 }
 
 /**
