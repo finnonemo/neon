@@ -120,7 +120,7 @@ The buttons' glyphs are Icon button's, set by the `Size` each Stepper `Size` pin
 | Medium | 48 | Small | 36, 6 from each edge | 15 (`/Medium`, as the value's step) |
 | Small | 36 | XSmall | 28, 4 from each edge | 13 (`/Small`, one step under the value's 15) |
 
-`minus` and `plus` are Font Awesome glyphs set through the Icons instance's `Icon Text` (structure.md on PR #206, "Icons" and check 12). Nothing is drawn as a vector. The glyphs never swap, so no fixed-width icon layer is needed.
+`minus` and `plus` are Font Awesome glyphs set through the Icons instance's `Icon Text` (structure.md on PR pawisssh/design-system#206, "Icons" and check 12). Nothing is drawn as a vector. The glyphs never swap, so no fixed-width icon layer is needed.
 
 ## Text styles, wrapping and truncation
 

@@ -19,7 +19,7 @@ Text field (variant root)          Fill × Hug, no fill, no padding, no min size
       └─ Helper Text | Error message | Success message | Warning message, with its glyph on Error / Success
 ```
 
-No trailing action: Clear, its `Action slot` (#191) and `_Text field action` were removed 2026-11-02 (owner). Password field's eye is a plain Icons instance last in its `Field` ([password-field.md](password-field.md)).
+No trailing action: Clear, its `Action slot` (pawisssh/design-system#191) and `_Text field action` were removed 2026-11-02 (owner). Password field's eye is a plain Icons instance last in its `Field` ([password-field.md](password-field.md)).
 
 ## Axes
 
@@ -90,11 +90,11 @@ Pairs (the spec's `contrast` list): Title and the Detail lines on the Base surfa
 | --- | --- | --- | --- |
 | `Title` | `Headings/Headline` · `Body/Callout` · `Body/Subheadline` | wraps (auto height) | none yet |
 | `Input text` | `Body/Body` · `Body/Callout` · `Body/Subheadline` | one line: Hug, auto width, `ENDING`, `maxLines` 1 (owner, 2026-11-02) | none yet |
-| `Placeholder text` | as Input text | one line: Fill, auto height, `ENDING`, `maxLines` 1 (#191) | none yet |
+| `Placeholder text` | as Input text | one line: Fill, auto height, `ENDING`, `maxLines` 1 (pawisssh/design-system#191) | none yet |
 | `_Unit suffix` › `Unit` | as Input text | one line, never cut | the Utility's `Unit` |
 | `Helper Text` · `Error message` · `Success message` · `Warning message` | `Body/Subheadline` | wraps, never truncates | none yet |
 
-Height growth from #115's Thai line heights: 114 · 105 · 92 → **120 · 112 · 100** (Large · Medium · Small, measured on Active, Error and Loading variants, 2026-11-01).
+Height growth from pawisssh/design-system#115's Thai line heights: 114 · 105 · 92 → **120 · 112 · 100** (Large · Medium · Small, measured on Active, Error and Loading variants, 2026-11-01).
 
 ## Hit target and Skeleton
 
