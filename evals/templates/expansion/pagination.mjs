@@ -78,6 +78,32 @@ export function a11y({ test, expect, gotoExpansion, keyboardFocus, focusColor })
     await expect(current).toHaveAccessibleName('หน้า 3 / Page 3');
   });
 
+  // Enter on Previous at page 2 disables it under the keyboard, and Core's Icon button, Tertiary,
+  // Disabled has no fill. Chromium takes the focus off a link that loses its href. A browser that
+  // leaves it there still matches :focus-visible: the second half focuses the disabled link to
+  // stand in for one, with no transition so the fill is read at once.
+  test('previous that turns disabled while it holds keyboard focus has no fill', async ({ page }) => {
+    await gotoExpansion(page);
+    const pages = page.locator(nav).getByRole('navigation', { name: 'เลือกหน้า / Pages' });
+    const previous = pages.getByRole('link', { name: 'หน้าก่อนหน้า / Previous page' });
+    const transparent = 'rgba(0, 0, 0, 0)';
+    await pages.getByRole('link', { name: 'หน้าถัดไป / Next page' }).click();
+    await keyboardFocus(page, previous);
+    await expect(previous).not.toHaveCSS('background-color', transparent);
+    await page.keyboard.press('Enter');
+    await expect(previous).toBeDisabled();
+    await expect(previous).toHaveCSS('background-color', transparent);
+
+    await previous.evaluate((el) => {
+      el.style.transition = 'none';
+      el.tabIndex = -1;
+      el.focus();
+    });
+    await expect(previous).toBeFocused();
+    expect(await previous.evaluate((el) => el.matches(':focus-visible'))).toBe(true);
+    await expect(previous).toHaveCSS('background-color', transparent);
+  });
+
   // Core's page has one box. A size is the Button's, so a page number given one keeps the Button.
   test('a page number given a size keeps the Button in that size', async ({ page }) => {
     await gotoExpansion(page);

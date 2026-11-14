@@ -14,6 +14,9 @@ import { cn } from "@/lib/utils"
 // keyboard focus, as Core's Focus state does. Disabled takes Core's disabled
 // fill and label, which dim by their own alpha: no opacity. The focus
 // indicator is Core's Focus/focus, 2px, drawn 2px outside the button.
+// ghost at an icon size is Core's Icon button, Tertiary
+// (core/components/icon-button.md): Disabled it has no fill and its glyph is
+// Icon/icon-disabled, where a Tertiary Button with a label keeps the fill.
 // Sizes: default is Large (56), md Medium (48), sm Small (36), xs XSmall (28).
 // Below Large the label is Core's Subheadline or Footnote in Medium, which no
 // type role holds: text-button-md and text-button-xs (theme/neon.css).
@@ -32,7 +35,7 @@ const buttonVariants = cva(
           "bg-button-secondary text-secondary-foreground hover:bg-button-secondary-hover focus-visible:bg-button-secondary-hover active:bg-button-secondary-active disabled:bg-button-disabled disabled:text-button-disabled-foreground",
         outline: "border border-input bg-background text-foreground hover:bg-accent disabled:text-button-disabled-foreground",
         ghost:
-          "text-foreground hover:bg-button-secondary-hover focus-visible:bg-button-secondary-hover active:bg-button-secondary-active disabled:bg-button-disabled disabled:text-button-disabled-foreground",
+          "text-foreground hover:bg-button-secondary-hover focus-visible:bg-button-secondary-hover active:bg-button-secondary-active",
         link: "text-link hover:text-link-hover active:text-link-hover disabled:text-button-disabled-foreground",
         brand:
           "bg-button-brand text-button-brand-foreground hover:bg-button-brand-hover focus-visible:bg-button-brand-hover active:bg-button-brand-active disabled:bg-button-disabled disabled:text-button-disabled-foreground",
@@ -48,6 +51,15 @@ const buttonVariants = cva(
         "icon-sm": "size-8",
       },
     },
+    // ghost's Disabled look goes by size, in two rules that share no property.
+    compoundVariants: [
+      {
+        variant: "ghost",
+        size: ["default", "md", "sm", "xs"],
+        class: "disabled:bg-button-disabled disabled:text-button-disabled-foreground",
+      },
+      { variant: "ghost", size: ["icon", "icon-sm"], class: "disabled:text-icon-disabled" },
+    ],
     defaultVariants: {
       variant: "default",
       size: "default",
