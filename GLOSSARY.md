@@ -29,7 +29,7 @@ Finnomena's design system, "(v3) Components / Core": the components, their specs
 _Avoid_: the DS, v3, Figma library
 
 **Core snapshot**:
-The compiled copy of Core that Neon carries, pinned to one Core commit. Core's repository compiles it with its Web compile, and Neon's Core sync carries what that writes. Skills and evals read Core only through it, since employees cannot reach Core's own repository.
+The compiled copy of Core that Neon carries, pinned to one Core commit and written by the Core sync ([CONTRIBUTING.md](CONTRIBUTING.md#sync-the-core-snapshot)). Skills and evals read Core only through it, since employees cannot reach Core's own repository.
 _Avoid_: Core copy, DS export
 
 **Counterpart**:
