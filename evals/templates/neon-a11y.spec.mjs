@@ -133,9 +133,14 @@ test('the dialog and the row menu return focus to their triggers', async ({ page
   await reject.click();
   const dialog = page.getByRole('dialog', { name: 'ยืนยันการปฏิเสธ' });
   await expect(dialog).toBeVisible();
-  // Radix hides the page behind the dialog from assistive technology; it hides
-  // main rather than #root, since #root also holds the toaster's live region.
-  await expect(page.locator('main')).toHaveAttribute('aria-hidden', 'true');
+  // Radix hides the page behind the dialog from assistive technology, and keeps
+  // every live region reachable: the toaster's, and the month heading of each
+  // calendar on the screen (react-day-picker's aria-live). So it hides the
+  // sections beside the calendars' rather than main (the trigger's own, and the
+  // one after the calendars), and in a calendar everything but that heading.
+  await expect(page.locator('[data-measure=actions]')).toHaveAttribute('aria-hidden', 'true');
+  await expect(page.locator('[data-measure=core-buttons]')).toHaveAttribute('aria-hidden', 'true');
+  await expect(page.locator('[data-measure=core-calendar] [data-calendar=date] [role=grid]')).toHaveAttribute('aria-hidden', 'true');
   await page.keyboard.press('Escape');
   await expect(dialog).toBeHidden();
   await expect(reject).toBeFocused();
@@ -335,6 +340,131 @@ test('a checkbox draws the glyph of its Selection, Space ticks it and a press ta
   expect(await drawn(channels)).toEqual([2]);
 });
 
+// Core's Date and time: the calendar's three fixtures, with 15 October as today.
+const gotoCalendars = async (page, mode = 'light') => {
+  await page.clock.setFixedTime(new Date(2026, 9, 15, 12));
+  await page.goto(`/?layout=extras${mode === 'dark' ? '&mode=dark' : ''}`);
+  await page.evaluate(() => document.fonts.ready);
+};
+const calendarDay = (page, hook, date) => page.locator(`[data-measure=core-calendar] [data-calendar=${hook}] button[data-day="${date}"]`);
+const box = async (locator) => {
+  const { x, y, width, height } = await locator.boundingBox();
+  return { left: Math.round(x), top: Math.round(y), right: Math.round(x + width), bottom: Math.round(y + height) };
+};
+
+// The cell is the target; the ring is drawn on the 36px Mark inside it: Focus/focus, 2px, 2px out.
+for (const mode of ['light', 'dark']) test(`${mode}: a calendar day reached from the keyboard draws Core's Focus ring outside its Mark, and the pointer fills a Mark`, async ({ page }) => {
+  await gotoCalendars(page, mode);
+  await calendarDay(page, 'date', '2026-10-10').focus();
+  await page.keyboard.press('ArrowRight');
+  const day = calendarDay(page, 'date', '2026-10-11');
+  await expect(day).toBeFocused();
+  expect(await day.evaluate((el) => el.matches(':focus-visible'))).toBe(true);
+  await expect(day).toHaveCSS('outline-style', 'none');
+  const mark = day.locator('[data-slot=calendar-day-mark]');
+  await expect(mark).toHaveCSS('outline-style', 'solid');
+  await expect(mark).toHaveCSS('outline-width', '2px');
+  await expect(mark).toHaveCSS('outline-offset', '2px');
+  await expect(mark).toHaveCSS('outline-color', await focusColor(page));
+  // A day the pointer is over takes Layer/layer-hover-01 in its Mark; a picked day keeps its disc.
+  const hovered = calendarDay(page, 'date', '2026-10-20');
+  await hovered.hover();
+  await expect(hovered.locator('[data-slot=calendar-day-mark]')).toHaveCSS('background-color', await computed(page, 'var(--color-bgElevation1Hover)'));
+  const picked = calendarDay(page, 'date', '2026-10-10');
+  await picked.hover();
+  await expect(picked.locator('[data-slot=calendar-day-mark]')).toHaveCSS('background-color', await computed(page, 'var(--color-bgToggleOn)'));
+});
+
+test("a calendar's Header, Weekdays and Weeks stack with no gap, and today's dot sits 4 under its number", async ({ page }) => {
+  await gotoCalendars(page);
+  const calendar = page.locator('[data-measure=core-calendar] [data-calendar=date] [data-slot=calendar]');
+  const header = await box(calendar.locator('.rdp-month_caption'));
+  const weekdays = await box(calendar.locator('.rdp-weekdays'));
+  const weeks = await Promise.all((await calendar.locator('.rdp-week').all()).map(box));
+  expect(weekdays.top).toBe(header.bottom);
+  expect(weeks[0].top).toBe(weekdays.bottom);
+  for (let at = 1; at < weeks.length; at++) expect(weeks[at].top).toBe(weeks[at - 1].bottom);
+  // Seven 48px days: the grid is 336 wide, the arrows end at its right edge.
+  expect(weeks[0].right - weeks[0].left).toBe(336);
+  expect((await box(calendar.locator('.rdp-button_next'))).right).toBe(weeks[0].right);
+  expect((await box(calendarDay(page, 'date', '2026-10-21'))).left).toBe((await box(calendarDay(page, 'date', '2026-10-20'))).right);
+  await expect(calendar.locator('.rdp-weekday')).toHaveText(['S', 'M', 'T', 'W', 'T', 'F', 'S']);
+  await expect(calendar.locator('.rdp-weekday').first()).toHaveAttribute('aria-label', 'Sunday');
+
+  const today = calendarDay(page, 'date', '2026-10-15');
+  const number = await box(today.locator('[data-slot=calendar-day-number]'));
+  const dot = await box(today.locator('[data-slot=calendar-day-dot]'));
+  expect(dot.top - number.bottom).toBe(4);
+  expect(dot.left + dot.right).toBe(number.left + number.right);
+  // Current and Selected is drawn as Selected: the dot goes.
+  await expect(calendarDay(page, 'today', '2026-10-15').locator('[data-slot=calendar-day-dot]')).toHaveCount(0);
+});
+
+test('a calendar announces its days, moves by the keyboard and picks a day', async ({ page }) => {
+  await gotoCalendars(page);
+  const calendar = page.locator('[data-measure=core-calendar] [data-calendar=date] [data-slot=calendar]');
+  await expect(calendar.getByRole('grid')).toHaveCount(1);
+  const picked = calendarDay(page, 'date', '2026-10-10');
+  await expect(picked).toHaveAccessibleName(/Saturday, October 10th, 2026/);
+  await expect(calendar.locator('[role=gridcell][aria-selected=true]')).toHaveAttribute('data-day', '2026-10-10');
+  await expect(calendarDay(page, 'date', '2026-10-15')).toHaveAttribute('aria-current', 'date');
+  await expect(picked).not.toHaveAttribute('aria-current');
+  // A disabled day is skipped by a press and announced.
+  await expect(calendarDay(page, 'date', '2026-10-02')).toBeDisabled();
+
+  await picked.focus();
+  await page.keyboard.press('ArrowDown');
+  await expect(calendarDay(page, 'date', '2026-10-17')).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(calendar.locator('[role=gridcell][aria-selected=true]')).toHaveAttribute('data-day', '2026-10-17');
+  await expect(picked.locator('[data-slot=calendar-day-mark]')).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+  await page.keyboard.press('PageDown');
+  await expect(calendar.locator('.rdp-caption_label')).toHaveText('November 2026');
+  await expect(calendar.locator('.rdp-caption_label')).toHaveAttribute('aria-live', 'polite');
+});
+
+// Core's Icon button, Tertiary: an arrow that cannot move takes Icon/icon-disabled and no fill.
+test('a calendar arrow at the first month is disabled in Core\'s Disabled ink', async ({ page }) => {
+  await gotoCalendars(page);
+  const calendar = page.locator('[data-measure=core-calendar] [data-calendar=today] [data-slot=calendar]');
+  const previous = calendar.locator('.rdp-button_previous');
+  await expect(previous).toHaveAttribute('aria-disabled', 'true');
+  await expect(previous).toHaveCSS('color', await computed(page, 'var(--color-fgIconDisabled)'));
+  await expect(previous).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+  await previous.click({ force: true });
+  await expect(calendar.locator('.rdp-caption_label')).toHaveText('October 2026');
+  const next = calendar.locator('.rdp-button_next');
+  await expect(next).toHaveCSS('color', await computed(page, 'var(--color-fgIcon)'));
+  await next.click();
+  await expect(calendar.locator('.rdp-caption_label')).toHaveText('November 2026');
+  await expect(previous).not.toHaveAttribute('aria-disabled');
+});
+
+// Core's Range start, In range and Range end: one band from the first disc's middle to the last's.
+test("a range draws one band between its ends, and a new end moves it", async ({ page }) => {
+  await gotoCalendars(page);
+  const calendar = page.locator('[data-measure=core-calendar] [data-calendar=range] [data-slot=calendar]');
+  const band = (date) => calendarDay(page, 'range', date).locator('[data-slot=calendar-day-band]');
+  await expect(calendar.locator('[role=gridcell][aria-selected=true]')).toHaveCount(8);
+  await expect(calendar.locator('[data-slot=calendar-day-band]')).toHaveCount(8);
+  const start = await box(calendarDay(page, 'range', '2026-11-17'));
+  const end = await box(calendarDay(page, 'range', '2026-11-24'));
+  expect(await box(band('2026-11-17'))).toMatchObject({ left: start.left + 24, right: start.right });
+  expect((await box(band('2026-11-18'))).left).toBe(start.right);
+  expect(await box(band('2026-11-24'))).toMatchObject({ left: end.left, right: end.left + 24 });
+  expect((await box(band('2026-11-23'))).right).toBe(end.left);
+  // The band is 36 tall, centred in the 48px week.
+  expect(await box(band('2026-11-20'))).toMatchObject({ top: start.top + 6, bottom: start.bottom - 6 });
+  // The days outside it have none.
+  await expect(band('2026-11-16')).toHaveCount(0);
+  await expect(band('2026-11-25')).toHaveCount(0);
+
+  await calendarDay(page, 'range', '2026-11-26').click();
+  await expect(calendarDay(page, 'range', '2026-11-26')).toHaveAttribute('data-range', 'end');
+  await expect(calendarDay(page, 'range', '2026-11-24')).toHaveAttribute('data-range', 'middle');
+  await expect(calendar.locator('[data-slot=calendar-day-band]')).toHaveCount(10);
+});
+
 test('a loading button keeps its size, focus and name, is announced as busy and ignores a press', async ({ page }) => {
   await page.goto('/?layout=extras');
   const send = page.getByRole('button', { name: 'ส่งรายงาน' });
@@ -371,8 +501,9 @@ test.describe('in a Thai browser', () => {
     expect(await page.evaluate(() => new Date(2026, 9, 10).toLocaleDateString())).toContain('2569');
     const field = page.locator('[data-measure=date] [data-slot=date-picker]');
     await field.click();
-    await expect(page.locator('[data-slot=calendar] .rdp-caption_label')).toHaveText('October 2026');
-    await page.locator('[data-slot=calendar] button[data-day="2026-10-10"]').click();
+    const calendar = page.locator('[data-slot=popover-content] [data-slot=calendar]');
+    await expect(calendar.locator('.rdp-caption_label')).toHaveText('October 2026');
+    await calendar.locator('button[data-day="2026-10-10"]').click();
     await expect(field).toHaveText('10/10/2026');
     await expect(field).toBeFocused();
   });

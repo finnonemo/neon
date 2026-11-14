@@ -25,8 +25,8 @@
     "why": "Each button in the group matches Button. Core has no joined group of Buttons: its Button dock stacks or splits whole Buttons at the bottom of a screen."
   },
   "calendar": {
-    "core": null,
-    "why": "Core has no web calendar grid: Date and time is the iOS picker."
+    "core": "date-and-time",
+    "why": "Calendar is the month grid of Date and time's Pickers set: its Header, Weekdays and Weeks of days. Date and time - Collapsed and the Time row have no Neon item."
   },
   "card": {
     "core": null,
