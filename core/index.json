@@ -79,8 +79,10 @@
     "why": "Calendar is the month grid of Date and time's Pickers set: its Header, Weekdays and Weeks of days. Date and time - Collapsed and the Time row have no Neon item."
   },
   "date-picker": {
-    "counterpart": null,
-    "why": "It is composed from calendar, which has no Counterpart."
+    "counterpart": "Date picker",
+    "doc": "components/date-picker.md",
+    "values": "components/date-picker.json",
+    "why": "Date picker is Core's Single at Large: one Date field with the calendar open under it. The field is a button that opens the calendar, not Core's typed input; the Range Type and the Medium and Small Sizes have no Neon prop."
   },
   "table": {
     "counterpart": "Table",
