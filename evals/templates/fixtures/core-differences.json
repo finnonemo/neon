@@ -145,7 +145,6 @@
     "buttonInput: h 56 ≠ 54"
   ],
   "expansion-pagination@375-light": [
-    "previous: bg rgba(1, 23, 43, 0.1) ≠ rgba(255, 255, 255, 0)",
     "previous: opacity 1 ≠ 0.5",
     "previousIcon: color rgba(0, 0, 0, 0.45) ≠ rgba(0, 0, 0, 0.85)",
     "current: font.lineHeight 24 ≠ 22",
@@ -382,7 +381,6 @@
     "buttonInput: h 56 ≠ 54"
   ],
   "expansion-pagination@375-dark": [
-    "previous: bg rgba(255, 255, 255, 0.1) ≠ rgba(0, 0, 0, 0)",
     "previous: opacity 1 ≠ 0.5",
     "previousIcon: color rgba(255, 255, 255, 0.45) ≠ rgb(255, 255, 255)",
     "current: font.lineHeight 24 ≠ 22",
@@ -625,7 +623,6 @@
     "buttonInput: h 56 ≠ 54"
   ],
   "expansion-pagination@1440-light": [
-    "previous: bg rgba(1, 23, 43, 0.1) ≠ rgba(255, 255, 255, 0)",
     "previous: opacity 1 ≠ 0.5",
     "previousIcon: color rgba(0, 0, 0, 0.45) ≠ rgba(0, 0, 0, 0.85)",
     "current: font.lineHeight 24 ≠ 22",
@@ -871,7 +868,6 @@
     "buttonInput: h 56 ≠ 54"
   ],
   "expansion-pagination@1440-dark": [
-    "previous: bg rgba(255, 255, 255, 0.1) ≠ rgba(0, 0, 0, 0)",
     "previous: opacity 1 ≠ 0.5",
     "previousIcon: color rgba(255, 255, 255, 0.45) ≠ rgb(255, 255, 255)",
     "current: font.lineHeight 24 ≠ 22",
