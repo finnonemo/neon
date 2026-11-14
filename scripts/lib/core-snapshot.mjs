@@ -60,6 +60,19 @@ async function webCompile({ from, compiler }) {
 // The names of the docs among a snapshot's paths. Core's Web compile writes every approved doc and no other.
 const approvedDocs = paths => new Set([...paths].flatMap(path => path.match(/^components\/(.+)\.md$/)?.[1] ?? []));
 
+// The fields of a Counterpart table entry.
+const ENTRY_FIELDS = ['core', 'why', 'unmatched', 'notInCore', 'notInCorePassThrough'];
+
+/**
+ * An entry holds only the table's fields: one under another name is read by nothing, so a misspelt mark would be
+ * dropped with nothing failing. Returns the problems, one line each.
+ */
+function fieldProblems(counterparts) {
+  return Object.entries(counterparts).flatMap(([name, entry]) => Object.keys(entry)
+    .filter(field => !ENTRY_FIELDS.includes(field))
+    .map(field => `${name}: ${field} is not a field of a Counterpart table entry, which has ${ENTRY_FIELDS.join(', ')}.`));
+}
+
 /**
  * An item with no Counterpart and the name of an approved Core doc must name that doc as `unmatched`, so a doc
  * Core approves later cannot leave the entry's `why` false with nothing failing. `approved` is the names of
@@ -94,7 +107,7 @@ function passThroughProblems(counterparts, items) {
 }
 
 /**
- * The repository check for the Counterpart table against the snapshot at `directory`: the `unmatched` rule, and,
+ * The repository check for the Counterpart table against the snapshot at `directory`: its fields, the `unmatched` rule, and,
  * where the registry is at hand (`items`, as registryComponents gives them), the `notInCorePassThrough` rule and
  * the index. The docs are read from the files the snapshot holds, so the check needs no Core checkout. The index is
  * the table read against those files, so a table that moved without a sync leaves every hash as recorded: the index
@@ -103,7 +116,9 @@ function passThroughProblems(counterparts, items) {
 export async function checkCounterpartTable(counterparts, directory, { items } = {}) {
   const read = path => readFile(join(directory, path), 'utf8');
   const { files } = JSON.parse(await read(MANIFEST));
-  const problems = unmatchedProblems(counterparts, approvedDocs(Object.keys(files)));
+  // A misspelt field first: the rules below would read the entry as one without it.
+  const problems = fieldProblems(counterparts);
+  if (!problems.length) problems.push(...unmatchedProblems(counterparts, approvedDocs(Object.keys(files))));
   if (!problems.length && items) {
     const held = new Map(await Promise.all(Object.keys(files).filter(path => path !== INDEX).map(async path => [path, await read(path)])));
     let given;
@@ -129,9 +144,11 @@ export async function checkCounterpartTable(counterparts, directory, { items } =
  * library whose props the item hands on unnamed (`notInCorePassThrough`, passThroughProblems), for the Catalog site
  * to mark; the skills leave both out of new work (ADR 0009). The index carries neither.
  * An entry with no Counterpart whose item has the name of an approved Core doc names that doc (`unmatched`);
- * the index does not carry it either.
+ * the index does not carry it either. An entry has no other field (fieldProblems).
  */
 function counterpartIndex({ items, counterparts, files, leftOut }) {
+  const fields = fieldProblems(counterparts);
+  if (fields.length) throw new Error(fields.join('\n'));
   const unmatched = unmatchedProblems(counterparts, approvedDocs(files.keys()));
   if (unmatched.length) throw new Error(unmatched.join('\n'));
   const names = items.map(item => item.name);
