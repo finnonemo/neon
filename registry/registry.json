@@ -88,7 +88,7 @@
       "name": "checkbox",
       "type": "registry:ui",
       "title": "Checkbox",
-      "dependencies": ["radix-ui@^1.8.1", "lucide-react@^1.66.0"],
+      "dependencies": ["radix-ui@^1.8.1"],
       "registryDependencies": ["@neon/utils"],
       "files": [
         { "path": "ui/checkbox.tsx", "type": "registry:ui", "target": "src/components/ui/checkbox.tsx" }
