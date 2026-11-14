@@ -75,7 +75,7 @@ The part of Neon that puts canonical theme assets into a target project and, unl
 _Avoid_: setup script, install script
 
 **Install mode**:
-One of the things the installer can do: **New**, which starts an app from the Neon base in an empty directory; **Add**, which adds Neon registry items to an existing app; **CSS-only**, which adds only the CSS adapter; and **CDS**, frozen for apps already on CDS, which adds the CDS theme to an existing project.
+One of the things the installer can do: **New**, which starts an app from the Neon base in an empty directory; **Add**, which adds Neon registry items to an existing app; **CSS-only**, which adds only the CSS adapter; and **CDS**, frozen for apps already on CDS, which adds the CDS theme to an existing project. The CDS Install mode is deprecated: Neon 2.0.0 removes it, and an app on CDS moves off it by a Rebuild on the Neon base.
 _Avoid_: tier. Tier is the styling decision a skill makes. Install mode is what the installer does to carry it out.
 
 **Starter assembly**:

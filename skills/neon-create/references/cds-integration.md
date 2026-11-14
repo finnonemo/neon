@@ -1,6 +1,8 @@
-# CDS integration (frozen): apps already on CDS
+# CDS integration (frozen, deprecated): apps already on CDS
 
 Read only in an app already on CDS, which is frozen there: for its components, for a review of it, or when changing its theme, providers, dependencies or token configuration. CDS component names, setup and patterns are here; the other references are written for the Neon base and name no CDS component. New apps and rebuilds use the [Neon base](neon-base.md); never add CDS to an app without it, nor Neon or shadcn items to an app on CDS. A working Finnomena app adding a feature skips the setup below.
+
+The CDS Install mode is deprecated: Neon 2.0.0 removes it. Until then it works as this reference describes. Do the requested work on CDS, and in the report say once that the mode is deprecated and which version removes it, and offer a [Rebuild](rebuild.md) on the Neon base. Rebuild only when the employee asks for it.
 
 ## Prepare and install
 

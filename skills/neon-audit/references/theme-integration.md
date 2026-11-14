@@ -20,6 +20,8 @@ Check existing/requested modes and relevant transitions.
 
 The installer preflights destination content before copying theme files and refuses to overwrite customization. Compare the canonical source (`theme/css/theme.css`, or the files under `theme/cds/` in an app already on CDS) with the actual destination. Merge only legitimate incoming changes while retaining local tokens, selectors and configuration. Ask a precise question only for an irreconcilable same-property conflict not resolved by the request.
 
+The CDS Install mode, which copies the `theme/cds/` files into an app already on CDS, is deprecated: Neon 2.0.0 removes it. Resolve the conflict as asked, then say so in the report and offer a [Rebuild](../../neon-create/references/rebuild.md) on the Neon base.
+
 Never delete customized files or modify the installer to bypass protection. A merged file retaining local additions still differs from canonical source; do not claim rerunning installation becomes a no-op. Finish the required file merges individually, verify resulting imports/dependencies, and rerun only operations whose preconditions are met.
 
 If a copy fails after starting, inspect which files landed before retrying. Known content conflicts are preflighted; unexpected disk/I/O failures can leave partial writes and are not automatically rolled back.

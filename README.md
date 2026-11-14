@@ -4,7 +4,7 @@
 
 Neon is a set of six AI skills, Finnomena theme assets, and the Neon registry of React components. The main journeys are create, redesign and review. Audit is an optional assessment when the target or integration approach is unclear. The fifth skill, `neon-block`, draws Brand Artwork such as an ad, a post or a cover with the engine of Block, Finnomena's Pattern builder. The sixth, `neon-deck`, builds a deck of slides as one HTML file whose cover, closing and Patterns come from the same engine.
 
-A new React app is built on the Neon base: [shadcn/ui](https://ui.shadcn.com) on Tailwind with Radix primitives, using Neon's components from the Neon registry. Each component is tuned to match its counterpart in Core, Finnomena's design system, and colors and type sizes come from Core's Theme. An app already on [Coinbase Design System](https://github.com/coinbase/cds) (CDS, `@coinbase/cds-web`) keeps its CDS components: CDS is frozen for those apps, which get bug fixes only.
+A new React app is built on the Neon base: [shadcn/ui](https://ui.shadcn.com) on Tailwind with Radix primitives, using Neon's components from the Neon registry. Each component is tuned to match its counterpart in Core, Finnomena's design system, and colors and type sizes come from Core's Theme. An app already on [Coinbase Design System](https://github.com/coinbase/cds) (CDS, `@coinbase/cds-web`) keeps its CDS components: CDS is frozen for those apps, which get bug fixes only. The CDS Install mode is deprecated: Neon 2.0.0 removes it, and an app on CDS moves off it by a Rebuild on the Neon base.
 
 You can write your requests in Thai or English. You do not need to know component names or design token values to get started.
 
