@@ -19,6 +19,7 @@
 // --from-snapshot takes the snapshot as checked in, with no Core checkout: it writes core/index.json again from the
 // Counterpart table, then all that follows the snapshot below. It is what a change to the Counterpart table, the
 // Role table or the Type role table alone needs, and what settles a merge conflict in the index or the manifest.
+// It takes no other flag.
 // The same run writes what follows the snapshot's Theme: the Theme token export
 // and the CSS adapter's colors (scripts/lib/core-theme.mjs); and what follows its
 // text styles: the adapter's type sizes and line heights (scripts/lib/core-type.mjs).
@@ -36,8 +37,9 @@ const option = name => (args.includes(name) ? args[args.indexOf(name) + 1] : und
 const from = option('--from');
 const fromSnapshot = args.includes('--from-snapshot');
 const dryRun = args.includes('--dry-run');
-// --from-snapshot has no Core checkout to name and nothing to run dry.
-if (fromSnapshot ? from || dryRun : !from) {
+// --from-snapshot compiles no Core checkout: it refuses the sync's flags rather than ignore them.
+const syncFlags = ['--from', '--at', '--compiler', '--dry-run', '--subjects'];
+if (fromSnapshot ? syncFlags.some(flag => args.includes(flag)) : !from) {
   console.error('Usage: node scripts/sync-core.mjs --from <Core checkout> [--at <commit or ref>] [--compiler <Core checkout>] [--dry-run] [--subjects]\n       node scripts/sync-core.mjs --from-snapshot');
   process.exit(2);
 }

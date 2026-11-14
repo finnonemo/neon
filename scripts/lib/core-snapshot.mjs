@@ -95,7 +95,7 @@ export async function checkCounterpartTable(counterparts, directory, { items } =
     if (given) {
       const index = JSON.parse(await read(INDEX));
       const differs = Object.keys(given).filter(item => JSON.stringify(index[item]) !== JSON.stringify(given[item]));
-      if (differs.length) problems.push(`The index (${INDEX}) is not the one the table gives for: ${differs.join(', ')}. Re-run node scripts/sync-core.mjs --from <Core checkout>.`);
+      if (differs.length) problems.push(`The index (${INDEX}) is not the one the table gives for: ${differs.join(', ')}. Run node scripts/sync-core.mjs --from-snapshot, which writes it again from the table with no Core checkout.`);
     }
   }
   if (problems.length) throw new Error(`The Counterpart table (${COUNTERPARTS_FILE}) does not follow the snapshot in ${directory}:\n${problems.join('\n')}`);
