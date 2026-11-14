@@ -197,3 +197,24 @@ test('every file of the assembled CDS starter lints clean, so a new app warns on
   const { lines } = lint(starter, ...files);
   assert.match(lines.at(-1), /^Source lint: clean \(\d+ changed files checked\)$/, lines.join('\n'));
 });
+
+test('--json reports counts by rule and each warning with its name and fix', t => {
+  const root = repository(t, { 'package.json': '{}', 'src/App.jsx': 'export const App = () => null;\n' });
+  write(root, { 'src/App.jsx': '<p className="text-(--color-fg) text-slate-300">Lorem ipsum</p>\n<i className="transition-all" />\n' });
+  const { status, lines } = lint('--json', root);
+  assert.equal(status, 0);
+  assert.equal(lines.length, 1);
+  const report = JSON.parse(lines[0]);
+  assert.equal(report.checked, 1);
+  assert.equal(report.total, 3);
+  assert.deepEqual(report.byRule, { 'stock-palette': 1, placeholder: 1, 'transition-all': 1 });
+  const { name, fix, ...palette } = report.warnings.find(({ rule }) => rule === 'stock-palette');
+  assert.deepEqual(palette, { path: 'src/App.jsx', lines: [1], rule: 'stock-palette', match: 'text-slate-300' });
+  assert.match(name, /^stock Tailwind color/);
+  assert.match(fix, /^map it by role/);
+  for (const warning of report.warnings) {
+    assert.ok(warning.name && warning.fix, warning.rule);
+    assert.doesNotMatch(warning.name, /;/);
+  }
+  assert.deepEqual(JSON.parse(lint('--json', join(root, 'missing')).lines[0]), { notRun: `${join(root, 'missing')} is not a directory` });
+});
