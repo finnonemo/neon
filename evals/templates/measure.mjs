@@ -241,6 +241,8 @@ export const screens = [
       medium: coreOnly('[data-size=md]', buttonCell('Primary', { Size: 'Medium' })),
       extraSmall: coreOnly('[data-size=xs]', buttonCell('Secondary', { Size: 'XSmall' })),
       small: coreOnly('[data-size=sm]', buttonCell('Tertiary', { Size: 'Small' })),
+      // A disabled Tertiary Button with a label keeps Core's disabled fill; at an icon size it has none (neon-a11y.spec.mjs).
+      tertiaryDisabled: coreOnly('[data-variant=ghost][data-size=default]:disabled', buttonCell('Tertiary', { State: 'Disabled' }), ['bg', 'color', 'opacity']),
       brand: coreOnly('[data-variant=brand]', buttonCell('Primary', { Type: 'Brand' })),
       inverse: coreOnly('[data-variant=inverse]', buttonCell('Primary', { Type: 'Inverse' })),
       // Loading fixes the Enabled button's height and binds no label ink.

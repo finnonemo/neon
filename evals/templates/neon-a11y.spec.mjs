@@ -485,6 +485,18 @@ test('a loading button keeps its size, focus and name, is announced as busy and 
   await expect(page.locator('[data-sonner-toast]')).toHaveCount(1);
 });
 
+// Core's Icon button, Tertiary, Disabled binds no fill and Icon/icon-disabled. The snapshot's index
+// reaches Button alone, so the icon sizes are held here; measure.mjs holds the Button's own cell.
+for (const mode of ['light', 'dark']) test(`${mode}: a disabled ghost button has no fill at an icon size and Core's disabled fill with a label`, async ({ page }) => {
+  await page.goto(`/?layout=extras${mode === 'dark' ? '&mode=dark' : ''}`);
+  const disabled = page.locator('[data-measure=core-buttons] [data-variant=ghost]:disabled');
+  const icon = disabled.and(page.locator('[data-size=icon]'));
+  await expect(icon).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+  await expect(icon).toHaveCSS('color', await computed(page, 'var(--color-fgIconDisabled)'));
+  await expect(icon).toHaveCSS('opacity', '1');
+  await expect(disabled.and(page.locator('[data-size=default]'))).toHaveCSS('background-color', await computed(page, 'var(--color-bgButtonDisabled)'));
+});
+
 test('the loading spinner turns once a second and stands still under reduced motion', async ({ page }) => {
   await page.goto('/?layout=extras');
   const spinner = page.locator('[data-measure=core-buttons] [aria-busy=true] [data-slot=button-spinner]');

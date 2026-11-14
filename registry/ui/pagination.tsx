@@ -50,8 +50,8 @@ type PaginationLinkProps = {
 
 // A page number is Core's page item. Core's page has one box, so a page number given a size
 // keeps the ghost Button in that size, as any other content (Previous, Next) is, in the icon
-// size by default. A disabled link is not :disabled, so it takes its disabled look by
-// aria-disabled.
+// size by default. A disabled link is not :disabled, so it takes the ghost Button's disabled
+// look by aria-disabled: no fill at an icon size, as Core's Icon button, Tertiary.
 function PaginationLink({ className, isActive, disabled, size, href, onClick, children, ...props }: PaginationLinkProps) {
   const isPage = size === undefined && (typeof children === "string" || typeof children === "number")
   const link = (
@@ -78,12 +78,19 @@ function PaginationLink({ className, isActive, disabled, size, href, onClick, ch
     </a>
   )
   if (isPage) return link
+  const buttonSize = size ?? "icon"
   return (
     <Button
       asChild
       variant="ghost"
-      size={size ?? "icon"}
-      className={cn("aria-disabled:pointer-events-none aria-disabled:bg-button-disabled aria-disabled:text-button-disabled-foreground", className)}
+      size={buttonSize}
+      className={cn(
+        "aria-disabled:pointer-events-none",
+        buttonSize === "icon" || buttonSize === "icon-sm"
+          ? "aria-disabled:text-icon-disabled"
+          : "aria-disabled:bg-button-disabled aria-disabled:text-button-disabled-foreground",
+        className
+      )}
     >
       {link}
     </Button>

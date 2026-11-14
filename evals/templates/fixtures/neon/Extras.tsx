@@ -244,6 +244,8 @@ export function Extras() {
           <Button size="md">ส่งคำขอ</Button>
           <Button size="xs" variant="secondary">แก้ไข</Button>
           <Button size="sm" variant="ghost">ข้าม</Button>
+          <Button variant="ghost" disabled>รอการอนุมัติ</Button>
+          <Button variant="ghost" size="icon" disabled aria-label="ตัวเลือกเพิ่มเติม"><MoreHorizontalIcon /></Button>
           <Button variant="brand">สมัครเลย</Button>
           <Button loading>กำลังบันทึก</Button>
           <Button variant="secondary" loading={sending} onClick={() => { setSending(true); toast("ส่งแล้ว / Sent") }}>ส่งรายงาน</Button>
