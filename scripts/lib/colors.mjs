@@ -24,6 +24,49 @@ export function contrast(a, b) {
   return (hi + 0.05) / (lo + 0.05);
 }
 
+/** A color as CSS or a token writes it (`rgb()`, `rgba()`, `#rrggbb`, `#rrggbbaa`) as { rgb, alpha }; null for anything else, such as a keyword. */
+export function parseColor(value) {
+  const hex = value.match(/^#([0-9a-f]{6})([0-9a-f]{2})?$/i);
+  if (hex) return { rgb: toRgb(value), alpha: hex[2] ? parseInt(hex[2], 16) / 255 : 1 };
+  const css = value.match(/^rgba?\(\s*([\d.]+),\s*([\d.]+),\s*([\d.]+)(?:,\s*([\d.]+))?\s*\)$/);
+  return css ? { rgb: css.slice(1, 4).map(Number), alpha: css[4] === undefined ? 1 : Number(css[4]) } : null;
+}
+
+// A color drawn over an opaque one, as the opaque color the eye gets.
+const over = ({ rgb, alpha }, under) => rgb.map((channel, index) => channel * alpha + under[index] * (1 - alpha));
+
+/**
+ * The contrast of `text` on each of `backgrounds` in each mode of `colors` ({ mode: { role: value } }, as
+ * adapterColors gives it). Each is a color role's name or a color written out, which is the same in every mode.
+ * A background that is not opaque is drawn over the mode's `bg`, and text that is not opaque over its background.
+ * Returns one row per mode and background: { mode, text, background, over, ratio }, the first two as { name, value }.
+ */
+export function roleContrast({ text, backgrounds, colors }) {
+  return Object.entries(colors).flatMap(([mode, roles]) => {
+    const read = name => {
+      const value = parseColor(name) ? name : roles[name.replace(/^--color-/, '')];
+      if (value === undefined) throw new Error(`${name} is not a color role, nor a color written as #rrggbb.`);
+      const color = parseColor(value);
+      if (!color) throw new Error(`${name} is ${value} (${mode}), which is not a color to measure.`);
+      return { name, value, color };
+    };
+    const page = read('bg').color;
+    if (page.alpha !== 1) throw new Error(`bg is not opaque (${mode}), so nothing says what a translucent color is drawn over.`);
+    const ink = read(text);
+    return backgrounds.map(name => {
+      const background = read(name);
+      const surface = over(background.color, page.rgb);
+      return {
+        mode,
+        text: { name: ink.name, value: ink.value },
+        background: { name: background.name, value: background.value },
+        over: background.color.alpha === 1 ? null : 'bg',
+        ratio: contrast(over(ink.color, surface), surface),
+      };
+    });
+  });
+}
+
 // Opaque palette tokens from theme/tokens/colors.json as { name: "Family/step", value }.
 // Alpha tokens (Black/50A …) are left out: a page color is never matched to one.
 export function paletteTokens(path = new URL('../../theme/tokens/colors.json', import.meta.url)) {
