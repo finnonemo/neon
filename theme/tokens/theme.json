@@ -321,11 +321,6 @@
         "value": "{White.100}",
         "type": "color",
         "prefix": "color"
-      },
-      "toggle-on-ios": {
-        "value": "{Green.115}",
-        "type": "color",
-        "prefix": "color"
       }
     },
     "Notifications": {
@@ -2862,11 +2857,6 @@
       },
       "segmented-control-selected": {
         "value": "{White.25A}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "toggle-on-ios": {
-        "value": "{Green.115}",
         "type": "color",
         "prefix": "color"
       }

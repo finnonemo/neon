@@ -641,12 +641,19 @@
     "gap uncheckedRing→disabledCheckedRing: 104 ≠ 102"
   ],
   "expansion-sheet-bottom@1440-light": [
+    "sheet: h 115 ≠ 90",
+    "sheet: w 600 ≠ 1440",
+    "sheet: radii 16,16,16,16 ≠ 16,16,0,0",
     "sheetTitle: font.lineHeight 28 ≠ 25",
     "sheetTitle: h 28 ≠ 25",
     "sheetBody: font.lineHeight 24 ≠ 22",
-    "sheetBody: h 24 ≠ 22",
-    "gap sheet→sheetTitle: -59 ≠ -54",
-    "gap sheet→sheetHandle: -83 ≠ -74",
+    "sheetBody: h 48 ≠ 22",
+    "sheetBody: w 536 ≠ 1126",
+    "gap sheetOverlay→sheet: -1020 ≠ -1440",
+    "gap sheet→sheetOverlay: -507 ≠ -900",
+    "gap sheet→sheetTitle: -83 ≠ -54",
+    "gap sheetBody→sheet: -568 ≠ -1283",
+    "gap sheet→sheetHandle: -107 ≠ -74",
     "gap sheetHandle→sheetTitle: 20 ≠ 16"
   ],
   "expansion-sheet-top@1440-light": [
@@ -879,12 +886,19 @@
     "gap uncheckedRing→disabledCheckedRing: 104 ≠ 102"
   ],
   "expansion-sheet-bottom@1440-dark": [
+    "sheet: h 115 ≠ 92",
+    "sheet: w 600 ≠ 1440",
+    "sheet: radii 16,16,16,16 ≠ 16,16,0,0",
     "sheetTitle: font.lineHeight 28 ≠ 25",
     "sheetTitle: h 28 ≠ 25",
     "sheetBody: font.lineHeight 24 ≠ 22",
-    "sheetBody: h 24 ≠ 22",
-    "gap sheet→sheetTitle: -59 ≠ -55",
-    "gap sheet→sheetHandle: -83 ≠ -75",
+    "sheetBody: h 48 ≠ 22",
+    "sheetBody: w 536 ≠ 1126",
+    "gap sheetOverlay→sheet: -1020 ≠ -1440",
+    "gap sheet→sheetOverlay: -507 ≠ -900",
+    "gap sheet→sheetTitle: -83 ≠ -55",
+    "gap sheetBody→sheet: -568 ≠ -1283",
+    "gap sheet→sheetHandle: -107 ≠ -75",
     "gap sheetHandle→sheetTitle: 20 ≠ 16"
   ],
   "expansion-sheet-top@1440-dark": [

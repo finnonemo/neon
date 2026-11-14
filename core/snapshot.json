@@ -1,7 +1,7 @@
 {
   "core": {
     "repository": "pawisssh/design-system",
-    "commit": "c56f00218b31b19e682aaebba8b35b58ce216536"
+    "commit": "3fdb1d7558ca56786108d5a7e8b03f797652c1ba"
   },
   "look": {
     "iOS": false,
@@ -104,7 +104,7 @@
     "components/tile.json": "419ff8a9dfd5bb5a921f34dcc774bb5315b590497787a6f51f9347b27cb062da",
     "components/tile.md": "0cdaf05fa5a08f1fbff1ce6b7ed8f5ffd32eb9fbf75fc66a4f1cd59f7f644cb8",
     "components/toggle.json": "26e4a1a06f24f33511939f7589821956fc6af6b35e8f2861bfe79124e5a7c85f",
-    "components/toggle.md": "7b00674173b1acf7a7af9221fd7e48011872525936f0a27d8904eebd680e5377",
+    "components/toggle.md": "1f65abcf834a41dc5d0307356a25519869c8344918ff20c8e104df2e75f8591a",
     "components/toggletip.json": "9a5a4e1ae044b52b8ad3e1f6edba3114dc20bb067ff35bfc5acc1e6446d07917",
     "components/toggletip.md": "c66336e0f0091c40dbdbe4c84335a70b845ec0c7d0a4e2b2ceef055adceeccc9",
     "components/toolbars.md": "abb322b28f49f2cf7c9fdd55a2d2feac9b1434889ac7c9f06c32bd38f2785669",
@@ -112,14 +112,14 @@
     "components/tooltip.md": "2dba61b2bd429c7e175e34d8cdc94922c11d7e676b7d80049db1774bb9a61c6d",
     "components/unit-suffix.json": "8998d20e44b8acb15d32a169511af10a09224337e969e5e9b8ae48fba846f5c7",
     "components/unit-suffix.md": "e39964b3f92c44fb0a22d8c33b929434c21915e3530f70210d2b384cf5e19b2f",
-    "components/value.json": "0d95a02871f88f8d2632dbc62508b3b414d23484bfabeb9136fab9aa44fb4965",
-    "components/value.md": "b3cca3083b665e996cc15ff8468360210a21fa40c9ed9213e7dfef47ce156560",
+    "components/value.json": "a8ad0a0abc2574b7b2334483ca0f230e00e977e4d79f3dbb502151235b328737",
+    "components/value.md": "1c1f9361b4c62f72e3992b1d4943a8c987f2a7da0b3d1fc9f8ee8e255b0c4b77",
     "components/vertical-bar.md": "92f5e0e440dc1d2e8bb361f69d1e0e0fb5a14a90446d9a8ed06b96719c1181c1",
     "hierarchy.md": "e04aaa62a02e8aa917f0753880b8523c47dc0baa29047e3858e5b8995cfe6629",
     "index.json": "b0062ce69d9bb87c9406f57fdc8b5eee91d0c5884448b7b38a5cde28edb356a2",
     "scales.json": "bb99d45e34a21778d526432dade7592009bc77bf4eded9aeebaecbd647cd309d",
     "text-styles.json": "50f32ae4b3d6afeb7defae0b08901699909986d970b14db672064928bc079810",
-    "theme.json": "9c9810e3b17175d39d89acb70bcd1b537d90524691457708c120d3548e8f10e5"
+    "theme.json": "60df2a7da111a31e96b1281168f8a68427ac3d6e30b07d6b0edf3631cc9bac09"
   },
-  "seal": "1896e605561fa6061d2fbd4ab31bb65a9adb66ad7b8051f0a70e254f8abf170f"
+  "seal": "cc94feaa70e0ce1b937413dbff42b4c7ee5cc8e8a1ec424173aaf62d8a51677d"
 }

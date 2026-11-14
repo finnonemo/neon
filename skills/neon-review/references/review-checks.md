@@ -55,6 +55,17 @@ Use provided viewport requirements. Otherwise sample a narrow and wide viewport 
 
 Single-width screenshots cannot establish responsive behavior. Inspect existing/specified theme modes; do not count absent dark mode as a defect unless required by the task.
 
+## Functional layout
+
+On a Back Office or Product Feature screen, these layout misses are findings, in the same scope as the habits above: under `composition: 'preserve'` they are observations for the owner, and review-only work edits nothing.
+
+| Miss | Instead |
+| --- | --- |
+| A sheet rising from the bottom edge at desktop width | The Neon `sheet` item's bottom side as installed, which centres it from the `lg` tier, per Core's Sheet Placement and the [overlay rules](../../neon-audit/references/functional-patterns.md#overlays) |
+| An empty sidebar, or none, in an app the request does not call standalone | Composition: the layout's `navigation` with the screen as its active item, and the question whether the product stands alone in the report, per [scaffold](../../neon-create/references/scaffold.md) |
+| A record's action as a button beside its row, or a list narrower than its pane | `ListRow` with the action in its trailing column, and the list at the pane's full width, per [lists before cards](../../neon-audit/references/functional-patterns.md#lists-before-cards) |
+| A third or fourth column for a deeper level of the selected record | Composition: the deeper level replaces the detail pane with a back control, or opens in a `Sheet`, per [panes](../../neon-audit/references/functional-patterns.md#panes) |
+
 ## Accessibility and interactions
 
 Where runtime evidence permits, check visible keyboard focus, logical order, accessible names for icon-only controls, label/error association, dialog focus/escape/return behavior (on the Neon base, with the Radix behaviors in [checks by base](#checks-by-base)), and access to the main task without a pointer. Measure foreground/background contrast with a suitable tool and actual colors before quoting a ratio. These checks do not constitute a comprehensive accessibility certification.

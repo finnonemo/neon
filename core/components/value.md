@@ -10,19 +10,18 @@ Value (variant root)          Hug × Hug, no fill, no padding
    ├─ Sign                    TEXT `+` · `-`, shown at Change = Positive · Negative
    ├─ Digits                  TEXT, property `Value text` (default `1,234.56`), WIDTH_AND_HEIGHT
    ├─ Unit                    _Unit suffix instance: `Unit` pinned to Value's, `State` to Enabled (Disabled when Disabled);
-   │                          text style overridden to Value's step; fill overridden to the figure's colour (question 2)
+   │                          text style overridden to Value's step; fill overridden to the figure's colour (question 2);
    ├─ Percent                 HORIZONTAL, Hug × Hug, gap 0 (BOOLEAN `Percent`, off; Unit = Baht · Units only)
    │  ├─ Percent open         TEXT ` (` (U+00A0 first), no sign (question 8)
    │  ├─ Percent digits       TEXT, property `Percent text` (default `2.43`)
    │  └─ Percent close        TEXT `%)`
-   ├─ Empty                   TEXT `--`, State = Empty only
    └─ Bar                     State = Skeleton only: 80 × 8, radius 0, skeleton-background
 ```
 
 - The designer types only unsigned digits, in `Value text` and `Percent text`. `Change` draws the figure's sign, so it never disagrees with the colour (pawisssh/design-system#71 D2); the bracketed percent takes `Change`'s colour but no sign (question 8).
 - **Gaps are characters, not padding.** `_Unit suffix` starts with its own U+00A0 (none before `%`), and `Percent open` starts with one, so Container's gap is 0 and the spaces scale with the text style, as developers append them in code. The throwaway's gap 4 doubles the suffix's space.
 - One text style for every text layer in a variant, the suffix included. The percent is not a step smaller: (v2)'s `Value + Percent` set both parts in one style.
-- `Empty` replaces `Sign`, `Digits`, `Unit` and `Percent` in State=Empty. `Bar` replaces them all in Skeleton. Container keeps the line's height, so a row doesn't jump when the figure arrives.
+- `Empty` replaces `Sign`, `Digits` and `Percent` in State=Empty, and the unit follows it in `text-secondary`: `-- ฿`, `-- หน่วย`, `--%`. `Bar` replaces them all in Skeleton. Container keeps the line's height, so a row doesn't jump when the figure arrives.
 - Nothing wraps or truncates. A figure is never cut (Localisation); the label beside it gives way, and the nester decides how.
 - No Label block: Value names nothing (structure.md).
 
@@ -32,12 +31,12 @@ Value (variant root)          Hug × Hug, no fill, no padding
 | --- | --- | --- |
 | `Change` | None · Positive · Negative · Zero | `Sign`'s character; every text layer's colour |
 | `Unit` | Baht · Units · Percent | the nested `_Unit suffix`'s `Unit`; `Percent` hidden at Percent |
-| `State` | Enabled · Disabled · Empty · Skeleton | Disabled: every text `text-disabled` and the suffix's `State=Disabled`. Empty: only `Empty` shows. Skeleton: only `Bar` shows |
+| `State` | Enabled · Disabled · Empty · Skeleton | Disabled: every text `text-disabled` and the suffix's `State=Disabled`. Empty: only `Empty` and the unit show. Skeleton: only `Bar` shows |
 | `Text style` | Body · Subheadline · Footnote · Title 1 · Large Title (question 4, decided; Subheadline added 2026-11-03) | every text layer's style, including the suffix's override; Container's min height; the bar's height |
 
-Properties: TEXT `Value text`, `Percent text`; BOOLEAN `Percent` (off, linked where `{{Unit=Baht, Units}}{{State=Enabled, Disabled}}`, so Empty and Skeleton, which are `Unit=Baht`, never show it).
+Properties: TEXT `Value text`, `Percent text`; BOOLEAN `Percent` (off, linked where `{{Unit=Baht, Units}}{{State=Enabled, Disabled}}`, so Empty and Skeleton never show it).
 
-`exclude`: Empty and Skeleton draw no sign, unit or percent, so they exist only at `Change=None`, `Unit=Baht`: `["{{State=Empty, Skeleton}}{{Change=Positive, Negative, Zero}}", "{{State=Empty, Skeleton}}{{Unit=Units, Percent}}"]`. Enabled and Disabled: 4 × 3 × 2 × 5 = 120; Empty and Skeleton: 1 × 1 × 2 × 5 = 10; **130 variants** (a full grid would be 4 × 3 × 4 × 5 = 240).
+`exclude`: Empty and Skeleton draw no sign or percent, so they exist only at `Change=None`; Empty keeps its unit, so it exists at every Unit, and Skeleton's bar draws none, so it stays at `Unit=Baht`: `["{{State=Empty, Skeleton}}{{Change=Positive, Negative, Zero}}", "{{State=Skeleton}}{{Unit=Units, Percent}}"]`. Enabled and Disabled: 4 × 3 × 2 × 5 = 120; Empty: 1 × 3 × 5 = 15; Skeleton: 1 × 1 × 5 = 5; **140 variants** (a full grid would be 4 × 3 × 4 × 5 = 240).
 
 Grid: columns `Text style`, largest first (Large Title, Title 1, Body, Subheadline, Footnote); rows `Change`, then `Unit`, then `State` innermost. Every row keeps a cell in every column after the exclusions, so the grid lint passes.
 
@@ -62,7 +61,6 @@ The `Label` record covers `Sign`, `Digits`, `Percent open`, `Percent digits`, `P
 | all text | `Change=Negative` | `Text/text-negative` | same |
 | all text | `Change=Zero` | `Text/text-secondary` | same |
 | all text | `State=Disabled` | `Text/text-disabled` | exempt |
-| `Empty` | `State=Empty` | `Text/text-secondary` | the four Base surfaces |
 | `Bar` | `State=Skeleton` | `Skeleton/skeleton-background` | decorative |
 
 Contrast list (`text`, 4.5:1): each colour above on `background-primary`, `background-secondary`, `layer-01`, `layer-02`. Composited through the Theme snapshot on 2026-11-02, the lowest is `text-negative` on `background-secondary` in Light, 4.81:1; `text-positive` ≥ 5.28, `text-secondary` ≥ 6.76, `text-primary` ≥ 13.87 in both modes.
@@ -79,7 +77,7 @@ None: no arrow; the sign carries the direction (pawisssh/design-system#71 assump
 | `Digits` | `Value/Label/<Text style>` | one line, never truncates, never wraps | `Value text` |
 | `Percent digits` | `Value/Label/<Text style>` | one line, never truncates | `Percent text` |
 | `Unit` (nested suffix) | the same style, by override | one line | none (the `Unit` axis) |
-| `Empty` | `Value/Label/<Text style>` | one line | none (always `--`) |
+| `Empty` | `Value/Label/<Text style>` | one line | none (always `--`, its unit after it) |
 
 - Every layer `WIDTH_AND_HEIGHT`, Hug: a figure grows its Value, never the other way round.
 - **`tnum`** (Numbers and dates): Finnomena Trek 1.002 has no `tnum` feature, and Figma's plugin API can't set one (`openTypeFeatures` is read-only, checked 2026-11-02), so the engine can't put `tnum` on the layers. Value right-aligns its text (`Align horizontal` `Right`), the handoff tells developers `font-variant-numeric: tabular-nums` / `.monospacedDigit`, and a Figma pass sets `tnum` by hand once Trek ships it (question 7; the AC line changed to match on 2026-11-02).
@@ -123,5 +121,5 @@ Skeleton is announced by the loading region (busy), not by each Value.
 ## Usage
 
 - The figures with Thai labels beside them: a Detail row `มูลค่าเงินลงทุน` · `250,000.00 ฿` at Footnote; a List item holding row `กองทุนเปิดไทยพาณิชย์` with `1,234.5678 หน่วย` and a second Value `+28,166.81 ฿ (2.43%)` below at Footnote; a header total `มูลค่าพอร์ตทั้งหมด` over `325,169.00 ฿` at Large Title.
-- Each `Change` on one figure: `250.00 ฿`, `+250.00 ฿`, `-250.00 ฿`, `0.00 ฿ (0.00%)`; Empty `--`; Skeleton rows; Disabled inside a disabled List item.
+- Each `Change` on one figure: `250.00 ฿`, `+250.00 ฿`, `-250.00 ฿`, `0.00 ฿ (0.00%)`; Empty `-- ฿`, `-- หน่วย` (a processing order's units), `--%`; Skeleton rows; Disabled inside a disabled List item.
 - Not for a money movement's direction: a dividend or a withdrawal is `Change=None` in `text-primary`, and the row's label says which way (Numbers and dates). Not for an amount being typed: that is Amount field or Text field with `Unit`. Not for a count on an icon: that is Badge.

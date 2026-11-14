@@ -43,7 +43,7 @@
   ],
   "exclude": [
     "{{State=Empty, Skeleton}}{{Change=Positive, Negative, Zero}}",
-    "{{State=Empty, Skeleton}}{{Unit=Units, Percent}}"
+    "{{State=Skeleton}}{{Unit=Units, Percent}}"
   ],
   "properties": [
     {
@@ -158,7 +158,7 @@
     {"layer":"Container / Digits","property":"visible","when":"{{Change=*}}","value":"false","literal":true},
     {"layer":"Container / Digits","property":"visible","when":"{{State=Enabled, Disabled}}","value":"true","literal":true},
     {"layer":"Container / Unit","property":"visible","when":"{{Change=*}}","value":"false","literal":true},
-    {"layer":"Container / Unit","property":"visible","when":"{{State=Enabled, Disabled}}","value":"true","literal":true},
+    {"layer":"Container / Unit","property":"visible","when":"{{State=Enabled, Disabled, Empty}}","value":"true","literal":true},
     {"layer":"Container / Unit","property":"componentProperties.Unit","when":"{{Change=*}}","value":"{{Unit=*}}"},
     {"layer":"Container / Unit","property":"componentProperties.State","when":"{{Change=*}}","value":"Enabled"},
     {"layer":"Container / Unit","property":"componentProperties.State","when":"{{State=Disabled}}","value":"Disabled"},
@@ -172,6 +172,7 @@
     {"layer":"Container / Unit / Container / Unit","property":"fills.0","when":"{{Change=Negative}}","value":"Theme/Text/text-negative"},
     {"layer":"Container / Unit / Container / Unit","property":"fills.0","when":"{{Change=Zero}}","value":"Theme/Text/text-secondary"},
     {"layer":"Container / Unit / Container / Unit","property":"fills.0","when":"{{State=Disabled}}","value":"Theme/Text/text-disabled"},
+    {"layer":"Container / Unit / Container / Unit","property":"fills.0","when":"{{State=Empty}}","value":"Theme/Text/text-secondary"},
     {"layer":"Container / Percent","property":"visible","when":"{{Unit=Percent}}","value":"false","literal":true},
     {"layer":"Container / Percent / Percent open","property":"textStyleId","when":"{{Text style=Body}}","value":"Body/Body"},
     {"layer":"Container / Percent / Percent open","property":"textStyleId","when":"{{Text style=Subheadline}}","value":"Body/Subheadline"},
@@ -205,6 +206,7 @@
     {"layer":"Container / Percent / Percent close","property":"fills.0","when":"{{State=Disabled}}","value":"Theme/Text/text-disabled"},
     {"layer":"Container / Empty","property":"visible","when":"{{Change=*}}","value":"false","literal":true},
     {"layer":"Container / Empty","property":"visible","when":"{{State=Empty}}","value":"true","literal":true},
+    {"layer":"Container / Empty","property":"itemIndex","when":"{{State=Empty}}","value":"2","literal":true},
     {"layer":"Container / Empty","property":"textStyleId","when":"{{Text style=Body}}","value":"Body/Body"},
     {"layer":"Container / Empty","property":"textStyleId","when":"{{Text style=Subheadline}}","value":"Body/Subheadline"},
     {"layer":"Container / Empty","property":"textStyleId","when":"{{Text style=Footnote}}","value":"Utility/Footnote"},
