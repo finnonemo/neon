@@ -69,3 +69,19 @@ test('neon-create reads the new UI workflow for a comparison table', async () =>
   const line = skill.split('\n').find(text => text.includes('(references/new-ui-workflow.md)')) ?? '';
   assert.match(line, /comparison table/);
 });
+
+// Review round 2026-11-after (review-01, -03, -05, -07; evals/review/verdicts.json).
+test('functional patterns give people a Block avatar, history a vertical progress step and back an icon alone', async () => {
+  const patterns = await read('neon-audit/references/functional-patterns.md');
+  const lists = section(patterns, 'Lists before cards');
+  assert.match(lists, /A row for a person .* leads with Core's \[Avatar\]/);
+  assert.match(lists, /`density` `coarse` \(the 4×4 Grid\)/);
+  assert.match(lists, /a stable hash of their id/);
+  assert.match(lists, /history .* is a vertical progress step/);
+  assert.match(section(patterns, 'Panes'), /back control is an icon-only button.*web and app alike.*Never an arrow with a visible label/);
+  const scaffold = await read('neon-create/references/scaffold.md');
+  assert.match(scaffold, /A Product Feature app starts from the starter's sidebar, `finnomenaEcosystemNav` .*without asking/);
+  assert.match(scaffold, /A Back Office app has no starter menu: when the request does not say, ask/);
+  const layout = section(await read('neon-review/references/review-checks.md'), 'Functional layout');
+  for (const miss of [/no avatar/, /history as a table/, /back control with a visible label/]) assert.match(layout, miss);
+});
