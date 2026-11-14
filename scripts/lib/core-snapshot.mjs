@@ -1,8 +1,8 @@
 // The Core snapshot (GLOSSARY): the copy of Core that Neon carries, pinned to one Core commit (ADR 0009).
 // Core's repository compiles it (ADR 0012): syncCore runs Core's Web compile from a Core checkout, copies what it
-// wrote, adds the index and records the commit and each file's hash; checkCoreSnapshot is the repository check that
-// refuses a hand edit, and checkCounterpartTable the one that holds the Counterpart table, and the index it gives,
-// to the snapshot.
+// wrote, adds the index and records the commit and each file's hash; indexCore writes the index again from the
+// Counterpart table, with no Core checkout; checkCoreSnapshot is the repository check that refuses a hand edit, and
+// checkCounterpartTable the one that holds the Counterpart table, and the index it gives, to the snapshot.
 // Nothing here reads Core's own docs.
 import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { existsSync, realpathSync } from 'node:fs';
@@ -40,7 +40,9 @@ async function webCompile({ from, compiler }) {
   try {
     let printed;
     try {
-      printed = execFileSync(process.execPath, [script, '--out', built, '--from', from, '--committed'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
+      // The compile runs only as the script node was started with, which it knows by its real path: a checkout
+      // reached through a link (the system's temporary directory is one on macOS) would compile nothing and say nothing.
+      printed = execFileSync(process.execPath, [realpathSync(script), '--out', built, '--from', from, '--committed'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
     } catch (error) {
       throw new Error(`Core's Web compile failed, so nothing was written:\n${(error.stderr || error.message).trim()}`);
     }
@@ -93,7 +95,7 @@ export async function checkCounterpartTable(counterparts, directory, { items } =
     if (given) {
       const index = JSON.parse(await read(INDEX));
       const differs = Object.keys(given).filter(item => JSON.stringify(index[item]) !== JSON.stringify(given[item]));
-      if (differs.length) problems.push(`The index (${INDEX}) is not the one the table gives for: ${differs.join(', ')}. Re-run node scripts/sync-core.mjs --from <Core checkout>.`);
+      if (differs.length) problems.push(`The index (${INDEX}) is not the one the table gives for: ${differs.join(', ')}. Run node scripts/sync-core.mjs --from-snapshot, which writes it again from the table with no Core checkout.`);
     }
   }
   if (problems.length) throw new Error(`The Counterpart table (${COUNTERPARTS_FILE}) does not follow the snapshot in ${directory}:\n${problems.join('\n')}`);
@@ -138,13 +140,45 @@ function counterpartIndex({ items, counterparts, files, leftOut }) {
 }
 
 /**
- * Compiles the Core checkout at `from` with Core's Web compile and writes the snapshot to `out`, replacing what was
- * there. `compiler` is the Core checkout whose compile runs: `from` itself unless the commit to compile is older than
- * the compile, and then the snapshot records the compiler's commit too. `items` are the registry's components, as
- * { name, supporting }. Returns the commit, the files written, the Core docs the compile left out, by standing,
- * and what moved since the snapshot it replaced (movedReport).
+ * Runs `use` on a detached worktree of `at`, a commit or ref the Core checkout at `from` holds, and returns what it
+ * returns. The worktree is added in a temporary directory and removed after, also when `use` throws, so the checkout's
+ * own working tree and branch stay as they are: another session may be working in it.
  */
-export async function syncCore({ from, compiler = from, out, items, counterparts }) {
+async function coreAt({ from, at }, use) {
+  let commit;
+  try {
+    commit = execFileSync('git', ['-C', from, 'rev-parse', '--verify', '--quiet', `${at}^{commit}`], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
+  } catch {
+    throw new Error(`The Core checkout at ${from} does not hold ${at}, so nothing was written. Fetch it there (git -C ${from} fetch), or name a commit the checkout holds.`);
+  }
+  const parent = await mkdtemp(join(tmpdir(), 'neon-core-at-'));
+  const worktree = join(parent, 'core');
+  try {
+    git(from, 'worktree', 'add', '--quiet', '--detach', worktree, commit);
+    return await use(worktree);
+  } finally {
+    // The worktree may not have been added; either way the checkout is left with no record of it.
+    try { git(from, 'worktree', 'remove', '--force', worktree); } catch { /* not added */ }
+    await rm(parent, { recursive: true, force: true });
+    try { git(from, 'worktree', 'prune'); } catch { /* not a checkout: the compile says so */ }
+  }
+}
+
+/**
+ * Compiles the Core checkout at `from` with Core's Web compile and writes the snapshot to `out`, replacing what was
+ * there. `at` names the commit or ref to compile, in a temporary worktree of the checkout; without it the checkout's
+ * own working tree is compiled, at whatever it has checked out. `compiler` is the Core checkout whose compile runs:
+ * what is compiled unless that commit is older than the compile, and then the snapshot records the compiler's commit
+ * too. `items` are the registry's components, as { name, supporting }. Returns the commit, the files written, the
+ * Core docs the compile left out, by standing, and what moved since the snapshot it replaced (movedReport). With
+ * `write` false it compiles, refuses what a sync refuses and returns the same, and leaves `out` as it was.
+ */
+export async function syncCore({ at, ...options }) {
+  if (at === undefined) return syncCheckout(options);
+  return coreAt({ from: options.from, at }, worktree => syncCheckout({ ...options, from: worktree }));
+}
+
+async function syncCheckout({ from, compiler = from, out, items, counterparts, write = true }) {
   const compiled = await webCompile({ from, compiler });
   const { repository, commit, leftOut } = compiled;
   const core = { repository, commit };
@@ -163,12 +197,46 @@ export async function syncCore({ from, compiler = from, out, items, counterparts
   const manifest = { core, look: LOOK, files: hashes };
   files.set(MANIFEST, data({ ...manifest, seal: sealOf(manifest) }));
   const moved = movedSince(await readFile(join(out, MANIFEST), 'utf8').then(JSON.parse, () => null), { from, core, hashes });
-  await rm(out, { recursive: true, force: true });
-  for (const [path, content] of files) {
-    await mkdir(dirname(join(out, path)), { recursive: true });
-    await writeFile(join(out, path), content);
+  if (write) {
+    await rm(out, { recursive: true, force: true });
+    for (const [path, content] of files) {
+      await mkdir(dirname(join(out, path)), { recursive: true });
+      await writeFile(join(out, path), content);
+    }
   }
   return { commit, compiler: core.compiler, files: [...files.keys()], leftOut, moved };
+}
+
+/**
+ * Writes the index of the snapshot at `out` again from the Counterpart table, then its hash and the seal in the
+ * manifest: the snapshot's part of --from-snapshot, which needs no Core checkout. The compiled files are the ones the
+ * snapshot holds, and each must still be the one the sync recorded, so this accepts no hand edit. Returns whether
+ * the index changed.
+ */
+export async function indexCore({ out, items, counterparts }) {
+  const refuse = problem => new Error(`${problem}, so the index was not written. In a merge conflict, take ${MANIFEST} and ${INDEX} whole from the side that moved Core (either side when neither did), then run this again.`);
+  let manifest;
+  try {
+    manifest = JSON.parse(await readFile(join(out, MANIFEST), 'utf8'));
+  } catch {
+    throw refuse(`${join(out, MANIFEST)} is not a manifest that can be read`);
+  }
+  if (manifest.seal !== sealOf(manifest)) throw refuse(`${join(out, MANIFEST)} does not match what the sync wrote`);
+  const files = new Map();
+  for (const [path, hash] of Object.entries(manifest.files)) {
+    if (path === INDEX) continue;
+    const content = await readFile(join(out, path), 'utf8').catch(() => null);
+    if (content === null || sha256(content) !== hash) throw refuse(`${path} ${content === null ? 'is missing' : 'does not match what the sync wrote'}`);
+    files.set(path, content);
+  }
+  // Which docs Core's compile left out is not in the snapshot: a Counterpart that names one is refused as a doc the compile did not write.
+  const index = `${JSON.stringify(counterpartIndex({ items, counterparts, files, leftOut: {} }), null, 2)}\n`;
+  const hashes = Object.fromEntries(Object.entries({ ...manifest.files, [INDEX]: sha256(index) }).sort(([a], [b]) => (a < b ? -1 : 1)));
+  const changed = index !== await readFile(join(out, INDEX), 'utf8').catch(() => null) || hashes[INDEX] !== manifest.files[INDEX];
+  const { core, look } = manifest;
+  await writeFile(join(out, INDEX), index);
+  await writeFile(join(out, MANIFEST), `${JSON.stringify({ core, look, files: hashes, seal: sealOf({ core, look, files: hashes }) }, null, 2)}\n`);
+  return { changed };
 }
 
 /**
@@ -204,14 +272,21 @@ function movedSince(previous, { from, core, hashes }) {
   };
 }
 
-/** What the sync prints about `moved` (syncCore's result), as lines: the pull request lists the same commits and files. */
-export function movedReport(moved, commit) {
+/**
+ * What the sync prints about `moved` (syncCore's result), as lines. Core's repository is private and this one is
+ * not, so the commits are named by hash alone unless `subjects` asks for them, to read and not to paste.
+ */
+export function movedReport(moved, commit, { subjects = false } = {}) {
   if (!moved) return [];
   const short = sha => sha.slice(0, 8);
   const lines = [];
   if (moved.from === commit) lines.push(`Core has not moved: the snapshot was already at ${short(commit)}.`);
   else if (!moved.commits) lines.push(`Core moved ${short(moved.from)} → ${short(commit)}. This checkout does not hold ${short(moved.from)}, so the commits between them are not listed.`);
-  else lines.push(`Core moved ${short(moved.from)} → ${short(commit)}. Core's commits between them: ${moved.commits.length}.`, ...moved.commits.map(line => `  ${line}`));
+  else {
+    lines.push(`Core moved ${short(moved.from)} → ${short(commit)}. Core's commits between them: ${moved.commits.length}.`);
+    if (subjects) lines.push(...moved.commits.map(line => `  ${line}`));
+    else if (moved.commits.length) lines.push(`  ${moved.commits.map(line => line.split(' ')[0]).join(', ')}`, 'Core is private, so their subjects are left out: --subjects prints them, to read and not to paste.');
+  }
   if (moved.compiler) lines.push(`The compiler moved ${short(moved.compiler[0])} → ${short(moved.compiler[1])}.`);
   for (const kind of ['added', 'changed', 'removed']) {
     if (moved[kind].length) lines.push(`${kind[0].toUpperCase()}${kind.slice(1)} in the snapshot: ${moved[kind].join(', ')}.`);
@@ -251,6 +326,6 @@ export async function checkCoreSnapshot(directory, { items } = {}) {
     }
   }
   if (problems.length) {
-    throw new Error(`The Core snapshot in ${directory} is not the one the sync wrote:\n${problems.join('\n')}\nThe snapshot is never edited by hand: change Core, or the Counterpart table, and re-run node scripts/sync-core.mjs --from <Core checkout>.`);
+    throw new Error(`The Core snapshot in ${directory} is not the one the sync wrote:\n${problems.join('\n')}\nThe snapshot is never edited by hand: change Core, or the Counterpart table, and re-run node scripts/sync-core.mjs --from <Core checkout>, or with --from-snapshot when only the table changed.`);
   }
 }
