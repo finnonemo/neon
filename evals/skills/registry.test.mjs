@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { expansionItem, expansionItems } from '../templates/expansion.mjs';
 import { loadImmersiveThemes, resolveColor } from '../../theme/scripts/generate-immersive-themes.mjs';
 import { contrast } from '../../scripts/lib/colors.mjs';
-import { BUILD_DIR, bareCnImports, browserSuiteItems, buildRegistry, darkClasses, dependencyProblems, unguardedItemRoles, missingTypeRoles, nextThemes, pinnedRegistryUrl, supportingProblems, tabsAsSegmented, themeBriefItemProblems, undeclaredSiblings, unmeasuredComponents, unpinnedUrls, unreachedItems, weightOverrides } from '../../scripts/lib/registry.mjs';
+import { BUILD_DIR, bareCnImports, browserSuiteItems, buildRegistry, darkClasses, dependencyProblems, registryComponents, unguardedItemRoles, missingTypeRoles, nextThemes, pinnedRegistryUrl, supportingProblems, tabsAsSegmented, themeBriefItemProblems, undeclaredSiblings, unmeasuredComponents, unpinnedUrls, unreachedItems, weightOverrides } from '../../scripts/lib/registry.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '../..');
 const read = (path) => readFileSync(join(root, path), 'utf8');
@@ -133,6 +133,25 @@ test('every registry item lists the packages its files import, and no other', ()
   assert.deepEqual(dependencyProblems([base, theme], css, { theme: ['tw-animate-css'] }), [], 'a stylesheet import counts, and an item it pulls in may list the package');
   assert.deepEqual(dependencyProblems([base, theme], css), ['theme lists tw-animate-css, which none of its files import']);
   assert.deepEqual(dependencyProblems([{ ...base, registryDependencies: [] }, theme], css, { theme: ['tw-animate-css'] }), ['base imports tw-animate-css without listing it']);
+});
+
+// The Counterpart table's rules ask a component which library it depends on and imports (#291). They are
+// answered by the same reading, so a subpath import is the package's and a version is never part of a name.
+test('a registry component names its packages as the dependency check does', async (t) => {
+  const temp = mkdtempSync(join(tmpdir(), 'neon-components-'));
+  t.after(() => rmSync(temp, { recursive: true, force: true }));
+  mkdirSync(join(temp, 'registry/ui'), { recursive: true });
+  writeFileSync(join(temp, 'registry/registry.json'), JSON.stringify({ items: [
+    { name: 'toast', type: 'registry:ui', dependencies: ['sonner@^2.0.0', '@fontsource/inter@^5.0.0'], files: [{ path: 'ui/toast.tsx' }, { path: 'ui/toast.css' }], meta: { supporting: true } },
+    { name: 'plain', type: 'registry:ui' },
+    { name: 'theme', type: 'registry:theme', dependencies: ['tw-animate-css@^1.4.0'] },
+  ] }));
+  writeFileSync(join(temp, 'registry/ui/toast.tsx'), 'import * as React from "react"\nimport { Toaster } from "sonner/dist/index"\nimport { cn } from "@/lib/utils"\nimport "./toast.css"');
+  writeFileSync(join(temp, 'registry/ui/toast.css'), '@import "@fontsource/inter/400.css";');
+  assert.deepEqual(await registryComponents(temp), [
+    { name: 'toast', supporting: true, dependencies: ['sonner', '@fontsource/inter'], imports: ['react', 'sonner', '@fontsource/inter'] },
+    { name: 'plain', supporting: false, dependencies: [], imports: [] },
+  ]);
 });
 
 // The components the approval and extras screens measure. Every later
