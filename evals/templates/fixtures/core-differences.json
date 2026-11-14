@@ -153,11 +153,8 @@
     "ellipsis: w 36 ≠ 15",
     "ellipsis: font.lineHeight 24 ≠ 22",
     "last: font.lineHeight 24 ≠ 22",
-    "gap previous→current: 16 ≠ 4",
-    "gap current→page: 0 ≠ 4",
-    "gap third→ellipsis: 0 ≠ 4",
-    "gap ellipsis→last: 0 ≠ 4",
-    "gap last→next: 16 ≠ 4"
+    "gap previous→current: 7 ≠ 4",
+    "gap last→next: 7 ≠ 4"
   ],
   "expansion-radio-group@375-light": [
     "groupLabel: font.lineHeight 24 ≠ 22",
@@ -392,11 +389,8 @@
     "ellipsis: w 36 ≠ 15",
     "ellipsis: font.lineHeight 24 ≠ 22",
     "last: font.lineHeight 24 ≠ 22",
-    "gap previous→current: 16 ≠ 4",
-    "gap current→page: 0 ≠ 4",
-    "gap third→ellipsis: 0 ≠ 4",
-    "gap ellipsis→last: 0 ≠ 4",
-    "gap last→next: 16 ≠ 4"
+    "gap previous→current: 7 ≠ 4",
+    "gap last→next: 7 ≠ 4"
   ],
   "expansion-radio-group@375-dark": [
     "groupLabel: font.lineHeight 24 ≠ 22",
@@ -637,11 +631,8 @@
     "ellipsis: w 36 ≠ 15",
     "ellipsis: font.lineHeight 24 ≠ 22",
     "last: font.lineHeight 24 ≠ 22",
-    "gap previous→current: 16 ≠ 4",
-    "gap current→page: 0 ≠ 4",
-    "gap third→ellipsis: 0 ≠ 4",
-    "gap ellipsis→last: 0 ≠ 4",
-    "gap last→next: 16 ≠ 4"
+    "gap previous→current: 7 ≠ 4",
+    "gap last→next: 7 ≠ 4"
   ],
   "expansion-radio-group@1440-light": [
     "groupLabel: font.lineHeight 24 ≠ 22",
@@ -878,11 +869,8 @@
     "ellipsis: w 36 ≠ 15",
     "ellipsis: font.lineHeight 24 ≠ 22",
     "last: font.lineHeight 24 ≠ 22",
-    "gap previous→current: 16 ≠ 4",
-    "gap current→page: 0 ≠ 4",
-    "gap third→ellipsis: 0 ≠ 4",
-    "gap ellipsis→last: 0 ≠ 4",
-    "gap last→next: 16 ≠ 4"
+    "gap previous→current: 7 ≠ 4",
+    "gap last→next: 7 ≠ 4"
   ],
   "expansion-radio-group@1440-dark": [
     "groupLabel: font.lineHeight 24 ≠ 22",

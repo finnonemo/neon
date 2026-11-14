@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils"
 
 // Core's Pagination (core/components/pagination.md), Type=Numbered at Medium: a bar at least
 // 56px tall on Layer/layer-01 under a Border/border-subtle top line, padded 16 at its sides, with
-// Previous and Next 16px from the pages. A page is a 36px box with 8px corners inside a 48px
+// Previous and Next 16px from the pages (both close up in a bar narrower than its pages). A page is a 36px box with 8px corners inside a 48px
 // target, its number Text/text-primary: Hover fills it Layer/layer-hover-01 and Pressed
 // Layer/layer-active-01. The current page is Background/background-inverse with
 // Text/text-inverse, marked aria-current="page". Disabled takes Text/text-disabled with no
@@ -20,21 +20,28 @@ function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
     <nav
       aria-label="pagination"
       data-slot="pagination"
-      className={cn("mx-auto flex min-h-14 w-full items-center justify-center border-t border-border bg-card px-4", className)}
+      className={cn("mx-auto flex min-h-14 w-full items-center justify-center border-t border-border bg-card px-[clamp(0.5rem,calc(50%_-_8.5rem),1rem)]", className)}
       {...props}
     />
   )
 }
 
+// The list fills the bar, so its items take their full width when it has room and close up
+// together when it has not, the pages kept in the middle.
 function PaginationContent({ className, ...props }: React.ComponentProps<"ul">) {
-  return <ul data-slot="pagination-content" className={cn("flex min-w-0 items-center", className)} {...props} />
+  return <ul data-slot="pagination-content" className={cn("flex min-w-0 flex-1 items-center justify-center", className)} {...props} />
 }
 
-// Core's 48px target round each control. Core's five pages with Previous and Next are wider than
-// a 375px screen, so in a bar too narrow for them the targets close up to their 36px boxes
-// rather than run off its sides.
+// Core's 48px target round each control. Previous and Next hold their 16px from the pages inside
+// their own item, 56px across. Core's five pages with Previous and Next are wider than a 375px
+// screen, so in a bar too narrow for them every item closes up evenly, the pages to their 36px
+// boxes and Previous and Next to their buttons, and the bar's 16px sides narrow to 8 once it is
+// under 304px wide: five pages with Previous and Next fit a 288px bar, a 320px phone's width.
+const sideItem =
+  "has-[>[data-pagination=previous]]:basis-14 has-[>[data-pagination=previous]]:justify-start has-[>[data-pagination=next]]:basis-14 has-[>[data-pagination=next]]:justify-end"
+
 function PaginationItem({ className, ...props }: React.ComponentProps<"li">) {
-  return <li data-slot="pagination-item" className={cn("flex min-h-12 min-w-fit shrink basis-12 items-center justify-center", className)} {...props} />
+  return <li data-slot="pagination-item" className={cn("flex min-h-12 min-w-fit shrink basis-12 items-center justify-center", sideItem, className)} {...props} />
 }
 
 type PaginationLinkProps = {
@@ -99,14 +106,14 @@ function PaginationLink({ className, isActive, disabled, size, href, onClick, ch
 }
 
 // Previous and Next are 40px icon buttons with a 16px icon and no visible text, 16px from
-// the pages; text is their accessible name.
+// the pages by their item; text is their accessible name.
 function PaginationPrevious({
   className,
   text = "Previous page",
   ...props
 }: React.ComponentProps<typeof PaginationLink> & { text?: string }) {
   return (
-    <PaginationLink className={cn("me-4 [&_svg:not([class*='size-'])]:size-4", className)} {...props}>
+    <PaginationLink data-pagination="previous" className={cn("[&_svg:not([class*='size-'])]:size-4", className)} {...props}>
       <ChevronLeftIcon />
       <span className="sr-only">{text}</span>
     </PaginationLink>
@@ -119,7 +126,7 @@ function PaginationNext({
   ...props
 }: React.ComponentProps<typeof PaginationLink> & { text?: string }) {
   return (
-    <PaginationLink className={cn("ms-4 [&_svg:not([class*='size-'])]:size-4", className)} {...props}>
+    <PaginationLink data-pagination="next" className={cn("[&_svg:not([class*='size-'])]:size-4", className)} {...props}>
       <ChevronRightIcon />
       <span className="sr-only">{text}</span>
     </PaginationLink>
