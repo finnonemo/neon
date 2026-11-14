@@ -50,6 +50,16 @@ const DEFAULT_SOURCE_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..
 const DEFAULT_THEME_DIR = "src/theme";
 const CDS_PACKAGE = "@coinbase/cds-web";
 
+/**
+ * The one line the CLI prints when it runs the CDS install mode, which is deprecated: the major
+ * that removes it is the one after plugin.json's version, the only manifest the package carries.
+ */
+export function cdsDeprecationNotice(sourceRoot = DEFAULT_SOURCE_ROOT) {
+  const { version } = JSON.parse(readFileSync(join(sourceRoot, ".claude-plugin/plugin.json"), "utf8"));
+  const removedIn = `${Number(version.split(".")[0]) + 1}.0.0`;
+  return `Deprecation notice: the CDS Install mode is deprecated and Neon ${removedIn} removes it. To move an app off CDS, ask neon-create for a Rebuild on the Neon base.`;
+}
+
 /** An installer refusal or failure; `exitCode` is what the CLI should exit with. */
 export class InstallError extends Error {
   constructor(message, { exitCode = 1, cause } = {}) {

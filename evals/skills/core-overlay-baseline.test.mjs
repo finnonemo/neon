@@ -100,7 +100,6 @@ test('a doc table cannot name a token, a step or a text style its Counterpart\'s
   assert.deepEqual(docValue(core, 'Layer/layer-01'), { kind: 'color', token: 'Layer/layer-01', ...layer01 });
   assert.throws(() => docValue(core, 'Text/text-negative'), /Core's Popover doc does not name Text\/text-negative/);
   assert.throws(() => docValue(core, 'Radius/radius-xl'), /Core's Popover doc does not name Radius\/radius-xl/);
-  // card: the Counterpart table says Core has no Card, so no retune gives it one.
   await assert.rejects(readCoreDoc(root, 'card'), /no Counterpart/);
   assert.equal(docValue(await readCoreDoc(root, 'dropdown-menu'), 'Body/Body').lineHeight, 24);
 });

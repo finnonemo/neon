@@ -97,3 +97,15 @@ test('the contributor instructions no longer say the skills carry CDS tuning', a
   assert.doesNotMatch(agents, /still carry CDS tuning|skills still/);
   assert.match(agents, /Neon matches Core, not CDS/);
 });
+
+test('every file that offers the CDS Install mode says it is deprecated, names the next major and offers a Rebuild', async () => {
+  // finnonemo/neon#287: one release of notice before finnonemo/neon#258 removes the mode.
+  const { version } = JSON.parse(await readFile(join(root, 'package.json'), 'utf8'));
+  const removedIn = `${Number(version.split('.')[0]) + 1}.0.0`;
+  for (const path of ['skills/neon-create/SKILL.md', CDS_REFERENCE, 'skills/neon-audit/SKILL.md', 'skills/neon-audit/references/theme-integration.md', 'README.md', 'GLOSSARY.md']) {
+    const notice = (await lines(path)).filter(({ text }) => /CDS Install mode[^.]* is deprecated/.test(text));
+    assert.equal(notice.length, 1, `${path} carries the notice once`);
+    assert.ok(notice[0].text.includes(`Neon ${removedIn} removes it`), `${notice[0].at} names Neon ${removedIn}`);
+    assert.match(notice[0].text, /\bRebuild\b.* on the Neon base/, `${notice[0].at} offers a Rebuild`);
+  }
+});

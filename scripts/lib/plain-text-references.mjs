@@ -6,8 +6,9 @@ import { withoutFences } from './markdown-links.mjs';
 // Catches prose and comment mentions of repository files that Markdown link
 // checks cannot see: bare Markdown filenames, backticked top-level directories,
 // parent-relative paths and repository paths with an extension. Prose with a
-// slash but no extension, and paths starting with a single dot (app-relative
-// examples), stay out of scope.
+// slash but no extension, paths starting with a single dot (app-relative
+// examples) and paths written after a checkout (<Core checkout>/docs/x.mjs, a
+// file of another repository) stay out of scope.
 const PATH_TOKEN = /(?<![\w@$.\/-])((?:\.\.\/)+[\w.\/-]*[\w\/]|[\w.-]+\/[\w.\/-]*[\w\/]|[A-Za-z][\w-]*\.md\b)/g;
 const INLINE_DIRECTORY = /`([\w.-]+)\/`/g;
 const CODE_COMMENTS = /\/\*[\s\S]*?\*\/|\/\/[^\n]*/g;
@@ -79,6 +80,6 @@ export async function checkPlainTextReferences(root, files, { ignored = [] } = {
     });
   }
   if (missing.length) {
-    throw new Error(`Missing plain-text references:\n${missing.join('\n')}\nPoint at an existing file, write an app-relative path with a leading ./, or describe the artifact instead of naming a file.`);
+    throw new Error(`Missing plain-text references:\n${missing.join('\n')}\nPoint at an existing file, write an app-relative path with a leading ./, write another repository's file after its checkout (<Core checkout>/docs/x.mjs), or describe the artifact instead of naming a file.`);
   }
 }

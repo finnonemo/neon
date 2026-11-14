@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
-import { checkCoreTheme, writeCoreTheme } from '../../scripts/lib/core-theme.mjs';
+import { adapterColors, changedRolesReport, checkCoreTheme, writeCoreTheme } from '../../scripts/lib/core-theme.mjs';
 
 // A small Core Theme: one token per shape the export has to carry.
 const THEME = {
@@ -113,6 +113,38 @@ test('writes the color of each role the Role table gives a token, in the light b
     assert.match(dark, /--color-fg: rgb\(255, 255, 255\);/);
     assert.match(dark, /--color-bgPrimary: rgb\(65, 81, 96\);/);
   }
+});
+
+test('says which color roles the write changed, per mode, and nothing when it changed none', async t => {
+  const root = await repository(t);
+  const { changed } = await writeCoreTheme(root);
+  assert.deepEqual(changed, [
+    { role: 'fg', light: ['rgb(9, 9, 9)', 'rgba(0, 0, 0, 0.851)'], dark: ['rgb(9, 9, 9)', 'rgb(255, 255, 255)'] },
+    // The dark blocks did not declare it, so its dark color was its light one.
+    { role: 'fgWarning', light: ['rgb(9, 9, 9)', 'rgb(211, 84, 12)'], dark: ['rgb(9, 9, 9)', 'rgb(242, 100, 20)'] },
+    { role: 'bgPrimary', light: ['rgb(9, 9, 9)', 'rgb(1, 23, 43)'], dark: ['rgb(9, 9, 9)', 'rgb(65, 81, 96)'] },
+  ]);
+  assert.deepEqual(changedRolesReport(changed).slice(0, 2), [
+    'Color roles of theme/css/theme.css that changed: 3.',
+    '  fg         light rgb(9, 9, 9) → rgba(0, 0, 0, 0.851)  dark rgb(9, 9, 9) → rgb(255, 255, 255)',
+  ]);
+  // One mode moves: only that mode is said.
+  await edit(root, 'core/theme.json', text => text.replace('#415160FF', '#01172BFF').replace('Navy/75', 'Navy/100'));
+  const again = await writeCoreTheme(root);
+  assert.deepEqual(again.changed, [{ role: 'bgPrimary', dark: ['rgb(65, 81, 96)', 'rgb(1, 23, 43)'] }]);
+  assert.match(changedRolesReport(again.changed)[1], /^  bgPrimary  dark rgb\(65, 81, 96\) → rgb\(1, 23, 43\)$/);
+  assert.deepEqual(changedRolesReport((await writeCoreTheme(root)).changed), ['No color role of theme/css/theme.css changed.']);
+});
+
+test('reads the adapter\'s colors per mode: a role no dark block declares keeps its light color', async t => {
+  const root = await repository(t);
+  await writeCoreTheme(root);
+  const { light, dark } = adapterColors(await read(root, 'theme/css/theme.css'));
+  assert.equal(light.fg, 'rgba(0, 0, 0, 0.851)');
+  assert.equal(dark.fg, 'rgb(255, 255, 255)');
+  assert.equal(light.currentColor, 'currentColor');
+  assert.equal(dark.currentColor, 'currentColor');
+  assert.equal(dark.bgLineHeavy, 'rgba(138, 145, 158, 0.66)');
 });
 
 test('adds a role Core darkens to a dark block that lacks it, after the role before it', async t => {

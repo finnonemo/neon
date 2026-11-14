@@ -121,17 +121,61 @@ function adapterFromCore(css, roles, theme) {
   return out.join('\n');
 }
 
+/**
+ * The color of every role the adapter `css` declares, per mode: { light: { role: value }, dark: { role: value } }.
+ * A role's dark color is the one the first dark block gives it (the OS-preference block and the manual one hold
+ * the same), and its light color where no dark block declares it.
+ */
+export function adapterColors(css) {
+  const lines = css.split('\n');
+  const firstDark = lines.findIndex(line => line.includes(DARK_BLOCKS));
+  const declared = block => block.flatMap(line => { const [, , role, value] = line.match(DECLARATION) ?? []; return role ? [[role, value]] : []; });
+  const light = Object.fromEntries(declared(firstDark < 0 ? lines : lines.slice(0, firstDark)));
+  const dark = { ...light };
+  const seen = new Set();
+  for (const [role, value] of declared(firstDark < 0 ? [] : lines.slice(firstDark))) {
+    if (!seen.has(role)) dark[role] = value;
+    seen.add(role);
+  }
+  return { light, dark };
+}
+
+/** The color roles whose value differs between two adapters, as [{ role, light?: [was, is], dark?: [was, is] }]. */
+function changedRoles(before, after) {
+  const [was, is] = [adapterColors(before), adapterColors(after)];
+  return Object.keys(is.light).flatMap(role => {
+    const moved = MODES.filter(mode => was[mode][role] !== is[mode][role]).map(mode => [mode, [was[mode][role], is[mode][role]]]);
+    return moved.length ? [{ role, ...Object.fromEntries(moved) }] : [];
+  });
+}
+
+/** What the sync prints about the color roles it changed (writeCoreTheme's result), as lines: the pull request names each one and its contrast. */
+export function changedRolesReport(changed) {
+  if (!changed.length) return [`No color role of ${ADAPTER} changed.`];
+  const width = Math.max(...changed.map(({ role }) => role.length));
+  return [
+    `Color roles of ${ADAPTER} that changed: ${changed.length}.`,
+    ...changed.map(change => `  ${change.role.padEnd(width)}  ${MODES.filter(mode => change[mode]).map(mode => `${mode} ${change[mode][0]} → ${change[mode][1]}`).join('  ')}`),
+    'Measure each against what it is drawn on or under, in both modes: node scripts/contrast.mjs <text role> <background role>...',
+  ];
+}
+
 /** The Theme token export and the CSS adapter as the Core snapshot in `root` gives them. */
 async function fromSnapshot(root) {
   const [theme, palette, roles, css] = await Promise.all([json(root, SNAPSHOT_THEME), json(root, PALETTE), json(root, ROLES_FILE), readFile(join(root, ADAPTER), 'utf8')]);
   return { export: serialized(themeExport(theme, palette)), adapter: adapterFromCore(css, roles, theme) };
 }
 
-/** Writes the Theme token export and the CSS adapter's colors from the Core snapshot in `root`. */
+/**
+ * Writes the Theme token export and the CSS adapter's colors from the Core snapshot in `root`. Returns the color
+ * roles whose value it changed (changedRolesReport).
+ */
 export async function writeCoreTheme(root) {
   const files = await fromSnapshot(root);
+  const before = await readFile(join(root, ADAPTER), 'utf8');
   await writeFile(join(root, THEME_EXPORT), files.export);
   await writeFile(join(root, ADAPTER), files.adapter);
+  return { changed: changedRoles(before, files.adapter) };
 }
 
 /** Refuses a Theme token export or CSS adapter that does not equal the Core snapshot's Theme. */

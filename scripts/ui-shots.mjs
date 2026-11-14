@@ -5,6 +5,8 @@
 // draw in headless Chromium instead of timing out a full-page capture.
 //   node scripts/ui-shots.mjs <url> [--sizes 375x812,1440x900] [--select <css>]...
 //     [--scale 0.5] [--tiles 4] [--wait 1500] [--out .local/shots] [--clock <ISO time>]
+// A selected element with no box of its own (display: contents, as the eval fixtures' data-measure hooks are) is
+// captured as the area its descendants cover. A selector that cannot be captured gets a line and the run goes on.
 // --clock fixes the page's clock before it loads, so a screen that draws today matches the browser suite's
 // (evals/templates: 2026-10-15T12:00).
 // Uses the Playwright that evals/templates installs:
@@ -14,7 +16,7 @@ import { createRequire } from 'node:module';
 import { join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { parseArgs } from 'node:util';
-import { parseClock, parseSizes, tileOffsets } from './lib/ui-shots.mjs';
+import { coveringBox, parseClock, parseSizes, tileOffsets, viewportClip } from './lib/ui-shots.mjs';
 
 const { values, positionals } = parseArgs({
   allowPositionals: true,
@@ -73,11 +75,34 @@ try {
         written.push(`${width} ${selector}: no match`);
         continue;
       }
-      await target.scrollIntoViewIfNeeded();
-      await page.waitForTimeout(400);
       const path = join(out, `${width}-select${i + 1}.png`);
-      await target.screenshot({ path });
-      written.push(`${path}  (${selector})`);
+      try {
+        const own = await target.boundingBox();
+        if (own?.width && own?.height) {
+          await target.scrollIntoViewIfNeeded();
+          await page.waitForTimeout(400);
+          await target.screenshot({ path });
+          written.push(`${path}  (${selector})`);
+          continue;
+        }
+        const box = coveringBox(await target.evaluate((element) => [...element.querySelectorAll('*')].map((child) => {
+          const { x, y, width, height } = child.getBoundingClientRect();
+          return { x: x + window.scrollX, y: y + window.scrollY, width, height };
+        })));
+        if (box) {
+          await page.evaluate(({ x, y }) => window.scrollTo(x, y), box);
+          await page.waitForTimeout(400);
+        }
+        const shown = box && viewportClip(box, await page.evaluate(() => ({ x: window.scrollX, y: window.scrollY })), { width, height });
+        if (!shown) {
+          written.push(`${width} ${selector}: not visible`);
+          continue;
+        }
+        await page.screenshot({ path, clip: shown.clip });
+        written.push(`${path}  (${selector}: the area its descendants cover${shown.cut ? ', cut at the viewport' : ''})`);
+      } catch (error) {
+        written.push(`${width} ${selector}: ${error.message.split('\n')[0]}`);
+      }
     }
     await page.close();
   }

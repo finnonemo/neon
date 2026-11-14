@@ -116,10 +116,10 @@
     "components/value.md": "b3cca3083b665e996cc15ff8468360210a21fa40c9ed9213e7dfef47ce156560",
     "components/vertical-bar.md": "92f5e0e440dc1d2e8bb361f69d1e0e0fb5a14a90446d9a8ed06b96719c1181c1",
     "hierarchy.md": "e04aaa62a02e8aa917f0753880b8523c47dc0baa29047e3858e5b8995cfe6629",
-    "index.json": "4cddd5b943c2358072148bbbdefbbcdcc9a592c4ee0b073e3ed14f65f172da03",
+    "index.json": "b0062ce69d9bb87c9406f57fdc8b5eee91d0c5884448b7b38a5cde28edb356a2",
     "scales.json": "bb99d45e34a21778d526432dade7592009bc77bf4eded9aeebaecbd647cd309d",
     "text-styles.json": "50f32ae4b3d6afeb7defae0b08901699909986d970b14db672064928bc079810",
     "theme.json": "9c9810e3b17175d39d89acb70bcd1b537d90524691457708c120d3548e8f10e5"
   },
-  "seal": "78474cab008ddd4148e88fed4421782b0d1f4b619c21f1b97b073a1d7068adf8"
+  "seal": "1896e605561fa6061d2fbd4ab31bb65a9adb66ad7b8051f0a70e254f8abf170f"
 }
