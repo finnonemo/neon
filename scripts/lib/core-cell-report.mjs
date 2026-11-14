@@ -37,6 +37,29 @@ export function setFor(core, cell, name) {
   throw new Error(`${fits.length ? `${fits.map((set) => set.name).join(' and ')} have these axes` : `No set of Core's ${core.counterpart} has exactly these axes`}: name the set with --set. It has ${all}.`);
 }
 
+/**
+ * The parts of a property table a cell is read for, as { read, left }. Parts that all read one set are
+ * all read, and coreValue refuses a cell that set does not have. Parts that read sets with different
+ * axes (the date picker's field is Date field's, its open calendar Date picker's) cannot share a cell:
+ * `read` holds the parts whose set has exactly the cell's axes and `left` the rest. Throws when no
+ * part's set has them, naming what each part reads.
+ */
+export function partsFor(core, parts, cell) {
+  if (new Set(parts.map((part) => part.set)).size < 2) return { read: parts, left: [] };
+  const axes = Object.keys(cell).sort().join('\n');
+  const read = parts.filter((part) => axesOf(setFor(core, cell, part.set)).sort().join('\n') === axes);
+  if (!read.length) throw new Error(`No part of ${core.item}'s property table reads a set with exactly these axes: ${partsBySet(core, parts)}. Name the axes of one set, or pick a part with --part.`);
+  return { read, left: parts.filter((part) => !read.includes(part)) };
+}
+
+/** What a table's parts read, set by set: "field, value read Date field (Text filled, State, Size); open reads Date picker (Type, Open, Size)". */
+export function partsBySet(core, parts) {
+  return [...new Set(parts.map((part) => part.set))].map((name) => {
+    const group = parts.filter((part) => part.set === name).map(({ part }) => part);
+    return `${group.join(', ')} ${group.length > 1 ? 'read' : 'reads'} ${withAxes(setFor(core, {}, name))}`;
+  }).join('; ');
+}
+
 const shown = (value) => {
   if (value.kind === 'color') return `${value.token}  light ${value.light}  dark ${value.dark}`;
   if (value.kind === 'textStyle') return `${value.name}  ${value.size}/${value.lineHeight}`;

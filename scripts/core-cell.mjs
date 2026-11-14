@@ -10,12 +10,15 @@
 // A cell names every axis of its set; quote a value with a space ('Type=Icon only'). --set <set> names
 // the set where a Counterpart has several with the same axes. A Counterpart the snapshot holds as a doc
 // alone has no cells: its table is printed as it is.
+// A table whose parts read sets with different axes (the date picker's field is Date field's, its open
+// calendar Date picker's) prints the parts whose set has the cell's axes and names the rest. The sets of
+// the Core components a table names as nested are read beside the Counterpart's own.
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
 import { coreBaseline, coreTable } from '../evals/templates/core-baseline.mjs';
 import { coreValue, readCoreItem } from './lib/core-cell.mjs';
-import { layerLines, parseCell, setFor, setLines, tableLines } from './lib/core-cell-report.mjs';
+import { layerLines, parseCell, partsBySet, partsFor, setFor, setLines, tableLines } from './lib/core-cell-report.mjs';
 import { SNAPSHOT_DIR } from './lib/core-snapshot.mjs';
 
 const USAGE = 'Usage: node scripts/core-cell.mjs <item> [Axis=Value]... [--part <part>] [--layers] [--set <set>]';
@@ -41,7 +44,7 @@ if (!entry.counterpart) fail(`${item} has no Counterpart${entry.why ? `: ${entry
 
 const table = coreTable(item);
 const parts = table?.parts.filter(({ part }) => !values.part || part === values.part) ?? [];
-const printTable = async (cell) => console.log((await tableLines(parts, async (part, mode, name) => (await coreBaseline({ item, part, cell }, mode, [name]))[name])).join('\n'));
+const printTable = async (cell, read = parts) => console.log((await tableLines(read, async (part, mode, name) => (await coreBaseline({ item, part, cell }, mode, [name]))[name])).join('\n'));
 
 try {
   if (table && values.part && !parts.length) throw new Error(`${item}'s property table has no part ${values.part}: it has ${table.parts.map(({ part }) => part).filter(Boolean).join(', ') || 'no parts'}.`);
@@ -51,12 +54,15 @@ try {
     else await printTable(undefined);
     process.exit(0);
   }
-  const core = await readCoreItem(root, item);
+  // A table names the Core components its Counterpart is built from (nested): their sets are read beside its own.
+  const nested = table?.nested ?? [];
+  const core = await readCoreItem(root, item, { nested });
   const cell = parseCell(words);
   if (!words.length && core.sets.some((set) => set.axes.length)) {
-    console.log(`${item} → Core's ${core.counterpart} (${SNAPSHOT_DIR}/${entry.values})\n`);
+    console.log(`${item} → Core's ${core.counterpart} (${SNAPSHOT_DIR}/${entry.values})${nested.length ? `, with the sets of ${nested.join(', ')}` : ''}\n`);
     console.log(setLines(core).join('\n'));
-    console.log(table ? `\nProperty table: ${table.parts.map(({ part, properties }) => `${part ?? 'one part'} (${properties.join(', ')})`).join('; ')}` : '\nNo property table in evals/templates/core/: the item is measured against the CDS baseline.');
+    const several = new Set(table?.parts.map((part) => part.set)).size > 1;
+    console.log(table ? `\nProperty table: ${table.parts.map(({ part, set, properties }) => `${part ?? 'one part'}${several ? ` in ${set}` : ''} (${properties.join(', ')})`).join('; ')}` : '\nNo property table in evals/templates/core/: the item is measured against the CDS baseline.');
     process.exit(0);
   }
   if (values.layers) {
@@ -66,10 +72,13 @@ try {
   } else {
     if (!table) throw new Error(`${item} has no property table in evals/templates/core/: print Core's bindings with --layers.`);
     if (values.set) throw new Error('--set goes with --layers: a property table names its own set.');
+    // Parts that read sets with other axes than the cell's are left out and named after the table.
+    const { read, left } = partsFor(core, parts, cell);
     // A cell its set does not have is refused once, here, and not on every property's line.
-    for (const set of new Set(parts.map((part) => part.set))) coreValue(core, set, cell, '', '');
+    for (const set of new Set(read.map((part) => part.set))) coreValue(core, set, cell, '', '');
     console.log(`${item}'s property table at ${words.join(', ') || 'its one cell'}\n`);
-    await printTable(cell);
+    await printTable(cell, read);
+    if (left.length) console.log(`\nNot in this cell: ${partsBySet(core, left)}.`);
   }
 } catch (error) {
   fail(error.message);

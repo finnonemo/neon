@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { layerLines, parseCell, setFor, setLines, tableLines } from '../../scripts/lib/core-cell-report.mjs';
+import { layerLines, parseCell, partsBySet, partsFor, setFor, setLines, tableLines } from '../../scripts/lib/core-cell-report.mjs';
 import { coreTable } from '../templates/core-baseline.mjs';
 
 // A small Counterpart: a Chip whose fill a Disabled rule overrides, and a nested set with the same axes.
@@ -87,6 +87,21 @@ test('an item\'s property table lists its parts with their set and properties', 
   assert.deepEqual(coreTable('checkbox').parts.map(({ part, set: name }) => [part, name]), [['box', 'Checkbox'], ['glyph', 'Checkbox'], ['value', 'Checkbox']]);
   assert.equal(coreTable('sheet').doc, true);
   assert.equal(coreTable('card'), null);
+  assert.deepEqual(coreTable('checkbox').nested, []);
+  assert.deepEqual(coreTable('date-picker').nested, ['date-field'], 'the docs of the Core components whose sets the table reads beside its own');
+});
+
+// Parts that read sets with different axes cannot share a cell: the date picker's field is Date field's.
+test('a cell is read for the parts whose set has its axes, and a cell no part\'s set has is refused with what each reads', () => {
+  const group = { name: 'Chip group', axes: [{ name: 'Wrap', values: ['False', 'True'] }], variables: {}, bindings: [] };
+  const grouped = { ...core, sets: [core.sets[0], group] };
+  const parts = [{ part: 'chip', set: 'Chip' }, { part: 'label', set: 'Chip' }, { part: 'row', set: 'Chip group' }];
+  assert.deepEqual(partsFor(grouped, parts, { Size: 'Large', State: 'Enabled' }), { read: parts.slice(0, 2), left: parts.slice(2) });
+  assert.deepEqual(partsFor(grouped, parts, { Wrap: 'True' }), { read: parts.slice(2), left: parts.slice(0, 2) });
+  assert.equal(partsBySet(grouped, parts), 'chip, label read Chip (Size, State); row reads Chip group (Wrap)');
+  assert.throws(() => partsFor(grouped, parts, { Size: 'Large' }), /No part of chip's property table reads a set with exactly these axes: chip, label read Chip \(Size, State\); row reads Chip group \(Wrap\)\. Name the axes of one set, or pick a part with --part\./);
+  assert.deepEqual(partsFor(grouped, parts.slice(0, 2), { Size: 'Large' }), { read: parts.slice(0, 2), left: [] }, 'parts of one set are all read: coreValue refuses the cell');
+  assert.throws(() => partsFor(grouped, [...parts, { part: 'gone', set: 'Chip row' }], { Wrap: 'True' }), /has no set Chip row/);
 });
 
 const run = (...args) => spawnSync(process.execPath, [fileURLToPath(new URL('../../scripts/core-cell.mjs', import.meta.url)), ...args], { encoding: 'utf8' });
@@ -116,4 +131,28 @@ test('core-cell.mjs fails on a cell Core does not have, and an item with no Coun
   assert.equal(sheet.status, 0, sheet.stderr);
   assert.match(sheet.stdout, /a doc alone \(core\/components\/sheet\.md\): it has no cells\.\ngrabber\n  h +4\n/);
   assert.equal(run().status, 2);
+});
+
+// The date picker's table names Date field as nested, and its parts read two sets with different axes.
+test('core-cell.mjs reads the sets a table names as nested: the date picker\'s field in Date field, its open calendar in Date picker', () => {
+  const sets = run('date-picker');
+  assert.equal(sets.status, 0, sets.stderr);
+  assert.match(sets.stdout, /with the sets of date-field\n\nDate picker\n  Type: Single, Range\n[\s\S]*\nDate field\n  Text filled: False, True\n[\s\S]*Property table: field in Date field \([^)]+\); [\s\S]*; open in Date picker \(gap, w\)\n/);
+  const field = ['Text filled=True', 'State=Enabled', 'Size=Large'];
+  const inField = run('date-picker', ...field);
+  assert.equal(inField.status, 0, inField.stderr);
+  assert.match(inField.stdout, /\nfield\n  h +56\n[\s\S]*\nicon\n  color +light [^\n]+\n\nNot in this cell: open reads Date picker \(Type, Open, Size\)\.\n$/);
+  const open = run('date-picker', 'Type=Single', 'Open=True', 'Size=Large');
+  assert.equal(open.status, 0, open.stderr);
+  assert.match(open.stdout, /\nopen\n  gap +4\n  w +370\n\nNot in this cell: field, value, placeholder, icon read Date field \(Text filled, State, Size\)\.\n$/);
+  const layers = run('date-picker', ...field, '--layers');
+  assert.equal(layers.status, 0, layers.stderr);
+  assert.match(layers.stdout, /^Core's Date field at Text filled=True, State=Enabled, Size=Large\n\nContainer\n/);
+  const neither = run('date-picker', 'Size=Large');
+  assert.equal(neither.status, 1);
+  assert.match(neither.stderr, /No part of date-picker's property table reads a set with exactly these axes: [\s\S]*pick a part with --part\./);
+  assert.equal(neither.stdout, '');
+  const part = run('date-picker', 'Size=Large', '--part', 'open');
+  assert.equal(part.status, 1);
+  assert.match(part.stderr, /A cell of Core's Date picker names every axis; Type is missing/);
 });
