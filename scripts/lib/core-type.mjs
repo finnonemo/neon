@@ -24,7 +24,7 @@ const DECLARATION = new RegExp(`^(?<lead>\\s*--(?<category>${CATEGORIES.join('|'
 // The design contract restates the table for the skills; its rows are `| \`<role>\` | <Core text style> |`.
 const CONTRACT = 'skills/INSTRUCTION.md';
 const CONTRACT_HEADING = '| Type role | Core text style |';
-const RESYNC = 'Re-run node scripts/sync-core.mjs --from <Core checkout>; a size or line height is not edited by hand.';
+const RESYNC = 'Re-run node scripts/sync-core.mjs --from-snapshot; a size or line height is not edited by hand.';
 
 const json = async (root, path) => JSON.parse(await readFile(join(root, path), 'utf8'));
 

@@ -26,7 +26,8 @@
   },
   "calendar": {
     "core": "date-and-time",
-    "why": "Calendar is the month grid of Date and time's Pickers set: its Header, Weekdays and Weeks of days. Date and time - Collapsed and the Time row have no Neon item."
+    "why": "Calendar is the month grid of Date and time's Pickers set: its Header, Weekdays and Weeks of days. Date and time - Collapsed and the Time row have no Neon item.",
+    "notInCorePassThrough": "react-day-picker"
   },
   "card": {
     "core": null,
@@ -102,7 +103,8 @@
     }
   },
   "sonner": {
-    "core": "snackbar"
+    "core": "snackbar",
+    "notInCorePassThrough": "sonner"
   },
   "spinner": {
     "core": "progress-circle",
