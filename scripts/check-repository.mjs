@@ -52,8 +52,9 @@ async function check(root, { sourceTree = false } = {}) {
   }
   await checkCodexManifest(root);
   // The registry does not ship, so only the source tree can say which items the index must cover.
-  await checkCoreSnapshot(join(root, SNAPSHOT_DIR), sourceTree ? { items: (await registryComponents(root)).map(item => item.name) } : {});
-  if (sourceTree) await checkCounterpartTable(JSON.parse(await readFile(join(root, COUNTERPARTS_FILE), 'utf8')), join(root, SNAPSHOT_DIR), await registryComponents(root));
+  const components = sourceTree ? await registryComponents(root) : null;
+  await checkCoreSnapshot(join(root, SNAPSHOT_DIR), components ? { items: components.map(item => item.name) } : {});
+  if (components) await checkCounterpartTable(JSON.parse(await readFile(join(root, COUNTERPARTS_FILE), 'utf8')), join(root, SNAPSHOT_DIR), { items: components });
   await checkBlockSnapshot(join(root, BLOCK_SNAPSHOT_DIR));
   await checkCoreTheme(root);
   await checkCoreType(root);
