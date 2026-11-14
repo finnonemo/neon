@@ -110,3 +110,49 @@ Limits:
 - **Denied commands.** Every run had at least one denied command, mostly `cd … &&` chains and variable assignments. Each run carried on.
 - **Harness label.** The harness printed "failed (exit 1)" for every case after its run ended, because the app the run created is a git repository of its own. The step that writes `diff.patch` hit it, and the app itself was not affected.
 - **What the owner judged.** Production builds, served by `review-server.mjs` at 375px and 1440px and full size, in light mode.
+
+### November 2026 after
+
+Round `2026-11-after-c9554ab`: main at `c9554ab`, after [#321](https://github.com/finnonemo/neon/pull/321). That PR:
+
+- puts a Block Brand Pattern on every Campaign Page
+- adds ADR 0013's scroll patterns
+- adds the functional layout rules
+- centres the sheet
+
+The eight runs used Claude Code 2.1.325 through `run-claude-case.mjs --serve-registry`, four at once. Every run ended on its own report, none at the cap, none void. Together they cost $48.62. The owner judged on 2026-11-15, and their notes are verbatim in [verdicts.json](verdicts.json).
+
+**None of eight passed**, and review-07 fell from ✓ to ✗. Only the sidebar comes back, now as a template the owner wants shipped rather than a question. The other baseline complaints are gone:
+
+- The Brand Pattern is no longer missing.
+- No sheet rises from the bottom at desktop width.
+- No screen has too many panes.
+- No row action sits outside its row.
+
+The notes name the next layer down.
+
+| Case | Verdict | Owner's tags and note, shortened | Cost, turns, time |
+| --- | --- | --- | --- |
+| review-01 approvals | ✗ | A list of real people leads each row with an avatar, drawn from a 4×4 Block. | $6.93, 100, 14 min |
+| review-02 Club Run | ✗ | Wrong colors: use the Theme Brief already made for it. | $6.56, 121, 14 min |
+| review-03 portfolio | ✗ | Show the reference's sidebar by default; the owner's sidebar should be the template from the start. | $6.88, 102, 15 min |
+| review-04 fifteen years | ✗ | detail, habit, hierarchy, interaction, motion, story. The hero does not work: a photo over a Brand Pattern background cannot be composed. Block's guideline says how a photo goes into a Block. | $6.41, 125, 15 min |
+| review-05 KYC | ✗ | detail. Nearly right; the case history should be a vertical progress step. | $5.85, 100, 14 min |
+| review-06 night run | ✗ | detail, fake, habit, hierarchy, interaction, motion, story. The hero Block is placed right and needs no background. A photo, if used, is masked into a Block. The Brand Pattern appears only once; it can sit in many places as illustration, and an immersive page may use a gradient. | $5.37, 100, 13 min |
+| review-07 auto-invest | ✗ | The back control is an icon alone, on web and app; never an icon with a label. | $6.40, 107, 14 min |
+| review-08 learning week | ✗ | fake, habit, hierarchy, interaction, motion, story. The sections repeat one style. | $4.21, 82, 10 min |
+
+What this round adds to the plan:
+
+- **The Brand Pattern holds the photo.** A photo is masked into a Block, never laid over or beside the Pattern on a background. The Pattern may appear in several places on an immersive page as illustration, and a gradient is allowed there. Block's guideline on placing a photo in a Block is the source.
+- **A Theme Brief's colors win.** Where a brief exists for the request, its colors are used.
+- **A default sidebar.** The owner's sidebar is a template the starter ships, not a question left open.
+- **Small functional rules.** An avatar drawn from a 4×4 Block leads a row about a person. A case history is a vertical progress step. A back control is an icon alone.
+- **Campaign sections vary.** Sections that repeat one style read as fake and break the story, motion and hierarchy together.
+
+Limits:
+
+- **A different model.** This round ran on `claude-fable-5-2`, the baseline on `claude-opus-5-5`. The runner takes the CLI's default model, so the two rounds differ in model as well as skills. The cost rise, $29.41 to $48.62, may come from either.
+- **One sample per case.** review-07's fall may be sample variation, the model, or both.
+- **Denied commands and the harness label** are as in the baseline round.
+- **What the owner judged** is as in the baseline round.
