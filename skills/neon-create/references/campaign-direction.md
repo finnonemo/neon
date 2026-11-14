@@ -47,7 +47,7 @@ Habits to name and replace: no Brand Pattern, or one drawn as a strip; hero, thr
 
 ## Motion
 
-A Campaign Page may tell its story with the four named scroll patterns of [ADR 0013](../../../docs/adr/0013-campaign-pages-tell-a-story-with-named-scroll-patterns.md):
+A Campaign Page may tell its story with the four named scroll patterns of Neon's ADR 0013:
 
 | Pattern | What moves | What it tells | Limit | Level |
 |---|---|---|---|---|

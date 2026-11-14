@@ -45,10 +45,6 @@ Generated Back Office and Product Feature screens repeat a few habits. On such a
 | Pagination under an overview list | Composition: cap the overview at a few rows with a "View all" link in its title row; `Pagination` belongs on the full list |
 | A greeting such as "Welcome back 👋", or emoji in headings | Composition: the page title names the task and its scope, such as "Fund fees, October 2026"; no greeting line or emoji |
 | Figures centered or left-aligned in proportional digits | `TableHead` and `TableCell` with `text-right tabular-nums`, per the [sample data rules](../../neon-create/references/new-ui-workflow.md#sample-data-and-figures) |
-| A sheet rising from the bottom edge at desktop width | The Neon `sheet` item's bottom side as installed, which centres it from the `lg` tier, per Core's Sheet Placement and the [overlay rules](../../neon-audit/references/functional-patterns.md#overlays) |
-| An empty sidebar, or none, in an app the request does not call standalone | Composition: the layout's `navigation` with the screen as its active item, and the question whether the product stands alone in the report, per [scaffold](../../neon-create/references/scaffold.md) |
-| A record's action as a button beside its row, or a list narrower than its pane | `ListRow` with the action in its trailing column, and the list at the pane's full width, per [lists before cards](../../neon-audit/references/functional-patterns.md#lists-before-cards) |
-| A third or fourth column for a deeper level of the selected record | Composition: the deeper level replaces the detail pane with a back control, or opens in a `Sheet`, per [panes](../../neon-audit/references/functional-patterns.md#panes) |
 | Cards nested in cards, or a gradient or heavy shadow behind every block | Composition: one container per group of related content; whitespace and a `Separator` set the hierarchy |
 
 Navy structure and primary actions, and indigo focus, selection and links, are the contract's [color roles](../../INSTRUCTION.md#color-roles), not habits. Habits are findings only on functional screens; immersive pages follow their own composition. Under colors-only scope only the chart and status rows apply. Under `composition: 'preserve'` the composition rows are observations for the owner. Review-only work suggests these fixes and edits nothing.
@@ -58,6 +54,17 @@ Navy structure and primary actions, and indigo focus, selection and links, are t
 Use provided viewport requirements. Otherwise sample a narrow and wide viewport (375px and 1440px are useful starting points), then inspect relevant transitions if the app changes panes/navigation. Record actual widths, not a claim that all breakpoints were covered. Check horizontal overflow, clipped Thai labels, sticky elements obscuring controls, and access to collapsed regions.
 
 Single-width screenshots cannot establish responsive behavior. Inspect existing/specified theme modes; do not count absent dark mode as a defect unless required by the task.
+
+## Functional layout
+
+On a Back Office or Product Feature screen, these layout misses are findings, in the same scope as the habits above: under `composition: 'preserve'` they are observations for the owner, and review-only work edits nothing.
+
+| Miss | Instead |
+| --- | --- |
+| A sheet rising from the bottom edge at desktop width | The Neon `sheet` item's bottom side as installed, which centres it from the `lg` tier, per Core's Sheet Placement and the [overlay rules](../../neon-audit/references/functional-patterns.md#overlays) |
+| An empty sidebar, or none, in an app the request does not call standalone | Composition: the layout's `navigation` with the screen as its active item, and the question whether the product stands alone in the report, per [scaffold](../../neon-create/references/scaffold.md) |
+| A record's action as a button beside its row, or a list narrower than its pane | `ListRow` with the action in its trailing column, and the list at the pane's full width, per [lists before cards](../../neon-audit/references/functional-patterns.md#lists-before-cards) |
+| A third or fourth column for a deeper level of the selected record | Composition: the deeper level replaces the detail pane with a back control, or opens in a `Sheet`, per [panes](../../neon-audit/references/functional-patterns.md#panes) |
 
 ## Accessibility and interactions
 
