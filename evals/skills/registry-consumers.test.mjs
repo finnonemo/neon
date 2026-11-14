@@ -114,6 +114,10 @@ test("the repository's registry: Button reads bgLineHeavy, Input its invalid str
   assert.deepEqual([...await items('bgHighlight')], ['calendar']);
   assert.ok((await items('bgToggleOn')).has('calendar'));
   assert.ok(!(await items('bgPrimary')).has('calendar'));
+  // Date picker took Core's Date picker (#276): its field is the Field roles with no stroke at rest, its
+  // glyph the icon role, and its text no muted ink.
+  for (const token of ['bgField', 'bgFieldHover', 'bgFieldDisabled', 'fgPlaceholder', 'fgIcon', 'fgIconDisabled']) assert.ok((await items(token)).has('date-picker'), token);
+  assert.ok(!(await items('fgMuted')).has('date-picker'));
   // Input took Core's Field (#216): it reads no bgLineHeavy, and its invalid stroke is the invalid slot.
   assert.ok(!(await items('bgLineHeavy')).has('input'));
   assert.ok((await items('bgLineNegative')).has('input'));
