@@ -4,7 +4,7 @@ import { mkdtemp, mkdir, writeFile, readFile, readdir, rm } from 'node:fs/promis
 import { execFileSync } from 'node:child_process';
 import { dirname, join } from 'node:path';
 import { tmpdir } from 'node:os';
-import { syncCore, checkCoreSnapshot, checkCounterpartTable, movedReport } from '../../scripts/lib/core-snapshot.mjs';
+import { syncCore, indexCore, checkCoreSnapshot, checkCounterpartTable, movedReport } from '../../scripts/lib/core-snapshot.mjs';
 
 // Core's Web compile is Core's own script, tested in Core's repository (ADR 0012). This stands in for it in a
 // checkout small enough to read here: it writes the files under `compiled/` of the checkout it is told to compile,
@@ -194,12 +194,19 @@ test('sync reports what moved since the snapshot it replaces: Core\'s commits, t
   assert.equal(moved.from, first);
   assert.deepEqual(moved.commits.map(line => line.replace(/^[0-9a-f]+ /, '')), ['Readme', 'Tile approved']);
   assert.deepEqual([moved.added, moved.changed, moved.removed], [['components/tile.md'], ['components/alert.md'], []]);
-  assert.deepEqual(movedReport(moved, commit).map(line => line.replace(/^  [0-9a-f]+ /, '  ')), [
+  // Core is private: the report names its commits by hash, and their subjects only when asked.
+  const hashes = moved.commits.map(line => line.split(' ')[0]);
+  assert.deepEqual(movedReport(moved, commit), [
     `Core moved ${first.slice(0, 8)} → ${commit.slice(0, 8)}. Core's commits between them: 2.`,
-    '  Readme',
-    '  Tile approved',
+    `  ${hashes.join(', ')}`,
+    'Core is private, so their subjects are left out: --subjects prints them, to read and not to paste.',
     'Added in the snapshot: components/tile.md.',
     'Changed in the snapshot: components/alert.md.',
+  ]);
+  assert.deepEqual(movedReport(moved, commit, { subjects: true }).slice(0, 3), [
+    `Core moved ${first.slice(0, 8)} → ${commit.slice(0, 8)}. Core's commits between them: 2.`,
+    `  ${hashes[0]} Readme`,
+    `  ${hashes[1]} Tile approved`,
   ]);
   // The same Core commit compiled by another checkout's compile: Core has not moved, the compiler has.
   const compiler = await coreCheckout(t);
@@ -216,6 +223,65 @@ test('sync reports what moved since the snapshot it replaces: Core\'s commits, t
   assert.equal(lost.moved.commits, null);
   assert.deepEqual(lost.moved.removed, ['components/gone.md']);
   assert.match(movedReport(lost.moved, lost.commit).join('\n'), /does not hold 00000000.*\nRemoved in the snapshot: components\/gone\.md\./s);
+});
+
+test('a dry run compiles, reports and refuses as a sync does, and writes nothing', async t => {
+  const { from, out, result } = await synced(t);
+  const before = Object.fromEntries(await Promise.all((await snapshotFiles(out)).map(async path => [path, await readFile(join(out, path), 'utf8')])));
+  await writeFile(join(from, 'compiled/components/tile.md'), doc('Tile', 'One Tile.'));
+  git(from, 'add', '-A');
+  git(from, 'commit', '-q', '-m', 'Tile approved');
+  const items = ITEMS.map(name => ({ name, supporting: false }));
+  const dry = await syncCore({ from, out, items, counterparts: COUNTERPARTS, write: false });
+  assert.notEqual(dry.commit, result.commit);
+  assert.deepEqual(dry.moved.added, ['components/tile.md']);
+  assert.ok(dry.files.includes('components/tile.md'));
+  await assert.rejects(syncCore({ from, out, items, counterparts: { ...COUNTERPARTS, card: { core: 'gone' } }, write: false }), /no such doc/);
+  const after = Object.fromEntries(await Promise.all((await snapshotFiles(out)).map(async path => [path, await readFile(join(out, path), 'utf8')])));
+  assert.deepEqual(after, before);
+});
+
+test('the index is written again from the Counterpart table, with no Core checkout', async t => {
+  const { out, read, json } = await synced(t);
+  const items = ITEMS.map(name => ({ name, supporting: false }));
+  const before = await read('snapshot.json');
+  assert.deepEqual(await indexCore({ out, items, counterparts: COUNTERPARTS }), { changed: false });
+  assert.equal(await read('snapshot.json'), before);
+  // Card takes a Counterpart: only the index, its hash and the seal change, and the repository check passes.
+  const table = { ...COUNTERPARTS, card: { core: 'menu', why: 'A card that opens is a Menu.' } };
+  assert.deepEqual(await indexCore({ out, items, counterparts: table }), { changed: true });
+  assert.deepEqual((await json('index.json')).card, { counterpart: 'Menu', doc: 'components/menu.md', why: 'A card that opens is a Menu.' });
+  const [was, now] = [JSON.parse(before), await json('snapshot.json')];
+  assert.deepEqual(now.core, was.core);
+  assert.deepEqual(Object.keys(now.files), Object.keys(was.files));
+  assert.deepEqual(Object.keys(now.files).filter(path => now.files[path] !== was.files[path]), ['index.json']);
+  await checkCoreSnapshot(out, { items: ITEMS });
+  // The same as a sync of the same Core with that table writes.
+  const { read: resynced } = await synced(t, { counterparts: table });
+  assert.equal(await read('index.json'), await resynced('index.json'));
+  // A merge that took the manifest from one side and left the other side's index: the index is put right.
+  await writeFile(join(out, 'index.json'), '{}\n');
+  assert.deepEqual(await indexCore({ out, items, counterparts: table }), { changed: true });
+  await checkCoreSnapshot(out, { items: ITEMS });
+});
+
+test('writing the index again accepts no hand edit and no table a sync refuses', async t => {
+  const { out, read } = await synced(t);
+  const items = ITEMS.map(name => ({ name, supporting: false }));
+  const [index, manifest] = [await read('index.json'), await read('snapshot.json')];
+  const untouched = async () => assert.deepEqual([await read('index.json'), await read('snapshot.json')], [index, manifest]);
+  await assert.rejects(indexCore({ out, items, counterparts: { ...COUNTERPARTS, card: { core: 'tile' } } }), /no such doc/);
+  await assert.rejects(indexCore({ out, items, counterparts: { button: { core: 'button' } } }), /no Counterpart entry for: dialog, card/);
+  await untouched();
+  const button = await read('components/button.md');
+  await writeFile(join(out, 'components/button.md'), `${button}- Brand on Secondary is fine.\n`);
+  await assert.rejects(indexCore({ out, items, counterparts: COUNTERPARTS }), /components\/button\.md does not match what the sync wrote, so the index was not written/);
+  await writeFile(join(out, 'components/button.md'), button);
+  // A manifest left with conflict markers, and one edited by hand.
+  await writeFile(join(out, 'snapshot.json'), `<<<<<<< ours\n${manifest}`);
+  await assert.rejects(indexCore({ out, items, counterparts: COUNTERPARTS }), /not a manifest that can be read.*take snapshot\.json and index\.json whole/s);
+  await writeFile(join(out, 'snapshot.json'), manifest.replace(/"commit": "[0-9a-f]{40}"/, `"commit": "${'0'.repeat(40)}"`));
+  await assert.rejects(indexCore({ out, items, counterparts: COUNTERPARTS }), /snapshot\.json does not match what the sync wrote/);
 });
 
 test('a refused Counterpart table leaves the snapshot as it was', async t => {
