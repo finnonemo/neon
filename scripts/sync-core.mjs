@@ -3,7 +3,8 @@
 //   node scripts/sync-core.mjs --from <Core checkout> [--at <commit or ref>] [--compiler <Core checkout>] [--dry-run] [--subjects]
 //   node scripts/sync-core.mjs --from-snapshot
 // Core's repository compiles its docs for the web (ADR 0012): this runs the checkout's Web compile, as sync-block
-// runs Block's bundle build, copies what it wrote and records the commit the compile names and each file's hash.
+// runs Block's bundle build, copies what it wrote and records the commit and the look the compile names and each
+// file's hash. A compile that prints no look is from a Core commit too old to sync, and is refused.
 // The compile refuses a checkout whose docs are not committed.
 // --at compiles that commit in a temporary worktree of the checkout and removes it after, so the checkout's own
 // working tree and branch stay as they are, and the snapshot is pinned to the commit named, not to what the checkout
@@ -55,7 +56,7 @@ try {
       ? `Wrote ${SNAPSHOT_DIR}/index.json from ${COUNTERPARTS_FILE}, and its hash and the seal in ${SNAPSHOT_DIR}/snapshot.json.`
       : `${SNAPSHOT_DIR}/index.json already follows ${COUNTERPARTS_FILE}: it is as it was.`);
   } else {
-    const { commit, compiler, files, leftOut, moved } = await syncCore({
+    const { commit, compiler, look, files, leftOut, moved } = await syncCore({
       ...snapshot,
       from: resolve(from),
       at: option('--at'),
@@ -64,6 +65,7 @@ try {
     });
     if (dryRun) console.log(`Dry run: nothing is written. The Theme export and the adapter are not written or checked.`);
     console.log(`${dryRun ? 'Would write' : 'Wrote'} ${files.length} files to ${SNAPSHOT_DIR}/ from Core ${commit}${compiler ? `, compiled by Core ${compiler}` : ''}.`);
+    console.log(`Core compiled it at the look iOS=${look.iOS ? 'True' : 'False'}, text size ${look.textSize}.`);
     for (const line of movedReport(moved, commit, { subjects: args.includes('--subjects') })) console.log(line);
     const byStanding = Object.groupBy(Object.keys(leftOut), name => leftOut[name]);
     for (const [standing, names] of Object.entries(byStanding)) console.log(`Left out, ${standing}: ${names.join(', ')}.`);
