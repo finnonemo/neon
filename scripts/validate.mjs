@@ -7,6 +7,8 @@
  * run that is still going shows where it is. A passing step ends with one
  * summary line; a failing step or test file prints its full output. Exits 1
  * if either fails, so its status is safe to trust without reading the log.
+ * Runs on one machine queue behind the checks lock (scripts/lib/checks-lock.mjs),
+ * which the browser suite takes too; a waiting run prints the run it waits for.
  *
  * Usage: node scripts/validate.mjs
  */
@@ -14,6 +16,7 @@ import { readdirSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
+import { takeChecksLock } from "./lib/checks-lock.mjs";
 import { runTestFiles } from "./lib/test-files.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -46,6 +49,8 @@ async function tests() {
   return false;
 }
 
+// Released when the process exits.
+await takeChecksLock({ label: "validate", worktree: root });
 // The repository check takes under a second and the tests half a minute, so it runs first.
 const results = [repositoryCheck(), await tests()];
 process.exit(results.every(Boolean) ? 0 : 1);
