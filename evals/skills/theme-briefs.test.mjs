@@ -1289,7 +1289,7 @@ test('check-only refuses a panel whose blocks are the color of the section it si
 test('the Brand Pattern sits on the section when Block draws on its fill, and in a panel when it does not', (t) => {
   const { briefs } = renderMatrix(t);
   const pattern = (theme, colourway) => section(briefs.find((brief) => brief.theme === theme && brief.colourway === colourway).text, 'Brand Pattern');
-  assert.match(pattern('club', 'accent'), /^The hero section carries the Brand Pattern in a panel on its ground: Block draws it in `white__yellow-100`, Yellow blocks on White \(`--immersive-canvas`\), and the panel takes the block and card radius\. It leads the section's screenful beside the text, never behind it and never as a strip, with its clear space left for a photo\./m);
+  assert.match(pattern('club', 'accent'), /^The hero section carries the Brand Pattern in a panel on its ground: Block draws it in `white__yellow-100`, Yellow blocks on White \(`--immersive-canvas`\), and the panel takes the block and card radius\. It leads the section's screenful beside the text, never behind it and never as a strip\. A photo fills one of its large Blocks, masked to that Block in grayscale/m);
   for (const text of briefs.map((brief) => section(brief.text, 'Layout'))) assert.match(text, /A component whose fill is its section's ground steps one lighter in the same family/);
 });
 
