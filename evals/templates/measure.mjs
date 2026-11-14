@@ -35,6 +35,7 @@ import { tableCell } from './core/table.mjs';
 import { alertCell } from './core/alert.mjs';
 import { menuCell } from './core/menu.mjs';
 import { popoverCell } from './core/popover.mjs';
+import { pickersCell } from './core/date-and-time.mjs';
 
 const both = (selector, check) => ({ cds: selector, neon: selector, check });
 const button = (n, core, check = ['font', 'color', 'bg', 'h', 'pad', 'radius']) => ({ ...both(`[data-measure=actions] button:nth-of-type(${n})`, check), core });
@@ -96,6 +97,45 @@ const coreFields = {
   disabledSelectValue: coreField('disabled-select', '[data-slot=select-value]', selectCell('value', { State: 'Disabled' }), ['font', 'color', 'opacity']),
   selectChevron: coreField('invalid-select', '[data-slot=select-trigger] > svg', selectCell('chevron', { State: 'Error' }), ['color']),
   disabledSelectChevron: coreField('disabled-select', '[data-slot=select-trigger] > svg', selectCell('chevron', { State: 'Disabled' }), ['color']),
+};
+// Core's Date and time in the calendar's three fixtures: a picked day beside today and disabled days,
+// today picked, and a range. The suite's clock makes 15 October today.
+const calendarPart = (hook, selector, part, check) => ({ neon: `[data-measure=core-calendar] [data-calendar=${hook}] ${selector}`, check, core: pickersCell(part) });
+const calendarDay = (date) => `button[data-day="${date}"]`;
+const dayBox = ['h', 'w', 'font', 'color'];
+const markBox = ['h', 'w', 'radius', 'bg'];
+const bandBox = ['h', 'w', 'bg'];
+const calendarMark = (hook, date, part) => calendarPart(hook, `${calendarDay(date)} [data-slot=calendar-day-mark]`, part, markBox);
+const calendarBand = (hook, date, part) => calendarPart(hook, `${calendarDay(date)} [data-slot=calendar-day-band]`, part, bandBox);
+const coreCalendar = {
+  calendarHeader: calendarPart('date', '.rdp-month_caption', 'header', ['h', 'pad']),
+  calendarMonth: calendarPart('date', '.rdp-caption_label', 'month', ['font', 'color']),
+  calendarPrevious: calendarPart('date', '.rdp-button_previous', 'arrow', ['h', 'w', 'bg']),
+  calendarNext: calendarPart('date', '.rdp-button_next', 'arrow', ['h', 'w', 'bg']),
+  calendarWeekday: calendarPart('date', '.rdp-weekday:nth-child(2)', 'weekday', ['font', 'color']),
+  calendarWeek: calendarPart('date', '.rdp-week:nth-child(3)', 'week', ['h']),
+  calendarDay: calendarPart('date', calendarDay('2026-10-20'), 'day', [...dayBox, 'opacity']),
+  calendarDayMark: calendarMark('date', '2026-10-20', 'mark'),
+  calendarToday: calendarPart('date', calendarDay('2026-10-15'), 'today', ['font', 'color']),
+  calendarTodayMark: calendarMark('date', '2026-10-15', 'mark'),
+  calendarTodayDot: calendarPart('date', `${calendarDay('2026-10-15')} [data-slot=calendar-day-dot]`, 'dot', ['h', 'w', 'bg']),
+  calendarSelected: calendarPart('date', calendarDay('2026-10-10'), 'selected', dayBox),
+  calendarSelectedMark: calendarMark('date', '2026-10-10', 'selectedMark'),
+  calendarDisabled: calendarPart('date', calendarDay('2026-10-02'), 'disabled', ['font', 'color', 'opacity']),
+  calendarDisabledMark: calendarMark('date', '2026-10-02', 'mark'),
+  // Current and Selected is drawn as Selected.
+  calendarTodaySelected: calendarPart('today', calendarDay('2026-10-15'), 'selected', dayBox),
+  calendarTodaySelectedMark: calendarMark('today', '2026-10-15', 'selectedMark'),
+  // A range's ends are drawn as Selected over half a band; the days between as Default over a whole one.
+  calendarRangeStart: calendarPart('range', calendarDay('2026-11-17'), 'selected', dayBox),
+  calendarRangeStartMark: calendarMark('range', '2026-11-17', 'selectedMark'),
+  calendarRangeStartBand: calendarBand('range', '2026-11-17', 'bandEnd'),
+  calendarInRange: calendarPart('range', calendarDay('2026-11-20'), 'day', [...dayBox, 'opacity']),
+  calendarInRangeMark: calendarMark('range', '2026-11-20', 'mark'),
+  calendarInRangeBand: calendarBand('range', '2026-11-20', 'band'),
+  calendarRangeEnd: calendarPart('range', calendarDay('2026-11-24'), 'selected', dayBox),
+  calendarRangeEndMark: calendarMark('range', '2026-11-24', 'selectedMark'),
+  calendarRangeEndBand: calendarBand('range', '2026-11-24', 'bandEnd'),
 };
 const tagBox = ['font', 'h', 'pad', 'radius', 'bg', 'color', 'border', 'opacity'];
 const expansionSection = (n) => `:has(> [data-measure=title]) > section:nth-of-type(${n})`;
@@ -223,6 +263,8 @@ export const screens = [
       disabledCheckboxLabel: { neon: '[data-measure=disabled-check] label', cds: '[data-measure=disabled-check] label span[id]', check: ['color', 'opacity'], core: checkboxCell('value', { State: 'Disabled', Selection: 'Checked' }) },
       // Core's Checkbox Selections CDS has no baseline for: held to the Core baseline alone, on the Neon target only.
       ...coreCheckboxes,
+      // Core's Date and time, which CDS's calendar is no baseline for: held to the Core baseline alone, on the Neon target only.
+      ...coreCalendar,
     },
     gaps: [
       ['selectLabel', 'selectTrigger', 'y'],
@@ -253,8 +295,9 @@ export const screens = [
     targets: {
       // The calendar opens in a popover: Core's Popover surface, at the calendar's own width.
       calendar: { neon: '[data-slot=popover-content]', cds: '[role=dialog] [role=menu]', check: ['radius', 'bg'], core: popoverCell() },
-      month: { neon: '[data-slot=calendar] .rdp-caption_label', cds: '[role=dialog] h3', check: ['font', 'color'] },
-      day: { neon: '[data-slot=calendar] button[data-day$="-10"]', cds: '[data-calendar-date$="-10"]', check: ['h', 'w', 'font', 'color'] },
+      // The calendar inside is Core's Date and time: its month, and a day no one has picked.
+      month: { neon: '[data-slot=popover-content] [data-slot=calendar] .rdp-caption_label', cds: '[role=dialog] h3', check: ['font', 'color'], core: pickersCell('month') },
+      day: { neon: '[data-slot=popover-content] [data-slot=calendar] button[data-day$="-10"]', cds: '[data-calendar-date$="-10"]', check: ['h', 'w', 'font', 'color'], core: pickersCell('day') },
     },
     gaps: [],
   },

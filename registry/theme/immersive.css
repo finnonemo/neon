@@ -27,7 +27,8 @@
  * thumb in on-action. The display items retuned to Core do the same: a
  * progress bar's and a spinner's track and a table's header row are palette
  * 75, the indicator, the arc and an avatar the action (its initial in
- * on-action), and a chevron the theme's text. The
+ * on-action), and a chevron the theme's text. A calendar's picked day is the
+ * action under on-action, like the switch, and a range's band palette 75. The
  * fgPrimary role (a ghost input button) is the theme's text, or Ultra would
  * draw it navy on navy.
  * The Button's states are restated, since Core's are for its own colors. The
@@ -84,6 +85,8 @@
   --layer-hover: var(--immersive-palette-75);
   --layer-active: var(--immersive-palette-75);
   --layer-selected: var(--immersive-palette-75);
+  --layer-selected-inverse: var(--immersive-action);
+  --highlight: var(--immersive-palette-75);
   --selection-tag: var(--immersive-palette-75);
   --selection-tag-hover: var(--immersive-palette-75);
   --selection-tag-disabled: color-mix(in srgb, var(--immersive-palette-75) 37.5%, var(--immersive-canvas));

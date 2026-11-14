@@ -187,6 +187,7 @@
   --color-fgTagWarning: rgb(174, 69, 10);
   --color-bgTagNegative: rgb(255, 245, 245);
   --color-fgTagNegative: rgb(186, 7, 7);
+  --color-bgHighlight: rgba(24, 23, 231, 0.102);
 
   /* --- Typography (mode-independent) --- */
   --fontFamily-display1: 'IBM Plex Sans Thai', sans-serif;
@@ -375,6 +376,7 @@
     --color-fgTagWarning: rgb(245, 139, 79);
     --color-bgTagNegative: rgba(247, 50, 50, 0.122);
     --color-fgTagNegative: rgb(249, 112, 112);
+    --color-bgHighlight: rgba(24, 23, 231, 0.251);
 
     --color-transparent: rgba(255, 255, 255, 0);
   }
@@ -462,6 +464,7 @@
   --color-fgTagWarning: rgb(245, 139, 79);
   --color-bgTagNegative: rgba(247, 50, 50, 0.122);
   --color-fgTagNegative: rgb(249, 112, 112);
+  --color-bgHighlight: rgba(24, 23, 231, 0.251);
 
   --color-transparent: rgba(255, 255, 255, 0);
 }
