@@ -31,8 +31,10 @@ Each round costs money. The owner agrees the budget first. Past records put a ru
 
    ```sh
    node evals/skills/run-claude-case.mjs --cases evals/review/cases.json --parallel 4 \
-     --ref <commit> --serve-registry --root .local/review/<round>
+     --ref <commit> --serve-registry --root .local/review/<round> --model claude-opus-5-5
    ```
+
+   - **The model.** Every round runs on `claude-opus-5-5`, the baseline's model, so rounds differ only in their skills. Without `--model` the runner takes the CLI's default, which put the November 2026 after round on another model.
 
    Run it with `run_in_background`, because a round passes the tool timeout.
    - **The registry.** `--serve-registry` serves this checkout's registry. For a baseline, run from a checkout at `<commit>` too, so the registry and the skills match.
