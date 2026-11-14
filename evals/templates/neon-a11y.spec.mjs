@@ -16,7 +16,7 @@ for (const [layout, mode] of ['approval', 'extras', 'expansion'].flatMap((layout
     // The role-and-color span probes cn, not a component, so axe skips it. A disabled field's helper
     // is Core's Text/text-disabled, part of an inactive control (WCAG 1.4.3 exempts it); axe exempts
     // a disabled control's label but not its description.
-    const { violations } = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
+    const { violations } = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
       .exclude('[data-measure=role-and-color]').exclude('[data-measure=field-disabled] [data-slot=field-description]').analyze();
     expect(violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);
   });
@@ -38,7 +38,7 @@ for (const [name, action, trigger, surface] of overlays) for (const mode of ['li
     await page.locator(trigger)[action]();
     await expect(page.locator(surface)).toBeVisible();
     await settled(page);
-    const { violations } = await new AxeBuilder({ page }).include(surface).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
+    const { violations } = await new AxeBuilder({ page }).include(surface).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
     expect(violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);
   });
 }
