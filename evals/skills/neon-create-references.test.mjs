@@ -185,8 +185,17 @@ test('campaign direction keeps its direction lines, composition moves and motion
   assert.match(composition, /row of equal cards for true peers.*once per page/);
   assert.match(composition, /accent family's strongest step.*action/);
   // The moves stay inside the theme's rules and the type roles as shipped.
-  assert.match(composition, /text White or Navy, tints by step, one color family per block, no gradient/);
+  assert.match(composition, /text White or Navy, tints by step, one color family per block, gradients only from the \[Gradient Recipes\]/);
   assert.match(composition, /No letter-spacing.*no tightened line height/);
+  // Review round 2026-11-after (review-08): every section led by the same display figure in a tinted block read as one template.
+  assert.match(composition, /No section repeats the one before/);
+  assert.match(composition, /leads two sections at most/);
+  // Review round 2026-11-after (review-04, review-06): a photo goes into one of the Pattern's Blocks, and Patterns illustrate further sections.
+  const pattern = part('Brand Pattern');
+  assert.match(pattern, /fills one large Block, masked to that Block's rectangle/);
+  assert.match(pattern, /never over or beside it/);
+  assert.match(pattern, /draw it with `transparent`/);
+  assert.match(pattern, /Patterns as illustrations for two or three other sections/);
   // A brief's picks stand; a value it did not pick is a reported departure.
   assert.match(composition, /radius and padding picks stand/);
   assert.match(composition, /departure from the brief/);

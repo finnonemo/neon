@@ -45,7 +45,7 @@ function print(name, result) {
   if (name === 'options') {
     const { formats, colourways, slopes, layouts, text, defaults, customSize } = result;
     console.log(`Formats (default ${defaults.format})`);
-    for (const format of formats) console.log(`  ${format.id.padEnd(14)}${format.width} x ${format.height}  ${format.label}`);
+    for (const format of formats) console.log(`  ${format.id.padEnd(14)}${format.width} x ${format.height}  ${format.label}  (${format.densities.map(({ id, grid }) => `${id} ${grid}`).join(', ')})`);
     console.log(`  ${customSize}`);
     console.log(`\nColourways (default ${defaults.colourway}): background, then block colours`);
     for (const colourway of colourways) console.log(`  ${colourway.id.padEnd(28)}${colourway.background}  ${colourway.blocks.join(' ')}`);

@@ -152,6 +152,23 @@ What this round adds to the plan:
 - **Small functional rules.** An avatar drawn from a 4×4 Block leads a row about a person. A case history is a vertical progress step. A back control is an icon alone.
 - **Campaign sections vary.** Sections that repeat one style read as fake and break the story, motion and hierarchy together.
 
+What changed after this round, not yet judged by a round:
+
+- **review-01:** finno takes a `density`, so a square avatar draws on the 4×4 Grid. A person's row leads with Core's Avatar, holding a Block avatar from a set of twelve and picked by a hash of the person's id. Core's Avatar is round, so its clip cuts the Pattern's corners; the owner has not yet ruled on that.
+- **review-03:** a Product Feature app starts from the starter's `finnomenaEcosystemNav`, with its screen active, and asks nothing. A Back Office app has no starter menu and still asks.
+- **review-04, review-06:**
+  - A photo fills one large Block of the Pattern, masked to it, in grayscale.
+  - With no photo, that Block carries the marked slot.
+  - The Pattern sits on its ground, `transparent` where the ground is not its background.
+  - Patterns illustrate two or three further sections.
+  - Immersive Themes take the Gradient Recipes (ADR 0014). The four briefs say the same.
+- **review-05:** a record's history is a vertical progress step.
+- **review-07:** the starter's back control is the arrow alone, its label kept as its accessible name.
+- **review-08:**
+  - No section repeats the composition of the one before.
+  - A display figure leads two sections at most.
+- **review-02 is open.** The page took its colors from the Club · Run brief's Layout table as written: a Yellow 50 hero, a Yellow 100 call-out and a Light Grey 100 tint, all through `--immersive-*` variables. Either the owner means another brief, or the brief's own grounds are what reads wrong. It is waiting on the owner.
+
 Limits:
 
 - **A different model.** This round ran on `claude-fable-5-2`, the baseline on `claude-opus-5-5`. The runner takes the CLI's default model, so the two rounds differ in model as well as skills. The cost rise, $29.41 to $48.62, may come from either.

@@ -8,8 +8,8 @@
  * `finnomenaEcosystemNav` below is an explicit, opt-in preset for apps that
  * want to link out to Finnomena's own ecosystem — the same 5 destinations as
  * the CDS starter's preset, with lucide icons in place of CDS icon names. It
- * is never wired in automatically; pass it to a layout's `navigation` prop
- * yourself.
+ * is never wired in automatically: neon-create passes a copy to a Product
+ * Feature app's `navigation`, with the new screen as the active item.
  */
 import { Bell, ChartNoAxesColumn, House, Search, UserRound, type LucideIcon } from "lucide-react"
 

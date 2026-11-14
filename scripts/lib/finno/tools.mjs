@@ -11,6 +11,7 @@ const SETTINGS = {
   width: { type: 'integer', description: 'Width in px (64 to 8000) for a size of your own; give height too.' },
   height: { type: 'integer', description: 'Height in px (64 to 8000) for a size of your own; give width too.' },
   colourway: { type: 'string', description: 'A Colourway id from `options`, such as navy__yellow-100. It fixes the background and the block colours together.' },
+  density: { type: 'string', enum: ['coarse', 'medium', 'fine', 'extra-fine'], description: 'The Grid the Pattern is drawn on, from `options`: coarse is 4 cells across a square, fine 16 (the guideline\'s standard for square). Leave out for the Format\'s default. A square avatar takes coarse.' },
   slope: { type: 'string', enum: ['flat', 'half', '75'], description: 'How steeply the Pattern rises: flat (calm), half (the default), 75 (steep, for growth and momentum).' },
   layout: { type: 'string', enum: LAYOUTS, description: 'The Page layout. pattern (the default) is the Pattern alone; headline, cover and closing place text and the logo.' },
   headline: { type: 'string', description: 'The headline, in Thai or English. Put [square brackets] around the words to Highlight. Not for layout pattern.' },

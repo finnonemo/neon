@@ -245,7 +245,7 @@ function brandPattern({ theme, picks, layout }) {
     `- **Ground:** ${variable(`${colourway}-${ground}`)} fill with ${variable(`on-${colourway}-${ground}`)} text${onCanvas ? ', the canvas itself' : ''}`,
     `- **Block Colourway:** ${code(id)}, ${name(drawn.blocks)} blocks on ${name(drawn.ground)}`,
     '',
-    `${placed} It leads the section's screenful beside the text, never behind it and never as a strip, with its clear space left for a photo. Block draws it as a static SVG at the panel's size: never hand-draw it, imitate it in CSS, crop, stretch or animate it.`,
+    `${placed} It leads the section's screenful beside the text, never behind it and never as a strip. A photo fills one of its large Blocks, masked to that Block in grayscale; with no photo, that Block holds a marked photo slot. Block draws it as a static SVG at the slot's size: never hand-draw it, imitate it in CSS, crop, stretch or animate it.`,
   ].join('\n');
 }
 

@@ -85,9 +85,10 @@ export function ResponsivePanes({
     </Button>
   ) : undefined
   const inspectorToolbar = compact ? (
-    <Button type="button" variant="ghost" size="sm" className="-ms-4" onClick={() => changePane("content")}>
+    // Core's back control is the arrow alone, on web and app alike; its label is the accessible name.
+    <Button type="button" variant="ghost" size="icon" className="-ms-2.5" aria-label={labels.backToContent}
+      onClick={() => changePane("content")}>
       <ArrowLeft />
-      {labels.backToContent}
     </Button>
   ) : undefined
 

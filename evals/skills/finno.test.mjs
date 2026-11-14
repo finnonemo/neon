@@ -65,6 +65,18 @@ test('render reports the Pattern rules it kept and the Reference Pattern nearest
   assert.ok(['rising', 'hanging', 'mountain'].includes(drawn.reference.family));
 });
 
+test('a Density from options draws the Pattern on that Grid: a square avatar on coarse 4x4', async () => {
+  const listed = await options();
+  assert.deepEqual(listed.formats.find(format => format.id === 'square').densities.map(density => density.grid), ['4x4', '8x8', '16x16', '32x32']);
+  assert.ok(!listed.formats.find(format => format.id === 'portrait-4-5').densities.some(density => density.id === 'coarse'));
+  const out = await scratch();
+  const avatar = await render({ width: 96, height: 96, density: 'coarse', seed: 'person-1', out });
+  assert.deepEqual(avatar.patternRules, { ok: true, violations: [] });
+  const cells = [...(await readFile(avatar.files.svg, 'utf8')).matchAll(/<rect x="(\d+)" y="(\d+)" width="(\d+)" height="(\d+)"/g)].flat().filter((_, i) => i % 5);
+  assert.ok(cells.length > 0 && cells.every(value => Number(value) % 24 === 0), 'every Block edge sits on the 24px cells of a 4x4 Grid');
+  await assert.rejects(render({ format: 'portrait-4-5', density: 'coarse', out }), /not supported/);
+});
+
 test('a request outside the guideline or this release is refused in words, and nothing is written', async () => {
   const out = join(await scratch(), 'never');
   const refusals = [
