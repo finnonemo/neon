@@ -21,7 +21,7 @@ import { spawnSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
 import { parseArgs } from 'node:util';
 
-const behindPattern = /not up to date|head branch is behind|has merge conflicts|is not mergeable/i;
+const behindPattern = /not up to date|head branch is behind/i;
 
 /** Runs a command and returns its status and output; never throws. */
 export function run(command, args, { cwd } = {}) {
@@ -61,6 +61,8 @@ export async function land({ pr, tries = 6, cwd = process.cwd(), exec = run, wai
     if (!dir) throw new Stop(`PR ${pr}: no worktree has ${branch} checked out; check it out (git worktree add <dir> ${branch}) and run this again`);
     const git = (args, message) => must('git', ['-C', dir, ...args], {}, message);
     const count = (range) => Number(git(['rev-list', '--count', range], `git rev-list ${range} failed`));
+    git(['fetch', '-q', 'origin', branch], 'git fetch failed');
+    if (count(`origin/${branch}..HEAD`) > 0) throw new Stop(`PR ${pr}: ${dir} has commits on ${branch} that are not on origin; push them (and let their checks run) before landing`);
 
     for (let attempt = 1; attempt <= tries; attempt += 1) {
       if (git(['status', '--porcelain', '--untracked-files=no'], 'git status failed')) throw new Stop(`PR ${pr}: ${dir} has uncommitted changes; commit or set them aside first`);
@@ -82,8 +84,12 @@ export async function land({ pr, tries = 6, cwd = process.cwd(), exec = run, wai
         git(['push', '-q', 'origin', `HEAD:refs/heads/${branch}`], `PR ${pr}: push failed`);
         log(`try ${attempt}: pushed ${branch}`);
       }
-      // A push registers its checks a few seconds later; before that gh reports none, or the last push's.
-      await wait(poll * 4);
+      // Until GitHub sees the pushed head, gh reports the last head's checks, which may have passed.
+      const head = git(['rev-parse', 'HEAD'], 'git rev-parse failed');
+      for (let waited = 0; view('headRefOid').headRefOid !== head; waited += 1) {
+        if (waited * poll >= 5 * 60_000) throw new Stop(`PR ${pr}: GitHub still shows another head than ${head} after five minutes`);
+        await wait(poll);
+      }
       for (let waited = 0; /no checks reported/i.test(exec('gh', ['pr', 'checks', String(pr)], { cwd }).stderr); waited += 1) {
         if (waited * poll >= 5 * 60_000) throw new Stop(`PR ${pr}: no checks registered after five minutes; look at the repository's Actions`);
         await wait(poll);
