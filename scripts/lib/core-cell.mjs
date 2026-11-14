@@ -19,12 +19,28 @@ const matches = (cell, when) => conditions(when).every(condition => holds(cell, 
 const narrowed = when => conditions(when).filter(({ values }) => !values.includes('*')).length;
 const named = cell => Object.entries(cell).map(([axis, value]) => `${axis}=${value}`).join(', ');
 
-/** A registry item's Counterpart as the Core snapshot in `root` holds it: its sets, with the Theme and text styles their values name. */
-export async function readCoreItem(root, item) {
+/**
+ * A registry item's Counterpart as the Core snapshot in `root` holds it: its sets, with the Theme and text styles
+ * their values name. A Counterpart built from other Core components binds none of their values itself (Date picker's
+ * fields are Date field's): `nested` names the docs of those components (`['date-field']`), and their sets are read
+ * beside its own. A doc the Counterpart's own doc does not link is refused, so a table cannot hold an item to a
+ * component Core did not put in it.
+ */
+export async function readCoreItem(root, item, { nested = [] } = {}) {
   const entry = (await json(root, 'index.json'))[item];
   if (!entry?.values) throw new Error(`The Core snapshot has no values file for ${item}: ${entry ? `its Counterpart ${entry.counterpart} has a doc only` : 'the Counterpart table does not list it'}.`);
   const [values, theme, textStyles] = await Promise.all([json(root, entry.values), json(root, 'theme.json'), json(root, 'text-styles.json')]);
-  return { item, counterpart: entry.counterpart, sets: values.sets, theme, textStyles };
+  const sets = [...values.sets];
+  if (nested.length) {
+    const doc = await readFile(join(root, SNAPSHOT_DIR, entry.doc), 'utf8');
+    for (const name of nested) {
+      if (!doc.includes(`(${name}.md)`)) throw new Error(`Core's ${entry.counterpart} doc does not link ${name}.md, so ${item} is not held to it.`);
+      const part = await json(root, `components/${name}.json`).catch(() => null);
+      if (!part) throw new Error(`The Core snapshot has no values file for ${name}, which Core's ${entry.counterpart} doc links.`);
+      sets.push(...part.sets);
+    }
+  }
+  return { item, counterpart: entry.counterpart, sets, theme, textStyles };
 }
 
 /**

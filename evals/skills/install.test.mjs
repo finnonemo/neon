@@ -553,6 +553,26 @@ test('deprecated theme/finnomena entry point forwards to the installer and its e
   assert.match(refused.stderr, /Unsupported --package-manager/);
 });
 
+test('CLI in the CDS install mode prints one deprecation line naming the next major, and no other mode prints it', async t => {
+  // finnonemo/neon#287: the major after package.json's version, which plugin.json (what the installer reads) must agree with.
+  const { version } = JSON.parse(await readFile(join(repoRoot, 'package.json'), 'utf8'));
+  const notice = new RegExp(`^Deprecation notice: the CDS Install mode is deprecated and Neon ${Number(version.split('.')[0]) + 1}\\.0\\.0 removes it\\. .*Rebuild on the Neon base\\.$`, 'gm');
+  const root = await sandbox(t);
+  const app = await existingApp(root);
+  const installed = cli(app, '--skip-install');
+  assert.equal(installed.status, 0, installed.stderr);
+  assert.match(installed.stdout, /Done\. Theme files copied/);
+  assert.equal(installed.stderr.match(notice)?.length, 1, installed.stderr);
+  // A refusal keeps its own message and exit status, and still says the mode is going.
+  const refused = cli(join(root, 'no-manifest'));
+  assert.equal(refused.status, 1, refused.stdout);
+  assert.equal(refused.stderr.match(notice)?.length, 1, refused.stderr);
+  const other = await existingApp(root, { name: 'other' }, 'other');
+  const css = cli(other, '--css-only');
+  assert.equal(css.status, 0, css.stderr);
+  assert.doesNotMatch(css.stdout + css.stderr, /Deprecation notice/);
+});
+
 test('CLI refusals print one clean message and exit 1', async t => {
   const app = await existingApp(await sandbox(t));
   await mkdir(join(app, 'src/theme'), { recursive: true });

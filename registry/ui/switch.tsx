@@ -7,9 +7,9 @@ import { cn } from "@/lib/utils"
 // that slides 24px when on. The track is Miscellaneous/toggle-off, and Layer/layer-selected-inverse
 // when on; the thumb is Icon/icon-inverse. Disabled takes Core's disabled tokens with no
 // opacity: the track Button/button-disabled, on or off, and the thumb icon-on-color-disabled; a
-// Label beside the switch follows it (peer-disabled). Core's web Toggle draws no Focus state and
-// has no invalid one: keyboard focus shows the Button's indicator, Focus/focus 2px wide and 2px
-// out, and aria-invalid the same outline in the invalid role. Radix sets data-state, which
+// Label beside the switch follows it (peer-disabled). Keyboard focus shows Core's Toggle Focus
+// ring: Focus/focus 2px wide with a 2px gap round the track. Core's Toggle has no invalid state:
+// aria-invalid draws the same outline in the invalid role. Radix sets data-state, which
 // radix-nova's data-checked: classes never match.
 function Switch({ className, ...props }: React.ComponentProps<typeof SwitchPrimitive.Root>) {
   return (
