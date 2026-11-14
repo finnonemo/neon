@@ -10,7 +10,8 @@ import { cn } from "@/lib/utils"
 // (core/components/date-and-time.md, the iOS=False look): a 48px Header with
 // the month in Headline at the left and two 48px arrows at the right, the
 // weekdays as one letter in Footnote, and weeks of 48px days with no gap, so
-// the grid is 336px wide. A day's number is Title 3 inside a 36px round Mark.
+// the grid is 336px wide. Narrower than that (a 320px phone), the seven
+// columns close up evenly, 41px each at 288, and the 36px Mark still fits. A day's number is Title 3 inside a 36px round Mark.
 // The Mark is the disc of a picked day (layer-selected-inverse under an
 // inverse number), takes layer-hover under the pointer and carries the focus
 // ring. Today is link ink with a 4px dot under the number; a disabled day is
@@ -32,6 +33,9 @@ const arrow = cn(
   "size-12 text-icon aria-disabled:pointer-events-none aria-disabled:bg-transparent aria-disabled:text-icon-disabled"
 )
 
+// A row of seven columns of up to 48px each: the weekdays, and each week.
+const week = "grid grid-cols-[repeat(7,minmax(0,3rem))]"
+
 // Core's weekdays are one letter (S M T W T F S); the header cell keeps the full name as its label.
 const formatWeekdayName: Formatters["formatWeekdayName"] = (weekday, options, dateLib) => (dateLib ?? new DateLib(options)).format(weekday, "ccccc")
 
@@ -41,22 +45,23 @@ function Calendar({ className, classNames, showOutsideDays = false, formatters, 
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
-      className={cn("w-fit", className)}
+      className={cn("w-fit max-w-full", className)}
       classNames={{
-        root: cn("w-fit", defaultClassNames.root),
-        months: cn("relative flex flex-col gap-4 md:flex-row", defaultClassNames.months),
-        month: cn("flex flex-col", defaultClassNames.month),
+        root: cn("w-fit max-w-full", defaultClassNames.root),
+        months: cn("relative flex max-w-full flex-col gap-4 md:flex-row", defaultClassNames.months),
+        month: cn("flex min-w-0 flex-col", defaultClassNames.month),
         nav: cn("absolute top-0 right-0 flex h-12 items-center", defaultClassNames.nav),
         button_previous: cn(arrow, defaultClassNames.button_previous),
         button_next: cn(arrow, defaultClassNames.button_next),
         month_caption: cn("flex h-12 items-center pl-2", defaultClassNames.month_caption),
         caption_label: cn("text-headline text-foreground select-none", defaultClassNames.caption_label),
-        month_grid: cn("border-collapse", defaultClassNames.month_grid),
-        weekdays: cn("flex", defaultClassNames.weekdays),
-        weekday: cn("flex w-12 items-center justify-center text-legal text-muted-foreground select-none", defaultClassNames.weekday),
-        week: cn("flex", defaultClassNames.week),
+        month_grid: cn("block w-full border-collapse [&>thead]:block", defaultClassNames.month_grid),
+        weekdays: cn(week, defaultClassNames.weekdays),
+        weekday: cn("flex min-w-0 items-center justify-center text-legal text-muted-foreground select-none", defaultClassNames.weekday),
+        weeks: cn("block", defaultClassNames.weeks),
+        week: cn(week, defaultClassNames.week),
         // A day with no button (no mode) is the number alone, in the same type.
-        day: cn("flex size-12 items-center justify-center p-0 text-title3 text-foreground select-none", defaultClassNames.day),
+        day: cn("flex h-12 min-w-0 items-center justify-center p-0 text-title3 text-foreground select-none", defaultClassNames.day),
         today: defaultClassNames.today,
         outside: cn("text-muted-foreground", defaultClassNames.outside),
         disabled: cn("text-disabled-foreground", defaultClassNames.disabled),
@@ -101,7 +106,7 @@ function CalendarDayButton({ className, day, modifiers, children, ...props }: Re
       data-range={range}
       aria-current={modifiers.today ? "date" : undefined}
       className={cn(
-        "group/day relative flex size-12 items-center justify-center text-title3 text-foreground outline-none select-none",
+        "group/day relative flex h-12 w-full items-center justify-center text-title3 text-foreground outline-none select-none",
         modifiers.outside && "text-muted-foreground",
         modifiers.today && "text-link",
         modifiers.disabled && "pointer-events-none text-disabled-foreground",

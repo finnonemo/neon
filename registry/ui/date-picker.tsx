@@ -22,8 +22,8 @@ import { cn } from "@/lib/utils"
 // corners, a dialog named by its month, with focus on the picked day, else
 // today. The snapshot has no Elevation token, so the surface keeps the
 // popover's stroke and shadow. Where the room is narrower than 370px the
-// side padding gives way first, and under the grid's 336px the surface
-// scrolls sideways.
+// side padding gives way first, and under the grid's 336px the calendar's
+// columns close up (calendar.tsx), so a 320px phone shows the whole month.
 // The field is a button: it opens the calendar and is not typed in. Core's
 // field is a text input that also takes a typed date, and its Range Type and
 // Medium and Small Sizes have no Neon prop.
