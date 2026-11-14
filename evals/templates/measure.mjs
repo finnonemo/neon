@@ -36,6 +36,7 @@ import { alertCell } from './core/alert.mjs';
 import { menuCell } from './core/menu.mjs';
 import { popoverCell } from './core/popover.mjs';
 import { pickersCell } from './core/date-and-time.mjs';
+import { dateFieldCell } from './core/date-picker.mjs';
 
 const both = (selector, check) => ({ cds: selector, neon: selector, check });
 const button = (n, core, check = ['font', 'color', 'bg', 'h', 'pad', 'radius']) => ({ ...both(`[data-measure=actions] button:nth-of-type(${n})`, check), core });
@@ -97,6 +98,21 @@ const coreFields = {
   disabledSelectValue: coreField('disabled-select', '[data-slot=select-value]', selectCell('value', { State: 'Disabled' }), ['font', 'color', 'opacity']),
   selectChevron: coreField('invalid-select', '[data-slot=select-trigger] > svg', selectCell('chevron', { State: 'Error' }), ['color']),
   disabledSelectChevron: coreField('disabled-select', '[data-slot=select-trigger] > svg', selectCell('chevron', { State: 'Disabled' }), ['color']),
+};
+// Core's Date field as the date picker draws it: empty, with a picked date, Error, and Disabled filled and empty.
+const emptyDate = (selector, part, check) => ({ neon: `[data-measure=date] ${selector}`, check, core: dateFieldCell(part, { filled: 'False' }) });
+const coreDate = (hook, selector, core, check = fieldBox) => ({ neon: `[data-measure=core-dates] [data-date=${hook}] ${selector}`, check, core });
+const dateText = ['font', 'color', 'opacity'];
+const coreDates = {
+  datePlaceholder: emptyDate('[data-slot=date-picker-value]', 'placeholder', dateText),
+  dateIcon: emptyDate('[data-slot=date-picker] > svg', 'icon', ['color']),
+  filledDate: coreDate('filled', '[data-slot=date-picker]', dateFieldCell('field'), [...fieldBox, 'pad']),
+  filledDateValue: coreDate('filled', '[data-slot=date-picker-value]', dateFieldCell('value'), dateText),
+  invalidDate: coreDate('invalid', '[data-slot=date-picker]', dateFieldCell('field', { State: 'Error' })),
+  disabledDate: coreDate('disabled', '[data-slot=date-picker]', dateFieldCell('field', { State: 'Disabled' })),
+  disabledDateValue: coreDate('disabled', '[data-slot=date-picker-value]', dateFieldCell('value', { State: 'Disabled' }), dateText),
+  disabledDateIcon: coreDate('disabled', '[data-slot=date-picker] > svg', dateFieldCell('icon', { State: 'Disabled' }), ['color']),
+  disabledDatePlaceholder: coreDate('disabled-empty', '[data-slot=date-picker-value]', dateFieldCell('placeholder', { State: 'Disabled', filled: 'False' }), dateText),
 };
 // Core's Date and time in the calendar's three fixtures: a picked day beside today and disabled days,
 // today picked, and a range. The suite's clock makes 15 October today.
@@ -218,9 +234,9 @@ export const screens = [
       selectTrigger: { neon: '[data-measure=select] [data-slot=select-trigger]', cds: '[data-measure=select] [data-testid=input-interactable-area]', check: ['h', 'radius', 'border', 'bg'], core: selectCell('field') },
       // Core's Select draws no placeholder: the value shown here is one, and takes Core's type only.
       selectValue: { neon: '[data-measure=select] [data-slot=select-value]', cds: '[data-measure=select] button p', check: ['font', 'color'], core: selectCell('value'), coreProperties: ['font'] },
-      // The DatePicker is not retuned; its Label is Core's Title.
+      // The date picker's field is Core's Date field, empty here; its Label is Core's Title.
       dateLabel: { neon: '[data-measure=date] label', cds: '[data-measure=date] label', check: ['font', 'color'], core: title },
-      dateField: { neon: '[data-measure=date] [data-slot=date-picker]', cds: '[data-measure=date] [data-testid=input-interactable-area]', check: ['h', 'radius', 'border', 'bg'] },
+      dateField: { neon: '[data-measure=date] [data-slot=date-picker]', cds: '[data-measure=date] [data-testid=input-interactable-area]', check: ['h', 'radius', 'border', 'bg'], core: dateFieldCell('field', { filled: 'False' }) },
       helpButton: { neon: '[data-measure=help] button', cds: '[data-measure=help] button', check: ['h', 'w'] },
       headerCell: { neon: '[data-measure=table] thead th:nth-child(1)', cds: '[data-measure=table] thead th:nth-child(1)', check: ['font', 'color', 'h'], core: tableCell('headerCell') },
       bodyRow: { neon: '[data-measure=table] tbody tr:nth-child(1)', cds: '[data-measure=table] tbody tr:nth-child(1)', check: ['h'], core: tableCell('bodyRow') },
@@ -265,6 +281,8 @@ export const screens = [
       ...coreCheckboxes,
       // Core's Date and time, which CDS's calendar is no baseline for: held to the Core baseline alone, on the Neon target only.
       ...coreCalendar,
+      // Core's Date field in the date picker, which CDS's date input is no baseline for: held to the Core baseline alone, on the Neon target only.
+      ...coreDates,
     },
     gaps: [
       ['selectLabel', 'selectTrigger', 'y'],
@@ -293,8 +311,8 @@ export const screens = [
     query: 'layout=extras',
     open: { action: 'click', neon: '[data-measure=date] [data-slot=date-picker]', cds: '[data-measure=date] button[aria-label="Open calendar"]' },
     targets: {
-      // The calendar opens in a popover: Core's Popover surface, at the calendar's own width.
-      calendar: { neon: '[data-slot=popover-content]', cds: '[role=dialog] [role=menu]', check: ['radius', 'bg'], core: popoverCell() },
+      // The calendar opens on Core's Compact surface, the Pickers' own: 16px corners on Layer/layer-01.
+      calendar: { neon: '[data-slot=popover-content]', cds: '[role=dialog] [role=menu]', check: ['radius', 'bg'], core: pickersCell('compact') },
       // The calendar inside is Core's Date and time: its month, and a day no one has picked.
       month: { neon: '[data-slot=popover-content] [data-slot=calendar] .rdp-caption_label', cds: '[role=dialog] h3', check: ['font', 'color'], core: pickersCell('month') },
       day: { neon: '[data-slot=popover-content] [data-slot=calendar] button[data-day$="-10"]', cds: '[data-calendar-date$="-10"]', check: ['h', 'w', 'font', 'color'], core: pickersCell('day') },
