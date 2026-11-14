@@ -56,6 +56,83 @@
           "at": "2026-11-14T18:09:42.366Z"
         }
       }
+    },
+    "2026-11-after-c9554ab": {
+      "done": "2026-11-14T22:34:31.580Z",
+      "cases": {
+        "review-01": {
+          "verdict": "fail",
+          "tags": [],
+          "note": "ถ้าเป็น list ที่เป็นคนจริงๆ ก็ควรมี avatar หน้า list แล้วใช้ block 4x4 เจนเป็นภาพ avatar ให้แต่ละคน",
+          "at": "2026-11-14T22:27:16.823Z"
+        },
+        "review-02": {
+          "verdict": "fail",
+          "tags": [],
+          "note": "สีไม่ถูก ลองใช้ theme brief ที่เราเคยทำ ควรนำมาใช้",
+          "at": "2026-11-14T22:27:42.682Z"
+        },
+        "review-03": {
+          "verdict": "fail",
+          "tags": [],
+          "note": "ทำไมถึงไม่ยอมแสดง sidebar แบบ default ตาม ref ไปเลย ตั้ง sidebar ที่ฉันให้เป็น template ตั้งแต่แรกไปเลย",
+          "at": "2026-11-14T22:28:27.403Z"
+        },
+        "review-04": {
+          "verdict": "fail",
+          "tags": [
+            "detail",
+            "habit",
+            "hierarchy",
+            "interaction",
+            "motion",
+            "story"
+          ],
+          "note": "รูป hero มันใช้งานไม่ได้จริง ที่คุณเอา block pattern ใส่ background แล้วมีรูปข้างบน compose มันไม่ได้ ไปดู blockหรือ pattern generator มันจะมี guideline การเอารูปไปใส่ตรง block อยู่",
+          "at": "2026-11-14T22:31:06.985Z"
+        },
+        "review-05": {
+          "verdict": "fail",
+          "tags": [
+            "detail"
+          ],
+          "note": "เกือบถูกแล้ว ตรงประวัติเคสก็ควรใช้ progress step vertical",
+          "at": "2026-11-14T22:30:45.064Z"
+        },
+        "review-07": {
+          "verdict": "fail",
+          "tags": [],
+          "note": "mobile size ปุ่ม กลับไปที่รายการ มันควรมีแค่ icon ทั้งเว็บและแอป เราจะไม่ใส่ icon + label ที่ back",
+          "at": "2026-11-14T22:33:26.515Z"
+        },
+        "review-08": {
+          "verdict": "fail",
+          "tags": [
+            "fake",
+            "habit",
+            "hierarchy",
+            "interaction",
+            "motion",
+            "story"
+          ],
+          "note": "section style ซ้ำซาก",
+          "at": "2026-11-14T22:34:25.697Z"
+        },
+        "review-06": {
+          "verdict": "fail",
+          "tags": [
+            "detail",
+            "fake",
+            "habit",
+            "hierarchy",
+            "interaction",
+            "motion",
+            "story"
+          ],
+          "note": "block hero วางถูกต้อง คือไม่ต้องมีพื้นหลังก็ได้ แต่รูป ถ้าจะใช้ก็ควร mask เข้าไปใน block, แล้วก็มีจุดที่ใส่ block pattern แค่จุดเดียว เราสามารถใส่ไว้ได้ในหลายๆที่ เหมือนเป็นภาพประกอบ immersive ยอมให้ใช้ gradient ได้ด้วย เหมือนเราเคยเขียนเรื่องนี้กันไว้แล้ว",
+          "at": "2026-11-14T22:34:30.464Z"
+        }
+      }
     }
   }
 }
