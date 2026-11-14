@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // Writes the Core snapshot (GLOSSARY, ADR 0009) from a Core checkout into core/:
 //   node scripts/sync-core.mjs --from <Core checkout> [--compiler <Core checkout>]
+//   node scripts/sync-core.mjs --index
 // Core's repository compiles its docs for the web (ADR 0012): this runs the checkout's Web compile, as sync-block
 // runs Block's bundle build, copies what it wrote and records the commit the compile names and each file's hash.
 // The compile refuses a checkout whose docs are not committed.
@@ -8,6 +9,8 @@
 // the snapshot then records the compiler's commit beside the docs'.
 // Which Core doc each registry item matches is Neon's own table, registry/core-counterparts.json. The snapshot is
 // never edited by hand: the repository check compares each file with the hash the sync recorded.
+// --index is for a change to that table alone: it rewrites core/index.json and the seal from the snapshot on disk,
+// reads no Core checkout and leaves the Core commit and every other file as they are.
 // It prints Core's commits since the snapshot it replaces and the files that changed: the pull request lists both.
 // The same run writes what follows the snapshot's Theme: the Theme token export
 // and the CSS adapter's colors (scripts/lib/core-theme.mjs); and what follows its
@@ -15,7 +18,7 @@
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
-import { syncCore, movedReport, SNAPSHOT_DIR, COUNTERPARTS_FILE } from './lib/core-snapshot.mjs';
+import { syncCore, reindexCore, movedReport, SNAPSHOT_DIR, COUNTERPARTS_FILE } from './lib/core-snapshot.mjs';
 import { writeCoreTheme, THEME_EXPORT, ADAPTER } from './lib/core-theme.mjs';
 import { writeCoreType } from './lib/core-type.mjs';
 import { registryComponents } from './lib/registry.mjs';
@@ -24,18 +27,25 @@ const root = fileURLToPath(new URL('..', import.meta.url));
 const args = process.argv.slice(2);
 const option = name => (args.includes(name) ? args[args.indexOf(name) + 1] : undefined);
 const from = option('--from');
-if (!from) {
-  console.error('Usage: node scripts/sync-core.mjs --from <Core checkout> [--compiler <Core checkout>]');
+const indexOnly = args.includes('--index');
+if (indexOnly ? args.length > 1 : !from) {
+  console.error('Usage: node scripts/sync-core.mjs --from <Core checkout> [--compiler <Core checkout>]\n       node scripts/sync-core.mjs --index');
   process.exit(2);
 }
 try {
-  const { commit, compiler, files, leftOut, moved } = await syncCore({
-    from: resolve(from),
-    compiler: resolve(option('--compiler') ?? from),
+  const table = {
     out: resolve(root, SNAPSHOT_DIR),
     items: await registryComponents(root),
     counterparts: JSON.parse(await readFile(resolve(root, COUNTERPARTS_FILE), 'utf8')),
-  });
+  };
+  if (indexOnly) {
+    const { commit, changed } = await reindexCore(table);
+    console.log(changed
+      ? `Wrote ${SNAPSHOT_DIR}/index.json and the seal from ${COUNTERPARTS_FILE} and the snapshot at Core ${commit}. No Core checkout was read and no other snapshot file changed.`
+      : `${SNAPSHOT_DIR}/index.json already says what ${COUNTERPARTS_FILE} gives at Core ${commit}.`);
+    process.exit(0);
+  }
+  const { commit, compiler, files, leftOut, moved } = await syncCore({ from: resolve(from), compiler: resolve(option('--compiler') ?? from), ...table });
   console.log(`Wrote ${files.length} files to ${SNAPSHOT_DIR}/ from Core ${commit}${compiler ? `, compiled by Core ${compiler}` : ''}.`);
   for (const line of movedReport(moved, commit)) console.log(line);
   const byStanding = Object.groupBy(Object.keys(leftOut), name => leftOut[name]);

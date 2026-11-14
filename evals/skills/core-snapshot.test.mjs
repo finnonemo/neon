@@ -4,7 +4,7 @@ import { mkdtemp, mkdir, writeFile, readFile, readdir, rm } from 'node:fs/promis
 import { execFileSync } from 'node:child_process';
 import { dirname, join } from 'node:path';
 import { tmpdir } from 'node:os';
-import { syncCore, checkCoreSnapshot, checkCounterpartTable, movedReport } from '../../scripts/lib/core-snapshot.mjs';
+import { syncCore, reindexCore, checkCoreSnapshot, checkCounterpartTable, movedReport } from '../../scripts/lib/core-snapshot.mjs';
 
 // Core's Web compile is Core's own script, tested in Core's repository (ADR 0012). This stands in for it in a
 // checkout small enough to read here: it writes the files under `compiled/` of the checkout it is told to compile,
@@ -233,6 +233,54 @@ test('a Supporting item has no Counterpart of its own, and the index says it is 
   await assert.rejects(synced(t, { items, counterparts: { ...COUNTERPARTS, toggle: { core: 'button' } } }), /toggle is a Supporting item.*button/s);
 });
 
+// A change to the Counterpart table alone (#297): the index is built from docs the snapshot already holds.
+const components = (items = ITEMS) => items.map(name => ({ name, supporting: false }));
+
+test('the index is rewritten from the snapshot with no Core checkout, as a sync at the same commit writes it', async t => {
+  const moved = { ...COUNTERPARTS, card: { core: 'menu', why: 'Menu is the web form.' } };
+  const { from, out, read } = await synced(t);
+  const before = await read('snapshot.json');
+  assert.deepEqual(await reindexCore({ out, items: components(), counterparts: COUNTERPARTS }), { commit: git(from, 'rev-parse', 'HEAD'), changed: false });
+  assert.equal(await read('snapshot.json'), before, 'an index that already follows the table leaves the manifest as it was');
+  assert.equal((await reindexCore({ out, items: components(), counterparts: moved })).changed, true);
+  const resynced = await synced(t, { from, counterparts: moved });
+  for (const path of ['index.json', 'snapshot.json']) assert.equal(await read(path), await resynced.read(path), path);
+  await checkCoreSnapshot(out, { items: ITEMS });
+  await checkCounterpartTable(moved, out, components());
+});
+
+test('the index is not rewritten over a refused table, a hand-edited file or a manifest no sync wrote', async t => {
+  const { out, read } = await synced(t);
+  const reindex = (counterparts = COUNTERPARTS, items = ITEMS) => reindexCore({ out, items: components(items), counterparts });
+  const before = [await read('index.json'), await read('snapshot.json')];
+  const untouched = async () => assert.deepEqual([await read('index.json'), await read('snapshot.json')], before);
+  await assert.rejects(reindex({ ...COUNTERPARTS, card: { core: 'tile' } }), /card.*tile.*no such doc/s);
+  await assert.rejects(reindex(COUNTERPARTS, [...ITEMS, 'tabs']), /no Counterpart entry.*tabs/s);
+  await untouched();
+  const button = await read('components/button.md');
+  await writeFile(join(out, 'components/button.md'), `${button}\n- Brand on Secondary is fine.\n`);
+  await assert.rejects(reindex(), /not the ones a sync wrote.*index was not rewritten.*components\/button\.md/s);
+  await writeFile(join(out, 'components/button.md'), button);
+  await rm(join(out, 'components/alert.json'));
+  await assert.rejects(reindex(), /not the ones a sync wrote.*components\/alert\.json/s);
+  await writeFile(join(out, 'components/alert.json'), COMPILED['compiled/components/alert.json']);
+  await untouched();
+  // A manifest edited by hand, or left half-merged, has no seal to carry over.
+  const manifest = JSON.parse(before[1]);
+  await writeFile(join(out, 'snapshot.json'), `${JSON.stringify({ ...manifest, core: { ...manifest.core, commit: '0'.repeat(40) } }, null, 2)}\n`);
+  await assert.rejects(reindex(), /snapshot\.json.*not the one a sync wrote.*take the base's snapshot\.json whole/s);
+});
+
+test('the repository check refuses an index that is not the one the Counterpart table gives', async t => {
+  const { out } = await synced(t);
+  await checkCounterpartTable(COUNTERPARTS, out, components());
+  const moved = { ...COUNTERPARTS, dialog: { core: 'menu' }, card: { core: null, why: 'Core has no Card yet.' } };
+  await checkCoreSnapshot(out, { items: ITEMS });
+  await assert.rejects(checkCounterpartTable(moved, out, components()), /index.*not the one the Counterpart table.*for: dialog, card\..*sync-core\.mjs --index/s);
+  await reindexCore({ out, items: components(), counterparts: moved });
+  await checkCounterpartTable(moved, out, components());
+});
+
 // The repository check: a snapshot is only what the sync wrote (ADR 0009: Core changes arrive by a re-sync).
 test('the repository check passes a snapshot as the sync wrote it', async t => {
   const { out } = await synced(t);
@@ -243,7 +291,7 @@ test('the repository check passes a snapshot as the sync wrote it', async t => {
 test('the repository check refuses a snapshot file edited by hand', async t => {
   const { out, read } = await synced(t);
   await writeFile(join(out, 'components/button.md'), `${await read('components/button.md')}\n- Brand on Secondary is fine.\n`);
-  await assert.rejects(checkCoreSnapshot(out, { items: ITEMS }), /components\/button\.md.*does not match.*sync-core/s);
+  await assert.rejects(checkCoreSnapshot(out, { items: ITEMS }), /components\/button\.md.*does not match.*sync-core\.mjs --from.*sync-core\.mjs --index/s);
 });
 
 test('the repository check refuses a manifest edited by hand: the commits it names are the ones compiled', async t => {
