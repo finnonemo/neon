@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Neon review</title>
+<style>
+  :root { --bg: #f6f7f9; --card: #fff; --ink: #01172b; --muted: #5b6b7a; --line: #dde3e8; --pass: #0a7a43; --fail: #c0262d; --chip: #eef2f5; --chip-on: #01172b; --chip-on-ink: #fff; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #0c1622; --card: #13202e; --ink: #e8eef3; --muted: #9aabba; --line: #2a3a4a; --chip: #1d2c3c; --chip-on: #e8eef3; --chip-on-ink: #0c1622; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 "IBM Plex Sans Thai", system-ui, sans-serif; }
+  header { position: sticky; top: 0; z-index: 2; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; padding: 12px 16px; background: var(--card); border-bottom: 1px solid var(--line); }
+  header h1 { margin: 0; font-size: 17px; }
+  .sandbox { padding: 2px 8px; border-radius: 99px; background: #f2f93c; color: #01172b; font-size: 13px; }
+  main { display: grid; gap: 24px; padding: 16px; max-width: 1800px; margin: 0 auto; }
+  article { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+  .top { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: baseline; justify-content: space-between; }
+  .top h2 { margin: 0; font-size: 17px; }
+  .top a { color: inherit; }
+  .frames { display: flex; gap: 16px; overflow-x: auto; padding: 12px 0; align-items: flex-start; }
+  .frame { flex: none; }
+  .frame span { display: block; color: var(--muted); font-size: 13px; }
+  .viewport { overflow: hidden; border: 1px solid var(--line); border-radius: 8px; }
+  .viewport iframe { border: 0; transform-origin: 0 0; background: #fff; }
+  .controls { display: grid; gap: 8px; }
+  .verdict { display: flex; gap: 8px; }
+  button { font: inherit; cursor: pointer; border: 1px solid var(--line); background: var(--chip); color: var(--ink); border-radius: 99px; padding: 6px 14px; }
+  button[aria-pressed="true"].pass { background: var(--pass); border-color: var(--pass); color: #fff; }
+  button[aria-pressed="true"].fail { background: var(--fail); border-color: var(--fail); color: #fff; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tags button { padding: 3px 10px; font-size: 13px; }
+  .tags button[aria-pressed="true"] { background: var(--chip-on); color: var(--chip-on-ink); border-color: var(--chip-on); }
+  textarea { font: inherit; width: 100%; min-height: 56px; border: 1px solid var(--line); border-radius: 8px; padding: 8px; background: var(--bg); color: var(--ink); }
+  .saved { color: var(--muted); font-size: 13px; }
+  .empty { color: var(--muted); padding: 24px 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1 id="title">Neon review</h1>
+  <div style="display:flex;gap:8px;align-items:center">
+    <span id="progress" class="saved"></span>
+    <button id="done" type="button">เสร็จเซ็ตนี้</button>
+  </div>
+</header>
+<main id="cases"><p class="empty">กำลังโหลด…</p></main>
+<script>
+const sandbox = new URLSearchParams(location.search).has('sandbox');
+// What a ✗ (or a ✓ with a reservation) points at: the five functional items, then the Campaign Page ones.
+const TAGS = [
+  ['data', 'ข้อมูลไม่สมจริง'],
+  ['states', 'state ไม่ครบ'],
+  ['detail', 'ขาดรายละเอียดเล็ก'],
+  ['interaction', 'ไม่มี micro-interaction'],
+  ['hierarchy', 'ลำดับไม่ชัด การ์ดเท่ากัน'],
+  ['story', 'ไม่มีเรื่องเล่า'],
+  ['motion', 'motion เรียบเกินไป'],
+  ['habit', 'habit ทั่วไป'],
+  ['fake', 'ดูเหมือนเว็บปลอม'],
+  ['mobile', 'พังที่ 375'],
+];
+const FRAMES = [[375, 812, 0.6], [1440, 900, 0.42]];
+let state;
+
+async function load() {
+  state = await (await fetch('/api/state')).json();
+  document.getElementById('title').textContent = `Neon review · ${state.round}`;
+  if (sandbox) document.getElementById('title').insertAdjacentHTML('beforeend', ' <span class="sandbox">sandbox: ไม่บันทึก</span>');
+  render();
+}
+
+function render() {
+  const root = document.getElementById('cases');
+  root.replaceChildren();
+  if (!state.cases.length) root.innerHTML = '<p class="empty">ยังไม่มีเคสในรอบนี้</p>';
+  for (const item of state.cases) root.append(card(item));
+  progress();
+}
+
+function progress() {
+  const judged = state.cases.filter(item => state.verdicts.cases[item.case]).length;
+  document.getElementById('progress').textContent = `ตัดสินแล้ว ${judged}/${state.cases.length}${state.verdicts.done ? ' · เสร็จแล้ว' : ''}`;
+}
+
+function card(item) {
+  const saved = state.verdicts.cases[item.case] ?? { verdict: null, tags: [], note: '' };
+  const draft = { verdict: saved.verdict, tags: new Set(saved.tags), note: saved.note };
+  const article = document.createElement('article');
+  const url = `http://localhost:${item.port}/`;
+  article.innerHTML = `<div class="top"><h2>${item.case}</h2>${item.built ? `<a href="${url}" target="_blank" rel="noopener">เปิดเต็มจอ</a>` : '<span class="saved">build ไม่ผ่าน หรือยังไม่ได้ build</span>'}</div>`;
+  if (item.built) {
+    const frames = document.createElement('div');
+    frames.className = 'frames';
+    for (const [width, height, scale] of FRAMES) {
+      frames.insertAdjacentHTML('beforeend', `<div class="frame"><span>${width}px</span><div class="viewport" style="width:${width * scale}px;height:${height * scale}px"><iframe src="${url}" width="${width}" height="${height}" style="transform:scale(${scale})" loading="lazy" title="${item.case} ${width}px"></iframe></div></div>`);
+    }
+    article.append(frames);
+  }
+  const controls = document.createElement('div');
+  controls.className = 'controls';
+  controls.innerHTML = `<div class="verdict"><button type="button" class="pass">✓ ผ่าน</button><button type="button" class="fail">✗ ไม่ผ่าน</button></div><div class="tags"></div><textarea placeholder="โน้ต (ไม่บังคับ)"></textarea><span class="saved"></span>`;
+  const [pass, fail] = controls.querySelectorAll('.verdict button');
+  const tags = controls.querySelector('.tags');
+  const note = controls.querySelector('textarea');
+  const status = controls.querySelector('.saved');
+  note.value = draft.note;
+  for (const [key, label] of TAGS) {
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.textContent = label;
+    chip.setAttribute('aria-pressed', String(draft.tags.has(key)));
+    chip.onclick = () => { draft.tags.has(key) ? draft.tags.delete(key) : draft.tags.add(key); chip.setAttribute('aria-pressed', String(draft.tags.has(key))); save(); };
+    tags.append(chip);
+  }
+  const show = () => {
+    pass.setAttribute('aria-pressed', String(draft.verdict === 'pass'));
+    fail.setAttribute('aria-pressed', String(draft.verdict === 'fail'));
+    const at = state.verdicts.cases[item.case]?.at;
+    status.textContent = sandbox ? 'sandbox: ไม่บันทึก' : at ? `บันทึกแล้ว ${new Date(at).toLocaleString('th-TH')}` : 'ยังไม่ได้ตัดสิน';
+  };
+  async function save() {
+    show();
+    if (!draft.verdict || sandbox) return;
+    const response = await fetch('/api/verdict', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ case: item.case, verdict: draft.verdict, tags: [...draft.tags], note: draft.note }) });
+    if (!response.ok) { status.textContent = `บันทึกไม่ได้: ${(await response.json()).error}`; return; }
+    state.verdicts = await response.json();
+    show();
+    progress();
+  }
+  pass.onclick = () => { draft.verdict = 'pass'; save(); };
+  fail.onclick = () => { draft.verdict = 'fail'; save(); };
+  note.onchange = () => { draft.note = note.value; save(); };
+  show();
+  article.append(controls);
+  return article;
+}
+
+document.getElementById('done').onclick = async () => {
+  if (sandbox) return alert('sandbox: ไม่บันทึก');
+  const left = state.cases.filter(item => !state.verdicts.cases[item.case]).map(item => item.case);
+  if (left.length && !confirm(`ยังไม่ได้ตัดสิน ${left.join(', ')} จะจบเซ็ตเลยไหม`)) return;
+  state.verdicts = await (await fetch('/api/done', { method: 'POST' })).json();
+  progress();
+};
+
+load();
+</script>
+</body>
+</html>

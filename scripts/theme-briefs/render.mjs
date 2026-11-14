@@ -17,8 +17,8 @@ const PROMPTS_LABEL = '**Example Component Prompts**';
 // Provisional (pending design owner review): Neon has no motion tokens.
 const MOTION = {
   still: 'State changes only, such as hover and focus, in 150ms or less. Content is present on load.',
-  subtle: 'Fades, or slides of 16px or less, as content enters view, over 150–250ms with ease-out.',
-  lively: 'Staggered reveals over 200–400ms as content enters view, with translation of 32px or less. No parallax behind text.',
+  subtle: 'Fades, or slides of 16px or less, as content enters view, over 150–250ms with ease-out. Allowed scroll patterns: Pinned story, Count-up figure and Progress rail, two moments a page.',
+  lively: 'Staggered reveals over 200–400ms as content enters view, with translation of 32px or less. No parallax behind text. Allowed scroll patterns: all four, Scrubbed reveal included, three moments a page.',
 };
 
 // The brief a picks file describes, from loaded inputs, as { brief }, or { missing } naming the theme texts
@@ -245,7 +245,7 @@ function brandPattern({ theme, picks, layout }) {
     `- **Ground:** ${variable(`${colourway}-${ground}`)} fill with ${variable(`on-${colourway}-${ground}`)} text${onCanvas ? ', the canvas itself' : ''}`,
     `- **Block Colourway:** ${code(id)}, ${name(drawn.blocks)} blocks on ${name(drawn.ground)}`,
     '',
-    `${placed} It runs as a strip beside or under the section's text, never behind it. Block's Brand Pattern procedure makes it as a static SVG: never hand-draw it, imitate it in CSS or animate it.`,
+    `${placed} It leads the section's screenful beside the text, never behind it and never as a strip, with its clear space left for a photo. Block draws it as a static SVG at the panel's size: never hand-draw it, imitate it in CSS, crop, stretch or animate it.`,
   ].join('\n');
 }
 
