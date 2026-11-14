@@ -63,7 +63,7 @@ None of its own: each field's text is Date field's, the calendar's is Pickers'. 
 - [x] 3. Each field is a Date field, identified by its stroke and Title, not by fill alone.
 - [x] 4. Open is shown by the calendar itself; the range by the end discs and announced states (Pickers).
 - [x] 5. Each field and day brings its own Focus ring.
-- [ ] 6. Reflow: not run yet. Each field reflows as Date field's; the calendar keeps its grid pinned at `Large` (date-and-time.md D9).
+- [x] 6. The `Open=True` variants' 108 overflow and 54 clipped hits all sit in the calendar, the check's long phrase in its fixed Month, Weekday and day labels, at `Large` too: the calendar keeps its grid pinned at `Large` (date-and-time.md D9), as Pickers' own run found.
 - [x] 7. No text under 11 pt: the smallest is the field's helper and the calendar's Footnote 13.
 - [x] 8. Motion names the open / close token, reduced form and haptic.
 - [x] 9. Role, name, states and order:

@@ -37,7 +37,7 @@
         "prefix": "color"
       },
       "text-positive": {
-        "value": "{Green.150}",
+        "value": "{Green.155}",
         "type": "color",
         "prefix": "color"
       },
@@ -319,6 +319,11 @@
       },
       "segmented-control-selected": {
         "value": "{White.100}",
+        "type": "color",
+        "prefix": "color"
+      },
+      "toggle-on-ios": {
+        "value": "{Green.115}",
         "type": "color",
         "prefix": "color"
       }
@@ -2575,7 +2580,7 @@
         "prefix": "color"
       },
       "text-positive": {
-        "value": "{Green.115}",
+        "value": "{Green.110}",
         "type": "color",
         "prefix": "color"
       },
@@ -2857,6 +2862,11 @@
       },
       "segmented-control-selected": {
         "value": "{White.25A}",
+        "type": "color",
+        "prefix": "color"
+      },
+      "toggle-on-ios": {
+        "value": "{Green.115}",
         "type": "color",
         "prefix": "color"
       }
