@@ -173,8 +173,7 @@
       "type": "registry:ui",
       "title": "Checkbox",
       "dependencies": [
-        "radix-ui@^1.8.1",
-        "lucide-react@^1.66.0"
+        "radix-ui@^1.8.1"
       ],
       "registryDependencies": [
         "@neon/utils"

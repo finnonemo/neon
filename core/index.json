@@ -21,8 +21,9 @@
     "why": "Label is the title above a control: Text field's Title."
   },
   "checkbox": {
-    "counterpart": null,
-    "why": "Core approved its Checkbox on 2026-11-14; the item is not retuned to it yet and keeps its CDS tuning."
+    "counterpart": "Checkbox",
+    "doc": "components/checkbox.md",
+    "values": "components/checkbox.json"
   },
   "avatar": {
     "counterpart": "Avatar",
