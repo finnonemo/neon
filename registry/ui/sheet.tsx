@@ -13,8 +13,10 @@ import { cn } from "@/lib/utils"
 // capped at 70em; left and right sheets are min(400px, 100vw) wide and full height. A bottom
 // sheet shows Core's Grabber, which is its close button; the other sides show an X. Radix closes
 // it on Escape or a scrim click and returns focus to the trigger; there is no drag to dismiss
-// and there are no detents. Core's centred sheet for a wide screen (Sheet - iPad) is not drawn:
-// a bottom sheet keeps this look at every width. The snapshot has no Elevation token, so the shadow is Neon's.
+// and there are no detents. From Core's lg tier (988px) up, a bottom sheet is Core's centred
+// sheet for a wide screen (Sheet - iPad at iOS=False): 600px wide, centred over the dimming,
+// with all four corners rounded and its Grabber kept, as Core's Placement has it for Regular
+// width. The snapshot has no Elevation token, so the shadow is Neon's.
 type Side = "top" | "right" | "bottom" | "left"
 
 const SheetSide = React.createContext<Side>("right")
@@ -45,7 +47,7 @@ function SheetOverlay({ className, ...props }: React.ComponentProps<typeof Sheet
 }
 
 const sides: Record<Side, string> = {
-  bottom: "inset-x-0 bottom-0 max-h-[85%] rounded-t-xl data-[state=open]:slide-in-from-bottom data-[state=closed]:slide-out-to-bottom",
+  bottom: "inset-x-0 bottom-0 max-h-[85%] rounded-t-xl data-[state=open]:slide-in-from-bottom data-[state=closed]:slide-out-to-bottom min-[988px]:top-0 min-[988px]:m-auto min-[988px]:h-fit min-[988px]:w-[min(600px,calc(100vw-48px))] min-[988px]:rounded-xl",
   top: "inset-x-0 top-0 max-h-[85%] rounded-b-xl data-[state=open]:slide-in-from-top data-[state=closed]:slide-out-to-top",
   left: "inset-y-0 left-0 w-[min(400px,100vw)] rounded-r-xl data-[state=open]:slide-in-from-left data-[state=closed]:slide-out-to-left",
   right: "inset-y-0 right-0 w-[min(400px,100vw)] rounded-l-xl data-[state=open]:slide-in-from-right data-[state=closed]:slide-out-to-right",
