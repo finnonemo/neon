@@ -1,7 +1,8 @@
 // The Core snapshot (GLOSSARY): the copy of Core that Neon carries, pinned to one Core commit (ADR 0009).
 // Core's repository compiles it (ADR 0012): syncCore runs Core's Web compile from a Core checkout, copies what it
-// wrote, adds the index and records the commit and each file's hash; checkCoreSnapshot is the repository check that
-// refuses a hand edit, and checkCounterpartTable the one that holds the Counterpart table to the snapshot.
+// wrote, adds the index and records the commit and each file's hash; syncIndex rewrites the index alone, from the
+// snapshot Neon holds, with no checkout; checkCoreSnapshot is the repository check that refuses a hand edit, and
+// checkCounterpartTable the one that holds the Counterpart table to the snapshot.
 // Nothing here reads Core's own docs.
 import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { existsSync, realpathSync } from 'node:fs';
@@ -23,6 +24,7 @@ const LOOK = { iOS: false, textSize: 'Large' };
 const sha256 = content => createHash('sha256').update(content).digest('hex');
 const sealOf = ({ core, look, files }) => sha256(JSON.stringify({ core, look, files }));
 const git = (cwd, ...args) => execFileSync('git', ['-C', cwd, ...args], { encoding: 'utf8' }).trim();
+const data = value => `${JSON.stringify(value, null, 2)}\n`;
 
 /**
  * Runs Core's Web compile of the checkout at `from`, with the compiler in the checkout at `compiler`, and returns
@@ -138,7 +140,6 @@ export async function syncCore({ from, compiler = from, out, items, counterparts
   }
   const files = new Map(compiled.files);
   for (const reserved of [INDEX, MANIFEST]) if (files.has(reserved)) throw new Error(`Core's Web compile wrote ${reserved}, which is the snapshot's own file, so nothing was written.`);
-  const data = value => `${JSON.stringify(value, null, 2)}\n`;
   files.set(INDEX, data(counterpartIndex({ items, counterparts, files, leftOut })));
   // The manifest: where the snapshot came from, the look it was compiled at, each file's hash for the repository check, and a seal over all three.
   const hashes = Object.fromEntries([...files].sort(([a], [b]) => (a < b ? -1 : 1)).map(([path, content]) => [path, sha256(content)]));
@@ -151,6 +152,29 @@ export async function syncCore({ from, compiler = from, out, items, counterparts
     await writeFile(join(out, path), content);
   }
   return { commit, compiler: core.compiler, files: [...files.keys()], leftOut, moved };
+}
+
+/**
+ * Rewrites the index of the snapshot at `out` from the Counterpart table, with no Core checkout: for a change to
+ * the table or to the registry's items alone. The commit, the look and every compiled file stay as the sync wrote
+ * them; the manifest takes the new index's hash and a new seal. Refuses a snapshot that is not the one the sync
+ * wrote, since its docs are then not Core's. Returns the commit the snapshot stays at and whether the index changed.
+ */
+export async function syncIndex({ out, items, counterparts }) {
+  await checkCoreSnapshot(out);
+  const read = path => readFile(join(out, path), 'utf8');
+  const { core, look, files: recorded } = JSON.parse(await read(MANIFEST));
+  const files = new Map();
+  for (const path of Object.keys(recorded)) if (path !== INDEX) files.set(path, await read(path));
+  // Which docs Core's compile left out is not in the snapshot, so a Counterpart it does not hold is only "no such doc".
+  const index = data(counterpartIndex({ items, counterparts, files, leftOut: {} }));
+  const changed = index !== await read(INDEX);
+  if (changed) {
+    const manifest = { core, look, files: { ...recorded, [INDEX]: sha256(index) } };
+    await writeFile(join(out, INDEX), index);
+    await writeFile(join(out, MANIFEST), data({ ...manifest, seal: sealOf(manifest) }));
+  }
+  return { commit: core.commit, changed };
 }
 
 /**
@@ -233,6 +257,6 @@ export async function checkCoreSnapshot(directory, { items } = {}) {
     }
   }
   if (problems.length) {
-    throw new Error(`The Core snapshot in ${directory} is not the one the sync wrote:\n${problems.join('\n')}\nThe snapshot is never edited by hand: change Core, or the Counterpart table, and re-run node scripts/sync-core.mjs --from <Core checkout>.`);
+    throw new Error(`The Core snapshot in ${directory} is not the one the sync wrote:\n${problems.join('\n')}\nThe snapshot is never edited by hand: change Core and re-run node scripts/sync-core.mjs --from <Core checkout>, or change the Counterpart table and re-run it with --from-snapshot.`);
   }
 }

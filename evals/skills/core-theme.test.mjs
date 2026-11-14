@@ -138,7 +138,7 @@ test('refuses an adapter role the Role table does not list, and a listed role th
   const unlisted = await repository(t, { 'theme/css/theme.css': ADAPTER.replace('  --space-2', '  --color-bgNew: rgb(1, 2, 3);\n  --space-2') });
   await assert.rejects(writeCoreTheme(unlisted), /color roles .*core-roles\.json does not list: bgNew/);
   const gone = await repository(t, { 'theme/css/core-roles.json': JSON.stringify({ ...ROLES, fgGone: 'Text/text-primary' }) });
-  await assert.rejects(writeCoreTheme(gone), /lists roles .*theme\.css does not have: fgGone/);
+  await assert.rejects(writeCoreTheme(gone), /lists roles .*theme\.css does not have: fgGone\. Declare each in the light block, alone on its line as "--color-<role>: <any color>;": the sync writes its color/);
   const unknown = await repository(t, { 'theme/css/core-roles.json': JSON.stringify({ ...ROLES, fg: 'Text/text-missing' }) });
   await assert.rejects(writeCoreTheme(unknown), /fg \(light\) the token Text\/text-missing, which the Core snapshot's Theme does not have/);
 });

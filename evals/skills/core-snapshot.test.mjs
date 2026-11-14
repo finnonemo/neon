@@ -4,7 +4,7 @@ import { mkdtemp, mkdir, writeFile, readFile, readdir, rm } from 'node:fs/promis
 import { execFileSync } from 'node:child_process';
 import { dirname, join } from 'node:path';
 import { tmpdir } from 'node:os';
-import { syncCore, checkCoreSnapshot, checkCounterpartTable, movedReport } from '../../scripts/lib/core-snapshot.mjs';
+import { syncCore, syncIndex, checkCoreSnapshot, checkCounterpartTable, movedReport } from '../../scripts/lib/core-snapshot.mjs';
 
 // Core's Web compile is Core's own script, tested in Core's repository (ADR 0012). This stands in for it in a
 // checkout small enough to read here: it writes the files under `compiled/` of the checkout it is told to compile,
@@ -231,6 +231,51 @@ test('a Supporting item has no Counterpart of its own, and the index says it is 
   const { json } = await synced(t, { items, counterparts: { ...COUNTERPARTS, toggle: none } });
   assert.deepEqual((await json('index.json')).toggle, { counterpart: null, supporting: true, why: none.why });
   await assert.rejects(synced(t, { items, counterparts: { ...COUNTERPARTS, toggle: { core: 'button' } } }), /toggle is a Supporting item.*button/s);
+});
+
+// The index alone, from the snapshot Neon holds: a change to the Counterpart table needs no Core checkout.
+const components = items => items.map(name => ({ name, supporting: false }));
+
+test('the index is rewritten from the Counterpart table with no Core checkout, and the commit and the docs stay', async t => {
+  const { from, out, read, json } = await synced(t);
+  await rm(from, { recursive: true, force: true });
+  const before = await json('snapshot.json');
+  const menu = await read('components/menu.md');
+  const result = await syncIndex({ out, items: components(ITEMS), counterparts: { ...COUNTERPARTS, card: { core: 'menu' } } });
+  assert.deepEqual(result, { commit: before.core.commit, changed: true });
+  assert.deepEqual((await json('index.json')).card, { counterpart: 'Menu', doc: 'components/menu.md' });
+  const after = await json('snapshot.json');
+  assert.deepEqual({ core: after.core, look: after.look }, { core: before.core, look: before.look });
+  assert.deepEqual(Object.keys(after.files), Object.keys(before.files));
+  assert.deepEqual(Object.keys(after.files).filter(path => after.files[path] !== before.files[path]), ['index.json']);
+  assert.notEqual(after.seal, before.seal);
+  assert.equal(await read('components/menu.md'), menu);
+  await checkCoreSnapshot(out, { items: ITEMS });
+});
+
+test('the index follows a registry item added with its entry, and an index that already follows is not rewritten', async t => {
+  const { out, read, json } = await synced(t);
+  const before = await read('snapshot.json');
+  assert.equal((await syncIndex({ out, items: components(ITEMS), counterparts: COUNTERPARTS })).changed, false);
+  assert.equal(await read('snapshot.json'), before);
+  const counterparts = { ...COUNTERPARTS, tabs: { core: null, why: 'Core has no Tabs.' } };
+  await assert.rejects(checkCoreSnapshot(out, { items: [...ITEMS, 'tabs'] }), /index.*tabs/s);
+  await syncIndex({ out, items: components([...ITEMS, 'tabs']), counterparts });
+  assert.deepEqual((await json('index.json')).tabs, { counterpart: null, why: 'Core has no Tabs.' });
+  await checkCoreSnapshot(out, { items: [...ITEMS, 'tabs'] });
+});
+
+test('the index is not rewritten in a snapshot edited by hand, or from a table the snapshot refuses', async t => {
+  const { out, read } = await synced(t);
+  const before = [await read('index.json'), await read('snapshot.json')];
+  const unchanged = async () => assert.deepEqual([await read('index.json'), await read('snapshot.json')], before);
+  await assert.rejects(syncIndex({ out, items: components(ITEMS), counterparts: { ...COUNTERPARTS, card: { core: 'tile' } } }), /card: its Counterpart tile.*no such doc/);
+  await assert.rejects(syncIndex({ out, items: components([...ITEMS, 'tabs']), counterparts: COUNTERPARTS }), /no Counterpart entry for: tabs/);
+  await unchanged();
+  const button = await read('components/button.md');
+  await writeFile(join(out, 'components/button.md'), `${button}\n- Brand on Secondary is fine.\n`);
+  await assert.rejects(syncIndex({ out, items: components(ITEMS), counterparts: { ...COUNTERPARTS, card: { core: 'menu' } } }), /components\/button\.md does not match what the sync wrote/);
+  await unchanged();
 });
 
 // The repository check: a snapshot is only what the sync wrote (ADR 0009: Core changes arrive by a re-sync).

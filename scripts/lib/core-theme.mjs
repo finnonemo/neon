@@ -15,7 +15,7 @@ export const ADAPTER = 'theme/css/theme.css';
 // The Role table: which Core Theme token each of the adapter's color roles takes, per mode. Hand-maintained.
 const ROLES_FILE = 'theme/css/core-roles.json';
 const MODES = ['light', 'dark'];
-const RESYNC = 'Re-run node scripts/sync-core.mjs --from <Core checkout>; neither file is edited by hand.';
+const RESYNC = 'Re-run node scripts/sync-core.mjs --from-snapshot; neither file is edited by hand.';
 // A color role as the adapter declares it: alone on its line, so a rewrite and the check see every one.
 const DECLARATION = /^(\s*--color-([\w-]+): )([^;]+);\s*$/;
 const DARK_BLOCKS = '/* --- Colors (dark)';
@@ -76,7 +76,7 @@ function adapterFromCore(css, roles, theme) {
   const unlisted = declared.filter(role => !(role in roles));
   if (unlisted.length) throw new Error(`${ADAPTER} has color roles ${ROLES_FILE} does not list: ${unlisted.join(', ')}. Name each one's Core Theme token, or say why it has none.`);
   const undeclared = Object.keys(roles).filter(role => !declared.includes(role));
-  if (undeclared.length) throw new Error(`${ROLES_FILE} lists roles ${ADAPTER} does not have: ${undeclared.join(', ')}.`);
+  if (undeclared.length) throw new Error(`${ROLES_FILE} lists roles ${ADAPTER} does not have: ${undeclared.join(', ')}. Declare each in the light block, alone on its line as "--color-<role>: <any color>;": the sync writes its color from Core's Theme, and adds it to each dark block where Core darkens it.`);
 
   const tokens = Object.fromEntries(declared.map(role => [role, roleTokens(role, roles[role])]));
   const color = (role, mode) => {

@@ -18,3 +18,10 @@ export function parseSizes(value) {
     return [Number(match[1]), Number(match[2])];
   });
 }
+
+/** "2026-10-15T12:00" → the Date a page's clock is fixed at; a time with no offset is local, as the browser suite's is. */
+export function parseClock(value) {
+  const time = new Date(value);
+  if (Number.isNaN(time.getTime())) throw new Error(`Clock "${value}" is not an ISO time, such as 2026-10-15T12:00`);
+  return time;
+}

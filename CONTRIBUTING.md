@@ -35,6 +35,14 @@ The Core snapshot in `core/` is compiled, never edited: a rule or value changes 
 node scripts/sync-core.mjs --from <Core checkout>
 ```
 
+A change to Neon's own tables alone (the Counterpart table, the Role table, the Type role table) needs no Core checkout and leaves the snapshot at its commit:
+
+```sh
+node scripts/sync-core.mjs --from-snapshot
+```
+
+It rewrites `core/index.json`, its hash and the seal in `core/snapshot.json`, and the adapter's colors and type, from the snapshot `core/` holds, and refuses a snapshot that is not the one the sync wrote.
+
 A Core commit older than Core's compile script has none to run: add `--compiler <Core checkout>` with a newer checkout, and the snapshot records that checkout's commit beside the docs'.
 
 The sync fails when Core's compile fails (it refuses uncommitted docs, a value Core states no number for, and a compiled file that would still hold the `iOS=True` look, Figma ids, Revision history or Dynamic Type), when a registry item has no entry in the Counterpart table, when an entry names a Core doc the compile left out or did not write, when a Supporting item is given a Counterpart, and when an item with no Counterpart has the name of an approved Core doc and its entry does not name that doc as `unmatched`; it then writes nothing. What a compiled doc holds is changed in Core's repository, not here. `validate` fails when a file under `core/`, or the commit `core/snapshot.json` names, differs from what the sync recorded, and when the Counterpart table breaks the `unmatched` rule against the snapshot. Review the snapshot's diff as Core's change. The sync prints Core's commits since the snapshot it replaced and the snapshot files added, changed and removed: list both in the pull request, with the Core commit it moved to.
