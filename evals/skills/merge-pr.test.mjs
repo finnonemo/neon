@@ -8,10 +8,14 @@ const fail = (stderr) => ({ status: 1, stdout: '', stderr });
 const behind = fail('X Pull request finnonemo/neon#9 is not mergeable: the head branch is not up to date with the base branch.');
 
 // A scripted git and gh: `script` answers the calls a test cares about, the rest succeed quietly.
-function fake({ behindMain = [0], merges = [ok()], mergeMain = ok(), checks = ok(), state = 'OPEN', unpushed = false } = {}) {
+// `conflicts` are the paths a failed merge of main leaves unmerged; `core` is the Core commit the snapshot names at the
+// merge base, on the branch and on main; `sync` and `build` answer the two generators.
+function fake({ behindMain = [0], merges = [ok()], mergeMain = ok(), checks = ok(), state = 'OPEN', unpushed = false, conflicts = ['README.md'], core = {}, sync = ok(), build = ok() } = {}) {
   const calls = [];
   let mainCount = 0;
   let mergeCount = 0;
+  let staged = false;
+  const snapshot = (commit) => ok(JSON.stringify({ core: { commit } }));
   const exec = (command, args) => {
     const line = [command, ...args].join(' ');
     calls.push(line);
@@ -28,7 +32,15 @@ function fake({ behindMain = [0], merges = [ok()], mergeMain = ok(), checks = ok
       if (mergeMain.status === 0) unpushed = true;
       return mergeMain;
     }
-    if (line.includes('diff --name-only --diff-filter=U')) return ok('README.md\n');
+    if (line.includes('diff --name-only --diff-filter=U')) return ok(staged ? '' : `${conflicts.join('\n')}\n`);
+    if (line.endsWith('merge-base HEAD MERGE_HEAD')) return ok('base1\n');
+    if (line.endsWith('show base1:core/snapshot.json')) return snapshot(core.base);
+    if (line.endsWith('show HEAD:core/snapshot.json')) return snapshot(core.ours);
+    if (line.endsWith('show MERGE_HEAD:core/snapshot.json')) return snapshot(core.theirs);
+    if (line.endsWith('scripts/sync-core.mjs --from-snapshot')) return sync;
+    if (line.endsWith('scripts/build-registry.mjs')) return build;
+    if (line.includes('add -A -- core theme registry/r')) staged = true;
+    if (line.endsWith('commit --no-edit -q')) unpushed = true;
     if (line.includes('--watch')) return checks;
     if (line.includes('pr merge')) return merges[Math.min(mergeCount++, merges.length - 1)];
     if (line.includes('symbolic-ref')) return ok('feature');
@@ -60,6 +72,53 @@ test('a conflict aborts the merge and names the files', async () => {
   await assert.rejects(land({ pr: 9, exec, ...quiet }), /conflicts in README\.md/);
   assert.ok(calls.some((c) => c.endsWith('merge --abort')));
   assert.ok(!calls.some((c) => c.includes('pr merge')));
+});
+
+const at = (calls, end) => calls.findIndex((c) => c.endsWith(end));
+
+test('a conflict only in the built registry is settled by building it again', async () => {
+  const { exec, calls } = fake({ behindMain: [1, 0], mergeMain: fail('CONFLICT'), conflicts: ['registry/r/button.json', 'registry/r/registry.json'] });
+  const lines = [];
+  assert.equal(await land({ pr: 9, exec, wait: async () => {}, log: (line) => lines.push(line) }), 'abc123');
+  const [built, staged, committed, pushed] = ['scripts/build-registry.mjs', 'add -A -- core theme registry/r', 'commit --no-edit -q', 'push -q origin HEAD:refs/heads/feature'].map((end) => at(calls, end));
+  assert.ok(built >= 0 && built < staged && staged < committed && committed < pushed, 'build, stage, commit, then push for the checks');
+  assert.ok(!calls.some((c) => c.endsWith('merge --abort') || c.includes('sync-core.mjs')));
+  assert.ok(lines.some((line) => line.includes('conflicted only in generated files (registry/r/button.json, registry/r/registry.json)')));
+});
+
+for (const [name, core, side] of [
+  ['main moved the Core commit', { base: 'aaa', ours: 'aaa', theirs: 'bbb' }, 'MERGE_HEAD'],
+  ['the branch moved the Core commit', { base: 'aaa', ours: 'bbb', theirs: 'aaa' }, 'HEAD'],
+  ['neither side moved the Core commit', { base: 'aaa', ours: 'aaa', theirs: 'aaa' }, 'HEAD'],
+]) {
+  test(`a conflict only in the Core snapshot takes it from ${side} when ${name}, then generates`, async () => {
+    const { exec, calls } = fake({ behindMain: [1, 0], mergeMain: fail('CONFLICT'), conflicts: ['core/index.json', 'core/snapshot.json'], core });
+    assert.equal(await land({ pr: 9, exec, ...quiet }), 'abc123');
+    const [taken, synced, built, committed] = [`checkout ${side} -- core/index.json core/snapshot.json`, 'scripts/sync-core.mjs --from-snapshot', 'scripts/build-registry.mjs', 'commit --no-edit -q'].map((end) => at(calls, end));
+    assert.ok(taken >= 0 && taken < synced && synced < built && built < committed, 'take the side, sync from the snapshot, build the registry, commit');
+    assert.ok(!calls.some((c) => c.endsWith('merge --abort')));
+  });
+}
+
+test('a Core snapshot conflict stops when both sides moved the Core commit', async () => {
+  const { exec, calls } = fake({ behindMain: [1], mergeMain: fail('CONFLICT'), conflicts: ['core/snapshot.json', 'registry/r/button.json'], core: { base: 'aaaaaaaa', ours: 'bbbbbbbb', theirs: 'cccccccc' } });
+  await assert.rejects(land({ pr: 9, exec, ...quiet }), /Both sides moved the Core commit \(bbbbbbb here, ccccccc on main\): run the Core sync again/);
+  assert.ok(calls.some((c) => c.endsWith('merge --abort')));
+  assert.ok(!calls.some((c) => c.includes('checkout') || c.includes('sync-core.mjs') || c.includes('build-registry.mjs') || c.includes('pr merge')));
+});
+
+test('a generated file beside a hand-written one in conflict is left for a person', async () => {
+  const { exec, calls } = fake({ behindMain: [1], mergeMain: fail('CONFLICT'), conflicts: ['registry/r/button.json', 'registry/ui/button.tsx'] });
+  await assert.rejects(land({ pr: 9, exec, ...quiet }), /conflicts in registry\/r\/button\.json, registry\/ui\/button\.tsx; the merge is aborted\. Keep both sides' intent\./);
+  assert.ok(calls.some((c) => c.endsWith('merge --abort')));
+  assert.ok(!calls.some((c) => c.includes('build-registry.mjs') || c.includes('pr merge')));
+});
+
+test('a generator that refuses aborts the merge and passes on what it said', async () => {
+  const { exec, calls } = fake({ behindMain: [1], mergeMain: fail('CONFLICT'), conflicts: ['core/index.json'], core: { base: 'aaa', ours: 'aaa', theirs: 'bbb' }, sync: fail('core/components/button.md differs from what the sync recorded') });
+  await assert.rejects(land({ pr: 9, exec, ...quiet }), /sync-core\.mjs --from-snapshot refused:\ncore\/components\/button\.md differs/);
+  assert.ok(calls.some((c) => c.endsWith('merge --abort')));
+  assert.ok(!calls.some((c) => c.includes('commit --no-edit') || c.includes('pr merge')));
 });
 
 test('a failed check stops before merging', async () => {

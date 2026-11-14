@@ -1,12 +1,12 @@
 import { defineConfig } from '@playwright/test';
 import { join, resolve } from 'node:path';
 
-if (!process.env.NEON_TEST_APP) throw new Error('Run npm test to assemble the disposable app first.');
+if (!process.env.NEON_TEST_APP || !process.env.NEON_TEMPLATE_PORT) throw new Error('Run npm test to assemble the disposable app first.');
 // One folder per target: Playwright clears its output and report folders at the
 // start of a run, so a shared folder would lose the first target's results.
 const artifacts = resolve('../../.local/evals/templates', process.env.NEON_TARGET ?? 'cds');
-// Parallel runs each need their own preview port: NEON_TEMPLATE_PORT=4179 node run.mjs …
-const port = Number(process.env.NEON_TEMPLATE_PORT ?? 4178);
+// run.mjs passes the preview's port: a free one, or the NEON_TEMPLATE_PORT it was given.
+const port = Number(process.env.NEON_TEMPLATE_PORT);
 export default defineConfig({
   testDir: '.',
   testMatch: '*.spec.mjs',

@@ -476,6 +476,25 @@ test('a calendar arrow at the first month is disabled in Core\'s Disabled ink', 
   await expect(previous).not.toHaveAttribute('aria-disabled');
 });
 
+// The arrow is disabled by aria-disabled, not the disabled attribute, so it keeps keyboard focus
+// when it stops at the first month, and the Button's focus fill has to go by aria-disabled too.
+test('a calendar arrow that turns disabled while it holds keyboard focus has no fill', async ({ page }) => {
+  await gotoCalendars(page);
+  const calendar = page.locator('[data-measure=core-calendar] [data-calendar=today] [data-slot=calendar]');
+  const previous = calendar.locator('.rdp-button_previous');
+  const transparent = 'rgba(0, 0, 0, 0)';
+  await calendar.locator('.rdp-button_next').click();
+  await expect(calendar.locator('.rdp-caption_label')).toHaveText('November 2026');
+  expect((await keyboardFocus(page, previous)).focusVisible).toBe(true);
+  await expect(previous).not.toHaveCSS('background-color', transparent);
+  await page.keyboard.press('Enter');
+  await expect(calendar.locator('.rdp-caption_label')).toHaveText('October 2026');
+  await expect(previous).toHaveAttribute('aria-disabled', 'true');
+  await expect(previous).toBeFocused();
+  expect(await previous.evaluate((el) => el.matches(':focus-visible'))).toBe(true);
+  await expect(previous).toHaveCSS('background-color', transparent);
+});
+
 // Core's Range start, In range and Range end: one band from the first disc's middle to the last's.
 test("a range draws one band between its ends, and a new end moves it", async ({ page }) => {
   await gotoCalendars(page);

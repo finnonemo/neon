@@ -36,6 +36,22 @@ test('each browser target keeps its own report and CI checks both survive', asyn
   assert.ok(check > workflow.indexOf('--target neon') && check < workflow.indexOf('actions/upload-artifact'));
 });
 
+// A fixed port fails when a dev server or another run already holds it.
+test('the browser suite previews on a free port unless NEON_TEMPLATE_PORT fixes one', async () => {
+  const { freePort } = await import('../../scripts/lib/free-port.mjs');
+  const { createServer } = await import('node:net');
+  const port = await freePort();
+  const server = createServer();
+  await new Promise((listening, refused) => server.once('error', refused).listen(port, '127.0.0.1', listening));
+  assert.notEqual(await freePort(), port, 'a held port is not handed out');
+  await new Promise((closed) => server.close(closed));
+  const run = await readFile(new URL('../templates/run.mjs', import.meta.url), 'utf8');
+  const config = await readFile(new URL('../templates/playwright.config.mjs', import.meta.url), 'utf8');
+  assert.match(run, /const port = process\.env\.NEON_TEMPLATE_PORT \?\? String\(await freePort\(\)\);/);
+  assert.match(run, /NEON_TEMPLATE_PORT: port \}/);
+  assert.match(config, /const port = Number\(process\.env\.NEON_TEMPLATE_PORT\);/);
+});
+
 test('validate runs on merge groups for a merge queue', async () => {
   const workflow = await readFile(new URL('../../.github/workflows/validate.yml', import.meta.url), 'utf8');
   assert.match(workflow.slice(0, workflow.indexOf('permissions:')), /^  merge_group:$/m);

@@ -11,28 +11,35 @@
  * A passing step prints one summary line; a failing step prints its full
  * output and stops. Exits with the failing step's status.
  *
- * Usage: node scripts/smoke-new-app.mjs [destination]
+ * Usage: node scripts/smoke-new-app.mjs [destination] [--keep]
  *
  * Without a destination it builds twice: outside any repository (a fresh
  * directory under the OS temp dir) and inside one (under this checkout's
- * gitignored .local/smoke/). A destination must be missing or empty. Apps
- * are kept afterwards so they can be previewed or inspected.
+ * gitignored .local/smoke/). Both apps are removed when every step passes;
+ * --keep leaves them to preview or inspect, and a failed run keeps them and
+ * says where. A destination is the app the caller asked for, so it is always
+ * kept; it must be missing or empty.
  */
 import { createHash } from "node:crypto";
-import { mkdtempSync } from "node:fs";
+import { mkdtempSync, rmSync } from "node:fs";
 import { appendFile, mkdir, readFile, readdir, writeFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { tmpdir } from "node:os";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
+import { parseArgs } from "node:util";
 import { bareCnImports, buildRegistry } from "./lib/registry.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const stamp = new Date().toISOString().replace(/\D/g, "").slice(0, 14);
-const destinations = process.argv[2]
-  ? [resolve(process.argv[2])]
+const { values: flags, positionals } = parseArgs({ allowPositionals: true, options: { keep: { type: "boolean", default: false } } });
+const destinations = positionals[0]
+  ? [resolve(positionals[0])]
   : [join(mkdtempSync(join(tmpdir(), "neon-smoke-")), "app"), join(root, ".local/smoke", stamp, "app")];
+const keep = flags.keep || Boolean(positionals[0]);
+// The apps this run has started on, for the line a failed run ends with.
+const started = [];
 // The item --add puts beside the base, and the Neon file it depends on that
 // the smoke tunes first: Dialog uses Button.
 const ADD_ITEM = "dialog";
@@ -51,7 +58,7 @@ function step(label, command, args, cwd, summarize) {
       if (status !== 0) {
         console.log(output.trimEnd());
         console.log(`✖ ${label}: failed (exit ${status})`);
-        process.exit(status ?? 1);
+        stop(status ?? 1);
       }
       console.log(`✔ ${label}: ${summarize(output)}`);
       done(output);
@@ -63,9 +70,16 @@ function check(label, problems) {
   if (problems.length) {
     console.log(problems.join("\n"));
     console.log(`✖ ${label}: failed`);
-    process.exit(1);
+    stop(1);
   }
   console.log(`✔ ${label}`);
+}
+
+/** Ends a failed run: its apps stay, and the last line says where. */
+function stop(status) {
+  rmSync(registryDir, { recursive: true, force: true });
+  console.log(`Kept for inspection: ${started.join(", ")}`);
+  process.exit(status);
 }
 
 function lastMatch(output, pattern) {
@@ -98,6 +112,7 @@ const installArgs = (...args) => [join(root, "scripts/install.mjs"), ...args, "-
 
 for (const destination of destinations) {
   console.log(`\n${destination}`);
+  started.push(destination);
   await mkdir(dirname(destination), { recursive: true });
   await step("install --new", process.execPath, installArgs(destination, "--new"), root, (out) => lastMatch(out, /^added \d+ packages|^Done/));
   check("no bare cn import after --new", bareCnImports(await sources(destination)));
@@ -122,6 +137,12 @@ for (const destination of destinations) {
   check(`--add theme-brief-${BRIEF} put the brief at ${briefPath}`, brief === (await readFile(join(root, "registry/theme-briefs", `${BRIEF}.md`), "utf8")) ? [] : [`${briefPath} ${brief === null ? "is missing" : "differs from the published brief"}`]);
 
   await step("build", "npm", ["run", "build"], destination, (out) => lastMatch(out, /built in/));
-  console.log(`App kept at ${destination}`);
+  if (keep) console.log(`App kept at ${destination}`);
 }
 server.close();
+rmSync(registryDir, { recursive: true, force: true });
+if (!keep) {
+  // Each app sits alone in a directory this run made.
+  for (const destination of destinations) rmSync(dirname(destination), { recursive: true, force: true });
+  console.log("\nBoth apps removed; --keep leaves them in place.");
+}
