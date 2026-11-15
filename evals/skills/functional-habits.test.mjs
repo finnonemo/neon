@@ -77,8 +77,8 @@ test('functional patterns give people a Block avatar, history a vertical progres
   assert.match(lists, /A row for a person .* leads with Core's \[Avatar\]/);
   assert.match(lists, /`density` `coarse` \(the 4×4 Grid\)/);
   assert.match(lists, /a stable hash of their id/);
-  // The owner's ruling: the round Avatar holds the Pattern inset, never clipped (24 in a 40 Avatar).
-  assert.match(lists, /at 60% of the Avatar's size \(24 in a 40 Avatar\), so the circle never cuts a Block/);
+  // The owner's ruling: the round Avatar's clip of the Pattern's corners is accepted.
+  assert.match(lists, /circle cuts the Pattern's corners: that is accepted/);
   assert.match(lists, /history .* is a vertical progress step/);
   assert.match(section(patterns, 'Panes'), /back control is an icon-only button.*web and app alike.*Never an arrow with a visible label/);
   const scaffold = await read('neon-create/references/scaffold.md');
