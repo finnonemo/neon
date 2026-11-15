@@ -133,6 +133,73 @@
           "at": "2026-11-14T22:34:30.464Z"
         }
       }
+    },
+    "2026-11-fixes-c14905a": {
+      "done": "2026-11-15T10:19:29.279Z",
+      "cases": {
+        "review-01": {
+          "verdict": "fail",
+          "tags": [
+            "states"
+          ],
+          "note": "check icon หลัง list ไม่ควรมี เวลาที่ selected list นั้นก็ควร fill สี layer list นั้นเป็น active state",
+          "at": "2026-11-15T10:15:03.446Z"
+        },
+        "review-02": {
+          "verdict": "fail",
+          "tags": [
+            "hierarchy"
+          ],
+          "note": "",
+          "at": "2026-11-15T10:16:03.079Z"
+        },
+        "review-03": {
+          "verdict": "fail",
+          "tags": [
+            "states"
+          ],
+          "note": "เรื่องที่เคยพูดเรื่องปุ่มซื้อเพิ่มไม่ควรอยู่หลัง List แบบนั้น list ควรขยายเต็มความกว้าง แต่คุณก็ยังนำมาใช้",
+          "at": "2026-11-15T10:16:58.831Z"
+        },
+        "review-04": {
+          "verdict": "fail",
+          "tags": [
+            "hierarchy"
+          ],
+          "note": "",
+          "at": "2026-11-15T10:19:26.862Z"
+        },
+        "review-05": {
+          "verdict": "pass",
+          "tags": [],
+          "note": "",
+          "at": "2026-11-15T10:18:21.898Z"
+        },
+        "review-06": {
+          "verdict": "fail",
+          "tags": [
+            "hierarchy"
+          ],
+          "note": "",
+          "at": "2026-11-15T10:19:23.696Z"
+        },
+        "review-07": {
+          "verdict": "pass",
+          "tags": [],
+          "note": "",
+          "at": "2026-11-15T10:18:57.330Z"
+        },
+        "review-08": {
+          "verdict": "fail",
+          "tags": [
+            "detail",
+            "hierarchy",
+            "states"
+          ],
+          "note": "",
+          "at": "2026-11-15T10:19:21.045Z"
+        }
+      }
     }
   }
 }
