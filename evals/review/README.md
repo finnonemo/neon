@@ -167,7 +167,7 @@ What changed after this round, not yet judged by a round:
 - **review-08:**
   - No section repeats the composition of the one before.
   - A display figure leads two sections at most.
-- **review-02 is open.** The page took its colors from the Club · Run brief's Layout table as written: a Yellow 50 hero, a Yellow 100 call-out and a Light Grey 100 tint, all through `--immersive-*` variables. Either the owner means another brief, or the brief's own grounds are what reads wrong. It is waiting on the owner.
+- **review-02:** the page took its colors from the Club · Run brief's Layout table as written, a Yellow 50 hero among them, while the brief opens "Club opens on a white canvas". The owner ruled to use the brief as made, with the hero on White: its Brand Pattern ground is now the canvas (`ground` `"canvas"`), and the Pattern stands on the page with no panel.
 
 Limits:
 
