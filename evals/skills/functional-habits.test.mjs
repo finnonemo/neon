@@ -87,3 +87,15 @@ test('functional patterns give people a Block avatar, history a vertical progres
   const layout = section(await read('neon-review/references/review-checks.md'), 'Functional layout');
   for (const miss of [/no avatar/, /history as a table/, /back control with a visible label/]) assert.match(layout, miss);
 });
+
+test('a record row holds its action and marks selection by fill, in the skills and the registry ListRow', async () => {
+  const lists = section(await read('neon-audit/references/functional-patterns.md'), 'Lists before cards');
+  assert.match(lists, /pass it as `ListRow`'s `action`/);
+  assert.match(lists, /selected row.*marked by its fill alone.*no check icon/);
+  const layout = section(await read('neon-review/references/review-checks.md'), 'Functional layout');
+  assert.match(layout, /check icon at the end of the selected row/);
+  const row = await readFile(new URL('../../registry/ui/list-row.tsx', import.meta.url), 'utf8');
+  assert.doesNotMatch(row, /CheckIcon/);
+  assert.match(row, /action\?: React\.ReactNode/);
+  assert.match(row, /enabled:bg-layer-selected/);
+});

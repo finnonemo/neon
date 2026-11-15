@@ -106,17 +106,36 @@ for (const mode of ['light', 'dark']) test(`${mode}: a list row reached from the
   await expect(divider).toBeHidden();
 });
 
-test('a selected list row shows by its Checkmark, one line is 56px and the last row has no Divider', async ({ page }) => {
+test('a selected list row shows by its fill alone, one line is 56px and the last row has no Divider', async ({ page }) => {
   await page.goto('/?layout=approval');
   const rows = page.locator('[data-measure=list] [data-slot=list-row]');
   await expect(rows.first()).toHaveAttribute('aria-current', 'true');
-  await expect(rows.first().locator('[data-slot=list-row-check]')).toBeVisible();
-  await expect(rows.nth(1).locator('[data-slot=list-row-check]')).toHaveCount(0);
+  // The owner's call: no trailing Checkmark; the selected row's fill differs from its neighbour's.
+  await expect(page.locator('[data-measure=list] li:nth-child(1) svg.lucide-check')).toHaveCount(0);
+  const fill = (row) => row.evaluate((el) => getComputedStyle(el).backgroundColor);
+  expect(await fill(rows.first())).not.toBe(await fill(rows.nth(1)));
   await expect(page.locator('[data-measure=list] li:last-child [data-slot=list-row-divider]')).toBeHidden();
   await page.goto('/?layout=extras');
   const oneLine = page.locator('[data-measure=core-list] li:nth-child(2) [data-slot=list-row]');
   expect((await oneLine.boundingBox()).height).toBe(56);
   await expect(page.locator('[data-measure=core-list] li:nth-child(1) [data-slot=list-row]')).toBeDisabled();
+});
+
+// Core's Trailing Button: an action on the row's record sits inside its row, which spans the list.
+test('a list row action sits inside its row, which spans the list', async ({ page }) => {
+  await page.goto('/?layout=extras');
+  const item = page.locator('[data-measure=core-list] li:nth-child(3)');
+  const box = item.locator('[data-slot=list-row-box]');
+  const action = box.locator('[data-slot=list-row-action] button');
+  await expect(action).toBeVisible();
+  // Its own button, never nested in the row's.
+  await expect(item.locator('[data-slot=list-row] button')).toHaveCount(0);
+  const [li, row, act, plain] = await Promise.all([item, box, action, page.locator('[data-measure=core-list] li:nth-child(2) [data-slot=list-row]')].map((l) => l.boundingBox()));
+  // The row with an action is as wide as a row without one, and the action ends inside it.
+  expect(row.width).toBe(plain.width);
+  expect(row.x + row.width).toBeLessThanOrEqual(li.x + li.width);
+  expect(act.x + act.width).toBeLessThanOrEqual(row.x + row.width);
+  expect(act.x).toBeGreaterThan(row.x);
 });
 
 // Core's Table: Hover is a Body row's.

@@ -226,9 +226,6 @@
       "name": "list-row",
       "type": "registry:ui",
       "title": "List row",
-      "dependencies": [
-        "lucide-react@^1.66.0"
-      ],
       "registryDependencies": [
         "@neon/utils"
       ],

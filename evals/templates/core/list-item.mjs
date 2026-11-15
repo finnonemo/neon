@@ -1,6 +1,6 @@
 // list-row → Core's List item at Medium with a custom leading part (an Avatar) and a Subtitle:
-// the row (Core's Main table cell), the text beside the artwork, its Title and Subtitle, and the
-// Checkmark a selected row shows.
+// the row (Core's Main table cell), the text beside the artwork, and its Title and Subtitle. A
+// selected row takes the Active cell's fill and no Checkmark (registry/ui/list-row.tsx).
 import { padding } from './entries.mjs';
 
 const set = 'List item';
@@ -42,6 +42,5 @@ export default {
         color: at('Label + Subtitle / Subtitle row / Subtitle'),
       },
     },
-    checkmark: { set, properties: { color: at('Right content / Checkmark') } },
   },
 };

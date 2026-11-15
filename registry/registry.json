@@ -118,7 +118,6 @@
       "name": "list-row",
       "type": "registry:ui",
       "title": "List row",
-      "dependencies": ["lucide-react@^1.66.0"],
       "registryDependencies": ["@neon/utils"],
       "files": [
         { "path": "ui/list-row.tsx", "type": "registry:ui", "target": "src/components/ui/list-row.tsx" }
