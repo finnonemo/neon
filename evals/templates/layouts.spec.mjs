@@ -9,6 +9,15 @@ test.beforeEach(async ({ page }) => {
   page.on('console', message => { if (message.type() === 'error') throw new Error(message.text()); });
 });
 
+// The functional shell clips at the viewport (.neon-layout is overflow: hidden), so a pane whose
+// content is wider than the pane never widens the document: only the pane's own scroll container
+// shows it. Pane scrollers are the ones the layouts give an inline overflowY (ContentView,
+// InspectorView, the sidebar); the board's sideways scroller sets overflowX and is meant to scroll.
+const widePanes = page => page.locator('.neon-layout').evaluate(root => [...root.querySelectorAll('*')]
+  .filter(el => ['auto', 'scroll'].includes(el.style.overflowY) && el.clientWidth > 0)
+  .filter(el => el.scrollWidth > el.clientWidth)
+  .map(el => `${el.closest('[aria-label]')?.getAttribute('aria-label') ?? el.parentElement?.className}: ${el.scrollWidth} > ${el.clientWidth}`));
+
 for (const layout of ['app', 'content']) {
   test(`${layout}: selection, back, local state, scroll and focus survive mobile navigation`, async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 812 });
@@ -78,6 +87,19 @@ for (const layout of ['app', 'content']) {
   });
 }
 
+test('a grid wider than its pane is caught in the pane, not the document', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/?layout=app');
+  await page.getByRole('region', { name: 'Content', exact: true }).evaluate(pane => {
+    const grid = document.createElement('div');
+    grid.style.cssText = 'display: grid; grid-template-columns: repeat(6, max-content)';
+    grid.innerHTML = '<span>a long label that sets the track width</span>'.repeat(6);
+    pane.querySelector('[style*="overflow-y"]').append(grid);
+  });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(1440);
+  expect(await widePanes(page)).toHaveLength(1);
+});
+
 // Figma's min and max frame for each desktop tier; sidebar widths come from theme/cds/breakpoints.config.ts.
 const desktopTiers = [[988, 64, 360], [1079, 64, 360], [1080, 240, 360], [1271, 240, 360], [1272, 320, 360], [1439, 320, 360], [1440, 360, 400], [1920, 360, 560], [2560, 360, 560]];
 for (const [layout, fixed, fill] of [['app', 'Content', 'Details'], ['content', 'Details', 'Content']]) {
@@ -115,6 +137,7 @@ for (const layout of ['app', 'content', 'simple', 'board', 'immersive']) {
       if (layout !== 'board') {
         expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
       }
+      expect(await widePanes(page)).toEqual([]);
       if (width === 375 || width === 1440) await page.screenshot({ path: test.info().outputPath(`${layout}-${width}.png`) });
     });
   }

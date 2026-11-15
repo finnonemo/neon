@@ -26,6 +26,15 @@ The rules hold in any framework and name no component library. Where Core holds 
 - A back control is an icon-only button, the arrow alone, on every tier and on web and app alike, with where it goes as its accessible name (`aria-label`). Never an arrow with a visible label.
 - Columns side by side that each scroll on their own are for a board or for records compared in columns, not for drilling down.
 
+## Grids inside a pane
+
+A pane's width is what the shell leaves after the sidebar and inspector, so it changes at other widths than the viewport, and the shell clips a pane that overflows rather than scrolling the page.
+
+- A collection of tiles whose count is not fixed takes a grid that wraps by itself: `repeat(auto-fill, minmax(<smallest useful tile>, 1fr))`. It needs no breakpoint.
+- When a fixed number of equal columns must change count, key the change to the pane's width with a container query on the pane, not to a viewport breakpoint. Equal `1fr` columns never wrap, so a count that suits a wide pane overflows a narrow one.
+- Never size a track to its content (`max-content`) around text: one long label then sets the width of the whole grid.
+- Nothing inside a pane is wider than the pane at any tier. Check the pane's own scroll container, not the document, which the shell keeps at the viewport's width.
+
 ## Surfaces, elevation and radius
 
 - Shadows belong only to layers that float above the page: sheet, modal, popover, toast and a dock while content scrolls beneath it. Separate on-page regions with `bgAlternate`, `bgLine` dividers or spacing, not shadows.
