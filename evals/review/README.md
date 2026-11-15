@@ -154,7 +154,7 @@ What this round adds to the plan:
 
 What changed after this round, not yet judged by a round:
 
-- **review-01:** finno takes a `density`, so a square avatar draws on the 4×4 Grid. A person's row leads with Core's Avatar, holding a Block avatar from a set of twelve and picked by a hash of the person's id. Core's Avatar is round, so its clip cuts the Pattern's corners; the owner has not yet ruled on that.
+- **review-01:** finno takes a `density`, so a square avatar draws on the 4×4 Grid. A person's row leads with Core's Avatar, holding a Block avatar from a set of twelve and picked by a hash of the person's id. Core's Avatar is round, so its clip cuts the Pattern's corners; the owner accepts that.
 - **review-03:** a Product Feature app starts from the starter's `finnomenaEcosystemNav`, with its screen active, and asks nothing. A Back Office app has no starter menu and still asks.
 - **review-04, review-06:**
   - A photo fills one large Block of the Pattern, masked to it, in grayscale.
@@ -167,7 +167,7 @@ What changed after this round, not yet judged by a round:
 - **review-08:**
   - No section repeats the composition of the one before.
   - A display figure leads two sections at most.
-- **review-02 is open.** The page took its colors from the Club · Run brief's Layout table as written: a Yellow 50 hero, a Yellow 100 call-out and a Light Grey 100 tint, all through `--immersive-*` variables. Either the owner means another brief, or the brief's own grounds are what reads wrong. It is waiting on the owner.
+- **review-02:** the page took its colors from the Club · Run brief's Layout table as written, a Yellow 50 hero among them, while the brief opens "Club opens on a white canvas". The owner ruled to use the brief as made, with the hero on White: its Brand Pattern ground is now the canvas (`ground` `"canvas"`), and the Pattern stands on the page with no panel.
 
 Limits:
 
@@ -175,3 +175,34 @@ Limits:
 - **One sample per case.** review-07's fall may be sample variation, the model, or both.
 - **Denied commands and the harness label** are as in the baseline round.
 - **What the owner judged** is as in the baseline round.
+
+### November 2026 fixes
+
+Round `2026-11-fixes-c14905a`: main at `c14905a`, after [#328](https://github.com/finnonemo/neon/pull/328), which made the after round's fixes. It ran before [#331](https://github.com/finnonemo/neon/pull/331) and [#332](https://github.com/finnonemo/neon/pull/332), so review-01's round Avatar and review-02's Yellow 50 hero predate those rulings.
+
+The eight runs used Claude Code 2.1.325 with `claude-opus-5-5`, the baseline's model, through `run-claude-case.mjs --serve-registry`, four at once. Every run ended on its own report, none at the cap, none void. Together they cost $32.49. The owner judged on 2026-11-15, and their notes are verbatim in [verdicts.json](verdicts.json).
+
+**Two of eight passed**: review-05 and review-07, whose after-round notes each named one rule (a vertical progress step, an icon-only back control). Every Campaign Page failed on hierarchy, with no note.
+
+| Case | Verdict | Owner's tags and note, shortened | Cost, turns, time |
+| --- | --- | --- | --- |
+| review-01 approvals | ✗ | states. No check icon at the end of a row: a selected row fills with its layer's active state. | $3.86, 111, 11 min |
+| review-02 Club Run | ✗ | hierarchy. | $4.03, 115, 13 min |
+| review-03 portfolio | ✗ | states. Again, the buy-more action sits after the row instead of in it, and the list does not span its container. | $4.14, 121, 14 min |
+| review-04 fifteen years | ✗ | hierarchy. | $3.99, 119, 14 min |
+| review-05 KYC | ✓ | | $4.32, 125, 13 min |
+| review-06 night run | ✗ | hierarchy. | $3.90, 107, 12 min |
+| review-07 auto-invest | ✓ | | $4.49, 131, 12 min |
+| review-08 learning week | ✗ | detail, hierarchy, states. | $3.76, 114, 11 min |
+
+What this round adds to the plan:
+
+- **A selected row shows its state by fill.** No trailing check icon; the row takes its layer's active fill.
+- **review-03 repeats a baseline note.** The row action and the full-width list were fixed in the after round and came back, so the rule is in the skill and a run still missed it.
+- **Campaign Pages are down to hierarchy.** review-04, review-06 and review-08 carried five to seven tags in the after round (detail, fake, habit, interaction, motion, story); hierarchy is the one left on all four pages, with detail and states also on review-08. Hierarchy has no note yet, so what it means waits on the owner.
+
+Limits:
+
+- **One sample per case.**
+- **The model changed back.** This round and the baseline ran on `claude-opus-5-5`, the after round on `claude-fable-5-2`, so a change against the after round may come from the model as well as the skills.
+- **Denied commands, the harness label and what the owner judged** are as in the baseline round.

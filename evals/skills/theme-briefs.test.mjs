@@ -132,7 +132,7 @@ const SCHEMA_REFUSALS = {
   'too many components': [edit(OCCASION, (p) => ({ ...p, components: Array(7).fill(p.components[0]) })), /"components" must have 2–6 items, has 7$/m],
   'too many dos': [edit(OCCASION, (p) => ({ ...p, dos: ['a', 'b', 'c', 'd'] })), /"dos" must have 1–3 items, has 4$/m],
   'no donts': [edit(OCCASION, (p) => ({ ...p, donts: [] })), /"donts" must have 1–3 items, has 0$/m],
-  'a wrong type': [edit(PICKS, (p) => ({ ...p, brandPattern: { ...p.brandPattern, colourway: 'accent', ground: '50' } })), /"brandPattern\.ground" must be a positive integer$/m],
+  'a wrong type': [edit(PICKS, (p) => ({ ...p, brandPattern: { ...p.brandPattern, colourway: 'accent', ground: '50' } })), /"brandPattern\.ground" must be a step \(a positive integer\) or "canvas"$/m],
   'a kind that does not match its folder': [edit(IMAGERY, (p) => ({ ...p, kind: 'layout' })), /people-in-action\.json: "kind" must be one of imagery$/m],
   'a slug that does not match its file name': [edit(LAYOUT, (p) => ({ ...p, slug: 'landing' })), /event-landing\.json: "slug" must match the file name "event-landing"$/m],
 };
@@ -205,7 +205,8 @@ const COMPATIBILITY_REFUSALS = {
   'a support component on Club': [edit(OCCASION, (p) => { p.components[1].roles = ['support']; return p; }), /^theme-briefs\/picks\/club-run\.json: occasion "run" component "Registration call-out" uses role "support", which Club lacks \(roles: action, palette, accent\)$/m],
   'a colourway from a family the theme lacks': [edit(PICKS, (p) => ({ ...p, brandPattern: { ...p.brandPattern, colourway: 'support', ground: 50 } })), /^theme-briefs\/picks\/club-run\.json: colourway "support" is not one of Club's families \(palette, accent\)$/m],
   'a ground that is not a step of the colourway': [edit(PICKS, (p) => ({ ...p, brandPattern: { ...p.brandPattern, colourway: 'accent', ground: 30 } })), /^theme-briefs\/picks\/club-run\.json: ground 30 is not a step of accent \(25, 50, 75, 100\)$/m],
-  'a Brand Pattern on the bare canvas': [{ 'theme/immersive-themes.json': withCanvasAccent(), ...edit(PICKS, (p) => ({ ...p, brandPattern: { ...p.brandPattern, colourway: 'accent', ground: 25 } })) }, /^theme-briefs\/picks\/club-run\.json: accent 25 is Club's bare canvas; a Brand Pattern sits on the canvas only as palette 100$/m],
+  'a Brand Pattern on the bare canvas': [{ 'theme/immersive-themes.json': withCanvasAccent(), ...edit(PICKS, (p) => ({ ...p, brandPattern: { ...p.brandPattern, colourway: 'accent', ground: 25 } })) }, /^theme-briefs\/picks\/club-run\.json: accent 25 is Club's bare canvas; a Brand Pattern sits on the canvas only as palette 100, or as ground "canvas"$/m],
+  'a canvas ground Block does not draw on': [edit(PICKS, (p) => ({ ...p, brandPattern: { ...p.brandPattern, ground: 'canvas', blockColourway: 'grey__yellow-100' } })), /^theme-briefs\/picks\/club-run\.json: ground "canvas" sets the Brand Pattern on Club's bare canvas, so Block must draw on White; "grey__yellow-100" does not$/m],
   'a Brand Pattern section the layout lacks': [edit(LAYOUT, (p) => ({ ...p, brandPattern: { section: 'proof' } })), /^theme-briefs\/presets\/layout\/event-landing\.json: Brand Pattern section "proof" is not one of its sections$/m],
   'an accent ground with no accent component': [edit(OCCASION, (p) => { p.components[1].roles = ['palette', 'action']; return p; }), /^theme-briefs\/picks\/club-run\.json: layout "event-landing" gives a section an accent ground, but no component of occasion "run" takes the accent role$/m],
   'a missing preset': [edit(PICKS, (p) => ({ ...p, presets: { ...p.presets, imagery: 'still-life' } })), /^theme-briefs\/picks\/club-run\.json: imagery preset "still-life" not found under theme-briefs\/presets\/imagery$/m],
@@ -251,6 +252,13 @@ test('palette 100 may be the bare canvas, and a Finnomena source needs no review
     'theme-briefs/picks/ultra-run.json': { ...valid[PICKS], theme: 'ultra', brandPattern: { colourway: 'palette', ground: 100, blockColourway: 'navy__grey-100' } },
     ...edit(LAYOUT, (p) => ({ ...p, source: source('https://www.finnomena.com/campaign/run') })),
   });
+  const { status, out } = checkOnly(root);
+  assert.equal(status, 0, out);
+});
+
+// Club's canvas is White and no step of its families is: a Pattern Block draws on White takes ground "canvas" (review-02).
+test('a Brand Pattern may sit on the bare canvas as ground "canvas" when Block draws on the canvas color', (t) => {
+  const root = fixture(t, edit(PICKS, (p) => ({ ...p, brandPattern: { colourway: 'accent', ground: 'canvas', blockColourway: 'white__yellow-100' } })));
   const { status, out } = checkOnly(root);
   assert.equal(status, 0, out);
 });

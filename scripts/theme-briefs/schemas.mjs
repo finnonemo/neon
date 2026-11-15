@@ -16,6 +16,11 @@ export function blockColourway(id) {
   const [ground, blocks] = String(id).split('__');
   return { ground: `${BLOCK_COLORS[ground]}.100`, blocks: `${BLOCK_COLORS[String(blocks).replace(/-100$/, '')]}.100` };
 }
+// The color a Brand Pattern section is filled with: a step of the picks file's colourway, or, with `ground`
+// "canvas", the theme's bare canvas, where the Pattern stands only when Block draws on the canvas color.
+export function patternFill(theme, { colourway, ground } = {}) {
+  return ground === 'canvas' ? theme?.canvas : theme?.steps[colourway]?.[ground]?.bg;
+}
 // A theme's variable for one of its colors at full strength: the canvas, the text or a family's 100 step.
 export function colorVariable(theme, color) {
   if (color === theme.canvas) return 'canvas';
@@ -110,8 +115,8 @@ export function picksSchema(facts) {
     theme: oneOf(...Object.keys(facts.themes)),
     briefName: { type: 'string', pattern: /^[A-Z][A-Za-z0-9]*(?: [A-Za-z0-9]+)*$/, describe: 'an English name starting with a capital, letters, digits and single spaces' },
     presets: object({ occasion: slug, layout: slug, imagery: slug }),
-    // colourway and ground: the fill the Pattern's section takes. blockColourway: what Block draws the Pattern in.
-    brandPattern: object({ colourway: oneOf(...COLOURWAYS), ground: { type: 'integer' }, blockColourway: oneOf(...BLOCK_COLOURWAYS) }),
+    // colourway and ground: the fill the Pattern's section takes, a step or "canvas". blockColourway: what Block draws the Pattern in.
+    brandPattern: object({ colourway: oneOf(...COLOURWAYS), ground: { type: 'ground' }, blockColourway: oneOf(...BLOCK_COLOURWAYS) }),
     // The example-library review record, for a brief built from a third-party source.
     review: object({
       status: oneOf(...REVIEW_STATUSES),
@@ -164,6 +169,8 @@ export function validate(value, schema, path = '', problems = []) {
     for (const [key, inner] of Object.entries(value)) validate(inner, schema.values, join(path, key), problems);
   } else if (schema.type === 'json-schema') {
     if (typeOf(value) !== 'object') problems.push(`"${path}" must be an object`);
+  } else if (schema.type === 'ground') {
+    if (value !== 'canvas' && (!Number.isInteger(value) || value <= 0)) problems.push(`"${path}" must be a step (a positive integer) or "canvas"`);
   } else if (schema.type === 'integer') {
     if (!Number.isInteger(value) || value <= 0) problems.push(`"${path}" must be a positive integer`);
   } else if (schema.type === 'boolean') {
