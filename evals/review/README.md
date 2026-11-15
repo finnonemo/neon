@@ -154,7 +154,7 @@ What this round adds to the plan:
 
 What changed after this round, not yet judged by a round:
 
-- **review-01:** finno takes a `density`, so a square avatar draws on the 4×4 Grid. A person's row leads with Core's Avatar, holding a Block avatar from a set of twelve and picked by a hash of the person's id. Core's Avatar is round, so its clip cuts the Pattern's corners; the owner has not yet ruled on that.
+- **review-01:** finno takes a `density`, so a square avatar draws on the 4×4 Grid. A person's row leads with Core's Avatar, holding a Block avatar from a set of twelve and picked by a hash of the person's id. Core's Avatar is round, so its clip cuts the Pattern's corners; the owner accepts that.
 - **review-03:** a Product Feature app starts from the starter's `finnomenaEcosystemNav`, with its screen active, and asks nothing. A Back Office app has no starter menu and still asks.
 - **review-04, review-06:**
   - A photo fills one large Block of the Pattern, masked to it, in grayscale.
