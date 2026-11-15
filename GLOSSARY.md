@@ -116,6 +116,10 @@ _Avoid_: migration, port, component adoption (which adds Neon's components into 
 How far a skill's styling reaches: colors only, visual system (adds typography, spacing and radius) or components (the Finnomena theme plus Neon's components; CDS components in an app already on CDS).
 _Avoid_: level, mode, install mode
 
+**Breakpoint**:
+One of the seven named widths at which the shell changes its layout (how wide the sidebar is, which panes show): `sm` 320, `md` 500, `lg` 988, `xl` 1080, `xxl` 1272, `xxxl` 1440 and `max` 1920. The shell's code calls one a breakpoint tier (`useBreakpointTier`). Tailwind's own `sm`, `md` and `lg` are other widths.
+_Avoid_: tier (alone; a Tier is a styling decision), screen size
+
 **Composition**:
 The arrangement and hierarchy of a screen, chosen independently of tier; preserved unless the employee explicitly asks to adapt it.
 _Avoid_: layout change, redesign (alone)

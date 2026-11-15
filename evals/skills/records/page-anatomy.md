@@ -12,7 +12,7 @@ scenarios:
 
 # Page anatomy
 
-Rules in [page anatomy](../../../skills/neon-audit/references/page-anatomy.md): which layout a whole functional page takes, what each pane holds and the order of its regions. Drawn from [research/coinbase-layout.md](../../../research/coinbase-layout.md), which measured one reference product's signed-in pages on 14 November 2026. Following [ADR 0011](../../../docs/adr/0011-a-functional-screen-has-four-layers-each-with-one-source.md), the reference names no product and carries no value from it; where the research conflicts with Neon's shell (scroll model, how the content area divides, the right pane on narrow tiers, tier boundaries), the shell holds and the rule is restated inside it. Static guards: `page-anatomy.test.mjs`.
+Rules in [page anatomy](../../../skills/neon-audit/references/page-anatomy.md): which layout a whole functional page takes, what each pane holds and the order of its regions. Drawn from [research/coinbase-layout.md](../../../research/coinbase-layout.md), which measured one reference product's signed-in pages on 14 November 2026. Following [ADR 0011](../../../docs/adr/0011-a-functional-screen-has-four-layers-each-with-one-source.md), the reference names no product and carries no value from it; where the research conflicts with Neon's shell (scroll model, how the content area divides, the right pane at narrow breakpoints, breakpoint boundaries), the shell holds and the rule is restated inside it. Static guards: `page-anatomy.test.mjs`.
 
 ## Runs, 14 November 2026
 

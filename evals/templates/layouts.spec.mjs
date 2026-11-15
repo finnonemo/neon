@@ -100,6 +100,30 @@ test('a grid wider than its pane is caught in the pane, not the document', async
   expect(await widePanes(page)).toHaveLength(1);
 });
 
+// The example library's pane-grids screen (docs/design/examples/pane-grids.md). AppShell's
+// content pane keeps a fixed 360-400px at desktop and ContentLayout's fills the rest, so the
+// same viewport gives a narrow and a wide pane: a grid that followed the viewport would fail one.
+for (const layout of ['app', 'content']) {
+  test(`${layout}: pane-grids example follows the pane's width at every breakpoint`, async ({ page }) => {
+    test.skip(target !== 'neon', 'The example is built from Neon registry items');
+    await page.setViewportSize({ width: 375, height: 900 });
+    await page.goto(`/?layout=${layout}&example=pane-grids`);
+    for (const width of [320, 375, 500, 768, 987, 988, 1080, 1272, 1440, 1920]) {
+      await page.setViewportSize({ width, height: 900 });
+      expect(await widePanes(page), `${width}px`).toEqual([]);
+      const form = await page.locator('[data-example="form"]').evaluate(grid => {
+        const box = grid.parentElement.parentElement;
+        const inner = box.clientWidth - parseFloat(getComputedStyle(box).paddingLeft) - parseFloat(getComputedStyle(box).paddingRight);
+        return { inner, columns: new Set([...grid.children].map(field => Math.round(field.getBoundingClientRect().x))).size };
+      });
+      expect(form.columns, `${width}px, pane content ${form.inner}px`).toBe(form.inner >= 480 ? 2 : 1);
+      const tiles = await page.locator('[data-example="tiles"]').evaluate(list => ({ width: list.clientWidth, tiles: [...list.children].map(tile => tile.getBoundingClientRect().width) }));
+      for (const tile of tiles.tiles) expect(tile, `${width}px tile`).toBeGreaterThanOrEqual(Math.min(224, tiles.width) - 1);
+      if ([375, 1440].includes(width)) await page.screenshot({ path: test.info().outputPath(`pane-grids-${layout}-${width}.png`) });
+    }
+  });
+}
+
 // Figma's min and max frame for each desktop tier; sidebar widths come from theme/cds/breakpoints.config.ts.
 const desktopTiers = [[988, 64, 360], [1079, 64, 360], [1080, 240, 360], [1271, 240, 360], [1272, 320, 360], [1439, 320, 360], [1440, 360, 400], [1920, 360, 560], [2560, 360, 560]];
 for (const [layout, fixed, fill] of [['app', 'Content', 'Details'], ['content', 'Details', 'Content']]) {

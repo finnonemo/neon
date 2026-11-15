@@ -19,6 +19,7 @@ import type { NavItem } from "@/layout/navItems"
 import { Approval } from "./app/Approval"
 import { Extras } from "./app/Extras"
 import { Expansion } from "./app/Expansion"
+import { PaneGrids } from "./app/PaneGrids"
 
 const params = new URLSearchParams(location.search)
 const layout = params.get("layout") ?? "app"
@@ -79,7 +80,9 @@ function ThemedControls({ children }: { children: ReactNode }) {
 export function App() {
   const [activePane, setActivePane] = useState<ActivePane>("content")
   const [selected, setSelected] = useState<number | null>(null)
-  const content = <Content onSelect={(id) => { setSelected(id); setActivePane("inspector") }} />
+  // ?example=pane-grids puts the example library's pane-grids screen in the content pane (Neon base only).
+  const content = params.get("example") === "pane-grids" ? <PaneGrids />
+    : <Content onSelect={(id) => { setSelected(id); setActivePane("inspector") }} />
   const props = {
     contentHeader: <span className="text-headline">พื้นที่ทำงาน / Workspace</span>,
     contentActions: <Button variant="secondary" size="icon" aria-label="Search workspace" onClick={() => document.querySelector<HTMLInputElement>('input')?.focus()}><Search /></Button>,

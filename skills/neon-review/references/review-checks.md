@@ -61,12 +61,13 @@ On a Back Office or Product Feature screen, these layout misses are findings, in
 
 | Miss | Instead |
 | --- | --- |
-| A sheet rising from the bottom edge at desktop width | The Neon `sheet` item's bottom side as installed, which centres it from the `lg` tier, per Core's Sheet Placement and the [overlay rules](../../neon-audit/references/functional-patterns.md#overlays) |
+| A sheet rising from the bottom edge at desktop width | The Neon `sheet` item's bottom side as installed, which centres it from the `lg` breakpoint, per Core's Sheet Placement and the [overlay rules](../../neon-audit/references/functional-patterns.md#overlays) |
 | An empty sidebar, or none, in an app the request does not call standalone | Composition: the layout's `navigation` with the screen as its active item: in a Product Feature app the starter's Finnomena sidebar, in a Back Office app the question whether the product stands alone in the report, per [scaffold](../../neon-create/references/scaffold.md) |
 | A record's action as a button beside its row, or a list narrower than its pane | `ListRow` with the action in its trailing column, and the list at the pane's full width, per [lists before cards](../../neon-audit/references/functional-patterns.md#lists-before-cards) |
 | A person's row with no avatar, or with initials where a Block avatar fits | Core's Avatar with their photo, else a Block avatar from a set drawn by the Block engine, per [lists before cards](../../neon-audit/references/functional-patterns.md#lists-before-cards) |
 | A record's history as a table, a card per event or plain text | A vertical progress step, per [lists before cards](../../neon-audit/references/functional-patterns.md#lists-before-cards) |
 | A back control with a visible label beside its arrow | An icon-only button with its destination as the accessible name, per [panes](../../neon-audit/references/functional-patterns.md#panes) |
+| Content cut off or scrolling sideways inside a pane at some width, or a grid whose column count follows the viewport (`sm:`, `md:`) | Check every breakpoint in the pane's own scroll container, not the page, which the shell keeps at the viewport's width. Tiles take an `auto-fill` grid; a count that changes follows the pane's width through a container query, per [grids inside a pane](../../neon-audit/references/functional-patterns.md#grids-inside-a-pane) |
 | A third or fourth column for a deeper level of the selected record | Composition: the deeper level replaces the detail pane with a back control, or opens in a `Sheet`, per [panes](../../neon-audit/references/functional-patterns.md#panes) |
 
 ## Accessibility and interactions

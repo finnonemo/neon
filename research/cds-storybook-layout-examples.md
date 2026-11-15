@@ -138,7 +138,16 @@ The primitives map onto what Neon's base already has. HStack and VStack are Tail
 
 ## 5. Recommendations (opinion)
 
-**Decided.** The owner answered "Yes, do both" on 2026-11-15: recommendations 1 and 2 are done. The rules are "Grids inside a pane" in `skills/neon-audit/references/functional-patterns.md`. The guard is `widePanes` in `evals/templates/layouts.spec.mjs`, run on every layout at six widths, with a case showing it catches a `max-content` grid that the document check misses. The other recommendations and the open questions stay open.
+**Decided.** The owner answered "Yes, do both" on 2026-11-15: recommendations 1 and 2 are done. The rules are "Grids inside a pane" in `skills/neon-audit/references/functional-patterns.md`. The guard is `widePanes` in `evals/templates/layouts.spec.mjs`, run on every layout at six widths, with a case showing it catches a `max-content` grid that the document check misses. On the same day the owner took every recommended answer in a grilling round ("ตามที่แนะนำทุกข้อ"), which settles the rest:
+
+- Recommendation 3 is done: [pane grids](../docs/design/examples/pane-grids.md), the example library's first record, `status: illustrative`. Its screen runs in the browser suite's Neon fixture and is checked at every breakpoint. Screenshots stay out of the repository; the record gives the command that captures them.
+- Recommendations 4 to 7 are declined as written. No ADR, because ADRs 0006, 0009 and 0011 already decide them.
+- Open question 1: the story is what it is. Neon shows its own grids in the example above, not a Storybook.
+- Open question 2: answered by "Yes, do both".
+- Open question 3: the review checks gain a row now. A browser step in the generated-app grader is [#330](https://github.com/finnonemo/neon/issues/330).
+- Open question 4: no Back Office flow needs a full-screen task layout; `ImmersiveLayout` and the Button dock cover it.
+- Open question 5: Tailwind's sizes stay as they are. Inside a pane, the rules call for a container query at a width in pixels, never a viewport prefix. The width Neon's shell changes at is now the glossary's **Breakpoint**; "tier" alone stays the styling decision, and the skills no longer use it for widths.
+- Open question 6: nothing is sent to CDS.
 
 Ranked by value for the effort, each checked against ADR 0006 (shadcn base, CDS frozen), ADR 0008 (superseded growth rule), ADR 0009 (Neon matches Core; growth only with an approved Core Counterpart) and ADR 0011 (four layers; no reference values; skills name no reference product).
 
