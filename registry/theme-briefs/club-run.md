@@ -212,16 +212,16 @@ Imagery never carries another brand's logo, copy or look, and the Finnomena logo
 
 - **Section:** hero
 - **Colourway:** Yellow (`accent`)
-- **Ground:** `--immersive-accent-50` fill with `--immersive-on-accent-50` text
+- **Ground:** `--immersive-canvas` fill with `--immersive-text` text, the canvas itself
 - **Block Colourway:** `white__yellow-100`, Yellow blocks on White
 
-The hero section carries the Brand Pattern in a panel on its ground: Block draws it in `white__yellow-100`, Yellow blocks on White (`--immersive-canvas`), and the panel takes the block and card radius. It leads the section's screenful beside the text, never behind it and never as a strip. A photo fills one of its large Blocks, masked to that Block in grayscale; with no photo, that Block holds a marked photo slot. Block draws it as a static SVG at the slot's size: never hand-draw it, imitate it in CSS, crop, stretch or animate it.
+The hero section carries the Brand Pattern on its ground: Block draws it in `white__yellow-100`, Yellow blocks on the section's own White. It leads the section's screenful beside the text, never behind it and never as a strip. A photo fills one of its large Blocks, masked to that Block in grayscale; with no photo, that Block holds a marked photo slot. Block draws it as a static SVG at the slot's size: never hand-draw it, imitate it in CSS, crop, stretch or animate it.
 
 ## Layout
 
 | # | Section | Ground | Fill | Text |
 |---|---|---|---|---|
-| 1 | hero | pattern | `--immersive-accent-50` | `--immersive-on-accent-50` |
+| 1 | hero | pattern | `--immersive-canvas` | `--immersive-text` |
 | 2 | detail-list | canvas | `--immersive-canvas` | `--immersive-text` |
 | 3 | call-out | accent | `--immersive-accent-100` | `--immersive-on-accent-100` |
 | 4 | detail-list | tint | `--immersive-palette-100` | `--immersive-on-palette-100` |

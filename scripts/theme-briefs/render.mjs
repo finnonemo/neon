@@ -8,7 +8,7 @@
 // { components: [{ name, role, paragraph }] }, preset-dos-donts { dos, donts },
 // imagery { paragraph }, layout { paragraph }, example-prompts { prompts }.
 // Layout opens on a scripted table of each section's ground; its prose follows.
-import { blockColourway, colorVariable, FIXED_COMPONENTS } from './schemas.mjs';
+import { blockColourway, colorVariable, FIXED_COMPONENTS, patternFill } from './schemas.mjs';
 
 const SECTIONS = ['Tokens — Colors', 'Tokens — Typography', 'Tokens — Spacing & Shapes', 'Components', "Do's and Don'ts", 'Surfaces', 'Elevation', 'Imagery', 'Brand Pattern', 'Layout', 'Motion', 'Agent Prompt Guide', 'Sibling Themes', 'Quick Start'];
 const HEADER = 'Header';
@@ -228,8 +228,10 @@ function surfaces({ theme }) {
 function brandPattern({ theme, picks, layout }) {
   const { colourway, ground, blockColourway: id } = picks.brandPattern;
   const label = theme.familyLabels[colourway];
-  const fill = theme.steps[colourway][ground].bg;
+  const fill = patternFill(theme, picks.brandPattern);
   const onCanvas = fill === theme.canvas;
+  const groundVariable = ground === 'canvas' ? 'canvas' : `${colourway}-${ground}`;
+  const textVariable = ground === 'canvas' ? 'text' : `on-${colourway}-${ground}`;
   const drawn = blockColourway(id);
   const name = (color) => color.split('.')[0];
   const section = layout.brandPattern.section;
@@ -242,7 +244,7 @@ function brandPattern({ theme, picks, layout }) {
     '',
     `- **Section:** ${layout.brandPattern.section}`,
     `- **Colourway:** ${label} (${code(colourway)})`,
-    `- **Ground:** ${variable(`${colourway}-${ground}`)} fill with ${variable(`on-${colourway}-${ground}`)} text${onCanvas ? ', the canvas itself' : ''}`,
+    `- **Ground:** ${variable(groundVariable)} fill with ${variable(textVariable)} text${onCanvas ? ', the canvas itself' : ''}`,
     `- **Block Colourway:** ${code(id)}, ${name(drawn.blocks)} blocks on ${name(drawn.ground)}`,
     '',
     `${placed} It leads the section's screenful beside the text, never behind it and never as a strip. A photo fills one of its large Blocks, masked to that Block in grayscale; with no photo, that Block holds a marked photo slot. Block draws it as a static SVG at the slot's size: never hand-draw it, imitate it in CSS, crop, stretch or animate it.`,
@@ -309,7 +311,7 @@ export function sectionGrounds({ theme, picks, layout }) {
     canvas: 'canvas',
     tint: `palette-${blockSteps(theme, 'palette')[0]}`,
     accent: `accent-${blockSteps(theme, 'accent')[0]}`,
-    pattern: `${picks.brandPattern.colourway}-${picks.brandPattern.ground}`,
+    pattern: picks.brandPattern.ground === 'canvas' ? 'canvas' : `${picks.brandPattern.colourway}-${picks.brandPattern.ground}`,
   };
   return layout.sections.map((section, index) => {
     const ground = layout.grounds[index];

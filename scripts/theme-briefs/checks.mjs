@@ -6,7 +6,7 @@ import { contrast, matchToken, paletteTokens } from '../lib/colors.mjs';
 import { loadInputs, PRESET_KINDS } from './inputs.mjs';
 import { accentPlacements, accentProblems, pairingProblems, proseText, valueProblems } from './prose-checks.mjs';
 import { assembleBrief, freshBrief, readProse, splitSections } from './render.mjs';
-import { blockColourway, BLOCK_COLOURWAYS, colorVariable, isThirdParty, sourceHost } from './schemas.mjs';
+import { blockColourway, BLOCK_COLOURWAYS, colorVariable, isThirdParty, patternFill, sourceHost } from './schemas.mjs';
 
 // Where authoring records live: draft mode writes them and CI reads them.
 export const RECORDS = 'theme-briefs/records';
@@ -49,13 +49,17 @@ function compatibility({ path, data }, presets, facts) {
     if (!steps) problems.push(`colourway "${colourway}" is not one of ${theme.label}'s families (${theme.families.join(', ')})`);
     else if (!steps[ground]) problems.push(`ground ${ground} is not a step of ${colourway} (${Object.keys(steps).join(', ')})`);
     else if (steps[ground].bg === theme.canvas && !(colourway === 'palette' && ground === 100)) {
-      problems.push(`${colourway} ${ground} is ${theme.label}'s bare canvas; a Brand Pattern sits on the canvas only as palette 100`);
+      problems.push(`${colourway} ${ground} is ${theme.label}'s bare canvas; a Brand Pattern sits on the canvas only as palette 100, or as ground "canvas"`);
     }
+  }
+  if (ground === 'canvas' && BLOCK_COLOURWAYS.includes(data.brandPattern?.blockColourway)
+    && blockColourway(data.brandPattern.blockColourway).ground !== theme.canvas) {
+    problems.push(`ground "canvas" sets the Brand Pattern on ${theme.label}'s bare canvas, so Block must draw on ${String(theme.canvas).split('.')[0]}; "${data.brandPattern.blockColourway}" does not`);
   }
   const drawn = data.brandPattern?.blockColourway;
   if (BLOCK_COLOURWAYS.includes(drawn)) {
     // In a panel, blocks in the section's own color cut the panel's edge away wherever they meet it.
-    const fill = theme.steps[colourway]?.[ground]?.bg;
+    const fill = patternFill(theme, data.brandPattern);
     const { ground: panel, blocks } = blockColourway(drawn);
     if (fill && panel !== fill && blocks === fill) problems.push(`Block Colourway "${drawn}" draws ${blocks.split('.')[0]} blocks in a panel on a ${blocks.split('.')[0]} section, where the panel loses its edge; pick one whose blocks are another color`);
     for (const [part, color] of Object.entries(blockColourway(drawn))) {
