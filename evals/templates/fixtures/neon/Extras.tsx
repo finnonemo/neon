@@ -282,7 +282,7 @@ export function Extras() {
           <Tag size="lg" variant="negative">ปฏิเสธ</Tag>
         </div>
       </Hook>
-      {/* Core's List item states the approval list has none of: a disabled row (selected, for its Checkmark), and a row of one line. */}
+      {/* Core's List item states the approval list has none of: a disabled row (selected, which keeps the disabled fill), a row of one line, and Core's Trailing Button as the row's action. */}
       <Hook name="core-list">
         <List aria-label="บัญชี / Accounts">
           <ListRow disabled selected>
@@ -293,6 +293,12 @@ export function Extras() {
           </ListRow>
           <ListRow>
             <ListRowContent><ListRowTitle>บัญชีกระแสรายวัน</ListRowTitle></ListRowContent>
+          </ListRow>
+          <ListRow action={<Button variant="secondary" size="xs" aria-label="เติมเงิน บัญชีเงินฝากประจำ">เติมเงิน</Button>}>
+            <ListRowContent>
+              <ListRowTitle>บัญชีเงินฝากประจำ</ListRowTitle>
+              <ListRowDescription>ครบกำหนด 12 เดือน</ListRowDescription>
+            </ListRowContent>
           </ListRow>
         </List>
       </Hook>

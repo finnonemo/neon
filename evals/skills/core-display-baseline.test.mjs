@@ -131,7 +131,7 @@ test('a list row is Core\'s List item: a 72px two-line row with 12px corners on 
   });
 });
 
-test('a list row\'s states: Active fills it, Focus strokes it, Disabled greys its text, and its Checkmark is the link color', async () => {
+test('a list row\'s states: Active fills it, Focus strokes it, and Disabled greys its text; a selected row takes the Active fill, no Checkmark', async () => {
   assert.deepEqual(await both(listCell('row', { State: 'Active' }), ['bg']), { light: { bg: 'rgba(1, 23, 43, 0.078)' }, dark: { bg: 'rgba(255, 255, 255, 0.122)' } });
   assert.deepEqual(await both(listCell('row', { State: 'Focus' }), ['border']), {
     light: { border: { width: 2, color: 'rgb(105, 104, 239)' } },
@@ -140,7 +140,6 @@ test('a list row\'s states: Active fills it, Focus strokes it, Disabled greys it
   for (const part of ['title', 'subtitle']) {
     assert.deepEqual(await both(listCell(part, { State: 'Disabled' }), ['color']), { light: { color: 'rgba(0, 0, 0, 0.451)' }, dark: { color: 'rgba(255, 255, 255, 0.451)' } }, part);
   }
-  assert.deepEqual(await both(listCell('checkmark')), { light: { color: 'rgb(24, 23, 231)' }, dark: { color: 'rgb(140, 139, 243)' } });
 });
 
 // Table: cells min 56, padding 14 · 8; header Label Footnote Strong in Text/text-secondary on the Header row's Layer/layer-02;

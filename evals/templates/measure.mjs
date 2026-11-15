@@ -182,9 +182,8 @@ export const screens = [
       // What the CDS list has no element for, or draws another way: held to the Core baseline alone.
       rowBox: { neon: '[data-measure=list] li:nth-child(2) [data-slot=list-row]', check: ['pad', 'bg', 'border'], core: listCell('row') },
       rowText: { neon: '[data-measure=list] li:nth-child(2) [data-slot=list-row-content]', check: ['pad'], core: listCell('text') },
-      // A selected row shows Core's Checkmark and keeps the row's fill.
-      selectedRowBox: { neon: '[data-measure=list] li:nth-child(1) [data-slot=list-row]', check: ['bg', 'border'], core: listCell('row') },
-      selectedCheck: { neon: '[data-measure=list] li:nth-child(1) [data-slot=list-row-check]', check: ['color'], core: listCell('checkmark') },
+      // A selected row keeps Core's Active fill (Layer/layer-selected-01 has its value) and shows no Checkmark.
+      selectedRowBox: { neon: '[data-measure=list] li:nth-child(1) [data-slot=list-row]', check: ['bg', 'border'], core: listCell('row', { State: 'Active' }) },
       rowAvatarFill: { neon: '[data-measure=list] li:nth-child(2) [data-slot=avatar-fallback]', check: ['radius', 'bg'], core: avatarCell('circle') },
       rowAvatarLabel: { neon: '[data-measure=list] li:nth-child(2) [data-slot=avatar-fallback]', check: ['font', 'color'], core: avatarCell('label') },
       tagFill: { neon: '[data-measure=list] li:nth-child(3) [data-slot=tag]', check: ['bg', 'color', 'border', 'opacity'], core: tagCell({ Color: 'Green' }) },
@@ -276,7 +275,6 @@ export const screens = [
       disabledRow: { neon: '[data-measure=core-list] li:nth-child(1) [data-slot=list-row]', check: ['h', 'bg', 'border'], core: listCell('row', { State: 'Disabled' }) },
       disabledRowTitle: { neon: '[data-measure=core-list] li:nth-child(1) [data-slot=list-row-title]', check: ['font', 'color'], core: listCell('title', { State: 'Disabled' }) },
       disabledRowDescription: { neon: '[data-measure=core-list] li:nth-child(1) [data-slot=list-row-description]', check: ['font', 'color'], core: listCell('subtitle', { State: 'Disabled' }) },
-      disabledRowCheck: { neon: '[data-measure=core-list] li:nth-child(1) [data-slot=list-row-check]', check: ['color'], core: listCell('checkmark', { State: 'Disabled' }) },
       disabledCheckbox: { neon: '[data-measure=disabled-check] [role=checkbox]', cds: '[data-measure=disabled-check] [data-testid=checkbox-outer]', check: ['border', 'bg', 'opacity'], core: checkboxCell('box', { State: 'Disabled', Selection: 'Checked' }) },
       disabledCheckboxLabel: { neon: '[data-measure=disabled-check] label', cds: '[data-measure=disabled-check] label span[id]', check: ['color', 'opacity'], core: checkboxCell('value', { State: 'Disabled', Selection: 'Checked' }) },
       // Core's Checkbox Selections CDS has no baseline for: held to the Core baseline alone, on the Neon target only.
