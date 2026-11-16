@@ -35,6 +35,7 @@ A pane's width is what the shell leaves after the sidebar and inspector, so it c
 - When a fixed number of equal columns must change count, key the change to the pane's width with a container query on the pane, at a width stated in pixels, not to a viewport breakpoint. Equal `1fr` columns never wrap, so a count that suits a wide pane overflows a narrow one. In Tailwind that is `@container` on the pane's body and `@min-[<width>]:` on the grid, never a viewport prefix (`sm:`, `md:`) inside a pane: Tailwind's named sizes, for viewports and for containers alike, are other widths than the app's breakpoints.
 - Never size a track to its content (`max-content`) around text: one long label then sets the width of the whole grid.
 - Nothing inside a pane is wider than the pane at any breakpoint. Check the pane's own scroll container, not the document, which the shell keeps at the viewport's width.
+- The reviewed [pane grids](../../../examples/pane-grids/README.md) example shows all three: a wrapping row of figures, an `auto-fill` grid of tiles and a form whose columns follow the pane.
 
 ## Surfaces, elevation and radius
 
