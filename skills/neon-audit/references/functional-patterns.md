@@ -13,7 +13,8 @@ The rules hold in any framework and name no component library. Where Core holds 
 
 - Use list rows for settings, search results and record or price rows; use cards for browsing a collection where each item has its own media or story. Tables stay the choice for comparing many records across the same attributes.
 - One leading-media size per list. A row has a title, up to two supporting lines, and a trailing column for the value or status. Show a chevron only when the row opens a deeper level.
-- An action on one record (buy more, open, retry) sits inside that record's row, in its trailing column, never as a button beside the row or in a column of its own.
+- An action on one record (buy more, open, retry) sits inside that record's row, in its trailing column, never as a button beside the row or in a column of its own. On the Neon base, pass it as `ListRow`'s `action`: the row's own button cannot hold a second button, and `action` keeps it inside the row's fill.
+- The selected row, the record a detail pane shows, is marked by its fill alone (`ListRow`'s `selected`, Layer/layer-selected-01) and `aria-current`: no check icon at its end. A check belongs to picking among options, which is a Radio or Checkbox.
 - A list spans the full width of the pane that holds it: no max width narrower than the pane, and no empty column beside it.
 - Separate rows with inset dividers or spacing; no divider after the last row. Do not put a card around each row.
 - Data-dense screens use condensed rows, compact controls and tables rather than smaller type or tighter custom spacing.
