@@ -1,5 +1,5 @@
 // block-engine.mjs: the Block engine (Finnomena's Pattern builder) for Node: Patterns, composed Pages, the text
-// shaper and an SVG rasteriser. Built from Block (github.com/pawisssh/block) commit d0b1460ef3f47c04210793fc077b5ca305bcd5d9
+// shaper and an SVG rasteriser. Built from Block (github.com/pawisssh/block) commit e13128d8d8592121e0efabe8d251d9b57f76f869
 // by `npm run build:engine-bundle`. Do not edit: change Block and build again.
 //
 // Code: MIT License, Copyright (c) 2026 Pawish Gawinseth (Block's LICENSE). It bundles harfbuzzjs (MIT License,
@@ -4377,6 +4377,12 @@ function cellTrend(blocks, grid) {
   const sx = grid.cols > grid.rows ? grid.rows / grid.cols : 1;
   return trendDegrees(cellPoints(blocks, grid).map(([x, y]) => [x * sx, y]));
 }
+function areaTrend(blocks, grid) {
+  const side = Math.min(grid.cols, grid.rows);
+  const sx = side / grid.cols;
+  const sy = side / grid.rows;
+  return trendDegrees(cellPoints(blocks, grid).map(([x, y]) => [x * sx, y * sy]));
+}
 function staircaseSteps(blocks, grid) {
   const tops = Array.from({ length: grid.cols }, () => -1);
   for (const b of blocks) {
@@ -4432,9 +4438,26 @@ function withReferencePatterns(patterns, fn) {
     activePatterns = before;
   }
 }
+var RETIRED_FROM_SET_4 = /* @__PURE__ */ new Set([
+  "14:611",
+  "111:451",
+  "111:510",
+  "386:188",
+  "approved:21",
+  "approved:44",
+  "approved:63",
+  "approved:64",
+  "approved:65",
+  "approved:66"
+]);
+var unretired = null;
+function withoutRetired(patterns) {
+  if (unretired?.from !== patterns) unretired = { from: patterns, list: patterns.filter((p) => !RETIRED_FROM_SET_4.has(p.figmaNode)) };
+  return unretired.list;
+}
 function referencePatternsFor(set) {
   const n = set ?? 1;
-  return n >= UNRELEASED_REFERENCE_SET ? activePatterns : activePatterns.filter((p) => p.set <= n);
+  return n >= UNRELEASED_REFERENCE_SET ? withoutRetired(activePatterns) : activePatterns.filter((p) => p.set <= n);
 }
 function patternMask(blocks, grid) {
   const n = REFERENCE_SIZE;
@@ -4461,29 +4484,97 @@ function maskOverlap(a, b) {
 }
 var REF_CELLS = /* @__PURE__ */ new Map();
 function refCells(ref) {
-  let cells = REF_CELLS.get(ref);
-  if (!cells) {
-    cells = [];
+  let cells2 = REF_CELLS.get(ref);
+  if (!cells2) {
+    cells2 = [];
     const flat = ref.mask.join("");
-    for (let i = 0; i < flat.length; i++) if (flat[i] === "#") cells.push(i);
-    REF_CELLS.set(ref, cells);
+    for (let i = 0; i < flat.length; i++) if (flat[i] === "#") cells2.push(i);
+    REF_CELLS.set(ref, cells2);
   }
-  return cells;
+  return cells2;
 }
 function patternSimilarity(blocks, grid, filter = {}) {
-  const cells = patternMask(blocks, grid);
-  const covered = cells.filter(Boolean).length;
+  const cells2 = patternMask(blocks, grid);
+  const covered = cells2.filter(Boolean).length;
   let best = { iou: 0, match: null };
   for (const ref of filter.set === void 0 ? activePatterns : referencePatternsFor(filter.set)) {
     if (filter.family && ref.family !== filter.family) continue;
     if (filter.slope && ref.slope !== null && ref.slope !== filter.slope) continue;
     const own = refCells(ref);
     let inter = 0;
-    for (const i of own) if (cells[i]) inter++;
+    for (const i of own) if (cells2[i]) inter++;
     const iou = inter / (covered + own.length - inter);
     if (iou > best.iou) best = { iou, match: ref };
   }
   return best;
+}
+
+// packages/core/src/formatFit.ts
+var FIT_TALL_CAP = 1.42;
+var FIT_WIDE_CAP = 2;
+var FIT_COVER_MIN = 0.3;
+var FIT_THIN_MIN = 0.0625;
+var FIT_THIN_MIN_WIDE = 0.1;
+var FIT_THIN_WIDE_FROM = 1.5;
+var FIT_AREA_ATTEMPTS = 24;
+var FIT_PAGE_ATTEMPTS = 4;
+var TALL_PAGE_PASSED_OVER = /* @__PURE__ */ new Set(["approved:31", "approved:34"]);
+var pageWidth = (grid) => grid.cols * grid.cellW;
+var pageHeight = (grid) => grid.rows * grid.cellH;
+function isTopBand(zone, grid) {
+  return zone.mode === "clear" && zone.row === 0 && zone.col === 0 && zone.w >= grid.cols && zone.h * 2 < grid.rows;
+}
+function isTallCapped(grid) {
+  return grid.rows > Math.floor(pageWidth(grid) * FIT_TALL_CAP / grid.cellH);
+}
+function isTallPage(grid) {
+  return pageHeight(grid) > pageWidth(grid);
+}
+function fitFamily(grid, zone, family) {
+  if (zone) return isTopBand(zone, grid) ? "rising" : null;
+  return family === "mountain" && isTallCapped(grid) ? "hanging" : family;
+}
+function fitRegion(grid, zone, family) {
+  const zoneRows = zone ? zone.h : 0;
+  let rows = grid.rows - zoneRows;
+  let cols = grid.cols;
+  let col = 0;
+  let row = zoneRows;
+  let capped = null;
+  const maxRows = Math.floor(cols * grid.cellW * FIT_TALL_CAP / grid.cellH);
+  const maxCols = Math.floor(rows * grid.cellH * FIT_WIDE_CAP / grid.cellW);
+  if (rows > maxRows) {
+    capped = "tall";
+    row = family === "hanging" && !zone ? zoneRows : zoneRows + (rows - maxRows);
+    rows = maxRows;
+  } else if (cols > maxCols) {
+    capped = "wide";
+    col = cols - maxCols;
+    cols = maxCols;
+  }
+  return { col, row, cols, rows, zoneRows, capped };
+}
+function regionGrid(grid, region) {
+  return { cols: region.cols, rows: region.rows, cellW: grid.cellW, cellH: grid.cellH, ...grid.cellPx === void 0 ? {} : { cellPx: grid.cellPx } };
+}
+function thinMinFor(grid, raisedCount = false) {
+  if (raisedCount) return 0;
+  return pageWidth(grid) / pageHeight(grid) > FIT_THIN_WIDE_FROM ? FIT_THIN_MIN_WIDE : FIT_THIN_MIN;
+}
+function thinnestSide(blocks, grid) {
+  const short = Math.min(pageWidth(grid), pageHeight(grid));
+  let thinnest = Infinity;
+  for (const b of blocks) thinnest = Math.min(thinnest, Math.min(b.w * grid.cellW, b.h * grid.cellH) / short);
+  return thinnest;
+}
+function clearTopRows(ref) {
+  let rows = 0;
+  while (rows < ref.mask.length && !ref.mask[rows].includes("#")) rows++;
+  return rows;
+}
+function fitBlockCount(grid, region, squareCount) {
+  const short = Math.min(grid.cols, grid.rows);
+  return Math.max(3, Math.round(squareCount * Math.min(1, region.cols * region.rows / (short * short))));
 }
 
 // packages/core/src/blockSettingRanges.ts
@@ -5026,12 +5117,12 @@ var SHAPE_SETTING_RANGES = {
 };
 
 // packages/core/src/set4Rules.ts
-function set4RuleProblem({ blocks, grid, slope, density, referenceSet, family, keeperCopy }) {
+function set4RuleProblem({ blocks, grid, slope, density, referenceSet, family, keeperCopy, againstArea }) {
   const signed = blockRulesFor({ referenceSet }, density);
   if (!signed) return null;
   if (blockRuleProblem(blocks, signed)) return "smallBlock";
   if (keeperCopy || Math.min(grid.cols, grid.rows) < TREND_MEASURABLE_FROM) return null;
-  const trend = cellTrend(blocks, grid);
+  const trend = againstArea ? areaTrend(blocks, grid) : cellTrend(blocks, grid);
   if (trend === null) return null;
   const [min, max] = SLOPE_TREND_BAND[slope];
   const softUpper = family === "mountain" && slope !== "flat";
@@ -5391,13 +5482,13 @@ function shapeSteps(s, noise, variation, grid, slope, sh) {
     if (dipAt.has(j - 1) || dipAt.has(j + 1)) continue;
     h[j] = Math.min(h[j - 1], h[j + 1]) - s.dipDepth;
   }
-  const band = resolveBand(s, sh);
+  const band2 = resolveBand(s, sh);
   const floor = floorRows(s, grid, sh);
   const top = h.map((v, i) => {
     if (i === n - 1 && (slope === "75" || sh.family === "hanging" && s.endHeight >= 1)) return rows;
     return clamp(Math.round(v * rows), floor + 1, rows);
   });
-  const thick = Math.max(1, Math.round(band.thick * rows));
+  const thick = Math.max(1, Math.round(band2.thick * rows));
   const bottom = top.map((tp) => Math.max(floor, tp - thick));
   for (let pass = 0; pass < 2; pass++) {
     for (let i = 1; i < n; i++) {
@@ -5707,7 +5798,7 @@ function drawPass(input, rng, diag2, waiveTrend) {
   const given = input.shape ?? {};
   const yields = given.lift !== void 0 && given.bandThickness === void 0 ? "bandThickness" : given.bandThickness !== void 0 && given.lift === void 0 ? "lift" : "bandThickness";
   const sh = { family, row, yields };
-  const band = trendBandFor(slope, family);
+  const band2 = trendBandFor(slope, family);
   const reject = (reason) => {
     if (diag2) diag2.rejected[reason]++;
   };
@@ -5731,8 +5822,8 @@ function drawPass(input, rng, diag2, waiveTrend) {
       return cut ? standOnBottom(cutAround(drawn, cut), sh, cut) : drawn;
     };
     let steps = make(s);
-    if (trendAsked && !trendOk(steps, pg, band)) {
-      const fitted = fitStart(s, pg, band, make);
+    if (trendAsked && !trendOk(steps, pg, band2)) {
+      const fitted = fitStart(s, pg, band2, make);
       if (!fitted) {
         reject("trend");
         continue;
@@ -5787,7 +5878,7 @@ function drawPass(input, rng, diag2, waiveTrend) {
       continue;
     }
     const trend = cellTrend(blocks, grid);
-    if (trendAsked && trend !== null && blocks.length >= 2 && (trend < band[0] || trend > band[1])) {
+    if (trendAsked && trend !== null && blocks.length >= 2 && (trend < band2[0] || trend > band2[1])) {
       reject("trend");
       continue;
     }
@@ -5815,12 +5906,12 @@ var trendBandFor = (slope, family) => {
   const [min, max] = SLOPE_TREND_BAND[slope];
   return family === "mountain" && slope !== "flat" ? [min, Infinity] : [min, max];
 };
-var trendOk = (steps, grid, band) => {
+var trendOk = (steps, grid, band2) => {
   if (steps.length < 2) return true;
   const trend = cellTrend(stepBlocks(steps, grid), grid);
-  return trend === null || trend >= band[0] && trend <= band[1];
+  return trend === null || trend >= band2[0] && trend <= band2[1];
 };
-function fitStart(s, grid, band, make) {
+function fitStart(s, grid, band2, make) {
   const rows = grid.rows;
   const home = Math.round(s.startHeight * rows);
   for (let delta = 1; delta <= rows; delta++) {
@@ -5828,18 +5919,189 @@ function fitStart(s, grid, band, make) {
       const r2 = home + sign * delta;
       if (r2 < 1 || r2 > rows) continue;
       const steps = make({ ...s, startHeight: r2 / rows });
-      if (trendOk(steps, grid, band)) return steps;
+      if (trendOk(steps, grid, band2)) return steps;
     }
   }
   return null;
 }
 
+// packages/core/src/candles.ts
+var CANDLE_ATTEMPTS = 200;
+var CANDLE_WIDE_UNDER = 0.5;
+var CANDLE_COVER_MIN_75 = 0.22;
+var LEFT_BLOCK_CHANCE = 0.35;
+var int = (rng, lo, hi) => lo + Math.floor(rng() * (hi - lo + 1));
+var frac = (rng, lo, hi) => lo + rng() * (hi - lo);
+var median2 = (xs) => [...xs].sort((a, b) => a - b)[xs.length >> 1];
+var cells = (b) => b.w * b.h;
+function split(rng, w, lo, hi) {
+  const out = [];
+  let left = w;
+  while (left > 0) {
+    let x = int(rng, lo, Math.max(lo, hi));
+    if (left - x < lo) x = left;
+    out.push(x);
+    left -= x;
+  }
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+}
+function band(rng, x0, w, y0, h, lo, hi, rows) {
+  let x = x0;
+  return split(rng, w, lo, hi).map((bw) => {
+    const b = { col: x, row: rows - y0 - h, w: bw, h };
+    x += bw;
+    return b;
+  });
+}
+function wideCandles(rng, cols, rows, slope, min) {
+  const u = cols / 48;
+  const n = (x) => Math.max(min, Math.round(x * u));
+  if (slope === "flat") {
+    const h02 = int(rng, Math.round(rows * 0.33), Math.round(rows * 0.47));
+    const h12 = int(rng, min, min + 1);
+    const h22 = int(rng, min, min + 1);
+    if (h02 + h12 + h22 > rows) return null;
+    const s12 = Math.round(cols * frac(rng, 0.3, 0.46));
+    const s22 = Math.round(cols * frac(rng, 0.6, 0.78));
+    const candles = [
+      band(rng, 0, cols, 0, h02, n(3), n(6), rows),
+      band(rng, s12, cols - s12, h02, h12, n(8), n(16), rows),
+      band(rng, s22, cols - s22, h02 + h12, h22, n(8), n(18), rows)
+    ];
+    if (rng() < LEFT_BLOCK_CHANCE) {
+      const tw = candles[0][0].w;
+      const th = int(rng, min, h12 + 1);
+      if (tw <= s12 - 2 * min) candles[1].push({ col: 0, row: rows - h02 - th, w: tw, h: th });
+    }
+    return candles;
+  }
+  if (slope === "half") {
+    const short = rng() < 0.5;
+    const h02 = short ? int(rng, min + 1, min + 2) : int(rng, min, min + 1);
+    const h22 = int(rng, min, min + 1);
+    const h12 = int(rng, Math.round(rows * 0.4), Math.round(rows * 0.5));
+    if (h02 + h12 + h22 > rows) return null;
+    const s12 = Math.round(cols * frac(rng, 0.3, 0.42));
+    const s22 = Math.round(cols * frac(rng, 0.68, 0.8));
+    return [
+      band(rng, 0, short ? s22 : cols, 0, h02, n(4), n(9), rows),
+      band(rng, s12, cols - s12, h02, h12, n(3), n(7), rows),
+      band(rng, s22, cols - s22, h02 + h12, h22, n(6), n(14), rows)
+    ];
+  }
+  const h0 = int(rng, Math.round(rows * 0.3), Math.round(rows * 0.42));
+  const h1 = int(rng, min, min + 1);
+  const h2 = rows - h0 - h1;
+  if (h2 < min) return null;
+  const s0 = int(rng, 0, Math.round(cols * 0.15));
+  const w0 = int(rng, Math.max(min, Math.round(cols * 0.13)), Math.round(cols * 0.24));
+  const s1 = s0 + w0 - (rng() < 0.5 ? 0 : int(rng, 1, Math.max(1, w0 - min)));
+  const s2 = s1 + int(rng, Math.round(cols * 0.15), Math.round(cols * 0.35));
+  if (cols - s2 < 2 * min) return null;
+  const e1 = Math.min(cols, s2 + int(rng, Math.round(cols * 0.15), Math.round(cols * 0.3)));
+  return [
+    [{ col: s0, row: rows - h0, w: w0, h: h0 }],
+    band(rng, s1, e1 - s1, h0, h1, Math.round(cols * 0.25), Math.round(cols * 0.55), rows),
+    band(rng, s2, cols - s2, h0 + h1, h2, Math.round(cols * 0.18), Math.round(cols * 0.34), rows)
+  ];
+}
+function tallCandles(rng, cols, rows, slope, thin) {
+  const min = Math.max(thin, cols < 16 ? 1 : 2);
+  const pct3 = (a, b) => Math.max(min, Math.round(rows * frac(rng, a, b)));
+  const col = (a, b) => Math.round(cols * frac(rng, a, b));
+  const candle = (x0, w, y0, h) => {
+    const two = h >= 2 * min && (h > 1.6 * w || h >= Math.round(cols * 0.3) && rng() < 0.7);
+    let heights = [h];
+    if (two) {
+      const a = int(rng, min, h - min);
+      heights = [a, h - a];
+    }
+    let y = y0;
+    return heights.flatMap((hh) => {
+      const lo = Math.max(min, Math.round(cols * 0.17), hh);
+      const hi = Math.max(lo, Math.round(hh * 2.5), Math.round(cols * 0.3));
+      const row = band(rng, x0, w, y, hh, Math.min(lo, w), w >= 2 * lo ? Math.min(hi, w - lo) : hi, rows);
+      y += hh;
+      return row;
+    });
+  };
+  if (slope === "flat") {
+    const h02 = pct3(0.33, 0.45);
+    const h12 = pct3(0.14, 0.24);
+    const h22 = pct3(0.12, 0.22);
+    if (h02 + h12 + h22 > rows) return null;
+    const s12 = col(0.3, 0.46);
+    const s22 = col(0.6, 0.78);
+    const candles = [candle(0, cols, 0, h02), candle(s12, cols - s12, h02, h12), candle(s22, cols - s22, h02 + h12, h22)];
+    if (rng() < LEFT_BLOCK_CHANCE) {
+      const tw = int(rng, Math.max(min, Math.round(cols * 0.12)), Math.max(min, Math.round(cols * 0.2)));
+      const th = int(rng, min, h12 + 1);
+      if (tw <= s12 - 2 * min) candles[0].push({ col: 0, row: rows - h02 - th, w: tw, h: th });
+    }
+    return candles;
+  }
+  if (slope === "half") {
+    const short = rng() < 0.5;
+    const h02 = short ? pct3(0.2, 0.28) : pct3(0.14, 0.22);
+    const h12 = pct3(0.36, 0.48);
+    const h22 = pct3(0.14, 0.24);
+    if (h02 + h12 + h22 > rows) return null;
+    const s12 = col(0.3, 0.42);
+    const s22 = col(0.62, 0.8);
+    return [candle(0, short ? s22 : cols, 0, h02), candle(s12, cols - s12, h02, h12), candle(s22, cols - s22, h02 + h12, h22)];
+  }
+  const h0 = pct3(0.3, 0.42);
+  const h1 = pct3(0.2, 0.32);
+  const h2 = rows - h0 - h1;
+  if (h2 < min) return null;
+  const s0 = int(rng, 0, Math.round(cols * 0.15));
+  const w0 = int(rng, Math.max(min, Math.round(cols * 0.13)), Math.max(min, Math.round(cols * 0.24)));
+  const s1 = s0 + w0 - (rng() < 0.5 ? 0 : int(rng, 1, Math.max(1, w0 - min)));
+  const s2 = s1 + int(rng, Math.round(cols * 0.23), Math.round(cols * 0.4));
+  if (cols - s2 < 2 * min) return null;
+  const e1 = Math.min(cols, s2 + int(rng, Math.round(cols * 0.15), Math.round(cols * 0.3)));
+  return [candle(s0, w0, 0, h0), candle(s1, e1 - s1, h0, h1), candle(s2, cols - s2, h0 + h1, h2)];
+}
+function isWideCandleArea(cols, rows) {
+  return rows / cols <= CANDLE_WIDE_UNDER;
+}
+function drawCandles(rng, cols, rows, slope, thin) {
+  return isWideCandleArea(cols, rows) ? wideCandles(rng, cols, rows, slope, thin) : tallCandles(rng, cols, rows, slope, thin);
+}
+function hasLeftBlock(candles, cols, rows) {
+  const blocks = candles.flat();
+  let before = 0;
+  for (let c = 0; c < cols; c++) {
+    const height = Math.max(0, ...blocks.filter((b) => b.col <= c && c < b.col + b.w).map((b) => rows - b.row));
+    if (height < before) return true;
+    before = height;
+  }
+  return false;
+}
+function candleProblem(candles, cols, rows, slope) {
+  if (isWideCandleArea(cols, rows) || slope === "75") {
+    const sizes2 = candles.map((candle) => median2(candle.map(cells)));
+    if (sizes2.some((size, i) => i > 0 && size < sizes2[i - 1])) return "order";
+  }
+  if (slope !== "75") return null;
+  const [, middle, top] = candles;
+  const topLeft = Math.min(...top.map((b) => b.col));
+  const middleLeft = Math.min(...middle.map((b) => b.col));
+  if (topLeft - middleLeft < Math.round(cols * 0.23) || cols - topLeft < Math.round(cols * 0.3)) return "step";
+  const sizes = candles.flat().map(cells);
+  return Math.max(...sizes) > 2.5 * median2(sizes) ? "slab" : null;
+}
+
 // packages/core/src/freeShapeRanges.ts
 function freeShapeBlockRanges(grid) {
-  const cells = grid.cols * grid.rows;
+  const cells2 = grid.cols * grid.rows;
   return {
-    blockCount: { min: 1, max: cells },
-    smallestBlock: { min: 1, max: cells },
+    blockCount: { min: 1, max: cells2 },
+    smallestBlock: { min: 1, max: cells2 },
     blockProportion: { min: 1, max: Math.max(grid.cols, grid.rows) },
     cornerMeetLimit: { min: 0, max: Math.max(0, (grid.cols - 1) * (grid.rows - 1)) }
   };
@@ -6134,9 +6396,9 @@ function outlineSteps(grid, group, noise) {
     h[j] = Math.min(h[j - 1], h[j + 1]) - (group.dipDepth ?? 0);
   }
   const floor = Math.min(rows - 1, Math.round((group.lift ?? 0) * rows));
-  const band = Math.max(1, Math.round((group.bandThickness ?? 1) * rows));
+  const band2 = Math.max(1, Math.round((group.bandThickness ?? 1) * rows));
   const top = h.map((value) => clamp2(Math.round(value * rows), floor + 1, rows));
-  const bottom = top.map((t) => Math.max(floor, t - band));
+  const bottom = top.map((t) => Math.max(floor, t - band2));
   for (let pass = 0; pass < 2; pass++) {
     for (let i = 1; i < n; i++) {
       if (Math.max(bottom[i], bottom[i - 1]) < Math.min(top[i], top[i - 1])) continue;
@@ -6291,21 +6553,21 @@ function measureClearZoneOverlap(page) {
   const zone = page.textZone;
   if (!zone || zone.mode !== "clear") return NONE;
   const area = zone.w * zone.h;
-  const cells = /* @__PURE__ */ new Set();
+  const cells2 = /* @__PURE__ */ new Set();
   let reachesInterior = false;
   for (const b of page.pattern) {
     const c1 = Math.min(b.col + b.w, zone.col + zone.w);
     const r1 = Math.min(b.row + b.h, zone.row + zone.h);
     for (let c = Math.max(b.col, zone.col); c < c1; c++) {
       for (let r2 = Math.max(b.row, zone.row); r2 < r1; r2++) {
-        cells.add(`${c},${r2}`);
+        cells2.add(`${c},${r2}`);
         if (!inRing(zone, c, r2)) reachesInterior = true;
       }
     }
   }
-  const share = cells.size / area;
+  const share = cells2.size / area;
   return {
-    covered: cells.size,
+    covered: cells2.size,
     area,
     share,
     reachesInterior,
@@ -6504,7 +6766,7 @@ function keepsAnchor(blocks, grid, family) {
   if (family === "hanging") return !bottom && blocks.some((b) => b.row === 0);
   return !blocks.some((b) => b.col === 0);
 }
-function templatePattern(grid, rng, params, zoned, set4) {
+function templatePattern(grid, rng, params, zoned, set4, only) {
   const count = Math.max(1, Math.floor(params.blockCount));
   if (count < 2) return null;
   const { slope, guidance, cornerMeetLimit } = params;
@@ -6512,7 +6774,7 @@ function templatePattern(grid, rng, params, zoned, set4) {
   const set = params.referenceSet ?? 1;
   if (set4) delete set4.copied;
   const refs = shuffled(
-    referencePatternsFor(set).filter((p) => p.slope === slope && (family === "auto" || p.family === family)),
+    referencePatternsFor(set).filter((p) => p.slope === slope && (family === "auto" || p.family === family) && (!only || only(p))),
     rng
   );
   if (refs.length === 0) return null;
@@ -6570,7 +6832,8 @@ function templatePattern(grid, rng, params, zoned, set4) {
           referenceSet: set,
           // Under 'auto' the copy's own Reference tells the family (a mountain keeps only the lower trend edge).
           family: family === "auto" && ref.family === "mountain" ? "mountain" : family,
-          keeperCopy: keeper
+          keeperCopy: keeper,
+          ...set4.againstArea ? { againstArea: true } : {}
         });
         if (broken) {
           set4.rejected[broken]++;
@@ -6808,7 +7071,7 @@ function decompose2(ctx, len, parts, y0, avoid, rng) {
 }
 function buildSkyline(ctx, rng) {
   const { cols, rows } = ctx.grid;
-  const { count, band, shadow, feas } = ctx;
+  const { count, band: band2, shadow, feas } = ctx;
   const minH = ctx.sizes.h[0];
   const spread = 1 + Math.round(ctx.free);
   const kWanted = typicalColumns(ctx.grid) + Math.floor(rng() * (2 * spread + 1)) - spread;
@@ -6899,7 +7162,7 @@ function buildSkyline(ctx, rng) {
   let used = 0;
   const wantedHeight = upper.map((u) => {
     const top = Math.max(minH, u * rows);
-    return band ? Math.max(minH, Math.min(top, thick * rows)) : top;
+    return band2 ? Math.max(minH, Math.min(top, thick * rows)) : top;
   });
   const heightLeft = new Array(k + 1).fill(0);
   for (let i = k - 1; i >= 0; i--) heightLeft[i] = heightLeft[i + 1] + wantedHeight[i];
@@ -6907,7 +7170,7 @@ function buildSkyline(ctx, rng) {
     const pinTop = (ctx.slope === "75" || ctx.pinTop) && i === k - 1;
     const topWanted = pinTop ? rows : Math.max(minH + ctx.lift, upper[i] * rows);
     let lowWanted = 0;
-    if (band) lowWanted = topWanted - thick * rows;
+    if (band2) lowWanted = topWanted - thick * rows;
     const maxLow = ctx.variant !== "rising" && prev.length > 0 ? Math.max(...prev.map((r2) => r2.y0 + r2.h)) - 1 : Infinity;
     lowWanted = Math.min(lowWanted, maxLow);
     let floor = ctx.lift;
@@ -7050,7 +7313,7 @@ function skyline(grid, colourway, rng, params, obstacle, extra = [], lenient = f
   const tintCount = Math.max(1, colourway.tints.length);
   const feas = feasibility(sizes.h, grid.rows);
   const lens = Array.from({ length: grid.rows }, (_, i) => i + 1);
-  let band = rng() < 0.5;
+  let band2 = rng() < 0.5;
   const wantShadow = tintCount >= 2 && rng() < 0.55;
   const shadowHeights = sizes.h.filter((z) => z <= Math.max(sizes.h[0], Math.min(4, grid.rows / 4)));
   const roll = rng();
@@ -7062,7 +7325,7 @@ function skyline(grid, colourway, rng, params, obstacle, extra = [], lenient = f
   const variant = !roomy ? "rising" : chosen !== "auto" ? chosen === "mountain" && slope === "75" ? "rising" : chosen : roll < hangingShare ? "hanging" : roll < hangingShare + mountainShare && slope !== "75" ? "mountain" : "rising";
   const liftedMountain = variant === "mountain" && rng() < 0.5;
   const lift = variant === "hanging" || liftedMountain ? Math.max(1, Math.round(grid.rows * (0.1 + 0.1 * rng()))) : 0;
-  if (lift > 0) band = true;
+  if (lift > 0) band2 = true;
   const inset = variant === "mountain" ? {
     left: Math.max(1, Math.round(grid.cols * (0.15 + 0.12 * rng()))),
     right: Math.max(1, Math.round(grid.cols * (0.04 + 0.06 * rng())))
@@ -7075,7 +7338,7 @@ function skyline(grid, colourway, rng, params, obstacle, extra = [], lenient = f
     lens,
     slope,
     count,
-    band,
+    band: band2,
     shadow: wantShadow && count >= Math.max(6, 2 * Math.ceil(grid.cols / sizes.w[sizes.w.length - 1])),
     shadowHeight: shadowHeights[Math.floor(rng() * shadowHeights.length)],
     obstacle,
@@ -7100,7 +7363,7 @@ function skyline(grid, colourway, rng, params, obstacle, extra = [], lenient = f
   const guided = threshold > 0;
   let scored = 0;
   for (const flip of [false, true]) {
-    ctx.band = flip ? !band : band;
+    ctx.band = flip ? !band2 : band2;
     if (flip && variant !== "rising") {
       ctx.variant = "rising";
       ctx.lift = 0;
@@ -7265,6 +7528,10 @@ function arrangeAroundCover(grid, colourway, rng, params, cover, tintCount, bloc
 }
 function generatePatternDetailed(grid, colourway, rng, params, options = {}) {
   if (params.freeShape && !options.textZone) return generateFreeShape(grid, params, params.freeShape, (params.variation ?? DEFAULT_VARIATION) / 100, rng, options.diagnostics);
+  if (!options.fit && !options.finalGrid && !params.freeShape && usesSet4Rules(params.referenceSet)) {
+    const fitted = drawFitted(grid, colourway, rng, params, options);
+    if (fitted) return fitted;
+  }
   const rules = options.blockRules ?? blockRulesFor(params, options.density);
   const half = halvedGrid(grid);
   if (half) {
@@ -7274,8 +7541,10 @@ function generatePatternDetailed(grid, colourway, rng, params, options = {}) {
       // The half-size Blocks have a quarter of the area once doubled.
       ...rules ? { blockRules: scaledBlockRules(rules, 4) } : {},
       ...options.density ? { density: options.density } : {},
+      ...options.fit ? { fit: options.fit } : {},
       finalGrid: grid
     });
+    if (options.fit?.copyOnly && built2.blocks.length === 0) return built2;
     const blocks = doubleBlocks(built2.blocks, grid);
     const zone = options.textZone;
     const zoneOk = !zone || measureClearZoneOverlap({ pattern: blocks, textZone: zone }).withinLimit;
@@ -7284,7 +7553,7 @@ function generatePatternDetailed(grid, colourway, rng, params, options = {}) {
   const out = options.diagnostics;
   const set4 = set4CheckFor(params, options, grid, rules);
   const built = !out ? generateDetailed(grid, colourway, rng, params, options, null, rules, set4) : diagnosed(out);
-  if (options.textZone?.mode === "flat") return built;
+  if (options.textZone?.mode === "flat" || built.blocks.length === 0) return built;
   const met = maybeAddCornerMeet(built.blocks, grid, rng, params.cornerMeetLimit, params.slope);
   return { ...built, blocks: keepCornerMeet(built.blocks, met, rules, set4, params, built.family) };
   function diagnosed(d) {
@@ -7333,6 +7602,7 @@ function set4CheckFor(params, options, grid, rules) {
     grid: finalGrid,
     ...options.finalGrid ? { expand: (b) => doubleBlocks(b, finalGrid) } : {},
     rejected: { smallBlock: 0, trend: 0 },
+    ...options.fit ? { againstArea: true } : {},
     // The user's own Smallest Block and Block proportion bind a Reference copy too (spec #86); unset, the copy is asked only the signed rules.
     ...rules && setsABlockSetting(params) ? { userRules: rules } : {}
   };
@@ -7346,7 +7616,8 @@ function set4Problem(set4, blocks, params, drawn) {
     density: set4.density,
     referenceSet: params.referenceSet,
     family,
-    keeperCopy: set4.copied?.source === "keeper"
+    keeperCopy: set4.copied?.source === "keeper",
+    ...set4.againstArea ? { againstArea: true } : {}
   });
 }
 function generateDetailed(grid, colourway, rng, params, options, out, rules, set4) {
@@ -7370,7 +7641,7 @@ function generateDetailed(grid, colourway, rng, params, options, out, rules, set
   if (useTemplate) {
     const covers = zone?.mode === "flat" ? coverCandidates(zone, grid, sizes).filter((c) => c.w * c.h / (grid.cols * grid.rows) <= MAX_COVER_SHARE).slice(0, MAX_COVER_TRIES).map((c) => ({ col: c.x, row: grid.rows - c.y0 - c.h, w: c.w, h: c.h })) : [];
     const zoned = !zone ? null : zone.mode === "clear" ? { mode: "clear", zone } : covers.length > 0 ? { mode: "flat", zone, covers } : void 0;
-    const blocks = zoned === void 0 ? null : templatePattern(grid, rng, params, zoned, set4);
+    const blocks = zoned === void 0 ? null : templatePattern(grid, rng, params, zoned, set4, options.fit?.only);
     if (out && set4) {
       out.set4Rejected = {
         smallBlock: (out.set4Rejected?.smallBlock ?? 0) + set4.rejected.smallBlock,
@@ -7381,6 +7652,7 @@ function generateDetailed(grid, colourway, rng, params, options, out, rules, set
     if (blocks && out && set4?.copied) out.copiedSource = set4.copied.source;
     if (blocks) return took("template", { blocks, flatFallback: false, template: true });
   }
+  if (options.fit?.copyOnly) return { blocks: [], flatFallback: false };
   if (rules && set4 && formulaApplies(params, count)) {
     const covers = zone?.mode === "flat" ? coverCandidates(zone, grid, sizes).filter((c) => c.w * c.h / (grid.cols * grid.rows) <= MAX_COVER_SHARE).slice(0, MAX_COVER_TRIES).map((c) => ({ col: c.x, row: grid.rows - c.y0 - c.h, w: c.w, h: c.h })) : [];
     const variant = formulaVariant(grid, params, rng);
@@ -7427,6 +7699,119 @@ function generateDetailed(grid, colourway, rng, params, options, out, rules, set
     if (best) return took("flatCover", { blocks: best.blocks, flatFallback: false });
   }
   return { blocks: around(toObstacle(zone, grid)), flatFallback: zone.mode === "flat" };
+}
+function drawFitted(grid, colourway, rng, params, options) {
+  const zone = options.textZone;
+  let family = fitFamily(grid, zone, params.family ?? "auto");
+  if (family === null) return null;
+  if (drawsCandles(grid, zone, params)) {
+    const candles = drawCandleFit(grid, zone, rng, params, options);
+    if (candles) return candles;
+  }
+  if (family === "auto" && isTallCapped(grid)) {
+    const roll = rng();
+    family = roll < HANGING_SHARE || roll < HANGING_SHARE + MOUNTAIN_SHARE && params.slope !== "75" ? "hanging" : "rising";
+  }
+  const region = fitRegion(grid, zone, family);
+  const thinMin = thinMinFor(grid, params.blockCount > defaultBlockCountFor(grid)) - 1e-9;
+  const only = isTallPage(grid) ? (ref) => !TALL_PAGE_PASSED_OVER.has(ref.figmaNode) : void 0;
+  const short = Math.min(grid.cols, grid.rows);
+  const isDefault = params.blockCount === defaultBlockCountFor(grid);
+  const areaCount = fitBlockCount(grid, region, isDefault ? defaultBlockCountFor({ ...grid, cols: short, rows: short }) : params.blockCount);
+  let attempts = 0;
+  let best = null;
+  const attempt = (reg, blockCount, how, fit) => {
+    attempts++;
+    const diagnostics = options.diagnostics ? {} : void 0;
+    const built = generatePatternDetailed(regionGrid(grid, reg), colourway, rng, { ...params, family, blockCount }, {
+      ...options.density ? { density: options.density } : {},
+      ...diagnostics ? { diagnostics } : {},
+      fit
+    });
+    const blocks = built.blocks.map((b) => ({ ...b, col: b.col + reg.col, row: b.row + reg.row }));
+    const thin = thinnestSide(blocks, grid);
+    const cover = blocks.reduce((sum, b) => sum + b.w * b.h, 0) / (grid.cols * (grid.rows - region.zoneRows));
+    const rules = blocks.length > 0 && checkPatternRules(blocks, grid).ok;
+    const score = (rules ? 4 : 0) + (thin >= thinMin ? 2 : 0) + (cover >= FIT_COVER_MIN ? 1 : 0);
+    return { built, blocks, how, region: reg, thin, cover, rules, score, diagnostics };
+  };
+  const keep = (a) => {
+    if (!best || a.score > best.score || a.score === best.score && a.thin > best.thin + 1e-9) best = a;
+    return a.score === 7;
+  };
+  const finish = (a) => {
+    if (options.diagnostics) {
+      const { col, row, cols, rows, capped } = a.region;
+      Object.assign(options.diagnostics, a.diagnostics, {
+        fit: { how: a.how, family, region: { col, row, cols, rows, capped }, attempts, thin: a.thin, cover: a.cover }
+      });
+    }
+    return { ...a.built, blocks: a.blocks };
+  };
+  if (region.zoneRows > 0 && templateChance(params.guidance) > 0) {
+    const pageRegion = fitRegion(grid, void 0, family);
+    const need = Math.round(REFERENCE_SIZE * Math.max(0, region.zoneRows - pageRegion.row) / pageRegion.rows);
+    const clear = (ref) => clearTopRows(ref) >= need && (!only || only(ref));
+    const pageCount = isDefault ? defaultBlockCountFor(regionGrid(grid, pageRegion)) : params.blockCount;
+    for (let i = 0; i < FIT_PAGE_ATTEMPTS; i++) {
+      const a = attempt(pageRegion, pageCount, "page", { only: clear, copyOnly: true });
+      if (!a.built.template || a.blocks.some((b) => b.row < region.zoneRows)) continue;
+      if (keep(a)) return finish(a);
+    }
+    const kept = best;
+    if (kept && kept.rules && kept.thin >= thinMin) return finish(kept);
+  }
+  for (let i = 0; i < FIT_AREA_ATTEMPTS; i++) {
+    if (keep(attempt(region, areaCount, "area", only ? { only } : {}))) break;
+  }
+  return finish(best);
+}
+function drawsCandles(grid, zone, params) {
+  if (!usesSet4Rules(params.referenceSet) || params.freeShape) return false;
+  const family = fitFamily(grid, zone, params.family ?? "auto");
+  if (family === null) return false;
+  if (!zone && (params.slope !== "75" || family !== "auto" && family !== "rising")) return false;
+  return params.guidance === DEFAULT_GUIDANCE && (params.variation ?? DEFAULT_VARIATION) === DEFAULT_VARIATION && params.blockCount === defaultBlockCountFor(grid) && Object.keys(params.shape ?? {}).length === 0;
+}
+function drawCandleFit(grid, zone, rng, params, options) {
+  const half = halvedGrid(grid);
+  const drawn = half ?? grid;
+  const drawnZone = zone && half ? halveZone(zone) : zone;
+  const steep = params.slope === "75";
+  const zoneRows = drawnZone?.h ?? 0;
+  const at = steep ? fitRegion(drawn, drawnZone, "rising") : { col: 0, row: zoneRows, cols: drawn.cols, rows: drawn.rows - zoneRows, zoneRows, capped: null };
+  const scale = half ? 2 : 1;
+  const col = at.col * scale;
+  const row = at.row * scale;
+  const region = { col, row, cols: Math.min(at.cols * scale, grid.cols - col), rows: Math.min(at.rows * scale, grid.rows - row), capped: at.capped };
+  const area = regionGrid(grid, region);
+  const free = grid.cols * (grid.rows - (zone?.h ?? 0));
+  const thinMin = thinMinFor(grid) - 1e-9;
+  const thinCells = Math.ceil(thinMinFor(drawn) * Math.min(drawn.cols * drawn.cellW, drawn.rows * drawn.cellH) / Math.min(drawn.cellW, drawn.cellH) - 1e-9);
+  const rules = blockRulesFor(params, options.density);
+  for (let attempts = 1; attempts <= CANDLE_ATTEMPTS; attempts++) {
+    const candles = drawCandles(rng, at.cols, at.rows, params.slope, thinCells);
+    if (!candles || candleProblem(candles, at.cols, at.rows, params.slope)) continue;
+    const inArea = candles.flat();
+    if (inArea.some((b) => b.col < 0 || b.row < 0 || b.col + b.w > at.cols || b.row + b.h > at.rows || b.w < 1 || b.h < 1)) continue;
+    const onDrawn = inArea.map((b, i) => ({ id: `block-${i + 1}`, col: b.col + at.col, row: b.row + at.row, w: b.w, h: b.h, tint: 0 }));
+    const blocks = half ? doubleBlocks(onDrawn, grid) : onDrawn;
+    if (zone && blocks.some((b) => b.row < zone.h)) continue;
+    if (!checkPatternRules(blocks, grid).ok) continue;
+    const thin = thinnestSide(blocks, grid);
+    if (thin < thinMin || countCornerMeets(blocks).length > params.cornerMeetLimit) continue;
+    if (rules && blockRuleProblem(blocks, rules)) continue;
+    const read = steep ? blocks.map((b) => ({ ...b, col: b.col - region.col, row: b.row - region.row })) : blocks;
+    if (options.density && set4RuleProblem({ blocks: read, grid: steep ? area : grid, slope: params.slope, density: options.density, referenceSet: params.referenceSet, family: "rising", againstArea: true })) continue;
+    const cover = blocks.reduce((sum, b) => sum + b.w * b.h, 0) / free;
+    if (cover < (steep ? CANDLE_COVER_MIN_75 : FIT_COVER_MIN)) continue;
+    if (options.diagnostics) {
+      const leftBlock = hasLeftBlock(candles, at.cols, at.rows);
+      Object.assign(options.diagnostics, { path: "candles", fit: { how: "area", family: "rising", region, attempts, thin, cover, leftBlock } });
+    }
+    return { blocks, flatFallback: false, family: "rising" };
+  }
+  return null;
 }
 function formulaVariant(grid, params, rng) {
   const chosen = params.family ?? "auto";
@@ -7520,19 +7905,19 @@ function stepEdgeCuts(slot, length, edge = { axis: "x", start: slot.col }) {
   const cuts = [];
   if (edge.axis === "y") {
     const len2 = fadeRampCells(length, edge.start - slot.row);
-    for (let band = 0; band < bands; band++) {
-      const col = slot.col + Math.round(band * slot.w / bands);
-      const end = slot.col + Math.round((band + 1) * slot.w / bands);
-      const h = Math.round(len2 * band / (bands - 1));
+    for (let band2 = 0; band2 < bands; band2++) {
+      const col = slot.col + Math.round(band2 * slot.w / bands);
+      const end = slot.col + Math.round((band2 + 1) * slot.w / bands);
+      const h = Math.round(len2 * band2 / (bands - 1));
       if (h > 0 && end > col) cuts.push({ col, row: edge.start - h, w: end - col, h });
     }
     return cuts;
   }
   const len = fadeRampCells(length, slot.col + slot.w - edge.start);
-  for (let band = 0; band < bands; band++) {
-    const row = slot.row + Math.round(band * slot.h / bands);
-    const end = slot.row + Math.round((band + 1) * slot.h / bands);
-    const w = edge.start - slot.col + Math.round(len * (bands - 1 - band) / (bands - 1));
+  for (let band2 = 0; band2 < bands; band2++) {
+    const row = slot.row + Math.round(band2 * slot.h / bands);
+    const end = slot.row + Math.round((band2 + 1) * slot.h / bands);
+    const w = edge.start - slot.col + Math.round(len * (bands - 1 - band2) / (bands - 1));
     if (w > 0 && end > row) cuts.push({ col: slot.col, row, w, h: end - row });
   }
   return cuts;
@@ -7991,22 +8376,22 @@ function layoutSlotsFor(doc, layout, fadeDirection = DEFAULT_FADE_DIRECTION) {
   const placed = [];
   const collide = [];
   for (const name of PRIORITY) {
-    let cells = candidates.get(name) ?? null;
-    if (!cells) continue;
+    let cells2 = candidates.get(name) ?? null;
+    if (!cells2) continue;
     const backdrop = name === "photo" && spec.photoBackdrop === true;
     if (!backdrop) {
       for (const other of collide) {
-        if (cells && overlaps(cells, other)) cells = cutAround2(cells, other);
+        if (cells2 && overlaps(cells2, other)) cells2 = cutAround2(cells2, other);
       }
     }
-    if (!cells) continue;
-    placed.push([name, cells]);
-    if (!backdrop) collide.push(cells);
+    if (!cells2) continue;
+    placed.push([name, cells2]);
+    if (!backdrop) collide.push(cells2);
   }
   const slots = {};
-  for (const [name, cells] of placed) {
-    if (name === "logo") slots.logo = { cells, px: toPx(cells, grid), anchor: spec.logo, box };
-    else slots[name] = { cells, px: toPx(cells, grid) };
+  for (const [name, cells2] of placed) {
+    if (name === "logo") slots.logo = { cells: cells2, px: toPx(cells2, grid), anchor: spec.logo, box };
+    else slots[name] = { cells: cells2, px: toPx(cells2, grid) };
   }
   return { layout, orientation, slots, textZone, ...spec.photoBackdrop && slots.photo ? { photoBackdrop: true } : {} };
 }
@@ -8028,14 +8413,14 @@ function articleCoverPatternArea(doc, fadeDirection) {
   return { col: 0, row: 0, w: grid.cols, h: zone.row + CLEAR_ZONE_RING_DEPTH };
 }
 function articleCoverEdge(doc, fadeDirection) {
-  const { axis, start: frac } = ARTICLE_COVER_DIRECTIONS[fadeDirection].edge;
+  const { axis, start: frac2 } = ARTICLE_COVER_DIRECTIONS[fadeDirection].edge;
   const grid = gridFor(doc);
   const photo = layoutSlotsFor(doc, "article-cover", fadeDirection).slots.photo.cells;
   if (axis === "x") {
-    const start2 = clamp4(Math.round(frac * grid.cols), photo.col, photo.col + photo.w);
+    const start2 = clamp4(Math.round(frac2 * grid.cols), photo.col, photo.col + photo.w);
     return { axis, start: start2, room: photo.col + photo.w - start2 };
   }
-  const start = clamp4(Math.round(frac * grid.rows), photo.row, photo.row + photo.h);
+  const start = clamp4(Math.round(frac2 * grid.rows), photo.row, photo.row + photo.h);
   return { axis, start, room: start - photo.row };
 }
 function fadeLengthMax(doc, fadeDirection) {
@@ -9929,10 +10314,10 @@ function fillUnderSlot(doc, pageIndex, slot) {
   const col1 = Math.min(grid.cols, slot.col + slot.w);
   const row1 = Math.min(grid.rows, slot.row + slot.h);
   const covered = /* @__PURE__ */ new Map();
-  let cells = 0;
+  let cells2 = 0;
   for (let c = col0; c < col1; c++) {
     for (let r2 = row0; r2 < row1; r2++) {
-      cells++;
+      cells2++;
       for (let i = pattern.length - 1; i >= 0; i--) {
         const b = pattern[i];
         if (c >= b.col && c < b.col + b.w && r2 >= b.row && r2 < b.row + b.h) {
@@ -9944,7 +10329,7 @@ function fillUnderSlot(doc, pageIndex, slot) {
   }
   let fill = fills.background;
   let onBlock = false;
-  let best = cells - [...covered.values()].reduce((sum, n) => sum + n, 0);
+  let best = cells2 - [...covered.values()].reduce((sum, n) => sum + n, 0);
   for (const [i, n] of covered) {
     if (n > best) {
       best = n;
@@ -9963,10 +10348,10 @@ function uniformFillUnder(doc, pageIndex, rect2) {
   const x1 = Math.min(grid.cols * grid.cellW, rect2.x + rect2.w);
   const y1 = Math.min(grid.rows * grid.cellH, rect2.y + rect2.h);
   if (x1 <= x0 || y1 <= y0) return fills.background;
-  const cells = cellsCovering({ x: x0, y: y0, w: x1 - x0, h: y1 - y0 }, grid);
+  const cells2 = cellsCovering({ x: x0, y: y0, w: x1 - x0, h: y1 - y0 }, grid);
   let found = null;
-  for (let c = cells.col; c < cells.col + cells.w; c++) {
-    for (let r2 = cells.row; r2 < cells.row + cells.h; r2++) {
+  for (let c = cells2.col; c < cells2.col + cells2.w; c++) {
+    for (let r2 = cells2.row; r2 < cells2.row + cells2.h; r2++) {
       let fill = fills.background;
       for (let i = pattern.length - 1; i >= 0; i--) {
         const b = pattern[i];
@@ -10028,11 +10413,11 @@ function logoNotch(doc, pageIndex = 0) {
   const photo = layoutSlotsFor(doc, "article-cover", direction).slots.photo?.cells;
   const placement = logoPlacement(doc, pageIndex);
   if (!photo || !placement) return void 0;
-  const cells = cellsCovering(withClearSpace(placement.box), gridFor(doc));
-  const col = Math.max(cells.col, photo.col);
-  const row = Math.max(cells.row, photo.row);
-  const w = Math.min(cells.col + cells.w, photo.col + photo.w) - col;
-  const h = Math.min(cells.row + cells.h, photo.row + photo.h) - row;
+  const cells2 = cellsCovering(withClearSpace(placement.box), gridFor(doc));
+  const col = Math.max(cells2.col, photo.col);
+  const row = Math.max(cells2.row, photo.row);
+  const w = Math.min(cells2.col + cells2.w, photo.col + photo.w) - col;
+  const h = Math.min(cells2.row + cells2.h, photo.row + photo.h) - row;
   return w > 0 && h > 0 ? { col, row, w, h } : void 0;
 }
 
@@ -10399,7 +10784,7 @@ function wrap(p, maxUnits) {
   lines.push({ start, end, overflows: span(start, end) > maxUnits });
   return lines;
 }
-function layoutPrepared(shaper, prepared, options) {
+function layoutPrepared(prepared, options) {
   const { size, leading, width: boxWidth, align = "left" } = options;
   if (!(size > 0)) throw new RangeError("Text size must be positive");
   if (!(leading > 0)) throw new RangeError("Leading must be positive");
@@ -10459,7 +10844,7 @@ function layoutPrepared(shaper, prepared, options) {
   };
 }
 function layoutText(shaper, markup, options) {
-  return layoutPrepared(shaper, prepareText(shaper, markup, options.face), options);
+  return layoutPrepared(prepareText(shaper, markup, options.face), options);
 }
 function fitText(shaper, markup, options) {
   const prepared = prepareText(shaper, markup, options.face);
@@ -10467,7 +10852,7 @@ function fitText(shaper, markup, options) {
   const { maxSize, width, height, leading, align } = options;
   let layout;
   for (let size = Math.max(min, Math.floor(maxSize)); size >= min; size--) {
-    layout = layoutPrepared(shaper, prepared, { size, leading, width, align });
+    layout = layoutPrepared(prepared, { size, leading, width, align });
     if (!layout.overflowX && layout.height <= height + 1e-6) return { size, fits: true, layout };
   }
   return { size: layout.size, fits: false, layout };
@@ -10524,7 +10909,7 @@ function fitInSlot(shaper, markup, face, leading, slot, maxSize, align, highligh
   for (let size = Math.max(1, Math.floor(maxSize)); size >= 1; size--) {
     const unit = prepared.tittle * size / prepared.upem;
     const width = slot.w - (hasRuns ? 1.5 * unit : 0);
-    const layout = layoutPrepared(shaper, prepared, { size, leading, width, align });
+    const layout = layoutPrepared(prepared, { size, leading, width, align });
     let top = reach.top * size;
     let bottom = reach.bottom * size;
     let left = 0;
@@ -10640,14 +11025,14 @@ function composeScene(doc, pageIndex, shaper, options = {}) {
     }
     const { runs } = parseMarkup(headlineMarkup);
     const inRun = (offset) => runs.some((r2) => offset >= r2.start && offset < r2.end);
-    const split = (keep) => ({
+    const split2 = (keep) => ({
       ...layout,
       lines: layout.lines.map((line) => ({ ...line, glyphs: line.glyphs.filter((g) => inRun(g.cluster) === keep) }))
     });
     const outlines = [];
     if (withOutlines) {
-      outlines.push({ role: "headline", d: layoutOutline(shaper, split(false), x, y), fill: colour });
-      if (runs.length > 0) outlines.push({ role: "headline-highlight", d: layoutOutline(shaper, split(true), x, y), fill: highlightColour });
+      outlines.push({ role: "headline", d: layoutOutline(shaper, split2(false), x, y), fill: colour });
+      if (runs.length > 0) outlines.push({ role: "headline-highlight", d: layoutOutline(shaper, split2(true), x, y), fill: highlightColour });
     }
     const runsOf = (line) => {
       const pieces = [];
@@ -11284,7 +11669,8 @@ var ORIGIN_LABEL = {
   flatCover: "flat-zone cover",
   fallback: "fallback",
   formula: "formula",
-  freeShape: "free shape"
+  freeShape: "free shape",
+  candles: "candles"
 };
 var pct = (share) => `${Math.round(share * 100)}%`;
 var within = (value, range) => value >= range.min && value <= range.max;
@@ -11462,9 +11848,11 @@ var NEAR_DUPLICATE = 0.85;
 var MAX_REROLLS = 20;
 var LOOSER_GUIDANCE = [60, 30, 0];
 var REROLLS_PER_STEP = 8;
-function candidateFamilies(doc, setSeed) {
+var CANDLE_LEFT_BLOCKS = 4;
+function candidateFamilies(doc, setSeed, pageIndex = 0) {
   const chosen = doc.generator.family ?? "auto";
   if (chosen !== "auto") return Array(CANDIDATE_COUNT).fill(chosen);
+  if (drawsCandlesOn(doc, pageIndex)) return Array(CANDIDATE_COUNT).fill("rising");
   const counts = doc.generator.slope === "75" ? [["rising", 7], ["hanging", 5]] : [["rising", 6], ["hanging", 4], ["mountain", 2]];
   const families = counts.flatMap(([family, n]) => Array(n).fill(family));
   const rng = createRng(`${setSeed}-families`);
@@ -11474,13 +11862,17 @@ function candidateFamilies(doc, setSeed) {
   }
   return families;
 }
-function candidateTries(doc, setSeed, index) {
+function drawsCandlesOn(doc, pageIndex) {
+  const referenceSet = rollReferenceSet(doc.generator.referenceSet);
+  return drawsCandles(gridFor(doc), doc.pages[pageIndex]?.textZone, { ...doc.generator, referenceSet });
+}
+function candidateTries(doc, setSeed, index, candles) {
   const seed = `${setSeed}-${index + 1}`;
   const own = doc.generator.guidance;
   const tries = [{ seed, guidance: own }];
   for (let k = 1; k <= MAX_REROLLS; k++) tries.push({ seed: `${seed}r${k}`, guidance: own });
   for (const guidance of LOOSER_GUIDANCE.filter((g) => g < own)) {
-    for (let k = 0; k < REROLLS_PER_STEP; k++) tries.push({ seed: `${seed}g${guidance}r${k}`, guidance });
+    for (let k = 0; k < REROLLS_PER_STEP; k++) tries.push({ seed: `${seed}g${guidance}r${k}`, guidance: candles ? own : guidance });
   }
   return tries;
 }
@@ -11491,29 +11883,39 @@ function* candidateSet(doc, setSeed, options = {}) {
   const grid = gridFor(doc);
   const colourway = getColourway(doc.colourway);
   const zone = page.textZone ? { textZone: page.textZone } : {};
-  const families = candidateFamilies(doc, setSeed);
+  const referenceSet = rollReferenceSet(doc.generator.referenceSet);
+  const candles = drawsCandlesOn(doc, pageIndex);
+  const families = candidateFamilies(doc, setSeed, pageIndex);
   const taken = [];
+  const fitted = usesSet4Rules(referenceSet) && !doc.generator.freeShape && fitFamily(grid, page.textZone, "auto") !== null;
+  const thinMin = thinMinFor(grid, doc.generator.blockCount > defaultBlockCountFor(grid)) - 1e-9;
+  let leftBlocks = 0;
   for (let index = 0; index < CANDIDATE_COUNT; index++) {
     let best = null;
     let failure;
-    for (const { seed, guidance } of candidateTries(doc, setSeed, index)) {
+    for (const { seed, guidance } of candidateTries(doc, setSeed, index, candles)) {
       if (best || failure) yield void 0;
-      const params = { ...doc.generator, family: families[index], guidance, referenceSet: rollReferenceSet(doc.generator.referenceSet) };
-      const { blocks, freeShapeFailure } = generatePatternDetailed(grid, colourway, createRng(seed), params, { ...zone, density: doc.density });
+      const params = { ...doc.generator, family: families[index], guidance, referenceSet };
+      const diagnostics = {};
+      const { blocks, freeShapeFailure } = generatePatternDetailed(grid, colourway, createRng(seed), params, { ...zone, density: doc.density, ...candles ? { diagnostics } : {} });
       if (freeShapeFailure) {
         failure = freeShapeFailure;
         continue;
       }
       const mask = patternMask(blocks, grid);
       const overlap = Math.max(0, ...taken.map((t) => maskOverlap(t, mask)));
-      if (!best || overlap < best.overlap) best = { candidate: { seed, pattern: blocks }, mask, overlap };
-      if (overlap < NEAR_DUPLICATE) break;
+      const thin = fitted && thinnestSide(blocks, grid) < thinMin;
+      const leftBlock = diagnostics.fit?.leftBlock === true;
+      const spare = thin || leftBlock && leftBlocks >= CANDLE_LEFT_BLOCKS;
+      if (!best || best.spare && !spare || best.spare === spare && overlap < best.overlap) best = { candidate: { seed, pattern: blocks }, mask, overlap, spare, leftBlock };
+      if (!spare && overlap < NEAR_DUPLICATE) break;
     }
     if (!best) {
       yield { index, rejected: freeShapeRejection(failure) };
       return;
     }
     taken.push(best.mask);
+    if (best.leftBlock) leftBlocks++;
     yield { index, candidate: best.candidate };
   }
 }
@@ -11551,13 +11953,13 @@ function keeperBlocker(format, density, hasTextZone) {
 function keeperMask(blocks, grid) {
   const n = REFERENCE_SIZE;
   const scale = n / grid.cols;
-  const cells = Array.from({ length: n }, () => Array(n).fill("."));
+  const cells2 = Array.from({ length: n }, () => Array(n).fill("."));
   for (const b of blocks) {
     for (let r2 = Math.max(0, b.row * scale); r2 < Math.min(n, (b.row + b.h) * scale); r2++) {
-      for (let c = Math.max(0, b.col * scale); c < Math.min(n, (b.col + b.w) * scale); c++) cells[r2][c] = "#";
+      for (let c = Math.max(0, b.col * scale); c < Math.min(n, (b.col + b.w) * scale); c++) cells2[r2][c] = "#";
     }
   }
-  return cells.map((row) => row.join(""));
+  return cells2.map((row) => row.join(""));
 }
 function maskFamily(mask) {
   const left = mask.some((r2) => r2[0] === "#");
@@ -11701,13 +12103,13 @@ function search(side, family, slope, cornerMeetLimit) {
         for (const b of blocks)
           for (let row = b.row; row < b.row + b.h; row++)
             for (let col = b.col; col < b.col + b.w; col++) filled[row * side + col] = true;
-        const cells = filled.map((on) => on ? "#" : ".").join("");
+        const cells2 = filled.map((on) => on ? "#" : ".").join("");
         const largest = blocks.reduce((a, b) => b.w * b.h > a.w * a.h ? b : a);
-        const key = `${cells}|${largest.w}x${largest.h}`;
+        const key = `${cells2}|${largest.w}x${largest.h}`;
         if (found.has(key)) continue;
         found.set(key, {
           settings: { ...settings, seed },
-          cells,
+          cells: cells2,
           largestBlock: { w: largest.w, h: largest.h },
           edgeJoined: joinedByEdges(filled, side),
           sample: patternMask(blocks, grid)
@@ -12024,6 +12426,12 @@ export {
   FACE_IDS,
   FADE_DIRECTIONS,
   FADE_LENGTH_RANGE,
+  FIT_COVER_MIN,
+  FIT_TALL_CAP,
+  FIT_THIN_MIN,
+  FIT_THIN_MIN_WIDE,
+  FIT_THIN_WIDE_FROM,
+  FIT_WIDE_CAP,
   FORMATS,
   FREE_SHAPE_DEFAULT,
   FREE_SHAPE_SETTINGS,
@@ -12060,6 +12468,7 @@ export {
   RECOMMENDED_MAX_FACTOR,
   REFERENCE_PATTERNS,
   REFERENCE_SIZE,
+  RETIRED_FROM_SET_4,
   SECONDARY_MAX_OF_SHORT,
   SECONDARY_OF_HEADLINE,
   SHAPE_SETTINGS,
@@ -12068,6 +12477,7 @@ export {
   SLOPES2 as SLOPES,
   SLOPE_TREND_BAND,
   SQUARE_FORMAT,
+  TALL_PAGE_PASSED_OVER,
   TEXT_NAVY,
   TEXT_WHITE,
   TICKER_HEIGHT_OF_CAP,
@@ -12076,6 +12486,7 @@ export {
   UNRELEASED_REFERENCE_SET,
   WICK_LENGTH,
   WICK_WIDTH,
+  areaTrend,
   articleCoverEdge,
   articleCoverPatternArea,
   articleCoverSettings,
@@ -12119,6 +12530,7 @@ export {
   defaultGeneratorParams,
   densityLevelsFor,
   deserialize,
+  drawsCandles,
   encodePng,
   encodeShareLink,
   encodeShareLinkDetailed,
@@ -12128,6 +12540,9 @@ export {
   fadeLengthMax,
   fadeRampCells,
   fillUnderSlot,
+  fitBlockCount,
+  fitFamily,
+  fitRegion,
   fitText,
   formatDensityLabel,
   formulaFamilyFor,
@@ -12150,7 +12565,10 @@ export {
   isAllCapsHeadline,
   isHandEdited,
   isPageEdited,
+  isTallCapped,
+  isTallPage,
   isTemplateModeCertain,
+  isTopBand,
   isValidBlockSize,
   itemizeScripts,
   keeperBlocker,
@@ -12215,6 +12633,8 @@ export {
   stepEdgeCuts,
   templateMask,
   textColourFor,
+  thinMinFor,
+  thinnestSide,
   tintFill,
   toReferencePattern,
   transformPath,
