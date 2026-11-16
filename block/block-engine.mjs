@@ -1,5 +1,5 @@
 // block-engine.mjs: the Block engine (Finnomena's Pattern builder) for Node: Patterns, composed Pages, the text
-// shaper and an SVG rasteriser. Built from Block (github.com/pawisssh/block) commit e13128d8d8592121e0efabe8d251d9b57f76f869
+// shaper and an SVG rasteriser. Built from Block (github.com/pawisssh/block) commit daed41d1e04f3229b4be93119bf89e46f3eeb049
 // by `npm run build:engine-bundle`. Do not edit: change Block and build again.
 //
 // Code: MIT License, Copyright (c) 2026 Pawish Gawinseth (Block's LICENSE). It bundles harfbuzzjs (MIT License,
@@ -4377,6 +4377,30 @@ function cellTrend(blocks, grid) {
   const sx = grid.cols > grid.rows ? grid.rows / grid.cols : 1;
   return trendDegrees(cellPoints(blocks, grid).map(([x, y]) => [x * sx, y]));
 }
+function disjointBlockTrend(blocks, grid) {
+  const sx = grid.cols > grid.rows ? grid.rows / grid.cols : 1;
+  let n = 0;
+  let sumX = 0;
+  let sumY = 0;
+  let sumXX = 0;
+  let sumXY = 0;
+  for (const b of blocks) {
+    const a = b.col + 0.5;
+    const y0 = grid.rows - b.row - b.h + 0.5;
+    const xs = b.w * a + b.w * (b.w - 1) / 2;
+    const ys = b.h * y0 + b.h * (b.h - 1) / 2;
+    n += b.w * b.h;
+    sumX += b.h * xs;
+    sumY += b.w * ys;
+    sumXX += b.h * (b.w * a * a + a * b.w * (b.w - 1) + (b.w - 1) * b.w * (2 * b.w - 1) / 6);
+    sumXY += xs * ys;
+  }
+  if (n < 2) return null;
+  const sxx = (sumXX - sumX * sumX / n) * sx * sx;
+  const sxy = (sumXY - sumX * sumY / n) * sx;
+  if (sxx <= 0) return 0;
+  return Math.atan(sxy / sxx) * 180 / Math.PI;
+}
 function areaTrend(blocks, grid) {
   const side = Math.min(grid.cols, grid.rows);
   const sx = side / grid.cols;
@@ -4420,13 +4444,15 @@ function toReferencePattern({ figmaNode, source, mask, family: given, slope: cho
 }
 var REFERENCE_PATTERNS = REFERENCE_PATTERN_MASKS.map(toReferencePattern);
 var AREA_RESAMPLE_SET = 3;
-var LATEST_REFERENCE_SET = 3;
-var UNRELEASED_REFERENCE_SET = 4;
+var LATEST_REFERENCE_SET = 4;
+var UNRELEASED_REFERENCE_SET = 5;
 function rollReferenceSet(current2) {
   return Math.max(LATEST_REFERENCE_SET, current2 ?? 0);
 }
+var RANGES_MEASURED_ON_SET = 3;
+var SET_4 = 4;
 function usesSet4Rules(referenceSet) {
-  return (referenceSet ?? 1) >= UNRELEASED_REFERENCE_SET;
+  return (referenceSet ?? 1) >= SET_4;
 }
 var activePatterns = REFERENCE_PATTERNS;
 function withReferencePatterns(patterns, fn) {
@@ -4451,13 +4477,18 @@ var RETIRED_FROM_SET_4 = /* @__PURE__ */ new Set([
   "approved:66"
 ]);
 var unretired = null;
-function withoutRetired(patterns) {
-  if (unretired?.from !== patterns) unretired = { from: patterns, list: patterns.filter((p) => !RETIRED_FROM_SET_4.has(p.figmaNode)) };
-  return unretired.list;
+function withoutRetired(patterns, set) {
+  if (unretired?.from !== patterns) unretired = { from: patterns, bySet: /* @__PURE__ */ new Map() };
+  let list = unretired.bySet.get(set);
+  if (!list) {
+    list = patterns.filter((p) => p.set <= set && !RETIRED_FROM_SET_4.has(p.figmaNode));
+    unretired.bySet.set(set, list);
+  }
+  return list;
 }
 function referencePatternsFor(set) {
   const n = set ?? 1;
-  return n >= UNRELEASED_REFERENCE_SET ? withoutRetired(activePatterns) : activePatterns.filter((p) => p.set <= n);
+  return n >= SET_4 ? withoutRetired(activePatterns, n) : activePatterns.filter((p) => p.set <= n);
 }
 function patternMask(blocks, grid) {
   const n = REFERENCE_SIZE;
@@ -4641,8 +4672,10 @@ var SIGNED_BLOCK_THRESHOLDS = {
 
 // packages/core/src/blockThresholds.ts
 var TABLE = SIGNED_BLOCK_THRESHOLDS;
+var SIGNED_SETS = Object.keys(TABLE).map(Number).sort((a, b) => b - a);
 function blockThresholdsFor(referenceSet, density) {
-  return TABLE[referenceSet ?? 1]?.[density];
+  const signed = SIGNED_SETS.find((n) => n <= (referenceSet ?? 1));
+  return signed === void 0 ? void 0 : TABLE[signed]?.[density];
 }
 function blockSettingRangesFor(density) {
   return BLOCK_SETTING_RANGES.densities[density];
@@ -5294,11 +5327,11 @@ function keeperIsOnBrand(keeper) {
   return set4RuleProblem({ blocks, grid, slope: keeper.slope, density: "fine", referenceSet: UNRELEASED_REFERENCE_SET, family }) !== "trend" && slopeShapeProblem(blocks, grid, keeper.slope) === null;
 }
 function measuredReferencePatterns() {
-  const released = referencePatternsFor(LATEST_REFERENCE_SET);
+  const released = referencePatternsFor(RANGES_MEASURED_ON_SET);
   const keepers = referencePatternsFor(UNRELEASED_REFERENCE_SET).filter(
     (p) => p.source === "keeper" && p.set > LATEST_REFERENCE_SET && keeperIsOnBrand(p)
   );
-  return keepers.length === 0 ? { patterns: released, referenceSet: LATEST_REFERENCE_SET } : { patterns: [...released, ...keepers], referenceSet: UNRELEASED_REFERENCE_SET };
+  return keepers.length === 0 ? { patterns: released, referenceSet: RANGES_MEASURED_ON_SET } : { patterns: [...released, ...keepers], referenceSet: UNRELEASED_REFERENCE_SET };
 }
 function measureShapeRanges(patterns, referenceSet) {
   const rows = [];
@@ -5906,9 +5939,11 @@ var trendBandFor = (slope, family) => {
   const [min, max] = SLOPE_TREND_BAND[slope];
   return family === "mountain" && slope !== "flat" ? [min, Infinity] : [min, max];
 };
+var CELL_TREND_UP_TO = 4096;
 var trendOk = (steps, grid, band2) => {
   if (steps.length < 2) return true;
-  const trend = cellTrend(stepBlocks(steps, grid), grid);
+  const blocks = stepBlocks(steps, grid);
+  const trend = grid.cols * grid.rows > CELL_TREND_UP_TO ? disjointBlockTrend(blocks, grid) : cellTrend(blocks, grid);
   return trend === null || trend >= band2[0] && trend <= band2[1];
 };
 function fitStart(s, grid, band2, make) {
@@ -12465,6 +12500,7 @@ export {
   PRESET_REFERENCE_SET,
   PRIMARY_NAVY_YELLOW,
   PhotoBakeError,
+  RANGES_MEASURED_ON_SET,
   RECOMMENDED_MAX_FACTOR,
   REFERENCE_PATTERNS,
   REFERENCE_SIZE,
@@ -12530,6 +12566,7 @@ export {
   defaultGeneratorParams,
   densityLevelsFor,
   deserialize,
+  disjointBlockTrend,
   drawsCandles,
   encodePng,
   encodeShareLink,
