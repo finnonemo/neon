@@ -70,7 +70,7 @@ The [functional patterns](../../neon-audit/references/functional-patterns.md) an
 
 - **Actions:** `Button` takes `variant` (`primary`, `secondary`, `tertiary`, `negative`) and `compact`.
 - **Lists:** `ListCell` takes `title`, `description`, `media`, `detail` and `subdetail` for the trailing value, `end` for a trailing control, `accessory="arrow"` for the chevron and `spacingVariant="condensed"` (`compact` is deprecated). `Divider` separates groups.
-- **Overlays:** `Tray` takes `pin` (`bottom`, `left`, `right`, …), `title` and `footer`; pick `pin` from the breakpoint tier, read with `useBreakpointTier` in the CDS starter.
+- **Overlays:** `Tray` takes `pin` (`bottom`, `left`, `right`, …), `title` and `footer`; pick `pin` from the breakpoint, read with `useBreakpointTier` in the CDS starter.
 - **Empty and loading:** `Fallback` draws skeleton placeholders; pictograms come at 48×48 or 64×64.
 - **Icons:** `Icon` takes `size` (`xs`, `s`, `m`, `l`; default `m`) and `active` for the selected navigation icon.
 - **Motion:** CDS components animate themselves. For custom transitions, CDS uses 100–150ms for controls, 200–300ms for drawers and modals and 350–500ms for page transitions.

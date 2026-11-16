@@ -7,7 +7,7 @@ The rules hold in any framework and name no component library. Where Core holds 
 ## Actions
 
 - Which action is primary, secondary or tertiary, how many primaries a screen, panel, sheet or dialog holds, and the destructive flow are Core's [hierarchy rules](../../../core/hierarchy.md): rules 1–6, and the owner's call H2 for the destructive flow. Row actions are secondary or tertiary, even when they are the most frequent action.
-- On narrow tiers, a form, confirmation or other focused flow puts its actions in a dock fixed to the bottom of the viewport. Their order, when they stack or sit side by side and how many the dock holds are Core's [Button dock](../../../core/components/button-dock.md#usage), Usage and Hierarchy. When the shell shows a bottom tab bar, the dock sits above it, or the flow hides the tab bar while it is open; the two never overlap. Leave room at the end of the content so the dock does not cover the last field.
+- At narrow breakpoints, a form, confirmation or other focused flow puts its actions in a dock fixed to the bottom of the viewport. Their order, when they stack or sit side by side and how many the dock holds are Core's [Button dock](../../../core/components/button-dock.md#usage), Usage and Hierarchy. When the shell shows a bottom tab bar, the dock sits above it, or the flow hides the tab bar while it is open; the two never overlap. Leave room at the end of the content so the dock does not cover the last field.
 
 ## Lists before cards
 
@@ -24,7 +24,7 @@ The rules hold in any framework and name no component library. Where Core holds 
 ## Panes
 
 - Beside the sidebar, a screen shows at most two panes: a list and the record selected in it. A deeper level of that record (one document, one order) replaces the detail pane with a back control, or opens in a sheet; it never adds a third column.
-- A back control is an icon-only button, the arrow alone, on every tier and on web and app alike, with where it goes as its accessible name (`aria-label`). Never an arrow with a visible label.
+- A back control is an icon-only button, the arrow alone, at every breakpoint and on web and app alike, with where it goes as its accessible name (`aria-label`). Never an arrow with a visible label.
 - Columns side by side that each scroll on their own are for a board or for records compared in columns, not for drilling down.
 
 ## Grids inside a pane
@@ -32,9 +32,9 @@ The rules hold in any framework and name no component library. Where Core holds 
 A pane's width is what the shell leaves after the sidebar and inspector, so it changes at other widths than the viewport, and the shell clips a pane that overflows rather than scrolling the page.
 
 - A collection of tiles whose count is not fixed takes a grid that wraps by itself: `repeat(auto-fill, minmax(<smallest useful tile>, 1fr))`. It needs no breakpoint.
-- When a fixed number of equal columns must change count, key the change to the pane's width with a container query on the pane, not to a viewport breakpoint. Equal `1fr` columns never wrap, so a count that suits a wide pane overflows a narrow one.
+- When a fixed number of equal columns must change count, key the change to the pane's width with a container query on the pane, at a width stated in pixels, not to a viewport breakpoint. Equal `1fr` columns never wrap, so a count that suits a wide pane overflows a narrow one. In Tailwind that is `@container` on the pane's body and `@min-[<width>]:` on the grid, never a viewport prefix (`sm:`, `md:`) inside a pane: Tailwind's named sizes, for viewports and for containers alike, are other widths than the app's breakpoints.
 - Never size a track to its content (`max-content`) around text: one long label then sets the width of the whole grid.
-- Nothing inside a pane is wider than the pane at any tier. Check the pane's own scroll container, not the document, which the shell keeps at the viewport's width.
+- Nothing inside a pane is wider than the pane at any breakpoint. Check the pane's own scroll container, not the document, which the shell keeps at the viewport's width.
 
 ## Surfaces, elevation and radius
 
@@ -43,8 +43,8 @@ A pane's width is what the shell leaves after the sidebar and inspector, so it c
 
 ## Overlays
 
-- Which overlay a secondary task opens in, and how that changes from narrow to wide tiers, is Core's choice by what the overlay holds: the "Not for" lines in the Usage of Core's [Sheet](../../../core/components/sheet.md#usage), [Popover](../../../core/components/popover.md#usage) and [Alert](../../../core/components/alert.md#usage). Those are Core's component names, not an app's: on the Neon base the snapshot's index gives each item's Counterpart. Core has no sheet from the side, so new work does not choose one.
-- At desktop width a sheet is centred, never a mobile sheet rising from the bottom edge: Core's Sheet Placement centres it at Regular width. On the Neon base, the `sheet` item's bottom side does this itself from the `lg` tier (988px); do not override its placement or choose a left or right side to get a desktop look.
+- Which overlay a secondary task opens in, and how that changes from narrow to wide breakpoints, is Core's choice by what the overlay holds: the "Not for" lines in the Usage of Core's [Sheet](../../../core/components/sheet.md#usage), [Popover](../../../core/components/popover.md#usage) and [Alert](../../../core/components/alert.md#usage). Those are Core's component names, not an app's: on the Neon base the snapshot's index gives each item's Counterpart. Core has no sheet from the side, so new work does not choose one.
+- At desktop width a sheet is centred, never a mobile sheet rising from the bottom edge: Core's Sheet Placement centres it at Regular width. On the Neon base, the `sheet` item's bottom side does this itself from the `lg` breakpoint (988px); do not override its placement or choose a left or right side to get a desktop look.
 - A sheet or dialog has a title and a visible close control. Every overlay returns focus to its trigger on close.
 
 ## Typography in use
@@ -68,4 +68,4 @@ A pane's width is what the shell leaves after the sidebar and inspector, so it c
 
 ## Breakpoints
 
-Name layouts by the app's breakpoint tiers (`sm`, `md`, `lg`, …), not by pixel values copied from another system.
+Name layouts by the app's breakpoints (`sm`, `md`, `lg`, …), not by pixel values copied from another system. A layout's own variants follow the app's breakpoints; inside a pane, follow [grids inside a pane](#grids-inside-a-pane).

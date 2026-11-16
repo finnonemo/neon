@@ -98,7 +98,7 @@ async function assembleNeon() {
   // Fixtures: App.tsx routes the screens; the rest sit beside AppRoot.
   await mkdir(join(app, 'src/app/shared'), { recursive: true });
   await copyFile(join(here, 'fixtures/neon/App.tsx'), join(app, 'src/App.tsx'));
-  for (const file of ['Approval.tsx', 'Extras.tsx', 'Expansion.tsx', 'Hook.tsx']) await copyFile(join(here, 'fixtures/neon', file), join(app, 'src/app', file));
+  for (const file of ['Approval.tsx', 'Extras.tsx', 'Expansion.tsx', 'Hook.tsx', 'PaneGrids.tsx']) await copyFile(join(here, 'fixtures/neon', file), join(app, 'src/app', file));
   await cp(join(here, 'fixtures/neon/expansion'), join(app, 'src/app/expansion'), { recursive: true });
   await copyFile(join(here, 'fixtures/shared/data.ts'), join(app, 'src/app/shared/data.ts'));
   const mainPath = join(app, 'src/main.tsx');
