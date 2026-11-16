@@ -40,6 +40,20 @@ for (const [layout, mode] of ['app', 'content'].flatMap((layout) => ['light', 'd
   });
 }
 
+// The screens themselves reflow too: at a 320 phone the page never scrolls sideways. A Table
+// scrolls inside its own container, so it is not counted.
+for (const layout of ['approval', 'extras', 'expansion']) {
+  test(`${layout}: the screen fits a 320px viewport`, async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 800 });
+    await page.goto(`/?layout=${layout}`);
+    await page.evaluate(() => document.fonts.ready);
+    expect(await page.evaluate(() => [...document.body.querySelectorAll('*')]
+      .filter((el) => el.getBoundingClientRect().right > innerWidth + 1 && !el.closest('[data-slot=table-container]') && getComputedStyle(el).position !== 'fixed')
+      .map((el) => `${el.tagName.toLowerCase()}.${(el.getAttribute('class') ?? '').split(' ').slice(0, 3).join('.')} right ${Math.round(el.getBoundingClientRect().right)}`))).toEqual([]);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);
+  });
+}
+
 // WCAG 1.4.10 Reflow: an item fits a 320 CSS px phone, 288 inside its 16 gutters. The fixture screens
 // hold items in fixed frames, so each outermost item is given a 288 box itself and nothing in it may
 // run past that box. A part inside a box that clips or scrolls on its own (a Table, a Progress

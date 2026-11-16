@@ -38,7 +38,7 @@ const alerts = [
 export default function AlertSection() {
   const [submitted, setSubmitted] = useState(false)
   return (
-    <div className="flex w-80 flex-col gap-4">
+    <div className="flex w-full max-w-80 flex-col gap-4">
       {alerts.map(({ variant, Icon, title, message }) => (
         <Hook key={variant} name={`alert-${variant}`}>
           <Alert variant={variant}>

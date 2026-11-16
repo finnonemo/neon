@@ -7,7 +7,7 @@ import { Hook } from "../Hook"
 
 export default function ButtonGroupSection() {
   return (
-    <div className="flex w-80 flex-col gap-6">
+    <div className="flex w-full max-w-80 flex-col gap-6">
       <Hook name="button-group-horizontal">
         <ButtonGroup aria-label="คำสั่ง / Actions">
           <Button>ซื้อ / Buy</Button>

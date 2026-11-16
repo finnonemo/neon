@@ -6,7 +6,7 @@ import { Hook } from "../Hook"
 
 export default function Collapsible() {
   return (
-    <div className="flex w-80 flex-col items-start">
+    <div className="flex w-full max-w-80 flex-col items-start">
       <Hook name="collapsible-default">
         <NeonCollapsible defaultOpen className="flex w-full flex-col items-start gap-6">
           <CollapsibleTrigger asChild>

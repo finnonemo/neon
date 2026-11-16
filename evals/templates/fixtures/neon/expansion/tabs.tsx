@@ -5,7 +5,7 @@ import { Hook } from "../Hook"
 
 export default function Tabs() {
   return (
-    <div className="flex w-80 flex-col">
+    <div className="flex w-full max-w-80 flex-col">
       <Hook name="tabs-default">
         <NeonTabs defaultValue="overview">
           <TabsList aria-label="บัญชี / Account">

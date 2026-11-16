@@ -84,7 +84,7 @@ export function Approval() {
         </div>
       </Hook>
       <Hook name="actions">
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <Button disabled={!confirmed}>อนุมัติ / Approve</Button>
           <Button variant="secondary">ขอข้อมูลเพิ่ม</Button>
           <Button variant="destructive">ปฏิเสธ</Button>

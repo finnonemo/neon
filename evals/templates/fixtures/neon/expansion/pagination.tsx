@@ -30,7 +30,7 @@ export default function PaginationSection() {
     </PaginationItem>
   )
   return (
-    <div className="w-80">
+    <div className="w-full max-w-80">
       <Hook name="pagination">
         <Pagination aria-label="เลือกหน้า / Pages">
           <PaginationContent>
