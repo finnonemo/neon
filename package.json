@@ -9,6 +9,9 @@
   },
   "homepage": "https://github.com/finnonemo/neon#readme",
   "keywords": ["finnomena", "neon", "mcp", "claude", "codex", "brand", "skills"],
+  "scripts": {
+    "prepublishOnly": "node scripts/release.mjs --check-publish"
+  },
   "bin": {
     "finno": "scripts/finno.mjs"
   },
