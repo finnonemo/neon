@@ -22,7 +22,7 @@ Why: CDS was a stand-in for a look Finnomena did not yet own. Core now has appro
 
 ## Considered Options
 
-- **Core first, CDS as the fallback for every gap:** rejected as the rule, kept only for the four items above, so two baselines do not become permanent.
+- **Core first, CDS as the fallback for every gap:** rejected as the rule, kept only for the items above that still lack an approved Counterpart (card today), so two baselines do not become permanent.
 - **Core for guidance only, components still measured against CDS:** rejected; the measured look would keep drifting from the one Finnomena designs in.
 - **Props renamed to Core's axes (`hierarchy`, `type`):** rejected; it breaks existing apps and shadcn's docs stop applying.
 - **Link skills to Core's repository:** rejected; only people with access to it would get its rules.
