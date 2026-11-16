@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wide pane fixture</title>
+<style>
+  body { margin: 0; }
+  .shell { display: flex; width: 100vw; height: 100vh; overflow: hidden; }
+  .pane { flex: 1 1 0; min-width: 0; }
+  .grid { display: grid; grid-template-columns: repeat(3, 200px); gap: 8px; }
+  .overflow-x-auto { overflow-x: auto; }
+</style>
+</head>
+<body>
+  <!-- The shell clips the page; each pane scrolls down on its own. -->
+  <div class="shell">
+    <section id="wide" class="pane" style="overflow-y: auto"><div class="grid"><p>One</p><p>Two</p><p>Three</p></div></section>
+    <section id="fits" class="pane" style="overflow-y: auto">
+      <p>Fits</p>
+      <!-- A table that scrolls sideways in its own wrapper keeps the pane at the pane's width. -->
+      <div id="table-wrap" class="overflow-x-auto"><div style="width: 900px">Wide table</div></div>
+    </section>
+    <!-- A board asks to scroll sideways. -->
+    <section id="board" class="pane" style="overflow-x: auto"><div style="width: 900px">Columns</div></section>
+  </div>
+</body>
+</html>

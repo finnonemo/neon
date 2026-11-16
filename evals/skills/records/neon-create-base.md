@@ -1,7 +1,7 @@
 ---
 scenarios:
   - request: Create a Finnomena Back Office, Product Feature or Campaign Page app from an empty workspace
-    observe: The app is created with `install.mjs --new` and grows with `--add` only; `grade-neon-app.mjs` passes: no CDS, no stock shadcn item or mark, no stock utility in the app's own sources, scoped stylesheets, typecheck and build; a Campaign Page passes its Immersive Theme to `ImmersiveLayout`; the report names each `@neon/` item added
+    observe: The app is created with `install.mjs --new` and grows with `--add` only; `grade-neon-app.mjs` passes: no CDS, no stock shadcn item or mark, no stock utility in the app's own sources, scoped stylesheets, typecheck and build, and no pane whose content is wider than the pane at any breakpoint; a Campaign Page passes its Immersive Theme to `ImmersiveLayout`; the report names each `@neon/` item added
 ---
 
 # neon-create on the Neon base
@@ -27,7 +27,7 @@ Fixture: an empty workspace, a git repository holding only `.gitkeep`. Each requ
 
 No revised app has a stock palette utility, `dark:` class, stock text size or weight utility in its source outside `./src/components/ui/`; the same grep finds `font-medium` in a stock shadcn accordion. `appStylesheetProblems` finds no unscoped selector in any revised app. In the baseline Campaign Page it flags the `[data-immersive-theme]` rules of the generated theme CSS the app copied, which was the contract on `main`. The revised Campaign Page passes `immersiveTheme` to `ImmersiveLayout`, defaulting to `"private"`, with a theme toggle shown only on the dev server or with `?review` in the URL. A quick look at each revised app's production build in an 800px-wide browser pane found Neon type and color roles, IBM Plex Sans Thai and populated screens after the mock loading state.
 
-`grade-neon-app.mjs <app>...` now runs these checks; these runs were graded before it existed, with the same functions.
+`grade-neon-app.mjs <app>...` now runs these checks; these runs were graded before it existed, with the same functions. Its browser step (no pane wider than its pane at any breakpoint) came later and was not run on these apps.
 
 Limits:
 

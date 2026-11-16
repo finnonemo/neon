@@ -31,6 +31,6 @@ Each example has a record in [examples/](examples/). Its runnable source lives i
 
 | Example | Status |
 | --- | --- |
-| [Pane grids](examples/pane-grids.md) | illustrative |
+| [Pane grids](examples/pane-grids.md) | reviewed, 2026-11-16 |
 
-No approved examples are introduced by the flow refactor. Current prose examples are illustrative; locally generated evaluation apps are behavioral evidence only.
+Pane grids is the first reviewed example. Prose examples in the skills are illustrative; locally generated evaluation apps are behavioral evidence only.

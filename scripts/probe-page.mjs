@@ -223,7 +223,7 @@ const quoted = ({ element, text }) => (element.includes(text.slice(0, 40)) ? ele
 // Adds `name` and the first element names of `list` to `found` when the list is not empty.
 const adder = found => (name, list) => { if (list.length) found.push(`${name} ${namesOf(list)}`); };
 
-/** The probe's general leads at one width (overflow, contrast, fills, nav, dialogs, serif text), each naming its elements. */
+/** The probe's general leads at one width (overflow, wide panes, contrast, fills, nav, dialogs, serif text), each naming its elements. */
 export function layoutLeads(result) {
   const found = [];
   const add = adder(found);
@@ -231,6 +231,7 @@ export function layoutLeads(result) {
   add('overflowing', result.overflowingElements);
   add('scrolled on load', result.scrolledOnLoad.elements);
   add('sideways scrollers', result.sidewaysScrollers);
+  add('pane content wider than its pane', result.widePanes ?? []);
   add('low contrast on dark fill', result.darkBackgroundControls.filter(entry => entry.contrast < 4.5));
   add('low contrast text on fill', result.lowContrastTextOnFill);
   add('fill matching its background', result.sameAsParentFill);
@@ -294,7 +295,8 @@ function neonRuleLines(result) {
 const contentTypes = { '.html': 'text/html', '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.webp': 'image/webp', '.json': 'application/json', '.woff2': 'font/woff2', '.woff': 'font/woff', '.ttf': 'font/ttf', '.ico': 'image/x-icon' };
 
 // A production build on a free local port; paths that are not files get index.html, as an app's routes do.
-function serve(root) {
+/** Serves the build at `root` on a free local port; a path that is not a file gets index.html. */
+export function serve(root) {
   const server = createServer((request, response) => {
     let path = join(root, decodeURIComponent(new URL(request.url, 'http://x').pathname));
     if (!insideDirectory(path, root) || !existsSync(path) || statSync(path).isDirectory()) path = join(root, 'index.html');
@@ -688,7 +690,8 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
     writeFileSync(join(out, 'probe.json'), JSON.stringify({ measured: drafted.measured, robots }, null, 2));
     writeFileSync(file, `${JSON.stringify(preset, null, 2)}\n`);
     if (values.json) {
-      console.log(JSON.stringify({ preset, measuredPx: drafted.measuredPx, unmeasured: drafted.unmeasured, robots }, null, 2));
+      // process.exit drops what a pipe has not taken yet, so wait for the write.
+      await new Promise(done => process.stdout.write(`${JSON.stringify({ preset, measuredPx: drafted.measuredPx, unmeasured: drafted.unmeasured, robots }, null, 2)}\n`, done));
       process.exit(0);
     }
     const { measuredPx, unmeasured } = drafted;
@@ -721,7 +724,8 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
   const line = reportLine(widths, measured);
   if (measured.length) writeFileSync(join(out, 'probe.json'), JSON.stringify({ measured, notRun, reportLine: line }, null, 2));
   if (values.json) {
-    console.log(JSON.stringify({ measured, notRun, reportLine: line }, null, 2));
+    // process.exit drops what a pipe has not taken yet, so wait for the write.
+    await new Promise(done => process.stdout.write(`${JSON.stringify({ measured, notRun, reportLine: line }, null, 2)}\n`, done));
     process.exit(0);
   }
   for (const { width, result, screenshot } of measured) {
