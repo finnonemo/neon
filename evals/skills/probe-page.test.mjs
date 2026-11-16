@@ -137,6 +137,16 @@ test('text on a filled block below 4.5:1 is a lead, through transparent wrappers
   assert.match(reportLine, /, low contrast text on fill p#canvas-text-on-tint "[^"]*"; p#wrapped "[^"]*" \+1 more,/);
 });
 
+test('a pane whose content is wider than it is a lead; a board or table asked to scroll sideways is not', t => {
+  const result = probeWithChrome(t, [fixture('probe-fixture-wide-pane.html'), '--json']);
+  if (result.skipped) return;
+  const { measured: [{ result: probed }], reportLine } = JSON.parse(result.stdout);
+  // The shell clips the page, so the document never shows it.
+  assert.equal(probed.horizontalOverflow, false);
+  assert.deepEqual(probed.widePanes.map(({ element }) => element.match(/#([\w-]+)/)[1]), ['wide']);
+  assert.match(reportLine, /pane content wider than its pane section#wide/);
+});
+
 test('--serve measures a production build on its own port, falling back to index.html for app routes', t => {
   const dist = tempDir('neon-probe-test-dist-');
   writeFileSync(join(dist, 'index.html'), '<!doctype html><title>Built</title><link rel="stylesheet" href="/assets/app.css"><p id="built">Built page</p>');

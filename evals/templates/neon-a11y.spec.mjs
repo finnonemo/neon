@@ -24,6 +24,22 @@ for (const [layout, mode] of ['approval', 'extras', 'expansion'].flatMap((layout
   });
 }
 
+// The pane-grids example (docs/design/examples/pane-grids.md) in both modes, in AppShell's narrow
+// content pane and ContentLayout's wide one; the 375 and 1440 screenshots are its review captures.
+for (const [layout, mode] of ['app', 'content'].flatMap((layout) => ['light', 'dark'].map((mode) => [layout, mode]))) {
+  test(`pane-grids example in ${layout} passes axe in ${mode}`, async ({ page }) => {
+    for (const width of [375, 1440]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(`/?layout=${layout}&example=pane-grids${mode === 'dark' ? '&mode=dark' : ''}`);
+      await page.evaluate(() => document.fonts.ready);
+      await settled(page);
+      const { violations } = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
+      expect(violations.map((v) => `${width}px ${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);
+      await page.screenshot({ path: test.info().outputPath(`pane-grids-${layout}-${mode}-${width}.png`) });
+    }
+  });
+}
+
 // WCAG 1.4.10 Reflow: an item fits a 320 CSS px phone, 288 inside its 16 gutters. The fixture screens
 // hold items in fixed frames, so each outermost item is given a 288 box itself and nothing in it may
 // run past that box. A part inside a box that clips or scrolls on its own (a Table, a Progress
