@@ -27,10 +27,10 @@ Below it, link the runnable source, the screenshot command with viewport/theme/s
 
 Link only the example relevant to the task, after its review status and resource packaging are settled. Use it as a composition/reference aid, not a mandatory template for every page. Keep canonical token values in `theme/` and visual policy in `skills/INSTRUCTION.md`. When an example and current policy disagree, identify the stale property and update/review it instead of silently creating a second authority.
 
-Each example has a record in [examples/](examples/). Its runnable source lives in the browser suite's fixtures, so `evals/templates` checks it on every change.
+Each example has a record in [examples/](./examples/): its review and how to capture it. A reviewed example ships in the plugin's [`examples/`](../../examples/) directory, its runnable source beside a README that says which composition it shows and why, so a skill can link it. The browser suite copies that source into its app, so `evals/templates` checks the file that ships on every change.
 
 | Example | Status |
 | --- | --- |
-| [Pane grids](examples/pane-grids.md) | reviewed, 2026-11-16 |
+| [Pane grids](./examples/pane-grids.md) | reviewed, 2026-11-16 |
 
 Pane grids is the first reviewed example. Prose examples in the skills are illustrative; locally generated evaluation apps are behavioral evidence only.

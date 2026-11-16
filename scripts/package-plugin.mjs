@@ -12,6 +12,7 @@ const PAYLOAD_ENTRIES = [
   "skills",
   "theme",
   "core",
+  "examples",
   "block",
   "templates/vitejs-cds",
 

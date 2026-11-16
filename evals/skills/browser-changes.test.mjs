@@ -54,7 +54,7 @@ test('browser-changes writes the job output the workflow reads', t => {
 
 test('browser paths cover the starter, theme, registry, browser suite, assembler, probe and restyle tooling', () => {
   for (const path of [
-    'templates/vitejs-cds/src/main.tsx', 'evals/templates/layouts.spec.mjs', 'theme/css/theme.css',
+    'templates/vitejs-cds/src/main.tsx', 'examples/pane-grids/PaneGrids.tsx', 'evals/templates/layouts.spec.mjs', 'theme/css/theme.css',
     'scripts/lib/assemble-starter.mjs', 'scripts/lib/assets.mjs', 'skills/neon-redesign/references/browser-probe.js',
     'evals/skills/probe-fixture.html', 'evals/skills/probe-fixture-no-plex.html', 'evals/skills/probe-fixture-thai-404.html', 'evals/skills/run-probe.mjs', 'evals/skills/grade-restyle.mjs',
     'evals/skills/grade-rebuild.mjs', 'evals/skills/fixtures/shadcn-v4-app/src/index.css', '.github/workflows/template-browser.yml',

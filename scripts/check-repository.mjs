@@ -58,7 +58,7 @@ async function check(root, { sourceTree = false } = {}) {
   await checkBlockSnapshot(join(root, BLOCK_SNAPSHOT_DIR));
   await checkCoreTheme(root);
   await checkCoreType(root);
-  const files = [...await markdownFiles(join(root, 'skills')), ...await markdownFiles(join(root, SNAPSHOT_DIR))];
+  const files = [...await markdownFiles(join(root, 'skills')), ...await markdownFiles(join(root, SNAPSHOT_DIR)), ...await markdownFiles(join(root, 'examples'))];
   if (sourceTree) files.push(join(root, 'README.md'));
   for (const file of files) {
     await checkMarkdownEncoding(file);

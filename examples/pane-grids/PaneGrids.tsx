@@ -1,8 +1,8 @@
-// The pane-grids example (docs/design/examples/pane-grids.md): the three grids
+// The pane-grids example (README.md beside this file): the three grids that
 // "Grids inside a pane" in skills/neon-audit/references/functional-patterns.md
-// names, in AppShell's content pane. Synthetic content. layouts.spec.mjs checks
-// that no pane overflows at every breakpoint and that each grid changes form
-// with the pane's width, not the viewport's.
+// names, for a functional pane's content. Built from Neon registry items
+// (card, field, input) and Tailwind; all content is synthetic. Neon's browser
+// suite renders this file in AppShell and ContentLayout at every breakpoint.
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Field, FieldControl, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"

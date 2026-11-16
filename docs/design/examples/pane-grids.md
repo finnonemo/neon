@@ -15,23 +15,13 @@ Show the three grids a functional pane uses, inside a real pane at every breakpo
 
 ## Source
 
-- Screen: [`evals/templates/fixtures/neon/PaneGrids.tsx`](../../../evals/templates/fixtures/neon/PaneGrids.tsx), built from Neon registry items (`card`, `field`, `input`) and Tailwind only. All content is synthetic.
+- Screen: [`examples/pane-grids/PaneGrids.tsx`](../../../examples/pane-grids/PaneGrids.tsx), built from Neon registry items (`card`, `field`, `input`) and Tailwind only. All content is synthetic. It ships in the plugin beside its [README](../../../examples/pane-grids/README.md), which skills link; the browser suite copies this same file into its Neon base app.
 - Route: `/?layout=app&example=pane-grids` (AppShell, where the content pane keeps a fixed width at desktop) and `/?layout=content&example=pane-grids` (ContentLayout, where the content pane fills the rest), in the browser suite's Neon base app.
 - Checks: `pane-grids example follows the pane's width at every breakpoint` in [`evals/templates/layouts.spec.mjs`](../../../evals/templates/layouts.spec.mjs), and `pane-grids example in <layout> passes axe in <mode>` in [`evals/templates/neon-a11y.spec.mjs`](../../../evals/templates/neon-a11y.spec.mjs).
 
 ## Why each grid fits
 
-| Region | Grid | Why |
-| --- | --- | --- |
-| Overview figures | A flex row that wraps (`flex flex-wrap`) | Each figure keeps its own width, so a long label never squeezes its neighbour's value. |
-| Featured funds | `grid-cols-[repeat(auto-fill,minmax(14rem,1fr))]` | The number of tiles isn't fixed, so the grid wraps by itself at every pane width with no breakpoint. Cards fit here because each tile is an item in a browsing collection. |
-| Contact details | `@container` on the pane's body, then `@min-[480px]:grid-cols-2` | A fixed number of columns that changes count follows the pane: at a 1440 viewport the form has one column in AppShell's narrow content pane and two in ContentLayout's wide one. |
-
-What expresses Finnomena: nothing here beyond the theme. Colours, type roles, radius and spacing come from the Neon base. The example is about structure.
-
-## What can vary
-
-The tile minimum (14rem) and the form's threshold (480px) suit these contents. Pick a tile's minimum from its smallest readable content, and a threshold from where two fields still have room for their labels. The kind of grid for each case doesn't vary.
+In the shipped [README](../../../examples/pane-grids/README.md): which grid each region takes and why, and what can vary. This record keeps the review and how to capture it.
 
 ## Verified
 
@@ -52,6 +42,8 @@ npm test --prefix evals/templates -- --target neon neon-a11y.spec.mjs --grep pan
 
 Approved whole on 2026-11-16 ("Approve all"), from the eight captures above: AppShell and ContentLayout, light and dark, at 375 and 1440. The captures are still, so interaction behavior was approved as the registry items (`card`, `field`, `input`) ship it, which the Neon browser suite's focus and axe tests check, not from anything this example adds.
 
-## Unresolved
+After the review the source moved from the browser suite's fixtures to `examples/pane-grids/`, so it ships; only its header comment changed.
 
-- No skill links it yet. Its source is a browser-suite fixture, not a packaged resource, and the [example library](../example-library.md#use-examples-in-skills) links an example only once its packaging is settled.
+## Used by
+
+- [Grids inside a pane](../../../skills/neon-audit/references/functional-patterns.md#grids-inside-a-pane) links the shipped README.
