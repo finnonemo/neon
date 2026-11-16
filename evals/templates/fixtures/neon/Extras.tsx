@@ -198,7 +198,7 @@ export function Extras() {
       </Hook>
       {/* Core's Segmented control Sizes, its Disabled control and its disabled segments, which CDS has no baseline for. */}
       <Hook name="core-segments">
-        <div className="flex w-80 flex-col gap-4">
+        <div className="flex w-full max-w-80 flex-col gap-4">
           <SegmentedControl data-segments="sm" size="sm" defaultValue="week" aria-label="ช่วงเวลา / Period">
             <SegmentedControlItem value="day">วัน</SegmentedControlItem>
             <SegmentedControlItem value="week">สัปดาห์</SegmentedControlItem>

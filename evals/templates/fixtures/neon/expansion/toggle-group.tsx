@@ -7,7 +7,7 @@ import { Hook } from "../Hook"
 
 export default function ToggleGroup() {
   return (
-    <div className="flex w-80 flex-col gap-6">
+    <div className="flex w-full max-w-80 flex-col gap-6">
       <Hook name="toggle-group-default">
         <NeonToggleGroup type="multiple" aria-label="สินทรัพย์ / Assets" defaultValue={["stock", "gold"]}>
           <ToggleGroupItem value="stock">หุ้น</ToggleGroupItem>

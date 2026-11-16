@@ -494,9 +494,11 @@ export function measureInPage(targets) {
   return out;
 }
 
-/** The distance between two measured boxes along one axis: b's start minus a's end. */
+/** The distance between two measured boxes along one axis: b's start minus a's end. A row that
+ * wraps puts b on a later line, and the gap is then the one between the lines. */
 export function gap(a, b, axis) {
-  return Math.round(axis === 'x' ? b.box.left - a.box.right : b.box.top - a.box.bottom);
+  const wrapped = axis === 'x' && b.box.top >= a.box.bottom;
+  return Math.round(axis === 'x' && !wrapped ? b.box.left - a.box.right : b.box.top - a.box.bottom);
 }
 
 /** Keeps only the checked properties, so the fixture stores what the spec compares. */

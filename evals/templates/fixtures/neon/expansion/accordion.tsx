@@ -7,7 +7,7 @@ import { Hook } from "../Hook"
 
 export default function Accordion() {
   return (
-    <div className="flex w-80 flex-col">
+    <div className="flex w-full max-w-80 flex-col">
       <Hook name="accordion-default">
         <NeonAccordion type="single" collapsible defaultValue="fees">
           <AccordionItem value="fees">

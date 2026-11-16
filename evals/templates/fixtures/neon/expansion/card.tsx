@@ -7,7 +7,7 @@ import { Hook } from "../Hook"
 export default function CardSection() {
   return (
     <Hook name="card-default">
-      <Card className="w-80">
+      <Card className="w-full max-w-80">
         <CardHeader>
           <CardTitle>กองทุนตราสารหนี้ / Bond fund</CardTitle>
           <CardDescription>ความเสี่ยงต่ำ เหมาะกับการพักเงินระยะสั้นและรับผลตอบแทนสม่ำเสมอ / Low risk, steady returns</CardDescription>
