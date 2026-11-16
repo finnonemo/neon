@@ -17,7 +17,7 @@ Show the three grids a functional pane uses, inside a real pane at every breakpo
 
 - Screen: [`evals/templates/fixtures/neon/PaneGrids.tsx`](../../../evals/templates/fixtures/neon/PaneGrids.tsx), built from Neon registry items (`card`, `field`, `input`) and Tailwind only. All content is synthetic.
 - Route: `/?layout=app&example=pane-grids` (AppShell, where the content pane keeps a fixed width at desktop) and `/?layout=content&example=pane-grids` (ContentLayout, where the content pane fills the rest), in the browser suite's Neon base app.
-- Check: `pane-grids example follows the pane's width at every breakpoint` in [`evals/templates/layouts.spec.mjs`](../../../evals/templates/layouts.spec.mjs).
+- Checks: `pane-grids example follows the pane's width at every breakpoint` in [`evals/templates/layouts.spec.mjs`](../../../evals/templates/layouts.spec.mjs), and `pane-grids example in <layout> passes axe in <mode>` in [`evals/templates/neon-a11y.spec.mjs`](../../../evals/templates/neon-a11y.spec.mjs).
 
 ## Why each grid fits
 
@@ -38,16 +38,16 @@ The tile minimum (14rem) and the form's threshold (480px) suit these contents. P
 - No pane scroll container is wider than its pane at any of the viewports above, in both layouts (`widePanes`).
 - The form shows two columns exactly when the pane's content box is at least 480px wide.
 - No tile is narrower than 14rem unless the pane itself is.
+- Axe finds no WCAG 2.2 AA violation at 375 and 1440, in light and dark, in both layouts.
 
 ## Screenshots
 
-Not kept in the repository. Run the browser suite and open the screenshots it writes to `.local/evals/templates/neon/test-results/` (`pane-grids-<layout>-375.png` and `-1440.png`):
+Not kept in the repository. Run the browser suite and open the screenshots it writes to `.local/evals/templates/neon/test-results/` (`pane-grids-<layout>-<mode>-375.png` and `-1440.png`, `<layout>` `app` or `content`, `<mode>` `light` or `dark`):
 
 ```bash
-npm test --prefix evals/templates -- --target neon layouts.spec.mjs --grep pane-grids
+npm test --prefix evals/templates -- --target neon neon-a11y.spec.mjs --grep pane-grids
 ```
 
 ## Unresolved
 
 - Not reviewed. Its approved properties stay empty until the designated reviewer records a decision, and no skill links it until then, as the [example library](../example-library.md#use-examples-in-skills) asks.
-- Light mode only; dark mode isn't checked.

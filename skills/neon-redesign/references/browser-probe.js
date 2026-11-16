@@ -69,6 +69,15 @@
     .filter(element => /(auto|scroll)/.test(getComputedStyle(element).overflowX) && element.scrollWidth > element.clientWidth + 1)
     .map(element => ({ element: label(element), scrollWidth: element.scrollWidth, clientWidth: element.clientWidth }));
 
+  // A pane scrolls down and its content is wider than it, though nothing asked it to scroll sideways
+  // (a shell that clips the page keeps the document at the viewport's width, so only the pane shows it).
+  const sidewaysAsked = element => /(auto|scroll)/.test(element.style.overflowX || element.style.overflow)
+    || /(^|\s)overflow-(x-)?(auto|scroll)(\s|$)/.test(typeof element.className === 'string' ? element.className : '');
+  const widePanes = all
+    .filter(element => /(auto|scroll)/.test(getComputedStyle(element).overflowY) && !sidewaysAsked(element))
+    .filter(element => element.scrollWidth > element.clientWidth + 1)
+    .map(element => ({ element: label(element), scrollWidth: element.scrollWidth, clientWidth: element.clientWidth }));
+
   const leaves = all.filter(element => element.children.length === 0 && element.textContent.trim());
   // Browser defaults compute to a face name such as `Times`, not `serif`.
   const serifFamily = /^\s*"?(serif|Times( New Roman)?|Georgia|Cambria|Noto Serif[^",]*)"?\s*(,|$)/i;
@@ -239,6 +248,7 @@
     overflowingElements: overflowing.slice(0, 10),
     scrolledOnLoad: { page: Math.round(window.scrollX), elements: scrolled.slice(0, 10) },
     sidewaysScrollers: sideways.slice(0, 10),
+    widePanes: widePanes.slice(0, 10),
     body: {
       fontFamily: body.fontFamily,
       background: body.backgroundColor,
