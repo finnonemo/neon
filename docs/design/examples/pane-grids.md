@@ -1,11 +1,11 @@
 # Pane grids
 
 ```yaml
-status: illustrative
-source_revision: null  # the revision the reviewer captures and reviews
-reviewer: null
-reviewed_on: null
-approved_properties: []
+status: reviewed
+source_revision: e69c1fe  # captured at 42d0f83, the same example, registry and theme files
+reviewer: Pawish Gawinseth
+reviewed_on: 2026-11-16
+approved_properties: [composition, typography, color-mapping, interaction-behavior]
 viewports: [320, 375, 500, 768, 987, 988, 1080, 1272, 1440, 1920]
 ```
 
@@ -48,6 +48,10 @@ Not kept in the repository. Run the browser suite and open the screenshots it wr
 npm test --prefix evals/templates -- --target neon neon-a11y.spec.mjs --grep pane-grids
 ```
 
+## Review
+
+Approved whole on 2026-11-16 ("Approve all"), from the eight captures above: AppShell and ContentLayout, light and dark, at 375 and 1440. The captures are still, so interaction behavior was approved as the registry items (`card`, `field`, `input`) ship it, which the Neon browser suite's focus and axe tests check, not from anything this example adds.
+
 ## Unresolved
 
-- Not reviewed. Its approved properties stay empty until the designated reviewer records a decision, and no skill links it until then, as the [example library](../example-library.md#use-examples-in-skills) asks.
+- No skill links it yet. Its source is a browser-suite fixture, not a packaged resource, and the [example library](../example-library.md#use-examples-in-skills) links an example only once its packaging is settled.
