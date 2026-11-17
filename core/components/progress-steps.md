@@ -165,6 +165,7 @@ Nothing truncates. Horizontal's labels share the row: four steps in 343 leave ab
 - Error: the failed step says what happened and what to do ("ตัดเงินไม่สำเร็จ / ยอดเงินในบัญชีไม่พอ ลองสั่งซื้ออีกครั้ง"); the steps after it stay Incomplete.
 - Skeleton while the order's status loads; a list that failed to load is the Pattern's error with its retry, not an Error step.
 - Not this: one amount over time is Progress bar; a wait with no steps is Progress circle; a tappable step list (a wizard's navigation) is out, as Progress steps isn't interactive.
+- **Placement** (R1, R2): page content, not chrome. A part of the page component, in its scrolling content, at the content column's width inside the 16 inset; never in a Toolbar, the Button dock or pinned. Vertical (the full status) as its own section; Horizontal (compact) in a Tile or directly under the screen's title; three steps or more. A flow's progress (signup, checkout, onboarding) is Progress steps `Horizontal` as the first part of the page component, scrolling with it (R2);
 
 ### Hierarchy
 

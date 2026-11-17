@@ -7,28 +7,30 @@
 `Date and time - Collapsed`, as the kit, with changes in brackets:
 
 ```
-Date and time - Collapsed (root)   Hug × Hug, HORIZONTAL, gap 8 (`spacing-03`) [kit 6], no fill
-├─ Date                            Button `Hierarchy=Secondary` `Type=Default` `Size=Small` (36), {{iOS=*}}, label "17 Nov 2026"
-│                                    [kit: a 34 grey capsule; owner 2026-11-03, D2]; shown on Mode Date · Date and Time
+Date and time - Collapsed (root)   Hug × Hug, sizing only
+└─ Container                       Hug × Hug, HORIZONTAL, gap 8 (`spacing-03`) [kit 6], no fill
+   ├─ Date                         Button `Hierarchy=Secondary` `Type=Default` `Size=Small` (36), {{iOS=*}}, label "17 Nov 2026"
+   │                                 [kit: a 34 grey capsule; owner 2026-11-03, D2]; shown on Mode Date · Date and Time
 ```
 
 `Date and time - Pickers`:
 
 ```
-│                                    Inline:  padding 0 · 16 (`spacing-05`, kit `Margin`), no radius
-│                                             iOS=False radius 16 (`radius-lg`), `Layer/layer-01`, `Elevation/Floating` (D5)
-├─ Date                            Fill × Hug, VERTICAL
-│  ├─ Header                       Fill × 48 [kit 40], HORIZONTAL, space-between, padding left 8
-│  │  ├─ Month                     HORIZONTAL, gap 4, a button (opens the month and year list): text "November 2026"
-│  │  │                              `Headings/Headline`, `text-primary`; Disclosure `chevron-right` `fa-sharp fa-solid/Small`,
-│  │  │                              `Miscellaneous/interactive`
-│  │  └─ Arrows                    HORIZONTAL, gap 0 [kit 28 between 20 glyphs]
-│  │     ├─ Previous               Icon button `Hierarchy=Tertiary` `Type=Default` `Size=Medium` (48), {{iOS=*}}, `chevron-left`
-│  │     └─ Next                   the same, `chevron-right`
-│  ├─ Weekdays                     Fill × Hug, HORIZONTAL, 7 Fill cells [kit 20 tall, gap 17]: S M T W T F S,
-│  │                                 `Utility/Footnote`, `text-secondary` (D7), centred
-│     └─ Week 1 … Week 6           `_Week`; Week 6 shown by BOOLEAN `Show Week 6` (off) [kit: hidden layer]
-└─ Time                            List item `Trailing=Picker - Time`, `Title` "Time", Fill × Hug (D3);
+Date and time - Pickers (root)     Fixed 370 × Hug, sizing only
+   │                                 Inline:  padding 0 · 16 (`spacing-05`, kit `Margin`), no radius
+   │                                          iOS=False radius 16 (`radius-lg`), `Layer/layer-01`, `Elevation/Floating` (D5)
+   ├─ Date                         Fill × Hug, VERTICAL
+   │  ├─ Header                    Fill × 48 [kit 40], HORIZONTAL, space-between, padding left 8
+   │  │  ├─ Month                  HORIZONTAL, gap 4, a button (opens the month and year list): text "November 2026"
+   │  │  │                           `Headings/Headline`, `text-primary`; Disclosure `chevron-right` `fa-sharp fa-solid/Small`,
+   │  │  │                           `Miscellaneous/interactive`
+   │  │  └─ Arrows                 HORIZONTAL, gap 0 [kit 28 between 20 glyphs]
+   │  │  ├─ Previous               Icon button `Hierarchy=Tertiary` `Type=Default` `Size=Medium` (48), {{iOS=*}}, `chevron-left`
+   │  │  └─ Next                   the same, `chevron-right`
+   │  ├─ Weekdays                  Fill × Hug, HORIZONTAL, 7 Fill cells [kit 20 tall, gap 17]: S M T W T F S,
+   │  │                              `Utility/Footnote`, `text-secondary` (D7), centred
+   │  └─ Week 1 … Week 6           `_Week`; Week 6 shown by BOOLEAN `Show Week 6` (off) [kit: hidden layer]
+   └─ Time                         List item `Trailing=Picker - Time`, `Title` "Time", Fill × Hug (D3);
                                      shown on Mode Date and Time [kit: `Show Time`]; Mode=Range: 17 Range start,
                                      18–23 In range, 24 Range end, no Time row
 ```
@@ -149,6 +151,7 @@ Our local Typography styles (Localisation), the same in both looks. Dates and ti
   - A date range: a List item "ช่วงวันที่" "17–24 พ.ย. 69" over Pickers `Mode=Range`, both looks.
   - Date picker, Single and Range, open (Android + web), after the Compact open `iOS=False` sample.
   - Buddhist era throughout: rows `17 พ.ย. 69`, the header the long month and BE year, never `2026`.
+- **Placement**: the Pickers open beside the Collapsed that opened them. `Style=Inline` expands in place under its row, pushing the content below it down. `Style=Compact` is a popover over the content, anchored to the Collapsed; it is the choice where space is tight. Never in the Button dock or a Toolbar; one picker open at a time; on a phone and at Regular alike (open call D4). HIG (Pickers): "in context, below or in proximity to the field people are editing".
 - Not for: a date the user types ([Date field](date-field.md)); a field over a calendar on Android and web ([Date picker](date-picker.md)); a wheel of arbitrary values (the system's `.wheels`, or Select).
 
 ### Hierarchy

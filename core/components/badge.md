@@ -126,5 +126,6 @@ The page's `Usage` frame, in Light and Dark:
 - a Count at the trailing end of a row (`ข้อความ`, `12`);
 - `99+`;
 - "Not a Badge": a word such as `ใหม่` / "New" is a Display tag.
+- **Placement**: always on a host, a Tab, an Avatar, an Icon button or a row, which gives the tap target; never free-standing. The host's spec decides the corner (Avatar: top end, its Q6). It hugs its content, never stretched to a layout. The feature names when it clears (a visit, a time), as Base asks.
 
 No `iOS` looks and no Focus ring to show.

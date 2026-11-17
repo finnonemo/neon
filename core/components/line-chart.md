@@ -11,20 +11,20 @@ Line chart (variant root)          Fill × Hug, no fill, no padding
    │  ├─ Date                      one line, $footnote, Text/text-secondary
    │  └─ Value                     one line, $headline Strong, Text/text-primary
    ├─ Plot                         FRAME, Fill × Fixed 160 · 96 (Content/<Size>/Plot height), clip content
-   │  ├─ Gridlines                 3 hairlines (top, middle, base): chart-gridline, the base chart-axis
+   │  ├─ Gridlines                 top and middle: LINEs, 2 dotted `0 4` round, chart-gridline; the base a solid 1 FRAME, chart-axis; padding top 1
    │  ├─ Series                    SLOT, Fill × Fill; each child a `_Line series`
-   │  ├─ _Scrubber                 ABSOLUTE; a rule 1 × the plot's height (chart-axis) and a dot (Item/<Size>/Dot size) with a 2 ring in layer-01, filled by Style; shown when State=Scrubbing
+   │  ├─ _Scrubber                 ABSOLUTE; a rule (vector), 2 dotted `0 4` round × the plot's height (chart-gridline) and a dot (Item/<Size>/Dot size) with a 2 ring in layer-01, filled by Style; shown when State=Scrubbing
    │  └─ Empty text                centred, $subhead, Text/text-secondary; shown when State=Empty
    ├─ X axis                       HORIZONTAL, space between, Fill × Hug: three labels, $caption1, Text/text-secondary
    └─ Period                       SLOT, Fill × Hug; a Segmented control instance, Size=Small, nine items; shown when Period=Below
 
-_Line series                       Fill × Fill, clip: `Area` (vector, fill chart-<style>-area) under `Line` (vector, stroke 3 · 2, round joins, chart-<style>); `Style` axis, one illustrative path each
+_Line series                       Fill × Fill, clip: `Area` (vector, a linear gradient from chart-<style>-area at the top to transparent at the baseline) under `Line` (vector, stroke Item/<Size>/Stroke weight (2), round cap and join, chart-<style>); `Style` axis, one illustrative path each
 ```
 
 - The readout follows the rule and is clamped to the plot's edges, like a Tooltip. In Figma it sits at the scrubber's x in a sample; in code it moves with the finger.
 - **The line is a vector, so Figma draws one illustrative path per `Style` and a sample replaces it** (Q1). The Positive path rises, the Negative falls and the Neutral stays flat, so the default instance reads true. A sample puts its own `_Line series` in the Slot, with a path drawn from real data by script and the same token bound to its stroke and area; code draws the line from data and never reads these paths.
 - The drag indicator is a part of the plot, not a separate set: it has no state of its own other than shown and hidden, so it is `State=Scrubbing` on the chart rather than an axis of a part.
-- Gridlines are solid hairlines (Carbon's), not Investment Call's dashes: a dash pattern is not a bindable variable and a gridline carries no meaning.
+- Gridlines are solid hairlines (Carbon's), not Investment Call's dashes: a dash pattern is not a bindable variable and a gridline carries no meaning. (reversed: dotted 2, `0 4`, round, CDS's; the dash is a logged literal)
 - No Y-axis labels (Q9): the readout carries the value the finger is on, and the X axis names the span.
 
 ## Axes
@@ -53,7 +53,7 @@ Properties: `Series` (SLOT), `Period` (SLOT), `Empty text` (TEXT, English defaul
 | --- | --- | --- | --- |
 | `Line chart/Container` | `Size` | Gap vertical | `spacing-04` (12) · `spacing-03` (8) |
 | `Line chart/Content` | `Size` | Plot height, Readout height | `spacing-13` (160) · `spacing-12` (96); `spacing-08` (40) · `spacing-07` (32) |
-| `Line chart/Item` | `Size` | Dot size | `spacing-04` (12) · `spacing-03` (8) |
+| `Line chart/Item` | `Size` | Dot size, Stroke weight | `spacing-04` (12) · `spacing-03` (8); `stroke-selected` (2) · `stroke-selected` (2) |
 | `Line chart/Label` | role: `Readout date`, `Readout value`, `Axis` | Type token, Type emphasis, Align horizontal, Align vertical, Decoration | `$footnote` Regular · `$headline` Strong · `$caption1` Regular; `Left`, `Top`, `-` |
 
 Templates: `Components/Line chart/<Group>/{{Size=*}}/<Property>`. Every value aliases a Scale step. **Literals, logged as in the allocation bar**: the line width (3 Medium · 2 Small), the rule width (1) and the dot's ring (2) are stroke weights, which have no Scale.
@@ -133,6 +133,7 @@ The draw-in is an app behaviour, not a Figma variant. Haptics are the architectu
 - **Empty and Skeleton**: `ไม่มีข้อมูลในช่วงนี้` over the gridlines, then the skeleton plot.
 - **A compact card**: `Size=Small`, `Period=None`, Neutral, beside a host header.
 - Use it for one series over time with a span the reader can change. Don't use it for a split of a whole ([Allocation bar](allocation-bar.md)), one progress amount ([Progress bar](progress-bar.md)) or a list-row trend (the later sparkline).
+- **Placement** (R1): content, at the column's width. A part of the page component, in its scrolling content under the Toolbar - Top, inside the 16 inset on a phone; never in the Button dock, a Toolbar, or pinned. The title or value above it is host content (HIG: descriptive text as a headline). The period selector stays directly under the plot; Scrubbing's readout replaces the header value while the finger is down. `Size=Small` (a card) sits in a Tile beside a host header. At Regular width it takes the content column's width, not the screen's (open call D3).
 
 Samples on Usage, eight in `Light` and their twins in `Dark`, each with an English `Note`; a sample sets component properties, text and Slot content, nothing else:
 

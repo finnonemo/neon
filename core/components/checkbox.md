@@ -5,28 +5,28 @@
 ## Anatomy and layer tree
 
 ```
-Checkbox (variant root)              Full-bleed: Fixed × Hug (240 × 72, Skeleton 48) · Inset: Hug × Hug (142 × 72, Skeleton
-│                                    108 × 48) · Icon only: Hug × Hug (48 × 48); no fill, no padding; min width
+Checkbox (variant root)              Full-bleed: Fixed × Hug (240 × 72, Skeleton 48) · Inset: Fixed × Hug (156 × 72, Skeleton
+│                                    112 × 48) · Icon only: Hug × Hug (48 × 48); no fill, no padding; min width
 │                                    Interactive/Medium (48); the min height is the row's (`hitTargetLayer`)
 └─ Container                         VERTICAL, no paint (the row is the surface); Full-bleed: Fill × Hug, padding 0 · 8, gap 0,
-   │                                 radius 12 · Inset, Icon only: Hug × Hug, padding 0, gap 0, radius 4
+   │                                 radius 12 · Inset: Fill × Hug · Icon only: Hug × Hug; both padding 0, gap 0, radius 4
    ├─ Label                          TEXT, Inset only, the group label, text-secondary (BOOLEAN `Label`)
    ├─ Icon + Value                   the row: HORIZONTAL, padding 0 · 8, gap 8, radius 12, min height 48 (Interactive/Medium),
    │                                 fill layer-01 (Active layer-active-01), stroke 2 inside, Transparent; Full-bleed Focus:
    │                                 Focus/focus (Carbon's row ring); Full-bleed Fill × Hug, top-aligned (Skeleton centred);
-   │                                 Inset bare: padding 0, Transparent, Fixed (142, Skeleton 108) × Hug, centred;
+   │                                 Inset bare: padding 0, Transparent, Fill × Hug, top-aligned (Skeleton centred);
    │                                 Icon only: the same, Hug, min width 48 too, the box centred both ways
    │  ├─ Checkbox margin             FRAME, Hug × Fill, padding 12 · 0 (every Type), min height Body line height; box on top,
-   │  │                              Inset and Icon only centred; index 0, Right: index 2
+   │  │                              Icon only centred; index 0, Right: index 2
    │  │  ├─ Spacer                   one box wide, hidden (BOOLEAN `Indented`, Inset)
    │  │  └─ Box                      24 × 24 (Icon/Large line height), no paint; holds the glyph
    │  │     ├─ Icon                  the box itself, a glyph: `square` (fa-sharp fa-regular/Large), `square-check` ·
    │  │     │                        `square-minus` (fa-sharp fa-solid/Large); icon-primary (Disabled icon-disabled)
    │  │     └─ Focus ring            absolute, 4 out on every side (Stretch × Stretch), no fill, stroke 2 inside
    │  │                              Focus/focus, radius 0; Inset and Icon only Focus
-   │  ├─ Text                        the Label block's frame (`labelBlock`): VERTICAL, gap 0, Full-bleed Fill × Fill · Inset
-   │  │                              Fixed × Fill, padding 12 · 0 (every Type), centred; hidden in Skeleton and on Icon only
-   │  │  ├─ Value                    Body, text-primary; Full-bleed wraps, Inset hugs (BOOLEAN `Value`, Inset)
+   │  ├─ Text                        the Label block's frame (`labelBlock`): VERTICAL, gap 0, Full-bleed and Inset Fill × Fill
+   │  │                              (Icon only Fixed), padding 12 · 0 (every Type), centred; hidden in Skeleton and on Icon only
+   │  │  ├─ Value                    Body, text-primary; wraps, Fill × Hug (BOOLEAN `Value`, Inset)
    │  │  └─ Subtitle                 Subheadline, text-secondary, wraps; Full-bleed only (BOOLEAN `Description`)
    │  └─ Skeleton                    Skeleton only, not Icon only, Fill × Fill, padding 12 · 0; top (Inset centred)
    │     └─ Value line margin        Fill × Hug, min height Body line height
@@ -67,7 +67,7 @@ Properties (Carbon's names and defaults), each on the variants Carbon has it; Ic
 
 | Group | Keyed by | Properties | Full-bleed | Inset | Icon only |
 | --- | --- | --- | --- | --- | --- |
-| `Checkbox/Container/<Type>` (new) | `Type` | Layout horizontal, Layout vertical | `Fill container`, `Hug contents` | `Hug contents`, `Hug contents` | `Hug contents`, `Hug contents` |
+| `Checkbox/Container/<Type>` (new) | `Type` | Layout horizontal, Layout vertical | `Fill container`, `Hug contents` | `Fill container`, `Hug contents` | `Hug contents`, `Hug contents` |
 |  |  | Layout min-width, Layout min-height | 0, 0 | 0, 0 | 0, 0 |
 |  |  | Gap horizontal | 8 (`Spacing/spacing-03 = 8`) | 8 (`Spacing/spacing-03 = 8`) | 0 (`Spacing/spacing-00 = 0`) |
 |  |  | Gap vertical | 0 (`Spacing/spacing-00 = 0`) | 0 (`Spacing/spacing-00 = 0`) | 0 (`Spacing/spacing-00 = 0`) |
@@ -117,16 +117,16 @@ Disabled and Skeleton are exempt; the Divider is decorative (the row's fill and 
 | Layer | Text style | Lines | Text property |
 | --- | --- | --- | --- |
 | `Label` | `Body/Subheadline` (`$subhead`) | one line, hugs | `Label text`, BOOLEAN `Label` |
-| `Value` | `Body/Body` (`$body`) | Full-bleed: wraps, Fill × Hug; Inset: hugs, one line | `Value text`, BOOLEAN `Value` |
+| `Value` | `Body/Body` (`$body`) | wraps, Fill × Hug (Full-bleed and Inset) | `Value text`, BOOLEAN `Value` |
 | `Subtitle` | `Body/Subheadline` (`$subhead`) | wraps, Fill × Hug | `Subtitle text`, BOOLEAN `Description` |
 | `Icon` | `fa-sharp fa-solid/Large`; Unchecked `fa-sharp fa-regular/Large` | one glyph | none |
 
-Nothing is truncated. Inset's `Icon + Value` is Fixed at 142, so a longer Inset value runs past it: set the row to Hug or Fill, or use Full-bleed.
+Nothing is truncated. Both Types are a Fill chain under a Fixed root: placed at Fill, the row takes its column and a long value wraps.
 
 ## Hit target and Skeleton
 
 - **Hit target**: `Interactive/Medium`, 48 × 48 minimum (ADR 0003, the 2026-11-02 amendment for row components); `componentSet.interactive: true`, `hitTargetLayer: Container › Icon + Value`. The row is the target: it binds the min height, the Root only the min width, and the Divider sits on the row's bottom edge. A one-line Full-bleed row is 48 (12 + 24 + 12), with a Subtitle 72. Icon only is the target itself: the box centred in a 48 × 48 row.
-- **Skeleton**: Carbon's: the box keeps its Selection; `Text` hides and the `Skeleton` frame shows an 80 × 8 `skeleton-background` bar on the first line; the Label and Spacer hide. Full-bleed Skeleton is 48 tall, Inset Skeleton 108 × 48; Icon only's Skeleton is the box alone, 48 × 48.
+- **Skeleton**: Carbon's: the box keeps its Selection; `Text` hides and the `Skeleton` frame shows an 80 × 8 `skeleton-background` bar on the first line; the Label and Spacer hide. Full-bleed Skeleton is 48 tall, Inset Skeleton 112 × 48; Icon only's Skeleton is the box alone, 48 × 48.
 
 ## Motion
 
@@ -141,7 +141,7 @@ Nothing is truncated. Inset's `Icon + Value` is Fixed at 142, so a longer Inset 
 - [x] 3. N/A: not a field.
 - [x] 4. Selection is shape (empty box, check, minus), not colour alone.
 - [ ] 5. The Focus ring is Carbon's, per Type: Full-bleed rings the whole row, 2 px `Focus/focus` inside; Inset rings the box, square, with a 2 px gap. Both are drawn as `State=Focus`; the map puts it around the Container with a 2 px gap and its radius + 4, and keeps it off the `State` axis. The owner's calls (Calls).
-- [x] 6. Inset's `Value` hugs one line, so long Inset copy at large sizes needs Fill or Full-bleed (Text styles).
+- [x] 6. Inset, placed at Fill, wraps the same way.
 - [x] 7. No text under 11 pt: Body 17, Subheadline 15, the glyph at Icon/Large.
 - [x] 8. Motion: one transition, colour only when reduced, no haptic.
 - [x] 9. Role, accessible name, announced states and focus order below. On Inset, the group `Label` names the group (`fieldset` / `legend` on web, a header trait on iOS), not each checkbox. Icon only has no text: it takes its name from its row or Tile title.
@@ -157,13 +157,24 @@ Indeterminate is set by the app (a parent over some checked children), never by 
 
 ## Usage
 
-The `Usage` frame moved its 28 `Style=Default` instances (Light and Dark) onto this set on 2026-11-02, each as `Type=Full-bleed, Alignment=Left` with the same State and Selection, `Label text` → `Value text`, `Description` off:
+The `Usage` frame holds 10 samples, Light and Dark, in Thai:
 
-- Settings, and Parent with Indeterminate over three children: Full-bleed rows, Divider on.
+- **Settings**: Full-bleed rows, Divider on, Unchecked and Checked.
+- **Parent**: an Indeterminate parent over three children, two checked.
+- **Inset group**: Inset with its `Label` (the group label) and `Indented` children, in the form's column.
 - the copy wraps and the box stays on the first line.
-- Focus: `State=Focus`, Full-bleed, so the row ring is the component's own; the hand-drawn ring around the sample is dropped, and its note gives both Types' rings.
-- Alternative: Checked and Indeterminate override the glyph to `Miscellaneous/interactive` (the Box's old fill and border overrides moved there with the glyph box, 2026-11-02), with the note reworded to match.
-
-The old set's last four `Style=Checkbox only` samples (Checked and Unchecked, twice) moved to `Type=Icon only, Alignment=Left, State=Enabled`, same Selection, 48 × 48, on 2026-11-02; then `Checkbox (old)` and its Bases frame were deleted. Not drawn yet: a Right-aligned list, and an Inset group with its Label and Indented children.
-
+- **Inset consent**: Inset at Fill takes the column; a long value wraps beneath and the box stays on the first line.
+- **Focus ring**: shown once, `State=Focus` on Full-bleed (the row ring); its note gives Inset's (the box ringed 4 out).
+- **Skeleton**: two rows in `State=Skeleton`: the box keeps its place, an 80 bar stands for the value.
+- **Nested**: `Type=Icon only`, 48 × 48, in a List item or Tile that owns the tap and the accessible name.
+- **Alternative**: Checked and Indeterminate with the glyph overridden to `Miscellaneous/interactive`.
 - **Placement** (a Draft doc, so edited in place; Uber's Check page, 2026-11-13, placement-fields.md): the box at the leading end of its row, the label after it, wrapping beneath with the box top-aligned; the whole row is the touch target; in a list row or an Inset group in the form's column. It is for an option saved by a final button; a setting that takes effect at once is a [Toggle](toggle.md). Apple's HIG has the checkbox on macOS only; Core keeps it on iOS because consent has no HIG iOS component (open call D6).
+
+- **When to use**: an option saved by a final button, in a form or a settings sheet with Save; each check is independent of the others; a parent over its children is `Indeterminate` while some are checked, and a tap on it checks all (Base, HIG).
+- **Group**: introduce a list with a group label (Inset `Label`) or a header that reads on its own; children sit `Indented` under their parent (Base, HIG).
+- **Touch target**: the whole row, label included (Base); the set's Hit target already keeps it.
+- **Content**: each value short (under 3 words where it can be), parallel with its siblings, positive (no "ไม่…"), no line break, no end punctuation; the group label ends with "?" only when it is a question (Base).
+  - Use one for a setting that takes effect at once: that's a [Toggle](toggle.md) (Base).
+  - Use one for one choice among options: that's [Radio](radio.md), or a button group for 2–3 short options (Base, HIG).
+  - Use one as a single action that submits ("ยอมรับ" that goes on): that's a [Button](button.md).
+  - Write a value as a negation or end it with punctuation (Base).

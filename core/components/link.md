@@ -97,3 +97,4 @@ The spec's `contrast` list: the `Link` label (text) and the Focus ring.
 - Primary for a standalone action in neutral text (List item's trailing Link, Section heading); Highlight for a link that must read as a link in body copy (Toggletip).
 - Underline (Cmd+U on the instance's label) for an inline link in running text and for Breadcrumbs; a standalone Link stays plain (Accessibility).
 - `Trailing icon` off where the link sits in a row or a path; on where it leads to another page.
+- **Placement** (R1): a destination, in or beside text. Inline in running text (Underline), or alongside it. Standalone at a row's or a Section heading's trailing end, or at the start of its block under the content it concerns (a terms link in a footer, a cancel link under an order's status). Never in the Button dock or a Toolbar, and never the screen's Primary: an action that does something is a Button, a destination is a Link.

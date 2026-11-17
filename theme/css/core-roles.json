@@ -92,7 +92,7 @@
   "bgElevation3": "Layer/layer-03",
   "bgInfo": "Support/support-info",
   "fgInteractive": "Miscellaneous/interactive",
-  "bgAvatar": "Avatar/background",
+  "bgAvatar": "Tag/Indigo/Primary/background",
   "fgOnColor": "Text/text-on-color",
   "fgIconMuted": "Icon/icon-secondary",
   "bgTagPositive": "Tag/Green/Secondary/background",

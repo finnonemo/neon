@@ -160,5 +160,6 @@ Checked on Active, Loading and Enabled at each Size, both looks, filled and empt
 - The Focus ring once, on `iOS=False`.
 - Built: Light and Dark columns at Medium.
 - Search at the top of a list or a screen. The magnifier is the label, so `Label` stays off unless the search sits in a form.
+- **Placement** (R1): two places. The `Show Search` row of [Toolbar - Top](toolbars.md), under the title; or inline, the first part of the page component's content, above the list it filters, full width inside the 16 inset, pinned under the Toolbar when the list scrolls (HIG). The keyboard opens with the field above it (HIG). No bottom-toolbar search and no Search tab: Core's Bottom Navigation is fixed.
 - Not for entering a value that is then validated: that's a [Text field](text-field.md). Not for picking from a fixed list: that's Select.
 - Cancel (iOS) and Back (Android) belong to the screen's toolbar or header, beside the field, not in it (call 6).

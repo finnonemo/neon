@@ -2252,99 +2252,44 @@
       }
     },
     "Chart": {
-      "chart-positive": {
-        "value": "{Green.135}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-negative": {
-        "value": "{Red.125}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-neutral": {
-        "value": "{Navy.55}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-positive-area": {
-        "value": "{Green.15A}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-negative-area": {
-        "value": "{Red.15A}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-gridline": {
-        "value": "{Navy.12A}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-gridline-subtle": {
-        "value": "{Navy.5A}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-axis": {
-        "value": "{Navy.25A}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-other": {
-        "value": "{Navy.50}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-not-classified": {
-        "value": "{Navy.25}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-empty": {
-        "value": "{Navy.8}",
-        "type": "color",
-        "prefix": "color"
-      },
       "Asset allocation": {
         "equity": {
-          "value": "{Blue.155}",
+          "value": "{Orange.100}",
           "type": "color",
           "prefix": "color"
         },
         "fixed-income": {
-          "value": "{Orange.145}",
+          "value": "{Green.130}",
           "type": "color",
           "prefix": "color"
         },
         "gold": {
-          "value": "{Yellow.150}",
+          "value": "{Yellow.160}",
           "type": "color",
           "prefix": "color"
         },
         "cash": {
-          "value": "{Purple.75}",
+          "value": "{Green.155}",
           "type": "color",
           "prefix": "color"
         },
         "government-bond": {
-          "value": "{Teal.120}",
+          "value": "{Blue.135}",
           "type": "color",
           "prefix": "color"
         },
         "unit-trust": {
-          "value": "{Red.90}",
+          "value": "{Yellow.150}",
           "type": "color",
           "prefix": "color"
         },
         "derivatives": {
-          "value": "{Indigo.80}",
+          "value": "{Red.145}",
           "type": "color",
           "prefix": "color"
         },
         "warrant": {
-          "value": "{Green.140}",
+          "value": "{Purple.100}",
           "type": "color",
           "prefix": "color"
         },
@@ -2356,106 +2301,106 @@
       },
       "Multi-asset": {
         "equity": {
-          "value": "{Purple.90}",
+          "value": "{Purple.100}",
           "type": "color",
           "prefix": "color"
         },
         "thai-equity": {
-          "value": "{Indigo.145}",
+          "value": "{Indigo.100}",
           "type": "color",
           "prefix": "color"
         },
         "gold": {
-          "value": "{Yellow.160}",
+          "value": "{Yellow.150}",
           "type": "color",
           "prefix": "color"
         },
         "cash": {
-          "value": "{Green.165}",
+          "value": "{Green.150}",
           "type": "color",
           "prefix": "color"
         },
         "mutual-fund": {
-          "value": "{Navy.65}",
+          "value": "{Navy.100}",
           "type": "color",
           "prefix": "color"
         },
         "tax-saving": {
-          "value": "{Blue.140}",
+          "value": "{Blue.135}",
           "type": "color",
           "prefix": "color"
         },
         "esavings": {
-          "value": "{Green.135}",
+          "value": "{Green.130}",
           "type": "color",
           "prefix": "color"
         },
         "cryptocurrency": {
-          "value": "{Red.155}",
+          "value": "{Red.135}",
           "type": "color",
           "prefix": "color"
         },
         "crowdfunding": {
-          "value": "{Red.110}",
+          "value": "{Red.100}",
           "type": "color",
           "prefix": "color"
         },
         "p2p-lending": {
-          "value": "{Orange.160}",
+          "value": "{Orange.100}",
           "type": "color",
           "prefix": "color"
         }
       },
       "Mutual fund": {
         "equity": {
-          "value": "{Purple.90}",
+          "value": "{Purple.100}",
           "type": "color",
           "prefix": "color"
         },
         "fixed-income": {
-          "value": "{Green.135}",
+          "value": "{Green.130}",
           "type": "color",
           "prefix": "color"
         },
         "balanced": {
-          "value": "{Light Grey.155}",
+          "value": "{Navy.100}",
           "type": "color",
           "prefix": "color"
         },
         "reits": {
-          "value": "{Blue.160}",
+          "value": "{Blue.135}",
           "type": "color",
           "prefix": "color"
         },
         "commodities": {
-          "value": "{Yellow.160}",
+          "value": "{Yellow.150}",
           "type": "color",
           "prefix": "color"
         }
       },
       "Tax saving": {
         "ssf": {
-          "value": "{Blue.140}",
+          "value": "{Blue.135}",
           "type": "color",
           "prefix": "color"
         },
         "rmf": {
-          "value": "{Purple.130}",
+          "value": "{Purple.115}",
           "type": "color",
           "prefix": "color"
         },
         "thaiesg": {
-          "value": "{Green.135}",
+          "value": "{Green.130}",
           "type": "color",
           "prefix": "color"
         },
         "thaiesgx": {
-          "value": "{Green.165}",
+          "value": "{Green.135}",
           "type": "color",
           "prefix": "color"
         },
         "ltf": {
-          "value": "{Navy.65}",
+          "value": "{Navy.100}",
           "type": "color",
           "prefix": "color"
         }
@@ -2463,77 +2408,70 @@
       "Super sector": {
         "Cyclical": {
           "basic-materials": {
-            "value": "{Purple.60}",
+            "value": "{Purple.80}",
             "type": "color",
             "prefix": "color"
           },
           "consumer-cyclical": {
-            "value": "{Purple.130}",
+            "value": "{Purple.120}",
             "type": "color",
             "prefix": "color"
           },
           "financial-services": {
-            "value": "{Purple.55}",
+            "value": "{Purple.75}",
             "type": "color",
             "prefix": "color"
           },
           "real-estate": {
-            "value": "{Purple.125}",
+            "value": "{Purple.115}",
             "type": "color",
             "prefix": "color"
           }
         },
         "Sensitive": {
           "consumer-services": {
-            "value": "{Blue.120}",
+            "value": "{Blue.140}",
             "type": "color",
             "prefix": "color"
           },
           "energy": {
-            "value": "{Blue.155}",
+            "value": "{Blue.160}",
             "type": "color",
             "prefix": "color"
           },
           "industrials": {
-            "value": "{Blue.115}",
+            "value": "{Blue.135}",
             "type": "color",
             "prefix": "color"
           },
           "technology": {
-            "value": "{Blue.150}",
+            "value": "{Blue.155}",
             "type": "color",
             "prefix": "color"
           }
         },
         "Defensive": {
           "consumer-defensive": {
-            "value": "{Green.115}",
+            "value": "{Green.135}",
             "type": "color",
             "prefix": "color"
           },
           "healthcare": {
-            "value": "{Green.155}",
+            "value": "{Green.165}",
             "type": "color",
             "prefix": "color"
           },
           "utilities": {
-            "value": "{Green.110}",
+            "value": "{Green.130}",
             "type": "color",
             "prefix": "color"
           },
           "medical": {
-            "value": "{Green.150}",
+            "value": "{Green.155}",
             "type": "color",
             "prefix": "color"
           }
         }
-      }
-    },
-    "Avatar": {
-      "background": {
-        "value": "{Indigo.70}",
-        "type": "color",
-        "prefix": "color"
       }
     }
   },
@@ -4790,99 +4728,44 @@
       }
     },
     "Chart": {
-      "chart-positive": {
-        "value": "{Green.115}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-negative": {
-        "value": "{Red.115}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-neutral": {
-        "value": "{Grey.50}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-positive-area": {
-        "value": "{Green.25A}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-negative-area": {
-        "value": "{Red.25A}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-gridline": {
-        "value": "{White.15A}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-gridline-subtle": {
-        "value": "{White.8A}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-axis": {
-        "value": "{White.25A}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-other": {
-        "value": "{Grey.40}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-not-classified": {
-        "value": "{Grey.75}",
-        "type": "color",
-        "prefix": "color"
-      },
-      "chart-empty": {
-        "value": "{Grey.80}",
-        "type": "color",
-        "prefix": "color"
-      },
       "Asset allocation": {
         "equity": {
-          "value": "{Blue.155}",
+          "value": "{Orange.100}",
           "type": "color",
           "prefix": "color"
         },
         "fixed-income": {
-          "value": "{Orange.130}",
+          "value": "{Green.100}",
           "type": "color",
           "prefix": "color"
         },
         "gold": {
-          "value": "{Yellow.150}",
+          "value": "{Yellow.85}",
           "type": "color",
           "prefix": "color"
         },
         "cash": {
-          "value": "{Purple.80}",
+          "value": "{Green.125}",
           "type": "color",
           "prefix": "color"
         },
         "government-bond": {
-          "value": "{Teal.115}",
+          "value": "{Blue.100}",
           "type": "color",
           "prefix": "color"
         },
         "unit-trust": {
-          "value": "{Red.90}",
+          "value": "{Yellow.100}",
           "type": "color",
           "prefix": "color"
         },
         "derivatives": {
-          "value": "{Indigo.55}",
+          "value": "{Red.100}",
           "type": "color",
           "prefix": "color"
         },
         "warrant": {
-          "value": "{Green.125}",
+          "value": "{Purple.100}",
           "type": "color",
           "prefix": "color"
         },
@@ -4899,47 +4782,47 @@
           "prefix": "color"
         },
         "thai-equity": {
-          "value": "{Indigo.45}",
+          "value": "{Indigo.75}",
           "type": "color",
           "prefix": "color"
         },
         "gold": {
-          "value": "{Yellow.125}",
+          "value": "{Yellow.100}",
           "type": "color",
           "prefix": "color"
         },
         "cash": {
-          "value": "{Green.135}",
-          "type": "color",
-          "prefix": "color"
-        },
-        "mutual-fund": {
-          "value": "{Navy.60}",
-          "type": "color",
-          "prefix": "color"
-        },
-        "tax-saving": {
-          "value": "{Blue.120}",
-          "type": "color",
-          "prefix": "color"
-        },
-        "esavings": {
           "value": "{Green.110}",
           "type": "color",
           "prefix": "color"
         },
+        "mutual-fund": {
+          "value": "{Navy.65}",
+          "type": "color",
+          "prefix": "color"
+        },
+        "tax-saving": {
+          "value": "{Blue.100}",
+          "type": "color",
+          "prefix": "color"
+        },
+        "esavings": {
+          "value": "{Green.100}",
+          "type": "color",
+          "prefix": "color"
+        },
         "cryptocurrency": {
-          "value": "{Red.120}",
+          "value": "{Red.110}",
           "type": "color",
           "prefix": "color"
         },
         "crowdfunding": {
-          "value": "{Red.40}",
+          "value": "{Red.100}",
           "type": "color",
           "prefix": "color"
         },
         "p2p-lending": {
-          "value": "{Orange.50}",
+          "value": "{Orange.100}",
           "type": "color",
           "prefix": "color"
         }
@@ -4951,29 +4834,29 @@
           "prefix": "color"
         },
         "fixed-income": {
-          "value": "{Green.125}",
+          "value": "{Green.100}",
           "type": "color",
           "prefix": "color"
         },
         "balanced": {
-          "value": "{Light Grey.65}",
+          "value": "{Navy.65}",
           "type": "color",
           "prefix": "color"
         },
         "reits": {
-          "value": "{Blue.70}",
+          "value": "{Blue.100}",
           "type": "color",
           "prefix": "color"
         },
         "commodities": {
-          "value": "{Yellow.125}",
+          "value": "{Yellow.100}",
           "type": "color",
           "prefix": "color"
         }
       },
       "Tax saving": {
         "ssf": {
-          "value": "{Blue.130}",
+          "value": "{Blue.100}",
           "type": "color",
           "prefix": "color"
         },
@@ -4983,17 +4866,17 @@
           "prefix": "color"
         },
         "thaiesg": {
-          "value": "{Green.45}",
+          "value": "{Green.100}",
           "type": "color",
           "prefix": "color"
         },
         "thaiesgx": {
-          "value": "{Green.120}",
+          "value": "{Green.110}",
           "type": "color",
           "prefix": "color"
         },
         "ltf": {
-          "value": "{Navy.60}",
+          "value": "{Navy.65}",
           "type": "color",
           "prefix": "color"
         }
@@ -5001,34 +4884,34 @@
       "Super sector": {
         "Cyclical": {
           "basic-materials": {
-            "value": "{Purple.85}",
+            "value": "{Purple.60}",
             "type": "color",
             "prefix": "color"
           },
           "consumer-cyclical": {
-            "value": "{Purple.50}",
+            "value": "{Purple.100}",
             "type": "color",
             "prefix": "color"
           },
           "financial-services": {
-            "value": "{Purple.120}",
+            "value": "{Purple.55}",
             "type": "color",
             "prefix": "color"
           },
           "real-estate": {
-            "value": "{Purple.80}",
+            "value": "{Purple.90}",
             "type": "color",
             "prefix": "color"
           }
         },
         "Sensitive": {
           "consumer-services": {
-            "value": "{Blue.155}",
+            "value": "{Blue.100}",
             "type": "color",
             "prefix": "color"
           },
           "energy": {
-            "value": "{Blue.135}",
+            "value": "{Blue.140}",
             "type": "color",
             "prefix": "color"
           },
@@ -5038,40 +4921,33 @@
             "prefix": "color"
           },
           "technology": {
-            "value": "{Blue.140}",
+            "value": "{Blue.130}",
             "type": "color",
             "prefix": "color"
           }
         },
         "Defensive": {
           "consumer-defensive": {
-            "value": "{Green.125}",
+            "value": "{Green.100}",
             "type": "color",
             "prefix": "color"
           },
           "healthcare": {
-            "value": "{Green.150}",
+            "value": "{Green.125}",
             "type": "color",
             "prefix": "color"
           },
           "utilities": {
-            "value": "{Green.35}",
+            "value": "{Green.75}",
             "type": "color",
             "prefix": "color"
           },
           "medical": {
-            "value": "{Green.130}",
+            "value": "{Green.120}",
             "type": "color",
             "prefix": "color"
           }
         }
-      }
-    },
-    "Avatar": {
-      "background": {
-        "value": "{Indigo.70}",
-        "type": "color",
-        "prefix": "color"
       }
     }
   }

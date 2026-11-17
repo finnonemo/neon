@@ -4,7 +4,7 @@
 import { padding } from './entries.mjs';
 
 const container = (property) => ({ layer: 'Container', property });
-const cells = { set: 'Table row', layer: 'Cells', property: 'minHeight' };
+const cells = { set: 'Table row', layer: 'Container / Cells', property: 'minHeight' };
 const row = (Type) => ({ Type, Size: 'Medium', Selection: 'None', Expansion: 'None', State: 'Enabled' });
 
 const CELLS = {
@@ -29,7 +29,7 @@ export default {
         h: container('minHeight'),
         pad: padding(container),
         // The Header row's fill, which Neon paints on each header cell.
-        bg: { set: 'Table row', at: row('Header'), layer: '(root)', property: 'fills.0' },
+        bg: { set: 'Table row', at: row('Header'), layer: 'Container', property: 'fills.0' },
         // Footnote Strong: Core's bold, which Neon draws at 600.
         font: { layer: 'Container / Label', property: 'textStyleId', weight: 600 },
         color: { layer: 'Container / Label', property: 'fills.0' },

@@ -7,16 +7,16 @@
 As copied from the kit, apart from the buttons and the Search row. Top iPhone `Style=Default`, as on 2026-11-08; `Toolbar - Top` has the same tree, with the `iOS=False` parts:
 
 ```
-Toolbar - Top - iPhone (variant)   402 × 58 (Search off), V, padding 0 · 0 · 10 · 0, Fixed × Hug
-├─ Controls                        Fill × 48, H, padding 0 · 16
-│  ├─ Title                        absolute, 258 wide; `Show Title`. Title (TEXT `Title`), one line, ending … Bottom layer, so an open Menu in Trailing draws over it
-│  ├─ Leading                      Slot, 48 × 48
-│  ├─ Spacer
-│  └─ Trailing                     Slot, 48 × 48
-└─ Search                          `Show Search` (off), Fill × Hug, padding 8 · 16 · 0 · 16 (spacing-03, spacing-05)
+└─ Container                       V, padding 0 · 0 · 10 · 0, Fill × Hug
+   ├─ Controls                        Fill × 48, H, padding 0 · 16
+   │  ├─ Title                        absolute, 258 wide; `Show Title`. Title (TEXT `Title`), one line, ending … Bottom layer, so an open Menu in Trailing draws over it
+   │  ├─ Leading                      Slot, 48 × 48
+   │  ├─ Spacer
+   │  └─ Trailing                     Slot, 48 × 48
+   └─ Search                          `Show Search` (off), Fill × Hug, padding 8 · 16 · 0 · 16 (spacing-03, spacing-05)
 ```
 
-Title 2 Line and Title 2 Line Left hold `Title and Subtitle` (TEXT `Title`, `Subtitle`; `Show Subtitle`), Large Title holds them under `Controls`. Every title is one line, truncated at the end. Heights with Search off: 58, Large Title 133. `Toolbar - Top`: padding 8 · 0 · 8 · 0 (`spacing-03`), so 64, Large Title 139 (115 without Subtitle), Search on 120. `Controls` hugs with min height `control-medium` (48), every title is in its flow and hugs its height, and Leading and Trailing fill around Default's and Title 2 Line's title, so it stays centred; Default's title box hugs up to 258. Large Title 146 (122 without Subtitle).
+Every set's variant root holds its size only, and the layout, padding, gap, fill and clip named below are its `Container`'s, in all five sets. Title 2 Line and Title 2 Line Left hold `Title and Subtitle` (TEXT `Title`, `Subtitle`; `Show Subtitle`), Large Title holds them under `Controls`. Every title is one line, truncated at the end. Heights with Search off: 58, Large Title 133. `Toolbar - Top`: padding 8 · 0 · 8 · 0 (`spacing-03`), so 64, Large Title 139 (115 without Subtitle), Search on 120. `Controls` hugs with min height `control-medium` (48), every title is in its flow and hugs its height, and Leading and Trailing fill around Default's and Title 2 Line's title, so it stays centred; Default's title box hugs up to 258. Large Title 146 (122 without Subtitle).
 
 Top - iPad: in Title 2 Line, Title 2 Line Left and Compact Large, Leading and Trailing hug, the title sits in the row between them, Fill, and the row's gap is 12 (`spacing-04`). Title 2 Line centres its title in the room left; the others start it at the leading end. 58 tall as before.
 
