@@ -4,7 +4,8 @@ import { mkdtemp, mkdir, writeFile, readFile, readdir, rm, symlink } from 'node:
 import { execFileSync } from 'node:child_process';
 import { dirname, join } from 'node:path';
 import { tmpdir } from 'node:os';
-import { syncCore, indexCore, checkCoreSnapshot, checkCounterpartTable, movedReport } from '../../scripts/lib/core-snapshot.mjs';
+import { syncCore, indexCore, checkCoreSnapshot, checkCorePalette, checkCounterpartTable, movedReport } from '../../scripts/lib/core-snapshot.mjs';
+import { paletteFromCore, paletteChanges, paletteReport, PALETTE_FILE, CORE_THEME_DOC } from '../../scripts/lib/core-palette.mjs';
 
 // Core's Web compile is Core's own script, tested in Core's repository (ADR 0012). This stands in for it in a
 // checkout small enough to read here: it writes the files under `compiled/` of the checkout it is told to compile,
@@ -46,7 +47,10 @@ const COMPILED = {
   'compiled/scales.json': '{\n  "Spacing/spacing-05": 16\n}\n',
   'compiled/text-styles.json': '{\n  "Body": { "size": 17, "lineHeight": 24 }\n}\n',
 };
-const CORE_FILES = { [COMPILE_PATH]: WEB_COMPILE, 'left-out.json': JSON.stringify({ draft: ['checkbox'], deprecated: ['sidebar', 'tab-bar'] }), ...COMPILED };
+// Core's record of the Colors library, which the compile does not carry: the sync reads it from the commit compiled.
+const PRIMITIVES = { 'Black/100': '#000000FF', 'Black/0': '#00000000', 'Black/85A': '#000000D9', 'White/100': '#FFFFFFFF', 'Navy/75': '#415160FF' };
+const coreTheme = primitives => `${JSON.stringify({ tokens: {}, primitives }, null, 2)}\n`;
+const CORE_FILES = { [COMPILE_PATH]: WEB_COMPILE, [CORE_THEME_DOC]: coreTheme(PRIMITIVES), 'left-out.json': JSON.stringify({ draft: ['checkbox'], deprecated: ['sidebar', 'tab-bar'] }), ...COMPILED };
 const ITEMS = ['button', 'dialog', 'card'];
 const COUNTERPARTS = {
   button: { core: 'button' },
@@ -479,4 +483,97 @@ test('the repository check refuses a file the sync did not write and a registry 
   await assert.rejects(checkCoreSnapshot(out, { items: [...ITEMS, 'tabs'] }), /index.*tabs/s);
   await writeFile(join(out, 'components/notes.md'), '# Notes\n');
   await assert.rejects(checkCoreSnapshot(out, { items: ITEMS }), /components\/notes\.md.*not.*the sync wrote/s);
+});
+
+// The palette (ADR 0012): written by the sync from Core's record of the Colors library, and never by hand.
+test('the palette is Core\'s Colors library in the shape its readers take: lowercase hex, no ff alpha, no newline at the end', () => {
+  const text = paletteFromCore(coreTheme(PRIMITIVES));
+  assert.equal(text.at(-1), '}');
+  // Hues keep the library's order; a step named by a whole number comes first, as JavaScript orders keys.
+  assert.deepEqual(JSON.parse(text), {
+    Black: { 0: { value: '#00000000', type: 'color', prefix: 'colors' }, 100: { value: '#000000', type: 'color', prefix: 'colors' }, '85A': { value: '#000000d9', type: 'color', prefix: 'colors' } },
+    White: { 100: { value: '#ffffff', type: 'color', prefix: 'colors' } },
+    Navy: { 75: { value: '#415160', type: 'color', prefix: 'colors' } },
+  });
+  assert.deepEqual(Object.keys(JSON.parse(text)), ['Black', 'White', 'Navy']);
+  assert.deepEqual(Object.keys(JSON.parse(text).Black), ['0', '100', '85A']);
+});
+
+test('the palette refuses a record with no primitives, a name that is not Hue/Step and a value that is not #RRGGBBAA', () => {
+  assert.throws(() => paletteFromCore(`${JSON.stringify({ tokens: {} })}\n`), /no `primitives`.*not written/s);
+  assert.throws(() => paletteFromCore(coreTheme({ Black: '#000000FF' })), /"Black" is not named "Hue\/Step"/);
+  assert.throws(() => paletteFromCore(coreTheme({ 'Black/1/2': '#000000FF' })), /not named "Hue\/Step"/);
+  assert.throws(() => paletteFromCore(coreTheme({ 'Black/100': '#000000' })), /Black\/100 is "#000000", not a color written "#RRGGBBAA"/);
+  assert.throws(() => paletteFromCore('{'), /not JSON/);
+});
+
+test('the sync reads the palette from the commit it compiles, records its hash, and refuses a Core commit with no record', async t => {
+  const from = await coreCheckout(t);
+  const first = git(from, 'rev-parse', 'HEAD');
+  await writeFile(join(from, CORE_THEME_DOC), coreTheme({ ...PRIMITIVES, 'Navy/75': '#41516080' }));
+  git(from, 'commit', '-q', '-am', 'Navy');
+  const { result, json } = await synced(t, { from, at: first });
+  assert.equal(result.palette, paletteFromCore(coreTheme(PRIMITIVES)));
+  assert.match((await json('snapshot.json')).palette, /^[0-9a-f]{64}$/);
+  assert.equal(JSON.parse((await synced(t, { from })).result.palette).Navy[75].value, '#41516080');
+  const { [CORE_THEME_DOC]: record, ...older } = CORE_FILES;
+  await assert.rejects(synced(t, { files: older }), /has no docs\/theme\/theme\.json.*nothing was written/s);
+  await assert.rejects(synced(t, { files: { ...CORE_FILES, [CORE_THEME_DOC]: `${JSON.stringify({ tokens: {} })}\n` } }), /no `primitives`/);
+});
+
+test('the sync lists each primitive whose value moved', () => {
+  const before = paletteFromCore(coreTheme(PRIMITIVES));
+  assert.deepEqual(paletteChanges(before, before), []);
+  const after = paletteFromCore(coreTheme({ ...PRIMITIVES, 'Navy/75': '#41516080', 'Navy/50': '#8090A0FF' }));
+  const changes = paletteChanges(before, after);
+  assert.deepEqual(changes, [{ name: 'Navy/50', was: null, is: '#8090a0' }, { name: 'Navy/75', was: '#415160', is: '#41516080' }]);
+  assert.match(paletteReport(changes, { count: 6, written: true }).join('\n'), /changed: 2 of 6.*Navy\/75 +#415160 → #41516080/s);
+  assert.match(paletteReport([], { count: 5, written: false })[0], /5 primitives.*holds/);
+});
+
+// A Neon root as the sync leaves it: the snapshot and the palette it wrote.
+async function syncedRoot(t) {
+  const root = await mkdtemp(join(tmpdir(), 'neon-root-'));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const { result } = await synced(t, { out: join(root, 'core') });
+  await mkdir(dirname(join(root, PALETTE_FILE)), { recursive: true });
+  await writeFile(join(root, PALETTE_FILE), result.palette);
+  return { root, palette: result.palette };
+}
+
+test('the repository check refuses a palette edited by hand', async t => {
+  const { root, palette } = await syncedRoot(t);
+  await checkCorePalette(root);
+  const edited = JSON.parse(palette);
+  edited.Navy[75].value = '#415161';
+  await writeFile(join(root, PALETTE_FILE), JSON.stringify(edited, null, 2));
+  await assert.rejects(checkCorePalette(root), /theme\/tokens\/colors\.json is not the palette the sync wrote.*never edited by hand.*sync-core/s);
+  // Even a change that leaves every value as it was: the file is the sync's, byte for byte.
+  await writeFile(join(root, PALETTE_FILE), `${palette}\n`);
+  await assert.rejects(checkCorePalette(root), /not the palette the sync wrote/);
+  await rm(join(root, PALETTE_FILE));
+  await assert.rejects(checkCorePalette(root), /colors\.json is missing/);
+});
+
+test('the repository check refuses a palette whose hash was taken out of the manifest, or edited there', async t => {
+  const { root } = await syncedRoot(t);
+  const path = join(root, 'core/snapshot.json');
+  const manifest = JSON.parse(await readFile(path, 'utf8'));
+  const { palette, ...without } = manifest;
+  await writeFile(path, `${JSON.stringify(without, null, 2)}\n`);
+  await assert.rejects(checkCorePalette(root), /records no hash for theme\/tokens\/colors\.json/);
+  await assert.rejects(checkCoreSnapshot(join(root, 'core'), { items: ITEMS }), /snapshot\.json does not match what the sync wrote/);
+  await writeFile(path, `${JSON.stringify({ ...manifest, palette: '0'.repeat(64) }, null, 2)}\n`);
+  await assert.rejects(checkCoreSnapshot(join(root, 'core'), { items: ITEMS }), /snapshot\.json does not match what the sync wrote/);
+});
+
+test('writing the index again keeps the palette\'s hash, so the palette still passes', async t => {
+  const { root } = await syncedRoot(t);
+  const out = join(root, 'core');
+  const was = JSON.parse(await readFile(join(out, 'snapshot.json'), 'utf8')).palette;
+  const items = ITEMS.map(name => ({ name, supporting: false }));
+  assert.deepEqual(await indexCore({ out, items, counterparts: { ...COUNTERPARTS, card: { core: 'menu' } } }), { changed: true });
+  assert.equal(JSON.parse(await readFile(join(out, 'snapshot.json'), 'utf8')).palette, was);
+  await checkCoreSnapshot(out, { items: ITEMS });
+  await checkCorePalette(root);
 });

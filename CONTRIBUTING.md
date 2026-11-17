@@ -43,6 +43,8 @@ A Core commit older than Core's compile script has none to run: add `--compiler 
 
 The sync compiles what the checkout has checked out, and another session may move it. Add `--at <commit or ref>` to pin the snapshot to a commit: the sync compiles it in a temporary worktree of the checkout and removes the worktree after, so the checkout's own working tree and branch stay as they are.
 
+The same run writes the palette, `theme/tokens/colors.json`: every Primitive of Core's `Colors` library, which every token resolves against ([ADR 0012](docs/adr/0012-core-compiles-the-snapshot-and-holds-the-palette.md)). Core's compile does not carry the library, so the sync reads Core's record of it, the `primitives` of `docs/theme/theme.json`, at the commit it compiled, and records the palette's hash in `core/snapshot.json`. It keeps the file's shape: hue, then step, lowercase hex with an `ff` alpha left off, and no newline at the end. It prints each primitive whose value moved, and the pull request lists them. A Core commit with no `primitives` is refused. `validate` fails when the palette is not the one the sync wrote. `--from-snapshot` carries the hash and cannot write the palette.
+
 To see what a sync would bring without moving the pin, add `--dry-run`: it compiles, refuses what a sync refuses and prints the same report, and writes nothing. It does not write or check the Theme export or the adapter.
 
 An entry of the Counterpart table has five fields, and the sync and `validate` refuse any other:
