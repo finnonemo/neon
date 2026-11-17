@@ -1,6 +1,6 @@
 Block snapshot
 
-Built from Block (github.com/pawisssh/block), Finnomena's Pattern builder, at commit daed41d1e04f3229b4be93119bf89e46f3eeb049
+Built from Block (github.com/pawisssh/block), Finnomena's Pattern builder, at commit e6df852ea21ae0cf203c7a0c2bafa732c5bdcaae
 by scripts/sync-block.mjs. Do not edit these files: change Block and sync again.
 
 Code: MIT License

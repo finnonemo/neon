@@ -1,11 +1,11 @@
 {
   "block": {
     "repository": "github.com/pawisssh/block",
-    "commit": "daed41d1e04f3229b4be93119bf89e46f3eeb049"
+    "commit": "e6df852ea21ae0cf203c7a0c2bafa732c5bdcaae"
   },
   "files": {
-    "NOTICE": "9e135968e63de097c20db0a0e1e6b585a6e54308e64a8c96f91971f3b6bcb53e",
-    "block-engine.mjs": "19c27bcc232d4a0afedf26b8547e39f87ad0cd986254229e7a9b41b2657e5ff1",
+    "NOTICE": "c55edf67ae8c7e0cb6cef4c4546d84620e6559569ca6dd045eeccf30fa38742c",
+    "block-engine.mjs": "e323de23ec2181c5d6e921dacb67768b07769838687982dced9b6acc77c0fb34",
     "fonts/IBMPlexMono-LICENSE.txt": "7e6b2818edbd8f6a01ae80641cc8f16a51080d08fb4e532be3a0b6f74adb07da",
     "fonts/IBMPlexMono-Regular.ttf": "d71c5e8ce165981d5d0c9c62f2e2c046adfcdfd507e209bd1e641cb1c9849aeb",
     "fonts/IBMPlexSansThai-LICENSE.txt": "7e6b2818edbd8f6a01ae80641cc8f16a51080d08fb4e532be3a0b6f74adb07da",
@@ -13,5 +13,5 @@
     "fonts/IBMPlexSansThai-Regular.ttf": "daa1e3024598fc137aa2b96716cce8607923ae80a3a83687174034f36bdd6a4f",
     "hb.wasm": "90c0bd6c34d54ac8730366f4ed7f7ce870e4b6b9260cbe92e728ffa6c4694c0a"
   },
-  "seal": "61412d0386e8c3be4a3f9b7b3cb955afe7eb3af6c0467d2b4cd0b2a9a650d119"
+  "seal": "947422c03d1ab54d96b37a7c4f634cb65640ce71e9a2dc1b532c7e57f1c49618"
 }
