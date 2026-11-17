@@ -1,5 +1,5 @@
 // The palette, theme/tokens/colors.json: every Primitive of Core's Colors library, which every color token resolves
-// against (ADR 0012). Core records the library in its docs/theme/theme.json, as `primitives`, a flat map of
+// against (ADR 0012). Core records the library in <Core checkout>/docs/theme/theme.json, as `primitives`, a flat map of
 // "Hue/Step": "#RRGGBBAA" in the library's order. Core's Web compile does not carry it, so the Core sync reads it from
 // the commit it compiled and writes the palette from it; the manifest records the palette's hash, and the repository
 // check (checkCorePalette in core-snapshot.mjs) refuses a palette that no longer has it.
