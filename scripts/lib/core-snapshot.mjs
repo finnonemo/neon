@@ -3,7 +3,9 @@
 // wrote, adds the index and records the commit and each file's hash; indexCore writes the index again from the
 // Counterpart table, with no Core checkout; checkCoreSnapshot is the repository check that refuses a hand edit, and
 // checkCounterpartTable the one that holds the Counterpart table, and the index it gives, to the snapshot.
-// Nothing here reads Core's own docs.
+// The one Core record read from Core's own files is the Colors library, which the compile does not carry: the sync
+// writes the palette from it (core-palette.mjs), the manifest records the palette's hash, and checkCorePalette refuses
+// a palette edited by hand.
 import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { existsSync, realpathSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
@@ -11,6 +13,7 @@ import { createHash } from 'node:crypto';
 import { tmpdir } from 'node:os';
 import { dirname, join, sep } from 'node:path';
 import { listFiles } from './plain-text-references.mjs';
+import { corePalette, PALETTE_FILE } from './core-palette.mjs';
 
 export const SNAPSHOT_DIR = 'core';
 export const COUNTERPARTS_FILE = 'registry/core-counterparts.json';
@@ -23,7 +26,8 @@ const COMPILER_DIR = 'docs/agents';
 // Which look that is is Core's to pick (its web look, GLOSSARY): Neon states none of its own.
 const LOOK_LINE = /^Look: iOS=(True|False), text size (.+)\.$/m;
 const sha256 = content => createHash('sha256').update(content).digest('hex');
-const sealOf = ({ core, look, files }) => sha256(JSON.stringify({ core, look, files }));
+// A manifest from before the palette has none, and JSON.stringify leaves it out: its seal is the one it was written with.
+const sealOf = ({ core, look, files, palette }) => sha256(JSON.stringify({ core, look, files, palette }));
 const git = (cwd, ...args) => execFileSync('git', ['-C', cwd, ...args], { encoding: 'utf8' }).trim();
 
 /**
@@ -236,9 +240,12 @@ async function syncCheckout({ from, compiler = from, out, items, counterparts, w
   for (const reserved of [INDEX, MANIFEST]) if (files.has(reserved)) throw new Error(`Core's Web compile wrote ${reserved}, which is the snapshot's own file, so nothing was written.`);
   const data = value => `${JSON.stringify(value, null, 2)}\n`;
   files.set(INDEX, data(counterpartIndex({ items, counterparts, files, leftOut })));
-  // The manifest: where the snapshot came from, the look the compile reported for this run, each file's hash for the repository check, and a seal over all three.
+  // The palette, from Core's record of the Colors library at the commit compiled: in a --at worktree, read before it is removed.
+  const palette = corePalette(from, commit);
+  // The manifest: where the snapshot came from, the look the compile reported for this run, each file's hash and the
+  // palette's for the repository check, and a seal over all four.
   const hashes = Object.fromEntries([...files].sort(([a], [b]) => (a < b ? -1 : 1)).map(([path, content]) => [path, sha256(content)]));
-  const manifest = { core, look, files: hashes };
+  const manifest = { core, look, files: hashes, palette: sha256(palette) };
   files.set(MANIFEST, data({ ...manifest, seal: sealOf(manifest) }));
   const moved = movedSince(await readFile(join(out, MANIFEST), 'utf8').then(JSON.parse, () => null), { from, core, hashes });
   if (write) {
@@ -248,7 +255,7 @@ async function syncCheckout({ from, compiler = from, out, items, counterparts, w
       await writeFile(join(out, path), content);
     }
   }
-  return { commit, compiler: core.compiler, look, files: [...files.keys()], leftOut, moved };
+  return { commit, compiler: core.compiler, look, files: [...files.keys()], leftOut, moved, palette };
 }
 
 /**
@@ -277,9 +284,10 @@ export async function indexCore({ out, items, counterparts }) {
   const index = `${JSON.stringify(counterpartIndex({ items, counterparts, files, leftOut: {} }), null, 2)}\n`;
   const hashes = Object.fromEntries(Object.entries({ ...manifest.files, [INDEX]: sha256(index) }).sort(([a], [b]) => (a < b ? -1 : 1)));
   const changed = index !== await readFile(join(out, INDEX), 'utf8').catch(() => null) || hashes[INDEX] !== manifest.files[INDEX];
-  const { core, look } = manifest;
+  // The palette's hash is carried as the sync recorded it: nothing here reads Core, so nothing here can write the palette.
+  const { core, look, palette } = manifest;
   await writeFile(join(out, INDEX), index);
-  await writeFile(join(out, MANIFEST), `${JSON.stringify({ core, look, files: hashes, seal: sealOf({ core, look, files: hashes }) }, null, 2)}\n`);
+  await writeFile(join(out, MANIFEST), `${JSON.stringify({ core, look, files: hashes, palette, seal: sealOf({ core, look, files: hashes, palette }) }, null, 2)}\n`);
   return { changed };
 }
 
@@ -372,4 +380,17 @@ export async function checkCoreSnapshot(directory, { items } = {}) {
   if (problems.length) {
     throw new Error(`The Core snapshot in ${directory} is not the one the sync wrote:\n${problems.join('\n')}\nThe snapshot is never edited by hand: change Core, or the Counterpart table, and re-run node scripts/sync-core.mjs --from <Core checkout>, or with --from-snapshot when only the table changed.`);
   }
+}
+
+/**
+ * The repository check for the palette in `root`: it is the file the sync wrote from Core's Colors library, by the
+ * hash the manifest of the snapshot in `root` records. The palette is never edited by hand.
+ */
+export async function checkCorePalette(root) {
+  const manifest = JSON.parse(await readFile(join(root, SNAPSHOT_DIR, MANIFEST), 'utf8'));
+  const resync = `The palette is never edited by hand: change Core's Colors library, and re-run node scripts/sync-core.mjs --from <Core checkout>.`;
+  if (!manifest.palette) throw new Error(`${SNAPSHOT_DIR}/${MANIFEST} records no hash for ${PALETTE_FILE}, so nothing says the sync wrote it. ${resync}`);
+  const content = await readFile(join(root, PALETTE_FILE), 'utf8').catch(() => null);
+  if (content === null) throw new Error(`${PALETTE_FILE} is missing. ${resync}`);
+  if (sha256(content) !== manifest.palette) throw new Error(`${PALETTE_FILE} is not the palette the sync wrote from Core ${manifest.core.commit.slice(0, 8)}. ${resync}`);
 }

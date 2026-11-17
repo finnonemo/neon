@@ -4,7 +4,7 @@
  *
  * Emits theme/css/immersive-themes.css from the hand-maintained
  * ../immersive-themes.json, resolving each Family.step reference against the
- * raw ../tokens/colors.json export. The CSS is a generated file — edit the
+ * ../tokens/colors.json palette, which the Core sync writes. The CSS is a generated file — edit the
  * JSON and re-run this script instead.
  *
  * Each theme becomes one `[data-immersive-theme="<name>"]` block of

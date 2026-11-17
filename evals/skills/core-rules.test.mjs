@@ -60,11 +60,11 @@ test('the Core rules reference reads the snapshot through its index, one compone
   assert.match(button, /^## Usage$/m);
   assert.match(button, /^### Hierarchy$/m);
   assert.match(await read('core/hierarchy.md'), /^## Rules every component keeps$/m);
-  // "Read from that heading to the end" holds for every Counterpart's doc.
-  assert.match(rules, /read from it to the end of the file/);
+  // A run reads Usage alone: from its heading to the next section, wherever Core places it in the doc.
+  assert.match(rules, /read from it to the next `## ` heading, or to the end of the file when none follows/);
   for (const doc of new Set(Object.values(index).map(entry => entry.doc).filter(Boolean))) {
     const headings = [...(await read(`core/${doc}`)).matchAll(/^## (.*)$/gm)].map(match => match[1]);
-    assert.equal(headings.at(-1), 'Usage', doc);
+    assert.equal(headings.filter(heading => heading === 'Usage').length, 1, doc);
   }
 });
 

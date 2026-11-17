@@ -16,6 +16,8 @@
 // It prints how far Core moved since the snapshot it replaces and the files that changed. Core's repository is
 // private: its commits are named by hash, and --subjects adds their subjects, to read and not to paste.
 // It prints each color role whose value the run changed, per mode: the pull request names each and its contrast.
+// It writes the palette, theme/tokens/colors.json, from Core's record of the Colors library at the commit it compiled
+// (scripts/lib/core-palette.mjs), records its hash in the manifest, and prints each primitive whose value moved.
 // --dry-run compiles, refuses what a sync refuses and prints the same, and writes nothing.
 // --from-snapshot takes the snapshot as checked in, with no Core checkout: it writes core/index.json again from the
 // Counterpart table, then all that follows the snapshot below. It is what a change to the Counterpart table, the
@@ -24,10 +26,11 @@
 // The same run writes what follows the snapshot's Theme: the Theme token export
 // and the CSS adapter's colors (scripts/lib/core-theme.mjs); and what follows its
 // text styles: the adapter's type sizes and line heights (scripts/lib/core-type.mjs).
-import { readFile } from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
 import { syncCore, indexCore, movedReport, SNAPSHOT_DIR, COUNTERPARTS_FILE } from './lib/core-snapshot.mjs';
+import { PALETTE_FILE, paletteChanges, paletteReport, paletteCount } from './lib/core-palette.mjs';
 import { writeCoreTheme, changedRolesReport, THEME_EXPORT, ADAPTER } from './lib/core-theme.mjs';
 import { writeCoreType } from './lib/core-type.mjs';
 import { registryComponents } from './lib/registry.mjs';
@@ -56,7 +59,7 @@ try {
       ? `Wrote ${SNAPSHOT_DIR}/index.json from ${COUNTERPARTS_FILE}, and its hash and the seal in ${SNAPSHOT_DIR}/snapshot.json.`
       : `${SNAPSHOT_DIR}/index.json already follows ${COUNTERPARTS_FILE}: it is as it was.`);
   } else {
-    const { commit, compiler, look, files, leftOut, moved } = await syncCore({
+    const { commit, compiler, look, files, leftOut, moved, palette } = await syncCore({
       ...snapshot,
       from: resolve(from),
       at: option('--at'),
@@ -69,6 +72,9 @@ try {
     for (const line of movedReport(moved, commit, { subjects: args.includes('--subjects') })) console.log(line);
     const byStanding = Object.groupBy(Object.keys(leftOut), name => leftOut[name]);
     for (const [standing, names] of Object.entries(byStanding)) console.log(`Left out, ${standing}: ${names.join(', ')}.`);
+    const held = await readFile(resolve(root, PALETTE_FILE), 'utf8').catch(() => null);
+    if (!dryRun) await writeFile(resolve(root, PALETTE_FILE), palette);
+    for (const line of paletteReport(paletteChanges(held, palette), { count: paletteCount(palette), written: !dryRun })) console.log(line);
     if (dryRun) process.exit(0);
   }
   const { changed } = await writeCoreTheme(root);
