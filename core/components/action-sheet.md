@@ -7,19 +7,20 @@
 `Action Sheet`, as the kit and as [Alert](alert.md), with changes in brackets:
 
 ```
-Action Sheet (variant root)       Fixed 300 × Hug, VERTICAL, padding 14 (raw, the kit's), gap 0, clip
-│                                   iOS=False: `Layer/layer-01`, radius 16 (`radius-lg`), `Elevation/Floating` (Q5)
-├─ Title and Message              VERTICAL, Fill × Hug, padding 8 · 8 · 24 · 8 (`spacing-03`, `spacing-06`), gap 10 (raw)
-│  │                                [kit `Title and Description`]
-│  ├─ Title                       `Headings/Headline`, `Text/text-primary`, left, wraps; TEXT `Title`
-│  └─ Message                     `Body/Body`, `Text/text-primary`, left, wraps; TEXT `Message`; BOOLEAN `Show message` (on)
-│                                   [kit `Description`]
-└─ Buttons                        VERTICAL, Fill × Hug, gap 8 (`spacing-03`) [new: holds the Slot and the Cancel together]
-   ├─ Actions                     SLOT, VERTICAL, Fill × Hug, gap 8 (`spacing-03`) [kit `Actions`]
-   │                                default content: three Buttons `Size=Medium, iOS=False`, Fill, in the Button dock's stack order (Uber):
-   │                                "Action 2" and "Action 3" (`Hierarchy=Secondary`), then "Delete" (`Hierarchy=Primary,
-   │                                Type=Danger`) [kit: `_Buttons`, Q2, Q4]
-   └─ Cancel                      Button `Hierarchy=Tertiary, Type=Default, Size=Medium, iOS=False`, Fill, "Cancel", icons off;
+Action Sheet (variant root)       Fixed 300 × Hug, sizing only
+└─ Container                      Fill × Hug, VERTICAL, padding 14 (raw, the kit's), gap 0, clip
+   │                                iOS=False: `Layer/layer-01`, radius 16 (`radius-lg`), `Elevation/Floating` (Q5)
+   ├─ Title and Message           VERTICAL, Fill × Hug, padding 8 · 8 · 24 · 8 (`spacing-03`, `spacing-06`), gap 10 (raw)
+   │  │                             [kit `Title and Description`]
+   │  ├─ Title                    `Headings/Headline`, `Text/text-primary`, left, wraps; TEXT `Title`
+   │  └─ Message                  `Body/Body`, `Text/text-primary`, left, wraps; TEXT `Message`; BOOLEAN `Show message` (on)
+   │                                [kit `Description`]
+   └─ Buttons                     VERTICAL, Fill × Hug, gap 8 (`spacing-03`) [new: holds the Slot and the Cancel together]
+      ├─ Actions                  SLOT, VERTICAL, Fill × Hug, gap 8 (`spacing-03`) [kit `Actions`]
+      │                             default content: three Buttons `Size=Medium, iOS=False`, Fill, in the Button dock's stack order (Uber):
+      │                             "Action 2" and "Action 3" (`Hierarchy=Secondary`), then "Delete" (`Hierarchy=Primary,
+      │                             Type=Danger`) [kit: `_Buttons`, Q2, Q4]
+      └─ Cancel                   Button `Hierarchy=Tertiary, Type=Default, Size=Medium, iOS=False`, Fill, "Cancel", icons off;
                                     BOOLEAN `Show Cancel` (on); its `Label Text` exposed [new, Q3]
 ```
 

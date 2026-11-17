@@ -7,13 +7,16 @@
 ```
 Allocation bar (variant root)    Fill × Hug, no fill, no padding
 └─ Container                     VERTICAL, gap 12 (Container/<Size>/Gap vertical), Fill × Hug
-   ├─ Bar                        HORIZONTAL, gap 2 (Bar/<Size>/Gap horizontal), Fill × Fixed 8 · 16 (Bar/<Size>/Layout height), radius 0, clip content, fill Chart/chart-empty (the track)
+   ├─ Bar                        HORIZONTAL, gap 2 (Bar/<Size>/Gap horizontal), Fill × Fixed 8 · 16 (Bar/<Size>/Layout height), radius 4 (Bar/<Size>/Radius), 60% smoothing, clip content, fill Chart/chart-empty (the track)
    │  └─ Segments                SLOT, Fill × Fill; each child an `_Allocation segment`, grown by its share (Q3)
    ├─ Legend (List)              SLOT, VERTICAL, Fill × Hug; List item instances, Size=Small, Leading=Small, Trailing=Value; shown when Legend=List
-   └─ Legend (Inline)            HORIZONTAL wrap, gap 16 × 8, Fill × Hug; `_Legend item` instances; shown when Legend=Inline
+   └─ Legend (Inline)            HORIZONTAL wrap, gap 16 × 8, Fill × Hug; `Legend item` instances; shown when Legend=Inline
 
-_Allocation segment              Fill × Fill (grow = its share), min width 4, no radius, fill Chart/chart-categorical-NN or chart-other by `Series`
-_Legend item                     HORIZONTAL, gap 8, Hug × Hug: `square-small` Icon, fill by `Series`; label (Body, one line, Text/text-primary)
+_Allocation segment              Fill × Fill (grow = its share), min width 4, radius 4 (Bar/<Size>/Radius, bound by hand: Slot content), 60% smoothing, fill Chart/chart-categorical-NN or chart-other by `Series`
+Legend item (set, Series)       Hug × Hug
+└─ Container                     HORIZONTAL, gap 8 (Legend item/Container/Default/Gap horizontal), Hug × Hug
+   ├─ Icon                       `square-small`, fill Categorical/Full/NN or Chart/chart-other by `Series`
+   └─ Label text                 Body, one line, Text/text-primary; TEXT `Label`, BOOLEAN `Show label`
 ```
 
 - A segment and a legend swatch take the same `Series`, so the bar and its legend can never disagree on a colour (ADR 0011: one meaning, one slot).
@@ -28,7 +31,7 @@ _Legend item                     HORIZONTAL, gap 8, Hug × Hug: `square-small` I
 | `Size` | Medium · Small | the bar's height, 16 · 8 |
 | `State` | Data · Empty · Skeleton | Data: segments. Empty: the bare track, as Port's `Value = False`. Skeleton: the track pulses, no legend |
 
-`_Allocation segment`: `Series` = 01 · 02 · 03 · 04 · 05 · 06 · 07 · 08 · Other (9). `_Legend item`: the same `Series`.
+`_Allocation segment`: `Series` = 01 · 02 · 03 · 04 · 05 · 06 · 07 · 08 · Other (9). `Legend item`: the same `Series` (9 variants), with the properties `Label` (TEXT) and `Show label` (BOOLEAN, on).
 
 Properties: none on the bar; the segments and legend rows are content (Slots). 3 × 2 × 3 = **18 variants** on the bar, 9 on each Item. The domain colours (`Chart/Asset allocation/equity`, …) are not an axis: a fill override bound to the domain token, the recipe List item's legend row already uses ([R1](list-item.md)), so one set serves every domain set without a `Domain` axis that grows with each new set.
 
@@ -39,7 +42,7 @@ Properties: none on the bar; the segments and legend rows are content (Slots). 3
 | Group | Keyed by | Properties | Values (Medium · Small) |
 | --- | --- | --- | --- |
 | `Allocation bar/Container` | `Size` | Gap vertical | `spacing-04` (12) · `spacing-03` (8) |
-| `Allocation bar/Bar` | `Size` | Layout height, Gap horizontal, Radius | `spacing-05` · `spacing-03` (16 · 8); `spacing-01` (2); `None (radius-0)` |
+| `Allocation bar/Bar` | `Size` | Layout height, Gap horizontal, Radius | `spacing-05` · `spacing-03` (16 · 8); `spacing-01` (2); `4px (radius-xs)` |
 | `Allocation bar/Segment` | `Size` | Layout min-width | `spacing-02` (4) |
 | `Allocation bar/Legend` | `Size` | Gap horizontal, Gap vertical | `spacing-05` (16), `spacing-03` (8) |
 | `Allocation bar/Label` | role: `Legend` | Type token, Type emphasis, Align horizontal, Align vertical, Decoration | `$subhead`, `Regular`, `Left`, `Top`, `-` |
@@ -58,13 +61,13 @@ Templates: `Components/Allocation bar/<Group>/{{Size=*}}/<Property>`. Every valu
 
 ## Icon records
 
-`Allocation bar/Icon/Small/Type token = fa-sharp fa-solid/Small`, the `square-small` swatch of `_Legend item`, a fixed-width layer so a label never shifts. In the List legend the swatch is List item's own `square` Icon, as built in pawisssh/design-system#170.
+`Allocation bar/Icon/Small/Type token = fa-sharp fa-solid/Small`, the `square-small` swatch of `Legend item`, a fixed-width layer so a label never shifts. In the List legend the swatch is List item's own `square` Icon, as built in pawisssh/design-system#170.
 
 ## Text styles, wrapping and truncation
 
 | Layer | Text style | Lines | Text property |
 | --- | --- | --- | --- |
-| `_Legend item` label | `$subhead` (15/24) | one line | `Label text` |
+| `Legend item` label | `$subhead` (15/24) | one line | `Label text` (property `Label`) |
 | List legend's label and value | List item's | as List item (Label one line `ENDING`, Value one line, never cut) | List item's |
 
 An Inline legend wraps to a new row between items, never inside one. A label that doesn't fit one row alone ends `ENDING`.
@@ -108,6 +111,7 @@ The grow is an app behaviour, not a Figma variant. The Skeleton's own shimmer is
 - **An asset allocation**: six parts from `Chart/Asset allocation/*` (หุ้น · ตราสารหนี้ · ทองคำ · เงินสด · พันธบัตรรัฐบาล · อื่นๆ) over the Inline legend, then the same bar over the List legend with percentages summing to 100.00.
 - Use it for a whole split into 2–9 parts. Fold a ninth and later part into `Other`. Don't use it for one progress amount ([Progress bar](progress-bar.md)), a trend (line chart) or a ring (Donut).
 - Segments are set by share. Re-weight by setting each segment's Fill share (Q3).
+- **Placement**: part of the page component, in its scrolling content under the Toolbar - Top, with the 16 inset on a phone; never in the Button dock, a Toolbar or pinned. A title or value sits above it as host content (HIG: descriptive text as a headline). Its legend is inside it (`Inline` or `List`) or the host labels it (`None`, Small); the List legend's rows stay flat on the host surface. Inside a Tile it takes the Tile's inner width; at Regular width, the content column's width (open call D3).
 
 Samples on Usage, eight in Light and their Dark twins (`twin-check.js` clean, 8 pairs), each with an English `Note`; a sample sets the Segments and legend Slots (a share per segment, the Chart token as its fill, each row's Label and Value), nothing else:
 

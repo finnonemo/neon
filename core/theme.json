@@ -4394,212 +4394,100 @@
       "hex": "#FFFFFF08"
     }
   },
-  "Chart/chart-positive": {
-    "light": {
-      "primitive": "Green/135",
-      "hex": "#009646FF"
-    },
-    "dark": {
-      "primitive": "Green/115",
-      "hex": "#00C45BFF"
-    }
-  },
-  "Chart/chart-negative": {
-    "light": {
-      "primitive": "Red/125",
-      "hex": "#D60808FF"
-    },
-    "dark": {
-      "primitive": "Red/115",
-      "hex": "#F30909FF"
-    }
-  },
-  "Chart/chart-neutral": {
-    "light": {
-      "primitive": "Navy/55",
-      "hex": "#737F8AFF"
-    },
-    "dark": {
-      "primitive": "Grey/50",
-      "hex": "#808080FF"
-    }
-  },
-  "Chart/chart-positive-area": {
-    "light": {
-      "primitive": "Green/15A",
-      "hex": "#00E76B26"
-    },
-    "dark": {
-      "primitive": "Green/25A",
-      "hex": "#00E76B40"
-    }
-  },
-  "Chart/chart-negative-area": {
-    "light": {
-      "primitive": "Red/15A",
-      "hex": "#F7323226"
-    },
-    "dark": {
-      "primitive": "Red/25A",
-      "hex": "#F7323240"
-    }
-  },
-  "Chart/chart-gridline": {
-    "light": {
-      "primitive": "Navy/12A",
-      "hex": "#01172B1F"
-    },
-    "dark": {
-      "primitive": "White/15A",
-      "hex": "#FFFFFF26"
-    }
-  },
-  "Chart/chart-gridline-subtle": {
-    "light": {
-      "primitive": "Navy/5A",
-      "hex": "#01172B0D"
-    },
-    "dark": {
-      "primitive": "White/8A",
-      "hex": "#FFFFFF14"
-    }
-  },
-  "Chart/chart-axis": {
-    "light": {
-      "primitive": "Navy/25A",
-      "hex": "#01172B40"
-    },
-    "dark": {
-      "primitive": "White/25A",
-      "hex": "#FFFFFF40"
-    }
-  },
-  "Chart/chart-other": {
-    "light": {
-      "primitive": "Navy/50",
-      "hex": "#808B95FF"
-    },
-    "dark": {
-      "primitive": "Grey/40",
-      "hex": "#999999FF"
-    }
-  },
-  "Chart/chart-not-classified": {
-    "light": {
-      "primitive": "Navy/25",
-      "hex": "#C0C5CAFF"
-    },
-    "dark": {
-      "primitive": "Grey/75",
-      "hex": "#404040FF"
-    }
-  },
-  "Chart/chart-empty": {
-    "light": {
-      "primitive": "Navy/8",
-      "hex": "#EBECEEFF"
-    },
-    "dark": {
-      "primitive": "Grey/80",
-      "hex": "#333333FF"
-    }
-  },
   "Chart/Asset allocation/equity": {
     "light": {
-      "primitive": "Blue/155",
-      "hex": "#006D97FF"
+      "primitive": "Orange/100",
+      "hex": "#F26414FF"
     },
     "dark": {
-      "primitive": "Blue/155",
-      "hex": "#006D97FF"
+      "primitive": "Orange/100",
+      "hex": "#F26414FF"
     }
   },
   "Chart/Asset allocation/fixed-income": {
     "light": {
-      "primitive": "Orange/145",
-      "hex": "#893608FF"
+      "primitive": "Green/130",
+      "hex": "#00A24BFF"
     },
     "dark": {
-      "primitive": "Orange/130",
-      "hex": "#AE450AFF"
+      "primitive": "Green/100",
+      "hex": "#00E76BFF"
     }
   },
   "Chart/Asset allocation/gold": {
     "light": {
-      "primitive": "Yellow/150",
-      "hex": "#919605FF"
+      "primitive": "Yellow/160",
+      "hex": "#747804FF"
     },
     "dark": {
-      "primitive": "Yellow/150",
-      "hex": "#919605FF"
+      "primitive": "Yellow/85",
+      "hex": "#F4FA59FF"
     }
   },
   "Chart/Asset allocation/cash": {
     "light": {
-      "primitive": "Purple/75",
-      "hex": "#BF74D2FF"
-    },
-    "dark": {
-      "primitive": "Purple/80",
-      "hex": "#BB6BCFFF"
-    }
-  },
-  "Chart/Asset allocation/government-bond": {
-    "light": {
-      "primitive": "Teal/120",
-      "hex": "#34A085FF"
-    },
-    "dark": {
-      "primitive": "Teal/115",
-      "hex": "#37AA8EFF"
-    }
-  },
-  "Chart/Asset allocation/unit-trust": {
-    "light": {
-      "primitive": "Red/90",
-      "hex": "#F84747FF"
-    },
-    "dark": {
-      "primitive": "Red/90",
-      "hex": "#F84747FF"
-    }
-  },
-  "Chart/Asset allocation/derivatives": {
-    "light": {
-      "primitive": "Indigo/80",
-      "hex": "#4645ECFF"
-    },
-    "dark": {
-      "primitive": "Indigo/55",
-      "hex": "#807FF2FF"
-    }
-  },
-  "Chart/Asset allocation/warrant": {
-    "light": {
-      "primitive": "Green/140",
-      "hex": "#008B40FF"
+      "primitive": "Green/155",
+      "hex": "#006830FF"
     },
     "dark": {
       "primitive": "Green/125",
       "hex": "#00AD50FF"
     }
   },
+  "Chart/Asset allocation/government-bond": {
+    "light": {
+      "primitive": "Blue/135",
+      "hex": "#009EDAFF"
+    },
+    "dark": {
+      "primitive": "Blue/100",
+      "hex": "#50CFFFFF"
+    }
+  },
+  "Chart/Asset allocation/unit-trust": {
+    "light": {
+      "primitive": "Yellow/150",
+      "hex": "#919605FF"
+    },
+    "dark": {
+      "primitive": "Yellow/100",
+      "hex": "#F2F93CFF"
+    }
+  },
+  "Chart/Asset allocation/derivatives": {
+    "light": {
+      "primitive": "Red/145",
+      "hex": "#9D0606FF"
+    },
+    "dark": {
+      "primitive": "Red/100",
+      "hex": "#F73232FF"
+    }
+  },
+  "Chart/Asset allocation/warrant": {
+    "light": {
+      "primitive": "Purple/100",
+      "hex": "#AA46C3FF"
+    },
+    "dark": {
+      "primitive": "Purple/100",
+      "hex": "#AA46C3FF"
+    }
+  },
   "Chart/Asset allocation/miscellaneous": {
     "light": {
-      "via": "Chart/chart-other",
       "primitive": "Navy/50",
       "hex": "#808B95FF"
     },
     "dark": {
-      "via": "Chart/chart-other",
       "primitive": "Grey/40",
       "hex": "#999999FF"
     }
   },
   "Chart/Multi-asset/equity": {
     "light": {
-      "primitive": "Purple/90",
-      "hex": "#B359C9FF"
+      "primitive": "Purple/100",
+      "hex": "#AA46C3FF"
     },
     "dark": {
       "primitive": "Purple/100",
@@ -4608,98 +4496,98 @@
   },
   "Chart/Multi-asset/thai-equity": {
     "light": {
-      "primitive": "Indigo/145",
-      "hex": "#0D0D7FFF"
+      "primitive": "Indigo/100",
+      "hex": "#1817E7FF"
     },
     "dark": {
-      "primitive": "Indigo/45",
-      "hex": "#9797F4FF"
+      "primitive": "Indigo/75",
+      "hex": "#5251EDFF"
     }
   },
   "Chart/Multi-asset/gold": {
     "light": {
-      "primitive": "Yellow/160",
-      "hex": "#747804FF"
+      "primitive": "Yellow/150",
+      "hex": "#919605FF"
     },
     "dark": {
-      "primitive": "Yellow/125",
-      "hex": "#D9E107FF"
+      "primitive": "Yellow/100",
+      "hex": "#F2F93CFF"
     }
   },
   "Chart/Multi-asset/cash": {
     "light": {
-      "primitive": "Green/165",
-      "hex": "#005125FF"
-    },
-    "dark": {
-      "primitive": "Green/135",
-      "hex": "#009646FF"
-    }
-  },
-  "Chart/Multi-asset/mutual-fund": {
-    "light": {
-      "primitive": "Navy/65",
-      "hex": "#5A6875FF"
-    },
-    "dark": {
-      "primitive": "Navy/60",
-      "hex": "#677480FF"
-    }
-  },
-  "Chart/Multi-asset/tax-saving": {
-    "light": {
-      "primitive": "Blue/140",
-      "hex": "#0092C9FF"
-    },
-    "dark": {
-      "primitive": "Blue/120",
-      "hex": "#0DBDFFFF"
-    }
-  },
-  "Chart/Multi-asset/esavings": {
-    "light": {
-      "primitive": "Green/135",
-      "hex": "#009646FF"
+      "primitive": "Green/150",
+      "hex": "#007435FF"
     },
     "dark": {
       "primitive": "Green/110",
       "hex": "#00D060FF"
     }
   },
-  "Chart/Multi-asset/cryptocurrency": {
+  "Chart/Multi-asset/mutual-fund": {
     "light": {
-      "primitive": "Red/155",
-      "hex": "#810505FF"
+      "primitive": "Navy/100",
+      "hex": "#01172BFF"
     },
     "dark": {
-      "primitive": "Red/120",
-      "hex": "#E50909FF"
+      "primitive": "Navy/65",
+      "hex": "#5A6875FF"
+    }
+  },
+  "Chart/Multi-asset/tax-saving": {
+    "light": {
+      "primitive": "Blue/135",
+      "hex": "#009EDAFF"
+    },
+    "dark": {
+      "primitive": "Blue/100",
+      "hex": "#50CFFFFF"
+    }
+  },
+  "Chart/Multi-asset/esavings": {
+    "light": {
+      "primitive": "Green/130",
+      "hex": "#00A24BFF"
+    },
+    "dark": {
+      "primitive": "Green/100",
+      "hex": "#00E76BFF"
+    }
+  },
+  "Chart/Multi-asset/cryptocurrency": {
+    "light": {
+      "primitive": "Red/135",
+      "hex": "#BA0707FF"
+    },
+    "dark": {
+      "primitive": "Red/110",
+      "hex": "#F61515FF"
     }
   },
   "Chart/Multi-asset/crowdfunding": {
     "light": {
-      "primitive": "Red/110",
-      "hex": "#F61515FF"
+      "primitive": "Red/100",
+      "hex": "#F73232FF"
     },
     "dark": {
-      "primitive": "Red/40",
-      "hex": "#FCADADFF"
+      "primitive": "Red/100",
+      "hex": "#F73232FF"
     }
   },
   "Chart/Multi-asset/p2p-lending": {
     "light": {
-      "primitive": "Orange/160",
-      "hex": "#632705FF"
+      "primitive": "Orange/100",
+      "hex": "#F26414FF"
     },
     "dark": {
-      "primitive": "Orange/50",
-      "hex": "#F9B28AFF"
+      "primitive": "Orange/100",
+      "hex": "#F26414FF"
     }
   },
   "Chart/Mutual fund/equity": {
     "light": {
-      "primitive": "Purple/90",
-      "hex": "#B359C9FF"
+      "primitive": "Purple/100",
+      "hex": "#AA46C3FF"
     },
     "dark": {
       "primitive": "Purple/100",
@@ -4708,58 +4596,58 @@
   },
   "Chart/Mutual fund/fixed-income": {
     "light": {
-      "primitive": "Green/135",
-      "hex": "#009646FF"
+      "primitive": "Green/130",
+      "hex": "#00A24BFF"
     },
     "dark": {
-      "primitive": "Green/125",
-      "hex": "#00AD50FF"
+      "primitive": "Green/100",
+      "hex": "#00E76BFF"
     }
   },
   "Chart/Mutual fund/balanced": {
     "light": {
-      "primitive": "Light Grey/155",
-      "hex": "#3D5A6AFF"
+      "primitive": "Navy/100",
+      "hex": "#01172BFF"
     },
     "dark": {
-      "primitive": "Light Grey/65",
-      "hex": "#C5D5DEFF"
+      "primitive": "Navy/65",
+      "hex": "#5A6875FF"
     }
   },
   "Chart/Mutual fund/reits": {
     "light": {
-      "primitive": "Blue/160",
-      "hex": "#006186FF"
+      "primitive": "Blue/135",
+      "hex": "#009EDAFF"
     },
     "dark": {
-      "primitive": "Blue/70",
-      "hex": "#85DDFFFF"
+      "primitive": "Blue/100",
+      "hex": "#50CFFFFF"
     }
   },
   "Chart/Mutual fund/commodities": {
     "light": {
-      "primitive": "Yellow/160",
-      "hex": "#747804FF"
+      "primitive": "Yellow/150",
+      "hex": "#919605FF"
     },
     "dark": {
-      "primitive": "Yellow/125",
-      "hex": "#D9E107FF"
+      "primitive": "Yellow/100",
+      "hex": "#F2F93CFF"
     }
   },
   "Chart/Tax saving/ssf": {
     "light": {
-      "primitive": "Blue/140",
-      "hex": "#0092C9FF"
+      "primitive": "Blue/135",
+      "hex": "#009EDAFF"
     },
     "dark": {
-      "primitive": "Blue/130",
-      "hex": "#00AAEBFF"
+      "primitive": "Blue/100",
+      "hex": "#50CFFFFF"
     }
   },
   "Chart/Tax saving/rmf": {
     "light": {
-      "primitive": "Purple/130",
-      "hex": "#792D8CFF"
+      "primitive": "Purple/115",
+      "hex": "#9337AAFF"
     },
     "dark": {
       "primitive": "Purple/100",
@@ -4768,98 +4656,98 @@
   },
   "Chart/Tax saving/thaiesg": {
     "light": {
-      "primitive": "Green/135",
-      "hex": "#009646FF"
+      "primitive": "Green/130",
+      "hex": "#00A24BFF"
     },
     "dark": {
-      "primitive": "Green/45",
-      "hex": "#8CF4BCFF"
+      "primitive": "Green/100",
+      "hex": "#00E76BFF"
     }
   },
   "Chart/Tax saving/thaiesgx": {
     "light": {
-      "primitive": "Green/165",
-      "hex": "#005125FF"
+      "primitive": "Green/135",
+      "hex": "#009646FF"
     },
     "dark": {
-      "primitive": "Green/120",
-      "hex": "#00B956FF"
+      "primitive": "Green/110",
+      "hex": "#00D060FF"
     }
   },
   "Chart/Tax saving/ltf": {
     "light": {
-      "primitive": "Navy/65",
-      "hex": "#5A6875FF"
+      "primitive": "Navy/100",
+      "hex": "#01172BFF"
     },
     "dark": {
-      "primitive": "Navy/60",
-      "hex": "#677480FF"
+      "primitive": "Navy/65",
+      "hex": "#5A6875FF"
     }
   },
   "Chart/Super sector/Cyclical/basic-materials": {
     "light": {
-      "primitive": "Purple/60",
-      "hex": "#CC90DBFF"
+      "primitive": "Purple/80",
+      "hex": "#BB6BCFFF"
     },
     "dark": {
-      "primitive": "Purple/85",
-      "hex": "#B762CCFF"
+      "primitive": "Purple/60",
+      "hex": "#CC90DBFF"
     }
   },
   "Chart/Super sector/Cyclical/consumer-cyclical": {
     "light": {
-      "primitive": "Purple/130",
-      "hex": "#792D8CFF"
+      "primitive": "Purple/120",
+      "hex": "#8A34A0FF"
     },
     "dark": {
-      "primitive": "Purple/50",
-      "hex": "#D5A3E1FF"
+      "primitive": "Purple/100",
+      "hex": "#AA46C3FF"
     }
   },
   "Chart/Super sector/Cyclical/financial-services": {
     "light": {
-      "primitive": "Purple/55",
-      "hex": "#D099DEFF"
+      "primitive": "Purple/75",
+      "hex": "#BF74D2FF"
     },
     "dark": {
-      "primitive": "Purple/120",
-      "hex": "#8A34A0FF"
+      "primitive": "Purple/55",
+      "hex": "#D099DEFF"
     }
   },
   "Chart/Super sector/Cyclical/real-estate": {
     "light": {
-      "primitive": "Purple/125",
-      "hex": "#823196FF"
+      "primitive": "Purple/115",
+      "hex": "#9337AAFF"
     },
     "dark": {
-      "primitive": "Purple/80",
-      "hex": "#BB6BCFFF"
+      "primitive": "Purple/90",
+      "hex": "#B359C9FF"
     }
   },
   "Chart/Super sector/Sensitive/consumer-services": {
     "light": {
-      "primitive": "Blue/120",
-      "hex": "#0DBDFFFF"
+      "primitive": "Blue/140",
+      "hex": "#0092C9FF"
     },
     "dark": {
-      "primitive": "Blue/155",
-      "hex": "#006D97FF"
+      "primitive": "Blue/100",
+      "hex": "#50CFFFFF"
     }
   },
   "Chart/Super sector/Sensitive/energy": {
     "light": {
-      "primitive": "Blue/155",
-      "hex": "#006D97FF"
+      "primitive": "Blue/160",
+      "hex": "#006186FF"
     },
     "dark": {
-      "primitive": "Blue/135",
-      "hex": "#009EDAFF"
+      "primitive": "Blue/140",
+      "hex": "#0092C9FF"
     }
   },
   "Chart/Super sector/Sensitive/industrials": {
     "light": {
-      "primitive": "Blue/115",
-      "hex": "#1EC1FFFF"
+      "primitive": "Blue/135",
+      "hex": "#009EDAFF"
     },
     "dark": {
       "primitive": "Blue/75",
@@ -4868,52 +4756,52 @@
   },
   "Chart/Super sector/Sensitive/technology": {
     "light": {
-      "primitive": "Blue/150",
-      "hex": "#007AA8FF"
+      "primitive": "Blue/155",
+      "hex": "#006D97FF"
     },
     "dark": {
-      "primitive": "Blue/140",
-      "hex": "#0092C9FF"
+      "primitive": "Blue/130",
+      "hex": "#00AAEBFF"
     }
   },
   "Chart/Super sector/Defensive/consumer-defensive": {
     "light": {
-      "primitive": "Green/115",
-      "hex": "#00C45BFF"
+      "primitive": "Green/135",
+      "hex": "#009646FF"
+    },
+    "dark": {
+      "primitive": "Green/100",
+      "hex": "#00E76BFF"
+    }
+  },
+  "Chart/Super sector/Defensive/healthcare": {
+    "light": {
+      "primitive": "Green/165",
+      "hex": "#005125FF"
     },
     "dark": {
       "primitive": "Green/125",
       "hex": "#00AD50FF"
     }
   },
-  "Chart/Super sector/Defensive/healthcare": {
+  "Chart/Super sector/Defensive/utilities": {
+    "light": {
+      "primitive": "Green/130",
+      "hex": "#00A24BFF"
+    },
+    "dark": {
+      "primitive": "Green/75",
+      "hex": "#40ED90FF"
+    }
+  },
+  "Chart/Super sector/Defensive/medical": {
     "light": {
       "primitive": "Green/155",
       "hex": "#006830FF"
     },
     "dark": {
-      "primitive": "Green/150",
-      "hex": "#007435FF"
-    }
-  },
-  "Chart/Super sector/Defensive/utilities": {
-    "light": {
-      "primitive": "Green/110",
-      "hex": "#00D060FF"
-    },
-    "dark": {
-      "primitive": "Green/35",
-      "hex": "#A6F7CBFF"
-    }
-  },
-  "Chart/Super sector/Defensive/medical": {
-    "light": {
-      "primitive": "Green/150",
-      "hex": "#007435FF"
-    },
-    "dark": {
-      "primitive": "Green/130",
-      "hex": "#00A24BFF"
+      "primitive": "Green/120",
+      "hex": "#00B956FF"
     }
   },
   "Miscellaneous/segmented-control-selected": {
@@ -4924,16 +4812,6 @@
     "dark": {
       "primitive": "White/25A",
       "hex": "#FFFFFF40"
-    }
-  },
-  "Avatar/background": {
-    "light": {
-      "primitive": "Indigo/70",
-      "hex": "#5D5DEEFF"
-    },
-    "dark": {
-      "primitive": "Indigo/70",
-      "hex": "#5D5DEEFF"
     }
   }
 }

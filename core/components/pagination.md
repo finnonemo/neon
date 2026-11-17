@@ -145,6 +145,9 @@ Thai floors 12 on one line and 13 where it wraps: both Sizes' styles are 15 and 
 ## Usage
 
 - Under a list or Table that has more rows than one screen shows. Not for a short list that loads more on scroll.
+  - **Placement** (R1, Uber's rules): at the foot of the page under its list or Table, never above it.
+  - Numbered spans the screen on a phone (five items at 375) and the container on web, nine pages at most.
+  - Overflow spans the container; Rows per page only on web.
 - Numbered under a list or a gallery whose pages the reader jumps between (up to about ten pages); Overflow under a Table with a total and a rows-per-page choice. Many pages and no choice of rows: Overflow without Rows per page (hide the group), not Numbered with a long Slot.
 - Previous is hidden on page 1 in Numbered; in Overflow Previous and Next are Disabled at the ends (Uber's `Substate` First · Last).
 - At 375 Numbered shows five items (1 2 3 … 10); Overflow wraps its groups.

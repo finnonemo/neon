@@ -12,8 +12,8 @@ Icon button (variant root)      Hug × Hug, no fill, no padding; min width and h
 ```
 
 ```
-Icon button group (variant)     Hug along the axis × Fixed 48, Capsule
-└─ Buttons                      Slot, gap 6; Horizontal pad L/R 4, Vertical pad T/B 4
+└─ Container                    Hug along the axis × Fill, Capsule; pad L/R 4 (Horizontal), T/B 4 (Vertical)
+   └─ Buttons                   Slot, gap 6
 ```
 
 ## Axes

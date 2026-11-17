@@ -7,15 +7,16 @@
 `Alert`, as the kit, with changes in brackets:
 
 ```
-│                                   iOS=False: `Layer/layer-01`, radius 16 (`radius-lg`), `Elevation/Floating` (A6)
-├─ Title and Message              VERTICAL, Fill × Hug, padding 8 · 8 · 24 · 8 (`spacing-03`, `spacing-06`), gap 10 (raw)
-│  ├─ Title                       `Headings/Headline`, `Text/text-primary`, left, wraps; TEXT `Title`
-│  └─ Message                     `Body/Body`, `Text/text-primary`, left, wraps; TEXT `Message`; BOOLEAN `Show Message` (on)
-├─ Text Fields                    VERTICAL, Fill × Hug, padding bottom 24 (`spacing-06`), gap 8 (`spacing-03`);
-│  │                                BOOLEAN `Show Text Field` (off) [kit `Text Field`, A5]
-│  ├─ Field 1                     Text field `Size=Medium`, Fill, its Title and Helper off
-│  └─ Field 2                     the same; BOOLEAN `Second Field` (on, the kit's)
-└─ Actions                        Button dock `iOS=False`, Fill, exposed (owner, 2026-11-09, replaces A2 (a));
+Alert (variant root)              Fixed 300 × Hug, sizing only
+   │                                iOS=False: `Layer/layer-01`, radius 16 (`radius-lg`), `Elevation/Floating` (A6)
+   ├─ Title and Message           VERTICAL, Fill × Hug, padding 8 · 8 · 24 · 8 (`spacing-03`, `spacing-06`), gap 10 (raw)
+   │  ├─ Title                    `Headings/Headline`, `Text/text-primary`, left, wraps; TEXT `Title`
+   │  └─ Message                  `Body/Body`, `Text/text-primary`, left, wraps; TEXT `Message`; BOOLEAN `Show Message` (on)
+   ├─ Text Fields                 VERTICAL, Fill × Hug, padding bottom 24 (`spacing-06`), gap 8 (`spacing-03`);
+   │  │                             BOOLEAN `Show Text Field` (off) [kit `Text Field`, A5]
+   │  ├─ Field 1                  Text field `Size=Medium`, Fill, its Title and Helper off
+   │  └─ Field 2                  the same; BOOLEAN `Second Field` (on, the kit's)
+   └─ Actions                     Button dock `iOS=False`, Fill, exposed (owner, 2026-11-09, replaces A2 (a));
                                     `Overflow`, `Top spacing`, `Home indicator` off; its Container's padding 0 and fill none
                                     Side-by-Side: `Layout=Two`, the bottom button (Tertiary, "Cancel") then Primary
                                     Stacked: `Layout=Stacked`, `Button 3` (Secondary, "Other") on, then Primary, then the

@@ -24,7 +24,7 @@ Set (`Breadcrumbs`):
 
 ```
 Breadcrumbs (component root)     Fixed 720 × Hug on the page, Fill once placed; VERTICAL, no fill, no padding (not interactive)
-└─ Breadcrumb wrapper            HORIZONTAL, Hug × Hug, gap spacing-03 (8), centred, no wrap
+└─ Container                     HORIZONTAL, Hug × Hug, gap spacing-03 (8), centred, no wrap
    ├─ Item 1 … Item 7            _Breadcrumb item instances, Link: `Item 1`–`3` shown, `Item 4`–`7` hidden (R3)
    └─ Current                    _Breadcrumb item, State=Current, last, so a link turned on lands before it (the owner,
                                  2026-11-06); the item's English default labels, Thai copy in Usage
@@ -56,7 +56,7 @@ The item draws its own states, as Carbon's (R4, reversing the exposed nested Lin
 
 | Group | Keyed by | Properties | Values |
 | --- | --- | --- | --- |
-| `Breadcrumbs/Breadcrumb wrapper/Default` | none | Layout horizontal, Layout vertical, Gap horizontal | `Hug contents`, `Hug contents`, 8 (`Spacing/spacing-03 = 8`) |
+| `Breadcrumbs/Container/Default` | none | Layout horizontal, Layout vertical, Gap horizontal | `Hug contents`, `Hug contents`, 8 (`Spacing/spacing-03 = 8`) |
 | `Breadcrumb item/Breadcrumb/<Type>` | `Type` | Layout horizontal, Layout vertical, Gap horizontal | `Hug contents`, `Hug contents`, 8 (`spacing-03`) |
 | `Breadcrumb item/Text/Link`, `Breadcrumb item/Overflow/Overflow` | box | Layout vertical `Hug contents`, Layout min-height, padding top · bottom · left · right, Radius | 32; 4 (`spacing-02`); 2 on Text, 8 (`spacing-03`) on Overflow; 8 (`Radius/8px (radius-sm) = 8`) |
 | `Breadcrumb item/Label/<Link, Current, Separator>` | role | Type token, Type emphasis, Align horizontal, Align vertical, Decoration | `$subhead`, `Regular`, `Left`, `Center`; Decoration `Underline` on Link, `-` on Current and Separator |

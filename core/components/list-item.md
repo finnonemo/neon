@@ -215,6 +215,7 @@ Contrast list: Label, Subtitle and Detail on `layer-01` and `layer-active-01`; t
 - A dense list at 48: Accordion's Content as `Size=Small` List items, and a statement list of one-line rows, `Trailing=Value`. A row that needs a Subtitle or a Second value is Medium.
 - A list of sliders (brightness, volume, text size) is not List item rows: stack [Slider](slider.md) `Type=Full-bleed`, the last row's `Bottom border` off (Slider's `Full-bleed list` sample).
 - Not for a form's consent box: that is Checkbox `Type=Inset`. Not for a plain list of checkboxes: that is Checkbox `Type=Full-bleed`, `Alignment=Right`. A static term and its detail is a List item with no action (Detail row, deprecated 2026-11-09): `Trailing=Label`, `Value` or `Button`, and a total a plain `Trailing=Value` row.
+- **Placement** (R1): rows on the page, no container. Stacked in the page component's scrolling content at the content's width (full width on a phone); a Section heading above a group where the screen has one; each row's own `Bottom border` is the cell divider, off on the last row of a group; a Divider (`Inset=None`) only between large groups. A Selection row (`List item control`) is not inset or outlined (the owner, 2026-11-12).
 
 ### Hierarchy
 

@@ -11,11 +11,11 @@ Bar chart (variant root)            Fill × Hug, no fill, no padding
    │  ├─ Y axis                     VERTICAL, space between, Hug × Fixed (the plot's height); three labels, right-aligned, $caption1, Text/text-secondary; shown by `Y axis`
    │  └─ Plot column                VERTICAL, gap Content/<Size>/Gap vertical (4), Fill × Hug
    │     ├─ Plot                    FRAME, Fill × Fixed 160 · 96 (Content/<Size>/Plot height)
-   │     │  ├─ Gridlines            ABSOLUTE; 3 hairlines (top, middle, base) chart-gridline; on Gain/loss the middle one is the zero line, chart-axis, and on the others the base is
+   │     │  ├─ Gridlines            ABSOLUTE; top, middle and base: a gridline is a LINE, 2 dotted `0 4` round, chart-gridline; on Gain/loss the middle one is the zero line, a solid 1 FRAME in chart-axis, and on the others the base is
    │     │  ├─ Bars                 SLOT, HORIZONTAL, gap Item/<Size>/Gap horizontal, Fill × Fill; `Column 1` … `Column 6`, each a `_Bar column`
    │     │  └─ Empty text           centred, $subhead, Text/text-secondary; shown when State=Empty
    │     └─ X axis                  HORIZONTAL, gap Item/<Size>/Gap horizontal, Fill × Hug; one label per column, FILL, centred, $caption1, Text/text-secondary
-   └─ Legend                        HORIZONTAL wrap, gap Legend/<Size>/Gap horizontal × Gap vertical (16 × 8), Fill × Hug; `_Legend item`s; shown when Legend=Inline
+   └─ Legend                        HORIZONTAL wrap, gap Legend/<Size>/Gap horizontal × Gap vertical (16 × 8), Fill × Hug; `Legend item` instances; shown when Legend=Inline
 
 _Bar column                         VERTICAL, Fill × Fill, gap 0: `Above` (Fill × Fill, bottom-aligned) over `Below` (Fill × Fill, top-aligned, shown on Gain/loss)
 ├─ Above                            `Bar` (Simple, a gain) or `Segment 3`, `Segment 2`, `Segment 1` (Stacked, top first)
@@ -54,7 +54,7 @@ Properties: `Y axis` (BOOLEAN, default off: Q9), `Bars` (SLOT), `Empty text` (TE
 
 `Legend` joins lint's group list for this set: the Allocation bar put its legend gaps in `Content`, which here holds the plot's.
 
-Templates: `Components/Bar chart/<Group>/{{Size=*}}/<Property>`. **Literals**: the gridline and zero-line height (1), as in the Line chart; the per-corner radius 4 (Theme's `Radius/4px` step, which a rule can't bind to two corners) and its 60% smoothing, set on the base; the illustrative bar heights. The bar minimum (1) is code's, not a Figma value.
+Templates: `Components/Bar chart/<Group>/{{Size=*}}/<Property>`. **Literals**: the zero-line height (1), the gridlines' `0 4` dash and round cap and the Gridlines frame's 1 inset, as in the Line chart; the per-corner radius 4 (Theme's `Radius/4px` step, which a rule can't bind to two corners) and its 60% smoothing, set on the base; the illustrative bar heights. The bar minimum (1) is code's, not a Figma value.
 
 `Theme`: no Component-scoped token.
 
@@ -71,7 +71,7 @@ Stacked segments touch with no gap, so two adjacent Categorical colours must hol
 
 ## Icon records
 
-`_Legend item`'s `square-small` swatch (Font Awesome Sharp Solid, `Allocation bar/Icon/Small`), reused as built. The chart draws no other Icon.
+`Legend item`'s `square-small` swatch (Font Awesome Sharp Solid, `Allocation bar/Icon/Small`), reused as built. The chart draws no other Icon.
 
 ## Text styles, wrapping and truncation
 
@@ -80,7 +80,7 @@ Stacked segments touch with no gap, so two adjacent Categorical colours must hol
 | X labels | `$caption1` (12, the Thai floor for one line) | one line, centred under its column, never cut | `X label 1` … `6` |
 | Y labels | `$caption1` | one line, right-aligned | `Y label top`, `middle`, `base` |
 | `Empty text` | `$subhead` (15) | up to two lines, centred | `Empty text` |
-| `_Legend item` label | `$subhead` (15/24) | one line | `Label text` |
+| `Legend item` label | `$subhead` (15/24) | one line | `Label text` (property `Label`) |
 
 The host picks X labels short enough for a column (a month `ม.ค.`, a quarter `Q1`). Twelve columns at 343 leave about 21 each at Medium: a three-character Thai month fits; a longer label means fewer labels, not a smaller style.
 

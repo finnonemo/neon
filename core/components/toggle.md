@@ -133,4 +133,5 @@ Item 2 is not met (pawisssh/design-system#198); met items 5 and 6. Item 2: `iOS=
 - Focus ring (`iOS=False`, web): 2 `Focus/focus` with a 2 gap round the track, never round the row, which stays one focus stop (the `Focus ring` sample).
 - Pin `iOS` (ADR 0005).
 - The Toggle changes a setting at once. For a choice confirmed by a button, use Checkbox.
+- **Placement** (R1): a list row's trailing end. The switch sits at the trailing end of its row, the title at the leading end. On iOS only in a list row, never a lone switch in free content (HIG: outside a list, a toggle-style Button); the web and Android look may sit anywhere in a form (Uber). `Toggle only` stays in a banner or a List item's trailing slot. It takes effect at once; a choice confirmed by a button is a Checkbox (Uber).
 - Don't use Read-only for "not available yet": that's Disabled.

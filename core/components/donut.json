@@ -38,7 +38,7 @@
     {"layer":"Container","property":"layoutSizingVertical","when":"{{Size=*}}{{State=*}}","value":"FIXED","literal":true},
     {"layer":"Container","property":"width","when":"{{Size=*}}","value":"Components/Donut/Container/{{Size=*}}/Layout width"},
     {"layer":"Container","property":"height","when":"{{Size=*}}","value":"Components/Donut/Container/{{Size=*}}/Layout height"},
-    {"layer":"Container / Track","property":"fills.0","when":"{{Size=*}}{{State=*}}","value":"Theme/Chart/chart-empty"},
+    {"layer":"Container / Track","property":"fills.0","when":"{{Size=*}}{{State=*}}","value":"Chart/chart-empty"},
     {"layer":"Container / Track","property":"fills.0","when":"{{State=Skeleton}}","value":"Theme/Skeleton/skeleton-background"},
     {"layer":"Container / Segments","property":"visible","when":"{{Size=*}}{{State=*}}","value":"false","literal":true},
     {"layer":"Container / Segments","property":"visible","when":"{{State=Data}}","value":"true","literal":true}
@@ -93,7 +93,7 @@
     {"layer":"Container / Arc","property":"fills.0","when":"{{Series=06}}","value":"Categorical/Full/06"},
     {"layer":"Container / Arc","property":"fills.0","when":"{{Series=07}}","value":"Categorical/Full/07"},
     {"layer":"Container / Arc","property":"fills.0","when":"{{Series=08}}","value":"Categorical/Full/08"},
-    {"layer":"Container / Arc","property":"fills.0","when":"{{Series=Other}}","value":"Theme/Chart/chart-other"},
+    {"layer":"Container / Arc","property":"fills.0","when":"{{Series=Other}}","value":"Chart/chart-other"},
     {"layer":"Container / Arc","property":"strokeWeight","when":"{{Size=*}}","value":"Components/Donut/Item/{{Size=*}}/Stroke weight"},
     {"layer":"Container / Arc","property":"strokes.0","when":"{{Series=*}}{{Size=*}}","value":"Theme/Layer/layer-01"}
   ]

@@ -177,13 +177,16 @@ Movement from Motion and haptics, the owner's D6 (ads-tokens.md § 5), edited in
   - `มูลค่า` with `250,000.00 ฿`.
   - The `มูลค่า` Accordion is expanded over three `Size=Small` List items: two `Trailing=Label` rows, then the total `ยอดรวม` as a plain `Trailing=Value` row, no Bold (R3 (a)). The last Accordion has `Bottom border` off.
 - **Surface**: a stack sits on `background-primary`. On `background-secondary`, put the stack on a `background-primary` surface first: there the header's `layer-01` row would read as a pill above content with no fill (Inventory).
+- **Content in a Screenflow Plan**: the Plan names the rows in the item's `slots.Content`, one `{ set: "List item", props }` each (`Size=Small, Trailing=Label` with its `Label text` and `Detail text`), as many as the content needs: the build fills Core's three rows in order, appends the rest and hides the ones left over. Each row sets `Bottom border`, off on the last, as Core's third row is (pawisssh/design-system#1137).
 - **Default open**: collapsed by default. At most the first Accordion of a stack opens by default, and never all of them (Base).
 - **Focus ring**: shown once, on a collapsed header.
 - **Skeleton**: a stack in `State=Skeleton`.
+- **Placement**: a vertical stack in the page's scrolling content, at the content's width. A panel opens **below** its header, never above. Secondary or supporting content only: a blocking error or an essential message goes in a Banner on the page, not inside a panel (Base). At most the first panel open (Default open above).
   - Put Accordions in a Grouped list or a Tile.
   - Use one for a row that goes to another screen: that's List item with its `angle-right` `Chevron`.
   - Use a right-pointing chevron (`angle-right`, `chevron-right`) as the indicator: it reads as going to another screen. The indicator is `angle-down` · `angle-up` (Base).
   - Hide a blocking error or essential information in one (Base).
+  - Open a panel above its header (Base: below the title, never above).
   - Make the content scroll inside the panel.
   - Put Detail rows in the Content Slot: use List items.
   - Use one where most panels must be opened anyway: show the content.

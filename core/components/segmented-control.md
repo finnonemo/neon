@@ -193,5 +193,6 @@ Motion and haptics, the Segmented control row, made specific:
 - The period selector: `Size=Small`, nine Latin labels `1D … MAX`, at 375 wide, with `1Y` selected.
 - The Focus ring once, on `iOS=False`.
 - A `Floating=True` Medium control, 280 wide, `ภาพรวม · ปรับพอร์ต` (R2), centred 16 above the bottom of a 375 × 296 screen over a scrolled list of `List item` rows.
+- **Placement** (R1): the first part of the content it changes. At the top of the content it switches, in the page component, at that content's full width inside the 16 inset on a phone (Uber: the main content's width, or smaller). At most 5 segments (Uber; HIG about 5 on iPhone). Never navigation (that is [Tabs](tabs.md)): a view's presentation or a filter. The nine-label period selector stays at `Size=Small`, the owner's T5 call, a deviation from the cap (open call D7).
 
 Use it to switch between two to five views or filters of the same content, where every option fits on one line at standard text sizes. Two closely related views of one object, such as a plan's Overview and Rebalance, take a Segmented control, `Floating=True` when it sits over scrolling content. Separate sections of the app are Navigation. It isn't for navigation between sections (that's Tabs), for a choice inside a form with many options (Select or Radio), or for an on/off (Toggle).

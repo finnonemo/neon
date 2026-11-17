@@ -10,14 +10,14 @@ Table (plain component, axes [])     Fixed 375 × Hug (an `axes: []` build keeps
    ├─ Table row  Type=Header         default content (Decision 12)
    └─ Table row  Type=Body  ×4
 
-Table row (variant root)             Horizontal, Fill × Hug; fill: Header `layer-02`, Body Hover `layer-hover-01`, else none
-├─ Background                        absolute, pinned to all four edges, `layer-02`; BOOLEAN `Zebra` (Body only)
-├─ Selected                          absolute, `layer-selected-01`; BOOLEAN `Selected` (Body only)
-├─ Margin left                       8 (Container Padding left) × Fill; BOOLEAN `Margins`
-├─ Leading                           Hug, min 48 × 48; Expand (Icon button), Checkbox, Radio by `Expansion` and `Selection`
-├─ Cells                             SLOT `Cells`; Horizontal, Fill × Hug, min height by Size, padding 0, gap 0
-│  └─ Table cell / Table header cell ×4   default content, each Fill and the row's Size, Medium (Decisions 10, 12)
-├─ Margin right                      8 (Container Padding right) × Fill; BOOLEAN `Margins`
+└─ Container                         Horizontal, Fill × Hug; fill: Header `layer-02`, Body Hover `layer-hover-01`, else none
+   ├─ Background                        absolute, pinned to all four edges, `layer-02`; BOOLEAN `Zebra` (Body only)
+   ├─ Selected                          absolute, `layer-selected-01`; BOOLEAN `Selected` (Body only)
+   ├─ Margin left                       8 (Container Padding left) × Fill; BOOLEAN `Margins`
+   ├─ Leading                           Hug, min 48 × 48; Expand (Icon button), Checkbox, Radio by `Expansion` and `Selection`
+   ├─ Cells                             SLOT `Cells`; Horizontal, Fill × Hug, min height by Size, padding 0, gap 0
+   │  └─ Table cell / Table header cell ×4   default content, each Fill and the row's Size, Medium (Decisions 10, 12)
+   ├─ Margin right                      8 (Container Padding right) × Fill; BOOLEAN `Margins`
 
 Table expanded row (plain component)  Fixed 375 × Hug, padding `spacing-05` left / right / bottom
 ├─ Content                           SLOT `Content`; Fill × Hug; a `$body` `text-secondary` paragraph, left-aligned
@@ -162,6 +162,7 @@ Theme: the Semantic tokens Carbon binds, by our names (Carbon structure). No `Ta
 - A Table: Header row, then Body rows, all one Size. Thai copy.
 - Figures right-aligned (`Alignment=Right`, header too); text left.
 - At 375, two to four columns; more scrolls sideways.
+- **Placement** (R1): Uber's anchors. At the content's width, its margins matching the content around it; a Table toolbar above it, at the left, and [Pagination](pagination.md) below; the header row stays visible while the rows scroll; at 375 two to four columns, more scroll sideways.
 - Zebra on long tables of figures, or Divider, not both.
 - Not for one term and its value down the screen, or a tapped row: that is [List item](list-item.md) (Detail row, deprecated 2026-11-09).
 

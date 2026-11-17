@@ -151,3 +151,4 @@ Items 1, 2 and 6 were checked on the built set on 2026-11-02. The rest are settl
 - A password or an alphanumeric secret is a [Password field](password-field.md), not this.
 - What happens after a wrong PIN belongs to the sign-in Pattern, as an outcome: clearing the cells, the `Error` haptic, a lockout message.
 - Thai copy in the Title and Detail, e.g. `รหัส PIN`, `กรอกรหัส 6 หลัก`, `รหัส PIN ไม่ถูกต้อง`.
+- **Placement** (R1): shrink, never wrap. 4 to 6 cells in one row; when the row is narrower than the cells, the cells shrink to fill it (Uber), never a second row. The system number keyboard opens on focus; no keypad is drawn. An error shows on the whole field only (Uber).

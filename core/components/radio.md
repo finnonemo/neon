@@ -110,3 +110,5 @@ On Inset, the group `Label` names the radio group (`radiogroup`'s label on web, 
 - `Style=Default` → `Type=Full-bleed, Alignment=Left`, same State and Selection, `Label text` → `Value text`, the old `Subtitle` boolean → `Description`, the instance's sizing kept (Fill), `Bottom border` on. Ten, in Radio buttons › Usage (Group, Long label and Focus ring, Light and Dark).
 - `Style=Radio only` → `Type=Icon only, Alignment=Left`, same State and Selection (none of them was Pressed, which Icon only lacks). The three `1602:*` came after the proposal's count of 19.
 - The two Focus ring samples stay `State=Enabled` inside their hand-drawn ring; `State=Focus` now draws the ring itself, so they could move onto it.
+
+- **Placement** (R1): a vertical group of at most 5. A vertical list in the form's column, the whole row the touch target, exactly one pre-selected (Uber). 2 to 5 options; more is a [Select](select.md) (Uber, HIG). Choosing never navigates anywhere (Uber). HIG has no radio on iOS; Core keeps it (open call D6).

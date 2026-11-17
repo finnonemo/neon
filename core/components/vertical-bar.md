@@ -5,13 +5,13 @@
 ## Anatomy and layer tree
 
 ```
-Vertical Bar (variant root)        Fixed 84 × Fill, no fill, no padding
-├─ Camera Punchout                 Fixed 48 × 42, at the top or the bottom (`Camera`), hidden for None
-├─ Top                             VERTICAL, gap 12, padding 24 / 24 / 0 / 12 (top 74 under a camera at the top), Fill × Hug
-│  ├─ Status bar - iPhone Duo      kit part, 48 × 83; `Show Status Bar`
-│  ├─ Overflow                     the same Icon button, the ellipsis (Toolbar compressed)
-│  └─ Toolbar items                Slot, Share + a two-button Icon button group by default (Tab bar compressed)
-└─ Navigation                      instance, `Layout=Rail`, `Items=5`, `Type=Search Role`, `Minimized` pinned by `Compression`; absolute, Stretch × Bottom; `Show Navigation`
+└─ Container                       VERTICAL, Fill × Fill, no fill, no padding
+   ├─ Camera Punchout                 Fixed 48 × 42, at the top or the bottom (`Camera`), hidden for None
+   ├─ Top                             VERTICAL, gap 12, padding 24 / 24 / 0 / 12 (top 74 under a camera at the top), Fill × Hug
+   │  ├─ Status bar - iPhone Duo      kit part, 48 × 83; `Show Status Bar`
+   │  ├─ Overflow                     the same Icon button, the ellipsis (Toolbar compressed)
+   │  └─ Toolbar items                Slot, Share + a two-button Icon button group by default (Tab bar compressed)
+   └─ Navigation                      instance, `Layout=Rail`, `Items=5`, `Type=Search Role`, `Minimized` pinned by `Compression`; absolute, Stretch × Bottom; `Show Navigation`
 ```
 
 The Camera Punchout sits where the outer camera is: bottom in Outer Landscape, top in Outer Portrait, absent on the inner display (its camera is hidden until used). The Rail's bar is Navigation's own 48 × 270, or 48 × 108 at `Minimized=True` ([navigation.md](navigation.md)), at x 12 of the strip; this component places it, it does not redraw it. With the camera at the bottom the Rail ends 74 above the strip's foot (24 otherwise), and Back and the status bar are off, since 466 has no room for them beside the Rail (Build log).

@@ -7,9 +7,10 @@
 The kit's variant is a flat frame of three absolute layers. Ours keeps its two looks in one tree and adds the Slot the kit lacks (P5), as Sheet adds its Content:
 
 ```
-Popovers (iPad Only) (variant root)  Hug × Hug, no fill, no padding; the Arrow overflows it, as the kit's does (P2)
-│  │                                   iOS=False: radius 12 (`radius-md`); `Layer/layer-01`, 1 `border-subtle` inside, `Elevation/Floating`
-│  └─ Content                        SLOT, Fill × Hug, VERTICAL, padding 16 (P6) [new: the kit has none]
+Popovers (iPad Only) (variant root)  Hug × Hug, sizing only
+└─ Container                         Hug × Hug, no fill, no padding; the Arrow overflows it, as the kit's does (P2)
+   │  │                                iOS=False: radius 12 (`radius-md`); `Layer/layer-01`, 1 `border-subtle` inside, `Elevation/Floating`
+   │  └─ Content                     SLOT, Fill × Hug, VERTICAL, padding 16 (P6) [new: the kit has none]
                                        iOS=False: `Seam` (56 × 1, over the Surface's border at the base), `Arrow shape` (filled `layer-01`) and `Arrow border` (the curve as an open 1 `border-subtle` path)
 ```
 
@@ -96,6 +97,7 @@ The page's `Usage` frame (structure.md) shows, in Light and Dark, each look with
 - **Where it sits.** Width picks the component (ADR 0013, Regular width): at iPad's regular width and on web desktop, a Popover anchored to its control; The Usage shows the iPhone case as that Sheet with the same Slot content, as the issue asks.
 - **Edge samples**: the three Top and Bottom Centers, `Leading (Top)` and `Trailing (Top)`, at both looks, so a designer sees where the arrow lands; the rest are in the set. `iOS=False` repeats one surface and its Arrow (P2).
 - **Placement**: the Popover's edge sits 8 from its anchor (`spacing-03`, P7), hand-placed; at both looks the arrow's tip is the kit's 13, so the tip sits 8 from the anchor and the surface 21.
+  - R1: always anchored to the control it describes, never over it (Uber, HIG); one at a time, never a cascade, and over it only an Alert (HIG); 16 from the screen's edges, its width at most the viewport less 32 (Uber); Regular width only: at Compact width the same view is a [Sheet](sheet.md) (ADR 0013).
 - **Dismiss**: tap outside or Esc; a Primary or Secondary Button in the Slot ("Got it", "ใช้ตัวกรอง") for a view that needs one, as Base's Popover asks. No ✕ is built in (P9).
 - **Not for**: an explanation of its anchor (a [Toggletip](toggletip.md) or a [Tooltip](tooltip.md)); a list of actions (a [Menu](menu.md)); a decision that stops the user (an [Alert](alert.md)); more than one screen of content or a flow (a Sheet at every width).
 - **Hierarchy**: N/A: it nests no button. A Button in the Slot is the Pattern's; Base gives its dismiss Primary or Secondary ([hierarchy.md](../hierarchy.md)).
