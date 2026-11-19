@@ -21,7 +21,7 @@ Start from the index, even when a reference already names a doc: it says whether
 
 ## Read the rule
 
-In the item's doc, read `## Usage` and, where the doc has one, `### Hierarchy` inside it: what the component is for, what it is not for, and which hierarchy its actions take. `## Usage` is each doc's last section, so find that heading and read from it to the end of the file, not the whole doc. The sections above it say how Core draws the component, which the Neon item already does.
+In the item's doc, read `## Usage` and, where the doc has one, `### Hierarchy` inside it: what the component is for, what it is not for, and which hierarchy its actions take. Every doc has a `## Usage` section, first or last. Find that heading and read from it to the next `## ` heading, or to the end of the file when none follows, not the whole doc. The other sections say how Core draws the component, which the Neon item already does.
 
 Which action is primary, secondary or tertiary is in [Core's hierarchy rules](../../../core/hierarchy.md): "Rules every component keeps" 1–6, and the owner's calls under them. Read it when a screen's actions are being chosen or judged; it is one file, not a component doc.
 

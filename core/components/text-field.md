@@ -144,3 +144,4 @@ the other cases below are not drawn yet.
 - A password or other secret is a [Password field](password-field.md), not a Text field.
 - Amounts: turn `Unit` on and set the unit on the `_Unit suffix` instance (Amount entry); the hero amount is Amount field.
 - Read-only for a value the user can see but not change in a form; Disabled only for "can't interact".
+- **Placement** (R1): a column of full-width rows. One field per row in the form's column, the Title above it, full width inside the 16 inset on a phone, one width down the column (HIG). A grid of fields only at Regular width, 16 apart (Uber's Compact layouts). Helper and Error text under the field, nearest it (Uber). The keyboard type follows the content: number for digits, email, URL; a PIN or an amount has its own component ([Pin code](pin-code.md), Amount field).

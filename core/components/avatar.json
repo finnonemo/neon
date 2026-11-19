@@ -35,7 +35,8 @@
         "Purple",
         "Green",
         "Light Grey",
-        "Orange"
+        "Orange",
+        "Neutral"
       ]
     }
   ],
@@ -211,17 +212,7 @@
     "Avatar/Icon/XSmall/Type token": "fa-sharp fa-solid/XSmall",
     "Avatar/Icon/XLarge/Type token": "fa-sharp fa-solid/XLarge",
     "Avatar/Icon/2XLarge/Type token": "fa-sharp fa-solid/2XLarge",
-    "Avatar/Icon/3XLarge/Type token": "fa-sharp fa-solid/3XLarge",
-    "Avatar/background": {
-      "light": {
-        "ref": "Indigo/70",
-        "hex": "#5D5DEEFF"
-      },
-      "dark": {
-        "ref": "Indigo/70",
-        "hex": "#5D5DEEFF"
-      }
-    }
+    "Avatar/Icon/3XLarge/Type token": "fa-sharp fa-solid/3XLarge"
   },
   "bindings": [
     {"layer":"Container","property":"layoutSizingHorizontal","when":"{{Size=*}}","value":"FIXED","literal":true},
@@ -231,13 +222,14 @@
     {"layer":"Container","property":"width","when":"{{Size=*}}","value":"Components/Avatar/Container/{{Size=*}}/Layout width"},
     {"layer":"Container","property":"height","when":"{{Size=*}}","value":"Components/Avatar/Container/{{Size=*}}/Layout height"},
     {"layer":"Container","property":"cornerRadius","when":"{{Size=*}}","value":"Components/Avatar/Container/{{Size=*}}/Radius"},
-    {"layer":"Container","property":"fills.0","when":"{{Color=Default}}","value":"Theme/Avatar/background"},
+    {"layer":"Container","property":"fills.0","when":"{{Color=Default}}","value":"Theme/Tag/Indigo/Primary/background"},
     {"layer":"Container","property":"fills.0","when":"{{Color=Red}}","value":"Theme/Tag/Red/Primary/background"},
     {"layer":"Container","property":"fills.0","when":"{{Color=Blue}}","value":"Theme/Tag/Blue/Primary/background"},
     {"layer":"Container","property":"fills.0","when":"{{Color=Purple}}","value":"Theme/Tag/Purple/Primary/background"},
     {"layer":"Container","property":"fills.0","when":"{{Color=Green}}","value":"Theme/Tag/Green/Primary/background"},
     {"layer":"Container","property":"fills.0","when":"{{Color=Light Grey}}","value":"Theme/Tag/Light Grey/Primary/background"},
     {"layer":"Container","property":"fills.0","when":"{{Color=Orange}}","value":"Theme/Tag/Orange/Primary/background"},
+    {"layer":"Container","property":"fills.0","when":"{{Color=Neutral}}","value":"Theme/Button/button-secondary"},
     {"layer":"Container / Image","property":"visible","when":"{{Size=*}}","value":"false","literal":true},
     {"layer":"Container / Image","property":"visible","when":"{{Artwork=Image}}","value":"true","literal":true},
     {"layer":"Container / Image","property":"cornerRadius","when":"{{Size=*}}","value":"Components/Avatar/Container/{{Size=*}}/Radius"},
@@ -253,6 +245,7 @@
     {"layer":"Container / Label","property":"textStyleId","when":"{{Size=2XLarge}}","value":"Headings/Large Title"},
     {"layer":"Container / Label","property":"textStyleId","when":"{{Size=3XLarge}}","value":"Headings/Large Title"},
     {"layer":"Container / Label","property":"fills.0","when":"{{Size=*}}","value":"Theme/Text/text-on-color"},
+    {"layer":"Container / Label","property":"fills.0","when":"{{Color=Neutral}}","value":"Theme/Text/text-primary"},
     {"layer":"Container / Icon","property":"visible","when":"{{Size=*}}","value":"false","literal":true},
     {"layer":"Container / Icon","property":"visible","when":"{{Artwork=Icon}}","value":"true","literal":true},
     {"layer":"Container / Icon","property":"characters","when":"{{Size=*}}","value":"user","literal":true},
@@ -266,6 +259,7 @@
     {"layer":"Container / Icon","property":"textStyleId","when":"{{Size=2XLarge}}","value":"fa-sharp fa-solid/3XLarge"},
     {"layer":"Container / Icon","property":"textStyleId","when":"{{Size=3XLarge}}","value":"fa-sharp fa-solid/3XLarge"},
     {"layer":"Container / Icon","property":"fills.0","when":"{{Size=*}}","value":"Theme/Icon/icon-on-color"},
+    {"layer":"Container / Icon","property":"fills.0","when":"{{Color=Neutral}}","value":"Theme/Icon/icon-primary"},
     {"layer":"Badge position","property":"primaryAxisAlignItems","when":"{{Size=*}}","value":"MAX","literal":true},
     {"layer":"Badge position","property":"counterAxisAlignItems","when":"{{Size=*}}","value":"MIN","literal":true},
     {"layer":"Badge position","property":"paddingTop","when":"{{Size=*}}","value":"Components/Avatar/Badge/{{Size=*}}/Padding top"},

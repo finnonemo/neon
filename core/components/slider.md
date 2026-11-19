@@ -177,5 +177,6 @@ The `Usage` frame shows, with Thai copy, both looks:
 - The Focus ring once, on `iOS=False`.
 - Skeleton, Single and Range.
 - A Full-bleed list of three rows (ความสว่าง, ระดับเสียง, ขนาดตัวอักษร), the last with Bottom border off, both looks.
+- **Placement** (R1): minimum leading, maximum trailing. In its row at the column's full width, the Title above it. The minimum at the leading end and the maximum at the trailing end (flipped in right-to-left), as icons or labels (Uber, HIG). A wide range pairs it with a field or a [Stepper](stepper.md) (HIG). Not for audio volume on iOS (HIG): the "ระดับเสียง" sample is only an example (open call D8).
 - Number input with Range: turn Min and Max off, since the inputs show the ends;
 - Don'ts: not for an exact figure (Amount field); not for 2–5 named options (Segmented control); not for a count changed one at a time (Stepper); not to show progress (Progress bar).

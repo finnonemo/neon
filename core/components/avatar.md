@@ -8,11 +8,12 @@ With the owner's answers (2026-11-02):
 
 ```
 ├─ Container                    HORIZONTAL, Fixed × Fixed (Layout width / height, raw: Q3), centred, radius Round,
-│  │                            clips content (Q4); fill Avatar/background (Q1) in every Artwork
 │  ├─ Image                     RECTANGLE, Fill × Fill, radius Round (Container's variable), IMAGE fill
 │  │                            (one person per Color in the set); Artwork=Image only
-│  ├─ Label                     TEXT, WIDTH_AND_HEIGHT, one line, centred; Artwork=Initials only
-│  └─ Icon                      TEXT `user`, fa-sharp fa-solid/<Step>; Artwork=Icon only
+│  ├─ Label                     TEXT, WIDTH_AND_HEIGHT, one line, centred, text-on-color (text-primary at Neutral);
+│  │                            Artwork=Initials only
+│  └─ Icon                      TEXT `user`, fa-sharp fa-solid/<Step>, icon-on-color (icon-primary at Neutral);
+│                               Artwork=Icon only
 └─ Badge position               FRAME, absolute on the root, constraints Stretch × Stretch (covers Container), no fill,
    │                            no clip; HORIZONTAL, aligned top end, padding top and right per Size (Q6); hidden unless `Badge`
    └─ Badge ring                FRAME, HORIZONTAL, Hug × Hug, padding 1 on every side, radius Round,
@@ -24,7 +25,7 @@ With the owner's answers (2026-11-02):
 - `Image` sits on the solid fill, as Carbon's `Aspect ratio` sits on its root: the engine sets paints only to a colour variable, a hex or `none` (spec-format.md), so it can't swap Container's paint between SOLID and IMAGE per variant. The solid fill shows while a photo loads and behind a transparent one.
 - A designer swaps the photo by changing `Image`'s image fill in the instance, never detaching.
 - No Items and no Slots. The one nested public instance is Badge, pinned `Content=Dot`.
-- `Badge ring` is CDS's ring as a layer: padding around the Badge, not a stroke, so the Dot stays 8 × 8 red (an inside stroke would eat its edge, Visuals) and Badge itself is unchanged. The ring is 10 × 10 around a Dot, and follows a Count's pill.
+- `Badge ring` is CDS's ring as a layer: padding around the Badge, not a stroke, so the Dot stays 8 × 8 (an inside stroke would eat its edge, Visuals) and Badge itself is unchanged. The ring is 10 × 10 around a Dot, and follows a Count's Capsule.
 
 ## Axes
 
@@ -32,11 +33,11 @@ With the owner's answers (2026-11-02):
 | --- | --- | --- |
 | `Size` | Small · 3XSmall · 2XSmall · XSmall · Medium · Large · XLarge · 2XLarge · 3XLarge | Container's diameter, Label's text style and weight, the Icon step, the Badge inset |
 | `Artwork` | Image · Initials · Icon | which of `Image`, `Label`, `Icon` shows |
-| `Color` | Default · Red · Blue · Purple · Green · Light Grey · Orange | Container's fill |
+| `Color` | Default · Red · Blue · Purple · Green · Light Grey · Orange · Neutral | Container's fill; at `Neutral`, Label's and Icon's fill too |
 
-- `Size` names the Avatar's own diameters, Carbon's eight with Base's 28 and 36 and a chip's 18: `3XSmall` 18 · `2XSmall` 24 · `XSmall` 28 · `Small` 36 · `Medium` 48 · `Large` 64 · `XLarge` 80 · `2XLarge` 96 · `3XLarge` 128. They are not Control heights, as Display tag's `Size` isn't, and skip the Size table; lint's `size-table` rule exempts Avatar's `3XSmall`, `2XSmall`, `2XLarge` and `3XLarge`. `Small` is the default: the two-line List item's size.
+- `Size` names the Avatar's own diameters, Carbon's eight with Base's 28 and 36 and a Selection tag's 18: `3XSmall` 18 · `2XSmall` 24 · `XSmall` 28 · `Small` 36 · `Medium` 48 · `Large` 64 · `XLarge` 80 · `2XLarge` 96 · `3XLarge` 128. They are not Control heights, as Display tag's `Size` isn't, and skip the Size table; lint's `size-table` rule exempts Avatar's `3XSmall`, `2XSmall`, `2XLarge` and `3XLarge`. `Small` is the default: the two-line List item's size.
 - Properties: BOOLEAN `Badge` (off) on `Badge position`; TEXT `Initials` on `Label` (default `AB`); the exposed Badge's own `Content` and `Number`.
-- 9 × 3 × 7 = **189 variants**. Grid: columns `Size` in axis order (Small, 3XSmall, 2XSmall, XSmall, Medium, Large, XLarge, 2XLarge, 3XLarge), so the default `Size=Small, Artwork=Image, Color=Default` is the top-left cell; rows `Color` in axis order, then `Artwork` (Image, Initials, Icon), 21 rows. This departs from Grid order's largest first (owner, 2026-11-02: "Small (re-sort)"), which `grid-audit.js` doesn't flag: its size list lacks `2XSmall` and `3XSmall`. Figma's panel lists `3XSmall` last until the owner drags it after `Small` (R2), so `verify` reports the option order until then.
+- 9 × 3 × 8 = **216 variants**. Grid: columns `Size` in axis order (Small, 3XSmall, 2XSmall, XSmall, Medium, Large, XLarge, 2XLarge, 3XLarge), so the default `Size=Small, Artwork=Image, Color=Default` is the top-left cell; rows `Color` in axis order, then `Artwork` (Image, Initials, Icon), 24 rows. This departs from Grid order's largest first (owner, 2026-11-02: "Small (re-sort)"), which `grid-audit.js` doesn't flag: its size list lacks `2XSmall` and `3XSmall`. Figma's panel lists `3XSmall` last until the owner drags it after `Small` (R2), so `verify` reports the option order until then.
 
 ## Component variables and Theme tokens
 
@@ -71,27 +72,28 @@ With the owner's answers (2026-11-02):
 
 Templates: `Components/Avatar/Container/{{Size=*}}/<Property>`, `Components/Avatar/Label/{{Size=*}}/Type token`, `Components/Avatar/Badge/{{Size=*}}/<Property>`, `Components/Avatar/Badge ring/{{Size=*}}/<Property>`; `Utility/Caption 2` · `Utility/Caption 1` · `Headings/Headline` · `Headings/Title 1` · `Headings/Large Title` · `Headings/Title 3` on Label by `Size`, and `fa-sharp fa-solid/<Step>` on Icon.
 
-`Theme` (Q1): one Component-scoped token for the fill, as Carbon binds a palette colour here (`Default/Blue/60`) with no Semantic role, the same in both modes (Tokens, ADR 0001). Its colour is Base's: the accent blue #276EF1 under white. The nearest palette step, `Indigo/65` (ΔE 12), gives white text 4.35, under 4.5, so the token takes the nearest that passes, `Indigo/70` (ΔE 16). Text and icon bind Carbon's Semantic tokens directly.
+`Theme` (Q1), one Component-scoped token for the fill, as Carbon binds a palette colour here (`Default/Blue/60`) with no Semantic role, the same in both modes (Tokens, ADR 0001). Its colour is Base's: the accent blue #276EF1 under white. The nearest palette step, `Indigo/65` (ΔE 12), gives white text 4.35, under 4.5, so the token took the nearest that passes, `Indigo/70` (ΔE 16). deleted it: `Default` reuses Tag's Indigo, `Indigo/85`, so every `Color` binds a Tag fill. Text and icon bind Carbon's Semantic tokens directly.
 
 | Theme token | Light | Dark | Paired with |
 | --- | --- | --- | --- |
-| `Avatar/background` (new) | →`Indigo/70` | →`Indigo/70` | decorative: a fill behind passing text, on any surface |
-| `Text/text-on-color` | →`White/100` | →`White/100` | `Avatar/background` (Label) |
-| `Icon/icon-on-color` | →`White/100` | →`White/100` | `Avatar/background` (Icon, decorative) |
-| `Background/background-primary` | →`Grey/0` | →`Grey/100` | the Badge ring: under the Dot, over `Avatar/background` |
+| `Text/text-on-color` | →`White/100` | →`White/100` | the Tag fills (Label) |
+| `Icon/icon-on-color` | →`White/100` | →`White/100` | the Tag fills (Icon, decorative) |
+| `Background/background-primary` | →`Grey/0` | →`Grey/100` | the Badge ring: under the Dot, over the Container's fill |
 | `Tag/<C>/Primary/background` (Tag's, reused) | Red/135 · Blue/155 · Purple/120 · Green/150 · Light Grey/150 · Orange/130 | same | Container's fill at `Color=<C>`, under `text-on-color` / `icon-on-color` |
+| `Button/button-secondary` (Button's, reused) | →`Navy/10A` | →`White/12A` | Container's fill at `Color=Neutral`; translucent, so it sits on any surface |
+| `Text/text-primary` | →`Black/85A` | →`White/100` | Label at `Color=Neutral` |
+| `Icon/icon-primary` | →`Black/85A` | →`White/100` | Icon at `Color=Neutral` (decorative) |
 
-Container's `fills.0` has one rule per colour: `{{Color=Default}}` → `Theme/Avatar/background`, and `{{Color=<C>}}` → `Theme/Tag/<C>/Primary/background` for each of the six, named in full (lint's `token-path` refuses a `{{Color=*}}` placeholder in another scope's token). A Tag fill retuned later changes the Avatar with it.
+Container's `fills.0` has one rule per colour: `{{Color=Default}}` → `Theme/Tag/Indigo/Primary/background`, and `{{Color=<C>}}` → `Theme/Tag/<C>/Primary/background` for each of the six, named in full (lint's `token-path` refuses a `{{Color=*}}` placeholder in another scope's token), and `{{Color=Neutral}}` → `Theme/Button/button-secondary`. Label's and Icon's `fills.0` are `text-on-color` and `icon-on-color` with one rule, `{{Color=Neutral}}` → `text-primary` and `icon-primary`. A Tag or Button fill retuned later changes the Avatar with it.
 
 Contrast from the Theme snapshot (`docs/theme/theme.json`) with `skills/build-component/scripts/contrast.mjs`, 2026-11-02:
 
 | Pair | Light | Dark |
 | --- | --- | --- |
-| `text-on-color` / `icon-on-color` on `Avatar/background` (Indigo/70) | 4.92 | 4.92 |
-| `Avatar/background` against `background-primary` / `background-secondary` / `layer-01` / `layer-02` | 4.92 / 4.40 / 4.92 / 4.92 | 4.27 / 4.27 / 3.54 / 3.07 |
-| Badge Dot (`support-error`) on its ring (`background-primary`) | 5.39 | 4.85 |
-| The ring against `Avatar/background` | 4.92 | 4.27 |
-| Without the ring: the Dot on `Avatar/background` | 1.09 | 1.14 |
+| Badge Dot (`Miscellaneous/interactive`, Badge's since 2026-11-03) on its ring (`background-primary`), 2026-11-16 | 5.59 | 7.10 |
+| `text-primary` / `icon-primary` on `Neutral` (`button-secondary`) over the four surfaces, 2026-11-15 | 11.72–12.82 | 10.37–16.48 |
+| The `Neutral` fill against the four surfaces (decorative); the ring against it | 1.23–1.24; 1.24–1.38 | 1.27–1.46; 1.27–2.04 |
+| Without the ring: the Dot on `Neutral` over the four surfaces, 2026-11-16 | 4.05–4.52 | 3.49–5.57 |
 | Not taken: white on `Indigo/65`, Base's nearest step | 4.35 | 4.35 |
 | Not taken: pawisssh/design-system#134's `text-secondary` on `Layer/layer-02`; `layer-02` against the four surfaces | 7.00; 1.00 / 1.12 / 1.00 / 1.00 | 7.22; 1.39 / 1.39 / 1.15 / 1.00 |
 
@@ -99,14 +101,14 @@ The spec's contrast list: Label `text` on `[Container]` where `{{Artwork=Initial
 
 ## Icon records
 
-`Avatar/Icon/<Step>/Type token = fa-sharp fa-solid/<Step>` for 2XSmall, XSmall, Large, XLarge, 2XLarge and 3XLarge (Icons, ADR 0006). An icon-only part steps up with `Size`, at the step with the Label's point size (11, 12, 17, 20, 28, 34), close to Base's 50 % / 44 % / 41 % of the diameter; 20 takes 2XSmall, 24 and 28 share XSmall, and it stops at 3XLarge from 80 up, as Carbon's stops at 32 from 64. One glyph, `user`, in every Icon variant, so no fixed-width layer. Each step's line height fits its circle.
+`Avatar/Icon/<Step>/Type token = fa-sharp fa-solid/<Step>` for 2XSmall, XSmall, Large, XLarge, 2XLarge and 3XLarge (Icons, ADR 0006). An icon-only part steps up with `Size`, at the step with the Label's point size (11, 12, 17, 20, 28, 34), close to Base's 50 % / 44 % / 41 % of the diameter; 18 takes 2XSmall, 24 and 28 share XSmall, and it stops at 3XLarge from 80 up, as Carbon's stops at 32 from 64. One glyph, `user`, in every Icon variant, so no fixed-width layer; at `Neutral` the host sets its type's glyph. Each step's line height fits its circle.
 
 ## Text styles, wrapping and truncation
 
 | Layer | Text style | Lines | Text property |
 | --- | --- | --- | --- |
-| `Label` | `Utility/Caption 1` 12/18 (24, 28) · `Headings/Headline` 17/24 · `Headings/Title 3` 20/28 Strong · `Headings/Title 1` 28/40 Strong · `Headings/Large Title` 34/48 Strong (80, 96, 128), by `Size` | one line, two letters, never truncated (Container clips a wide pair) | `Initials` |
-| `Icon` | `fa-sharp fa-solid/<Step>` | one glyph | none (the glyph is fixed) |
+| `Label` | `Utility/Caption 2` 11/16 (18) · `Utility/Caption 1` 12/18 (24, 28) · `Headings/Headline` 17/24 · `Headings/Title 3` 20/28 Strong · `Headings/Title 1` 28/40 Strong · `Headings/Large Title` 34/48 Strong (80, 96, 128), by `Size` | one line, two letters, never truncated (Container clips a wide pair) | `Initials` |
+| `Icon` | `fa-sharp fa-solid/<Step>` | one glyph: `user`, or at `Neutral` the type's glyph, set in the instance | none (the glyph's characters are overridden) |
 
 - Each line height fits inside its diameter, so Thai marks above and below a consonant don't cross the circle's box at `Large`.
 - Weights (Q2), Base's: Medium to 36, Bold from 48. Core's Caption 1, Title 1 and Large Title styles are Regular and Headline is Medium; Type Emphasis has Regular, Strong (Bold), Italic and Strong Italic, no Medium, and bold text takes `Strong`, not a new style (Visuals, 2026-11-02). So 2XSmall and XSmall take Caption 1 Regular (no Medium to take, Q11), Small is Headline's Medium (Q12), and Medium to 3XLarge are Title 3, Title 1 and Large Title `Strong` (Large Title at 96 and 128 too: components use no Display style, Q8).
@@ -125,13 +127,13 @@ The spec's contrast list: Label `text` on `[Container]` where `{{Artwork=Initial
 
 ## Accessibility
 
-- [x] 1. Initials pass 4.5:1 on their fill in both modes, every `Color`: `text-on-color` (White/100) on `Default` 4.92, Red 6.73, Blue 5.78, Purple 6.82, Green 5.92, Light Grey 6.32, Orange 5.74, the same in Light and Dark (read live 2026-11-10). The fill is decorative.
-- [x] 2. The fill and the Icon are decorative. The Badge's Dot (`support-error`) is the one meaningful part. It sits in a 1 px ring of `background-primary` (owner, 2026-11-02), so it meets the ring on every side: 5.39 Light · 4.85 Dark, and the ring meets the `Default` fill at 4.92 · 4.27 (measured 2026-11-02 with `contrast.mjs`), the six Tag fills at 5.74–6.82 Light and 3.08–3.66 Dark (2026-11-10): a separator, not a contrast target. Without the ring the Dot's inner half was 1.09 / 1.14 on the fill. The contrast lint skips it (Container is decorative), so this line is the check.
+- [x] 1. Initials pass 4.5:1 on their fill in both modes, every `Color`: `text-on-color` (White/100) on `Default` 4.92, Red 6.73, Blue 5.78, Purple 6.82, Green 5.92, Light Grey 6.32, Orange 5.74, the same in Light and Dark (read live 2026-11-10); `text-primary` on `Neutral` 11.72–12.82 Light and 10.37–16.48 Dark over the four Base surfaces. The fill is decorative.
+- [x] 2. The fill and the Icon are decorative. The Badge's Dot (`Miscellaneous/interactive`, Badge's colour since 2026-11-03; `support-error` before) is the one meaningful part. It sits in a 1 px ring of `background-primary` (owner, 2026-11-02), so it meets the ring on every side: 5.59 Light · 7.10 Dark (2026-11-16). The ring meets the `Default` fill at 4.92 · 4.27 (measured 2026-11-02 with `contrast.mjs`), the six Tag fills at 5.74–6.82 Light and 3.08–3.66 Dark (2026-11-10), and `Neutral` at 1.24 · 1.27 on `background-primary`: a separator, not a contrast target. Without the ring the Dot is 1.13 · 1.66 on `Default` and 4.05–4.52 · 3.49–5.57 on `Neutral`. The contrast lint skips it (Container is decorative), so this line is the check.
 - [x] 3. N/A: not a field.
 - [x] 4. A Badge never carries meaning alone: the host's accessible name says it ("Kiattisak, new message").
 - [x] 5. N/A: not interactive, no Focus ring.
-- [ ] 6. checked with `docs/agents/reflow-check.js` after the build.
-- [x] 7. 12 pt (Caption 1), over 11.
+- [x] 6. `docs/agents/reflow-check.js` on the 27 `Neutral` variants (2026-11-16): every diameter the same in all three modes; its `overflow` 18 and `clipped` 9 are all `Label` at `Artwork=Initials`, from the script's long unspaced Thai phrase, which no two-letter Initials field holds (Default reads the same).
+- [x] 7. 11 pt at its smallest (Caption 2, `3XSmall`), not under 11.
 - [x] 8. Motion: None, haptic None.
 - [x] 9. Hidden from assistive tech; the person's name beside it is read once:
 
@@ -160,4 +162,6 @@ No `iOS` looks and no Focus ring to show.
 
 ### Color
 
-Rule for developers (the doc and the handoff, R6, Base's "Diversify colors"): in a list, give the *n*th person the *n*th `Color` in axis order, starting again after `Orange`. A person with a photo still counts, so a photo that fails to load shows its slot's colour. One Avatar on its own (an account entry, a card header) takes `Default`. The colour carries no meaning: never use it for a role or a status, as with Tag colours. A host that nests Avatar (Selection Tag, Table cell, Menu Profile Item) leaves it at `Default`.
+Rule for developers (the doc and the handoff, R6, Base's "Diversify colors"): in a list, give the *n*th person the *n*th `Color` in axis order from `Default`, starting again after `Orange`. A person with a photo still counts, so a photo that fails to load shows its slot's colour. One Avatar on its own (an account entry, a card header) takes `Default`. The colour carries no meaning: never use it for a role or a status, as with Tag colours. A host that nests Avatar (Selection Tag, Table cell, Menu Profile Item) leaves it at `Default`.
+
+`Neutral` (R7) is not a person's colour and stays out of that cycle. It is the quiet fill under a glyph that names a type or a step: an order type (buy `arrow-up`, switch `arrow-right-arrow-left`), a transaction kind, a step, at `Artwork=Icon` with the glyph's characters set to that type. The glyph carries the meaning, not the fill. Never a person, a person's initials or a photo. The row's text says the type, so it stays hidden from assistive tech like every Avatar. The page's samples don't show it yet: a `Neutral` row in `Colors` and an order list are `component-usage`'s.

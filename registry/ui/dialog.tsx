@@ -46,7 +46,7 @@ function DialogContent({ className, children, ...props }: React.ComponentProps<t
         data-slot="dialog-content"
         className={cn(
           "fixed inset-0 z-50 flex flex-col bg-popover text-popover-foreground shadow-[0_8px_24px_rgba(0,0,0,0.12)] outline-none",
-          "md:inset-auto md:top-1/2 md:left-1/2 md:max-h-[calc(100svh-4rem)] md:w-auto md:max-w-[612px] md:-translate-x-1/2 md:-translate-y-1/2 md:rounded-xl xl:w-[612px]",
+          "md:inset-auto md:top-1/2 md:left-1/2 md:max-h-[calc(100svh-4rem)] md:w-[612px] md:-translate-x-1/2 md:-translate-y-1/2 md:rounded-xl",
           "data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
           className
         )}

@@ -134,6 +134,7 @@ The `Usage` frame shows, with Thai copy:
 - A long Thai label that wraps beside the Value.
 - The bar with `Label` off, inside a Tile under the Tile's title.
 - Indeterminate under a section's label, while its content loads.
-- Don'ts: no Progress bar inside a control (a Button's wait is `_Loading`); no Indeterminate for a short wait on a surface (Progress circle); no Indeterminate where a Skeleton can show the shape to come; no Progress bar for named steps (Progress steps).
+- **Placement** (R1): the anchor sets the scope (Uber). Inline under its label, in a Tile or beside a List item: one task or amount (the default). Flush on the screen's top edge under the Toolbar: the whole page loading; on a Sheet header's bottom edge: that Sheet's content; on a card or image edge: that card or image. These flush placements are a Pattern's: the set has no edge variant, and `Label` is off.
+- Don'ts: no Progress bar inside a control (a Button's wait is `_Loading`); no Indeterminate for a short wait on a surface (Progress circle); no Indeterminate where a Skeleton can show the shape to come; no Progress bar for named steps (Progress steps); one shape per concept: never a circle in one place and a bar in another for the same wait.
 
 No Focus ring and no `iOS` pair.

@@ -141,6 +141,7 @@ The live set's Fixed height clipped here. The new Container uses min-height and 
 - A status, category or attribute label (a fund's risk level, an order's state).
 - Not tappable. For a choice someone taps, use Selection tag.
 - Copy fits on one line at 375 wide in Thai.
+- **Placement**: a tag hugs its content, never stretched to the layout; a long label truncates at the layout's edge. A cluster wraps to the next row. Over an image it sits absolute at the image's top; otherwise in the layout, beside or under a title. Never inside a List item's text line: a trailing Label or Badge there instead (Base, List item: "Don't use tags inline with text").
 - Which `Hierarchy` to pick: Hierarchy below.
 
 ### Hierarchy

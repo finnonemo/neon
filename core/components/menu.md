@@ -7,9 +7,10 @@
 The variant root is the trigger's 48 × 48, and the open menu is drawn past it from the anchored corner:
 
 ```
-Menu (variant)                         Fixed 48 × 48, no fill, clip off, no auto-layout
-├─ Trigger                             Expand=False only; exposed instance, x 0 y 0
-└─ Menu                                Expand=True only; 238 × Hug, top 0; Top right: x −190, constraints Right × Top; Top left: x 0, Left × Top
+Menu (variant)                         Fixed 48 × 48, VERTICAL, sizing only (the 48 is R3's trigger)
+└─ Container                           Fill × Fill, no fill, clip off, no auto-layout [new, pawisssh/design-system#1239]
+   ├─ Trigger                          Expand=False only; exposed instance, x 0 y 0
+   └─ Menu                             Expand=True only; 238 × Hug, top 0; Top right: x −190, constraints Right × Top; Top left: x 0, Left × Top
 ```
 
 `Menu` holds the kit's tree, kept for both looks; changes are in brackets. As it was on 2026-11-07 in the kit (its root, now the `Menu` frame):

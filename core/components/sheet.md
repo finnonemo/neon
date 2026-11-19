@@ -7,34 +7,35 @@
 `Sheet - iPhone`, as the kit, with changes in brackets:
 
 ```
-Sheet - iPhone (variant root)       Fixed 402 × 874, no fill [kit: the screen]
-├─ Dimming Layer                    Fill × Fill, absolute, `Miscellaneous/overlay`; BOOLEAN `Show Dimming Layer` (on)
-│                                     [kit: the `Overlay` instance; localised to a rectangle on the Theme token, K6]
-│  │                                  it holds Background Page and the Sheet below (path `Stack/Sheet`), which sit in the root on the other detents
-│  ├─ Background Page               the kit's 370 card behind (x 16, y 0, STRETCH × STRETCH), under a 10% overlay
-│  └─ Sheet                         y 10, STRETCH × STRETCH
-└─ Sheet                            VERTICAL, padding top 16 (every detent, as the kit), gap 0, clip
-   │                                             Large 402 × 812 at y 62, `Layer/layer-01`, radii 38 · 38 · 0 · 0, the kit's shadow
-   │                                  iOS=False: Uber's `Modal sheet`: full width and flush with the bottom, Medium 402 × 465
-   │                                             at y 409 (the same top edge), Large 402 × 812 at y 62; `Layer/layer-01`,
-   │                                             radius 16 (`radius-lg`) on the top corners only; `Elevation/Sheet` (K3, K4)
-   ├─ Header                        nested instance, Fill × Hug, its properties exposed [new, K5]
-   ├─ Content                       SLOT, Fill × Fill, VERTICAL [kit `Content`, which also held the toolbar]
-   ├─ Footer                        SLOT, Fill × Hug; BOOLEAN `Show Footer` (off); a Button dock goes here [new, K5]
-   └─ Grabber                       absolute, top, centred, Fixed 96 × 48 [kit 10 tall, K7]; BOOLEAN `Show Grabber` (on)
+Sheet - iPhone (variant root)       Fixed 402 × 874, sizing only [kit: the screen]
+   ├─ Dimming Layer                 Fill × Fill, absolute, `Miscellaneous/overlay`; BOOLEAN `Show Dimming Layer` (on)
+   │                                  [kit: the `Overlay` instance; localised to a rectangle on the Theme token, K6]
+   │  │                               it holds Background Page and the Sheet below (path `Stack/Sheet`), which sit in the Container on the other detents
+   │  ├─ Background Page            the kit's 370 card behind (x 16, y 0, STRETCH × STRETCH), under a 10% overlay
+   │  └─ Sheet                      y 10, STRETCH × STRETCH
+   └─ Sheet                         VERTICAL, padding top 16 (every detent, as the kit), gap 0, clip
+      │                                          Large 402 × 812 at y 62, `Layer/layer-01`, radii 38 · 38 · 0 · 0, the kit's shadow
+      │                               iOS=False: Uber's `Modal sheet`: full width and flush with the bottom, Medium 402 × 465
+      │                                          at y 409 (the same top edge), Large 402 × 812 at y 62; `Layer/layer-01`,
+      │                                          radius 16 (`radius-lg`) on the top corners only; `Elevation/Sheet` (K3, K4)
+      ├─ Header                     nested instance, Fill × Hug, its properties exposed [new, K5]
+      ├─ Content                    SLOT, Fill × Fill, VERTICAL [kit `Content`, which also held the toolbar]
+      ├─ Footer                     SLOT, Fill × Hug; BOOLEAN `Show Footer` (off); a Button dock goes here [new, K5]
+      └─ Grabber                    absolute, top, centred, Fixed 96 × 48 [kit 10 tall, K7]; BOOLEAN `Show Grabber` (on)
                                       iOS=False: Uber's `Grabber - Sheet` bar, 48 × 4 at top 8, radius Round, `Border/border-subtle` (K6)
 ```
 
 `Sheet - iPad`: the kit's single component, 936 × 852, given the same parts. The root is the sheet itself (no Dimming Layer: the kit draws none, K7):
 
 ```
-Sheet - iPad (variant root)         Fixed 936 × 852, VERTICAL, padding top 16 (`spacing-05`), clip [kit: the 10 Grabber
-│                                     frame in the flow pushes the toolbar down; ours is absolute, owner 2026-11-09]
-│                                     iOS=False: `Layer/layer-01`, radius 16 (`radius-lg`), `Elevation/Floating`
-│                                     iOS=False: Toolbar - Top `Style=Title 2 Line` (64)
-├─ Content                          SLOT, Fill × Fill
-│                                    as the iOS Button dock pads 0 there and a centred sheet has no home indicator
-└─ Grabber                          as Sheet - iPhone; BOOLEAN `Show Grabber` (on: the kit's iPad sheet draws it; owner 2026-11-09)
+Sheet - iPad (variant root)         Fixed 936 × 852 (`width` bound), sizing only [new Container, pawisssh/design-system#1239]
+└─ Container                        Fill × Fill, VERTICAL, padding top 16 (`spacing-05`), clip [kit: the 10 Grabber
+   │                                  frame in the flow pushes the toolbar down; ours is absolute, owner 2026-11-09]
+   │                                  iOS=False: `Layer/layer-01`, radius 16 (`radius-lg`), `Elevation/Floating`
+   │                                  iOS=False: Toolbar - Top `Style=Title 2 Line` (64)
+   ├─ Content                       SLOT, Fill × Fill
+   │                                 as the iOS Button dock pads 0 there and a centred sheet has no home indicator
+   └─ Grabber                       as Sheet - iPhone; BOOLEAN `Show Grabber` (on: the kit's iPad sheet draws it; owner 2026-11-09)
 ```
 
 Header heights differ between the looks because the bars differ: Toolbar - Top - iPhone and - iPad are 58 in Core (kit 54, its 44 buttons at 48), Toolbar - Top is 64 (Toolbars). Each detent's sheet height is the same in both looks, so `iOS=False`'s Content is 6 shorter. That is the bars' difference, not the sheet's.

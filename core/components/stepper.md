@@ -177,5 +177,6 @@ Stepping fires no haptic (Motion and haptics: `Selection` is Segmented control's
 - Thai copy in every case: Title "จำนวนหน่วย", helper "ขั้นต่ำ 1 หน่วย", unit `Units`.
 - At the minimum, set Decrement to `State=Disabled`; at the maximum, Increment. A typed value outside the range is an Error with a message ("ต้องไม่เกิน 10 หน่วย"); it isn't clamped silently.
 - The figure can be typed as well as stepped (call 5); the number pad opens on focus.
+- **Placement** (R1): as [Text field](text-field.md): one per row in the form's column, full width inside the 16 inset on a phone, the grid only at Regular width. The field shows the value, the buttons at its trailing edge (HIG: a stepper beside a field showing the value); whole numbers with a minimum and a maximum (Uber).
 - Read-only for a value the user can't change in this form; Disabled only for "can't interact".
 - The Focus ring once, outside the field.

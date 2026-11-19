@@ -157,6 +157,7 @@ The page's `Usage` frame, in Light and Dark (Theme mode on each column), with Th
 - Pill Medium, asset classes in a scrolling row, and Pill Small, fund types (`ทั้งหมด` · `ตราสารหนี้` · `ผสม` · `หุ้น` · `อสังหาฯ` · `ต่างประเทศ`) (P7); the Pill row starts 16 in from the screen's edge, the component's own inset;
 - a tab with a Badge (`แจ้งเตือน`, `3`) and one with an Icon (`กองทุน`): Icon and Badge are per tab, turned on by selecting the tab in the Slot (owner, "ทำให้ tab รองรับ icon badge ด้วย เปิดปิดได้": both booleans were already on `_Tab`);
 - the Focus ring once, on a selected tab;
+- **Placement** (R1): Uber's top placement, for sections of one screen. At the top of the content area, under the Toolbar - Top, above what the tabs switch; full width on a phone, and on Regular width the first tab aligns with the content; pinned under the Toolbar while the content scrolls. Top-level destinations stay [Navigation](navigation.md) Bottom (HIG's tab bar).
 - "Not Tabs": switching a period or a filter on one view is a Segmented control (`1D` … `MAX`, `บาท` · `หน่วย`); the sample shows `บาท` · `หน่วย`.
 
 No `iOS` looks to show.

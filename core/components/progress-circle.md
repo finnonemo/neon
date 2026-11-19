@@ -128,6 +128,7 @@ The `Usage` frame shows, with Thai copy:
 - The same at `Progress=50%` for an upload in a sheet ("อัปโหลดแล้ว 50%").
 - `Size=Small` with `Label` off as a list's load-more footer.
 - An Inline row under a form going from "กำลังบันทึก…" to "บันทึกแล้ว", and to Error ("บันทึกไม่สำเร็จ").
+- **Placement** (R1): centred in the container it stands for (Uber). A whole screen: centred both ways in the Content Area, between the Toolbar and the tab bar or dock, only where a Skeleton can't show the layout. A Sheet: the middle of the Sheet; an image: on that image. A list's load-more: centred at the list's end, `Size=Small`, `Label` off. An action's wait in a Button or a field is `_Loading`, not this set. The Pill (a countdown) keeps its label inside it.
 - Don'ts:
   - no Progress circle inside a Button or Text field (that is `_Loading`);
   - none for content whose shape is known (Skeleton);

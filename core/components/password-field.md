@@ -54,3 +54,4 @@ As Text field, items 1–8. Item 9's Password row:
 - Use for a password, PIN entered as text, or any secret value. A one-time code in boxes is PIN code, not this.
 - `Show text=True` for the revealed state; the eye-slash follows.
 - No unit: a secret has none. An amount is a Text field with `Unit` on.
+- **Placement** (R1): as [Text field](text-field.md): one per row in the form's column, full width inside the 16 inset on a phone, the grid only at Regular width. Secure entry, never prefilled (HIG); a PIN is [Pin code](pin-code.md).

@@ -180,5 +180,6 @@ From the per-component table of Motion and haptics (Tile: pressed, hover, select
 - A content tile, `Behavior=Action`, `Leading content=Artwork custom`, that opens an article.
 - A document row, `Layout=Inline`, `Leading content=Artwork medium` (`file-invoice`), `Trailing content=Thumbnail`: `หนังสือชี้ชวนกองทุน` / `อัปเดตล่าสุด 1 พ.ย. 2569`, in `Action rows`.
 - Skeleton tiles; `State=Focus` once, on a selected tile.
+- **Placement** (R1): Uber's two layouts. In the page's flow at the content's width: a grid 2 or 3 across on a phone, 8 between tiles (16 for one column or a wide grid), or a horizontal group that peeks the next tile, 24 or more from the screen's edge. Never a container of rows: stack [List items](list-item.md).
 - Not yet drawn: a tile with a Toggle, a trailing Label (an amount), a Badge, a Chevron; a neutral tile with a CTA (a Button in `Slot`).
 - Not for one-line options (bank accounts, settings): List item with a trailing Radio or Checkbox. Not for a status message: Contextual banner. Not a container of rows: stack List items on the page. A tile with a control in `Slot` is never `Behavior=Selection` (two targets in one); Figma can't stop it, so review checks it.

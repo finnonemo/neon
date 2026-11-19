@@ -100,6 +100,7 @@ The sweep is an app behaviour, not a Figma variant, as the bar's grow. The compa
 - **Current vs new** (Rebalance compare): two `Size=Large` donuts under the column labels สัดส่วนปัจจุบัน | สัดส่วนที่แนะนำ (rebalance-compare.md, DES-13 Q15), one segment per fund. The same fund takes the same `Series` in both, so a fund keeps its colour from current to new (Q5, Q6); a fund at 0% keeps no segment.
 - Use it for a whole split into 2–9 parts at a glance, beside labels or as a decoration of a labelled control. Fold a ninth and later part into `Other`. Don't use it to compare parts precisely (a bar or rows read lengths better), for a trend, or for one amount.
 - Set each share by the segment's Arc end angle, from 12 o'clock clockwise: every Arc starts at `−90°` and ends at `−90° + 360·T`, where `T` (0–1) is its share plus every share before it; the first segment sits on top, the last at the bottom.
+- **Placement**: part of the page component's content, with its labels or legend (List item rows) beside or under it; never in the Button dock or a Toolbar. `Size=Small` is a decoration inside a labelled control (the Today chip), not a chart on its own. `Size=Large`, one or two side by side under their column labels (Rebalance compare): each keeps its `Size`, aligned to the column's leading side at Regular and not stretched (open call D3). The same fund keeps its `Series` across donuts that show the same data (HIG: continuity).
 
 Samples on Usage (each Light with its Dark twin):
 

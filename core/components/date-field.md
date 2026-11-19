@@ -52,3 +52,4 @@ As Text field, items 1–8; the calendar icon is a non-text pair with the Field 
 
 - A date typed as text, where the person knows it (a birth date): Date field alone. A date picked from a month: Date picker, which opens a calendar under it.
 - Not on iOS: use Date and time - Collapsed.
+- **Placement**: [Text field's placement](text-field.md) (its): one per row in the form's column, full width inside the 16 inset on a phone, the grid only at Regular width. Not on iOS (HIG's date picker is the compact picker button).

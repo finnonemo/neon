@@ -1,5 +1,5 @@
 // block-engine.mjs: the Block engine (Finnomena's Pattern builder) for Node: Patterns, composed Pages, the text
-// shaper and an SVG rasteriser. Built from Block (github.com/pawisssh/block) commit daed41d1e04f3229b4be93119bf89e46f3eeb049
+// shaper and an SVG rasteriser. Built from Block (github.com/pawisssh/block) commit e6df852ea21ae0cf203c7a0c2bafa732c5bdcaae
 // by `npm run build:engine-bundle`. Do not edit: change Block and build again.
 //
 // Code: MIT License, Copyright (c) 2026 Pawish Gawinseth (Block's LICENSE). It bundles harfbuzzjs (MIT License,
@@ -1086,29 +1086,41 @@ var require_hbjs = __commonJS({
   }
 });
 
-// packages/core/src/colourway.ts
-var BRAND_COLOUR_TABLE = {
-  navy: ["#01172B", "#415160", "#808B95", "#C0C5CA"],
-  grey: ["#A6BFCC", "#BCCFD9", "#D3DFE6", "#E9EFF2"],
-  yellow: ["#F2F93C", "#F5FB6D", "#F9FC9E", "#FCFECE"],
-  white: ["#FFFFFF"],
-  green: ["#00E76B", "#2EFF8F", "#74FFB4", "#B9FFDA"],
-  blue: ["#50CFFF", "#7CDBFF", "#A8E7FF", "#D3F3FF"],
-  purple: ["#AA46C3", "#BF74D2", "#D5A3E1", "#EAD1F0"],
-  red: ["#F73232", "#F96565", "#FB9999", "#FDCCCC"],
-  orange: ["#F26414", "#F58B4F", "#F9B28A", "#FCD8C4"]
-};
-var BRAND_COLOURS = {
+// packages/core/src/brandColours.core.ts
+var CORE_BRAND_COLOURS = {
   navy: { 100: "#01172B", 75: "#415160", 50: "#808B95", 25: "#C0C5CA" },
   grey: { 100: "#A6BFCC", 75: "#BCCFD9", 50: "#D3DFE6", 25: "#E9EFF2" },
   yellow: { 100: "#F2F93C", 75: "#F5FB6D", 50: "#F9FC9E", 25: "#FCFECE" },
   white: { 100: "#FFFFFF" },
-  green: { 100: "#00E76B", 75: "#2EFF8F", 50: "#74FFB4", 25: "#B9FFDA" },
+  green: { 100: "#00E76B", 75: "#40ED90", 50: "#80F3B5", 25: "#BFF9DA" },
   blue: { 100: "#50CFFF", 75: "#7CDBFF", 50: "#A8E7FF", 25: "#D3F3FF" },
   purple: { 100: "#AA46C3", 75: "#BF74D2", 50: "#D5A3E1", 25: "#EAD1F0" },
   red: { 100: "#F73232", 75: "#F96565", 50: "#FB9999", 25: "#FDCCCC" },
   orange: { 100: "#F26414", 75: "#F58B4F", 50: "#F9B28A", 25: "#FCD8C4" }
 };
+
+// packages/core/src/colourway.ts
+var BRAND_COLOUR_OVERRIDES = [
+  { colour: "green", tint: 75, hex: "#2EFF8F" },
+  { colour: "green", tint: 50, hex: "#74FFB4" },
+  { colour: "green", tint: 25, hex: "#B9FFDA" }
+];
+var BRAND_COLOURS = (() => {
+  const table = Object.fromEntries(
+    Object.entries(CORE_BRAND_COLOURS).map(([name, tints]) => [name, { ...tints }])
+  );
+  for (const { colour, tint, hex } of BRAND_COLOUR_OVERRIDES) {
+    if (!table[colour]?.[tint]) throw new Error(`Override for a Tint Core lacks: ${colour} ${tint}`);
+    table[colour][tint] = hex;
+  }
+  return table;
+})();
+var BRAND_COLOUR_TABLE = Object.fromEntries(
+  Object.entries(BRAND_COLOURS).map(([name, tints]) => [
+    name,
+    Object.keys(tints).map(Number).sort((a, b) => b - a).map((tint) => tints[tint])
+  ])
+);
 var DEFAULT_COLOURWAY_ID = "navy__yellow-100";
 function determineTextColours(bgColour, bgTint) {
   if (bgTint === 25 || bgColour === "white" || bgColour === "grey" || bgColour === "yellow") {
@@ -7526,7 +7538,9 @@ function bridgeToAnchor(blocks, anchor, grid, sizes) {
     let left = best.vertical ? best.h : best.w;
     let at = best.vertical ? best.row : best.col;
     while (left > 0) {
-      const z = Math.max(...list.filter((x) => x <= left));
+      const fits = list.filter((x) => x <= left);
+      if (fits.length === 0) return null;
+      const z = Math.max(...fits);
       out.push({
         id: `block-${out.length + 1}`,
         col: best.vertical ? best.col : at,

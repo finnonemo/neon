@@ -162,4 +162,5 @@ Warning is taller than Active where its glyph narrows the text column.
 - The Title always shows. The placeholder is an example, not the label.
 - Turn on `Character count` when the input has a limit, and write it as `<count>/<limit>` ("0/200"). Over the limit, the field shows `State=Error` with the message "เกินมา <n> ตัวอักษร". The count stays grey.
 - The field starts 3 lines tall and grows as the value wraps. In code it stops growing at 6 lines and scrolls inside (assumption).
+- **Placement** (R1): as [Text field](text-field.md), for text longer than a line: full width, never two across, 3 lines high by default and growing with the text (HIG: any height, scrolls); not a wrapped Text field (Uber).
 - Use Read-only for a value the user can see but not change, and Disabled only for "can't interact".
