@@ -14,6 +14,7 @@ import { assembleStarter } from '../../scripts/lib/assemble-starter.mjs';
 import { takeChecksLock } from '../../scripts/lib/checks-lock.mjs';
 import { freePort } from '../../scripts/lib/free-port.mjs';
 import { SHADCN, bareCnImports, browserSuiteItems, buildRegistry } from '../../scripts/lib/registry.mjs';
+import { runRetryingMissingTarball } from './tarball-retry.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, '../..');
@@ -72,10 +73,11 @@ async function assembleNeon() {
     await mkdir(join(work, 'registry/r'), { recursive: true });
     for (const [name, content] of await buildRegistry({ root, url })) await writeFile(join(work, 'registry/r', name), content);
     ({ items } = JSON.parse(await readFile(join(work, 'registry/r/registry.json'), 'utf8')));
-    await run('npx', ['--yes', SHADCN, 'init', '-t', 'vite', '-b', 'radix', '-n', 'app', '--no-monorepo', `${url}/neon-base.json`], work);
+    // Both commands install the newest versions npm lists, whose tarballs it may not serve yet.
+    await runRetryingMissingTarball('npx', ['--yes', SHADCN, 'init', '-t', 'vite', '-b', 'radix', '-n', 'app', '--no-monorepo', `${url}/neon-base.json`], { cwd: work, beforeRetry: () => rm(app, { recursive: true, force: true }) });
     // The vite template appends shadcn's stock button and a theme provider.
     const components = browserSuiteItems(items).map((name) => `@neon/${name}`);
-    await run('npx', ['--yes', SHADCN, 'add', ...components, '--overwrite', '-y'], app);
+    await runRetryingMissingTarball('npx', ['--yes', SHADCN, 'add', ...components, '--overwrite', '-y'], { cwd: app });
     await rm(join(app, 'src/components/theme-provider.tsx'), { force: true });
   } finally {
     server.close();
