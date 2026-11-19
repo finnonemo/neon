@@ -17,7 +17,10 @@ async function checkout() {
   execFileSync('git', ['init', '-q', root]);
   await writeFile(join(root, 'package.json'), '{\n  "name": "finnomena",\n  "version": "1.2.3"\n}\n');
   git('remote', 'add', 'origin', join(work, 'origin.git'));
-  const commit = (message) => git('-c', 'user.name=t', '-c', 'user.email=t@example.com', 'commit', '-q', '--allow-empty', '-am', message);
+  // A commit and an annotated tag both need an identity, and a CI runner has none.
+  git('config', 'user.name', 't');
+  git('config', 'user.email', 't@example.com');
+  const commit = (message) => git('commit', '-q', '--allow-empty', '-am', message);
   git('add', '-A');
   commit('release');
   return { root, git, commit };
