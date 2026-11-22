@@ -110,6 +110,12 @@ Items 2, 5 and 6 are not met.
 
 ## Usage
 
+### When to use
+
+- An icon-only action in content or a bar.
+
+### Rules
+
 - `Icon button` for an icon-only action in content or a bar; pin `iOS` (ADR 0005). A chevron at the end of a row isn't one (the row takes the tap), nor is a tab bar item (Small and Rect icon buttons).
 - Which `Hierarchy` to pick: [button.md › Hierarchy](button.md); Tertiary only inside a container with its own surface ([H3](../hierarchy.md)).
 - Danger for a destructive action: Secondary Danger at the entry point, Primary Danger only on the confirmation step ([H2](../hierarchy.md); Secondary Danger passes contrast since 2026-11-09).

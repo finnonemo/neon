@@ -14,9 +14,9 @@ export function segmentedCell({ Size = 'Medium', State = 'Enabled' } = {}) {
   return { item: 'segmented-control', part: 'track', cell: { Size, State, Floating: 'False' } };
 }
 
-/** One segment in a cell of Core's _Segmented control item: Medium, Enabled and not chosen unless said. */
+/** One segment in a cell of Core's _Segmented control item: Medium, Enabled and not chosen unless said. Floating is False, as the track's. */
 export function segmentCell({ Selected = 'False', State = 'Enabled', Size = 'Medium' } = {}) {
-  return { item: 'segmented-control', part: 'segment', cell: { Selected, State, Size } };
+  return { item: 'segmented-control', part: 'segment', cell: { Selected, State, Size, Floating: 'False' } };
 }
 
 export default {
@@ -27,6 +27,7 @@ export default {
         h: container('minHeight'),
         pad,
         radius: container('cornerRadius'),
+        // Floating=False states the track's fill as none.
         bg: container('fills.0'),
         // The whole control dims when Disabled, the one opacity Core binds here.
         opacity: { layer: '(root)', property: 'opacity', unbound: 1 },

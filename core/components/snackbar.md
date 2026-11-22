@@ -178,6 +178,7 @@ Snackbar (variant root)        Fill × Hug, no fill, no padding, VERTICAL
   - Port's `มี 2 แผนที่มีคำแนะนำจากที่ปรึกษา` is not a Snackbar: no user action prompts it. It is an In-line banner or a Contextual banner.
 - **Focus ring**: shown once, on the Close of an `iOS=False` Button Snackbar.
 - the Don'ts listed under them, with the Error one added 2026-11-06. The samples set only component properties and text (`usage-overrides.js`: no gaps). A Thai message carries zero-width spaces between words (`เพิ่ม​กองทุน​ใน​รายการโปรด​แล้ว`), since Figma breaks unspaced Thai at any letter.
+- **Don't**:
   - Stack Snackbars. The next one waits until the current one leaves.
   - Show one the user didn't cause: not system-prompted, not engagement or promotion ("ลองฟีเจอร์ใหม่"), not critical or emergency messages. Those are a banner or a Dialog: a timed message can't carry what a user must read.
   - Colour it by Status. It stays grey; colour is a banner's.

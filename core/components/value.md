@@ -80,7 +80,7 @@ None: no arrow; the sign carries the direction (pawisssh/design-system#71 assump
 | `Empty` | `Value/Label/<Text style>` | one line | none (always `--`, its unit after it) |
 
 - Every layer `WIDTH_AND_HEIGHT`, Hug: a figure grows its Value, never the other way round.
-- **`tnum`** (Numbers and dates): Finnomena Trek 1.002 has no `tnum` feature, and Figma's plugin API can't set one (`openTypeFeatures` is read-only, checked 2026-11-02), so the engine can't put `tnum` on the layers. Value right-aligns its text (`Align horizontal` `Right`), the handoff tells developers `font-variant-numeric: tabular-nums` / `.monospacedDigit`, and a Figma pass sets `tnum` by hand once Trek ships it (question 7; the AC line changed to match on 2026-11-02).
+- **`tnum`** (Numbers and dates): Finnomena Trek 1.002 has no `tnum` feature, and Figma's plugin API can't set one (`openTypeFeatures` is read-only, checked 2026-11-02), so the engine can't put `tnum` on the layers. Value right-aligns its text (`Align horizontal` `Right`), the handoff tells developers `font-variant-numeric: tabular-nums` / `.monospacedDigit()`, and a Figma pass sets `tnum` by hand once Trek ships it (question 7; the AC line changed to match on 2026-11-02).
 - **Type Emphasis**: Value sets no Type Emphasis mode on its layers, so a host's explicit mode passes down: Detail row's `Emphasis=Total` sets `Strong` on its own frame and the nested Value turns Bold with it. No `Footnote Bold` step (question 6).
 - Thai floor: Value holds digits, `฿`, `หน่วย` and `--` on one line; Footnote 13 is its smallest step, above Thai's 12.
 

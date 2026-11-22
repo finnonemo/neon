@@ -139,6 +139,12 @@ One `Title` property, where Tab Bar's parts called it `Label`: the property is w
 
 ## Usage
 
+### When to use
+
+- The app's tab bars and Sidebar in one set, carried across widths.
+
+### Rules
+
 - Page `Navigations` (new, A-Z in `❖ Component`), from the `Templates` page's frames; the three parts in Items.
 - iPad 834 with `Layout=Top`; Duo with `Layout=Rail`; Web XL (Sidebar 240) and Web SM.
 - A note: set the frame's `Breakpoint` and `Platform` modes, not `Layout`; override `Layout` only on iPad (Top) and Duo (Rail).

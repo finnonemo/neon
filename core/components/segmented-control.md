@@ -27,7 +27,7 @@ Segmented control (variant root)     Fill × Hug, no fill, no padding; min heigh
 | --- | --- | --- |
 | `Size` | Medium · Small · Large (call 3; Large added last, V5, first on the grid) | Container min height 48 · 36 · 56 and padding 6 · 4 · 4, the Root's Hit target |
 | `State` | Enabled · Disabled · Skeleton (call 8 reversed) | track fill; Disabled is the root at opacity 0.5 over the Enabled look (U2); Skeleton hides `Segments` |
-| `Floating` | False · True (R2) | Skeleton and the Items are unchanged |
+| `Floating` | False · True (R2) | `Floating=False` has no track fill (F2); Skeleton is unchanged; the default Items' `Floating` (F1) |
 
 Properties: SLOT `Segments`, added by hand. 3 × 3 × 2 × 2 = **36 variants**. `Floating` sits before `iOS`, since `iOS` is always last (ADR 0005); every instance placed is `Floating=False`.
 
@@ -38,8 +38,9 @@ Properties: SLOT `Segments`, added by hand. 3 × 3 × 2 × 2 = **36 variants**. 
 | `Selected` | False · True | the indicator fill and the label colour |
 | `State` | Enabled · Pressed · Focus · Disabled · Hover (W8) | the press and hover fills, the Focus stroke, the disabled colours |
 | `Size` | Medium · Small · Large | side padding and min height; the label is `Body/Subheadline` on Medium and Small, `Body/Body` on Large (V4) |
+| `Floating` | False · True (F1) | False: the selected fill is `Button/button-secondary` with no outline or shadow, both looks (F3); True: the and the looks, unchanged |
 
-Properties: TEXT `Label`. 2 × 5 × 3 × 2 = **60 variants**. The set pins its three default Items' `Size` and `iOS` to its own. A designer sets both on each Item they add, since Slot content isn't pinned (call 7, R1).
+Properties: TEXT `Label`. 2 × 5 × 3 × 2 × 2 = **120 variants**. `Floating` sits before `iOS` (ADR 0005); the 60 Items that existed are `Floating=False`. The set pins its three default Items' `Size`, `Floating` and `iOS` to its own. A designer sets all three on each Item they add, since Slot content isn't pinned (call 7, R1).
 
 - There is no Error or Loading state: a segmented control picks between values that are always valid.
 - There are no booleans. The number of segments is the number of Items in the Slot (call 1).
@@ -82,12 +83,14 @@ Track (`Segmented control › Container`):
 
 | `State` | `iOS=False` |
 | --- | --- |
-| Enabled | `Button/button-secondary` |
+| Enabled | none (F2; `Button/button-secondary` before) |
 | Skeleton | `Skeleton/skeleton-background` |
 
 Disabled takes Enabled's track.
 
-Item (`_Segmented control item › Container` fill, its stroke, `Label`), `iOS=False`.
+Item on `Floating=False` (F3), both looks: the selected fill is `Button/button-secondary` (Pressed `button-secondary-active`, Focus and Hover `button-secondary-hover`, Disabled `button-disabled`), its stroke `Theme/Transparent` but Focus's `Focus/focus`, its label `text-primary` (Disabled `text-disabled`); no shadow. The unselected cells are each look's own, below and.
+
+Item on `Floating=True` (`_Segmented control item › Container` fill, its stroke, `Label`), `iOS=False`.
 
 | `Selected` · `State` | Fill | Stroke | Label |
 | --- | --- | --- | --- |
@@ -114,6 +117,8 @@ Contrast (the spec's `contrast` list). The figures were computed 2026-11-04 from
 | Focus stroke `Focus/focus` | focus ring | the lint's |
 | The track | decorative | the labels carry it |
 | Disabled | disabled | none |
+| `Floating=False`: `Label` `text-secondary` unselected, on the page (`iOS=False`) | text | 6.73 · 7.22 |
+| `Floating=False`: the selected fill `button-secondary` against the page | decorative: the owner's exception (F4) | 1.23 · 1.27 |
 
 Rejected indicators, against the same track: `Layer/layer-selected-02` (the Toolbars' part) is **1.16 · 1.43**, and a white thumb, `Layer/layer-01` (the kit's look), is **1.24 · 1.06**. Both fail the 3:1 that a state indicator needs (Accessibility). took a white pill anyway (`segmented-control-selected`, S1), at the owner's word, as an exception (S5). retired S5 on `iOS=False`: the `border-strong` outline passes 3:1 and marks the selection.
 
@@ -170,9 +175,9 @@ Motion and haptics, the Segmented control row, made specific:
 ## Accessibility
 
 - [ ] 1. Text pairs: `iOS=False` and the selected pair on both looks pass (contrast table); the `iOS=False` selected label is `text-primary` on the pill, 15.13 · 7.23. The lint is to be run on the spec.
-- [ ] 2. Non-text: on `iOS=False` the selected segment's 2 `border-strong` outline is 14.66 · 16.48 against `button-secondary`, so S5 retires there (the lint checks it as a non-text pair). the Strong label and the shadow mark the selection. The Focus stroke is to be confirmed by the lint.
+- [ ] 2. Non-text: on `Floating=False` the selected `button-secondary` fill is 1.23 · 1.27 against the page, under 3:1, with no outline: the owner's accepted exception (F4, 2026-11-17); the label carries the selection. On `Floating=True, iOS=False` the selected segment's 2 `border-strong` outline is 14.66 · 16.48 against `button-secondary`, so S5 retires there (the lint checks it as a non-text pair). the Strong label and the shadow mark the selection. The Focus stroke is to be confirmed by the lint.
 - [x] 3. A field is identified by more than its fill: N/A, it isn't a field. The segments carry their own labels.
-- [x] 4. Not by colour alone: on `iOS=False` the selected segment is outlined (14.66 · 16.48). A disabled segment (the Item's `State=Disabled`) dims its label, and a disabled control (the set's `State=Disabled`) dims the whole control to 50%, as the kit's; Focus draws a stroke, and Skeleton is its shape.
+- [x] 4. On `Floating=True, iOS=False` the selected segment is outlined (14.66 · 16.48). A disabled segment (the Item's `State=Disabled`) dims its label, and a disabled control (the set's `State=Disabled`) dims the whole control to 50%, as the kit's; Focus draws a stroke, and Skeleton is its shape.
 - [x] 5. Focus ring: a 2 `Focus/focus` stroke inside the focused segment, on the Item (call 11), not outside the Container.
 - [x] 6. The check's long unspaced phrase takes 4 · 6 · 10 lines: past T4's two lines at every size, so in code it is a copy problem at standard sizes and the switch case at AX sizes. Still to confirm in code: Thai breaks between words.
 - [x] 7. No text under 11 pt: the smallest is Subheadline (15).

@@ -59,6 +59,12 @@ Raw values, mode `Value`, `ALL_SCOPES`, like the rest of the collection. Shaped 
 
 ## Usage
 
+### When to use
+
+- A message about the state of one page or feature, at the top of the page or next to the content it is about.
+
+### Rules
+
 - Use an In-line banner for a message about the state of one page or feature, at the top of the page or next to the content it is about: form validation, inline callouts, Warning, Success and Failure states (Uber, Usage).
 - Don't use it for global system messaging that affects more than one experience of an app, such as upcoming maintenance or a lost connection: that is Uber's System banner, which Core doesn't have (Uber, Usage). Don't use it for short-lived feedback after an action, such as "Copied": use a [Snackbar](snackbar.md) (Uber, Usage).
 - Show one at a time. When several fields have errors, put them all in one banner at the top or bottom of the form (Uber, Usage).
