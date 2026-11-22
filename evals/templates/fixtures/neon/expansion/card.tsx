@@ -1,4 +1,4 @@
-// card, measured against CDS ContentCard (fixtures/expansion/card.tsx) with the
+// card, measured against CDS ContentCard (fixtures/cds-baseline.json) with the
 // same Thai title, description, body text and footer action.
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"

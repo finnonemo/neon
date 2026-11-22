@@ -1,5 +1,5 @@
 // field, measured against Core's Text field and the CDS input stack
-// (fixtures/expansion/field.tsx): a field with long Thai helper text, one in
+// (fixtures/cds-baseline.json): a field with long Thai helper text, one in
 // its error state, where the error takes the helper's place, and a disabled
 // one (Neon only). The fixture wires nothing by hand: Field ties its label,
 // helper and error to the control in FieldControl. The input-group field

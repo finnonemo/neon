@@ -1,4 +1,4 @@
-// switch, measured against Core's Toggle and CDS Switch (fixtures/expansion/switch.tsx). Core's
+// switch, measured against Core's Toggle and CDS Switch (fixtures/cds-baseline.json). Core's
 // Toggle only has no label, so the label keeps CDS's: body, fg when checked and fgMuted when not.
 // Label is muted by default, so a checked switch's label takes the foreground while the switch is
 // enabled; a disabled switch's label stays Text/text-disabled, on or off.

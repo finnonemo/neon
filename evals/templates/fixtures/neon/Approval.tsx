@@ -1,4 +1,4 @@
-// The approval screen on the Neon base, measured against fixtures/Approval.tsx.
+// The approval screen on the Neon base, measured against the retired CDS screen in fixtures/cds-baseline.json.
 import { useState } from "react"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"

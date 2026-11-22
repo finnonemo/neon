@@ -249,9 +249,8 @@ export function unmeasuredComponents(items, screenMeasured, expansion) {
   for (const item of items) {
     if (item.type !== 'registry:ui' || screenMeasured.includes(item.name) || item.meta?.supporting) continue;
     if (!expansion.screens(item.name)) problems.push(`${item.name}: no screen in evals/templates/expansion/${item.name}.mjs`);
-    for (const path of [`expansion/${item.name}.tsx`, `neon/expansion/${item.name}.tsx`]) {
-      if (!expansion.fixture(path)) problems.push(`${item.name}: no evals/templates/fixtures/${path}`);
-    }
+    const path = `neon/expansion/${item.name}.tsx`;
+    if (!expansion.fixture(path)) problems.push(`${item.name}: no evals/templates/fixtures/${path}`);
   }
   return problems;
 }
@@ -275,9 +274,8 @@ export function supportingProblems(items, expected, expansion) {
       else if (!(byName.get(user).registryDependencies ?? []).includes(`@neon/${name}`)) problems.push(`${user} does not declare @neon/${name}`);
     }
     if (expansion.screens(name)) problems.push(`${name}: a Supporting item has no screen of its own; remove evals/templates/expansion/${name}.mjs`);
-    for (const path of [`expansion/${name}.tsx`, `neon/expansion/${name}.tsx`]) {
-      if (expansion.fixture(path)) problems.push(`${name}: a Supporting item has no fixture of its own; remove evals/templates/fixtures/${path}`);
-    }
+    const path = `neon/expansion/${name}.tsx`;
+    if (expansion.fixture(path)) problems.push(`${name}: a Supporting item has no fixture of its own; remove evals/templates/fixtures/${path}`);
   }
   for (const item of items) {
     if (item.meta?.supporting && !(item.name in expected)) problems.push(`${item.name}: marked meta.supporting but no item is named to use it`);

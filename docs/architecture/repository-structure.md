@@ -17,7 +17,7 @@
 | `scripts/` | maintainer | Stable, public commands: `finno` (`finno.mjs`, the published command and local tool server), the installer (`install.mjs`: New, Add and CSS-only), the Core and Block snapshot syncs (`sync-core.mjs`, `sync-block.mjs`), the browser probe runner skills use without a browser tool (`probe-page.mjs`), the warn-only source lint the shared verification checklist runs (`source-lint.mjs`, rules in `scripts/lib/source-rules.mjs` that the eval graders also import), the build-then-serve preview that waits for HTTP 200 (`preview-app.mjs`), a read-only report of Chrome's DevTools endpoint for REA (`cdp-status.mjs`), the Theme Brief listing and recognition `neon-create` runs (`theme-brief.mjs`), the plugin packager (`package-plugin.mjs`), the registry builder (`build-registry.mjs`, guards in `scripts/lib/registry.mjs`), the disposable-app check (`smoke-new-app.mjs`), the token and consumer lookups (`token-lookup.mjs`, `contrast.mjs`, `registry-consumers.mjs`), and the repository check run by `validate.mjs` (`check-repository.mjs`). `scripts/theme-briefs/` holds the maintainer-only Theme Brief tool and its checks. |
 | `docs/` | maintainer | This directory — curated, tracked documentation about the repository itself: architecture, the ADRs, agent configuration and design notes. Not shipped in the distributed plugin. |
 | `evals/skills/` | maintainer | Skill scenarios and packaging regression checks, run with `node --test evals/skills/*.test.mjs`. |
-| `evals/templates/` | maintainer | Browser suite for the CDS starter and the Neon base: assembles a disposable app (`--target neon` creates one with `shadcn init` from the local registry), builds it and runs Playwright layout, integration and CDS-match checks. Reports go to `.local/evals/templates/<target>/`. |
+| `evals/templates/` | maintainer | Browser suite for the Neon base: creates a disposable app with `shadcn init` from the local registry, builds it and runs Playwright layout, accessibility and match checks against the frozen CDS-era baselines and Core. Reports go to `.local/evals/templates/neon/`. |
 | `README.md`, `AGENTS.md`, `CONTRIBUTING.md`, `CODING_STANDARDS.md`, `GLOSSARY.md`, `LICENSE`, `marketplace.example.json` | maintainer | Root documents and the example marketplace file. `README.md` is the employee-facing entry point; `AGENTS.md` and `CONTRIBUTING.md` are for maintainers and their agents. |
 | `package.json` | maintainer | The npm package `finnomena`, whose command is `finno`. Its `files` list decides what the npm package carries. |
 | `.github/` | maintainer | CI workflows: `validate.yml` (`node scripts/validate.mjs`) and `template-browser.yml` (the browser suite). |
@@ -91,7 +91,7 @@ node scripts/sync-core.mjs --from-snapshot   # Neon's own tables alone: no check
 node scripts/sync-block.mjs --from <Block checkout>
 ```
 
-Run the browser suite after template, registry or theme changes (add `-- --target neon` to build the app from this checkout's registry):
+Run the browser suite after registry or theme changes; it builds the app from this checkout's registry:
 
 ```sh
 npm ci --prefix evals/templates

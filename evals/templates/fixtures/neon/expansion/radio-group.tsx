@@ -1,4 +1,4 @@
-// radio-group, measured against Core's Radio and CDS RadioGroup (fixtures/expansion/radio-group.tsx).
+// radio-group, measured against Core's Radio and CDS RadioGroup (fixtures/cds-baseline.json).
 // The headline names the group; each option's Label is Core's Value: body in Text/text-primary,
 // chosen or not. Label turns it Text/text-disabled beside a disabled radio.
 import { useState } from "react"

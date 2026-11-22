@@ -1,4 +1,4 @@
-// button-group, measured against CDS ButtonGroup (fixtures/expansion/button-group.tsx):
+// button-group, measured against CDS ButtonGroup (fixtures/cds-baseline.json):
 // a horizontal group of a primary and a secondary button, and a vertical
 // group whose buttons fill its width.
 import { Button } from "@/components/ui/button"

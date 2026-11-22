@@ -1,5 +1,5 @@
 // toggle-group, measured against CDS's grouped toggle buttons
-// (fixtures/expansion/toggle-group.tsx): one group per size, a disabled group
+// (fixtures/cds-baseline.json): one group per size, a disabled group
 // and a vertical one. The default and disabled groups are type="multiple"
 // (aria-pressed); the sm and lg groups are type="single" (radios).
 import { ToggleGroup as NeonToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"

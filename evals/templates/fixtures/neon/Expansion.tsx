@@ -1,4 +1,4 @@
-// The expansion screen on the Neon base, measured against fixtures/Expansion.tsx:
+// The expansion screen on the Neon base, measured against the retired CDS screen in fixtures/cds-baseline.json:
 // one section per registry expansion item from ./expansion/<item>.tsx, inside a
 // data-measure=<item> hook. Sections are found, not listed, so an item adds its
 // file and nothing else.
