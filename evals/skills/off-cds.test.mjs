@@ -96,3 +96,11 @@ test('the CDS deprecation notices went with the mode', async () => {
     assert.doesNotMatch(await readFile(join(root, path), 'utf8'), /Neon 2\.0\.0 removes|CDS Install mode[^.]* is deprecated/, path);
   }
 });
+
+test('no registry item names the CDS theme or package', async () => {
+  const dir = join(root, 'registry/r');
+  const { readdir } = await import('node:fs/promises');
+  for (const name of (await readdir(dir)).filter(file => file.endsWith('.json'))) {
+    assert.doesNotMatch(await readFile(join(dir, name), 'utf8'), /theme\/cds|@coinbase\/cds-web|Full CDS/, name);
+  }
+});

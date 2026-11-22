@@ -27,8 +27,7 @@
  * differs from the snapshot.
  *
  * EVERYTHING ELSE (font family and weight, space, radius) is
- * maintained by hand, not generated. It was first captured from
- * @coinbase/cds-web@9.26.1's own `createThemeCssVars()` against the CDS
+ * maintained by hand, not generated. It was first captured from the CDS
  * theme Neon 2.0.0 removed (ADR 0016); edit it here.
  *
  * NAMES follow the pattern CDS's ThemeProvider emitted
@@ -66,9 +65,9 @@
  *   - Colors + typography: also use --fontFamily-*, --fontSize-*,
  *     --fontWeight-*, --lineHeight-*, --space-*, --borderRadius-*.
  *     Immersive pages also take their content column from --layout-*.
- *   - Full CDS: don't use this file — see
- *     ${CLAUDE_PLUGIN_ROOT}/skills/neon-create instead (ThemeProvider +
- *     createNeonTheme() + real CDS components).
+ *   - Components: start or rebuild the app on the Neon base instead
+ *     (${CLAUDE_PLUGIN_ROOT}/skills/neon-create), whose theme item reads
+ *     this file.
  */
 
 :root {
