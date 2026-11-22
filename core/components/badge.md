@@ -98,12 +98,12 @@ None.
 - [x] 5. N/A: not interactive, no Focus ring.
 - [x] 6. Nothing clips; the Dot stays 8 × 8.
 
-| Content | `Large` |  |  |
-| --- | --- | --- | --- |
-| `1` | 20 × 20 | 28 × 28 | 48 × 48 |
-| `99+` | 30 × 20 | 41 × 28 | 66 × 48 |
-| Thai test string `ปั๋ง ผู้ใหญ่ ฎู ฟุ้ง` | 86 × 20 | 125 × 28 | 216 × 48 |
-| Dot | 8 × 8 | 8 × 8 | 8 × 8 |
+| Content | `Large` |
+| --- | --- |
+| `1` | 20 × 20 |
+| `99+` | 30 × 20 |
+| Thai test string `ปั๋ง ผู้ใหญ่ ฎู ฟุ้ง` | 86 × 20 |
+| Dot | 8 × 8 |
 
 Re-measured after the change, 2026-11-01. Before, with a raw 20, it was a capsule (20 × 28, 22 × 48).
 - [x] 7. 12 pt (Caption 1), over 11.

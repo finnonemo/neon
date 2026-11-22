@@ -38,6 +38,8 @@ Page items are a Slot because the pages shown change with the total (Uber has ei
 
 ## Axes
 
+**`Pagination`**
+
 | Axis | Values (default first) | Drives |
 | --- | --- | --- |
 | `Type` | Numbered · Overflow | which Container parts show |
@@ -45,6 +47,8 @@ Page items are a Slot because the pages shown change with the total (Uber has ei
 | `State` | Default · Skeleton | Skeleton replaces the parts with bars (P4) |
 
 Properties: BOOLEANs `Show Previous` (Numbered, on), `Dividers` (Overflow, on); the exposed nested Select values and Button states. 2 × 2 × 2 = **8 variants**.
+
+**`_Pagination item`**
 
 | Axis | Values | Drives |
 | --- | --- | --- |
@@ -54,6 +58,8 @@ Properties: BOOLEANs `Show Previous` (Numbered, on), `Dividers` (Overflow, on); 
 | `Size` | Medium · Small | label text style |
 
 Page 2 × 5 + Ellipsis 5 = 15, × 2 Sizes = **30 variants**.
+
+**`Table toolbar`**
 
 | Axis | Values | Drives |
 | --- | --- | --- |

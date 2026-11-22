@@ -102,6 +102,12 @@ A sheet keeps an explicit Cancel; the scrim, Esc and swipe-down are supplemental
 
 ## Usage
 
+### When to use
+
+- A choice of two to four actions besides Cancel, on a sheet that hugs its content.
+
+### Rules
+
 - Page `Action Sheets` (new, between `Accordions` and `Alerts`, from the `Templates` clone): the set in Components; no Items. A base in its set frame on 🚧 Drafts waits for the owner before the set is built (`build-component` step 1).
 - Samples in Light and Dark columns, Thai copy as instance overrides, over a screen with the `Miscellaneous/overlay` scrim:
   - A destructive choice, both looks (Mail's draft): "ทิ้งร่างนี้?", `Show message` off, "บันทึกร่าง" (Secondary), "ลบร่าง" (`Type=Danger`, Primary), Cancel "แก้ไขต่อ" (keep editing).

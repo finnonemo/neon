@@ -117,14 +117,14 @@ None: a static label.
 - [x] 5. N/A: not interactive, no Focus ring.
 - [x] 6. Reflows with nothing clipped. Measured on scratch instances of Green Primary, 2026-11-02, width × height:
 
-  | Size | Large |  |  |
-  | --- | --- | --- | --- |
-  | Large | 111 × 40 | 138 × 52 | 208 × 74 |
-  | Medium | 97 × 32 | 121 × 42 | 184 × 66 |
-  | Small | 76 × 24 | 101 × 34 | 160 × 56 |
-  | XSmall | 68 × 20 | 93 × 30 | 151 × 50 |
+  | Size | Large |
+  | --- | --- |
+  | Large | 111 × 40 |
+  | Medium | 97 × 32 |
+  | Small | 76 × 24 |
+  | XSmall | 68 × 20 |
 
-The live set's Fixed height clipped here. The new Container uses min-height and hugs, so it grows instead (the owner's call).
+  The live set's Fixed height clipped here. The new Container uses min-height and hugs, so it grows instead (the owner's call).
 - [x] 7. No text under 11 pt: Caption 1 (12) is the smallest.
 - [x] 8. Motion: None.
 - [x] 9. Role, name, states and focus order:

@@ -105,6 +105,12 @@ Movement from Motion and haptics, the owner's D6 (ads-tokens.md § 5), edited in
 
 ## Usage
 
+### When to use
+
+- A question that needs an answer, or a confirmation with two or three actions, centred over the screen.
+
+### Rules
+
 - Page `Alerts` (new, between `Accordions` and `Amount fields`, from the `Templates` clone): the set in Components; no Items. A base in its set frame on 🚧 Drafts (Side-by-Side, both looks) waits for the owner before the set is built (`build-component` step 1).
 - Samples in Light and Dark columns, Thai copy, over a screen with the `Miscellaneous/overlay` scrim:
   - Side-by-Side, both looks: "ออกจากระบบ?" (Log out?), "คุณต้องเข้าสู่ระบบอีกครั้งเพื่อดูพอร์ตของคุณ", Dismiss "ยกเลิก", Preferred "ออกจากระบบ" (logging out isn't destructive, [hierarchy.md](../hierarchy.md) rule 5).

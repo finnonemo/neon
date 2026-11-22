@@ -76,7 +76,7 @@ None of its own. The Header's Icon buttons (Uber's trailing X: `xmark`) are the 
 
 ## Text styles, wrapping and truncation
 
-None of its own: the title and subtitle are the Toolbar's (one line; Uber allows 2 to 3, which `Style=Title 2 Line` gives on iPad). Content brings its own.
+None of its own: the title and subtitle are the Toolbar's. On `Sheet - iPhone` the Header's title wraps to **2 lines, then …** (`maxLines` 2, ENDING, an override in each of the 5 variants); two 24 lines fill the 48 row, so the Header stays 58 and 64 (`iOS=False`). On `Sheet - iPad` it stays one line, ending … (Uber allows 2 to 3; iPad's `Style=Title 2 Line` is a title over a subtitle, not a 2-line title). Thai has no spaces between words, so Figma breaks a long Thai title mid-word: a sample puts a zero-width space (U+200B) between words so it wraps where a phone would. Content brings its own.
 
 ## Hit target and Skeleton
 
@@ -119,9 +119,15 @@ A dimmed sheet keeps an explicit dismiss, X or Cancel. The scrim, Esc and swipe-
 
 ## Usage
 
+### When to use
+
+- A form, long content or several steps over the screen.
+
+### Rules
+
 - Page `Sheets` (new, between `Selects` and `Sidebars`, from the `Templates` clone): both sets in Components; no Items. A base in its set frame on 🚧 Drafts (Medium, both looks) waits for the owner before the sets are built (`build-component` step 1).
 - Samples in Light and Dark columns, Thai copy:
-  - `Sheet - iPhone` Medium, both looks: "ตัวกรอง" (filters), trailing `xmark`, three List item rows, and a Button dock "ดูผลลัพธ์" in the Footer.
+  - `Sheet - iPhone` Medium, both looks: "เปรียบเทียบผลตอบแทนย้อนหลังของกองทุนที่เลือก" on 2 lines (zero-width spaces between its words; "ตัวกรอง", filters), trailing `xmark`, three List item rows, and a Button dock "ดูผลลัพธ์" in the Footer.
   - Large, both looks: "รายละเอียดคำสั่งซื้อ" with List items (Detail rows until 2026-11-09, swapped when Detail row was deprecated);
   - Non-modal: Medium with `Show Dimming Layer` off, over a screen (Uber's sheet over a map).
   - the Web sample the same.
@@ -135,4 +141,5 @@ A dimmed sheet keeps an explicit dismiss, X or Cancel. The scrim, Esc and swipe-
   - The Half-folded and Duo Inner samples (the kit's 653-wide sheet) and the eight Large (Stacked) sizes without a variant stay hand-built. Change the sheet's placement in the set, not in a sample.
   - The examples set only text, component properties and Slot content, plus what a sample on a Screen can't avoid: each sheet's root padding places it (an instance's inner `Sheet` takes no x, y or resize), a `Platform` or `Breakpoint` mode pins the look, and the bezel sits above the sheet. usage-overrides lists these as gaps; they are the composition, not a missing component property.
 - **Placement**: at **Compact width** the sheet rises from the **bottom edge** over a dimming layer (non-modal: none): Medium inset 6 from the sides and the bottom, Large the full width 62 from the top (Android 52, iPhone SE 20). At **Regular width** (iPad, web XL) it is `Sheet - iPad`, **centred** over the dimming. A Pattern places it as a sibling layer over the whole screen (screen-rules). One sheet at a time; a second closes the first.
+- **Title**: name what the sheet holds. On iPhone it may take 2 lines, then …; write the words that tell sheets apart first, since a third line is cut. On iPad it is one line.
 - Not for: one question or a confirmation (Alert, pawisssh/design-system#150); a menu of actions (Action Sheet, pawisssh/design-system#151, or Menu); top-level navigation (Tab Bar, Sidebar).

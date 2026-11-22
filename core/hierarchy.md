@@ -58,6 +58,8 @@ Button, Icon button and Rect button: [button.md › Hierarchy](components/button
 
 Each component gets a `### Hierarchy` section in its own doc, from its own Uber Base docs page and Apple's page for it, not inferred from Button's. Draft every new call in its component's doc with the component's prefix (BD1, FU1). A call that binds one component stays there; one that binds several gets its H number when it lands in Owner's calls on main, so two sessions drafting at once never take the same number (pawisssh/design-system#696).
 
+**Own a `Hierarchy` axis**
+
 | Component | Values | `### Hierarchy` in | Left to do |
 | --- | --- | --- | --- |
 | Button, Icon button, Rect button | Primary · Secondary · Tertiary | [button.md](components/button.md) | H2's contrast fix: done 2026-11-09 |
@@ -66,6 +68,8 @@ Each component gets a `### Hierarchy` section in its own doc, from its own Uber 
 | Section heading | Primary · Secondary · Tertiary | [section-heading.md](components/section-heading.md) |  |
 | In-line banner | Primary · Secondary | [banner.md](components/banner.md) | none: BN1–BN4 decided 2026-11-09 |
 | Contextual banner | Primary · Secondary | [contextual-banner.md](components/contextual-banner.md) | none: CB1–CB5 decided 2026-11-09 |
+
+**Pin a nested Button's or Icon button's `Hierarchy`**
 
 | Nester | Pins | `### Hierarchy` in | Left to do |
 | --- | --- | --- | --- |

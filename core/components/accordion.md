@@ -30,6 +30,7 @@ _Accordion header (variant root)    Fill × Hug, no fill, no padding, min width 
   - Container has no top or bottom padding (owner, 2026-11-02). It has no Divider; `Bottom border` belongs to the public set.
 - **Header layer names**: `_Accordion header` keeps List item's names (`Main table cell`, `Label + Subtitle`, `Right content`). Carbon names this row only by its item.
 - **Label block**: frame `Label + Subtitle`, title `Label`, description `Subtitle` (`$footnote`, Large only). The Skeleton bar is `Label line`. The spec declares these as `labelBlock`.
+- **Summary**:
   - `Value` and the chevron sit in `Right content`, so the title takes the remaining width and wraps.
   - The summary is text, not a nested Value instance. Port's right sides are a date, a status with an icon, a masked card number and an amount: all one line, some with an icon. sets it in Body, as a Content row's List item `Detail`.
   - An amount in the summary stays plain text. The figure styling of Core's Value is the content rows' job (Assumptions).
@@ -98,6 +99,8 @@ Properties: BOOLEAN `Bottom border` (on), SLOT `Content`, and the header's `Titl
 | Chevron | Enabled, Active, Focus · Disabled | `Icon/icon-secondary` · `Icon/icon-disabled` | same |
 | Label line | Skeleton | `Skeleton/skeleton-background` |  |
 | Bottom border | every state | `Border/border-subtle` | `background-primary` |
+
+**Contrast list**:
 
 - Label, Subtitle and Value on `layer-01` and `layer-active-01`, in both modes.
 - The chevron at 3:1 on the same backgrounds: it carries the expanded state, beside the announced state.
@@ -182,6 +185,7 @@ Movement from Motion and haptics, the owner's D6 (ads-tokens.md § 5), edited in
 - **Focus ring**: shown once, on a collapsed header.
 - **Skeleton**: a stack in `State=Skeleton`.
 - **Placement**: a vertical stack in the page's scrolling content, at the content's width. A panel opens **below** its header, never above. Secondary or supporting content only: a blocking error or an essential message goes in a Banner on the page, not inside a panel (Base). At most the first panel open (Default open above).
+- **Don't**:
   - Put Accordions in a Grouped list or a Tile.
   - Use one for a row that goes to another screen: that's List item with its `angle-right` `Chevron`.
   - Use a right-pointing chevron (`angle-right`, `chevron-right`) as the indicator: it reads as going to another screen. The indicator is `angle-down` · `angle-up` (Base).

@@ -141,6 +141,12 @@ Our local Typography styles (Localisation), the same in both looks. Dates and ti
 
 ## Usage
 
+### When to use
+
+- Picking a date or a time from a collapsed row that opens its pickers beside it.
+
+### Rules
+
 - Page `Date and time pickers` (new, from the `Templates` clone, A-Z between `Checkboxes` and `Detail rows`): both sets in Components, then [Date picker](date-picker.md), `_Day` and `_Week` in Items. A base for each set in its set frame on 🚧 Drafts waits for the owner before the sets are built (`build-component` step 1).
 - Samples in Light and Dark, both looks, Thai copy, today 9 พ.ย. 69:
   - A Grouped list "วันที่โอน" (transfer date) with a List item `Trailing=Picker - Date and Time` and, under it, Pickers `Style=Inline` `Mode=Date and Time`: header "พฤศจิกายน 2569", 17 selected, today's mark on 9, days before today Disabled (a scheduled transfer), the Time row "เวลา" "11.30 น.".

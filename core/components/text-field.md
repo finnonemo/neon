@@ -122,7 +122,7 @@ Height growth from pawisssh/design-system#115's Thai line heights: 114 · 105 ·
   | --- | --- | --- | --- | --- | --- |
   | `Large` | 120 · 112 · 100 | 56 · 48 · 36 | 24 · 24 · 24 | 24 | none |
 
-Checked on Active, Error and Loading at each Size, plus Small Active with a long Thai value and Small Enabled with a long placeholder (both truncated then, when `Input text` was Fill). Nothing clips it: Field, slot and Item have clip off. A screenshot of the check frame shows the glyph's ink inside the Field; the ink bounds weren't measured.
+  Checked on Active, Error and Loading at each Size, plus Small Active with a long Thai value and Small Enabled with a long placeholder (both truncated then, when `Input text` was Fill). Nothing clips it: Field, slot and Item have clip off. A screenshot of the check frame shows the glyph's ink inside the Field; the ink bounds weren't measured.
 - [x] 7. No text under 11 pt: the smallest is Subheadline.
 - [x] 8. The Motion part names each transition.
 - [x] 9. Role, name, states and focus order:
@@ -137,6 +137,12 @@ Checked on Active, Error and Loading at each Size, plus Small Active with a long
 Password field's row: [password-field.md](password-field.md).
 
 ## Usage
+
+### When to use
+
+- A field the user types a value into, under a title that always shows.
+
+### Rules
 
 the other cases below are not drawn yet.
 

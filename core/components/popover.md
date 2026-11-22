@@ -92,6 +92,12 @@ None of its own: the Popover draws no text. The Slot's content brings its text s
 
 ## Usage
 
+### When to use
+
+- A view anchored to its control at iPad's regular width and on web desktop; at compact width the same view is a Sheet.
+
+### Rules
+
 The page's `Usage` frame (structure.md) shows, in Light and Dark, each look with the same Thai view in its Slot ("ตัวกรองกองทุน": a Radio group "ประเภทกองทุน", a Select "ระดับความเสี่ยง", a "ล้างค่า" Link and a Primary "ใช้ตัวกรอง" Button):
 
 - **Where it sits.** Width picks the component (ADR 0013, Regular width): at iPad's regular width and on web desktop, a Popover anchored to its control; The Usage shows the iPhone case as that Sheet with the same Slot content, as the issue asks.

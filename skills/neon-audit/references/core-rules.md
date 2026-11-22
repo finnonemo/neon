@@ -33,6 +33,16 @@ A doc speaks of Core's own components, so read it as follows:
 - **Bookkeeping:** sample frames, page names, issue numbers, dates and draft notes are Core's records, not rules.
 - **Scope:** a rule shapes new UI and `composition: 'adapt'`. Under `preserve` or colors-only scope a miss is an observation; it does not license restructuring.
 
+## Rules for every screen
+
+Three snapshot files hold Core's rules that belong to no one component. Each is one file: read the part the task needs, not the whole.
+
+- [Foundations](../../../core/foundations.md): control sizes, the Hit target and row heights; how a number, a unit, a sign, an empty value and a date are written; the accessibility floor (WCAG 2.2 AA, the contrast targets, the focus ring, the smallest text); the motion tokens and their reduced-motion form. Read its part when a screen formats figures or dates, when a review finding is about contrast, focus or target size, or when a transition is being given a duration.
+- [Motion tokens](../../../core/motion.json): the same tokens as data. A component doc names a transition as `moderate-02 · entrance`; this file gives the milliseconds and the `cubic-bezier`.
+- [Screen templates](../../../core/patterns/screen-templates.md), with [the layouts as data](../../../core/patterns/screen-templates.json): which Areas (Sidebar, Content, Inspector, Bottom Navigation) Core's own screens show at each of its breakpoints, and how wide. It is a reference for what Core draws. An app's layout still follows [functional patterns](functional-patterns.md) and its own breakpoints.
+
+Cite them as a component doc is cited: "Core `foundations.md` › Numbers and dates: units follow the number".
+
 ## Cite a rule
 
 A finding or a choice that rests on Core names the doc, the section and the rule, in Core's words kept short: "Core `hierarchy.md`, rule 4: Tertiary is for ways out", or "Core `alert.md` › Usage: not for a form or long content". Cite only a rule read in the snapshot this session. For an item with no Counterpart, say so and rest the finding on the design contract instead.

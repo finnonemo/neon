@@ -1,0 +1,20 @@
+{
+  "durations": {
+    "fast-01": 70,
+    "fast-02": 110,
+    "moderate-01": 150,
+    "moderate-02": 240,
+    "slow-01": 400,
+    "slow-02": 700
+  },
+  "easings": {
+    "standard": "cubic-bezier(0.2, 0, 0.38, 0.9)",
+    "entrance": "cubic-bezier(0, 0, 0.38, 0.9)",
+    "exit": "cubic-bezier(0.2, 0, 1, 0.9)"
+  },
+  "movements": {
+    "scale-in": "scale 0.96 → 1, with opacity",
+    "slide-full": "the surface's own height, from the edge it is anchored to",
+    "expand": "height 0 → its content, with opacity"
+  }
+}

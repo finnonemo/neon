@@ -9,7 +9,6 @@ As copied from the kit, apart from the buttons and the Search row. Top iPhone `S
 ```
 └─ Container                       V, padding 0 · 0 · 10 · 0, Fill × Hug
    ├─ Controls                        Fill × 48, H, padding 0 · 16
-   │  ├─ Title                        absolute, 258 wide; `Show Title`. Title (TEXT `Title`), one line, ending … Bottom layer, so an open Menu in Trailing draws over it
    │  ├─ Leading                      Slot, 48 × 48
    │  ├─ Spacer
    │  └─ Trailing                     Slot, 48 × 48
@@ -38,7 +37,7 @@ N/A: the icons are the nested Icon buttons' own.
 
 ## Text styles, wrapping and truncation
 
-As copied from the kit. every Top - iPhone title and subtitle is one line, truncated at the end (`textTruncation` ENDING, `maxLines` 1), so a long Thai title ends in … before the Slots. does the same for Top - iPad's `Tab Bar=False` titles and subtitles (Title 2 Line, Title 2 Line Left, Compact Large).
+As copied from the kit. every Top - iPhone title and subtitle is one line, truncated at the end (`textTruncation` ENDING, `maxLines` 1), so a long Thai title ends in … before the Slots. does the same for Top - iPad's `Tab Bar=False` titles and subtitles (Title 2 Line, Title 2 Line Left, Compact Large). Top - iPhone `Style=Default`'s title box is 258 × 48, centred, so an instance that sets `maxLines` 2 (Sheet's Header) wraps inside the 48 row; Toolbars' own title stays one line at y 12. structure-check's `box-fixed` on that box is by design.
 
 ## Hit target and Skeleton
 
@@ -54,6 +53,12 @@ System: an iOS component (Motion and haptics).
 Not reviewed beyond the contrast notes.
 
 ## Usage
+
+### When to use
+
+- The iOS toolbars: navigation, the prominent action and the other items in their groups, with the rest in an overflow menu.
+
+### Rules
 
 Each set has its own Usage row. Top - iPhone's Usage holds the kit look's `Samples`. Toolbar - Top's Usage holds `Samples`, which took over Top navigation bar's samples: Default, Large Title with Subtitle, `Show Search`, long titles, a Text button in Trailing, a content bar (`Show Title` off, Tertiary Button with a chevron in Leading), Focus, and a 1440 Regular width `Screen` with Breadcrumbs under the bar. Web and Android use Toolbar - Top filled to the screen's width.
 

@@ -190,6 +190,12 @@ These use our local Typography styles (Localisation), the same in both looks. Li
 
 ## Usage
 
+### When to use
+
+- A list of actions and choices opened from a control, never a form.
+
+### Rules
+
 - Page `Menus` (new, between `Lists` and `Password fields`, made with `docs/agents/make-page.js`): `Menu` in Components, the six parts in Items; no Bases.
 - Usage samples, in Light and Dark columns (iOS bars' exception). Each look gets a `Screen 402` frame. `Closed`: a toolbar with `Expand=False` in its `Trailing` Slot. `Sort` and `Actions`: `Expand=True · Anchor=Top right` in the button's place, so the menu covers it. The Thai copy:
   - A sort menu: a `เรียงตาม` section with `ชื่อ`, `ราคาล่าสุด` and `ผลตอบแทน 1 ปี`, one of them checked.

@@ -128,6 +128,12 @@ Item 2 is not met (pawisssh/design-system#198); met items 5 and 6. Item 2: `iOS=
 
 ## Usage
 
+### When to use
+
+- A setting that changes at once; for a choice confirmed by a button, use Checkbox.
+
+### Rules
+
 - `Style=Default` for a setting with a title in a form; `Toggle only` where the row already names it (banners, a List item's trailing Toggle). A titled settings row in a list is List item control `Trailing=Toggle`, not `Style=Default`.
 - Place `Style=Default` at Fill: it is Fixed 343 only in the set, and its label wraps.
 - Focus ring (`iOS=False`, web): 2 `Focus/focus` with a 2 gap round the track, never round the row, which stays one focus stop (the `Focus ring` sample).

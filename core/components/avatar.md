@@ -72,19 +72,19 @@ With the owner's answers (2026-11-02):
 
 Templates: `Components/Avatar/Container/{{Size=*}}/<Property>`, `Components/Avatar/Label/{{Size=*}}/Type token`, `Components/Avatar/Badge/{{Size=*}}/<Property>`, `Components/Avatar/Badge ring/{{Size=*}}/<Property>`; `Utility/Caption 2` · `Utility/Caption 1` · `Headings/Headline` · `Headings/Title 1` · `Headings/Large Title` · `Headings/Title 3` on Label by `Size`, and `fa-sharp fa-solid/<Step>` on Icon.
 
-`Theme` (Q1), one Component-scoped token for the fill, as Carbon binds a palette colour here (`Default/Blue/60`) with no Semantic role, the same in both modes (Tokens, ADR 0001). Its colour is Base's: the accent blue #276EF1 under white. The nearest palette step, `Indigo/65` (ΔE 12), gives white text 4.35, under 4.5, so the token took the nearest that passes, `Indigo/70` (ΔE 16). deleted it: `Default` reuses Tag's Indigo, `Indigo/85`, so every `Color` binds a Tag fill. Text and icon bind Carbon's Semantic tokens directly.
+`Theme` (Q1), one Component-scoped token for the fill, as Carbon binds a palette colour here (`Default/Blue/60`) with no Semantic role, the same in both modes (Tokens, ADR 0001). Its colour is Base's: the accent blue #276EF1 under white. The nearest palette step, `Indigo/65` (ΔE 12), gives white text 4.35, under 4.5, so the token took the nearest that passes, `Indigo/70` (ΔE 16). deleted it: `Default` reuses Tag's Indigo, `Indigo/85`, so every `Color` binds a Tag fill. (R1) gives `Default` Core's Navy, the fill Button Primary sits on, under the same white (R2). Text and icon bind Carbon's Semantic tokens directly.
 
 | Theme token | Light | Dark | Paired with |
 | --- | --- | --- | --- |
-| `Text/text-on-color` | →`White/100` | →`White/100` | the Tag fills (Label) |
-| `Icon/icon-on-color` | →`White/100` | →`White/100` | the Tag fills (Icon, decorative) |
+| `Text/text-on-color` | →`White/100` | →`White/100` | the Navy and Tag fills (Label) |
+| `Icon/icon-on-color` | →`White/100` | →`White/100` | the Navy and Tag fills (Icon, decorative) |
 | `Background/background-primary` | →`Grey/0` | →`Grey/100` | the Badge ring: under the Dot, over the Container's fill |
 | `Tag/<C>/Primary/background` (Tag's, reused) | Red/135 · Blue/155 · Purple/120 · Green/150 · Light Grey/150 · Orange/130 | same | Container's fill at `Color=<C>`, under `text-on-color` / `icon-on-color` |
 | `Button/button-secondary` (Button's, reused) | →`Navy/10A` | →`White/12A` | Container's fill at `Color=Neutral`; translucent, so it sits on any surface |
 | `Text/text-primary` | →`Black/85A` | →`White/100` | Label at `Color=Neutral` |
 | `Icon/icon-primary` | →`Black/85A` | →`White/100` | Icon at `Color=Neutral` (decorative) |
 
-Container's `fills.0` has one rule per colour: `{{Color=Default}}` → `Theme/Tag/Indigo/Primary/background`, and `{{Color=<C>}}` → `Theme/Tag/<C>/Primary/background` for each of the six, named in full (lint's `token-path` refuses a `{{Color=*}}` placeholder in another scope's token), and `{{Color=Neutral}}` → `Theme/Button/button-secondary`. Label's and Icon's `fills.0` are `text-on-color` and `icon-on-color` with one rule, `{{Color=Neutral}}` → `text-primary` and `icon-primary`. A Tag or Button fill retuned later changes the Avatar with it.
+Container's `fills.0` has one rule per colour: `{{Color=Default}}` → `Theme/Button/button-primary`, and `{{Color=<C>}}` → `Theme/Tag/<C>/Primary/background` for each of the six, named in full (lint's `token-path` refuses a `{{Color=*}}` placeholder in another scope's token), and `{{Color=Neutral}}` → `Theme/Button/button-secondary`. Label's and Icon's `fills.0` are `text-on-color` and `icon-on-color` with one rule, `{{Color=Neutral}}` → `text-primary` and `icon-primary`. A Tag or Button fill retuned later changes the Avatar with it.
 
 Contrast from the Theme snapshot (`docs/theme/theme.json`) with `skills/build-component/scripts/contrast.mjs`, 2026-11-02:
 
@@ -112,7 +112,12 @@ The spec's contrast list: Label `text` on `[Container]` where `{{Artwork=Initial
 
 - Each line height fits inside its diameter, so Thai marks above and below a consonant don't cross the circle's box at `Large`.
 - Weights (Q2), Base's: Medium to 36, Bold from 48. Core's Caption 1, Title 1 and Large Title styles are Regular and Headline is Medium; Type Emphasis has Regular, Strong (Bold), Italic and Strong Italic, no Medium, and bold text takes `Strong`, not a new style (Visuals, 2026-11-02). So 2XSmall and XSmall take Caption 1 Regular (no Medium to take, Q11), Small is Headline's Medium (Q12), and Medium to 3XLarge are Title 3, Title 1 and Large Title `Strong` (Large Title at 96 and 128 too: components use no Display style, Q8).
-- Rules for developers (doc and handoff): show Image, else Initials when there is a name, else Icon. Initials are two Latin letters, uppercase: the first letter of the given name and of the family name (Kiattisak Srisuk → `KS`). A one-word name shows its first letter. A name with no Latin letter (Thai script, digits, emoji) shows Icon (Q13). An image is cropped to fill the circle.
+- Rules for developers (doc and handoff): show Image, else Initials when there is a name, else Icon. An image is cropped to fill the circle. Initials take the first word and the last word of the name, and each word gives its first letter:
+  - a Latin word its first letter, uppercased (Kiattisak Srisuk → `KS`);
+  - a Thai word its first consonant, the first character in ก–ฮ (U+0E01–U+0E2E, so ฤ and ฦ count): leading vowels เ แ โ ใ ไ and every tone or vowel mark are skipped (`สมชาย ใจดี` → `สจ`, `เกียรติศักดิ์ ศรีสุข` → `กศ`, `ไพโรจน์ แซ่ตั้ง` → `พซ`);
+  - a mixed name keeps each word's own script (`สมชาย Lee` → `สL`); one word gives one letter (`สมชาย` → `ส`); a word with neither (digits, emoji) is skipped, and a name with no letter left shows Icon.
+  - At `3XSmall` (18) a Thai name shows Icon (R4): its Label is Caption 2 11, under the Thai floor of 12 (Localisation), and the widest pairs fill the circle. Latin keeps two letters there.
+- Thai pairs fit from 24 up (read live 2026-11-22, Label box width in Finnomena Trek): `สจ` 15 at 24 and 28, 20 at 36, 42 at 80–128; the widest, `ฒฬ`, 21 at 24 and 60 at 128, each narrower than `WM` (22, 61), the wide Latin pair accepted.
 
 ## Hit target and Skeleton
 
@@ -127,8 +132,8 @@ The spec's contrast list: Label `text` on `[Container]` where `{{Artwork=Initial
 
 ## Accessibility
 
-- [x] 1. Initials pass 4.5:1 on their fill in both modes, every `Color`: `text-on-color` (White/100) on `Default` 4.92, Red 6.73, Blue 5.78, Purple 6.82, Green 5.92, Light Grey 6.32, Orange 5.74, the same in Light and Dark (read live 2026-11-10); `text-primary` on `Neutral` 11.72–12.82 Light and 10.37–16.48 Dark over the four Base surfaces. The fill is decorative.
-- [x] 2. The fill and the Icon are decorative. The Badge's Dot (`Miscellaneous/interactive`, Badge's colour since 2026-11-03; `support-error` before) is the one meaningful part. It sits in a 1 px ring of `background-primary` (owner, 2026-11-02), so it meets the ring on every side: 5.59 Light · 7.10 Dark (2026-11-16). The ring meets the `Default` fill at 4.92 · 4.27 (measured 2026-11-02 with `contrast.mjs`), the six Tag fills at 5.74–6.82 Light and 3.08–3.66 Dark (2026-11-10), and `Neutral` at 1.24 · 1.27 on `background-primary`: a separator, not a contrast target. Without the ring the Dot is 1.13 · 1.66 on `Default` and 4.05–4.52 · 3.49–5.57 on `Neutral`. The contrast lint skips it (Container is decorative), so this line is the check.
+- [x] 1. Initials pass 4.5:1 on their fill in both modes, every `Color`: `text-on-color` (White/100) on `Default` 18.12 Light · 8.17 Dark (2026-11-22), and on Red 6.73, Blue 5.78, Purple 6.82, Green 5.92, Light Grey 6.32, Orange 5.74, the same in Light and Dark (read live 2026-11-10); `text-primary` on `Neutral` 11.72–12.82 Light and 10.37–16.48 Dark over the four Base surfaces. The fill is decorative.
+- [x] 2. The fill and the Icon are decorative. The Badge's Dot (`Miscellaneous/interactive`, Badge's colour since 2026-11-03; `support-error` before) is the one meaningful part. It sits in a 1 px ring of `background-primary` (owner, 2026-11-02), so it meets the ring on every side: 5.59 Light · 7.10 Dark (2026-11-16). The ring meets the `Default` fill at 18.12 · 2.57 (`contrast.mjs`, 2026-11-22), the six Tag fills at 5.74–6.82 Light and 3.08–3.66 Dark (2026-11-10), and `Neutral` at 1.24 · 1.27 on `background-primary`: a separator, not a contrast target. Without the ring the Dot is 3.24 · 2.76 on `Default` and 4.05–4.52 · 3.49–5.57 on `Neutral`. The contrast lint skips it (Container is decorative), so this line is the check.
 - [x] 3. N/A: not a field.
 - [x] 4. A Badge never carries meaning alone: the host's accessible name says it ("Kiattisak, new message").
 - [x] 5. N/A: not interactive, no Focus ring.
@@ -151,7 +156,7 @@ An Avatar with no name beside it fails this floor, as a Brand mark does (Brand m
 The page's `Usage` frame, in Light and Dark:
 
 - every `Artwork` at every `Size`;
-- initials: Kiattisak Srisuk → `KS`, a one-word name → one letter, a wide pair (`WM`) at 24, and a Thai-script name → Icon;
+- initials: Kiattisak Srisuk → `KS`, a one-word name → one letter, a wide pair (`WM`) at 24, and a Thai name → `สจ` (สมชาย ใจดี), Icon at `3XSmall` (R4);
 - a Badge Dot at Small and Large, and a Count (`3`) at Large;
 - Avatars in List items' `Leading=Custom` swap: 24 (`2XSmall`) in a one-line row (12 + 24 + 12 = 48, the row's minimum), 36 (`Small`) in a two-line row (top-aligned with the title, as the row's parts are; [list-item.md](list-item.md));
 - a 64 (`Large`) Avatar in a card header;
