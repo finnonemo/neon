@@ -1,13 +1,11 @@
 // The Neon base's own accessibility: axe on every screen in both modes, tag
 // contrast, the segmented control's keyboard, focus return from the overlays
-// and the DatePicker's format. Runs on the neon target only.
+// and the DatePicker's format.
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { computedColor as computed, expansionItems, focusColor, gotoExpansion, keyboardFocus, settled } from './expansion.mjs';
 import { coreBaseline } from './core-baseline.mjs';
 import { datePickerCell } from './core/date-picker.mjs';
-
-test.skip(process.env.NEON_TARGET !== 'neon', 'The Neon base only');
 
 for (const [layout, mode] of ['approval', 'extras', 'expansion'].flatMap((layout) => ['light', 'dark'].map((mode) => [layout, mode]))) {
   test(`${layout} passes axe in ${mode}`, async ({ page }) => {

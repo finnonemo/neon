@@ -1,4 +1,4 @@
-// sheet, measured open on each side against CDS Tray (fixtures/expansion/sheet.tsx).
+// sheet, measured open on each side against CDS Tray (fixtures/cds-baseline.json).
 // Tray has no description, so neither has the sheet (aria-describedby is unset).
 import { Button } from "@/components/ui/button"
 import { Sheet as NeonSheet, SheetBody, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"

@@ -23,7 +23,7 @@
         { "path": "base/App.tsx", "type": "registry:file", "target": "src/App.tsx" },
         { "path": "base/app/AppRoot.tsx", "type": "registry:file", "target": "src/app/AppRoot.tsx" },
         { "path": "base/app/colorScheme.ts", "type": "registry:file", "target": "src/app/colorScheme.ts" },
-        { "path": "../templates/vitejs-cds/index.html", "type": "registry:file", "target": "~/index.html" }
+        { "path": "base/index.html", "type": "registry:file", "target": "~/index.html" }
       ]
     },
     {
@@ -448,7 +448,7 @@
         { "path": "layout/layoutPanes.ts", "type": "registry:file", "target": "src/layout/layoutPanes.ts" },
         { "path": "layout/navItems.ts", "type": "registry:file", "target": "src/layout/navItems.ts" },
         { "path": "layout/useBreakpointTier.ts", "type": "registry:file", "target": "src/layout/useBreakpointTier.ts" },
-        { "path": "../theme/cds/breakpoints.config.ts", "type": "registry:file", "target": "src/theme/breakpoints.config.ts" }
+        { "path": "theme/breakpoints.config.ts", "type": "registry:file", "target": "src/theme/breakpoints.config.ts" }
       ]
     },
     {

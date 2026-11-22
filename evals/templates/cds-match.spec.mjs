@@ -1,7 +1,8 @@
-// The Neon base must render like the CDS starter: every measured element within
-// ±1px and the same colors, at 375 and 1440, light and dark. The baseline is
-// captured from the CDS fixtures (npm run baseline) and is the contract both
-// targets are held to; NEON_TARGET picks which app the selectors read.
+// The Neon base must render like the retired CDS starter: every measured element
+// within ±1px and the same colors, at 375 and 1440, light and dark. The baseline,
+// fixtures/cds-baseline.json, was captured from that starter before Neon 2.0.0
+// removed it (ADR 0016); nothing regenerates it, and it is the contract the Neon
+// base is held to. The selectors read each target's `neon` entry.
 // Neon's colors now come from Core's Theme and its type sizes and line heights
 // from Core's text styles (ADR 0009), so the Neon target is held to the
 // baseline except for the differences recorded in
@@ -17,15 +18,12 @@ import { fileURLToPath } from 'node:url';
 import { screens, viewports, modes, measureInPage, gap, pick, compare, asRecorded } from './measure.mjs';
 import { withCoreBaseline } from './core-baseline.mjs';
 
-const target = process.env.NEON_TARGET ?? 'cds';
-const capture = process.env.NEON_CAPTURE_BASELINE === '1';
+const target = 'neon';
 const baselinePath = fileURLToPath(new URL('./fixtures/cds-baseline.json', import.meta.url));
-if (capture && target !== 'cds') throw new Error('The baseline is captured from the CDS target only.');
 const baseline = existsSync(baselinePath) ? JSON.parse(readFileSync(baselinePath, 'utf8')) : null;
 const differencesPath = fileURLToPath(new URL('./fixtures/core-differences.json', import.meta.url));
 const captureDifferences = process.env.NEON_CAPTURE_CORE_DIFFERENCES === '1';
-if (captureDifferences && target !== 'neon') throw new Error('Core differences are recorded from the Neon target only.');
-const coreDifferences = target === 'neon' && existsSync(differencesPath) ? JSON.parse(readFileSync(differencesPath, 'utf8')) : {};
+const coreDifferences = existsSync(differencesPath) ? JSON.parse(readFileSync(differencesPath, 'utf8')) : {};
 
 async function measureScreen(page, screen, viewport, mode) {
   await page.setViewportSize(viewport);
@@ -82,23 +80,13 @@ function differences(expected, actual) {
 const expectedFor = async (entry) => {
   // An overlay CDS has no trigger for is not in the CDS baseline: its targets are held to Core alone.
   const cds = baseline?.[caseKey(entry)] ?? (baseline && entry.screen.open && !entry.screen.open.cds ? { elements: {}, gaps: {} } : undefined);
-  return cds && target === 'neon' ? withCoreBaseline(cds, entry.screen.targets, entry.mode) : cds;
+  return cds && withCoreBaseline(cds, entry.screen.targets, entry.mode);
 };
 
 const cases = viewports.flatMap((viewport) => modes.flatMap((mode) => screens.map((screen) => ({ screen, viewport, mode }))));
 const caseKey = ({ screen, viewport, mode }) => `${screen.name}@${viewport.width}-${mode}`;
 
-if (capture) {
-  test('capture the CDS baseline', async ({ page }) => {
-    test.setTimeout(240_000);
-    const out = {};
-    for (const entry of cases) if (!entry.screen.open || entry.screen.open[target]) out[caseKey(entry)] = await measureScreen(page, entry.screen, entry.viewport, entry.mode);
-    const missing = Object.entries(out).flatMap(([key, value]) =>
-      Object.entries(value.elements).filter(([, v]) => v === null).map(([name]) => `${key} ${name}`));
-    writeFileSync(baselinePath, `${JSON.stringify(out, null, 2)}\n`);
-    console.log(`Wrote ${Object.keys(out).length} cases; not rendered: ${missing.length ? missing.join(', ') : 'none'}`);
-  });
-} else if (captureDifferences) {
+if (captureDifferences) {
   test('record where Neon follows Core, not the CDS baseline', async ({ page }) => {
     test.setTimeout(240_000);
     const out = {};
@@ -114,10 +102,10 @@ if (capture) {
   test.describe(`${target} matches the CDS baseline`, () => {
     for (const entry of cases) {
       test(caseKey(entry), async ({ page }) => {
-        expect(baseline, 'Run npm run baseline first.').not.toBeNull();
+        expect(baseline, 'fixtures/cds-baseline.json is missing.').not.toBeNull();
         test.skip(entry.screen.open && !entry.screen.open[target], `${target} has no trigger for ${entry.screen.name} yet`);
         const expected = await expectedFor(entry);
-        expect(expected, `${caseKey(entry)} is missing from the baseline; run npm run baseline.`).toBeTruthy();
+        expect(expected, `${caseKey(entry)} is missing from the baseline.`).toBeTruthy();
         const problems = differences(expected, await measureScreen(page, entry.screen, entry.viewport, entry.mode));
         const recorded = coreDifferences[caseKey(entry)] ?? [];
         expect(asRecorded(problems, recorded), problems.join('\n')).toEqual(recorded);
@@ -126,20 +114,18 @@ if (capture) {
   });
 }
 
-if (target === 'neon' && !capture) {
-  // Stock cn reads text-label1 as a color and drops it beside text-positive.
-  test('cn keeps a type role and a text color together', async ({ page }) => {
-    await page.goto('/?layout=approval');
-    const { font, color, positive } = await page.evaluate(() => {
-      const el = document.querySelector('[data-measure=role-and-color]');
-      const probe = document.body.appendChild(Object.assign(document.createElement('span'), { style: 'color: var(--color-fgPositive)' }));
-      const style = getComputedStyle(el);
-      const result = { font: [style.fontSize, style.lineHeight, style.fontWeight], color: style.color, positive: getComputedStyle(probe).color };
-      probe.remove();
-      return result;
-    });
-    // label1 takes Core's Subheadline: 15 over 24.
-    expect(font).toEqual(['15px', '24px', '600']);
-    expect(color).toBe(positive);
+// Stock cn reads text-label1 as a color and drops it beside text-positive.
+test('cn keeps a type role and a text color together', async ({ page }) => {
+  await page.goto('/?layout=approval');
+  const { font, color, positive } = await page.evaluate(() => {
+    const el = document.querySelector('[data-measure=role-and-color]');
+    const probe = document.body.appendChild(Object.assign(document.createElement('span'), { style: 'color: var(--color-fgPositive)' }));
+    const style = getComputedStyle(el);
+    const result = { font: [style.fontSize, style.lineHeight, style.fontWeight], color: style.color, positive: getComputedStyle(probe).color };
+    probe.remove();
+    return result;
   });
-}
+  // label1 takes Core's Subheadline: 15 over 24.
+  expect(font).toEqual(['15px', '24px', '600']);
+  expect(color).toBe(positive);
+});

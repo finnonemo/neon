@@ -9,8 +9,7 @@
 //            keyboardFocus(page, control) reports its keyboard focus indicator and
 //            focusColor(page) is the color Core draws one in and computedColor(page, value)
 //            what a color expression computes to.
-// Its fixtures are fixtures/expansion/<item>.tsx (CDS) and
-// fixtures/neon/expansion/<item>.tsx (Neon). Adding an item adds files only.
+// Its fixtures are fixtures/neon/expansion/<item>.tsx. Adding an item adds files only.
 // Modules import nothing from here: this file imports them.
 import { readdirSync } from 'node:fs';
 

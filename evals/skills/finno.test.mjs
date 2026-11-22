@@ -165,7 +165,7 @@ test('the npm package is the plugin: one version, the command, and never the Tre
   assert.ok(existsSync(join(root, pkg.bin.finno)));
   assert.equal(pkg.dependencies, undefined, 'the plugin installs from the repository with no install step');
   assert.ok(pkg.files.includes('!block/fonts/FinnomenaTrek-*'));
-  for (const entry of ['.claude-plugin', 'skills', 'theme', 'registry', 'templates', 'core', 'block', 'scripts']) assert.ok(pkg.files.includes(entry), entry);
+  for (const entry of ['.claude-plugin', 'skills', 'theme', 'registry', 'core', 'block', 'scripts']) assert.ok(pkg.files.includes(entry), entry);
 });
 
 // The agents' own commands, answered as a computer with all three agents and nothing of Neon would.

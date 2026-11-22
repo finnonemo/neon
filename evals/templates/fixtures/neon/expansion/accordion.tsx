@@ -1,5 +1,5 @@
 // accordion, measured against Core's Accordion and, where Core gives no value, CDS Accordion
-// (fixtures/expansion/accordion.tsx):
+// (fixtures/cds-baseline.json):
 // one item open at a time, the first open, and any item can close again. The last
 // item is disabled, which the CDS fixture has none of.
 import { Accordion as NeonAccordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"

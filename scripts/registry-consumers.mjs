@@ -5,13 +5,13 @@
 // Reads this checkout's registry/ source. A token is a theme.css property
 // without its category (bgPrimary for --color-bgPrimary) or a whole property
 // name. Follows shadcn's slots and the @theme utilities to the classes items
-// use. For apps on frozen CDS, use cds-consumers.mjs.
+// use.
 import { fileURLToPath } from 'node:url';
 import { findRegistryConsumers } from './lib/registry-consumers.mjs';
 
 const tokens = process.argv.slice(2);
 if (tokens.includes('--app')) {
-  console.error('registry-consumers reads this checkout\'s registry/; --app is cds-consumers.mjs\'s option.');
+  console.error('registry-consumers reads this checkout\'s registry/ and takes no --app.');
   process.exit(2);
 }
 if (!tokens.length) {

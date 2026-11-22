@@ -1,16 +1,15 @@
 /**
- * Finnomena responsive breakpoint/grid tiers — projected from
- * tokens/breakpoint.json's "Detailed Layout" variant.
+ * Finnomena responsive breakpoint/grid tiers, from
+ * theme/tokens/breakpoint.json's "Detailed Layout" variant.
  *
- * GENERATED FILE — do not hand-edit. Regenerate with:
- *   node theme/scripts/sync-tokens.mjs && node theme/scripts/generate-breakpoints-config.mjs
+ * Maintained by hand: nothing regenerates it. A change to the breakpoints
+ * changes this file and theme/tokens/breakpoint.json together.
  *
  * This file covers viewport ranges, sidebar rail/full width, and grid
  * rhythm (gutter/end-margins/columns) only. It does NOT cover Content/
  * Inspector pane widths for the 3-pane app shell — those come from a
  * separate Figma frame read, not this token export (see
- * templates/vitejs-cds/src/layout/layoutPanes.ts for that data
- * and why it's kept separate).
+ * ../layout/layoutPanes.ts for that data and why it's kept separate).
  */
 export interface BreakpointTier {
   name: "sm" | "md" | "lg" | "xl" | "xxl" | "xxxl" | "max";

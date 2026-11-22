@@ -1,6 +1,6 @@
 {
   "name": "finnomena",
-  "version": "1.0.3",
+  "version": "2.0.0",
   "description": "Neon as one command: installs Finnomena's brand skills into your agent and gives it the Block engine's tools for drawing Brand Artwork.",
   "license": "MIT",
   "repository": {
@@ -24,13 +24,10 @@
     "skills",
     "theme",
     "registry",
-    "templates",
     "core",
     "block",
     "scripts",
     "!block/fonts/FinnomenaTrek-*",
-    "!**/tokens.report.json",
-    "!**/tokens.resolved.json",
     "!**/dist",
     "!**/.DS_Store"
   ]

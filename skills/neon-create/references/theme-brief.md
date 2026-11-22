@@ -16,7 +16,7 @@ Run `node "<Neon root>/scripts/theme-brief.mjs" match <file>` on every style fil
 
 ## Use a recognised brief
 
-- Briefs target the Neon base. In an app already on CDS by the [Base](../../neon-audit/references/project-inspection.md#base) rule, or one without React, say so and offer a new Neon-base app or a theme-only page.
+- Briefs target the Neon base. In an app on CDS by the [Base](../../neon-audit/references/project-inspection.md#base) rule, which Neon no longer themes, or one without React, say so and offer a new Neon-base app or a theme-only page.
 - Record the item name as `themeBrief` in `NeonContext`, and leave `referenceDesign` and `brandIntensity` unset. Offer no Brand Intensity dial.
 - The page's Immersive Theme is the brief's: pass it as `ImmersiveLayout`'s `immersiveTheme`.
 - The brief gives the page its values, components and section order, not its composition. Compose with [campaign direction](campaign-direction.md), inside the brief's picks and motion level. When its Layout section opens on a section table, each section takes the ground, fill and text variable of its row, and the Picks list gives the lead fact role, the feature block radius and the hero name role: the name takes that role, and nothing else in the hero, a date numeral included, is set larger. When the name takes more than two lines at that role, keep the role and move the organisation's name that opens it ("Finnomena") to a line above, in a label or title role; a name still past two lines keeps the role, and the report gives its line count. A component the brief gives the feature block radius is one block that spans the content column with that radius; cards inside it keep the block and card radius.

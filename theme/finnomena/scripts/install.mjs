@@ -1,9 +1,7 @@
 #!/usr/bin/env node
 /**
  * DEPRECATED forwarding shim — the canonical installer now lives at
- * scripts/install.mjs (repo root), routed through the canonical theme
- * assets in theme/cds/, theme/css/, and the starter assembly function in
- * scripts/lib/assemble-starter.mjs. This file exists only so callers still
+ * scripts/install.mjs (repo root). This file exists only so callers still
  * invoking the old theme/finnomena/scripts/install.mjs path keep working
  * for one more release; it forwards argv and exit status unchanged and
  * implements no installer logic of its own. Remove in a later announced

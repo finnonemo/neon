@@ -31,11 +31,8 @@ test('the reference keeps its scope, action and motion rules', async () => {
   const source = await read('neon-audit/references/functional-patterns.md');
   assert.match(source, /does not license restructuring/);
   assert.match(source, /do not authorize adopting a component library in a CSS-only restyle/);
-  // New work is on the Neon base (ADR 0006): CDS names live only in the CDS reference (#220).
-  assert.doesNotMatch(source, /ListCell|Tray|Fallback|useBreakpointTier/);
-  assert.match(source, /An app already on CDS finds the same patterns in CDS names in \[CDS integration\]\(\.\.\/\.\.\/neon-create\/references\/cds-integration\.md#functional-patterns\)/);
-  const cdsPatterns = (await read('neon-create/references/cds-integration.md')).split('## Functional patterns')[1];
-  assert.match(cdsPatterns ?? '', /ListCell[\s\S]*useBreakpointTier/);
+  // New work is on the Neon base (ADR 0006), and Neon no longer themes CDS (ADR 0016): no CDS names.
+  assert.doesNotMatch(source, /ListCell|Tray|Fallback|useBreakpointTier|cds-integration/);
   assert.match(source, /Row actions are secondary or tertiary/);
   // The starter's BottomNav is fixed to the bottom at tier sm; a dock must not sit under it.
   assert.match(source, /the dock sits above it, or the flow hides the tab bar/);

@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 // flexBasis: the shorthand can reset the longhand. The browser suite serves a
 // production build, where the warning is silent, so the source is checked.
 const root = fileURLToPath(new URL('../..', import.meta.url));
-const dirs = ['registry/layout', 'templates/vitejs-cds/src/layout'];
+const dirs = ['registry/layout'];
 const styles = text => text.match(/style=\{\{[\s\S]*?\}\}/g) ?? [];
 
 for (const dir of dirs) {

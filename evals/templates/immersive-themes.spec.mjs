@@ -4,7 +4,6 @@ import { readFileSync } from 'node:fs';
 // Each Immersive Theme on the Neon base's ImmersiveLayout (#96). Expected
 // colors come from the generated theme CSS, so the page is held to the themes
 // a Campaign Page copies; the color schemes are the ticket's rule.
-test.skip((process.env.NEON_TARGET ?? 'cds') !== 'neon', 'The Neon base only; the CDS starter takes no immersiveTheme');
 test.beforeEach(async ({ page }) => {
   page.on('pageerror', error => { throw error; });
   page.on('console', message => { if (message.type() === 'error') throw new Error(message.text()); });

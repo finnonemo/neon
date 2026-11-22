@@ -1,6 +1,6 @@
 # Neon
 
-Neon distributes Finnomena's brand theme, Neon's components and the skills that apply them to employees' apps, and carries Block's engine so the same skills can draw Brand Artwork. New work is built on the Neon base; CDS is kept, frozen, for apps already on it.
+Neon distributes Finnomena's brand theme, Neon's components and the skills that apply them to employees' apps, and carries Block's engine so the same skills can draw Brand Artwork. Work is built on the Neon base. Neon no longer themes CDS: Neon 2.0.0 removed it, and an app on CDS moves off it by a Rebuild.
 
 The package and installing terms describe Neon itself. The employee work terms describe what employees bring and ask for.
 
@@ -13,7 +13,7 @@ The complete Neon package directory. Skills resolve every theme, starter and ins
 _Avoid_: plugin root, `CLAUDE_PLUGIN_ROOT`
 
 **Canonical theme assets**:
-The one source copy of the theme: the Neon registry's items and the CSS adapter. Every install takes from it. The frozen CDS theme files stay beside them for apps already on CDS.
+The one source copy of the theme: the Neon registry's items and the CSS adapter. Every install takes from it.
 _Avoid_: starter theme, theme copy
 
 **Neon base**:
@@ -33,7 +33,7 @@ The compiled copy of Core that Neon carries, pinned to one Core commit and writt
 _Avoid_: Core copy, DS export
 
 **Counterpart**:
-The Core component a Neon component is matched to and measured against, such as Divider for separator or Alert for alert-dialog. A Neon component whose Core doc is not yet approved keeps its earlier CDS tuning until it is, and says so. In the frozen CDS context, a CDS Counterpart is the CDS component an item was first tuned to.
+The Core component a Neon component is matched to and measured against, such as Divider for separator or Alert for alert-dialog. A Neon component whose Core doc is not yet approved keeps its earlier CDS tuning until it is, and says so.
 _Avoid_: equivalent, twin
 
 **Counterpart table**:
@@ -71,16 +71,12 @@ _Avoid_: Neon CLI, Installer (which puts theme assets into an app)
 ### Installing
 
 **Installer**:
-The part of Neon that puts canonical theme assets into a target project and, unless told to skip, installs the dependencies they need: the Neon registry for React apps, and the CSS-only script for everything else.
+The part of Neon that puts canonical theme assets into a target project and installs the dependencies they need: the Neon registry for React apps, and the CSS-only script for everything else.
 _Avoid_: setup script, install script
 
 **Install mode**:
-One of the things the installer can do: **New**, which starts an app from the Neon base in an empty directory; **Add**, which adds Neon registry items to an existing app; **CSS-only**, which adds only the CSS adapter; and **CDS**, frozen for apps already on CDS, which adds the CDS theme to an existing project. The CDS Install mode is deprecated: Neon 2.0.0 removes it, and an app on CDS moves off it by a Rebuild on the Neon base.
+One of the things the installer can do: **New**, which starts an app from the Neon base in an empty directory; **Add**, which adds Neon registry items to an existing app; and **CSS-only**, which adds only the CSS adapter. Neon 2.0.0 removed the CDS Install mode, with the CDS theme and starter: Neon no longer themes CDS, and an app on CDS moves off it by a Rebuild on the Neon base.
 _Avoid_: tier. Tier is the styling decision a skill makes. Install mode is what the installer does to carry it out.
-
-**Starter assembly**:
-Combining the frozen CDS starter with the CDS theme files to produce a complete, runnable CDS app. A new app starts from the Neon base in the Neon registry instead.
-_Avoid_: scaffold copy, starter sync
 
 **Preflight**:
 The CSS-only script's guarantee that every check finishes before the first write, so a refused install leaves the target untouched.
@@ -113,7 +109,7 @@ Recreating an existing React app on the Neon base in a new directory, treating t
 _Avoid_: migration, port, component adoption (which adds Neon's components into the existing app instead)
 
 **Tier**:
-How far a skill's styling reaches: colors only, visual system (adds typography, spacing and radius) or components (the Finnomena theme plus Neon's components; CDS components in an app already on CDS).
+How far a skill's styling reaches: colors only, visual system (adds typography, spacing and radius) or components (the Finnomena theme plus Neon's components).
 _Avoid_: level, mode, install mode
 
 **Breakpoint**:

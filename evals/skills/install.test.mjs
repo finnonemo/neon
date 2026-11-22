@@ -10,11 +10,8 @@ import { install, InstallError, createCommandRunner } from '../../scripts/lib/in
 import { SHADCN, buildRegistry, pinnedRegistryUrl } from '../../scripts/lib/registry.mjs';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
-const cdsFiles = ['theme.config.ts', 'color-overrides.ts', 'createTheme.ts', 'breakpoints.config.ts'];
-const starterManifest = JSON.parse(await readFile(join(repoRoot, 'templates/vitejs-cds/package.json'), 'utf8'));
-const cdsVersion = starterManifest.dependencies['@coinbase/cds-web'];
 
-// Each sandbox carries its own .git so package-manager evidence never climbs into the real filesystem.
+// Each sandbox carries its own .git, as a project would.
 async function sandbox(t) {
   const root = await mkdtemp(join(tmpdir(), 'neon-install-'));
   t.after(() => rm(root, { recursive: true, force: true }));
@@ -94,129 +91,32 @@ test('a symlinked default src/theme that escapes the target is refused', async t
   await assertUnchanged(root, () => install({ mode: 'css-only', target: app, runCommand: recorder().runCommand }), /symlinked ancestor/);
 });
 
-test('an unsupported package manager is refused in every mode before writing', async t => {
-  const app = await existingApp(await sandbox(t), { dependencies: { '@coinbase/cds-web': cdsVersion } });
-  for (const mode of ['css-only', 'cds']) {
-    await assertUnchanged(app, () => install({ mode, target: app, packageManager: 'deno', skipInstall: true, runCommand: recorder().runCommand }), /Unsupported --package-manager "deno"/);
-  }
-});
-
 // --- Customised files -------------------------------------------------------
 
-test('identical existing theme files are kept and only missing ones are copied', async t => {
-  const app = await existingApp(await sandbox(t), { dependencies: { '@coinbase/cds-web': cdsVersion } });
-  await mkdir(join(app, 'src/theme'), { recursive: true });
-  await cp(join(repoRoot, 'theme/cds/createTheme.ts'), join(app, 'src/theme/createTheme.ts'));
-  const result = await install({ mode: 'cds', target: app, runCommand: recorder().runCommand });
-  assert.equal(result.copiedFiles, 3);
-});
-
-test('a customised theme file stops the whole copy, leaving the other files unwritten', async t => {
+test('an identical existing theme.css is kept and nothing is copied', async t => {
   const app = await existingApp(await sandbox(t));
   await mkdir(join(app, 'src/theme'), { recursive: true });
-  await writeFile(join(app, 'src/theme/breakpoints.config.ts'), '// local change\n');
+  await cp(join(repoRoot, 'theme/css/theme.css'), join(app, 'src/theme/theme.css'));
+  const result = await install({ mode: 'css-only', target: app, runCommand: recorder().runCommand });
+  assert.equal(result.copiedFiles, 0);
+});
+
+test('a customised theme.css refuses the copy', async t => {
+  const app = await existingApp(await sandbox(t));
+  await mkdir(join(app, 'src/theme'), { recursive: true });
+  await writeFile(join(app, 'src/theme/theme.css'), '/* local change */\n');
   const { calls, runCommand } = recorder();
-  await assertUnchanged(app, () => install({ mode: 'cds', target: app, runCommand }), /Refusing to overwrite customized file/);
+  await assertUnchanged(app, () => install({ mode: 'css-only', target: app, runCommand }), /Refusing to overwrite customized file/);
   assert.deepEqual(calls, []);
 });
 
-// --- CDS --------------------------------------------------------------------
+// --- CDS, removed in 2.0.0 --------------------------------------------------
 
-test('cds refuses a target without package.json', async t => {
-  const root = await sandbox(t);
-  await mkdir(join(root, 'empty'));
-  await assertUnchanged(root, () => install({ mode: 'cds', target: join(root, 'empty'), runCommand: recorder().runCommand }), /No package\.json found/);
-});
-
-test('cds copies the four canonical theme files and adds CDS at the starter version', async t => {
-  const app = await existingApp(await sandbox(t));
+test('the CDS install mode is refused: Neon no longer themes CDS, and a Rebuild is offered', async t => {
+  const app = await existingApp(await sandbox(t), { dependencies: { '@coinbase/cds-web': '^9.0.0' } });
   const { calls, runCommand } = recorder();
-  const result = await install({ mode: 'cds', target: app, runCommand });
-  for (const file of cdsFiles) {
-    assert.equal(await readFile(join(app, 'src/theme', file), 'utf8'), await readFile(join(repoRoot, 'theme/cds', file), 'utf8'));
-  }
-  assert.deepEqual(calls, [{ command: 'npm', args: ['install', `@coinbase/cds-web@${cdsVersion}`], cwd: app }]);
-  assert.equal(result.packageManager, 'npm');
-  assert.equal(result.dependenciesInstalled, true);
-  assert.equal(result.copiedFiles, 4);
-});
-
-test('cds skips the install when CDS is already a dependency or devDependency', async t => {
-  const root = await sandbox(t);
-  for (const field of ['dependencies', 'devDependencies']) {
-    const app = await existingApp(root, { [field]: { '@coinbase/cds-web': '^9.0.0' } }, field);
-    const { calls, runCommand } = recorder();
-    const result = await install({ mode: 'cds', target: app, runCommand });
-    assert.deepEqual(calls, []);
-    assert.equal(result.cdsAlreadyPresent, true);
-  }
-});
-
-test('cds with skipInstall copies files, runs nothing, and reports the pending CDS version', async t => {
-  const app = await existingApp(await sandbox(t));
-  const { calls, runCommand } = recorder();
-  const result = await install({ mode: 'cds', target: app, skipInstall: true, runCommand });
+  await assertUnchanged(app, () => install({ mode: 'cds', target: app, runCommand }), /Neon no longer themes the Coinbase Design System .*Rebuild on the Neon base/);
   assert.deepEqual(calls, []);
-  assert.equal(result.dependenciesInstalled, false);
-  assert.equal(result.cdsVersion, cdsVersion);
-  assert.ok(await exists(join(app, 'src/theme/theme.config.ts')));
-});
-
-test('cds reads a CDS version from the starter before copying anything', async t => {
-  const root = await sandbox(t);
-  const source = join(root, 'neon');
-  await cp(join(repoRoot, 'theme'), join(source, 'theme'), { recursive: true });
-  await mkdir(join(source, 'templates/vitejs-cds'), { recursive: true });
-  await writeFile(join(source, 'templates/vitejs-cds/package.json'), JSON.stringify({ dependencies: {} }));
-  const app = await existingApp(root);
-  await assertUnchanged(app, () => install({ mode: 'cds', target: app, sourceRoot: source, skipInstall: true, runCommand: recorder().runCommand }), /does not declare a @coinbase\/cds-web version/);
-});
-
-// --- Package-manager evidence -----------------------------------------------
-
-test('a lockfile at the workspace root is found through manifestless directories', async t => {
-  const root = await sandbox(t);
-  await writeFile(join(root, 'pnpm-lock.yaml'), '');
-  const app = await existingApp(root, { name: 'portal' }, 'apps/portal');
-  const { calls, runCommand } = recorder();
-  await install({ mode: 'cds', target: app, runCommand });
-  assert.deepEqual(calls, [{ command: 'pnpm', args: ['add', `@coinbase/cds-web@${cdsVersion}`], cwd: app }]);
-});
-
-test('a declared packageManager in a parent manifest selects that manager', async t => {
-  const root = await sandbox(t);
-  await writeFile(join(root, 'package.json'), JSON.stringify({ packageManager: 'yarn@4.1.0' }));
-  const app = await existingApp(root, { name: 'portal' }, 'apps/portal');
-  const { calls, runCommand } = recorder();
-  await install({ mode: 'cds', target: app, runCommand });
-  assert.equal(calls[0].command, 'yarn');
-  assert.deepEqual(calls[0].args, ['add', `@coinbase/cds-web@${cdsVersion}`]);
-});
-
-test('the evidence walk stops at a .git directory', async t => {
-  const root = await sandbox(t);
-  await writeFile(join(root, 'pnpm-lock.yaml'), '');
-  const app = await existingApp(root, { name: 'nested' }, 'nested');
-  await mkdir(join(app, '.git'));
-  const { calls, runCommand } = recorder();
-  await install({ mode: 'cds', target: app, runCommand });
-  assert.equal(calls[0].command, 'npm');
-});
-
-test('conflicting lockfiles are refused before writing, even when nothing would be installed', async t => {
-  const root = await sandbox(t);
-  const app = await existingApp(root, { devDependencies: { '@coinbase/cds-web': cdsVersion } });
-  await writeFile(join(app, 'yarn.lock'), '');
-  await writeFile(join(app, 'package-lock.json'), '{}');
-  await assertUnchanged(app, () => install({ mode: 'cds', target: app, skipInstall: true, runCommand: recorder().runCommand }), /Conflicting package manager evidence/);
-});
-
-test('an explicit package manager overrides lockfile evidence', async t => {
-  const app = await existingApp(await sandbox(t));
-  await writeFile(join(app, 'yarn.lock'), '');
-  const { calls, runCommand } = recorder();
-  await install({ mode: 'cds', target: app, packageManager: 'bun', runCommand });
-  assert.equal(calls[0].command, 'bun');
 });
 
 // --- New and Add, through the Neon registry ----------------------------------
@@ -359,8 +259,6 @@ test('new refuses options shadcn init cannot honour', async t => {
   const destination = join(root, 'fresh');
   for (const [options, message] of [
     [{ themeDir: 'lib/theme' }, /--theme-dir is not supported with --new/],
-    [{ skipInstall: true }, /--skip-install is not supported with --new/],
-    [{ packageManager: 'pnpm' }, /--package-manager is not supported with --new/],
   ]) {
     const { calls, runCommand } = fakeShadcn();
     await assertUnchanged(root, () => install({ mode: 'new', target: destination, runCommand, ...registryOptions, ...options }), message);
@@ -452,9 +350,7 @@ test('add refuses before writing when the app is not ready for it', async t => {
   const bare = await existingApp(await sandbox(t));
   for (const [target, options, message] of [
     [app, { items: [] }, /Name at least one Neon item to add/],
-    [app, { items: ['dialog'], skipInstall: true }, /--skip-install is not supported with --add/],
     [app, { items: ['dialog'], themeDir: 'lib/theme' }, /--theme-dir is not supported with --add/],
-    [app, { items: ['dialog'], packageManager: 'pnpm' }, /--package-manager is not supported with --add/],
     [app, { items: ['no-such-item'] }, /No Neon registry item at .*no-such-item\.json/],
     [elsewhere, { items: ['dialog'] }, /components\.json's @neon registry is .*neon--v0\.4\.0/],
     [bare, { items: ['dialog'] }, /No components\.json/],
@@ -515,15 +411,6 @@ test('CLI css-only prints the import hint and exits 0', async t => {
   assert.match(result.stdout, /Done\. Import it once/);
 });
 
-// shadcn init always installs, so New can never report files without dependencies.
-test('CLI new refuses --skip-install rather than claim an app without dependencies', async t => {
-  const destination = join(await sandbox(t), 'fresh');
-  const result = cli(destination, '--new', '--skip-install');
-  assert.equal(result.status, 1, result.stdout);
-  assert.match(result.stderr, /--skip-install is not supported with --new/);
-  assert.equal(await exists(destination), false);
-});
-
 test('CLI add and new refuse what they cannot do with one clean message', async t => {
   const app = await existingApp(await sandbox(t));
   for (const [args, message] of [
@@ -548,29 +435,18 @@ test('deprecated theme/finnomena entry point forwards to the installer and its e
   assert.equal(ok.status, 0, ok.stderr);
   assert.match(ok.stderr, /Deprecation notice/);
   await access(join(app, 'src/theme/theme.css'));
-  const refused = shim([app, '--package-manager', 'deno']);
+  const refused = shim([app, '--new', '--css-only']);
   assert.equal(refused.status, 1);
-  assert.match(refused.stderr, /Unsupported --package-manager/);
+  assert.match(refused.stderr, /mutually exclusive/);
 });
 
-test('CLI in the CDS install mode prints one deprecation line naming the next major, and no other mode prints it', async t => {
-  // finnonemo/neon#287: the major after package.json's version, which plugin.json (what the installer reads) must agree with.
-  const { version } = JSON.parse(await readFile(join(repoRoot, 'package.json'), 'utf8'));
-  const notice = new RegExp(`^Deprecation notice: the CDS Install mode is deprecated and Neon ${Number(version.split('.')[0]) + 1}\\.0\\.0 removes it\\. .*Rebuild on the Neon base\\.$`, 'gm');
-  const root = await sandbox(t);
-  const app = await existingApp(root);
-  const installed = cli(app, '--skip-install');
-  assert.equal(installed.status, 0, installed.stderr);
-  assert.match(installed.stdout, /Done\. Theme files copied/);
-  assert.equal(installed.stderr.match(notice)?.length, 1, installed.stderr);
-  // A refusal keeps its own message and exit status, and still says the mode is going.
-  const refused = cli(join(root, 'no-manifest'));
-  assert.equal(refused.status, 1, refused.stdout);
-  assert.equal(refused.stderr.match(notice)?.length, 1, refused.stderr);
-  const other = await existingApp(root, { name: 'other' }, 'other');
-  const css = cli(other, '--css-only');
-  assert.equal(css.status, 0, css.stderr);
-  assert.doesNotMatch(css.stdout + css.stderr, /Deprecation notice/);
+test('CLI without a mode refuses: Neon 2.0.0 removed the CDS Install mode', async t => {
+  const app = await existingApp(await sandbox(t), { dependencies: { '@coinbase/cds-web': '^9.0.0' } });
+  const result = cli(app);
+  assert.equal(result.status, 1, result.stdout);
+  assert.match(result.stderr, /^Neon no longer themes the Coinbase Design System \(CDS\): Neon 2\.0\.0 removed the CDS Install mode\. .*Rebuild on the Neon base\. Install with --new, --add or --css-only\.$/m);
+  assert.doesNotMatch(result.stderr, /^\s+at /m);
+  assert.deepEqual(await files(app), ['package.json']);
 });
 
 test('CLI refusals print one clean message and exit 1', async t => {
@@ -579,10 +455,11 @@ test('CLI refusals print one clean message and exit 1', async t => {
   await writeFile(join(app, 'src/theme/theme.css'), '/* local */');
   for (const [args, message] of [
     [[app, '--css-only'], /Refusing to overwrite customized file/],
-    [[app, '--sync-starter'], /assembled from canonical assets/],
+    [[app, '--sync-starter'], /Unknown option '--sync-starter'/],
     [[app, '--new', '--css-only'], /mutually exclusive/],
     [[app, '--new', '--theme-dir', 'x'], /--theme-dir is not supported with --new/],
-    [[app, '--package-manager', 'deno'], /Unsupported --package-manager/],
+    [[app, '--package-manager', 'npm'], /Unknown option '--package-manager'/],
+    [[app, '--skip-install'], /Unknown option '--skip-install'/],
     [[], /Usage: node install\.mjs/],
   ]) {
     const result = cli(...args);

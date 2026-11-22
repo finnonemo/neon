@@ -1,4 +1,4 @@
-// collapsible, measured against CDS Collapsible (fixtures/expansion/collapsible.tsx):
+// collapsible, measured against CDS Collapsible (fixtures/cds-baseline.json):
 // open below a secondary Button that Radix wires to the region it controls.
 import { Button } from "@/components/ui/button"
 import { Collapsible as NeonCollapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"

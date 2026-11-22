@@ -17,7 +17,7 @@ New React work goes on the Neon base, and an app already on React keeps its [bas
 Tell the base from the manifests, as neon-create does:
 
 - **Neon base:** `components.json` has an `@neon` registry entry. Its components are Neon registry items, styled by the rules in [Neon base](../../neon-create/references/neon-base.md).
-- **CDS:** `package.json` depends on `@coinbase/cds-web`. CDS is frozen for apps already on it: they keep CDS, styled as [CDS integration](../../neon-create/references/cds-integration.md) describes.
+- **CDS:** `package.json` depends on `@coinbase/cds-web`. Neon no longer themes CDS: Neon 2.0.0 removed the CDS Install mode and theme. Say so, and offer a [Rebuild](../../neon-create/references/rebuild.md) on the Neon base. Neon adds nothing to the app's CDS components; its own CSS-styled UI can still take the CSS adapter.
 - **Neither:** no `@neon` entry and no CDS. A `components.json` without `@neon` is plain shadcn (v0, Lovable): it keeps its own components and is restyled through its CSS variables; it takes `@neon/` items only for components the request asks for, through neon-create.
 
 An app with both an `@neon` entry and `@coinbase/cds-web` is mixed: report it as unresolved and add to neither side. Restyle and review keep the app on its base; a new React app starts on the Neon base. The base an app is on is not a finding. Without source, such as from a screenshot alone, the base is unknown; say so.
@@ -26,7 +26,7 @@ An app with both an `@neon` entry and `@coinbase/cds-web` is mixed: report it as
 
 Inspect the active entry/theme imports and provider tree, not just filenames. Record relevant paths, theme directory, styling syntax and theme-mode owner. A working Finnomena installation should be reused. A `theme.css` file neither proves it is imported nor requires an upgrade.
 
-In an app already on CDS, locate the providers [CDS integration](../../neon-create/references/cds-integration.md#theme-and-providers) lists and the theme passed to them. Hand off existing locations so implementation updates that wiring only if needed, never adds duplicate providers. For CSS, inspect variable scope and the app's selectors. Preserve customized declarations and existing font loader. Examine source types in the installed package when API support is uncertain.
+Hand off existing provider and theme locations so implementation updates that wiring only if needed, never adds duplicate providers. For CSS, inspect variable scope and the app's selectors. Preserve customized declarations and existing font loader. Examine source types in the installed package when API support is uncertain.
 
 ## Server-rendered React
 

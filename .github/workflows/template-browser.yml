@@ -43,7 +43,6 @@ jobs:
           cache: npm
           cache-dependency-path: |
             evals/templates/package-lock.json
-            templates/vitejs-cds/package-lock.json
             evals/skills/fixtures/shadcn-v4-app/package-lock.json
       - run: npm ci --prefix evals/templates
       - run: node evals/skills/run-probe.mjs --fixture
@@ -52,14 +51,13 @@ jobs:
       - run: npm ci --prefix evals/skills/fixtures/shadcn-v4-app
       - run: node evals/skills/grade-restyle.mjs --source evals/skills/fixtures/shadcn-v4-app --result evals/skills/fixtures/shadcn-v4-app --shots shadcn-v4
       - run: node evals/skills/run-probe.mjs shadcn-v4 --widths 1024 --dark-class
-      - run: npm test --prefix evals/templates
       # The Neon base, created with shadcn init from this checkout's registry.
-      # It runs even when the CDS target failed, so both results are uploaded.
+      # It runs even when a restyle step failed, so its report is uploaded.
       - if: ${{ !cancelled() }}
         run: npm test --prefix evals/templates -- --target neon
-      # Each target writes its own report folder; fail unless both reports exist.
+      # Fail unless the report exists, so a run that wrote none is not a pass.
       - if: ${{ !cancelled() }}
-        run: test -f .local/evals/templates/cds/report/index.html && test -f .local/evals/templates/neon/report/index.html
+        run: test -f .local/evals/templates/neon/report/index.html
       - uses: actions/upload-artifact@v4
         if: always()
         with:

@@ -7,9 +7,9 @@ scenarios:
   - request: "`$neon-review` of a Neon-base screen with a stock shadcn item, a `dark:` class and `text-sm` beside a type role; do not edit"
     observe: Names the Neon base; findings name the stock item, the `dark:` class and the stock size with Neon fixes; Select closing on a pick, the polite toast and `aria-hidden` siblings are not findings; no file edited.
   - request: "`$neon-review` of a CDS screen and of a plain shadcn screen; do not edit"
-    observe: Names each base; CDS fixes use CDS components or props, never a Neon item; neither app gets a finding for being off the Neon base; no file edited.
+    observe: Names each base; suggests no CDS component, prop or Neon item for the CDS screen's CDS components and notes a Rebuild on the Neon base as the way off CDS; the shadcn app gets no finding for being off the Neon base; no file edited.
   - request: "`$neon-audit` how should this app take Finnomena styling? (Neon-base, CDS and plain shadcn apps)"
-    observe: "Names each base from its manifests and recommends one path: Neon base to neon-create with `@neon/` items, CDS stays on CDS, plain shadcn to a CSS restyle; never offers CDS to an app not already on it; edits nothing."
+    observe: "Names each base from its manifests and recommends one path: Neon base to neon-create with `@neon/` items, CDS told Neon no longer themes it and offered a Rebuild on the Neon base, plain shadcn to a CSS restyle; never offers CDS to an app not already on it; edits nothing."
 ---
 
 # Base detection

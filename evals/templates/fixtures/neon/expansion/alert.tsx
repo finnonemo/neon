@@ -1,4 +1,4 @@
-// alert, measured against CDS Banner (fixtures/expansion/alert.tsx) in each
+// alert, measured against CDS Banner (fixtures/cds-baseline.json) in each
 // variant, with the same Thai messages. The button after them (unmeasured)
 // shows a new alert, for the a11y spec to hear it announced.
 import { useState } from "react"

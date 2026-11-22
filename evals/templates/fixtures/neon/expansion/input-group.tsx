@@ -1,5 +1,5 @@
 // input-group, measured against CDS TextInput's start and end slots
-// (fixtures/expansion/input-group.tsx): a start icon, a text suffix and an end
+// (fixtures/cds-baseline.json): a start icon, a text suffix and an end
 // icon button.
 import { SearchIcon, XIcon } from "lucide-react"
 

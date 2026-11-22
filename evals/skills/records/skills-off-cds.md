@@ -3,12 +3,12 @@ scenarios:
   - request: Add a fee table that stays readable on a phone to an app on the Neon base
     observe: Opens no CDS reference; the references it reads hold no CDS component name; builds with Neon items and adds no CDS dependency
   - request: Add the same fee table to an app already on CDS
-    observe: Reads the CDS reference; builds with `@coinbase/cds-web` components; adds no `components.json`, `@neon` registry or Neon item
+    observe: Builds nothing on CDS and adds no `components.json`, `@neon` registry, Neon item or CDS component; says Neon no longer themes CDS and offers a Rebuild on the Neon base (Neon 2.0.0; the run below predates it)
 ---
 
 # Skills off CDS
 
-For finnonemo/neon#220: the skills default to the Neon base, and what they say about CDS components, setup and patterns sits in [CDS integration](../../../skills/neon-create/references/cds-integration.md), linked only behind "already on CDS". One request ran once on each base with `main` as baseline (`dc23278`) and with this change as revised (`9387b43`), November 2026, through `run-claude-case.mjs --model claude-opus-5-5 --serve-registry --cap 1800` on Claude Code 2.1.323, with the runner's allowlist, permission note and browser tool.
+For finnonemo/neon#220: the skills default to the Neon base, and what they say about CDS components, setup and patterns sits in [CDS integration](https://github.com/finnonemo/neon/blob/bf893a1/skills/neon-create/references/cds-integration.md) (removed in Neon 2.0.0), linked only behind "already on CDS". One request ran once on each base with `main` as baseline (`dc23278`) and with this change as revised (`9387b43`), November 2026, through `run-claude-case.mjs --model claude-opus-5-5 --serve-registry --cap 1800` on Claude Code 2.1.323, with the runner's allowlist, permission note and browser tool.
 
 Fixtures: the Neon-base app is `.local/evals-fixtures/219/plan-app`, the app of [Core component rules](core-component-rules.md). The app already on CDS is a copy of the frozen starter, `templates/vitejs-cds`, which depends on `@coinbase/cds-web` and carries no theme files of its own.
 

@@ -1,4 +1,4 @@
-// The extras screen on the Neon base, measured against fixtures/Extras.tsx.
+// The extras screen on the Neon base, measured against the retired CDS screen in fixtures/cds-baseline.json.
 // It adds no provider: the base's AppRoot holds the tooltip provider and toaster.
 import { useState } from "react"
 import { InfoIcon, MoreHorizontalIcon } from "lucide-react"

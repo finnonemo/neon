@@ -4,7 +4,7 @@
 
 Describe the employee request that fails today and the expected behavior. Reproduce it before changing guidance. For skills, test retrieval and decisions with realistic prompts; for installer/packager code, use executable regression tests. Keep the same prompt and evidence for the before/after comparison.
 
-Edit the owning source: visual decisions in `skills/INSTRUCTION.md`, mechanics in skill references, token data in `theme/tokens/`, and the Neon base's components, layouts and slot mapping in `registry/`. CDS is frozen: `theme/cds/` and `templates/vitejs-cds/` take bug fixes only, for apps already on CDS. Reference-design and Brand Intensity rules apply to campaign and landing pages only and must not override functional product guidance. Use the terms in [GLOSSARY.md](GLOSSARY.md) and record hard-to-reverse decisions as ADRs in [docs/adr](docs/adr/).
+Edit the owning source: visual decisions in `skills/INSTRUCTION.md`, mechanics in skill references, token data in `theme/tokens/`, and the Neon base's components, layouts and slot mapping in `registry/`. Reference-design and Brand Intensity rules apply to campaign and landing pages only and must not override functional product guidance. Use the terms in [GLOSSARY.md](GLOSSARY.md) and record hard-to-reverse decisions as ADRs in [docs/adr](docs/adr/).
 
 Use a branch such as `codex/describe-the-change` and a focused pull request. Do not change release versions or publish as a side effect of a documentation refactor.
 
@@ -19,17 +19,9 @@ git diff --check
 
 `validate` prints each step as it starts and each test file as it finishes. It and the [browser suite](evals/templates/README.md) take one lock for the machine, so runs started from several worktrees queue: a waiting run prints the run it waits for, by pid and worktree, and a run that was killed blocks nothing.
 
-The resource check follows local Markdown links and plugin-root paths in distributed skills and reviewed examples (`examples/`), parses skill frontmatter strictly (an unquoted `: ` or ` #` in a plain `description` is rejected, and descriptions are limited to 1024 characters), rejects shipped Markdown that is not UTF-8 or contains double-encoded (mojibake) text, and repeats against a newly packaged artifact. It also checks plain-text file references (bare Markdown filenames, backticked top-level directories, `../` paths and repository paths with an extension) in all Markdown and in code comments under `theme/` and `scripts/`, excluding `templates/`, `theme/examples/`, the Core snapshot in `core/` (its docs name Core's paths, not this repository's) and ignored paths. The packager rejects missing required top-level payloads. These checks do not validate every CDS API example or enforce design taste.
+The resource check follows local Markdown links and plugin-root paths in distributed skills and reviewed examples (`examples/`), parses skill frontmatter strictly (an unquoted `: ` or ` #` in a plain `description` is rejected, and descriptions are limited to 1024 characters), rejects shipped Markdown that is not UTF-8 or contains double-encoded (mojibake) text, and repeats against a newly packaged artifact. It also checks plain-text file references (bare Markdown filenames, backticked top-level directories, `../` paths and repository paths with an extension) in all Markdown and in code comments under `theme/` and `scripts/`, excluding the Core snapshot in `core/` (its docs name Core's paths, not this repository's) and ignored paths. The packager rejects missing required top-level payloads. These checks do not validate every CDS API example or enforce design taste.
 
-When raw tokens change, inspect generator headers and run in order:
-
-```sh
-node theme/scripts/sync-tokens.mjs
-node theme/scripts/generate-theme-config.mjs
-node theme/scripts/generate-breakpoints-config.mjs
-```
-
-Review the resulting diff and unresolved-token report. `theme/tokens/theme.json` is not a raw export: the Core sync writes it, so these generators only read it. `generate-theme-config.mjs` also rewrites `theme/cds/color-mapping.todo.md` from it; CDS is frozen, so leave that file's change out. The CDS color mapping is hand-maintained and frozen; the CSS adapter's font family, weight, space and radius values are updated separately using the method in its header. Do not automatically replace missing mappings with guesses. Before naming the Neon registry items a token change affects, list them with `node scripts/registry-consumers.mjs <token>`.
+`theme/tokens/colors.json` and `theme/tokens/theme.json` are not raw exports: the Core sync writes them. `theme/tokens/breakpoint.json` is the raw breakpoint export; `registry/theme/breakpoints.config.ts` is maintained by hand beside it. The CSS adapter's font family, weight, space and radius values are updated by hand using the method in its header. Do not automatically replace missing mappings with guesses. Before naming the Neon registry items a token change affects, list them with `node scripts/registry-consumers.mjs <token>`.
 
 ### Sync the Core snapshot
 
@@ -76,7 +68,7 @@ The registry's built items in `registry/r/` carry a copy of every file they inst
 
 For registry, template or theme changes, run `node scripts/smoke-new-app.mjs`. It builds the registry, serves it locally, creates an app with the New install mode, adds an item and a Theme Brief with Add, and builds the app, once outside any repository and once under `.local/smoke/`. It removes both apps when every step passes and keeps them, saying where, when one fails. Then inspect the affected UI in an app it leaves in place (`--keep`, or a destination: `node scripts/smoke-new-app.mjs <app dir>`); `node scripts/preview-app.mjs <app dir>` serves a build and prints `Ready: <url>` only once it answers. Check relevant light/dark modes, narrow/wide layouts, Thai/English labels, keyboard interactions and task states. Record actual evidence, including blocked checks.
 
-Before every push, `node .github/scripts/browser-changes.mjs origin/main HEAD` says whether the change needs the [browser suite](evals/templates/README.md): it prints the browser paths the branch changed, the list CI reads. When it prints one, run the suite with `--target neon`, which creates the app from the registry and holds it to the CDS baseline. A fix to the frozen CDS starter or CDS theme files runs the default CDS target. Each leaves its report under `.local/evals/templates/<target>/`; CI runs both targets and uploads the reports separately from the plugin.
+Before every push, `node .github/scripts/browser-changes.mjs origin/main HEAD` says whether the change needs the [browser suite](evals/templates/README.md): it prints the browser paths the branch changed, the list CI reads. When it prints one, run the suite with `--target neon`, which creates the app from the registry and holds it to the frozen CDS-era baselines and Core. It leaves its report under `.local/evals/templates/neon/`; CI runs it and uploads the report separately from the plugin.
 
 For changes to the browser probe, its runner or their fixtures, check on Linux before calling them done, not only on macOS. CI runs the browser job in `mcr.microsoft.com/playwright` with Linux Chrome and without macOS system fonts. Process cleanup, Chrome's temporary files and font fallbacks behaved differently there and failed CI twice after local runs passed. Use the image tag `template-browser.yml` names, or push early and read the CI result.
 

@@ -1,14 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile, readdir } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
-// Static guards for finnonemo/neon#220 (records/skills-off-cds.md): the skills default to the
-// Neon base, and CDS guidance sits in one reference read only in an app already on CDS.
-// They check where the words sit, not what a run reads, and they read a line at a time: a line
-// is a paragraph or a table row, so a stray sentence beside a qualifying one passes.
+// Static guards for finnonemo/neon#220 (records/skills-off-cds.md) and finnonemo/neon#258
+// (ADR 0016): the skills build on the Neon base, and Neon no longer themes CDS, so CDS appears
+// only to say so, to tell an app on it apart, or to keep it out. They check where the words sit,
+// not what a run reads, and they read a line at a time: a line is a paragraph or a table row.
 const root = new URL('../../', import.meta.url).pathname;
-const CDS_REFERENCE = 'skills/neon-create/references/cds-integration.md';
 
 const skillFiles = async () =>
   (await readdir(join(root, 'skills'), { recursive: true }))
@@ -26,29 +26,20 @@ const strayLines = async (paths, stray) => {
   }
   return found;
 };
-const sharedSkillFiles = async () => (await skillFiles()).filter(path => path !== CDS_REFERENCE);
-
 // A line names CDS when it says the word or one of its paths.
 const NAMES_CDS = /\bCDS\b|cds-web|vitejs-cds|theme\/cds/;
-// The frozen base for apps already on it: saying so, telling the two bases apart, or keeping it out of other apps.
-const AS_FROZEN_BASE = /already on (?:Coinbase Design System \()?CDS|\bfrozen\b|\bis mixed\b|\b(?:no|not|never|nor)\b[^.;:]*\bCDS\b/;
-// Names only CDS has: a shared reference that holds one is carrying CDS guidance.
-const CDS_ONLY_NAMES = /ListCell|\bTray\b|useBreakpointTier|ComponentConfigProvider|MediaQueryProvider|PortalProvider|activeColorScheme|tabularNumbers|justifyContent|emphasis="low"|9\.26\.1|createNeonTheme|CSS-to-CDS|CDS adoption/;
+// Saying Neon no longer themes it, telling an app on it apart, or keeping it out of an app.
+const AS_RETIRED = /no longer themes CDS|Neon 2\.0\.0 removed|has no Counterpart recorded|\bon CDS\b|\bis mixed\b|\b(?:no|not|never|nor)\b[^.;:]*\bCDS\b|`@coinbase\/cds-web` is CDS/;
+// Names only CDS has: a skill that holds one is carrying CDS guidance.
+const CDS_ONLY_NAMES = /ListCell|\bTray\b|ComponentConfigProvider|MediaQueryProvider|PortalProvider|activeColorScheme|tabularNumbers|justifyContent|emphasis="low"|9\.26\.1|createNeonTheme|CSS-to-CDS|CDS adoption|cds-integration/;
 
-test('outside the CDS reference, the skills name CDS only as the frozen base for apps already on it', async () => {
-  assert.deepEqual(await strayLines(await sharedSkillFiles(), text => NAMES_CDS.test(text) && !AS_FROZEN_BASE.test(text)), []);
+test('the skills name CDS only to say Neon no longer themes it, to tell it apart or to keep it out', async () => {
+  assert.deepEqual(await strayLines(await skillFiles(), text => NAMES_CDS.test(text) && !AS_RETIRED.test(text)), []);
 });
 
-test('CDS component names and setup live in the CDS reference alone', async () => {
-  assert.deepEqual(await strayLines(await sharedSkillFiles(), text => text.match(CDS_ONLY_NAMES)?.[0]), []);
-  // What left the shared references is still there for an app on CDS.
-  const reference = await readFile(join(root, CDS_REFERENCE), 'utf8');
-  for (const name of ['ListCell', 'Tray', 'useBreakpointTier', 'tabularNumbers', 'multiline', 'colorScheme', 'MediaQueryProvider']) assert.match(reference, new RegExp(name), name);
-  for (const heading of ['Functional patterns', 'Functional screen habits', 'Moving CSS-styled UI to CDS components']) assert.match(reference, new RegExp(`^## ${heading}$`, 'm'), heading);
-});
-
-test('every link to the CDS reference sits behind "already on CDS"', async () => {
-  assert.deepEqual(await strayLines(await sharedSkillFiles(), text => text.includes('cds-integration.md') && !/already on (?:CDS|it)\b/i.test(text)), []);
+test('no skill carries CDS component names or setup, and the CDS reference is gone', async () => {
+  assert.deepEqual(await strayLines(await skillFiles(), text => text.match(CDS_ONLY_NAMES)?.[0]), []);
+  assert.equal(existsSync(join(root, 'skills/neon-create/references/cds-integration.md')), false);
 });
 
 test('neon-create describes what it builds with as shadcn/ui matched to Core', async () => {
@@ -56,40 +47,41 @@ test('neon-create describes what it builds with as shadcn/ui matched to Core', a
   assert.match(create.match(/^description: .*$/m)[0], /shadcn\/ui matched to Core/);
 });
 
-test('an app already on CDS still reaches CDS from a restyle and from a rebuild question', async () => {
-  const css = await readFile(join(root, 'skills/neon-redesign/references/css-integration.md'), 'utf8');
-  assert.match(css, /CDS components in an app already on CDS, after the \[checks for moving CSS-styled UI\]\(\.\.\/\.\.\/neon-create\/references\/cds-integration\.md#moving-css-styled-ui-to-cds-components\)/);
+test('an app on CDS hears that Neon no longer themes CDS and is offered a Rebuild, from every skill that meets one', async () => {
+  for (const path of ['neon-create/SKILL.md', 'neon-audit/references/project-inspection.md', 'neon-audit/references/workflow-contract.md', 'neon-redesign/SKILL.md', 'neon-redesign/references/css-integration.md', 'neon-review/references/review-checks.md', 'neon-create/references/neon-base.md']) {
+    const offers = (await lines(`skills/${path}`)).filter(({ text }) => /no longer themes CDS/.test(text) && /\[Rebuild\]\([^)]*rebuild\.md\)/.test(text));
+    assert.ok(offers.length >= 1, `${path} says Neon no longer themes CDS and links a Rebuild`);
+  }
   // The alternative to a Rebuild is component adoption (GLOSSARY), not a restyle.
   const rebuild = await readFile(join(root, 'skills/neon-create/references/rebuild.md'), 'utf8');
   assert.match(rebuild, /rebuild, or keep the app and add Neon's components to it screen by screen/);
+  assert.match(rebuild, /an app on CDS is offered|what an app on CDS is offered/);
 });
 
 test('the components tier is not named after CDS', async () => {
   const contract = await readFile(join(root, 'skills/neon-audit/references/workflow-contract.md'), 'utf8');
   assert.match(contract, /tier: 'colors' \| 'visual-system' \| 'components';/);
   assert.match(contract, /`components` uses the base's real components and the Finnomena theme/);
-  // CDS is frozen (ADR 0006): a request to add it routes to the Neon base.
+  // Neon no longer themes CDS (ADR 0016): a request to add it routes to the Neon base.
   assert.doesNotMatch(contract, /Explicit CDS adoption/);
-  assert.match(contract, /Request to add CDS to an app without it \| `neon-create` on the Neon base/);
+  assert.match(contract, /Request to add CDS to an app \| `neon-create` on the Neon base/);
   for (const path of await skillFiles()) assert.doesNotMatch(await readFile(join(root, path), 'utf8'), /tier: 'cds'/, path);
 });
 
-test('provisional stays on what does not trace to Core: Immersive Themes, gradient recipes, roles without a Core token and the frozen CDS mapping', async () => {
-  const KEPT = /Immersive Theme|gradient|recipe|no Core (?:Theme )?token|not matched to Core|frozen CDS theme's color mapping/i;
+test('provisional stays on what does not trace to Core: Immersive Themes, gradient recipes and roles without a Core token', async () => {
+  const KEPT = /Immersive Theme|gradient|recipe|no Core (?:Theme )?token|not matched to Core/i;
   assert.deepEqual(await strayLines([...(await skillFiles()), 'README.md'], text => /provisional/i.test(text) && !KEPT.test(text)), []);
   const contract = await readFile(join(root, 'skills/INSTRUCTION.md'), 'utf8');
   assert.match(contract, /a color role with no Core token stays provisional/);
-  // The frozen CDS mapping never traced to Core (theme/cds/color-overrides.ts still says so): it keeps the word.
-  assert.match(contract.split('\n')[2], /the frozen CDS theme's color mapping are provisional, with no design approval claimed/);
-  assert.match(await readFile(join(root, CDS_REFERENCE), 'utf8'), /is not matched to Core and stays provisional, with no design approval claimed/);
-  assert.match(await readFile(join(root, 'theme/cds/color-overrides.ts'), 'utf8'), /PROVISIONAL/);
+  assert.match(contract.split('\n')[2], /the Immersive Themes, the gradient recipes and a color role with no Core token are provisional, with no design approval claimed/);
 });
 
-test('the README offers the Neon base, and CDS only to an app already on it', async () => {
+test('the README offers the Neon base and says Neon no longer themes CDS', async () => {
   const readme = await readFile(join(root, 'README.md'), 'utf8');
-  assert.doesNotMatch(readme, /real CDS|Full CDS|CDS required|adopting CDS|themed CDS app/);
-  assert.match(readme, /\| Components \| Finnomena theme plus the real components of the app's base: Neon items, or CDS in an app already on it \|/);
+  assert.doesNotMatch(readme, /real CDS|Full CDS|CDS required|adopting CDS|themed CDS app|already on CDS|frozen CDS/);
+  assert.match(readme, /\| Components \| Finnomena theme plus Neon's components on the Neon base \|/);
   assert.match(readme.match(/^\| \[`\/neon:neon-create`\].*$/m)[0], /Neon components \(shadcn\/ui matched to Core\)/);
+  assert.match(readme, /Neon no longer themes CDS/);
 });
 
 test('the contributor instructions no longer say the skills carry CDS tuning', async () => {
@@ -98,14 +90,17 @@ test('the contributor instructions no longer say the skills carry CDS tuning', a
   assert.match(agents, /Neon matches Core, not CDS/);
 });
 
-test('every file that offers the CDS Install mode says it is deprecated, names the next major and offers a Rebuild', async () => {
-  // finnonemo/neon#287: one release of notice before finnonemo/neon#258 removes the mode.
-  const { version } = JSON.parse(await readFile(join(root, 'package.json'), 'utf8'));
-  const removedIn = `${Number(version.split('.')[0]) + 1}.0.0`;
-  for (const path of ['skills/neon-create/SKILL.md', CDS_REFERENCE, 'skills/neon-audit/SKILL.md', 'skills/neon-audit/references/theme-integration.md', 'README.md', 'GLOSSARY.md']) {
-    const notice = (await lines(path)).filter(({ text }) => /CDS Install mode[^.]* is deprecated/.test(text));
-    assert.equal(notice.length, 1, `${path} carries the notice once`);
-    assert.ok(notice[0].text.includes(`Neon ${removedIn} removes it`), `${notice[0].at} names Neon ${removedIn}`);
-    assert.match(notice[0].text, /\bRebuild\b.* on the Neon base/, `${notice[0].at} offers a Rebuild`);
+test('the CDS deprecation notices went with the mode', async () => {
+  // finnonemo/neon#287 gave one release of notice; finnonemo/neon#258 removed the mode in Neon 2.0.0.
+  for (const path of [...(await skillFiles()), 'README.md', 'GLOSSARY.md']) {
+    assert.doesNotMatch(await readFile(join(root, path), 'utf8'), /Neon 2\.0\.0 removes|CDS Install mode[^.]* is deprecated/, path);
+  }
+});
+
+test('no registry item names the CDS theme or package', async () => {
+  const dir = join(root, 'registry/r');
+  const { readdir } = await import('node:fs/promises');
+  for (const name of (await readdir(dir)).filter(file => file.endsWith('.json'))) {
+    assert.doesNotMatch(await readFile(join(dir, name), 'utf8'), /theme\/cds|@coinbase\/cds-web|Full CDS/, name);
   }
 });

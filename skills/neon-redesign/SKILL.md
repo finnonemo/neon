@@ -1,6 +1,6 @@
 ---
 name: neon-redesign
-description: Use when restyling existing Finnomena or neon UI through CSS tokens or Neon role utilities, keeping the app on its base, including non-React apps, partial changes, pages restyled from a supplied reference design and explicitly requested layout or hierarchy redesign. Applies to established Finnomena intent. Use neon-create for new components, a rebuild or component colors in an app already on CDS.
+description: Use when restyling existing Finnomena or neon UI through CSS tokens or Neon role utilities, keeping the app on its base, including non-React apps, partial changes, pages restyled from a supplied reference design and explicitly requested layout or hierarchy redesign. Applies to established Finnomena intent. Use neon-create for new components or a rebuild.
 ---
 
 # Restyle Finnomena UI
@@ -11,7 +11,7 @@ Apply Finnomena visual roles to existing UI while preserving its framework and p
 
 ## When to use
 
-Use for CSS styling or presentation redesign. New components, a rebuild, and color changes to CDS components in an app already on CDS (frozen), belong to [neon-create](../neon-create/SKILL.md). Review-only requests belong to [neon-review](../neon-review/SKILL.md).
+Use for CSS styling or presentation redesign. New components and a rebuild belong to [neon-create](../neon-create/SKILL.md). Review-only requests belong to [neon-review](../neon-review/SKILL.md).
 
 ## Fast path
 
@@ -29,7 +29,7 @@ When target, scope and theme variables are known, begin with the affected styles
 
 - Neon base: restyle through Neon role utilities and Neon item props, per the styling rules in [Neon base](../neon-create/references/neon-base.md). `index.css`, `src/theme/` and Neon item files stay as installed; colors-only changes only color role utilities.
 - `composition: 'adapt'` on the Neon base that changes which Neon item or prop value an element takes: [Core rules](../neon-audit/references/core-rules.md), for that item only. `colors` and `visual-system` restyles read no component doc.
-- App already on CDS: restyle its own CSS-styled UI through CSS tokens here; the colors of its CDS components go to [neon-create](../neon-create/SKILL.md).
+- App on CDS: restyle its own CSS-styled UI through CSS tokens here. Neon no longer themes CDS (Neon 2.0.0 removed it): for its CDS components, say so and offer a [Rebuild](../neon-create/references/rebuild.md) on the Neon base.
 - Neither: the CSS path below, plain shadcn included, with no Neon items.
 - Plain CSS/shadcn formats or mapping examples: relevant sections of [style migration](references/style-migration.md).
 - shadcn/ui on Tailwind v4 (v0, Lovable; `@theme inline` over `:root`/`.dark`): its [style migration format](references/style-migration.md#5-shadcn-style-on-tailwind-v4); edit values by role and pair in both modes.

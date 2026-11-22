@@ -1,6 +1,6 @@
 // Assembles a disposable app and runs the Playwright specs against it.
-//   node run.mjs [playwright args]                 the CDS starter (default)
-//   node run.mjs --target neon [playwright args]   the Neon base, from this checkout's registry
+//   node run.mjs [playwright args]   the Neon base, from this checkout's registry
+//   --target neon is accepted and is the only target; Neon 2.0.0 removed the CDS one.
 //   --keep leaves the assembled app in place and prints its path, for screenshots.
 // The preview takes a free port; NEON_TEMPLATE_PORT fixes it. Runs on one machine queue behind
 // the checks lock (scripts/lib/checks-lock.mjs), which scripts/validate.mjs takes too.
@@ -10,7 +10,6 @@ import { tmpdir } from 'node:os';
 import { join, relative, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawn } from 'node:child_process';
-import { assembleStarter } from '../../scripts/lib/assemble-starter.mjs';
 import { takeChecksLock } from '../../scripts/lib/checks-lock.mjs';
 import { freePort } from '../../scripts/lib/free-port.mjs';
 import { SHADCN, bareCnImports, browserSuiteItems, buildRegistry } from '../../scripts/lib/registry.mjs';
@@ -20,9 +19,9 @@ const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, '../..');
 const args = process.argv.slice(2);
 const targetAt = args.indexOf('--target');
-const target = targetAt >= 0 ? args.splice(targetAt, 2)[1] : 'cds';
+const target = targetAt >= 0 ? args.splice(targetAt, 2)[1] : 'neon';
 const keep = args.includes('--keep') && args.splice(args.indexOf('--keep'), 1).length > 0;
-if (!['cds', 'neon'].includes(target)) throw new Error(`Unknown target ${target}; use cds or neon.`);
+if (target !== 'neon') throw new Error(`Unknown target ${target}; the only target is neon (Neon 2.0.0 removed the CDS one).`);
 const release = await takeChecksLock({ label: `browser suite (${target})`, worktree: root });
 const work = await mkdtemp(join(tmpdir(), 'neon-browser-'));
 const app = join(work, 'app');
@@ -32,29 +31,6 @@ async function run(command, args, cwd, env = {}) {
     process.on('error', reject);
     process.on('exit', code => code === 0 ? resolveRun() : reject(new Error(`${command} exited ${code}`)));
   });
-}
-
-async function assembleCds() {
-  await assembleStarter({ sourceRoot: root, destination: app });
-  await run('npm', ['ci', '--no-audit', '--no-fund'], app);
-  // Build the shipped app before adding any test-only fixtures.
-  await run('npm', ['run', 'build'], app);
-  await mkdir(join(app, 'src/app/shared'), { recursive: true });
-  for (const file of ['App.tsx', 'Approval.tsx', 'Extras.tsx', 'Expansion.tsx', 'Hook.tsx', 'shared/data.ts']) {
-    await copyFile(join(here, 'fixtures', file), join(app, 'src/app', file));
-  }
-  // The expansion screen's sections: one file per item, copied whole.
-  await cp(join(here, 'fixtures/expansion'), join(app, 'src/app/expansion'), { recursive: true });
-  await copyFile(join(root, 'theme/examples/app-entry.tsx'), join(app, 'src/app/IntegrationRoot.tsx'));
-  const mainPath = join(app, 'src/main.tsx');
-  let main = await readFile(mainPath, 'utf8');
-  main = main.replace('import { AppRoot } from "./app/AppRoot";', '')
-    .replace('<AppRoot>', '').replace('</AppRoot>', '');
-  // Isolate the documented integration imports: the fixture's reference
-  // provider owns reset/default/icon CSS, while main retains the Thai loader.
-  main = main.replace(/^import "@coinbase\/[^\n]+\n/gm, '');
-  await writeFile(mainPath, main);
-  await run('npm', ['run', 'build'], app);
 }
 
 // Creates the app as an employee would, with shadcn init from the Neon base,
@@ -112,7 +88,7 @@ async function assembleNeon() {
 }
 
 try {
-  await (target === 'neon' ? assembleNeon() : assembleCds());
+  await assembleNeon();
   // Picked after the app is assembled, so the port is free when the preview binds it.
   const port = process.env.NEON_TEMPLATE_PORT ?? String(await freePort());
   await run(process.execPath, [join(here, 'node_modules/@playwright/test/cli.js'), 'test', ...args], here, { NEON_TEST_APP: app, NEON_TARGET: target, NEON_TEMPLATE_PORT: port });

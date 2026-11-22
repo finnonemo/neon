@@ -1,7 +1,7 @@
 /**
  * Finnomena brand CSS custom properties — for projects that want
- * Finnomena's colors/typography/spacing WITHOUT installing
- * @coinbase/cds-web or using CDS React components.
+ * Finnomena's colors/typography/spacing as plain CSS, and the Neon
+ * base's theme item, which maps them to shadcn slots and type roles.
  *
  * COLORS come from Core's Theme (ADR 0009). Each --color-* role takes the
  * Core Theme token that
@@ -27,18 +27,13 @@
  * differs from the snapshot.
  *
  * EVERYTHING ELSE (font family and weight, space, radius) is
- * hand-captured, not generated: the byte-exact output of
- * @coinbase/cds-web@9.26.1's own `createThemeCssVars()` against
- * `createNeonTheme()`. Recapture it by hand when
- * ${CLAUDE_PLUGIN_ROOT}/theme/cds/theme.config.ts's `neonTheme` changes.
+ * maintained by hand, not generated. It was first captured from the CDS
+ * theme Neon 2.0.0 removed (ADR 0016); edit it here.
  *
- * NAMES match what CDS's ThemeProvider emits at runtime
+ * NAMES follow the pattern CDS's ThemeProvider emitted
  * (`--{category}-{key}`, e.g. `--color-fg`, `--space-2`,
- * `--borderRadius-200`, `--fontFamily-body`), so an app already on CDS
- * keeps its `var(--color-fg)` references. The colors, type sizes and line
- * heights are no longer CDS's: the frozen CDS theme
- * (${CLAUDE_PLUGIN_ROOT}/theme/cds/) keeps the values it had, and this
- * file follows Core.
+ * `--borderRadius-200`, `--fontFamily-body`), so existing
+ * `var(--color-fg)` references keep working.
  *
  * SCOPE: only color, typography (fontFamily/fontSize/fontWeight/
  * lineHeight), space, and borderRadius are included — the fields Finnomena
@@ -70,9 +65,9 @@
  *   - Colors + typography: also use --fontFamily-*, --fontSize-*,
  *     --fontWeight-*, --lineHeight-*, --space-*, --borderRadius-*.
  *     Immersive pages also take their content column from --layout-*.
- *   - Full CDS: don't use this file — see
- *     ${CLAUDE_PLUGIN_ROOT}/skills/neon-create instead (ThemeProvider +
- *     createNeonTheme() + real CDS components).
+ *   - Components: start or rebuild the app on the Neon base instead
+ *     (${CLAUDE_PLUGIN_ROOT}/skills/neon-create), whose theme item reads
+ *     this file.
  */
 
 :root {

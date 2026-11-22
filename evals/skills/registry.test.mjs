@@ -169,11 +169,10 @@ test('every Neon component is measured against its Counterpart', () => {
 
   const combobox = { name: 'combobox', type: 'registry:ui', files: [] };
   const fake = (screens, fixtures) => ({ screens: (name) => screens[name] ?? 0, fixture: (path) => fixtures.includes(path) });
-  const both = ['expansion/combobox.tsx', 'neon/expansion/combobox.tsx'];
-  assert.deepEqual(unmeasuredComponents([combobox], [], fake({ combobox: 1 }, both)), []);
-  assert.deepEqual(unmeasuredComponents([combobox], [], fake({}, both)), ['combobox: no screen in evals/templates/expansion/combobox.mjs']);
-  assert.deepEqual(unmeasuredComponents([combobox], [], fake({ combobox: 1 }, [both[0]])), ['combobox: no evals/templates/fixtures/neon/expansion/combobox.tsx']);
-  assert.deepEqual(unmeasuredComponents([combobox], [], fake({ combobox: 1 }, [both[1]])), ['combobox: no evals/templates/fixtures/expansion/combobox.tsx']);
+  const fixture = ['neon/expansion/combobox.tsx'];
+  assert.deepEqual(unmeasuredComponents([combobox], [], fake({ combobox: 1 }, fixture)), []);
+  assert.deepEqual(unmeasuredComponents([combobox], [], fake({}, fixture)), ['combobox: no screen in evals/templates/expansion/combobox.mjs']);
+  assert.deepEqual(unmeasuredComponents([combobox], [], fake({ combobox: 1 }, [])), ['combobox: no evals/templates/fixtures/neon/expansion/combobox.tsx']);
   assert.deepEqual(unmeasuredComponents([combobox], ['combobox'], fake({}, [])), [], 'a component the approval or extras screen measures');
   assert.deepEqual(unmeasuredComponents([{ ...combobox, meta: { supporting: true } }], [], fake({}, [])), [], 'a supporting component');
   assert.deepEqual(unmeasuredComponents([{ ...combobox, type: 'registry:item' }], [], fake({}, [])), [], 'not a component');
@@ -209,9 +208,8 @@ test('every Supporting item is marked, pulled in by the items that use it, and m
   assert.deepEqual(supportingProblems([sidebar], { skeleton: ['sidebar'] }, fake({}, [])), ['skeleton: not in registry.json']);
   assert.deepEqual(supportingProblems([{ ...skeleton, meta: { supporting: 'yes' } }, sidebar], { skeleton: ['sidebar'] }, fake({}, [])), ['skeleton: not marked meta.supporting']);
   assert.deepEqual(supportingProblems([skeleton, sidebar], { skeleton: ['sidebar', 'carousel'] }, fake({}, [])), ['carousel: not in registry.json']);
-  assert.deepEqual(supportingProblems([skeleton, sidebar], { skeleton: ['sidebar'] }, fake({ skeleton: 1 }, ['expansion/skeleton.tsx', 'neon/expansion/skeleton.tsx'])), [
+  assert.deepEqual(supportingProblems([skeleton, sidebar], { skeleton: ['sidebar'] }, fake({ skeleton: 1 }, ['neon/expansion/skeleton.tsx'])), [
     'skeleton: a Supporting item has no screen of its own; remove evals/templates/expansion/skeleton.mjs',
-    'skeleton: a Supporting item has no fixture of its own; remove evals/templates/fixtures/expansion/skeleton.tsx',
     'skeleton: a Supporting item has no fixture of its own; remove evals/templates/fixtures/neon/expansion/skeleton.tsx',
   ]);
 });
@@ -245,18 +243,16 @@ test('the logo item ships the canonical SVGs with the Logo the layouts use, and 
   for (const name of ['logo', 'layouts']) assert.ok(base.registryDependencies.includes(`{{registry}}/${name}.json`), `the base pulls in ${name}`);
 });
 
-// Framework-free layout geometry stays shared. Pane views render each base's
-// own borders and are checked by the browser geometry baseline.
-test('the layouts item shares framework-free starter geometry and includes every layout', () => {
+// The layouts item ships every file of registry/layout and the breakpoints it reads.
+test('the layouts item ships its framework-free geometry and every layout', () => {
   const layouts = registryItem('layouts');
   const unchanged = ['layout.css', 'layoutPanes.ts', 'useBreakpointTier.ts'];
   for (const name of unchanged) {
     assert.ok(layouts.files.some((file) => file.path === `layout/${name}` && file.target === `src/layout/${name}`), `layouts ships ${name}`);
-    assert.equal(read(`registry/layout/${name}`), read(`templates/vitejs-cds/src/layout/${name}`), `registry/layout/${name} differs from the starter's`);
   }
-  assert.ok(layouts.files.some((file) => file.path === '../theme/cds/breakpoints.config.ts' && file.target === 'src/theme/breakpoints.config.ts'));
-  const starterLayouts = readdirSync(join(root, 'templates/vitejs-cds/src/layout')).filter((name) => name !== 'Logo.tsx').sort();
-  assert.deepEqual(layouts.files.map((file) => file.path.replace(/^layout\//, '')).filter((name) => !name.includes('/')).sort(), starterLayouts, 'every starter layout file has a Neon counterpart');
+  assert.ok(layouts.files.some((file) => file.path === 'theme/breakpoints.config.ts' && file.target === 'src/theme/breakpoints.config.ts'));
+  const layoutFiles = readdirSync(join(root, 'registry/layout')).filter((name) => name !== 'Logo.tsx').sort(); // Logo.tsx is the logo item's
+  assert.deepEqual(layouts.files.map((file) => file.path.replace(/^layout\//, '')).filter((name) => !name.includes('/')).sort(), layoutFiles, 'the item ships every other file of registry/layout');
   assert.ok(layouts.registryDependencies.includes('@neon/logo'));
 });
 

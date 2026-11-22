@@ -17,14 +17,6 @@ test('the rebuild inventory records responsive rules and carries them over', asy
   assert.match(source, /effects? that (?:depends?|reads?) (?:on )?layout/);
 });
 
-test('CDS integration warns that Box lays children out in a flex row', async () => {
-  const source = await readFile(`${references}cds-integration.md`, 'utf8');
-  // bs-s1's <Box as="section"> laid its fund cards side by side, 1882px wide at 375px.
-  assert.match(source, /`Box` computes to `display: flex` in a row/);
-  assert.match(source, /flexDirection="column"/);
-  assert.match(source, /`VStack`/);
-});
-
 test('the rebuild reference builds on the Neon base from Neon items only', async () => {
   const source = await readFile(`${references}rebuild.md`, 'utf8');
   const build = source.match(/## Build\n([\s\S]*?)\n## /)?.[1] ?? '';
@@ -72,20 +64,19 @@ test('the Neon base reference lists every Neon component item', async () => {
 
 test('neon-create keeps the two bases apart and names the items it added', async () => {
   const skill = await readFile(new URL('../../skills/neon-create/SKILL.md', import.meta.url), 'utf8');
-  // The components tier: Neon items on a new or Neon-base app, CDS components on an app already on CDS.
-  assert.match(skill, /Neon registry items \(`@neon\/<item>`\) in a new or Neon-base app, CDS components in an app already on CDS\. One app never mixes the two/);
+  // The components tier: Neon items on a new or Neon-base app. Neon no longer themes CDS (ADR 0016).
+  assert.match(skill, /Neon registry items \(`@neon\/<item>`\) in a new or Neon-base app\./);
   assert.match(skill, /`@neon` registry entry marks the Neon base/);
-  assert.match(skill, /In an app already on CDS use verified CDS exports and prop types, never a Neon or shadcn item/);
+  assert.match(skill, /In an app on CDS, build nothing on CDS and add no Neon item to it: say that Neon no longer themes CDS and offer a \[Rebuild\]\(references\/rebuild\.md\) on the Neon base/);
   assert.match(skill.split('## Done')[1], /Name every `@neon\/` item the work added, in the Handoff Summary/);
-  // Routing for apps already on CDS stays with neon-create.
-  assert.match(skill.match(/^description: .*$/m)[0], /already on Coinbase Design System/);
+  assert.doesNotMatch(skill.match(/^description: .*$/m)[0], /CDS|Coinbase/);
 });
 
 test('the contract themes a Neon-base Campaign Page through ImmersiveLayout', async () => {
   const contract = await readFile(new URL('../../skills/INSTRUCTION.md', import.meta.url), 'utf8');
   assert.match(contract, /pass the theme as `ImmersiveLayout`'s `immersiveTheme` \(the `@neon\/immersive-themes` registry item\)/);
   assert.match(contract, /Elsewhere, copy the \[generated theme CSS\]/);
-  assert.match(contract, /build on the Neon base with Neon registry items; an app already on CDS keeps CDS/);
+  assert.match(contract, /build on the Neon base with Neon registry items; Neon no longer themes CDS \(Neon 2\.0\.0 removed it\), so an app on CDS is offered a Rebuild on the Neon base/);
 });
 
 test('neon-create links the Campaign Page content reference behind one condition', async () => {

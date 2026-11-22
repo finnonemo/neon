@@ -1,6 +1,6 @@
 # Starter workspace shell
 
-`AppShell` and `ContentLayout` in both the Neon registry and the CDS starter use order-history chrome: mobile bottom navigation below 500px, a 64px icon rail from 500px through 1279px, and a 240px sidebar from 1280px. Other starter layouts keep their existing geometry. This is a maintained structural override in the starter stylesheet, not a change to the raw breakpoint exports or provisional color mapping.
+`AppShell` and `ContentLayout` in the Neon registry use order-history chrome: mobile bottom navigation below 500px, a 64px icon rail from 500px through 1279px, and a 240px sidebar from 1280px. Other starter layouts keep their existing geometry. This is a maintained structural override in the starter stylesheet, not a change to the raw breakpoint exports or provisional color mapping.
 
 The header stays above each pane's independently scrolling body. Supply `contentHeader`, `contentActions`, `inspectorHeader`, and `inspectorActions` as React nodes. Actions remain app-owned, including their labels and handlers. For example:
 
@@ -15,7 +15,7 @@ The header stays above each pane's independently scrolling body. Supply `content
 />
 ```
 
-`Text` comes from `@coinbase/cds-web/typography`; `IconButton` comes from `@coinbase/cds-web/buttons`. The example's handler and content belong to the app. Header rows have a 64px minimum height and can grow for wrapped Thai/English text. Omitted slots preserve existing callers.
+`Text` and `IconButton` stand for the app's own heading and icon button. The example's handler and content belong to the app. Header rows have a 64px minimum height and can grow for wrapped Thai/English text. Omitted slots preserve existing callers.
 
 Inspector behavior is intentionally preserved: below 988px, content and inspector switch as separate views with a back control; at wider widths both panes use their existing placement and widths. Selection, form state, scroll retention and focus return continue through `ResponsivePanes`. No right-hand overlay or drawer was added.
 
@@ -25,7 +25,7 @@ Functional layouts use the existing border role beneath pane headers and at visi
 
 ImmersiveLayout has no sidebar or adjacent functional pane boundary. It opts out of the border on the reused InspectorView's empty toolbar. Bottom navigation keeps its existing top border.
 
-The user confirmed the shared rule for Neon and CDS and the inter-column board dividers before implementation. The header slots and workspace chrome use each implementation's own controls and theme; the apps do not mix component libraries.
+The user confirmed the divider rule and the inter-column board dividers before implementation.
 
 ## Reference and evidence boundary
 

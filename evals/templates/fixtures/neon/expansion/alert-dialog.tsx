@@ -1,4 +1,4 @@
-// alert-dialog, measured open against CDS Alert (fixtures/expansion/alert-dialog.tsx):
+// alert-dialog, measured open against CDS Alert (fixtures/cds-baseline.json):
 // a destructive confirmation with a dismiss and a preferred action, as CDS's
 // dismissActionLabel and preferredActionVariant="negative" draw them.
 import { Button } from "@/components/ui/button"

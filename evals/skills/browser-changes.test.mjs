@@ -52,10 +52,10 @@ test('browser-changes writes the job output the workflow reads', t => {
   assert.equal(readFileSync(output, 'utf8'), 'browser=false\n');
 });
 
-test('browser paths cover the starter, theme, registry, browser suite, assembler, probe and restyle tooling', () => {
+test('browser paths cover the theme, registry, browser suite, probe and restyle tooling', () => {
   for (const path of [
-    'templates/vitejs-cds/src/main.tsx', 'examples/pane-grids/PaneGrids.tsx', 'evals/templates/layouts.spec.mjs', 'theme/css/theme.css',
-    'scripts/lib/assemble-starter.mjs', 'scripts/lib/assets.mjs', 'skills/neon-redesign/references/browser-probe.js',
+    'examples/pane-grids/PaneGrids.tsx', 'evals/templates/layouts.spec.mjs', 'theme/css/theme.css',
+    'skills/neon-redesign/references/browser-probe.js',
     'evals/skills/probe-fixture.html', 'evals/skills/probe-fixture-no-plex.html', 'evals/skills/probe-fixture-thai-404.html', 'evals/skills/run-probe.mjs', 'evals/skills/grade-restyle.mjs',
     'evals/skills/grade-rebuild.mjs', 'evals/skills/fixtures/shadcn-v4-app/src/index.css', '.github/workflows/template-browser.yml',
     '.github/scripts/browser-changes.mjs', 'registry/ui/button.tsx', 'registry/r/neon-base.json', 'scripts/lib/registry.mjs',
