@@ -53,6 +53,33 @@ test('a release is published only from the commit its tag names', async () => {
   assert.match(problem, /git switch --detach neon--v1\.2\.3/);
 });
 
+test('a release is published only with the files its tag holds', async () => {
+  const { root, git } = await checkout();
+  git('tag', 'neon--v1.2.3');
+  git('push', '-q', 'origin', 'refs/tags/neon--v1.2.3');
+  assert.deepEqual(await publishProblems({ root }), [], 'a clean checkout of the tag');
+
+  // A file left in the checkout that no commit holds would ship under the release's name.
+  await mkdir(join(root, 'theme'), { recursive: true });
+  await writeFile(join(root, 'theme/tokens.resolved.json'), '{}\n');
+  const [untracked, ...rest] = await publishProblems({ root });
+  assert.equal(rest.length, 0);
+  assert.match(untracked, /would hold 1 file that neon--v1\.2\.3 does not: theme\/tokens\.resolved\.json/);
+
+  // A file git ignores is left out of the package too, so it is no problem.
+  await writeFile(join(root, '.gitignore'), 'theme/\n');
+  git('add', '.gitignore');
+  git('commit', '-q', '-m', 'ignore theme');
+  git('tag', '-f', 'neon--v1.2.3');
+  git('push', '-q', '-f', 'origin', 'refs/tags/neon--v1.2.3');
+  assert.deepEqual(await publishProblems({ root }), []);
+
+  // A tracked file changed since the tag.
+  await writeFile(join(root, 'package.json'), '{\n  "name": "finnomena",\n  "version": "1.2.3",\n  "private": false\n}\n');
+  const [modified] = await publishProblems({ root });
+  assert.match(modified, /would hold 1 file changed since neon--v1\.2\.3: package\.json/);
+});
+
 test('npm publish runs the check, and the script exits 1 on a problem', async () => {
   const { scripts } = JSON.parse(await readFile(join(repoRoot, 'package.json'), 'utf8'));
   assert.equal(scripts.prepublishOnly, 'node scripts/release.mjs --check-publish');
