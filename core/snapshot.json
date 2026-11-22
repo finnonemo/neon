@@ -1,7 +1,7 @@
 {
   "core": {
     "repository": "pawisssh/design-system",
-    "commit": "3c46c6e04719f0ded3bbec1b3c9a1c9a2a085464"
+    "commit": "2b368c115a282a4fe0b0a3bde2283c184c96c205"
   },
   "look": {
     "iOS": false,
@@ -128,5 +128,5 @@
     "theme.json": "694edcb7a9cd98d9b466a49fbb5bae37676d28081c433880dfc3cc5a71609a65"
   },
   "palette": "6450fd8e24da15c4c10ee29ea14d2cd9ce1422a67c256bb9ec75e7e428e2437f",
-  "seal": "564777cb97992d1806abc17796ba0ceee43462e1db2f2d907c97859f476496cf"
+  "seal": "703acd291a6255a71577d1df5051b3e402b4b443aafb5d81a4d507b63e6e6a57"
 }
