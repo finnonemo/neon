@@ -4,7 +4,7 @@
 
 Describe the employee request that fails today and the expected behavior. Reproduce it before changing guidance. For skills, test retrieval and decisions with realistic prompts; for installer/packager code, use executable regression tests. Keep the same prompt and evidence for the before/after comparison.
 
-Edit the owning source: visual decisions in `skills/INSTRUCTION.md`, mechanics in skill references, token data in `theme/tokens/`, and the Neon base's components, layouts and slot mapping in `registry/`. CDS is frozen: `theme/cds/` and `templates/vitejs-cds/` take bug fixes only, for apps already on CDS. Reference-design and Brand Intensity rules apply to campaign and landing pages only and must not override functional product guidance. Use the terms in [GLOSSARY.md](GLOSSARY.md) and record hard-to-reverse decisions as ADRs in [docs/adr](docs/adr/).
+Edit the owning source: visual decisions in `skills/INSTRUCTION.md`, mechanics in skill references, token data in `theme/tokens/`, and the Neon base's components, layouts and slot mapping in `registry/`. Reference-design and Brand Intensity rules apply to campaign and landing pages only and must not override functional product guidance. Use the terms in [GLOSSARY.md](GLOSSARY.md) and record hard-to-reverse decisions as ADRs in [docs/adr](docs/adr/).
 
 Use a branch such as `codex/describe-the-change` and a focused pull request. Do not change release versions or publish as a side effect of a documentation refactor.
 
@@ -21,15 +21,7 @@ git diff --check
 
 The resource check follows local Markdown links and plugin-root paths in distributed skills and reviewed examples (`examples/`), parses skill frontmatter strictly (an unquoted `: ` or ` #` in a plain `description` is rejected, and descriptions are limited to 1024 characters), rejects shipped Markdown that is not UTF-8 or contains double-encoded (mojibake) text, and repeats against a newly packaged artifact. It also checks plain-text file references (bare Markdown filenames, backticked top-level directories, `../` paths and repository paths with an extension) in all Markdown and in code comments under `theme/` and `scripts/`, excluding `templates/`, `theme/examples/`, the Core snapshot in `core/` (its docs name Core's paths, not this repository's) and ignored paths. The packager rejects missing required top-level payloads. These checks do not validate every CDS API example or enforce design taste.
 
-When raw tokens change, inspect generator headers and run in order:
-
-```sh
-node theme/scripts/sync-tokens.mjs
-node theme/scripts/generate-theme-config.mjs
-node theme/scripts/generate-breakpoints-config.mjs
-```
-
-Review the resulting diff and unresolved-token report. `theme/tokens/theme.json` is not a raw export: the Core sync writes it, so these generators only read it. `generate-theme-config.mjs` also rewrites `theme/cds/color-mapping.todo.md` from it; CDS is frozen, so leave that file's change out. The CDS color mapping is hand-maintained and frozen; the CSS adapter's font family, weight, space and radius values are updated separately using the method in its header. Do not automatically replace missing mappings with guesses. Before naming the Neon registry items a token change affects, list them with `node scripts/registry-consumers.mjs <token>`.
+`theme/tokens/colors.json` and `theme/tokens/theme.json` are not raw exports: the Core sync writes them. `theme/tokens/breakpoint.json` is the raw breakpoint export; `registry/theme/breakpoints.config.ts` is maintained by hand beside it. The CSS adapter's font family, weight, space and radius values are updated by hand using the method in its header. Do not automatically replace missing mappings with guesses. Before naming the Neon registry items a token change affects, list them with `node scripts/registry-consumers.mjs <token>`.
 
 ### Sync the Core snapshot
 

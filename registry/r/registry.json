@@ -59,7 +59,7 @@
           "target": "src/app/colorScheme.ts"
         },
         {
-          "path": "../templates/vitejs-cds/index.html",
+          "path": "base/index.html",
           "type": "registry:file",
           "target": "~/index.html"
         }
@@ -904,7 +904,7 @@
           "target": "src/layout/useBreakpointTier.ts"
         },
         {
-          "path": "../theme/cds/breakpoints.config.ts",
+          "path": "theme/breakpoints.config.ts",
           "type": "registry:file",
           "target": "src/theme/breakpoints.config.ts"
         }

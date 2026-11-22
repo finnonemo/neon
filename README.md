@@ -4,7 +4,7 @@
 
 Neon is a set of six AI skills, Finnomena theme assets, and the Neon registry of React components. The main journeys are create, redesign and review. Audit is an optional assessment when the target or integration approach is unclear. The fifth skill, `neon-block`, draws Brand Artwork such as an ad, a post or a cover with the engine of Block, Finnomena's Pattern builder. The sixth, `neon-deck`, builds a deck of slides as one HTML file whose cover, closing and Patterns come from the same engine.
 
-A new React app is built on the Neon base: [shadcn/ui](https://ui.shadcn.com) on Tailwind with Radix primitives, using Neon's components from the Neon registry. Each component is tuned to match its counterpart in Core, Finnomena's design system, and colors and type sizes come from Core's Theme. An app already on [Coinbase Design System](https://github.com/coinbase/cds) (CDS, `@coinbase/cds-web`) keeps its CDS components: CDS is frozen for those apps, which get bug fixes only. The CDS Install mode is deprecated: Neon 2.0.0 removes it, and an app on CDS moves off it by a Rebuild on the Neon base.
+A new React app is built on the Neon base: [shadcn/ui](https://ui.shadcn.com) on Tailwind with Radix primitives, using Neon's components from the Neon registry. Each component is tuned to match its counterpart in Core, Finnomena's design system, and colors and type sizes come from Core's Theme. Neon no longer themes [Coinbase Design System](https://github.com/coinbase/cds) (CDS, `@coinbase/cds-web`): Neon 2.0.0 removed the CDS Install mode, theme and starter, and an app on CDS moves off it by a Rebuild on the Neon base.
 
 You can write your requests in Thai or English. You do not need to know component names or design token values to get started.
 
@@ -179,9 +179,10 @@ Start with the task: create a feature, redesign existing UI, or review the resul
 **Typical paths**
 
 - New React app → `neon-create`.
-- New feature in an app on the Neon base, or already on CDS (frozen) → `neon-create`, reusing the current setup.
+- New feature in an app on the Neon base → `neon-create`, reusing the current setup.
+- App on CDS → `neon-create` offers a Rebuild on the Neon base, since Neon no longer themes CDS.
 - Existing app with unclear theming needs → `neon-audit` → `neon-create` or `neon-redesign`.
-- Colors-only change → `neon-redesign`; on CDS components in an app already on CDS (frozen) → `neon-create`, still colors only.
+- Colors-only change → `neon-redesign`.
 - Landing page from a reference design → `neon-create` for a new page, `neon-redesign` for an existing one.
 - UI quality check → `neon-review`.
 - An ad, post, cover or Pattern background as an image → `neon-block`.
@@ -195,7 +196,7 @@ When an existing app needs theming, Neon supports three levels:
 | --- | --- | --- |
 | Colors only | Semantic color variables | No |
 | Visual system | Colors, typography, spacing and radius within the agreed scope | No |
-| Components | Finnomena theme plus the real components of the app's base: Neon items, or CDS in an app already on it | Yes |
+| Components | Finnomena theme plus Neon's components on the Neon base | Yes |
 
 Layout is a separate choice from these tiers. Existing composition is preserved by default. Ask explicitly to reorganize layout or hierarchy when you want that changed; an ambiguous “make it Finnomena” request changes styling. Even a composition redesign preserves framework, routes, handlers, services and data meaning.
 
@@ -205,7 +206,7 @@ stack the controls on mobile. Keep the current theme, routes, filter handlers
 and service contracts. Do not add components or new product behavior.
 ```
 
-Your explicit request takes priority. “Change only the colors” stays colors-only even if the app already has Neon or CDS components. Vue, Svelte and other non-React apps use the CSS path; Neon does not silently convert them to React.
+Your explicit request takes priority. “Change only the colors” stays colors-only even if the app already has Neon components. Vue, Svelte and other non-React apps use the CSS path; Neon does not silently convert them to React.
 
 New apps start on the Neon base (Vite, React 19, TypeScript and Tailwind, from the Neon registry) unless you explicitly request another framework. Neon does not scaffold other frameworks.
 
@@ -236,7 +237,7 @@ Neon guides the assistant to:
 - Explain mock behavior, incomplete integrations and checks that could not be performed.
 - Say whether the result is **Ship-ready** or **Brand-ready**. Only a campaign or landing page with no investment content, and no personal-data form outside an approved company form service, can be Ship-ready; you get a static build and a pre-launch checklist, and any item Neon could not pass or verify becomes a to-do you finish before publishing. Back office screens, product features and pages that mention investment products or returns are Brand-ready: they match the brand and come with a handoff file (`./NEON-HANDOFF.md`) for engineering and compliance review.
 
-Skills guide an AI assistant; they are not a runtime enforcement layer. Review the resulting app before relying on it. Colors that trace to a Core Theme token are Core's; the Immersive Themes, the gradient recipes, the few color roles with no Core token and the frozen CDS theme's color mapping are provisional and still need design review. See the [design contract](skills/INSTRUCTION.md) for visual policy and mapping boundaries.
+Skills guide an AI assistant; they are not a runtime enforcement layer. Review the resulting app before relying on it. Colors that trace to a Core Theme token are Core's; the Immersive Themes, the gradient recipes and the few color roles with no Core token are provisional and still need design review. See the [design contract](skills/INSTRUCTION.md) for visual policy and mapping boundaries.
 
 ## Troubleshooting
 
@@ -244,7 +245,6 @@ Skills guide an AI assistant; they are not a runtime enforcement layer. Review t
 | --- | --- |
 | Neon does not activate | Confirm the plugin is enabled, mention Finnomena in the request, or explicitly invoke the matching skill. |
 | The assistant cannot find theme or design files | Keep the full repository/package together and provide its absolute location. Individual skill folders are not self-contained distributions. |
-| An app on CDS looks like default Coinbase styling | Ask the assistant to verify that `createNeonTheme()` is connected to the existing provider and the affected UI uses Finnomena tokens. |
 | A theme file conflict stops installation | Ask the assistant to compare and merge the customized theme. Do not delete it merely to make installation proceed. |
 | The UI is styled but actions are placeholders | Specify the expected action and service. Ask for real interaction handling or clearly labeled demo behavior. |
 | The assistant cannot inspect the preview | Ask for the checks it completed and the exact local preview steps. Treat browser-dependent checks as unverified. |
@@ -262,17 +262,13 @@ node scripts/validate.mjs
 
 The [CI workflow](.github/workflows/validate.yml) runs these checks on pull requests and pushes to `main`. They verify packaging behavior, skill metadata and resource links in source and a fresh bundle; they do not certify rendered UI quality.
 
-To preview the frozen CDS starter, run from the Neon repository root and use a fresh destination. A new app on the Neon base is created from the registry instead, with `node scripts/install.mjs <target-dir> --new`:
+To preview a new app on the Neon base, create one from the registry in a fresh destination:
 
 ```sh
-node scripts/assemble-starter.mjs /tmp/neon-preview
+node scripts/install.mjs /tmp/neon-preview --new
 cd /tmp/neon-preview
-npm install
-npm run build
 npm run dev
 ```
-
-Open the local URL printed by Vite. Assembly supplies the CDS theme; the tracked starter source is not a standalone runnable app until assembled.
 
 To package the distributable resources into an empty destination:
 
@@ -291,17 +287,16 @@ Packaging does not publish a release. Full contribution, token update and releas
 | [`skills/`](skills/) | Six skill entrypoints and their supporting references |
 | [`skills/INSTRUCTION.md`](skills/INSTRUCTION.md) | Shared functional and immersive design direction |
 | [`registry/`](registry/) | The Neon registry: the Neon base's components, layouts and theme as shadcn items, built into `registry/r/` and pinned to each release |
-| [`theme/`](theme/) | Exported tokens, the CSS theme, the frozen CDS theme and the Finnomena logo SVGs |
+| [`theme/`](theme/) | Exported tokens, the CSS theme and the Finnomena logo SVGs |
 | [`core/`](core/) | The Core snapshot: Core's component rules, specs and Theme tokens compiled for the web, written by the [Core sync](CONTRIBUTING.md#sync-the-core-snapshot) |
 | [`block/`](block/) | The Block snapshot: Block's engine built into one file, with the open fonts it draws text in, generated by `scripts/sync-block.mjs` |
 | [`scripts/finno.mjs`](scripts/finno.mjs) | `finno`: the command, the local tool server and `finno setup`; published to npm as `finnomena` |
-| [`templates/vitejs-cds/`](templates/vitejs-cds/) | The frozen CDS starter source and layouts, for apps already on CDS |
-| [`scripts/`](scripts/) | The installer, `finno`, the Core and Block syncs, CDS starter assembly, the browser probe runner, packaging and resource checks |
+| [`scripts/`](scripts/) | The installer, `finno`, the Core and Block syncs, the browser probe runner, packaging and resource checks |
 | [`scripts/theme-briefs/`](scripts/theme-briefs/) | Maintainer-only Theme Brief tool and its checks, not packaged |
 | [`theme-briefs/`](theme-briefs/) | Maintainer-only Theme Brief presets, picks files, theme texts and authoring records, not packaged |
 | [`registry/theme-briefs/`](registry/theme-briefs/) | Published Theme Briefs, served as `theme-brief-<theme>-<slug>` registry items |
 | [`evals/skills/`](evals/skills/) | Skill scenarios and packaging regression checks |
-| [`evals/templates/`](evals/templates/) | Browser suite that builds a disposable app from the Neon registry (or the CDS starter) and runs layout and Core-match checks |
+| [`evals/templates/`](evals/templates/) | Browser suite that builds a disposable app from the Neon registry and runs layout and Core-match checks |
 | [`docs/`](docs/) | Maintainer documentation |
 
 
