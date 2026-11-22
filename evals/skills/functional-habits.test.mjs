@@ -57,9 +57,7 @@ test('responsive task access turns a narrow comparison table into two-line rows 
   // Without column headers each moved field needs its label; a row's description truncates unless told to wrap.
   assert.match(narrow, /label/);
   assert.match(narrow, /`whitespace-normal`/);
-  // The CDS name for the same rule is in the CDS reference (#220).
   assert.doesNotMatch(narrow, /ListCell|multiline/);
-  assert.match(await read('neon-create/references/cds-integration.md'), /cuts `description` to one line unless `multiline` is set/);
   assert.match(narrow, /[Ff]ilters fold into one control row or a sheet/);
   assert.match(narrow, /375px/);
 });

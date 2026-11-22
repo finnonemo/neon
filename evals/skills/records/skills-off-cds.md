@@ -8,7 +8,7 @@ scenarios:
 
 # Skills off CDS
 
-For finnonemo/neon#220: the skills default to the Neon base, and what they say about CDS components, setup and patterns sits in [CDS integration](../../../skills/neon-create/references/cds-integration.md), linked only behind "already on CDS". One request ran once on each base with `main` as baseline (`dc23278`) and with this change as revised (`9387b43`), November 2026, through `run-claude-case.mjs --model claude-opus-5-5 --serve-registry --cap 1800` on Claude Code 2.1.323, with the runner's allowlist, permission note and browser tool.
+For finnonemo/neon#220: the skills default to the Neon base, and what they say about CDS components, setup and patterns sits in [CDS integration](https://github.com/finnonemo/neon/blob/bf893a1/skills/neon-create/references/cds-integration.md) (removed in Neon 2.0.0), linked only behind "already on CDS". One request ran once on each base with `main` as baseline (`dc23278`) and with this change as revised (`9387b43`), November 2026, through `run-claude-case.mjs --model claude-opus-5-5 --serve-registry --cap 1800` on Claude Code 2.1.323, with the runner's allowlist, permission note and browser tool.
 
 Fixtures: the Neon-base app is `.local/evals-fixtures/219/plan-app`, the app of [Core component rules](core-component-rules.md). The app already on CDS is a copy of the frozen starter, `templates/vitejs-cds`, which depends on `@coinbase/cds-web` and carries no theme files of its own.
 

@@ -245,18 +245,16 @@ test('the logo item ships the canonical SVGs with the Logo the layouts use, and 
   for (const name of ['logo', 'layouts']) assert.ok(base.registryDependencies.includes(`{{registry}}/${name}.json`), `the base pulls in ${name}`);
 });
 
-// Framework-free layout geometry stays shared. Pane views render each base's
-// own borders and are checked by the browser geometry baseline.
-test('the layouts item shares framework-free starter geometry and includes every layout', () => {
+// The layouts item ships every file of registry/layout and the breakpoints it reads.
+test('the layouts item ships its framework-free geometry and every layout', () => {
   const layouts = registryItem('layouts');
   const unchanged = ['layout.css', 'layoutPanes.ts', 'useBreakpointTier.ts'];
   for (const name of unchanged) {
     assert.ok(layouts.files.some((file) => file.path === `layout/${name}` && file.target === `src/layout/${name}`), `layouts ships ${name}`);
-    assert.equal(read(`registry/layout/${name}`), read(`templates/vitejs-cds/src/layout/${name}`), `registry/layout/${name} differs from the starter's`);
   }
-  assert.ok(layouts.files.some((file) => file.path === '../theme/cds/breakpoints.config.ts' && file.target === 'src/theme/breakpoints.config.ts'));
-  const starterLayouts = readdirSync(join(root, 'templates/vitejs-cds/src/layout')).filter((name) => name !== 'Logo.tsx').sort();
-  assert.deepEqual(layouts.files.map((file) => file.path.replace(/^layout\//, '')).filter((name) => !name.includes('/')).sort(), starterLayouts, 'every starter layout file has a Neon counterpart');
+  assert.ok(layouts.files.some((file) => file.path === 'theme/breakpoints.config.ts' && file.target === 'src/theme/breakpoints.config.ts'));
+  const layoutFiles = readdirSync(join(root, 'registry/layout')).filter((name) => name !== 'Logo.tsx').sort(); // Logo.tsx is the logo item's
+  assert.deepEqual(layouts.files.map((file) => file.path.replace(/^layout\//, '')).filter((name) => !name.includes('/')).sort(), layoutFiles, 'the item ships every other file of registry/layout');
   assert.ok(layouts.registryDependencies.includes('@neon/logo'));
 });
 

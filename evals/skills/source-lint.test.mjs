@@ -189,15 +189,6 @@ test('flags selectors reaching into CDS only in CDS apps, including classes on C
   ]);
 });
 
-test('every file of the assembled CDS starter lints clean, so a new app warns only on what the agent wrote', () => {
-  const starter = join(mkdtempSync(join(tmpdir(), 'neon-lint-starter-')), 'app');
-  const assembled = spawnSync(process.execPath, [join(repo, 'scripts/assemble-starter.mjs'), starter], { encoding: 'utf8' });
-  assert.equal(assembled.status, 0, assembled.stderr);
-  const files = readdirSync(starter, { recursive: true }).filter(path => statSync(join(starter, path)).isFile());
-  const { lines } = lint(starter, ...files);
-  assert.match(lines.at(-1), /^Source lint: clean \(\d+ changed files checked\)$/, lines.join('\n'));
-});
-
 test('--json reports counts by rule and each warning with its name and fix', t => {
   const root = repository(t, { 'package.json': '{}', 'src/App.jsx': 'export const App = () => null;\n' });
   write(root, { 'src/App.jsx': '<p className="text-(--color-fg) text-slate-300">Lorem ipsum</p>\n<i className="transition-all" />\n' });

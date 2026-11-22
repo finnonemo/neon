@@ -17,7 +17,7 @@ test('project inspection tells the three bases apart as neon-create does', async
   assert.match(base, /\*\*CDS:\*\* `package\.json` depends on `@coinbase\/cds-web`/);
   assert.match(base, /\*\*Neither:\*\* no `@neon` entry and no CDS/);
   const create = await read('neon-create/SKILL.md');
-  assert.match(create, /`@coinbase\/cds-web` is CDS/);
+  assert.match(create, /`@coinbase\/cds-web` is CDS, which Neon no longer themes/);
   assert.match(create, /`@neon` registry entry marks the Neon base/);
   // A v0 or Lovable app has components.json without @neon: plain shadcn, so neither.
   assert.match(base, /`components\.json` without `@neon` is plain shadcn/);
@@ -29,11 +29,11 @@ test('project inspection tells the three bases apart as neon-create does', async
 test('neon-audit recommends a path from the base', async () => {
   const skill = await read('neon-audit/SKILL.md');
   assert.match(skill, /\[base\]\(references\/project-inspection\.md#base\)/);
-  // New React work starts on the Neon base; CDS is never offered to an app not already on it.
+  // New React work starts on the Neon base; Neon no longer themes CDS (ADR 0016), so an app on it gets a Rebuild.
   assert.match(skill, /new React app starts on the Neon base/);
-  assert.match(skill, /an app already on CDS stays on CDS/);
+  assert.match(skill, /an app on CDS, which Neon no longer themes, gets a Rebuild on the Neon base as the recommendation/);
   assert.match(skill, /plain shadcn takes `@neon\/` items only for requested components/);
-  assert.match(skill, /or CDS to an app not already on it/);
+  assert.match(skill, /or CDS to any app/);
   assert.doesNotMatch(skill, /Full CDS/);
   assert.match(markdownSection(skill, 'Done'), /the app's base/);
   assert.doesNotMatch(inspection, /CDS is the React implementation path/);
@@ -47,8 +47,8 @@ test('neon-redesign keeps the app on its base and styles it by that base', async
   // Neon base: role utilities and item props, installed theme untouched.
   assert.match(refs, /Neon base: .*\(\.\.\/neon-create\/references\/neon-base\.md\)/);
   assert.match(refs, /`index\.css`, `src\/theme\/` and Neon item files stay as installed/);
-  // Already on CDS: the app's own CSS here, the colors of its CDS components in neon-create.
-  assert.match(refs, /App already on CDS: .*the colors of its CDS components go to \[neon-create\]/);
+  // On CDS: the app's own CSS here; its CDS components get a Rebuild, since Neon no longer themes CDS.
+  assert.match(refs, /App on CDS: restyle its own CSS-styled UI through CSS tokens here\. Neon no longer themes CDS .*\[Rebuild\]/);
   // Neither, plain shadcn included: the CSS path, no Neon items.
   assert.match(refs, /Neither: .*no Neon items/);
   assert.doesNotMatch(skill.match(/^description: .*$/m)[0], /CDS adoption/);
@@ -69,15 +69,14 @@ test('neon-review applies the checks of the app\'s base and stays read-only', as
   assert.match(checks, /Select closes on a pick/);
   assert.match(checks, /announced politely/);
   assert.match(checks, /`aria-hidden` instead of setting `aria-modal`/);
-  assert.match(checks, /\*\*Already on CDS \(frozen\):\*\*.*never a Neon item/);
+  assert.match(checks, /\*\*On CDS:\*\* Neon no longer themes CDS.*\[Rebuild\]/);
   assert.match(checks, /\*\*Neither:\*\*.*not a finding/);
   assert.match(checks, /no installer and no `shadcn add`/);
 });
 
-test('review habits name Neon items, and the CDS names sit in the CDS reference', async () => {
+test('review habits name Neon items and no CDS names', async () => {
   const habits = markdownSection(await read('neon-review/references/review-checks.md'), 'Functional screen habits');
   for (const item of ['tag', 'list-row', 'table', 'segmented-control']) assert.match(habits, new RegExp(`\`${item}\``), item);
   assert.doesNotMatch(habits, /emphasis=|justifyContent|tabularNumbers|9\.26\.1/);
-  const cds = markdownSection(await read('neon-create/references/cds-integration.md'), 'Functional screen habits');
-  for (const name of ['emphasis="low"', 'tabularNumbers', 'TableHeader']) assert.ok(cds.includes(name), name);
+  assert.doesNotMatch(habits, /CDS|cds-integration/);
 });

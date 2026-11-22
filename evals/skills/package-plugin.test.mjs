@@ -7,13 +7,13 @@ import { dirname, join, resolve } from 'node:path';
 import { packagePlugin } from '../../scripts/package-plugin.mjs';
 import { checkCoreSnapshot, SNAPSHOT_DIR } from '../../scripts/lib/core-snapshot.mjs';
 
-test('distribution contains the shared design contract and conditional CDS guide', async () => {
+test('distribution contains the shared design contract and no CDS starter or guide', async () => {
   const destination = await mkdtemp(join(tmpdir(), 'neon-package-test-'));
   await packagePlugin({ destination });
   await access(join(destination, 'skills/INSTRUCTION.md'));
-  await access(join(destination, 'templates/vitejs-cds/src/layout/ResponsivePanes.tsx'));
-  await access(join(destination, 'templates/vitejs-cds/src/layout/layout.css'));
-  await access(join(destination, 'skills/neon-create/references/cds-integration.md'));
+  await assert.rejects(access(join(destination, 'templates')));
+  await assert.rejects(access(join(destination, 'theme/cds')));
+  await assert.rejects(access(join(destination, 'skills/neon-create/references/cds-integration.md')));
   await assert.rejects(access(join(destination, 'evals')));
 });
 

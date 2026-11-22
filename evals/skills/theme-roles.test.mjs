@@ -1,7 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { onColorLabel } from '../../theme/cds/color-overrides.ts';
 import { contrast } from '../../scripts/lib/colors.mjs';
 
 // theme/css/theme.css declares light colors in :root and dark colors twice:
@@ -26,11 +25,13 @@ const over = (value, under) => {
 const surfaceOf = (colors, role) => over(colors[role], over(colors.bg, [255, 255, 255]));
 const textOn = (colors, text, surface) => contrast(over(colors[text], surfaceOf(colors, surface)), surfaceOf(colors, surface));
 
-// Pairs CDS draws in @coinbase/cds-web@9.26.1 (node scripts/cds-consumers.mjs):
+// Pairs CDS drew in @coinbase/cds-web@9.26.1, kept as the theme's text pairs:
 // status and helper text (CellDetail, InputIcon, SelectStack) in every text
 // role on the page, card and popover; Cell and SegmentedControl on bgAlternate;
 // Chip on bgSecondary; UpsellCard and the checked SegmentedControl label on
 // bgPrimaryWash. Button fills carry the onColorLabel role in each mode.
+// The label text role on those fills in each mode, as the removed CDS theme set it.
+const onColorLabel = { light: 'fgInverse', dark: 'fg' };
 const textPairs = [
   ...['fg', 'fgMuted', 'fgPrimary', 'fgNegative', 'fgPositive', 'fgWarning']
     .flatMap(text => ['bg', 'bgElevation1', 'bgElevation2', 'bgAlternate'].map(surface => [text, surface])),
