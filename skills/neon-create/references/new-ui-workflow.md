@@ -1,12 +1,12 @@
 # Feature implementation
 
-Read for complex feature states, mock figures or comparison tables on functional screens, or integration into an existing app. New-project mechanics live in [scaffold](scaffold.md); components and styling live in [Neon base](neon-base.md), or in [CDS integration](cds-integration.md) for an app already on CDS.
+Read for complex feature states, mock figures or comparison tables on functional screens, or integration into an existing app. New-project mechanics live in [scaffold](scaffold.md); components and styling live in [Neon base](neon-base.md).
 
 ## Existing app integration
 
 Find the relevant screen/component, service contract and route. Reuse existing shell, providers, state and authentication. Inspect only missing evidence. A new-screen request does not authorize scaffolding over the app or replacing its layout system. Follow explicit composition scope for existing UI.
 
-Use the app's base: Neon items on the Neon base, CDS components in an app already on CDS, never both. Inspect installed exports/types rather than guessing component names or props. Choose [task-based composition](../../INSTRUCTION.md#task-based-choices). Existing wrapper components can preserve local conventions and behavior.
+Use Neon items on the Neon base. Neon no longer themes CDS (Neon 2.0.0 removed it): an app on CDS gets the offer of a [Rebuild](rebuild.md) instead. Inspect installed exports/types rather than guessing component names or props. Choose [task-based composition](../../INSTRUCTION.md#task-based-choices). Existing wrapper components can preserve local conventions and behavior.
 
 ## States and services
 

@@ -1,6 +1,6 @@
 # Rebuild an existing React app on the Neon base
 
-Read only when the employee explicitly asks to rebuild or move a whole existing React app onto Neon, the Neon base, the Finnomena starter or CDS ("rebuild this with Neon", "ย้ายทั้งแอปไป CDS"). A rebuild always targets the Neon base, since CDS is frozen for apps already on it; a request that names CDS gets the Neon base and one line saying why. Feature, colors-only and "make it Finnomena" requests keep the existing stack; non-React apps use the CSS path. The existing app is the spec; the result is a new app created from the Neon base.
+Read only when the employee explicitly asks to rebuild or move a whole existing React app onto Neon, the Neon base, the Finnomena starter or CDS ("rebuild this with Neon", "ย้ายทั้งแอปไป CDS"). It is also what an app on CDS is offered, since neon no longer themes CDS (Neon 2.0.0 removed it). A rebuild always targets the Neon base; a request that names CDS gets the Neon base and one line saying why. Feature, colors-only and "make it Finnomena" requests keep the existing stack; non-React apps use the CSS path. The existing app is the spec; the result is a new app created from the Neon base.
 
 ## Prepare
 

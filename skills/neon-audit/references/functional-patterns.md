@@ -2,7 +2,7 @@
 
 Read when building a functional screen (Back Office or Product Feature) with lists, overlays, mobile actions or empty states, or when `composition: 'adapt'` reorganizes one. These rules shape new UI and adapted composition only. Under `composition: 'preserve'` or colors-only scope, report a miss as an observation; it does not license restructuring. Campaign Pages keep their own composition and motion.
 
-The rules hold in any framework and name no component library. Where Core holds a component's rule, they name the Core doc instead of restating it. Read [Core rules](core-rules.md) before opening one: it says which part of a doc holds the rule, and to open only the doc of a component the task uses. Build them from the app's own components. They do not authorize adopting a component library in a CSS-only restyle. An app already on CDS finds the same patterns in CDS names in [CDS integration](../../neon-create/references/cds-integration.md#functional-patterns).
+The rules hold in any framework and name no component library. Where Core holds a component's rule, they name the Core doc instead of restating it. Read [Core rules](core-rules.md) before opening one: it says which part of a doc holds the rule, and to open only the doc of a component the task uses. Build them from the app's own components. They do not authorize adopting a component library in a CSS-only restyle.
 
 ## Actions
 

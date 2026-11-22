@@ -1,6 +1,6 @@
 # Neon base
 
-Read when building, styling or adding components in a new app, one already on the Neon base (its `components.json` names an `@neon` registry) or a shadcn app taking Neon items. An app already on CDS follows [CDS integration](cds-integration.md) instead. One app never mixes Neon items and CDS components.
+Read when building, styling or adding components in a new app, one already on the Neon base (its `components.json` names an `@neon` registry) or a shadcn app taking Neon items. Neon no longer themes CDS (Neon 2.0.0 removed it): in an app on CDS, add no Neon item and offer a [Rebuild](rebuild.md) on the Neon base.
 
 ## Add Neon items
 

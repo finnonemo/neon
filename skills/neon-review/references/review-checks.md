@@ -19,7 +19,7 @@ Apply the checks of the app's [base](../../neon-audit/references/project-inspect
 
 - **Neon base:** every file in `src/components/ui/` is a Neon item, not a stock shadcn one, and no source imports CDS. Text uses Neon type roles (`text-body`, `text-label1`), with no stock size such as `text-sm` and no weight utility beside a role. Colors use Neon role utilities, with no `dark:` class or stock palette utility. `cn` comes from `@/lib/utils`, not the bare `cn` package. Suggest fixes with Neon items and their props, per [Neon base](../../neon-create/references/neon-base.md). ADR 0006 keeps three Radix behaviors, and none is a finding: Select closes on a pick, the toast is announced politely, and an open Dialog hides its siblings with `aria-hidden` instead of setting `aria-modal`. Focus still returns to the trigger when an overlay closes.
   A finding about how a Neon item is used (which one, its hierarchy, a state) names the Core rule it breaks, read per [Core rules](../../neon-audit/references/core-rules.md#cite-a-rule) for that item only; a colors-only review reads no component doc.
-- **Already on CDS (frozen):** check against [CDS integration](../../neon-create/references/cds-integration.md) and suggest CDS components, props or configuration, never a Neon item.
+- **On CDS:** Neon no longer themes CDS (Neon 2.0.0 removed it). Review the app's own CSS-styled UI by the Neither checks, suggest no CDS component, prop or Neon item for its CDS components, and note that a [Rebuild](../../neon-create/references/rebuild.md) on the Neon base is the way off CDS.
 - **Neither:** check brand roles through the app's CSS variables and the design contract, and suggest CSS fixes. Being off the Neon base is not a finding.
 
 ## Brand consistency
@@ -34,7 +34,7 @@ For color mapping disagreements, identify the documented rule and actual mapping
 
 ## Functional screen habits
 
-Generated Back Office and Product Feature screens repeat a few habits. On such a screen, name the habit in the finding, cite the visible evidence and give its Neon alternative as the fix. Names are Neon items: `tag`, `list-row` for list rows, `table`, `card`, `separator`, `pagination` and `segmented-control` for a filter; read the installed file for their props. An app already on CDS takes the same fixes in CDS names from [CDS integration](../../neon-create/references/cds-integration.md#functional-screen-habits).
+Generated Back Office and Product Feature screens repeat a few habits. On such a screen, name the habit in the finding, cite the visible evidence and give its Neon alternative as the fix. Names are Neon items: `tag`, `list-row` for list rows, `table`, `card`, `separator`, `pagination` and `segmented-control` for a filter; read the installed file for their props.
 
 | Habit | Neon alternative |
 | --- | --- |
