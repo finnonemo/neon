@@ -24,13 +24,10 @@
     "skills",
     "theme",
     "registry",
-    "templates",
     "core",
     "block",
     "scripts",
     "!block/fonts/FinnomenaTrek-*",
-    "!**/tokens.report.json",
-    "!**/tokens.resolved.json",
     "!**/dist",
     "!**/.DS_Store"
   ]

@@ -1,14 +1,7 @@
 /**
  * Framework-agnostic breakpoint hook, keyed off ../theme/breakpoints.config.ts
- * (copied in from neon-create at scaffold time).
- *
- * Confirmed (against the real @coinbase/cds-web@9.26.1 types) that
- * MediaQueryProvider does NOT accept a custom-breakpoints prop — its only
- * props are `children` and `defaultValues` (a one-time initial snapshot,
- * not a breakpoint config, per dts/system/MediaQueryProvider.d.ts). This
- * plain matchMedia-based hook is the correct approach here, not a
- * placeholder pending verification — see neon-create/SKILL.md's known
- * limitations for the citation.
+ * (the layouts item installs it): a resize listener
+ * that names the tier the window's width falls in.
  */
 import { useEffect, useState } from "react";
 import { breakpoints, type BreakpointName } from "../theme/breakpoints.config";

@@ -1,6 +1,6 @@
 /**
- * install.mjs — the installer: puts canonical theme assets into a target
- * project and, unless told to skip, installs the dependencies they need.
+ * install.mjs — the installer: starts an app from the Neon base, adds Neon
+ * registry items to an app, or copies the CSS adapter into a project.
  * scripts/install.mjs is its CLI; skills invoke that, tests call install().
  *
  * Interface: one call, `install({ mode, target, ...options })`, where mode
@@ -10,22 +10,16 @@
  *   "add"      — run the pinned shadcn add for `items` in an app with a
  *                components.json, keeping Neon files the app has in its own
  *                form (reported as `keptFiles`)
- *   "cds"      — frozen for apps already on CDS: copy the 4 canonical CDS
- *                files into <target>/src/theme (or themeDir) and add
- *                @coinbase/cds-web at the starter's declared version if the
- *                project lacks it
  *   "css-only" — copy theme/css/theme.css into <target>/src/theme (or
  *                themeDir); never installs anything
  * It resolves to a result describing what happened, or rejects with an
  * InstallError carrying the exit code the CLI should use. It never prints
  * (other than through the injected `log`) and never exits the process.
  *
- * Preflight: every check — mode/option compatibility, the package-manager
- * override, package-manager evidence, the theme destination, the starter's
- * manifest and CDS version, customized destination files — runs before the
- * first write. A refused install leaves the target untouched, even in modes
- * or option combinations that would never actually run a package manager.
- * Only an unexpected I/O failure mid-copy can leave partial writes.
+ * Preflight: every check — mode/option compatibility, the theme destination,
+ * customized destination files — runs before the first write. A refused
+ * install leaves the target untouched. Only an unexpected I/O failure
+ * mid-copy can leave partial writes.
  *
  * New and Add read their items from the Neon registry pinned to this
  * package's release (`registry` overrides it, as the smoke build does with a
@@ -33,8 +27,7 @@
  * sets so the agent under test runs the plain command), and check after
  * shadcn that every item file landed.
  *
- * Seams: `runCommand(command, args, cwd)` runs the package-manager or shadcn
- * command (default: createCommandRunner(), the real spawnSync adapter; tests
+ * Seams: `runCommand(command, args, cwd)` runs the shadcn command (default: createCommandRunner(), the real spawnSync adapter; tests
  * pass a recording fake). `fetchJson(url)` reads one registry item (default:
  * fetch). `sourceRoot` points at a Neon root other than this one.
  */
@@ -42,23 +35,15 @@ import { constants, copyFileSync, existsSync, mkdirSync, readFileSync, readdirSy
 import { basename, dirname, isAbsolute, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
-import { CDS_FILES, CSS_FILE } from "./assets.mjs";
-import { assertSupportedOverride, choosePackageManager, dependencyCommand } from "./package-manager.mjs";
 import { SHADCN, fetchRegistryJson, neonRegistryUrl, resolveItemFiles } from "./registry.mjs";
 
 const DEFAULT_SOURCE_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const DEFAULT_THEME_DIR = "src/theme";
-const CDS_PACKAGE = "@coinbase/cds-web";
+const CSS_FILE = "theme/css/theme.css";
 
-/**
- * The one line the CLI prints when it runs the CDS install mode, which is deprecated: the major
- * that removes it is the one after plugin.json's version, the only manifest the package carries.
- */
-export function cdsDeprecationNotice(sourceRoot = DEFAULT_SOURCE_ROOT) {
-  const { version } = JSON.parse(readFileSync(join(sourceRoot, ".claude-plugin/plugin.json"), "utf8"));
-  const removedIn = `${Number(version.split(".")[0]) + 1}.0.0`;
-  return `Deprecation notice: the CDS Install mode is deprecated and Neon ${removedIn} removes it. To move an app off CDS, ask neon-create for a Rebuild on the Neon base.`;
-}
+/** What the installer says to a request for the CDS Install mode, which Neon 2.0.0 removed. */
+export const CDS_RETIRED =
+  "Neon no longer themes the Coinbase Design System (CDS): Neon 2.0.0 removed the CDS Install mode. To move an app off CDS, ask neon-create for a Rebuild on the Neon base. Install with --new, --add or --css-only.";
 
 /** An installer refusal or failure; `exitCode` is what the CLI should exit with. */
 export class InstallError extends Error {
@@ -95,8 +80,6 @@ export async function install({
   target,
   items = [],
   themeDir,
-  packageManager,
-  skipInstall = false,
   sourceRoot = DEFAULT_SOURCE_ROOT,
   runCommand = createCommandRunner(),
   registry,
@@ -105,27 +88,23 @@ export async function install({
   log = () => {},
 }) {
   try {
-    const neon = { sourceRoot, starterDir: join(sourceRoot, "templates", "vitejs-cds") };
-    const options = { target: resolve(target), themeDir, packageManager, skipInstall, runCommand, registry, fetchJson, log };
+    const neon = { sourceRoot };
+    const options = { target: resolve(target), themeDir, runCommand, registry, fetchJson, log };
     const neonRegistry = { ...options, env };
     if (mode === "new") return await installNew(neon, neonRegistry);
     if (mode === "add") return await installAdd(neon, { ...neonRegistry, items });
-    // Shape-check an explicit override before any mode-specific work, so it
-    // is rejected even where no package manager would ever run.
-    assertSupportedOverride(packageManager);
     if (registry !== undefined) throw new Error("--registry applies only to --new and --add, which install from the Neon registry.");
-    if (mode === "cds") return await installCds(neon, options);
     if (mode === "css-only") return installCssOnly(neon, options);
-    throw new Error(`Unknown install mode "${mode}". Expected new, add, cds or css-only.`);
+    if (mode === "cds") throw new Error(CDS_RETIRED);
+    throw new Error(`Unknown install mode "${mode}". Expected new, add or css-only.`);
   } catch (err) {
     throw err instanceof InstallError ? err : new InstallError(err.message, { cause: err });
   }
 }
 
-async function installNew(neon, { target, themeDir, packageManager, skipInstall, runCommand, registry, env, fetchJson }) {
-  // shadcn init installs as it creates, with the manager it detects, and the
-  // base imports its theme from src/theme, so these would be silently ignored.
-  refuseShadcnOptions("--new: shadcn init creates the Neon base app as it ships", { themeDir, packageManager, skipInstall });
+async function installNew(neon, { target, themeDir, runCommand, registry, env, fetchJson }) {
+  // The base imports its theme from src/theme, so this would be silently ignored.
+  refuseThemeDir("--new: shadcn init creates the Neon base app as it ships", themeDir);
   if (existsSync(target) && readdirSync(target).length > 0) throw new Error(`New: destination is not empty: ${target}`);
   const url = await neonRegistryUrl({ registry, env, root: neon.sourceRoot });
   const files = await resolveItemFiles({ url, names: ["neon-base"], fetchJson });
@@ -148,10 +127,9 @@ async function installNew(neon, { target, themeDir, packageManager, skipInstall,
   return result({ mode: "new", destination: target, dependenciesInstalled: true });
 }
 
-async function installAdd(neon, { target, items, themeDir, packageManager, skipInstall, runCommand, registry, env, fetchJson, log }) {
-  // shadcn add installs as it adds, with the manager the app's lockfile names,
-  // and writes each item where the item targets it.
-  refuseShadcnOptions("--add: shadcn add installs each item as the registry has it", { themeDir, packageManager, skipInstall });
+async function installAdd(neon, { target, items, themeDir, runCommand, registry, env, fetchJson, log }) {
+  // shadcn add writes each item where the item targets it.
+  refuseThemeDir("--add: shadcn add installs each item as the registry has it", themeDir);
   if (items.length === 0) throw new Error("Name at least one Neon item to add, e.g. --add dialog.");
   const configPath = join(target, "components.json");
   if (!existsSync(configPath)) {
@@ -193,35 +171,6 @@ async function installAdd(neon, { target, items, themeDir, packageManager, skipI
   return result({ mode: "add", destination: target, keptFiles: [...kept.keys()], dependenciesInstalled: true });
 }
 
-async function installCds(neon, { target, themeDir, packageManager, skipInstall, runCommand, log }) {
-  const pkgPath = join(target, "package.json");
-  if (!existsSync(pkgPath)) {
-    throw new Error(`No package.json found at ${pkgPath} — is this an existing project?`);
-  }
-  const pkg = JSON.parse(readFileSync(pkgPath, "utf8"));
-  const cdsAlreadyPresent = Boolean(pkg.dependencies?.[CDS_PACKAGE] || pkg.devDependencies?.[CDS_PACKAGE]);
-  const destThemeDir = resolveThemeDir(target, themeDir ?? DEFAULT_THEME_DIR);
-  // Resolved even when nothing will be installed, so ambiguous manager
-  // configuration is rejected consistently before any write.
-  const manager = choosePackageManager({ projectDir: target, override: packageManager });
-  const cdsVersion = cdsAlreadyPresent ? null : declaredCdsVersion(neon);
-  const command =
-    cdsAlreadyPresent || skipInstall ? null : dependencyCommand(manager, [`${CDS_PACKAGE}@${cdsVersion}`]);
-
-  const copiedFiles = copyThemeFiles(join(neon.sourceRoot, "theme", "cds"), destThemeDir, CDS_FILES, log);
-  if (command) runCommand(command.command, command.args, target);
-  return result({
-    mode: "cds",
-    destination: target,
-    themeDir: destThemeDir,
-    copiedFiles,
-    packageManager: manager,
-    cdsAlreadyPresent,
-    cdsVersion,
-    dependenciesInstalled: Boolean(command) || cdsAlreadyPresent,
-  });
-}
-
 function installCssOnly(neon, { target, themeDir, log }) {
   const destThemeDir = resolveThemeDir(target, themeDir ?? DEFAULT_THEME_DIR);
   const cssPath = join(neon.sourceRoot, CSS_FILE);
@@ -232,12 +181,9 @@ function installCssOnly(neon, { target, themeDir, log }) {
 // Neon's cn, which knows Neon's type roles (text-label1, ...) as font sizes.
 const NEON_CN = "src/lib/utils.ts";
 
-/** Refuses the CDS-mode options shadcn would silently ignore. */
-function refuseShadcnOptions(reason, { themeDir, packageManager, skipInstall }) {
-  const given = { "--theme-dir": themeDir !== undefined, "--skip-install": skipInstall, "--package-manager": packageManager !== undefined };
-  for (const [flag, isGiven] of Object.entries(given)) {
-    if (isGiven) throw new Error(`${flag} is not supported with ${reason}.`);
-  }
+/** Refuses --theme-dir, which shadcn would silently ignore. */
+function refuseThemeDir(reason, themeDir) {
+  if (themeDir !== undefined) throw new Error(`--theme-dir is not supported with ${reason}.`);
 }
 
 /**
@@ -262,25 +208,9 @@ function result(fields) {
     themeDir: null,
     copiedFiles: 0,
     keptFiles: [],
-    packageManager: null,
-    cdsAlreadyPresent: false,
-    cdsVersion: null,
     dependenciesInstalled: false,
     ...fields,
   };
-}
-
-function readStarterManifest({ starterDir }) {
-  return JSON.parse(readFileSync(join(starterDir, "package.json"), "utf8"));
-}
-
-/** The CDS version range the starter declares — the version every install pins to. */
-function declaredCdsVersion(neon) {
-  const version = readStarterManifest(neon).dependencies?.[CDS_PACKAGE];
-  if (!version) {
-    throw new Error(`templates/vitejs-cds/package.json does not declare a ${CDS_PACKAGE} version.`);
-  }
-  return version;
 }
 
 /**

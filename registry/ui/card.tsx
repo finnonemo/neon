@@ -2,8 +2,8 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 
-// card → CDS ContentCard (Counterpart; CDS Card is deprecated in cds-web
-// 9.26.1 in its favor): 24px radius, 16px padding and 16px between its parts.
+// card → CDS ContentCard (Counterpart; CDS's own Card is deprecated in its
+// favor): 24px radius, 16px padding and 16px between its parts.
 // The header is ContentCardBody's text: a headline title over a label2
 // description in fgMuted, with no gap; the content inherits body; the footer
 // spreads its children like ContentCardFooter.

@@ -14,10 +14,8 @@ const PAYLOAD_ENTRIES = [
   "core",
   "examples",
   "block",
-  "templates/vitejs-cds",
 
   "scripts/install.mjs",
-  "scripts/assemble-starter.mjs",
   "scripts/source-lint.mjs",
   "scripts/probe-page.mjs",
   "scripts/theme-brief.mjs",
@@ -32,8 +30,6 @@ const EXCLUDED_NAMES = new Set([
   ".git",
   "dist",
   ".DS_Store",
-  "tokens.report.json",
-  "tokens.resolved.json",
   "notes",
 ]);
 
