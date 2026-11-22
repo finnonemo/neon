@@ -1,7 +1,7 @@
 ---
 scenarios:
   - request: In an app already on CDS with a working Finnomena theme, "change the yellow CTA to a white button" on a CDS campaign page
-    observe: Routes to `neon-create`, not `neon-redesign`; no installer or provider setup; changes that one Button through a CDS prop, configuration or a scoped wrapper; no app stylesheet rule reaches into the component (`stylesheet-scope.mjs`); `color-overrides.ts`, `theme.css`, `neonComponentConfig` and other Buttons unchanged; fonts, spacing, radius and composition unchanged; label and boundary contrast checked.
+    observe: Routes to `neon-create`; changes no CDS component, theme or config and adds no Neon item; says Neon no longer themes CDS and offers a Rebuild on the Neon base (Neon 2.0.0; the run below predates it)
 ---
 
 # Colors-only on CDS components

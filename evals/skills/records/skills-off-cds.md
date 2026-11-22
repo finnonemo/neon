@@ -3,7 +3,7 @@ scenarios:
   - request: Add a fee table that stays readable on a phone to an app on the Neon base
     observe: Opens no CDS reference; the references it reads hold no CDS component name; builds with Neon items and adds no CDS dependency
   - request: Add the same fee table to an app already on CDS
-    observe: Reads the CDS reference; builds with `@coinbase/cds-web` components; adds no `components.json`, `@neon` registry or Neon item
+    observe: Builds nothing on CDS and adds no `components.json`, `@neon` registry, Neon item or CDS component; says Neon no longer themes CDS and offers a Rebuild on the Neon base (Neon 2.0.0; the run below predates it)
 ---
 
 # Skills off CDS
