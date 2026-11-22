@@ -100,13 +100,13 @@ test('a tag has no cell for a Color or a Size the Neon tag has no value for', ()
   assert.throws(() => tagCell({ Size: 'XSmall' }), /no size/);
 });
 
-// Avatar: Small 36 with Headline (Medium weight), Medium 48 with Title 3 Strong; Tag/Indigo/Primary/background under Text/text-on-color.
+// Avatar: Small 36 with Headline (Medium weight), Medium 48 with Title 3 Strong; Button/button-primary (Navy) under Text/text-on-color.
 // Strong has no Neon type role, so the table states no weight for it.
 test('an avatar is Core\'s round Avatar: 36 with a Headline initial, 48 with a Title 3 one', async () => {
-  const fill = 'rgb(59, 58, 235)';
+  const fill = { light: 'rgb(1, 23, 43)', dark: 'rgb(65, 81, 96)' };
   const ink = 'rgb(255, 255, 255)';
-  assert.deepEqual(await both(avatarCell('circle')), { light: { h: 36, w: 36, radius: 18, bg: fill }, dark: { h: 36, w: 36, radius: 18, bg: fill } });
-  assert.deepEqual(await both(avatarCell('circle', { Size: 'Medium' })), { light: { h: 48, w: 48, radius: 24, bg: fill }, dark: { h: 48, w: 48, radius: 24, bg: fill } });
+  assert.deepEqual(await both(avatarCell('circle')), { light: { h: 36, w: 36, radius: 18, bg: fill.light }, dark: { h: 36, w: 36, radius: 18, bg: fill.dark } });
+  assert.deepEqual(await both(avatarCell('circle', { Size: 'Medium' })), { light: { h: 48, w: 48, radius: 24, bg: fill.light }, dark: { h: 48, w: 48, radius: 24, bg: fill.dark } });
   assert.deepEqual(await coreBaseline(avatarCell('label'), 'light'), { font: { size: 17, lineHeight: 24, weight: 500 }, color: ink });
   assert.deepEqual(await coreBaseline(avatarCell('label', { Size: 'Medium' }), 'dark'), { font: { size: 20, lineHeight: 28 }, color: ink });
   assert.throws(() => avatarCell('circle', { Size: 'Large' }), /no size/);

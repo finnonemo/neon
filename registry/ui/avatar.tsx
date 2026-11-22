@@ -25,7 +25,7 @@ function AvatarImage({ className, ...props }: React.ComponentProps<typeof Avatar
 }
 
 // Core's Artwork=Initials in Color=Default: the initials in Text/text-on-color on
-// Tag/Indigo/Primary/background, the Tag fill Core's Default reuses. They are Headline at
+// Button/button-primary, Core's Navy, the fill Core's Default takes. They are Headline at
 // 36px and Title 3 at 48px. Core's 48px initials are Strong, an emphasis no Neon type role
 // carries: they keep Title 3's weight.
 function AvatarFallback({ className, ...props }: React.ComponentProps<typeof AvatarPrimitive.Fallback>) {

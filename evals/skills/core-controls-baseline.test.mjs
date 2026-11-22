@@ -141,21 +141,21 @@ test('a switch is Core\'s Toggle: a 48 by 24 track, toggle-off and layer-selecte
   assert.deepEqual(await coreBaseline(toggleCell('thumb', { State: 'Disabled' }), 'dark', ['bg']), { bg: 'rgba(255, 255, 255, 0.451)' });
 });
 
-// Segmented control: a 12px-cornered track on button-secondary; the chosen segment is the page background in a 2px strong stroke.
+// Segmented control at Floating=False: a 12px-cornered track with no fill; the chosen segment is button-secondary with no stroke.
 test('a segmented control is Core\'s at each Size: 48, 36 and 56 tall', async () => {
   const at = async (Size) => coreBaseline(segmentedCell({ Size }), 'light', ['h', 'pad', 'radius', 'bg', 'opacity']);
-  const track = { radius: 12, bg: 'rgba(1, 23, 43, 0.102)', opacity: 1 };
+  const track = { radius: 12, bg: 'rgba(0, 0, 0, 0)', opacity: 1 };
   assert.deepEqual(await at('Medium'), { h: 48, pad: [6, 6, 6, 6], ...track });
   assert.deepEqual(await at('Small'), { h: 36, pad: [4, 4, 4, 4], ...track });
   assert.deepEqual(await at('Large'), { h: 56, pad: [4, 4, 4, 4], ...track });
-  assert.deepEqual(await coreBaseline(segmentedCell({ State: 'Disabled' }), 'dark', ['bg', 'opacity']), { bg: 'rgba(255, 255, 255, 0.122)', opacity: 0.5 });
+  assert.deepEqual(await coreBaseline(segmentedCell({ State: 'Disabled' }), 'dark', ['bg', 'opacity']), { bg: 'rgba(0, 0, 0, 0)', opacity: 0.5 });
 });
 
-test('a chosen segment is the page background in a strong stroke; the others are bare and secondary', async () => {
+test('a chosen segment is button-secondary with no stroke; the others are bare and secondary', async () => {
   const chosen = await both(segmentCell({ Selected: 'True' }));
   const item = { h: 36, pad: [0, 8, 0, 8], radius: 8, font: { size: 15, lineHeight: 24, weight: 400 } };
-  assert.deepEqual(chosen.light, { ...item, bg: 'rgb(255, 255, 255)', border: { width: 2, color: 'rgb(1, 23, 43)' }, color: 'rgba(0, 0, 0, 0.851)' });
-  assert.deepEqual(chosen.dark, { ...item, bg: 'rgb(0, 0, 0)', border: { width: 2, color: 'rgb(255, 255, 255)' }, color: 'rgb(255, 255, 255)' });
+  assert.deepEqual(chosen.light, { ...item, bg: 'rgba(1, 23, 43, 0.102)', border: { width: 2, color: 'rgba(255, 255, 255, 0)' }, color: 'rgba(0, 0, 0, 0.851)' });
+  assert.deepEqual(chosen.dark, { ...item, bg: 'rgba(255, 255, 255, 0.122)', border: { width: 2, color: 'rgba(255, 255, 255, 0)' }, color: 'rgb(255, 255, 255)' });
   const other = await coreBaseline(segmentCell({ Selected: 'False' }), 'light');
   assert.deepEqual(other, { ...item, bg: 'rgba(255, 255, 255, 0)', border: { width: 2, color: 'rgba(255, 255, 255, 0)' }, color: 'rgba(0, 0, 0, 0.651)' });
   const sizes = async (Size) => coreBaseline(segmentCell({ Selected: 'False', Size }), 'light', ['h', 'pad', 'font']);
