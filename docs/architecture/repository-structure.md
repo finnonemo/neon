@@ -28,7 +28,7 @@
 
 `node scripts/package-plugin.mjs <destination-dir>` is the authoritative definition of what ships. It copies an explicit allowlist — currently `.claude-plugin/`, `.codex-plugin/`, `skills/`, `theme/`, `core/`, `examples/`, `block/`, `scripts/install.mjs`, `scripts/source-lint.mjs`, `scripts/probe-page.mjs`, `scripts/theme-brief.mjs`, `scripts/finno.mjs`, `scripts/package-plugin.mjs`, `scripts/lib/`, and `LICENSE` — into the destination, leaving out Finnomena Trek's font files. Everything else (`docs/`, `evals/`, `registry/`, `theme-briefs/`, `research/`, `.local/`, `notes/`, dependencies, build output) is excluded by construction, not by convention: it's simply not in that list. If a path should ship, it has to be added to `PAYLOAD_ENTRIES` in that script; being tracked in Git is necessary but not sufficient.
 
-The npm package `finnomena` has its own boundary, the `files` list in `package.json`. It carries the plugin payload and also `registry/`, all of `templates/` and all of `scripts/`, and likewise leaves out the Trek font files.
+The npm package `finnomena` has its own boundary, the `files` list in `package.json`. It carries the plugin payload and also `registry/` and all of `scripts/`, and likewise leaves out the Trek font files.
 
 ## Local material
 

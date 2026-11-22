@@ -67,7 +67,7 @@ Keep a complete checkout of this repository available:
 git clone https://github.com/finnonemo/neon.git
 ```
 
-Register the six folders under `skills/` using your assistant's supported skill-loading mechanism. Keep the checkout intact: these skills also need sibling `theme/`, `core/`, `block/`, `templates/` and `scripts/` resources. Copying a `SKILL.md` alone is insufficient.
+Register the six folders under `skills/` using your assistant's supported skill-loading mechanism. Keep the checkout intact: these skills also need sibling `theme/`, `core/`, `block/` and `scripts/` resources. Copying a `SKILL.md` alone is insufficient.
 
 If your assistant supports reading a skill directly, give it the absolute path to the relevant `SKILL.md` and your app's target directory. Automatic discovery varies by host; the repository checks do not verify host installation.
 
