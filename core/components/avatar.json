@@ -222,7 +222,7 @@
     {"layer":"Container","property":"width","when":"{{Size=*}}","value":"Components/Avatar/Container/{{Size=*}}/Layout width"},
     {"layer":"Container","property":"height","when":"{{Size=*}}","value":"Components/Avatar/Container/{{Size=*}}/Layout height"},
     {"layer":"Container","property":"cornerRadius","when":"{{Size=*}}","value":"Components/Avatar/Container/{{Size=*}}/Radius"},
-    {"layer":"Container","property":"fills.0","when":"{{Color=Default}}","value":"Theme/Tag/Indigo/Primary/background"},
+    {"layer":"Container","property":"fills.0","when":"{{Color=Default}}","value":"Theme/Button/button-primary"},
     {"layer":"Container","property":"fills.0","when":"{{Color=Red}}","value":"Theme/Tag/Red/Primary/background"},
     {"layer":"Container","property":"fills.0","when":"{{Color=Blue}}","value":"Theme/Tag/Blue/Primary/background"},
     {"layer":"Container","property":"fills.0","when":"{{Color=Purple}}","value":"Theme/Tag/Purple/Primary/background"},

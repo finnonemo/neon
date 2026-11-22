@@ -162,9 +162,6 @@ _File media item (variant root)  80 × 80, VERTICAL, no fill
 - Uploading: Base puts its button in a progress circle. The Icon button's own Loading spinner stands in until Progress circle (pawisssh/design-system#302) is built; Base's `borderTransparent` outline is `Border/border-subtle`.
 - The image is the designer's: set Image's fill on an instance. In code the image's alt is the file name; Remove reads "ลบ <file name>", as on `_File item`.
 
-Picture: `Anatomy`.
-The eight parts by number, on one instance at its default copy: Title, Description, Zone, Prompt, Helper text, Button, File item, Remove.
-
 ## Axes
 
 ### `File upload`
@@ -191,7 +188,7 @@ The screen breaks its constraints line with a U+2028 line separator. The generat
 | `Artwork` | Image · Icon | Image: the picked image fills the tile. Icon: the File icon for a file with no preview, in the tile (Standard) or bare before the name (Compact). Only Uploaded, Uploading (Icon: the plain `file` glyph), Success, Focus and Disabled differ; every variant is duplicated so switching State or Type keeps it (owner: "All 28 → 56") |
 | `State` | Uploaded · Uploading · Success · Focus · Error · Disabled · Skeleton | see the tree above. Skeleton is Base's Preloading |
 
-Properties: `File name` = "name-change-certificate.pdf", `File size` = "1.2 MB", `Uploading text` = "Uploading…", `Success text` = "Upload successful", `Error text` = "Upload failed". The file's image is the Artwork Image's fill; the file type for a file with no preview is the exposed File icon's Icon Text (`file-pdf`, `file-lines`, `file`). **56 variants** (28 before the `Artwork` axis), grid Artwork × State rows (Image above Icon), Type × iOS columns (Standard left of Compact), 14 × 4.
+Properties: `File name` = "name-change-certificate.pdf", `File size` = "1.2 MB", `Uploading text` = "Uploading…", `Success text` = "Upload successful", `Error text` = "Upload failed". The file's image is the Artwork Image's fill; the file type for a file with no preview is the exposed File icon's Icon Text (`file-pdf`, `file-lines`, `file`). **56 variants**, grid Artwork × State rows (Image above Icon), Type × iOS columns (Standard left of Compact), 14 × 4.
 
 ### `_File media item`
 
@@ -223,7 +220,7 @@ No properties: the image is the Image layer's fill. **12 variants**, State rows 
 | `File upload/Label` | role: `Title` · `Description` · `Prompt` · `Helper` · `Error` · `Small title` · `File name` · `File size` · `Uploading` · `Success` | Type token, Type emphasis, Align horizontal, Align vertical, Decoration | see Text styles |
 | `File upload/Icon` | Icon step: `XLarge` · `Large` · `Medium` | Type token | `fa-sharp fa-solid/<Step>` |
 
-created 16: the `Uploaded` key in each `State`-keyed group (14) and `File upload/Surface/Default/Radius` (→ `Radius/12px (radius-md)`) and `Stroke weight` (→ `Sizing/stroke-selected`, 2), `Item frame`'s; 140 in all. `Item frame` binds `Theme/Border/border-subtle` (Light `Black/12A`, Dark `White/18A`), Tile Selection's. added 5 (`Label/Small title/*`, `Headings/Headline`); the Small zone binds `_File item`'s own `Item/Standard/*` (padding, gap, radius), `Content/Standard/Gap vertical` and `Artwork/Uploaded/Radius`, so it stays a Standard row's height, and its Upload icon takes `Icon/XLarge`. Equal values under every key, as Tag's are; the spec keys them so a later state can differ. `Title block`, `Zone`, `Detail`, `File list` and `Media list` are group words the lint's `token-path` list doesn't have yet (Open). Stroke weights alias nothing (2 is raw, as on Text field). The screen's zone is padding 32, gap 10, radius 16; Base's 24 · 16, 12 and 12 are on Core's steps and match the item's radius (Q5).
+140 variables in all. `File upload/Surface/Default/Radius` (→ `Radius/12px (radius-md)`) and `Stroke weight` (→ `Sizing/stroke-selected`, 2) are `Item frame`'s, which binds `Theme/Border/border-subtle` (Light `Black/12A`, Dark `White/18A`), Tile Selection's. The Small zone's Title takes `Label/Small title/*` (`Headings/Headline`); the Small zone binds `_File item`'s own `Item/Standard/*` (padding, gap, radius), `Content/Standard/Gap vertical` and `Artwork/Uploaded/Radius`, so it stays a Standard row's height, and its Upload icon takes `Icon/XLarge`. Equal values under every key, as Tag's are; the spec keys them so a later state can differ. `Title block`, `Zone`, `Detail`, `File list` and `Media list` are group words the lint's `token-path` list doesn't have yet (Open). Stroke weights alias nothing (2 is raw, as on Text field). The screen's zone is padding 32, gap 10, radius 16; Base's 24 · 16, 12 and 12 are on Core's steps and match the item's radius (Q5).
 
 Templates: `Components/File upload/<Group>/{{State=*}}/<Property>`, `Components/File upload/Label/<role>/<Property>`, `Components/File upload/Icon/<Step>/Type token`.
 
@@ -257,12 +254,7 @@ Templates: `Components/File upload/<Group>/{{State=*}}/<Property>`, `Components/
 | `Border/border-subtle` | Small's `Item frame` border (Tile Selection's) | — | — | decorative: the item's own texts carry it |
 | `Skeleton/skeleton-background`, `Skeleton/skeleton-element` | Skeleton item and its blocks (Base's Preloading) | — | — | Text field's |
 
-The zone is a `Field/field` fill with no stroke, and Drag over is `field-hover` with the Prompt's words; the history follows. The zone took Base's look on `App` and `Web` (Q5, revised): a `Field/field` fill and a dashed 2 `Border/border-interactive` stroke, both decorative; the Helper Text, the Prompt and the Button identify it. The Button was Primary (Secondary, the owner's call over this reason): `Button/button-secondary` and `Field/field` are both `Navy/10A` / `White/12A`, so a Secondary one has no edge there (Base's Secondary pill sits on a lighter fill than ours). In Dark `button-primary` sits close to the zone (1.27–2.02), and its label identifies it, as on any Primary Button. Drag over follows Base's Hover: a blue fill (`notification-info-background`, the nearest Theme token to Base's `#eff4fe`, borrowed from Notifications: Open), Carbon's solid `Miscellaneous/interactive` stroke, and the Prompt in `Link/link-primary` (Carbon's box text). Before this revision the zone was the E-KYC screen's: no fill, a dashed `Border/border-tile` and a Secondary Button.
-
-Carbon's resting box stroke is `border-strong-01`, a mid grey that passes 3:1. Core's `Border/border-strong` is near black (16.19–21.00:1), too heavy beside Base's look. A Disabled zone keeps its fill and stroke: `Border/border-disabled` (3.01) is stronger than the resting one.
-
-Picture: `Metrics`.
-A band over each padding and gap of the Container, the Zone and a File item, each number read from the instance.
+The zone is a `Field/field` fill with no stroke, and Drag over is `field-hover` with the Prompt's words.
 
 ## Icon records
 
@@ -296,9 +288,6 @@ The Button's `plus`, the Small zone's Icon button `plus` and the Icon buttons' `
 - **File size**: digits and unit with a space, decimal style, one decimal above 1 MB: "2.4 MB", "820 KB". Not a Value figure (no ฿, หน่วย or %), so no `_Unit suffix`; Latin unit letters, as the OS shows them.
 - Thai floors: smallest text 15, wrapping text at 15 or more.
 
-Picture: `Type and color`.
-Each text's style and color token, in Light and Dark.
-
 ## Hit target and Skeleton
 
 - **Hit target**: none on either Root. The Button and the Icon button carry theirs (ADR 0003): the Icon button Small is 36 in a 48 Root, inside an 80 Standard row (84 Uploading) or a 48 Compact row, so nothing overflows. The zone is not a second focus stop. In code a tap anywhere on it may open the picker, but focus and the accessible name stay on its Button. Where a drop is taken (web, iPad), the zone is also a drop target.
@@ -326,7 +315,7 @@ Add the row to Motion and haptics' per-component table when the set is built. Th
 - [ ] 3. The zone is identified by its texts and Button, not by its fill. Drag over is told by the fill only (1.29–1.60 against the page): the drag itself is the cue, and the drop handler announces the target (H2).
 - [ ] 4. An error is a glyph, a stroke and a message, never the red alone. Uploading is a progress bar plus "Uploading…". Drag over changes only the fill.
 - [x] 5. `_File item` State=Focus draws its own 2 `Focus/focus` outline (3 until pawisssh/design-system#810, now `Sizing/focus-ring`) on the item (4.35 Light, 4.00 Dark on the page, past 3:1). The zone's Focus ring is the nested Button's; Remove and Retry keep their Icon button's.
-- [ ] 6. the file name stays one line and truncates; the row grows. its Title and Description stay one line and truncate; 2026-11-17, on the seven Small `iOS=False` variants: `Item frame` clips nothing; 2026-11-17, on eight Medium `iOS=False` variants: nothing clipped; Enabled stands 308 · 444 · 844, Uploading Item 448 · 620 · 1256, Uploaded Single 228 · 244 · 348 (owner: "Approve as recommended").
+- [ ] 6. the file name stays one line and truncates; the row grows. On `Size=Small` the zone's Title and Description stay one line and truncate.
 - [ ] 7. Smallest text 15.
 - [ ] 8. Motion table above.
 - [ ] 9. Role, name, states and focus order:
@@ -337,6 +326,3 @@ Add the row to Motion and haptics' per-component table when the set is built. Th
 | Accessible name | same; Description and Helper as `aria-describedby` on the input |
 | Announced states | `aria-live="polite"` on the item status; `aria-invalid` + `aria-describedby` Error message on the input when `State=Error`; `aria-disabled` |
 | Focus order | same |
-
-Picture: `Reading order`.
-Title, Button, each File item, its Remove (row 9). Uber's [Specs page](https://base.uber.com/6d2425e9f/p/5555b5-file-upload/b/99797f) is four redlines (mobile and web) and no text; ours adds Type and color and Reading order, which Uber keeps on other components' Specs pages.

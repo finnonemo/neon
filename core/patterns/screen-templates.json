@@ -1,0 +1,59 @@
+{
+  "breakpoints": [
+    { "name": "SM", "min": 320, "max": 499, "widthClass": "Compact" },
+    { "name": "MD", "min": 500, "max": 987, "widthClass": "Regular" },
+    { "name": "LG", "min": 988, "max": 1079, "widthClass": "Regular" },
+    { "name": "XL", "min": 1080, "max": 1271, "widthClass": "Regular" },
+    { "name": "XXL", "min": 1272, "max": 1439, "widthClass": "Regular" },
+    { "name": "XXXL", "min": 1440, "max": 1919, "widthClass": "Regular" },
+    { "name": "Max", "min": 1920, "frames": [1920, 2560, 3840], "widthClass": "Regular" }
+  ],
+  "readableWidth": { "maxWidth": 980, "layouts": ["Simple", "Content", "Detailed"] },
+  "layouts": {
+    "Simple": {
+      "SM": [{ "area": "Content" }, { "area": "Bottom Navigation" }],
+      "MD": [{ "area": "Sidebar", "width": 64 }, { "area": "Content" }],
+      "LG": [{ "area": "Sidebar", "width": 64 }, { "area": "Content" }],
+      "XL": [{ "area": "Sidebar", "width": 240 }, { "area": "Content" }],
+      "XXL": [{ "area": "Sidebar", "width": 320 }, { "area": "Content" }],
+      "XXXL": [{ "area": "Sidebar", "width": 320 }, { "area": "Content" }],
+      "Max": [{ "area": "Sidebar", "width": 320 }, { "area": "Content" }]
+    },
+    "Content": {
+      "SM": [{ "area": "Content" }, { "area": "Bottom Navigation" }],
+      "MD": [{ "area": "Sidebar", "width": 64 }, { "area": "Content" }],
+      "LG": [{ "area": "Sidebar", "width": 64 }, { "area": "Content" }, { "area": "Inspector", "width": 360 }],
+      "XL": [{ "area": "Sidebar", "width": 240 }, { "area": "Content" }, { "area": "Inspector", "width": 360 }],
+      "XXL": [{ "area": "Sidebar", "width": 320 }, { "area": "Content" }, { "area": "Inspector", "width": 360 }],
+      "XXXL": [{ "area": "Sidebar", "width": 320 }, { "area": "Content" }, { "area": "Inspector", "width": 400 }],
+      "Max": [{ "area": "Sidebar", "width": 320 }, { "area": "Content" }, { "area": "Inspector", "width": 560 }]
+    },
+    "Detailed": {
+      "SM": [{ "area": "Inspector" }],
+      "MD": [{ "area": "Sidebar", "width": 64 }, { "area": "Content" }, { "area": "Inspector" }],
+      "LG": [{ "area": "Sidebar", "width": 64 }, { "area": "Content", "width": 360 }, { "area": "Inspector" }],
+      "XL": [{ "area": "Sidebar", "width": 240 }, { "area": "Content", "width": 360 }, { "area": "Inspector" }],
+      "XXL": [{ "area": "Sidebar", "width": 320 }, { "area": "Content", "width": 360 }, { "area": "Inspector" }],
+      "XXXL": [{ "area": "Sidebar", "width": 360 }, { "area": "Content", "width": 400 }, { "area": "Inspector" }],
+      "Max": [{ "area": "Sidebar", "width": 360 }, { "area": "Content", "width": 560 }, { "area": "Inspector" }]
+    },
+    "Multi-column": {
+      "SM": [{ "area": "Content", "width": 2000 }, { "area": "Bottom Navigation" }],
+      "MD": [{ "area": "Sidebar", "width": 64 }, { "area": "Content", "width": 2000 }],
+      "LG": [{ "area": "Sidebar", "width": 64 }, { "area": "Content", "width": 2000 }],
+      "XL": [{ "area": "Sidebar", "width": 240 }, { "area": "Content", "width": 2240 }],
+      "XXL": [{ "area": "Sidebar", "width": 320 }, { "area": "Content", "width": 2240 }],
+      "XXXL": [{ "area": "Sidebar", "width": 320 }, { "area": "Content", "width": 2520 }],
+      "Max": [{ "area": "Sidebar", "width": 320 }, { "area": "Content", "width": 3480 }]
+    },
+    "Immersive": {
+      "SM": [{ "area": "Content" }, { "area": "Bottom Navigation" }],
+      "MD": [{ "area": "Content" }],
+      "LG": [{ "area": "Content" }],
+      "XL": [{ "area": "Content" }],
+      "XXL": [{ "area": "Content" }],
+      "XXXL": [{ "area": "Content" }],
+      "Max": [{ "area": "Content", "maxWidth": 1440 }]
+    }
+  }
+}

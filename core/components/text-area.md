@@ -144,7 +144,7 @@ The stroke is 3, not the 2 that pawisssh/design-system#171 and the Motion table 
   | --- | --- | --- | --- |
   | `Large` | 152 · 152 · 128 | 5 · 5 · 4 | 104 (3 lines, the min) |
 
-Warning is taller than Active where its glyph narrows the text column.
+  Warning is taller than Active where its glyph narrows the text column.
 - [x] 7. No text under 11 pt: the smallest is Subheadline.
 - [x] 8. The Motion part names each transition.
 - [x] 9. Role, name, states and focus order:

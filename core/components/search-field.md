@@ -142,7 +142,7 @@ The issue and the map's table say "stroke 2 on Focus"; Text field is 3 since 202
   | --- | --- | --- | --- |
   | `Large` | 120 · 112 · 100 | 56 · 48 · 36 | none |
 
-Checked on Active, Loading and Enabled at each Size, both looks, filled and empty, with `ปั๋ง ผู้ใหญ่ ฎู ฟุ้ง` and `แบบประเมินความเสี่ยงของคุณหมดอายุ`.
+  Checked on Active, Loading and Enabled at each Size, both looks, filled and empty, with `ปั๋ง ผู้ใหญ่ ฎู ฟุ้ง` and `แบบประเมินความเสี่ยงของคุณหมดอายุ`.
 - [x] 7. No text under 11 pt: the smallest is Subheadline.
 - [x] 8. The Motion part names each transition.
 - [x] 9. Role, name, states and focus order:
@@ -155,6 +155,12 @@ Checked on Active, Loading and Enabled at each Size, both looks, filled and empt
 | Focus order | the input, then Clear |
 
 ## Usage
+
+### When to use
+
+- Search at the top of a list or a screen.
+
+### Rules
 
 - Both looks side by side, with Thai copy: Enabled empty, and Active with a value, the cursor and Clear.
 - The Focus ring once, on `iOS=False`.

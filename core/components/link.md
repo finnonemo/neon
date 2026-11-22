@@ -94,6 +94,12 @@ The spec's `contrast` list: the `Link` label (text) and the Focus ring.
 
 ## Usage
 
+### When to use
+
+- A destination, in or beside text: inline in running text, or standalone at the trailing end of a row.
+
+### Rules
+
 - Primary for a standalone action in neutral text (List item's trailing Link, Section heading); Highlight for a link that must read as a link in body copy (Toggletip).
 - Underline (Cmd+U on the instance's label) for an inline link in running text and for Breadcrumbs; a standalone Link stays plain (Accessibility).
 - `Trailing icon` off where the link sits in a row or a path; on where it leads to another page.

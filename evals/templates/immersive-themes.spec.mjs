@@ -95,7 +95,7 @@ for (const [theme, scheme] of Object.entries(SCHEMES)) {
 
 // Text on the fills a themed page paints (white on white on Ultra before the adapter mapped them). Expected colors come from
 // immersive.css's mapping: palette 75 under the theme's text. A pressed toggle keeps that fill and shows a 2px ring in the
-// theme's text; the chosen segment is the canvas under the theme's text, inside a ring of it.
+// theme's text; the chosen segment is palette 75 under the theme's text, on a track with no fill of its own.
 // Computed colors come as rgb(0-255) or, for a color-mix(), color(srgb 0-1).
 const channels = text => { const values = text.match(/[\d.]+/g).slice(0, 3).map(Number); return text.startsWith('color(') ? values : values.map(v => v / 255); };
 const luminance = colorText => channels(colorText)
@@ -120,15 +120,16 @@ for (const theme of Object.keys(SCHEMES)) {
       ['unpressed toggle', page.getByRole('button', { name: 'Unpressed toggle', exact: true }), expected.fill, expected.text],
       ['pressed toggle', page.getByRole('button', { name: 'Pressed toggle', exact: true }), expected.fill, expected.text],
       ['neutral tag', page.getByText('Neutral tag', { exact: true }), expected.fill, expected.text],
-      ['segmented track', page.getByRole('radiogroup', { name: 'Period' }), expected.fill, expected.text],
-      ['checked segment', page.getByRole('radio', { name: 'Month', exact: true }), expected.canvas, expected.text],
+      ['checked segment', page.getByRole('radio', { name: 'Month', exact: true }), expected.fill, expected.text],
     ];
+    // The track has no fill (Core's Floating=False): an unchosen segment's text sits on the canvas.
+    await expect(page.getByRole('radiogroup', { name: 'Period' })).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
     for (const [name, locator, background, color] of checks) {
       expect(await colors(locator), name).toEqual({ background, color });
       expect(ratio(color, background), `${name} text contrast`).toBeGreaterThanOrEqual(4.5);
     }
-    // Pressed and chosen show by a 2px ring inside, in the theme's text.
-    for (const ringed of [page.getByRole('button', { name: 'Pressed toggle', exact: true }), page.getByRole('radio', { name: 'Month', exact: true })]) {
+    // Pressed shows by a 2px ring inside, in the theme's text; the chosen segment shows by its fill.
+    for (const ringed of [page.getByRole('button', { name: 'Pressed toggle', exact: true })]) {
       await expect(ringed).toHaveCSS('outline-width', '2px');
       await expect(ringed).toHaveCSS('outline-offset', '-2px');
       await expect(ringed).toHaveCSS('outline-color', expected.text);

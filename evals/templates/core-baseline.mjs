@@ -122,6 +122,8 @@ function measuredValue(core, table, cell, mode, entry, name) {
     throw new Error(`Core's ${set} binds no ${entry.layer} ${entry.property} for ${name} in this cell, and the property table gives no value for that.`);
   }
   if (bound.kind === 'color') return bound[mode];
+  // A paint Core states as none (the Segmented control's track when Floating=False) measures as no paint.
+  if (bound.value === 'none' && /^(fills|strokes)\./.test(entry.property)) return NO_PAINT;
   // A text style gives a size and a line height; the weight is the table's, where it states one.
   if (bound.kind === 'textStyle') return { size: bound.size, lineHeight: bound.lineHeight, ...('weight' in entry && { weight: entry.weight }) };
   return asNumber(bound.value);

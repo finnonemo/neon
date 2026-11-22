@@ -144,6 +144,12 @@ Choosing a row fires no haptic from Select (Motion and haptics: `Selection` is S
 
 ## Usage
 
+### When to use
+
+- A field whose tap opens a short list to choose one from: Menu on iOS, Dropdown menu on Android and web.
+
+### Rules
+
 - The Title always shows; the prompt inside ("เลือกบัญชีธนาคาร") is not the label. Thai copy in every case (บัญชีรับเงิน / เลือกบัญชีธนาคาร).
 - A tap opens Menu on iOS, Dropdown menu on Android + web; the screen places the list under the field.
 - Short lists only. A long or searchable list is a Search field over a list, or a Sheet with List items and a trailing Radio (Inventory).

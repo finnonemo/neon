@@ -113,9 +113,6 @@ Button | Rect button (variant root)   Hug × Hug, no fill, no padding; min width
 
 `Large (Expressive)` / `Medium (Expressive)`: Container min width 256 (`Layout width`), content centred; the `Trailing Icon` is absolute, pinned right × centre.
 
-Picture: `Anatomy`.
-The four parts by number, on one instance (`Primary · Default · Medium`, `iOS=False`): Container, Leading Icon, Label, Trailing Icon.
-
 ## Axes
 
 `Button`:
@@ -127,7 +124,7 @@ The four parts by number, on one instance (`Primary · Default · Medium`, `iOS=
 | `Size` | XSmall · Small · Medium · Medium (Expressive) · Large · Large (Expressive) | Container 28 / 36 / 48 / 48 / 56 / 56, text style, icon step; Expressive fixes the width at 256 |
 | `State` | Enabled · Hover · Focus · Active · Disabled · Loading · Skeleton | fill, Focus stroke, `_Loading`, Skeleton |
 
-`Rect button`: `Type` · `Hierarchy` · `Size` · `State` in that order, the same values, no `iOS`.
+`Rect button`: `Type` · `Hierarchy` · `Size` · `State` in that order, the same values except `Type`, which has no Inverse (Default · Brand · Danger), and no `iOS`.
 
 Properties (both): `Leading Icon`, `Trailing Icon` (BOOLEAN), `Label Text`, `L. Icon Text`, `T. Icon Text` (TEXT). `Label Text` is new on `Rect button` (pawisssh/design-system#126). `Artwork` (BOOLEAN, off) and `Leading artwork` (INSTANCE_SWAP, default Avatar `Size=3XSmall, Artwork=Image`, preferred values Avatar's variants), on the 600 and 210 cells that have a `Leading Icon`. `Value` (BOOLEAN, off) on the 120 and 60 cells of `Hierarchy` Secondary and Tertiary at `Type=Default` with a Label (not Loading or Skeleton); the nested [Value](value.md) is exposed, so its `Change`, `Unit` and `Value text` sit in the Button's panel.
 (3 × 3 − 2 Brand cells) × 6 × 7 = **294 variants** per look: 588 on `Button` plus 252 Inverse (3 Hierarchies × 6 Sizes × 7 States × 2 `iOS`) = **840**, and 294 on `Rect button`, whose `Type` keeps Default · Brand · Danger.
@@ -176,9 +173,6 @@ The paint opacities Figma shows on these layers (0.85 labels and icons, 0.45 Dis
 
 Pairs (the spec's `contrast` list): Label (text) and Leading Icon (non-text) on the Container fill over each Base surface, `iOS=False` only; the Focus stroke.
 
-Picture: `Metrics`.
-A band over the Container's padding and gaps, each number read from the instance. One Size is drawn; the other five differ only in the numbers the Sizes table holds.
-
 ## Icon records
 
 `Button/Icon/<Step>/Type token = fa-sharp fa-solid/<Step>`. Beside text the step follows the label (Icons): XSmall Small, Small / Medium / Medium (Expressive) Medium, Large / Large (Expressive) Large. Glyphs are text in the Icons library (`L. Icon Text` `add`, `T. Icon Text` `angle-down`); the icon layers hug the glyph. `_Loading` is Medium (24) at every Size.
@@ -189,9 +183,6 @@ A band over the Container's padding and gaps, each number read from the instance
 | --- | --- | --- | --- |
 | `Label` | `Utility/Footnote` · `Body/Subheadline` × 3 · `Body/Body` × 2 | wraps at 200 (or the Fill column's width), centred, never cut (Localisation) | `Label Text` |
 | `Leading Icon` · `Trailing Icon` | the icon step above | one glyph | `L. Icon Text` · `T. Icon Text` |
-
-Picture: `Type and color`.
-Each text's style and color token, in Light and Dark.
 
 ## Hit target and Skeleton
 
@@ -230,6 +221,3 @@ Item 5 is open: the nine-point criterion of pawisssh/design-system#126 is not me
 A leading artwork is decorative: the Label names the button. Where the artwork carries data the Label doesn't say (a donut's split), the screen states it elsewhere. On Disabled it dims to 45%, with the label and icons (item 4).
 
 A trailing value: the name is the Label, then the figure as Value reads it ("วันนี้ บวก 4.27 เปอร์เซ็นต์"). `Change` always draws the sign, so colour is never the only cue (item 4). The figure is text, 4.5:1: `text-positive` (`Green/155` · `Green/110` since R4) is 5.08 Light · 5.03 Dark at its lowest on `button-secondary` and 4.57 · 4.58 on `button-secondary-active`; `text-negative` and `text-secondary` pass too, and the spec's `contrast` entries check all three with no known defect. On Disabled the figure is `text-disabled`, exempt;
-
-Picture: `Reading order`.
-One element, one focus stop (item 9).

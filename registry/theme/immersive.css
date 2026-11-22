@@ -11,7 +11,7 @@
  * A theme's text is White or Navy only, so muted text is the theme's text
  * too, and cards and popovers sit on the canvas so it stays readable there.
  * Secondary, muted and accent fills (secondary and outline buttons, toggles,
- * the segmented control track, fields, menu items) carry the theme's text,
+ * the chosen segment, fields, menu items) carry the theme's text,
  * not their own foreground, so they take
  * palette 75: the first stepped block on a theme whose palette 100 is the
  * canvas, and the one step whose on-color is the theme's text in every theme.
@@ -21,8 +21,8 @@
  * slots the same way: a field, a toggle and a segment's Hover are palette 75,
  * their strokes, icons, placeholder and helper the theme's text, and their
  * Disabled the Button's (the fill's CDS blend and the text, each at half
- * strength on the canvas). A pressed toggle and the chosen segment show by a
- * ring in the theme's text; the chosen segment sits on the canvas. The switch
+ * strength on the canvas). A pressed toggle shows by a ring in the theme's
+ * text; the chosen segment is palette 75 on a track with no fill. The switch
  * is the action when on and the action at half strength when off, under a
  * thumb in on-action. The display items retuned to Core do the same: a
  * progress bar's and a spinner's track and a table's header row are palette

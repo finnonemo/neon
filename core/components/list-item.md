@@ -31,6 +31,7 @@ List item (variant root)        Fill × Hug, no fill, no padding; min width Inte
    │  ├─ Skeleton               Skeleton only, Fill × Hug, padding 14 · 0, min height 56 (Small: 12 · 0, min 48)
    │  │  └─ Label line          80 × 8, radius 0, skeleton-background
    │  ├─ Right content          List item and List item control: HORIZONTAL, Hug × Hug, padding 0, min height 56 (Small 48), gap 16,
+   │  │                         height so the Chevron centres and the figures stay on the title's line (2026-11-18); that set's trailing
    │  │                         parts (below); hidden in Skeleton
    │  └─ Grabber                Draggable list only: FRAME, min 48 × 48 (Interactive/Medium), opacity 0 on Skeleton
    │     └─ Grip                TEXT in a 24 × 24 box, fa-sharp fa-solid/Large, icon-secondary (Disabled icon-disabled):
