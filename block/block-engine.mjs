@@ -1,5 +1,5 @@
 // block-engine.mjs: the Block engine (Finnomena's Pattern builder) for Node: Patterns, composed Pages, the text
-// shaper and an SVG rasteriser. Built from Block (github.com/pawisssh/block) commit e6df852ea21ae0cf203c7a0c2bafa732c5bdcaae
+// shaper and an SVG rasteriser. Built from Block (github.com/pawisssh/block) commit 6709336de87598a1bfa822ac53296eb50f8cab49
 // by `npm run build:engine-bundle`. Do not edit: change Block and build again.
 //
 // Code: MIT License, Copyright (c) 2026 Pawish Gawinseth (Block's LICENSE). It bundles harfbuzzjs (MIT License,
@@ -5976,6 +5976,7 @@ function fitStart(s, grid, band2, make) {
 var CANDLE_ATTEMPTS = 200;
 var CANDLE_WIDE_UNDER = 0.5;
 var CANDLE_COVER_MIN_75 = 0.22;
+var CANDLE_SMALL_UNDER = 8;
 var LEFT_BLOCK_CHANCE = 0.35;
 var int = (rng, lo, hi) => lo + Math.floor(rng() * (hi - lo + 1));
 var frac = (rng, lo, hi) => lo + rng() * (hi - lo);
@@ -6113,10 +6114,28 @@ function tallCandles(rng, cols, rows, slope, thin) {
   const e1 = Math.min(cols, s2 + int(rng, Math.round(cols * 0.15), Math.round(cols * 0.3)));
   return [candle(s0, w0, 0, h0), candle(s1, e1 - s1, h0, h1), candle(s2, cols - s2, h0 + h1, h2)];
 }
+function smallCandles(rng, cols, rows, slope, min) {
+  const flat = slope === "flat";
+  const h0 = int(rng, min, rows - 2 * min);
+  const h1 = int(rng, min, rows - h0 - min);
+  const h2 = flat ? int(rng, min, rows - h0 - h1) : rows - h0 - h1;
+  const s0 = flat ? 0 : int(rng, 0, cols - 3 * min);
+  const w0 = flat ? cols : int(rng, min, cols - s0 - 2 * min);
+  const s1 = flat ? int(rng, 0, cols - 2 * min) : int(rng, s0, Math.min(s0 + w0, cols - 2 * min));
+  const s2 = int(rng, s1 + min, cols - min);
+  const e1 = flat ? cols : int(rng, s2, cols);
+  if (h2 < min || e1 - s1 < min) return null;
+  return [
+    [{ col: s0, row: rows - h0, w: w0, h: h0 }],
+    [{ col: s1, row: rows - h0 - h1, w: e1 - s1, h: h1 }],
+    [{ col: s2, row: rows - h0 - h1 - h2, w: cols - s2, h: h2 }]
+  ];
+}
 function isWideCandleArea(cols, rows) {
   return rows / cols <= CANDLE_WIDE_UNDER;
 }
 function drawCandles(rng, cols, rows, slope, thin) {
+  if (cols < CANDLE_SMALL_UNDER) return smallCandles(rng, cols, rows, slope, Math.max(1, thin));
   return isWideCandleArea(cols, rows) ? wideCandles(rng, cols, rows, slope, thin) : tallCandles(rng, cols, rows, slope, thin);
 }
 function hasLeftBlock(candles, cols, rows) {
@@ -12090,38 +12109,20 @@ function keeperId(mask, taken = /* @__PURE__ */ new Set()) {
 }
 
 // packages/core/src/preset.ts
-var PRESET_REFERENCE_SET = 3;
-var RISK_LEVELS = ["low", "medium", "high"];
-var RISK_SLOPES = ["flat", "half", "75"];
-function slopeFor({ investmentStyle, risk }) {
-  const [from, to] = (typeof risk === "string" ? [risk, risk] : risk).map((level) => RISK_LEVELS.indexOf(level));
-  const slope = RISK_SLOPES[Math.ceil((from + to) / 2)];
-  return investmentStyle === "market-timing" && slope === "75" ? "half" : slope;
-}
-var STYLE_SHAPES = {
-  "one-time": { families: ["rising", "hanging"], cornerMeetLimit: 0 },
-  "dollar-cost-average": { families: ["rising", "hanging"], cornerMeetLimit: 2 },
-  "market-timing": { families: ["mountain"], cornerMeetLimit: 1 }
-};
-var BLOCK_COUNTS = {
-  2: [1, 2, 3],
-  4: [2, 3, 4, 5, 6],
-  8: [2, 3, 4, 6, 8, 12],
-  16: [3, 5, 8, 12, 16, 24, 32]
-};
-var GUIDANCES = [0, 60];
-var SEEDS = Array.from({ length: 60 }, (_, n) => `preset-${n}`);
+var PRESET_REFERENCE_SET = 4;
+var BRICK_FAMILY = "rising";
+var BRICK_SLOPE = "75";
+var STYLE_CORNER_MEETS = { "one-time": 0, "dollar-cost-average": 2, "market-timing": 1 };
+var SEEDS = Array.from({ length: 300 }, (_, n) => `preset-${n}`);
 var INITIAL_COST_STEPS = [1, 5e3, 2e4, 5e4, 5e5, 2e6, 1e7];
 var NARROW = {
-  2: { w: 1, h: [1, 1, 2, 2] },
   4: { w: 1, h: [1, 2, 2, 3] },
   8: { w: 1, h: [2, 3, 4, 5] },
   16: { w: 2, h: [4, 6, 8, 10] }
 };
-var WIDE = { 2: 2, 4: 2, 8: 2, 16: 4 };
+var WIDE = { 4: 2, 8: 2, 16: 4 };
 function distanceFromTarget(side, step, { w, h }) {
   if (step <= 3) return Math.abs(w - NARROW[side].w) + Math.abs(h - NARROW[side].h[step]);
-  if (side === 2) return Math.abs(w - 2) + Math.abs(h - 1);
   return Math.max(0, WIDE[side] - w) + Math.max(0, WIDE[side] - h);
 }
 function joinedByEdges(filled, side) {
@@ -12138,40 +12139,38 @@ function joinedByEdges(filled, side) {
   }
   return reached.size === filled.filter(Boolean).length;
 }
-function search(side, family, slope, cornerMeetLimit) {
+function search(side, cornerMeetLimit) {
   const grid = { cols: side, rows: side, cellW: 1, cellH: 1 };
   const colourway = getColourway(DEFAULT_COLOURWAY_ID);
   const found = /* @__PURE__ */ new Map();
-  for (const blockCount of BLOCK_COUNTS[side])
-    for (const guidance of GUIDANCES)
-      for (const seed of SEEDS) {
-        const settings = { family, slope, blockCount, guidance, cornerMeetLimit };
-        const blocks = generatePattern(grid, colourway, createRng(seed), { ...settings, referenceSet: PRESET_REFERENCE_SET });
-        if (blocks.length === 0) continue;
-        const filled = Array(side * side).fill(false);
-        for (const b of blocks)
-          for (let row = b.row; row < b.row + b.h; row++)
-            for (let col = b.col; col < b.col + b.w; col++) filled[row * side + col] = true;
-        const cells2 = filled.map((on) => on ? "#" : ".").join("");
-        const largest = blocks.reduce((a, b) => b.w * b.h > a.w * a.h ? b : a);
-        const key = `${cells2}|${largest.w}x${largest.h}`;
-        if (found.has(key)) continue;
-        found.set(key, {
-          settings: { ...settings, seed },
-          cells: cells2,
-          largestBlock: { w: largest.w, h: largest.h },
-          edgeJoined: joinedByEdges(filled, side),
-          sample: patternMask(blocks, grid)
-        });
-      }
+  const settings = { family: BRICK_FAMILY, slope: BRICK_SLOPE, blockCount: defaultBlockCountFor(grid), guidance: DEFAULT_GUIDANCE, cornerMeetLimit };
+  for (const seed of SEEDS) {
+    const diagnostics = {};
+    const { blocks } = generatePatternDetailed(grid, colourway, createRng(seed), { ...settings, referenceSet: PRESET_REFERENCE_SET }, { diagnostics });
+    if (diagnostics.path !== "candles" || blocks.length === 0) continue;
+    const filled = Array(side * side).fill(false);
+    for (const b of blocks)
+      for (let row = b.row; row < b.row + b.h; row++)
+        for (let col = b.col; col < b.col + b.w; col++) filled[row * side + col] = true;
+    const cells2 = filled.map((on) => on ? "#" : ".").join("");
+    const largest = blocks.reduce((a, b) => b.w * b.h > a.w * a.h ? b : a);
+    const key = `${cells2}|${largest.w}x${largest.h}`;
+    if (found.has(key)) continue;
+    found.set(key, {
+      settings: { ...settings, seed },
+      cells: cells2,
+      largestBlock: { w: largest.w, h: largest.h },
+      edgeJoined: joinedByEdges(filled, side),
+      sample: patternMask(blocks, grid)
+    });
+  }
   return [...found.values()];
 }
 function presetBricks(side, entries) {
   const searched = /* @__PURE__ */ new Map();
-  const searchOnce = (family, slope, cornerMeetLimit) => {
-    const key = [family, slope, cornerMeetLimit].join();
-    if (!searched.has(key)) searched.set(key, search(side, family, slope, cornerMeetLimit));
-    return searched.get(key);
+  const searchOnce = (cornerMeetLimit) => {
+    if (!searched.has(cornerMeetLimit)) searched.set(cornerMeetLimit, search(side, cornerMeetLimit));
+    return searched.get(cornerMeetLimit);
   };
   for (const { id, strategy, planCover } of entries) {
     if (!INITIAL_COST_STEPS.includes(strategy.initialCost)) {
@@ -12184,9 +12183,7 @@ function presetBricks(side, entries) {
   const taken = /* @__PURE__ */ new Set();
   return entries.map(({ id, strategy, planCover }) => {
     const style = strategy.investmentStyle;
-    const { families, cornerMeetLimit } = STYLE_SHAPES[style];
-    const slope = slopeFor(strategy);
-    const allowed = families.flatMap((family) => searchOnce(family, slope, cornerMeetLimit)).filter((brick) => style === "market-timing" || brick.edgeJoined === (style === "one-time"));
+    const allowed = searchOnce(STYLE_CORNER_MEETS[style]).filter((brick) => style === "market-timing" || brick.edgeJoined === (style === "one-time"));
     const step = INITIAL_COST_STEPS.indexOf(strategy.initialCost);
     const cover = planCover?.flat();
     let best = null;
