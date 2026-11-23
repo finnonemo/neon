@@ -4,19 +4,29 @@ Compositions taken from the maintainer's private reference screens ([ADR 0017](.
 
 | Code | Pattern | Task | Regions, in order | Status |
 | --- | --- | --- | --- | --- |
-| P1 | Value-row form and dock | Set up one thing with sensible defaults | Title and one line of help; name field; rows of label, current value and chevron; a single choice; dock with a way out and the one primary | illustrative, first set |
+| P1 | Value-row form and dock | Set up one thing with sensible defaults | Title and one line of help; name field; rows of label, current value and chevron; a single choice; dock with a way out and the one primary | approved 2026-11-24: composition, interaction |
 | P2 | Stepped form | Finish a task with a real sequence | Title; progress steps; one step's fields; dock with back and continue | illustrative |
 | P3 | Long form | Enter much related information | Sections by heading and space; tiles for a choice of few; repeatable item group with an add action under it; dock | illustrative |
 | P4 | Form with summary | Check the result while filling in | Form; summary of label and value, total or preview in the Inspector; primary beside the summary | illustrative |
-| P5 | Filtered list and Inspector | Find one record and read it | Title; search and filters; result count; table or rows; selected record in the Inspector; on narrow, two-line rows that open the record | illustrative, first set |
+| P5 | Filtered list and Inspector | Find one record and read it | Title; search and filters; result count; table or rows; selected record in the Inspector; on narrow, two-line rows that open the record | approved 2026-11-24: composition, interaction |
 | P6 | Work queue | Act on records one by one or in bulk | Status filter with counts; rows with a secondary action; selection bar; confirmation | illustrative |
 | P7 | Record detail | Read one record and act on it | Identity and status; warning with its action; figure band; tabs or sections; history as vertical progress | illustrative |
-| P8 | Overview of figures | See where things stand | Title naming the scope; the main figure; figure band; short collections, each ending in its own way in | illustrative, first set |
+| P8 | Overview of figures | See where things stand | Title naming the scope; the main figure; figure band; short collections, each ending in its own way in | approved 2026-11-24: composition, interaction |
 | P9 | Settings | Change how something works | List of areas; one area's rows, choices and switches in the detail | illustrative |
 | P10 | Screen states | Understand loading, nothing or failure | Skeleton in the final layout; empty state under live filters; error with one way back | illustrative |
 | P11 | Dialog | Decide or edit without leaving | Fixed heading; scrolling content; fixed actions | illustrative |
 | P12 | Browsing | Choose among many things worth seeing | Search and categories; filters; sections with a way to the full set; tiles | illustrative |
 | P13 | Campaign Page sections | Understand an offer | Proposition with image and action; short benefits; questions and answers; terms | illustrative |
+
+## Approvals
+
+P1, P5 and P8: the owner answered "อนุมัติทั้งหมด" on 2026-11-24 to composition and interaction, from drafts shown at 375 and 1440 in the light theme with their states. Not approved: visual values, copy, and what the drafts did not show (dark mode, widths from 500 to 987, a keyboard-only pass, the toast). The drafts stay uncommitted in `.local/` as ADR 0017 asks, so the source revision is the content hash `5bbf707aef97` (SHA-256 of `src/patterns/*.ts*`, concatenated in name order). The approval does not open ADR 0015's gate.
+
+Seen in the drafts, unresolved and the shell's own:
+
+- P1: `SimpleLayout` leaves an empty 64px bar over the title, and its sidebar is 360px where its siblings' is 240px.
+- P5: on narrow, the shell's details button repeats what a tap on a row does.
+- P8: on narrow, the shell's details button leaves the primary room for a short label only.
 
 ## Refused parts
 
