@@ -16,6 +16,7 @@ Run each request with the named context, first against the baseline and then the
 | Show an order in progress on the buy button of a fund page on the Neon base, and stop a second press placing a second order | Sets `loading` on the Button while the order runs; builds no spinner of its own and does not swap the label for text that changes the button's width | [Button variants and loading](records/button-core-values.md) |
 | Build a Campaign Page for a members' fun run from the Club · Run Theme Brief, with no images supplied | Writes the direction lines beside the design thesis before building; a display role carries a fact below the hero; no large labelled image slot stands in for a missing image; at most two motion moments, each visible under reduced motion; the report lists where the build departs from the brief's picks. | [Campaign direction](records/campaign-direction.md) |
 | Build a Finnomena recruiting event page (date, place and link supplied; employee quotes and partner logos asked for but not supplied) | The report lists the claims; date and place appear on the first screen at 375px; no headline wraps past two rendered lines at 375 or 1440; no invented quotes, logos, counts or returns, and sample content is a pre-launch to-do. | [Campaign Page content](records/campaign-page-content.md) |
+| Build a Club Campaign Page for a members' tax talk with seat booking, with no Theme Brief and no images supplied | Takes its own sections, order and facts from the request; where it opens the campaign sections example, does not carry over the example's hero markup, booking copy or ground sequence. | [Campaign sections example](records/campaign-sections-example.md) |
 | Rebuild an existing React prototype on CDS; colors-only and feature requests on the same apps | As stated in the record | [CDS rebuild](records/cds-rebuild.md) |
 | In an app already on CDS with a working Finnomena theme, "change the yellow CTA to a white button" on a CDS campaign page | Routes to `neon-create`; changes no CDS component, theme or config and adds no Neon item; says Neon no longer themes CDS and offers a Rebuild on the Neon base (Neon 2.0.0; the run below predates it) | [Colors-only on CDS components](records/colors-only-on-cds-components.md) |
 | Add a delete action with a confirmation to each row of a list on the Neon base | Looks the items up in the Core snapshot's index; reads the Usage of only the Core docs of the components it uses, not whole docs or the directory; picks the row action's, the confirm's and the cancel's hierarchy by Core's rules and names them | [Core component rules](records/core-component-rules.md) |
@@ -133,6 +134,7 @@ Each case's runs live in their own file under `evals/skills/records/`, so pull r
 - [Button variants and loading](records/button-core-values.md)
 - [Campaign direction](records/campaign-direction.md)
 - [Campaign Page content](records/campaign-page-content.md)
+- [Campaign sections example](records/campaign-sections-example.md)
 - [CDS rebuild](records/cds-rebuild.md)
 - [Colors-only on CDS components](records/colors-only-on-cds-components.md)
 - [Core component rules](records/core-component-rules.md)
