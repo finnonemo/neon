@@ -21,7 +21,7 @@ Request, verbatim; the revised arm used port 5232:
 | App source lines of over 30 characters identical to the example | 1, an import | 17: imports and generic classes, and also the hero's two-column, padding and image markup, the acceptance state and the label "ฉันอ่านและยอมรับเงื่อนไข" |
 | Kept out of the page | Not applicable | The questions section, the 60-minute figure, the example's facts and its Patterns |
 | Outside the request | A theme menu in the header | None seen |
-| Verdict | Not applicable: no example opened | Fail: sections and facts are its own, but hero markup, booking label and grounds are the example's |
+| Verdict | Unverified: no example opened | Fail: sections and facts are its own, but hero markup, booking label and grounds are the example's |
 
 The wording calling the example a reference rather than a template did not stop the copying.
 
