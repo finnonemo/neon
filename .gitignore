@@ -25,3 +25,6 @@ tests/
 # Finnomena Trek font files: local only. The licence forbids distributing them
 # without written permission (block/NOTICE, ADR 0010).
 block/fonts/FinnomenaTrek-*
+
+# Third-party reference screens, kept on the maintainer's machine only (ADR 0017).
+resources/
