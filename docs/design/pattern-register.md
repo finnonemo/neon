@@ -56,6 +56,10 @@ Checked in the drafts: 375, 768, 988 and 1440 in light and 375 and 1440 in dark,
 
 Seen in the drafts, the shell's own: in dark the wordmark stays navy on black; list rows take a fill in dark that light has not; `ContentLayout` and `AppShell` centre the menu where `SimpleLayout` puts it at the top; on narrow `SimpleLayout`'s tab bar is navy and the others' light.
 
+The sheet takes focus on its handle, whose focus ring covers part of a title at its centre; this is the registry's `sheet`.
+
+The second drafts' source revision is `f01aa7f3b623` (SHA-256 of `src/v2/*`, then `src/patterns/nav.ts*` and `src/App.tsx`, concatenated in name order).
+
 P13's references are a service's introduction inside an app, not a Campaign Page. It stands as a Campaign Page example on the owner's approval, and not as evidence of what these references lend.
 
 ## Refused parts
