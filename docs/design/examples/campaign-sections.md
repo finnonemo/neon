@@ -2,7 +2,7 @@
 
 ```yaml
 status: partially-reviewed
-source_revision: c405672ad559  # the draft that was reviewed; see Review for what changed on shipping
+source_revision: c405672ad559  # the draft that was reviewed; shipped in 8cd6eb5; see Review for what changed
 reviewer: Pawish Gawinseth
 reviewed_on: 2026-11-24
 approved_properties: [composition, interaction-behavior]
@@ -42,7 +42,7 @@ npm test --prefix evals/templates -- --target neon neon-a11y.spec.mjs --grep cam
 
 Composition and interaction approved on 2026-11-24 ("อนุมัติทั้งหมด"), from a draft on the Club theme at 375 and 1440 with an open answer, the missing acceptance and the booked state. Not approved: visual values, the Brand Pattern picks, copy and sample facts, the other Immersive Themes, and widths between 375 and 1440.
 
-Changed when it shipped: the component's name and header comment, the Patterns imported from beside the source, and a 480px maximum on each Pattern below the `lg` breakpoint, so up to 987 they no longer fill a wider column. The maximum has no effect at 375 or 1440. The widths it changes were not shown for review.
+Changed when it shipped: the component's name and header comment, the Patterns imported from beside the source, and a 480px maximum on each Pattern below the `lg` breakpoint, so up to 987 they no longer fill a wider column. At 375 and 1440 the full-page `start` captures of the shipped source (commit `8cd6eb5`) match the reviewed draft's with no pixel differing. The draft itself is not in the repository. The widths it changes were not shown for review.
 
 ## Used by
 
