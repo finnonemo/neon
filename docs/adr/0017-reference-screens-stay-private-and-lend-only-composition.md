@@ -8,6 +8,7 @@ The owner collected 45 distinct screens of one third-party product family (Uber)
 
 - **The images are the maintainer's, never shipped.** `resources/` is ignored by git. What Neon keeps is written by Finnomena: the [pattern register](../design/pattern-register.md), which names no product and holds no image and no measured value. The table from pattern to image sits beside the images. ADR 0001 stands.
 - **Only composition and behaviour are taken**: regions, order of information, interaction and states. Color, type, space, shape and components come from Core (ADR 0009, ADR 0011).
+- **The layouts and breakpoints stay Neon's** (the owner, 2026-11-24). Taken is what goes inside a pane: which components form a group, their order and rank, where tabs, buttons, filters, lists, alerts and charts sit, and how they behave. A page's shell, its panes and their widths are never taken from an image.
 - **An allowed set, not a closed list.** An approved pattern needs no further approval to be used. A screen outside the set is still designed from `skills/INSTRUCTION.md`.
 - **Where an image and Core or Neon differ, Core or Neon wins.** The register records each refused part and what is used instead. To have an image win, change the rule at its source first.
 - **A review finding rests on a rule, never on an image.** A pattern can show that a composition is accepted, or be offered as a fix. Differing from a pattern is not a finding.

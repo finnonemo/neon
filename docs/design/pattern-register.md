@@ -32,6 +32,19 @@ Seen in the P1, P5 and P8 drafts, unresolved and the shell's own:
 - P5: on narrow, the shell's details button repeats what a tap on a row does.
 - P8: on narrow, the shell's details button leaves the primary room for a short label only.
 
+## Second drafts
+
+The owner said on 2026-11-24 that the first drafts did not show the references' influence, and that what to take is the group of components inside a Neon layout (ADR 0017). P5 and P8 were drawn again on that reading; both are `illustrative`, and the approvals above hold for the first drafts only.
+
+| Code | Layout, unchanged | Groups inside the panes |
+| --- | --- | --- |
+| P5 with P7 | Detailed | List: tabs with counts; menu filters and search in one row; result count; rows grouped by month, a tag only on an exception. Detail: figure and status; identity with copy; alert with its action; figure band; tabs over the history with its times, the line items that open, the price chart marked at the order, the documents |
+| P8 | Content | Main figure, its chart and the range under it, which a pointer or arrow keys read day by day; alert with its action; a verdict as the heading and each criterion under its figure; a share chart whose legend is a list; tabs over a table that becomes two-line rows; action rows with an icon and their state |
+
+Left for Core: Neon has no chart tokens, so charts use steps of ink with direct labels.
+
+P13's references are a service's introduction inside an app, not a Campaign Page. It stands as a Campaign Page example on the owner's approval, and not as evidence of what these references lend.
+
 ## Refused parts
 
 | In the references | Used instead | Rule |
