@@ -34,14 +34,27 @@ Seen in the P1, P5 and P8 drafts, unresolved and the shell's own:
 
 ## Second drafts
 
-The owner said on 2026-11-24 that the first drafts did not show the references' influence, and that what to take is the group of components inside a Neon layout (ADR 0017). P5 and P8 were drawn again on that reading; both are `illustrative`, and the approvals above hold for the first drafts only.
+The owner said on 2026-11-24 that the first drafts did not show the references' influence, and that what to take is the group of components inside a Neon layout (ADR 0017). P5 and P8 were drawn again on that reading, and the owner answered "ตรง ทำต่อ" to that direction: the other functional patterns were drawn the same way. All are `illustrative`: the answer approves no visual value, and the approvals above hold for the first drafts only.
 
 | Code | Layout, unchanged | Groups inside the panes |
 | --- | --- | --- |
 | P5 with P7 | Detailed | List: tabs with counts; menu filters and search in one row; result count; rows grouped by month, a tag only on an exception. Detail: figure and status; identity with copy; alert with its action; figure band; tabs over the history with its times, the line items that open, the price chart marked at the order, the documents |
 | P8 | Content | Main figure, its chart and the range under it, which a pointer or arrow keys read day by day; alert with its action; a verdict as the heading and each criterion under its figure; a share chart whose legend is a list; tabs over a table that becomes two-line rows; action rows with an icon and their state |
+| P1 | Simple | Title with the way to save a draft; name field with its optional part behind a small action; rows of icon, label and value that edit in a bottom sheet; tiles for a choice that needs a sentence; split dock, two actions on narrow |
+| P2 | Simple | Progress steps first; one heading per step, which takes focus; a choice with what it brings under it; fields in groups; a review whose rows go back to their step |
+| P3 | Simple | Numbered sections with one header row each; risk tiles with one disabled and its reason; people that fold to one line with their share, and the sum in the section's header; checkbox groups in columns; files with their progress |
+| P4 | Content | Segmented control first; rows with their own change action; amount chips with the figure in the section's header; date tiles; optional settings fold to their current value. Inspector: primary, live facts, total. On narrow the total sits over the primary in the dock |
+| P6 | Simple | Alert with its action; status with counts and search in one row, which stays in view; rows with the time left or progress and one secondary action; select mode with its own bar and a confirmation |
+| P9 | Detailed | List rows state the current value. Detail: tiles for the mode; a radio shows its inline fields when chosen; domain field with removable values; switches that save at once |
+| P10 | Simple | Banner with a chart, tiles, rows, questions; the skeleton in the same geometry; a filtered empty state with live filters and no action; first use and error with one secondary action |
+| P11 | Simple | Sheets with a fixed title and actions: long text, steps, and a figure band over a checkbox tree whose count is in the primary |
+| P12 | Content | Segmented control, category row, shelves with arrows that reach their ends, tiles with a line chart and a follow toggle, an editorial block beside its links. Inspector: sort, switches, risk chips; any of them turns the shelves into one grid |
 
-Left for Core: Neon has no chart tokens, so charts use steps of ink with direct labels.
+Left for Core and Neon: Core specifies charts ([line chart](../../core/components/line-chart.md), [donut](../../core/components/donut.md)), and the drafts follow them. Their `Chart/chart-*` values are only in those docs: `core/theme.json` holds the domain sets alone, and `theme/css/core-roles.json` has no chart role, so Neon's theme has none and the drafts resolve the values by hand. The share chart mixes two domain sets, because no set covers every kind held. An earlier note here that there were no chart tokens was wrong.
+
+Checked in the drafts: 375, 768, 988 and 1440 in light and 375 and 1440 in dark, with one h1, nothing cut off and no console error; validation, focus on a step, a sheet's return of focus, undo and the skeleton's geometry at 375 and 1440. Not checked: a screen reader, a whole pass by keyboard alone, widths between those, 200% text.
+
+Seen in the drafts, the shell's own: in dark the wordmark stays navy on black; list rows take a fill in dark that light has not; `ContentLayout` and `AppShell` centre the menu where `SimpleLayout` puts it at the top; on narrow `SimpleLayout`'s tab bar is navy and the others' light.
 
 P13's references are a service's introduction inside an app, not a Campaign Page. It stands as a Campaign Page example on the owner's approval, and not as evidence of what these references lend.
 
