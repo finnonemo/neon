@@ -11,7 +11,18 @@ You can write your requests in Thai or English. You do not need to know componen
 - **Functional screens:** Restrained, task-led simplicity, navy/white foundations, and indigo interaction highlights. Other colors communicate accents, status, support and illustration.
 - **Immersive pages:** colorful Finnomena surfaces, expressive imagery and palette-based gradients are welcome when they support the story.
 
-[Get started](#get-started) · [Example requests](#example-requests) · [Choose a skill](#choose-a-skill) · [Troubleshooting](#troubleshooting) · [Contributing](#contributing)
+[What's new in 2.0.0](#whats-new-in-200) · [Get started](#get-started) · [Example requests](#example-requests) · [Choose a skill](#choose-a-skill) · [Troubleshooting](#troubleshooting) · [Contributing](#contributing)
+
+## What's new in 2.0.0
+
+Neon 2.0.0 retires its support for Coinbase Design System ([ADR 0016](docs/adr/0016-cds-is-retired.md)). No employee app in use was on CDS, so the release takes out what kept that path alive. Because it removes an Install mode, it is a breaking change.
+
+- **Removed:** the CDS Install mode, the CDS theme (`theme/cds`), the CDS starter (`templates/vitejs-cds`), and the CDS guidance in the skills. The installer options that only the CDS mode used, `--sync-starter`, `--package-manager` and `--skip-install`, are gone too.
+- **Installer:** a run now needs a mode: `--new`, `--add <item>...` or `--css-only`. A run with no mode used to mean CDS; now it stops and explains that Neon no longer themes CDS.
+- **Apps on CDS:** `neon-create` no longer offers to build in an app on CDS, and `neon-audit` no longer lists CDS as an integration choice. For an app on CDS, the skills offer a Rebuild on the Neon base.
+- **Unchanged:** the Neon base, the Neon registry, Core's colors and type sizes, the Immersive Themes, and the six skills.
+
+If you still need CDS support, 1.0.3 was the last release to have it, and it can still be installed from the tag `neon--v1.0.3`.
 
 ## Get started
 
