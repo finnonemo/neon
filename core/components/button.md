@@ -15,6 +15,7 @@ Draft (2026-11-17), put together from the rules this doc already held; the two "
 - Expressive for a fixed 256 action; a full-width button is the nester's Fill.
 - Leading artwork: turn `Artwork` on and `Leading Icon` off, then swap the artwork into `Leading artwork`. An artwork is at most 20 tall at XSmall and 24 at the other Sizes; a taller one grows the capsule. The gap to the Label is the Container's (4 · 8). A Donut is swapped in from the Charts library in the product file: it can't be a preferred value (ADR 0009). First case: Port's Today chip, Donut `Size=Small` with one segment per asset class ([donut.md](donut.md), Usage).
 - Trailing value: for a change figure beside a short label, as Port's Today chip. Type the label alone ("วันนี้"), turn `Value` on, then on the nested Value pick `Change` (Positive · Negative · Zero) and type the unsigned digits into `Value text` ("4.27"); `Unit` stays Percent and `Text style` the Size's. Never type a figure with its sign into `Label Text` where its direction matters. One figure per Button, on Secondary and Tertiary Default only, and only beside a label that stays on one line (Accessibility); a row of figures is a List item's. The gap to the Label is the Container's (4 · 8); a Small Secondary grows from 94 to 147 wide with "+4.27%".
+- Subtitle: a short second line under the Label at the same height (56 Large, 48 Medium), on Medium, Medium (Expressive), Large and Large (Expressive). Set `Subtitle` True and type it into `Subtitle Text` ("ยอดเงินคงเหลือ ฿1,250.00"). Not on XSmall or Small, Loading or Skeleton. The Subtitle takes the Label's colour, so it says what the Label's action needs, never a second action.
 - Tertiary Inverse only on `Background/background-inverse` (Snackbar), for a single quiet action or Close; Primary Inverse there for a filled call (P2).
 - Primary and Secondary Inverse are also the white buttons over maps, photos and headers; Toolbars, Tab bars and Segmented controls use them on `iOS=False`. Primary Inverse on `iOS=False` carries the effect style `Elevation/Button inverse` (Elevation). In Dark both are dark grey (`Grey/90`, `Grey/80`), following `background-secondary` and `background-tertiary`.
 
@@ -105,7 +106,10 @@ Button | Rect button (variant root)   Hug × Hug, no fill, no padding; min width
 └─ Container                          HORIZONTAL, Hug × Hug, min height Button/Container/<Round | Rect>/<Size>/Layout height (Fixed on Loading), centred, stroke 2 on Focus
    ├─ Artwork                         instance, hidden; shown by `Artwork`, swapped by `Leading artwork` (default Avatar 3XSmall, 18 × 18); hugs; opacity 45% on Disabled; none on Loading and Skeleton
    ├─ Leading Icon                    TEXT glyph (Icons library), shown by `Leading Icon`
-   ├─ Label                           TEXT, `Label Text`
+   ├─ Label                           TEXT, `Label Text` (on `Subtitle=False`)
+   ├─ Text                            `Subtitle=True` only, in Label's place: VERTICAL, Hug × Hug, centred, gap 0
+   │  ├─ Label                        TEXT, `Label Text`
+   │  └─ Subtitle                     TEXT, `Subtitle Text` (default "Subtitle"), `Utility/Caption 1`, the Label's ink
    ├─ Value                           exposed Value instance, hidden; shown by `Value`; `Unit=Percent`, `Change` Positive by default, `Text style` the Label's step, `State=Disabled` on Disabled; Secondary and Tertiary Default only, none on Loading and Skeleton
    ├─ Trailing Icon                   TEXT glyph, shown by `Trailing Icon`
    └─ _Loading                        instance, State=Loading only, Size pinned Medium
@@ -123,11 +127,12 @@ Button | Rect button (variant root)   Hug × Hug, no fill, no padding; min width
 | `Type` | Default · Brand · Danger · Inverse | colour role; Brand only on Primary; Inverse on every Hierarchy and State, `Button` only |
 | `Size` | XSmall · Small · Medium · Medium (Expressive) · Large · Large (Expressive) | Container 28 / 36 / 48 / 48 / 56 / 56, text style, icon step; Expressive fixes the width at 256 |
 | `State` | Enabled · Hover · Focus · Active · Disabled · Loading · Skeleton | fill, Focus stroke, `_Loading`, Skeleton |
+| `Subtitle` | False · True | True: `Text` holds `Label` and `Subtitle`, padding top and bottom 7 (Large, L (Expr.)) or 3 (Medium, M (Expr.)) so the height stays 56 / 48; Medium and Large sizes only, not Loading or Skeleton |
 
-`Rect button`: `Type` · `Hierarchy` · `Size` · `State` in that order, the same values except `Type`, which has no Inverse (Default · Brand · Danger), and no `iOS`.
+`Rect button`: `Type` · `Hierarchy` · `Size` · `State` · `Subtitle` in that order, the same values except `Type`, which has no Inverse (Default · Brand · Danger), and no `iOS`.
 
-Properties (both): `Leading Icon`, `Trailing Icon` (BOOLEAN), `Label Text`, `L. Icon Text`, `T. Icon Text` (TEXT). `Label Text` is new on `Rect button` (pawisssh/design-system#126). `Artwork` (BOOLEAN, off) and `Leading artwork` (INSTANCE_SWAP, default Avatar `Size=3XSmall, Artwork=Image`, preferred values Avatar's variants), on the 600 and 210 cells that have a `Leading Icon`. `Value` (BOOLEAN, off) on the 120 and 60 cells of `Hierarchy` Secondary and Tertiary at `Type=Default` with a Label (not Loading or Skeleton); the nested [Value](value.md) is exposed, so its `Change`, `Unit` and `Value text` sit in the Button's panel.
-(3 × 3 − 2 Brand cells) × 6 × 7 = **294 variants** per look: 588 on `Button` plus 252 Inverse (3 Hierarchies × 6 Sizes × 7 States × 2 `iOS`) = **840**, and 294 on `Rect button`, whose `Type` keeps Default · Brand · Danger.
+Properties (both): `Leading Icon`, `Trailing Icon` (BOOLEAN), `Label Text`, `L. Icon Text`, `T. Icon Text` (TEXT). `Label Text` is new on `Rect button` (pawisssh/design-system#126). `Artwork` (BOOLEAN, off) and `Leading artwork` (INSTANCE_SWAP, default Avatar `Size=3XSmall, Artwork=Image`, preferred values Avatar's variants), on the 600 and 210 cells that have a `Leading Icon`. `Value` (BOOLEAN, off) on the 120 and 60 cells of `Hierarchy` Secondary and Tertiary at `Type=Default` with a Label (not Loading or Skeleton); the nested [Value](value.md) is exposed, so its `Change`, `Unit` and `Value text` sit in the Button's panel. `Subtitle Text` (TEXT, default "Subtitle") on the `Subtitle=True` cells.
+(3 × 3 − 2 Brand cells) × 6 × 7 = **294 variants** per look: 588 on `Button` plus 252 Inverse (3 Hierarchies × 6 Sizes × 7 States × 2 `iOS`) = 840 on `Subtitle=False`, plus 400 on `Subtitle=True` (4 Sizes × 5 States × 20 `Hierarchy` × `Type` × `iOS` cells) = **1,240**; 294 + 140 = **434** on `Rect button`, whose `Type` keeps Default · Brand · Danger.
 
 ## Component variables and Theme tokens
 
@@ -141,8 +146,10 @@ Properties (both): `Leading Icon`, `Trailing Icon` (BOOLEAN), `Label Text`, `L. 
 |  |  | Gap horizontal | 4 · 4 · 8 · 8 · 8 · 8 |
 |  |  | Radius | 200 (Capsule) |
 |  |  | Layout width | 256 on the Expressive sizes |
+|  |  | Subtitle padding top / bottom | 4 · 6 · 3 · 3 · 7 · 7, raw; bound on `Subtitle=True` only, so XSmall and Small (and XLarge, 16) only repeat their Padding top for the full set |
 | `Button/Container/Rect/<Size>` | `Size` | Padding left / right | 8 · 12 · 16 · 16 · 24 · 16 |
 |  |  | Radius | 8 · 8 · 12 · 12 · 16 · 16 |
+|  |  | Subtitle padding top / bottom | 4 · 6 · 3 · 3 · 7 · 7, as Round's (bound on `Subtitle=True` only) |
 | `Button/Icon/<Step>` | Icon step | Type token | `fa-sharp fa-solid/Small` · `/Medium` · `/Large` |
 
 Root min width and height bind the shared `Interactive/<Size>/Interactive min-height`: XSmall and Small 48 (`hit-target`), Medium and Medium (Expressive) 48, Large and Large (Expressive) 56 (`control-large`), read 2026-11-01. A `Round/XLarge` record exists with no variant on it.
@@ -182,6 +189,7 @@ Pairs (the spec's `contrast` list): Label (text) and Leading Icon (non-text) on 
 | Layer | Text style (XSmall · Small · Medium · M (Expr.) · Large · L (Expr.)) | Lines | Text property |
 | --- | --- | --- | --- |
 | `Label` | `Utility/Footnote` · `Body/Subheadline` × 3 · `Body/Body` × 2 | wraps at 200 (or the Fill column's width), centred, never cut (Localisation) | `Label Text` |
+| `Subtitle` | `Utility/Caption 1` (12/18) on Medium, M (Expr.), Large, L (Expr.) | one line at 42 = Label 24 + 18; wraps at 200, centred, never cut, and then grows the Container (R7) | `Subtitle Text` |
 | `Leading Icon` · `Trailing Icon` | the icon step above | one glyph | `L. Icon Text` · `T. Icon Text` |
 
 ## Hit target and Skeleton
@@ -207,7 +215,7 @@ Item 5 is open: the nine-point criterion of pawisssh/design-system#126 is not me
 - [x] 4. No state by colour alone: Disabled dims label and icons, Loading shows a spinner, Skeleton drops the content, Focus adds a stroke.
 - [ ] 5. **The Focus ring isn't outside the Container**: `State=Focus` draws a 2 px `Focus/focus` stroke `INSIDE` the Container (all 126 Focus variants: 84 Button, 42 Rect button), not the 2 px ring with a 2 px gap outside it (Accessibility). Owner's call; not changed here.
 - [x] 6. **Reflows.** A long label wraps at 200 and stays inside: Large 104 · 140 · 368, Medium 96 · 120 · 284, Small 84 · 108 · 272, XSmall 68 · 92 · 248. Clean in Button dock and Alert too ([Button dock](button-dock.md) and [Alert](alert.md) item 6).
-- [x] 7. No text under 11 pt: the smallest is Footnote.
+- [x] 7. No text under 11 pt: the smallest is the Subtitle's Caption 1 (12).
 - [x] 8. The Motion part names each transition.
 - [x] 9. Role, name, states and focus order:
 
@@ -217,6 +225,8 @@ Item 5 is open: the nine-point criterion of pawisssh/design-system#126 is not me
 | Accessible name | the Label |
 | Announced states | `disabled`, `aria-busy` on Loading |
 | Focus order | one stop |
+
+A subtitle is part of the name: the Label, then the Subtitle. It takes the Label's ink, so the Label's contrast pairs hold for it.
 
 A leading artwork is decorative: the Label names the button. Where the artwork carries data the Label doesn't say (a donut's split), the screen states it elsewhere. On Disabled it dims to 45%, with the label and icons (item 4).
 
