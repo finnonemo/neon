@@ -16,13 +16,17 @@ Compositions taken from the maintainer's private reference screens ([ADR 0017](.
 | P10 | Screen states | Understand loading, nothing or failure | Skeleton in the final layout; empty state under live filters; error with one way back | illustrative |
 | P11 | Dialog | Decide or edit without leaving | Fixed heading; scrolling content; fixed actions | illustrative |
 | P12 | Browsing | Choose among many things worth seeing | Search and categories; filters; sections with a way to the full set; tiles | illustrative |
-| P13 | Campaign Page sections | Understand an offer | Proposition with image and action; short benefits; questions and answers; terms | illustrative |
+| P13 | Campaign Page sections | Understand an offer | Proposition with image and action; short benefits; questions and answers; terms | approved 2026-11-24: composition, interaction |
 
 ## Approvals
 
 P1, P5 and P8: the owner answered "อนุมัติทั้งหมด" on 2026-11-24 to composition and interaction, from drafts shown at 375 and 1440 in the light theme with their states. Not approved: visual values, copy, and what the drafts did not show (dark mode, widths from 500 to 987, a keyboard-only pass, the toast). The drafts stay uncommitted in `.local/` as ADR 0017 asks, so the source revision is the content hash `5bbf707aef97` (SHA-256 of `src/patterns/*.ts*`, concatenated in name order). The approval does not open ADR 0015's gate.
 
-Seen in the drafts, unresolved and the shell's own:
+P13: the owner answered "อนุมัติทั้งหมด" on 2026-11-24 to composition and interaction, from a draft on the Club theme shown at 375 and 1440 with an open answer, the missing acceptance and the booked state. Not approved: visual values, the Brand Pattern picks, copy and sample facts, and what the draft did not show (the other Immersive Themes, widths between 375 and 1440, a keyboard-only pass). The source revision is `c405672ad559` (SHA-256 of `src/campaign/P13Campaign.tsx` then `public/p13-*.svg`, concatenated in name order). Its hero photo is a marked slot.
+
+Seen in the P13 draft, unresolved: at 1440 the Pattern beside the questions is taller than their list; from 500 to 987 the hero's Pattern fills the column, so the hero passes one screen.
+
+Seen in the P1, P5 and P8 drafts, unresolved and the shell's own:
 
 - P1: `SimpleLayout` leaves an empty 64px bar over the title, and its sidebar is 360px where its siblings' is 240px.
 - P5: on narrow, the shell's details button repeats what a tap on a row does.
