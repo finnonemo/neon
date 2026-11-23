@@ -24,7 +24,7 @@ P1, P5 and P8: the owner answered "อนุมัติทั้งหมด" o
 
 P13: the owner answered "อนุมัติทั้งหมด" on 2026-11-24 to composition and interaction, from a draft on the Club theme shown at 375 and 1440 with an open answer, the missing acceptance and the booked state. Not approved: visual values, the Brand Pattern picks, copy and sample facts, and what the draft did not show (the other Immersive Themes, widths between 375 and 1440, a keyboard-only pass). The source revision is `c405672ad559` (SHA-256 of `src/campaign/P13Campaign.tsx` then `public/p13-*.svg`, concatenated in name order). Its hero photo is a marked slot.
 
-Seen in the P13 draft, unresolved: at 1440 the Pattern beside the questions is taller than their list; from 500 to 987 the hero's Pattern fills the column, so the hero passes one screen.
+Seen in the P13 draft, unresolved: at 1440 the Pattern beside the questions is taller than their list; from 500 to 987 the hero's Pattern fills the column, so the hero passes one screen. P13 ships as [campaign sections](./examples/campaign-sections.md), which caps that Pattern at 480px; the hero still passes one screen at 768 (1056px).
 
 Seen in the P1, P5 and P8 drafts, unresolved and the shell's own:
 

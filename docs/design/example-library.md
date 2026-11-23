@@ -32,5 +32,6 @@ Each example has a record in [examples/](./examples/): its review and how to cap
 | Example | Status |
 | --- | --- |
 | [Pane grids](./examples/pane-grids.md) | reviewed, 2026-11-16 |
+| [Campaign sections](./examples/campaign-sections.md) | partially reviewed (composition, interaction behavior), 2026-11-24 |
 
 Pane grids is the first reviewed example. Prose examples in the skills are illustrative; locally generated evaluation apps are behavioral evidence only.

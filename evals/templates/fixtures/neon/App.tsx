@@ -20,6 +20,7 @@ import { Approval } from "./app/Approval"
 import { Extras } from "./app/Extras"
 import { Expansion } from "./app/Expansion"
 import { PaneGrids } from "./app/PaneGrids"
+import { CampaignSections } from "./app/campaign-sections/CampaignSections"
 
 const params = new URLSearchParams(location.search)
 const layout = params.get("layout") ?? "app"
@@ -91,7 +92,8 @@ export function App() {
     ...(params.has("uncontrolled") ? {} : { activePane, onActivePaneChange: setActivePane }),
     paneLabels: { content: "Content", inspector: "Details", viewDetails: "ดูรายละเอียด", backToContent: "กลับไปที่รายการ" },
   }
-  return layout === "approval" ? <Approval />
+  return params.get("example") === "campaign-sections" ? <CampaignSections />
+    : layout === "approval" ? <Approval />
     : layout === "extras" ? <Extras />
     : layout === "expansion" ? <Expansion />
     : layout === "logo" ? <main><Logo /><Logo tone="light" /></main>

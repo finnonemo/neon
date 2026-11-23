@@ -38,6 +38,54 @@ for (const [layout, mode] of ['app', 'content'].flatMap((layout) => ['light', 'd
   });
 }
 
+// The campaign-sections example (docs/design/examples/campaign-sections.md): the rules a Campaign
+// Page can be measured on, and its booking flow. The screenshots are its review captures.
+for (const width of [375, 768, 1024, 1440]) {
+  test(`campaign-sections example holds at ${width}px`, async ({ page }) => {
+    const height = width === 375 ? 812 : 900;
+    await page.setViewportSize({ width, height });
+    await page.goto('/?example=campaign-sections');
+    await page.evaluate(() => document.fonts.ready);
+    const shot = (state) => page.screenshot({ path: test.info().outputPath(`campaign-sections-${state}-${width}.png`), fullPage: true });
+    const axe = async (state) => {
+      await settled(page);
+      const { violations } = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
+      expect(violations.map((v) => `${state} ${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);
+      await shot(state);
+    };
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+    const cta = await page.getByRole('link', { name: 'จองที่นั่งฟรี' }).boundingBox();
+    expect(cta.y + cta.height).toBeLessThanOrEqual(height);
+    // Every headline: two rendered lines or fewer.
+    for (const heading of await page.locator('h1, h2').all()) {
+      const lines = await heading.evaluate((node) => {
+        const range = document.createRange();
+        range.selectNodeContents(node);
+        return new Set([...range.getClientRects()].map((rect) => Math.round(rect.top))).size;
+      });
+      expect(lines, await heading.textContent()).toBeLessThanOrEqual(2);
+    }
+    // Every visible Pattern is drawn whole: its box keeps the file's ratio, never a strip.
+    for (const image of await page.locator('main img:visible').all()) {
+      const { box, file } = await image.evaluate((node) => ({ box: node.offsetWidth / node.offsetHeight, file: node.naturalWidth / node.naturalHeight }));
+      expect(Math.abs(box - file)).toBeLessThan(0.02);
+    }
+    await axe('start');
+    await page.getByRole('button', { name: 'ไม่เคยลงทุนเลย เรียนได้ไหม' }).press('Enter');
+    await expect(page.getByText('ได้ คลาสเริ่มจากศูนย์')).toBeVisible();
+    await page.getByRole('button', { name: 'จองที่', exact: true }).press('Enter');
+    const accept = page.getByRole('checkbox', { name: 'ฉันอ่านและยอมรับเงื่อนไข' });
+    await expect(accept).toBeFocused();
+    await expect(accept).toHaveAttribute('aria-invalid', 'true');
+    await expect(accept).toHaveAccessibleDescription('ยอมรับเงื่อนไขก่อนจองที่');
+    await axe('error');
+    await accept.press('Space');
+    await page.getByRole('button', { name: 'จองที่', exact: true }).press('Enter');
+    await expect(page.getByRole('heading', { name: 'จองที่แล้ว' })).toBeFocused();
+    await axe('booked');
+  });
+}
+
 // The screens themselves reflow too: at a 320 phone the page never scrolls sideways. A Table
 // scrolls inside its own container, so it is not counted.
 for (const layout of ['approval', 'extras', 'expansion']) {

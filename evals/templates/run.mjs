@@ -77,8 +77,9 @@ async function assembleNeon() {
   await mkdir(join(app, 'src/app/shared'), { recursive: true });
   await copyFile(join(here, 'fixtures/neon/App.tsx'), join(app, 'src/App.tsx'));
   for (const file of ['Approval.tsx', 'Extras.tsx', 'Expansion.tsx', 'Hook.tsx']) await copyFile(join(here, 'fixtures/neon', file), join(app, 'src/app', file));
-  // A shipped example is tested as it ships, not from a copy.
+  // Shipped examples are tested as they ship, not from copies.
   await copyFile(join(root, 'examples/pane-grids/PaneGrids.tsx'), join(app, 'src/app/PaneGrids.tsx'));
+  await cp(join(root, 'examples/campaign-sections'), join(app, 'src/app/campaign-sections'), { recursive: true });
   await cp(join(here, 'fixtures/neon/expansion'), join(app, 'src/app/expansion'), { recursive: true });
   await copyFile(join(here, 'fixtures/shared/data.ts'), join(app, 'src/app/shared/data.ts'));
   const mainPath = join(app, 'src/main.tsx');
