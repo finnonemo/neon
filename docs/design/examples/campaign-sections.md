@@ -46,4 +46,4 @@ Changed when it shipped: the component's name and header comment, the Patterns i
 
 ## Used by
 
-No skill links it yet.
+- [Campaign Page direction](../../../skills/neon-create/references/campaign-direction.md#composition) links the shipped README.
