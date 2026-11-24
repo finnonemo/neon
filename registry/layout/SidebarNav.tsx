@@ -21,7 +21,7 @@ export function SidebarNav({ items, isRail }: { items: NavItem[]; isRail: boolea
           rel={item.external ? "noopener noreferrer" : undefined}
           aria-label={item.label}
           aria-current={item.active ? "page" : undefined}
-          className={cn("flex items-center gap-2 rounded-md p-2 text-foreground no-underline", isRail ? "justify-center" : "justify-start")}
+          className={cn("flex items-center gap-2 rounded-md p-2 text-foreground no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring", isRail ? "justify-center" : "justify-start")}
         >
           <Icon className="size-6" />
           {!isRail && <span className="neon-sidebar-label">{item.label}</span>}

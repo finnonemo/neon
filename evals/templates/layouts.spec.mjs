@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { focusColor, keyboardFocus } from './expansion.mjs';
 
 // Fixtures exercise the actual installed Neon base components, not copies of their logic.
 test.beforeEach(async ({ page }) => {
@@ -266,6 +267,28 @@ for (const layout of ['app', 'content']) {
     await page.screenshot({ path: test.info().outputPath(`${layout}-workspace-wide.png`) });
   });
 }
+// Core's focus ring: 2px Focus/focus outside the link with a 2px gap, not the base's 1px outline at half strength.
+for (const mode of ['light', 'dark']) {
+  for (const [layout, width, links] of [
+    ['immersive', 375, ['Finnomena']],
+    ['app', 768, ['Finnomena', 'รายการ / Requests']],
+    ['app', 1440, ['Finnomena', 'รายการ / Requests']],
+    ['simple', 768, ['Finnomena', 'รายการ / Requests']],
+    ['simple', 1440, ['Finnomena', 'รายการ / Requests']],
+  ]) {
+    test(`${layout} ${width}px ${mode}: shell links draw Core's focus ring`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(`/?layout=${layout}&mode=${mode}`);
+      for (const name of links) {
+        const link = page.locator('.neon-sidebar, header').getByRole('link', { name, exact: true });
+        const focus = await keyboardFocus(page, link);
+        expect(focus.focusVisible).toBe(true);
+        expect(focus.after, name).toBe(`outline 2px ${await focusColor(page)} 2px`);
+      }
+    });
+  }
+}
+
 for (const layout of ['app', 'content']) {
   test(`${layout}: desktop panes read sidebar, content, then inspector`, async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });

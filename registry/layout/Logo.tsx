@@ -21,7 +21,7 @@ export function Logo({ variant = "full", tone }: LogoProps) {
   const isFull = variant === "full"
 
   return (
-    <a href="https://www.finnomena.com" target="_blank" rel="noopener noreferrer">
+    <a href="https://www.finnomena.com" target="_blank" rel="noopener noreferrer" className="focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring">
       <img src={assets[variant][tone ?? scheme]} alt="Finnomena" width={isFull ? 136 : 32} height={32} className="block" />
     </a>
   )
