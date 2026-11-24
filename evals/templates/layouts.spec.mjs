@@ -283,6 +283,8 @@ for (const mode of ['light', 'dark']) {
         const link = page.locator('.neon-sidebar, header').getByRole('link', { name, exact: true });
         const focus = await keyboardFocus(page, link);
         expect(focus.focusVisible).toBe(true);
+        // Chrome paints no solid outline on an inline link around a block image, whatever the computed style says.
+        await expect(link).not.toHaveCSS('display', 'inline');
         expect(focus.after, name).toBe(`outline 2px ${await focusColor(page)} 2px`);
       }
     });
