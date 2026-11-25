@@ -18,7 +18,7 @@ Look at the built page at 375px and 1440px and improve the design until you are 
 
 Point each page variable at the Immersive Theme's `--immersive-*` properties, per the contract's [color rules](../../INSTRUCTION.md#immersive-color). A theme may point a variable at another property than the rest do, as Ultra often needs. Change color only: leave layout, type, spacing, shape and motion as designed. When a color fails contrast or reads wrong, choose another step or ground for it before touching the layout. With a Reference-led reference, the page colors follow [Brand Intensity](../../INSTRUCTION.md#reference-designs-and-brand-intensity) instead.
 
-Done when no color literal is left in the page outside supplied images, engine-drawn artwork and Gradient Recipe stops, and switching the theme recolors the whole page without moving anything. The review build's theme toggle proves it: check all four themes.
+Done when no color literal is left in the page outside supplied images, engine-drawn artwork and Gradient Recipe stops, and switching the theme recolors the whole page without moving anything. The review build's theme toggle proves it: check all four themes. The launch build keeps one theme and has no toggle.
 
 ## What every page keeps
 
