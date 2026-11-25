@@ -74,7 +74,7 @@ test('neon-create keeps the two bases apart and names the items it added', async
 
 test('the contract themes a Neon-base Campaign Page through ImmersiveLayout', async () => {
   const contract = await readFile(new URL('../../skills/INSTRUCTION.md', import.meta.url), 'utf8');
-  assert.match(contract, /pass the theme as `ImmersiveLayout`'s `immersiveTheme` \(the `@neon\/immersive-themes` registry item\)/);
+  assert.match(contract, /can pass the theme as `ImmersiveLayout`'s `immersiveTheme` \(the `@neon\/immersive-themes` registry item\)/);
   assert.match(contract, /Elsewhere, copy the \[generated theme CSS\]/);
   assert.match(contract, /build on the Neon base with Neon registry items; Neon no longer themes CDS \(Neon 2\.0\.0 removed it\), so an app on CDS is offered a Rebuild on the Neon base/);
 });
