@@ -159,3 +159,14 @@ test('campaign direction sets no layout rule and keeps theming and the brand', a
   // The retired rules do not come back.
   for (const rule of [/dominant element/, /Direction lines/, /moments on a/, /edge to edge/, /campaign-sections/, /half the hero/, /4\.5:1|prefers-reduced-motion|[Ii]nvented proof|keyboard/]) assert.doesNotMatch(source, rule);
 });
+
+test('neon-review judges a Campaign Page by its brand only', async () => {
+  const checks = await readFile(new URL('../../skills/neon-review/references/review-checks.md', import.meta.url), 'utf8');
+  const campaign = checks.split('## Campaign Pages\n')[1]?.split('\n## ')[0] ?? '';
+  assert.match(campaign, /logo, typeface, color and any Brand Pattern/);
+  assert.match(campaign, /accessibility, contrast or motion only when the request asks/);
+  assert.match(checks.split('## Accessibility and interactions\n')[1], /On a \[Campaign Page\]\(#campaign-pages\), only when the request asks/);
+  assert.doesNotMatch(checks, /with passing contrast/);
+  const skill = await readFile(new URL('../../skills/neon-review/SKILL.md', import.meta.url), 'utf8');
+  assert.match(skill, /references\/review-checks\.md#campaign-pages/);
+});
