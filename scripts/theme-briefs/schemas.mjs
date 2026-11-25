@@ -2,10 +2,6 @@
 // and every input is scanned for hex-like strings, px values and font fields
 // (type and colors come from the theme, never from an input).
 
-const SECTION_ROLES = ['hero', 'proof', 'detail-list', 'call-out', 'form', 'footer'];
-// What a section sits on: the canvas, the theme's strongest tint step, its strongest accent step, or the
-// Brand Pattern's ground, which the picks file chooses.
-export const GROUNDS = ['canvas', 'tint', 'accent', 'pattern'];
 export const COLOURWAYS = ['palette', 'accent', 'support'];
 // Block's primary Colourways (COLOURWAYS_LIST in block/block-engine.mjs): a ground color and one block color.
 // Block draws a Brand Pattern in one of these and no other; a test holds this list to the engine's.
@@ -15,11 +11,6 @@ export const BLOCK_COLOURWAYS = ['navy__yellow-100', 'navy__grey-100', 'navy__wh
 export function blockColourway(id) {
   const [ground, blocks] = String(id).split('__');
   return { ground: `${BLOCK_COLORS[ground]}.100`, blocks: `${BLOCK_COLORS[String(blocks).replace(/-100$/, '')]}.100` };
-}
-// The color a Brand Pattern section is filled with: a step of the picks file's colourway, or, with `ground`
-// "canvas", the theme's bare canvas, where the Pattern stands only when Block draws on the canvas color.
-export function patternFill(theme, { colourway, ground } = {}) {
-  return ground === 'canvas' ? theme?.canvas : theme?.steps[colourway]?.[ground]?.bg;
 }
 // A theme's variable for one of its colors at full strength: the canvas, the text or a family's 100 step.
 export function colorVariable(theme, color) {
@@ -31,15 +22,13 @@ const SECONDARIES = ['green', 'blue', 'purple', 'red', 'orange'];
 const REVIEW_STATUSES = ['illustrative', 'partially-reviewed', 'reviewed'];
 // The components every brief renders itself; an occasion component never takes one of their names.
 export const FIXED_COMPONENTS = ['Main Action', 'Secondary Action', 'Logo', 'Tint Block', 'Accent Block', 'Support Block'];
-export const ENTRIES = ['tagline', 'mood-occasion', 'occasion-components', 'preset-dos-donts', 'imagery', 'layout', 'example-prompts'];
+export const ENTRIES = ['tagline', 'mood-occasion', 'occasion-components', 'preset-dos-donts', 'imagery'];
 // What an entry may take: preset fields (never a source), theme text and facts, picks, computed lists and
-// earlier entries' output. A whole preset ("layout", "imagery") leaves out its kind, slug and source.
+// earlier entries' output. The whole "imagery" preset leaves out its kind, slug and source.
 export const INPUTS = [
-  ...['taglineIntent', 'moodIntent', 'components', 'dos', 'donts', 'promptInputs', 'secondaryHighlights'].map((field) => `occasion.${field}`),
-  'layout', ...['sections', 'heroPattern', 'navigation', 'footer', 'density', 'blockRadius', 'sectionGap', 'cardPadding', 'pageWidth', 'motion', 'brandPattern', 'grounds', 'featureRadius', 'factRole', 'nameRole'].map((field) => `layout.${field}`),
-  'imagery', ...['leads', 'framing', 'subject', 'illustration', 'density'].map((field) => `imagery.${field}`),
-  'theme.kind', 'theme.label', 'theme.mood', 'theme.sibling', 'theme.roles', 'brief.name', 'brandPattern.colourway', 'brandPattern.section',
-  'accentPlacements', 'offActionFills', 'colorVars', 'typeRoles', 'sectionGrounds', 'occasion-components.components', 'occasion-components.names',
+  ...['taglineIntent', 'moodIntent', 'components', 'dos', 'donts', 'secondaryHighlights'].map((field) => `occasion.${field}`),
+  'imagery', ...['leads', 'subject', 'illustration'].map((field) => `imagery.${field}`),
+  'theme.kind', 'theme.label', 'theme.mood', 'theme.sibling', 'brief.name', 'occasion-components.components', 'occasion-components.names',
 ];
 // The bands each entry's soft checks read from its targets.
 export const TARGETS = {
@@ -48,10 +37,7 @@ export const TARGETS = {
   'occasion-components': ['roleWords', 'paragraphWords', 'paragraphSentences'],
   'preset-dos-donts': ['words'],
   imagery: ['words'],
-  layout: ['words'],
-  'example-prompts': ['count', 'words'],
 };
-export const PLACEHOLDERS = ['{{variables}}', '{{typeRoles}}'];
 
 const text = { type: 'string' };
 const slug = { type: 'string', pattern: /^[a-z0-9]+(?:-[a-z0-9]+)*$/, describe: 'a lowercase hyphenated slug' };
@@ -60,7 +46,6 @@ const oneOf = (...values) => ({ enum: values });
 const list = (items, min = 0, max = Infinity) => ({ type: 'array', items, min, max });
 const object = (properties, optional = []) => ({ type: 'object', properties, optional });
 const nullable = (schema) => ({ ...schema, nullable: true });
-const step = (set, prefix) => ({ type: 'string', step: set, describe: `a ${prefix}-* step name` });
 
 // Provenance of a preset drafted from a public page (ADR 0007). Never a drafting input.
 const source = object({
@@ -70,53 +55,30 @@ const source = object({
   robotsDisallowed: { type: 'boolean' },
 });
 
-export function presetSchema(kind, name, facts) {
+export function presetSchema(kind, name) {
   const common = { kind: oneOf(kind), slug: { ...slug, equals: name } };
   if (kind === 'occasion') {
     return object({
       ...common,
       taglineIntent: text,
       moodIntent: text,
-      // leadFact: the one fact the component sets in the layout's fact role. feature: it spans the content column.
-      components: list(object({ name: text, role: text, contentNotes: text, roles: list(oneOf(...COLOURWAYS, 'action'), 1), leadFact: text, feature: { type: 'boolean' } }, ['leadFact', 'feature']), 2, 6),
+      // What the occasion's components say; how each one looks is the page's design.
+      components: list(object({ name: text, role: text, contentNotes: text }), 2, 6),
       dos: list(text, 1, 3),
       donts: list(text, 1, 3),
-      promptInputs: list(text),
       secondaryHighlights: list(oneOf(...SECONDARIES)),
     });
   }
-  if (kind === 'layout') {
-    return object({
-      ...common,
-      sections: list(oneOf(...SECTION_ROLES), 1),
-      grounds: list(oneOf(...GROUNDS), 1),
-      heroPattern: text,
-      navigation: text,
-      footer: text,
-      density: oneOf('compact', 'comfortable', 'spacious'),
-      blockRadius: step(facts.borderRadius, 'borderRadius'),
-      sectionGap: step(facts.space, 'space'),
-      cardPadding: step(facts.space, 'space'),
-      featureRadius: step(facts.borderRadius, 'borderRadius'),
-      factRole: oneOf(...facts.scale.type.map(({ role }) => role).filter((role) => role.startsWith('display'))),
-      // The hero name's role. Narrow screens take the next display role down, so the smallest is not a choice.
-      nameRole: oneOf(...facts.scale.type.map(({ role }) => role).filter((role) => role.startsWith('display')).slice(0, -1)),
-      pageWidth: oneOf('contained', 'full-bleed'),
-      motion: oneOf('still', 'subtle', 'lively'),
-      brandPattern: object({ section: oneOf(...SECTION_ROLES) }),
-      source,
-    }, ['source']);
-  }
-  return object({ ...common, leads: text, framing: text, subject: text, illustration: text, density: text, source }, ['source']);
+  return object({ ...common, leads: text, subject: text, illustration: text, source }, ['source']);
 }
 
 export function picksSchema(facts) {
   return object({
     theme: oneOf(...Object.keys(facts.themes)),
     briefName: { type: 'string', pattern: /^[A-Z][A-Za-z0-9]*(?: [A-Za-z0-9]+)*$/, describe: 'an English name starting with a capital, letters, digits and single spaces' },
-    presets: object({ occasion: slug, layout: slug, imagery: slug }),
-    // colourway and ground: the fill the Pattern's section takes, a step or "canvas". blockColourway: what Block draws the Pattern in.
-    brandPattern: object({ colourway: oneOf(...COLOURWAYS), ground: { type: 'ground' }, blockColourway: oneOf(...BLOCK_COLOURWAYS) }),
+    presets: object({ occasion: slug, imagery: slug }),
+    // What Block draws the Pattern in, when the page has one.
+    brandPattern: object({ blockColourway: oneOf(...BLOCK_COLOURWAYS) }),
     // The example-library review record, for a brief built from a third-party source.
     review: object({
       status: oneOf(...REVIEW_STATUSES),
@@ -169,8 +131,6 @@ export function validate(value, schema, path = '', problems = []) {
     for (const [key, inner] of Object.entries(value)) validate(inner, schema.values, join(path, key), problems);
   } else if (schema.type === 'json-schema') {
     if (typeOf(value) !== 'object') problems.push(`"${path}" must be an object`);
-  } else if (schema.type === 'ground') {
-    if (value !== 'canvas' && (!Number.isInteger(value) || value <= 0)) problems.push(`"${path}" must be a step (a positive integer) or "canvas"`);
   } else if (schema.type === 'integer') {
     if (!Number.isInteger(value) || value <= 0) problems.push(`"${path}" must be a positive integer`);
   } else if (schema.type === 'boolean') {
@@ -179,7 +139,7 @@ export function validate(value, schema, path = '', problems = []) {
     problems.push(`"${path}" must be a non-empty string`);
   } else if (schema.equals !== undefined && value !== schema.equals) {
     problems.push(`"${path}" must match the file name "${schema.equals}"`);
-  } else if ((schema.pattern && !schema.pattern.test(value)) || (schema.step && !schema.step.has(value))) {
+  } else if (schema.pattern && !schema.pattern.test(value)) {
     problems.push(`"${path}" must be ${schema.describe}`);
   }
   return problems;
@@ -192,7 +152,7 @@ const PX = /\b\d+(?:\.\d+)?px\b/i;
 export function bans(value, path = '', problems = []) {
   if (typeof value === 'string') {
     if (HEX.test(value)) problems.push(`"${path}" holds a hex-like value`);
-    if (PX.test(value)) problems.push(`"${path}" holds a px value; use a step name`);
+    if (PX.test(value)) problems.push(`"${path}" holds a px value`);
   } else if (value && typeof value === 'object') {
     for (const [key, inner] of Object.entries(value)) {
       const at = join(path, key);
@@ -236,15 +196,14 @@ export function entryProblems(name, data) {
   const problems = [];
   const after = Array.isArray(data?.after) ? data.after : [];
   (Array.isArray(data?.inputs) ? data.inputs : []).forEach((input, index) => {
-    // "layout." and "imagery." name preset fields; only the other entries' names name an output.
-    const from = ENTRIES.find((entry) => !['layout', 'imagery'].includes(entry) && String(input).startsWith(`${entry}.`));
+    // "imagery." names preset fields; only the other entries' names name an output.
+    const from = ENTRIES.find((entry) => entry !== 'imagery' && String(input).startsWith(`${entry}.`));
     if (String(input).split('.').includes('source')) problems.push(`"inputs.${index}" names a preset source, which is never an input`);
     else if (!INPUTS.includes(input)) problems.push(`"inputs.${index}" is not an input the tool supplies`);
     else if (from && !after.includes(from)) problems.push(`"inputs.${index}" takes the output of "${from}", which "after" does not name`);
   });
   if (after.includes(name)) problems.push('"after" names the entry itself');
   for (const key of Object.keys(data?.targets ?? {})) if (!TARGETS[name].includes(key)) problems.push(`"targets.${key}" is not a band ${name} checks; its bands are ${TARGETS[name].join(', ')}`);
-  if (name === 'mood-occasion' && data?.output && !data.output.properties?.accentPlacement) problems.push('"output" must have an accentPlacement property');
   return problems;
 }
 
@@ -252,7 +211,7 @@ export function sharedProblems(data) {
   const problems = [];
   for (const key of ['preamble', 'bans']) {
     (Array.isArray(data?.[key]) ? data[key] : []).forEach((line, index) => {
-      for (const [placeholder] of String(line).matchAll(/\{\{\w*\}\}/g)) if (!PLACEHOLDERS.includes(placeholder)) problems.push(`"${key}.${index}" has the placeholder ${placeholder}; placeholders are ${PLACEHOLDERS.join(', ')}`);
+      for (const [placeholder] of String(line).matchAll(/\{\{\w*\}\}/g)) problems.push(`"${key}.${index}" has the placeholder ${placeholder}; the tool fills none`);
     });
   }
   return problems;
@@ -305,22 +264,6 @@ const onDomain = (host, domain) => host === domain || host.endsWith(`.${domain}`
 
 export function presetProblems(kind, data) {
   const problems = [];
-  const { sections, brandPattern } = data ?? {};
-  if (kind === 'layout' && Array.isArray(sections) && brandPattern?.section && !sections.includes(brandPattern.section)) {
-    problems.push(`Brand Pattern section "${brandPattern.section}" is not one of its sections`);
-  }
-  if (kind === 'layout' && Array.isArray(sections) && Array.isArray(data.grounds)) {
-    const { grounds } = data;
-    if (grounds.length !== sections.length) problems.push(`"grounds" has ${grounds.length} items; it gives one ground per section, and there are ${sections.length}`);
-    else {
-      const at = sections.indexOf(brandPattern?.section);
-      grounds.forEach((ground, index) => {
-        if (ground === 'pattern' && index !== at) problems.push(`"grounds.${index}" is "pattern", but the Brand Pattern section is ${at < 0 ? 'not a section' : `section ${at + 1}`}`);
-      });
-      if (at >= 0 && grounds[at] !== 'pattern') problems.push(`"grounds.${at}" must be "pattern": the Brand Pattern section takes the ground its picks file chooses`);
-      if (grounds.every((ground) => ground === 'canvas' || ground === 'pattern')) problems.push('"grounds" leaves every section on the canvas; give at least one section a tint or accent ground');
-    }
-  }
   if (kind === 'occasion' && Array.isArray(data?.components)) {
     for (const { name } of data.components) if (FIXED_COMPONENTS.includes(name)) problems.push(`component "${name}" takes the name of a fixed component`);
   }

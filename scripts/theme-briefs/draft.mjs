@@ -9,8 +9,8 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 
 import { join, relative } from 'node:path';
 import { briefProblems, checkInputs, RECORDS, renderable, sourceNamesOf } from './checks.mjs';
 import { askClaude, ClaudeError, claudeVersion, EFFORT, MODEL } from './model.mjs';
-import { accentPlacements, entryChecks, proseText, words } from './prose-checks.mjs';
-import { freshBrief, offActionFills, placeholderProse, readProse, renderBrief, SCRIPTED_SECTIONS, sectionGrounds, splitSections } from './render.mjs';
+import { entryChecks, proseText, words } from './prose-checks.mjs';
+import { freshBrief, placeholderProse, readProse, renderBrief, SCRIPTED_SECTIONS, splitSections } from './render.mjs';
 import { ENTRIES, entryOrder } from './schemas.mjs';
 import { paletteTokens } from '../lib/colors.mjs';
 
@@ -18,7 +18,7 @@ import { paletteTokens } from '../lib/colors.mjs';
 export const ACCOUNTS = ['maintainer-sign-in', 'neutral-account', 'neutral-key'];
 const ATTEMPTS = 3;
 // The section heading each entry's prose sits under; the header has none.
-const FILLS = { tagline: 'Header', 'mood-occasion': 'Header', 'occasion-components': 'Components', 'preset-dos-donts': "Do's and Don'ts", imagery: 'Imagery', layout: 'Layout', 'example-prompts': 'Agent Prompt Guide' };
+const FILLS = { tagline: 'Header', 'mood-occasion': 'Header', 'occasion-components': 'Occasion content', 'preset-dos-donts': "Do's and Don'ts", imagery: 'Imagery' };
 
 // JSON with sorted keys, so a hash depends only on content.
 const canonical = (value) => Array.isArray(value) ? `[${value.map(canonical).join(',')}]`
@@ -38,32 +38,16 @@ function commitOf(root) {
 
 // The value of each input an entry may name; a whole preset leaves out its kind, slug and source.
 function inputValue(input, brief, outputs) {
-  const { theme, texts, picks, occasion, layout, imagery, facts } = brief;
+  const { theme, texts, picks, imagery } = brief;
   const preset = ({ kind, slug, source, ...rest }) => rest;
   const [head, field] = input.split('.');
-  if (input === 'layout') return preset(layout);
   if (input === 'imagery') return preset(imagery);
-  if (head === 'occasion' || head === 'layout' || head === 'imagery') return brief[head][field];
-  if (head === 'theme') return { kind: theme.kind, label: theme.label, mood: texts[theme.id].mood, sibling: texts[theme.id].sibling, roles: theme.roles }[field];
+  if (head === 'occasion' || head === 'imagery') return brief[head][field];
+  if (head === 'theme') return { kind: theme.kind, label: theme.label, mood: texts[theme.id].mood, sibling: texts[theme.id].sibling }[field];
   if (input === 'brief.name') return picks.briefName;
-  if (input === 'brandPattern.colourway') return picks.brandPattern.colourway;
-  if (input === 'brandPattern.section') return layout.brandPattern.section;
-  if (input === 'accentPlacements') return accentPlacements(brief);
-  if (input === 'offActionFills') return offActionFills(theme).map((name) => `--immersive-${name}`);
-  if (input === 'colorVars') return [...theme.vars.keys()].map((name) => `--immersive-${name}`);
-  if (input === 'typeRoles') return facts.scale.type.map(({ role }) => role);
-  if (input === 'sectionGrounds') return sectionGrounds(brief);
   if (input === 'occasion-components.components') return outputs['occasion-components'].components;
   if (input === 'occasion-components.names') return outputs['occasion-components'].components.map(({ name }) => name);
   throw new Error(`no value for input "${input}"`);
-}
-
-function systemPrompt(shared, brief) {
-  const { theme, facts } = brief;
-  const fill = (line) => line
-    .replaceAll('{{variables}}', [...[...theme.vars.keys()].map((name) => `--immersive-${name}`), ...[...facts.neonVars].map((name) => `--${name}`)].join(', '))
-    .replaceAll('{{typeRoles}}', facts.scale.type.map(({ role }) => role).join(', '));
-  return [...shared.preamble, ...shared.bans].map(fill).join('\n');
 }
 
 function entryPrompt(name, data, bands, inputs, previous) {
@@ -81,23 +65,19 @@ function entryPrompt(name, data, bands, inputs, previous) {
 }
 
 // An entry's bands and output schema for one brief: the mood band covers the whole paragraph, less its
-// scripted theme half and ratio line, and the mood's schema takes the brief's accent placements.
+// scripted theme half and ratio line.
 export function entryTargets(entry, data, brief) {
-  const placements = accentPlacements(brief);
   const head = splitSections(renderBrief(brief, placeholderProse(brief)))[0].text.split('\n');
   const scriptedMood = entry === 'mood-occasion' ? words(head.at(-3)) + words(head.at(-1)) : 0;
   const bands = Object.fromEntries(Object.entries(data.targets).map(([key, [low, high]]) => [key, [low - scriptedMood, high - scriptedMood]]));
-  const schema = entry === 'mood-occasion'
-    ? { ...data.output, properties: { ...data.output.properties, accentPlacement: placements.length ? { type: 'string', enum: placements } : { enum: [null] } } }
-    : data.output;
-  return { bands, schema, placements };
+  return { bands, schema: data.output };
 }
 
 // Draft one brief's entries; returns everything the writes and the review report need. Entries in `seed`
 // are not drafted: their outputs, read from a committed brief, stand in for later entries' inputs.
 export function draftBrief(name, brief, { library, claude, model, sources, tokens }, seed = {}) {
   const { shared, entries, order } = library;
-  const system = systemPrompt(shared, brief);
+  const system = [...shared.preamble, ...shared.bans].join('\n');
   const outputs = { ...seed };
   const runs = {};
   for (const entry of order) {
@@ -111,13 +91,13 @@ export function draftBrief(name, brief, { library, claude, model, sources, token
       runs[entry] = { waiting };
       continue;
     }
-    const { bands, schema, placements } = entryTargets(entry, data, brief);
+    const { bands, schema } = entryTargets(entry, data, brief);
     const resolved = Object.fromEntries(data.inputs.map((input) => [input, inputValue(input, brief, outputs)]));
     const attempts = [];
     while (attempts.length < ATTEMPTS && !(attempts.length && !attempts.at(-1).hard.length && !attempts.at(-1).soft.length)) {
       const { answer, problem } = askClaude({ claude, model, system, schema, prompt: entryPrompt(entry, data, bands, resolved, attempts.at(-1)) });
       const normalized = normalize(answer);
-      const checks = problem ? { hard: [problem], soft: [] } : entryChecks(entry, normalized, { brief, data, schema, bands, placements, sources });
+      const checks = problem ? { hard: [problem], soft: [] } : entryChecks(entry, normalized, { brief, data, schema, bands, sources });
       attempts.push({ answer: normalized, ...checks });
     }
     // The hard-passing attempt with fewest soft misses, the earliest on a tie.
@@ -139,7 +119,7 @@ export function draftBrief(name, brief, { library, claude, model, sources, token
   let scripted;
   if (!markers.length) {
     scripted = freshBrief(text, brief).text === text;
-    const problems = scripted ? briefProblems(text, { theme: brief.theme, brief, tokens, sources, record: { accentPlacement: outputs['mood-occasion'].accentPlacement } })
+    const problems = scripted ? briefProblems(text, { theme: brief.theme, brief, tokens, sources })
       : ['the drafted prose does not read back from the brief'];
     if (problems.length) markers.push({ heading: 'Header', line: `**Brief checks failed:** ${problems.join('; ')}` });
   }
@@ -180,7 +160,6 @@ function record(result, { commit, version, claudeVersion: claudeCode, model, acc
         output: kept ? hash(read[entry]) : null,
       }];
     })),
-    accentPlacement: result.outputs['mood-occasion']?.accentPlacement ?? null,
   };
 }
 

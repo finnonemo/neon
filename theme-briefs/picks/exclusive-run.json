@@ -3,12 +3,9 @@
   "briefName": "Run",
   "presets": {
     "occasion": "run",
-    "layout": "event-poster",
     "imagery": "people-in-action"
   },
   "brandPattern": {
-    "colourway": "palette",
-    "ground": 100,
     "blockColourway": "grey__navy-100"
   }
 }

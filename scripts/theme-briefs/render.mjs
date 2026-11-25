@@ -6,20 +6,11 @@
 // Prose is keyed by prompt library entry, in the shape each entry outputs:
 // tagline { tagline }, mood-occasion { paragraph }, occasion-components
 // { components: [{ name, role, paragraph }] }, preset-dos-donts { dos, donts },
-// imagery { paragraph }, layout { paragraph }, example-prompts { prompts }.
-// Layout opens on a scripted table of each section's ground; its prose follows.
-import { blockColourway, colorVariable, FIXED_COMPONENTS, patternFill } from './schemas.mjs';
+// imagery { paragraph }.
+import { blockColourway, colorVariable } from './schemas.mjs';
 
-const SECTIONS = ['Tokens — Colors', 'Tokens — Typography', 'Tokens — Spacing & Shapes', 'Components', "Do's and Don'ts", 'Surfaces', 'Elevation', 'Imagery', 'Brand Pattern', 'Layout', 'Motion', 'Agent Prompt Guide', 'Sibling Themes', 'Quick Start'];
+const SECTIONS = ['Tokens — Colors', 'Tokens — Typography', 'Components', 'Occasion content', "Do's and Don'ts", 'Surfaces', 'Imagery', 'Brand Pattern', 'Agent Prompt Guide', 'Sibling Themes', 'Quick Start'];
 const HEADER = 'Header';
-const PROMPTS_LABEL = '**Example Component Prompts**';
-
-// Provisional (pending design owner review): Neon has no motion tokens.
-const MOTION = {
-  still: 'State changes only, such as hover and focus, in 150ms or less. Content is present on load.',
-  subtle: 'Fades, or slides of 16px or less, as content enters view, over 150–250ms with ease-out. Allowed scroll patterns: Pinned story, Count-up figure and Progress rail, two moments a page.',
-  lively: 'Staggered reveals over 200–400ms as content enters view, with translation of 32px or less. No parallax behind text. Allowed scroll patterns: all four, Scrubbed reveal included, three moments a page.',
-};
 
 // The brief a picks file describes, from loaded inputs, as { brief }, or { missing } naming the theme texts
 // it lacks. Sibling Themes needs every theme's text. Missing presets are left to the compatibility check.
@@ -29,7 +20,7 @@ export function assembleBrief(inputs, picks) {
   const chosen = Object.fromEntries(Object.entries(picks.data?.presets ?? {}).map(([kind, slug]) => [kind, presets[kind]?.[slug]?.data]));
   const theme = facts.themes[picks.data?.theme];
   const missing = Object.keys(facts.themes).filter((id) => !texts[id]).map((id) => `theme-briefs/themes/${id}.json`);
-  if (!theme || !chosen.occasion || !chosen.layout || !chosen.imagery) return { missing: [] };
+  if (!theme || !chosen.occasion || !chosen.imagery) return { missing: [] };
   if (missing.length) return { missing };
   return { brief: { name: picks.name, picks: picks.data, theme, facts, texts, ...chosen } };
 }
@@ -49,7 +40,7 @@ function header({ theme, picks, texts }, prose) {
     `**Theme:** ${theme.kind}`,
     `**Immersive Theme:** ${theme.id}`,
     '',
-    `This is a Finnomena Theme Brief, not a Reference Design: skip Brand Intensity and apply the whole Brand Contract. Colors come from the ${theme.label} Immersive Theme and type from Neon's theme; layout, components, imagery and motion are Finnomena-authored and interpreted, not measured. Provisional pending design owner review.`,
+    `This is a Finnomena Theme Brief, not a Reference Design: skip Brand Intensity and apply the whole Brand Contract. Colors come from the ${theme.label} Immersive Theme and the typeface from Neon's theme. It gives no layout, type size, spacing, shape or motion: design the page yourself. Provisional pending design owner review.`,
     '',
     // One paragraph on three lines, so the occasion half can be read back by position.
     texts[theme.id].mood.replace(/\s+/g, ' ').trim(),
@@ -90,69 +81,14 @@ function colors({ theme, facts }) {
 }
 
 function typography({ facts }) {
-  const { typeface, type } = facts.scale;
+  const { typeface, weights } = facts.type;
   return [
     '## Tokens — Typography',
     '',
     `### ${typeface} · ${code('--fontFamily-body')}`,
     `- **Substitute:** none. ${typeface} is part of the Brand Floor.`,
-    `- **Weights:** ${[...new Set(type.map(({ weight }) => weight))].sort().join(', ')}`,
-    '- **Role:** every text role, Thai and Latin alike.',
-    '',
-    '### Type Scale',
-    '',
-    table(['Role', 'Family', 'Weight', 'Size', 'Line Height', 'Token'], type.map(({ role, weight, size, line }) => [role, typeface, weight, size, line, code(`--fontSize-${role}`)])),
-  ].join('\n');
-}
-
-// The display role one below a role: what a hero name takes on narrow screens.
-const roleBelow = (facts, role) => facts.scale.type[facts.scale.type.findIndex((row) => row.role === role) + 1].role;
-const factSize = (facts, role) => {
-  const { size, line } = facts.scale.type.find((row) => row.role === role) ?? {};
-  return `${size}/${line}`;
-};
-
-function spacing({ facts, layout }) {
-  const { space, borderRadius, contentMaxWidth, endMargin, wideEndMargin } = facts.scale;
-  const valueOf = (name) => [...space, ...borderRadius].find((step) => step.name === name)?.value;
-  const shown = (name) => name === 'borderRadius-1000' ? 'fully round' : valueOf(name);
-  const step = (name) => `${code(`--${name}`)} (${shown(name)})`;
-  const margins = `${endMargin}${wideEndMargin ? `, then ${wideEndMargin.value} from a ${wideEndMargin.from} viewport` : ''}`;
-  const column = `Content sits in one centred column at most ${code('--layout-contentMaxWidth')} (${contentMaxWidth}) wide, with ${code('--layout-endMargin')} (${margins}) inside it.`;
-  const width = layout.pageWidth === 'contained'
-    ? `contained. ${column} Section fills stop at that column, inside the end margins, with the block radius.`
-    : `full-bleed. ${column} Section fills span the viewport.`;
-  return [
-    '## Tokens — Spacing & Shapes',
-    '',
-    `**Base unit:** ${step('space-1')}`,
-    '',
-    '### Spacing Scale',
-    '',
-    table(['Name', 'Value', 'Token'], space.map(({ name, value }) => [name.slice('space-'.length).replace('_', '.'), value, code(`--${name}`)])),
-    '',
-    '### Border Radius',
-    '',
-    table(['Name', 'Value', 'Token'], borderRadius.map(({ name }) => [name.slice('borderRadius-'.length), shown(name), code(`--${name}`)])),
-    '',
-    '### Layout',
-    '',
-    table(['Name', 'Value', 'Token'], [
-      ['Content max width', contentMaxWidth, code('--layout-contentMaxWidth')],
-      ['End margin', endMargin, code('--layout-endMargin')],
-      ...(wideEndMargin ? [[`End margin from a ${wideEndMargin.from} viewport`, wideEndMargin.value, code('--layout-endMargin')]] : []),
-    ]),
-    '',
-    '### Picks',
-    '',
-    `- **Density:** ${layout.density}`,
-    `- **Block and card radius:** ${step(layout.blockRadius)}`,
-    `- **Feature block radius:** ${step(layout.featureRadius)}, for a block that spans the content column; cards inside it keep the block and card radius`,
-    `- **Lead fact role:** ${code(layout.factRole)} (${factSize(facts, layout.factRole)}), for the one fact a component leads with; other component text stops at ${code('title1')}`,
-    `- **Hero name role:** ${code(layout.nameRole)} (${factSize(facts, layout.nameRole)}), and ${code(roleBelow(facts, layout.nameRole))} (${factSize(facts, roleBelow(facts, layout.nameRole))}) on narrow screens; nothing else in the hero is set larger than the name`,
-    `- **Section gap:** ${step(layout.sectionGap)}`,
-    `- **Card padding:** ${step(layout.cardPadding)}`,
-    `- **Page width:** ${width}`,
+    `- **Weights:** ${weights.join(', ')}`,
+    '- **Role:** all text, Thai and Latin alike.',
   ].join('\n');
 }
 
@@ -162,7 +98,7 @@ const stepRange = (name, steps) => steps.length === 1 ? variable(`${name}-${step
 
 // Block fills whose text is not the main action's color: a button in the action color does not read there.
 // Each family is named whole when every one of its block steps is such a fill.
-export const offActionFills = (theme) => theme.families.flatMap((family) => blockSteps(theme, family).filter((step) => theme.steps[family][step].fg !== theme.action).map((step) => `${family}-${step}`));
+const offActionFills = (theme) => theme.families.flatMap((family) => blockSteps(theme, family).filter((step) => theme.steps[family][step].fg !== theme.action).map((step) => `${family}-${step}`));
 function offActionNote(theme) {
   const fills = offActionFills(theme);
   if (!fills.length) return '';
@@ -173,25 +109,31 @@ function offActionNote(theme) {
   return ` On ${named.join(', ').replace(/, ([^,]*)$/, ' and $1')}, ${variable('action')} does not read: fill the button with that fill's ${code('on-')} text variable and set its label in the fill's own variable.`;
 }
 
-function components({ theme }, prose) {
+const blocks = (heading, entries) => [`## ${heading}`, ...entries.map(([name, role, text]) => `### ${name}\n**Role:** ${role}\n\n${text}`)].join('\n\n');
+
+function components({ theme }) {
   const fills = (name) => `${stepRange(name, blockSteps(theme, name))} fills, each with its own ${code('on-')} text variable`;
   const fixed = [
-    ['Main Action', 'The main action of a section', `Neon ${code('Button')} filled with ${variable('action')}, its label in ${variable('on-action')}, with ${code('--borderRadius-1000')} corners.${offActionNote(theme)}`],
+    ['Main Action', 'The action the page is for', `Neon ${code('Button')} filled with ${variable('action')}, its label in ${variable('on-action')}.${offActionNote(theme)}`],
     ['Secondary Action', 'An alternative beside the main action', `Neon ${code('Button')} in its ${code('secondary')} variant: ${variable('palette-75')} fill with its label in ${variable('on-palette-75')}. On ${theme.families.includes('support') ? 'an accent or support fill' : 'an accent fill'}, or on a block that already has that fill, the ${code('ghost')} variant: no fill, its label in the fill's ${code('on-')} text variable. Neon has no outlined button.`],
     ['Logo', 'Brand identity', `Neon's logo item, the ${theme.kind === 'dark' ? 'dark-surface' : 'light-surface'} mark. Never recreate the wordmark as text.`],
-    ['Tint Block', 'Group a section or a set of details', `${fills('palette')}. Flat: no border and no shadow; step lighter for nested emphasis.`],
-    ['Accent Block', 'Highlight an offer or call-out', `${fills('accent')}. Flat, like the Tint Block.`],
-    ...(theme.families.includes('support') ? [['Support Block', 'Detail and reference content', `${fills('support')}, for detail lists and secondary information.`]] : []),
+    ['Tint Block', 'A block in the palette', `${fills('palette')}.`],
+    ['Accent Block', 'A block in the accent', `${fills('accent')}.`],
+    ...(theme.families.includes('support') ? [['Support Block', 'A block in the support color', `${fills('support')}.`]] : []),
   ];
-  const entries = [...fixed, ...prose['occasion-components'].components.map(({ name, role, paragraph }) => [name, role, paragraph])];
-  return ['## Components', ...entries.map(([name, role, body]) => `### ${name}\n**Role:** ${role}\n\n${body}`)].join('\n\n');
+  return blocks('Components', fixed);
+}
+
+// What the occasion's components say, as facts; the page's design decides their look and order.
+function occasionContent(brief, prose) {
+  return blocks('Occasion content', prose['occasion-components'].components.map(({ name, role, paragraph }) => [name, role, paragraph]));
 }
 
 // The stock Do's and Don'ts, keyed on theme facts; the preset bullets follow them.
 function stockRules(theme) {
   const tints = blockSteps(theme, 'palette');
   const dos = [
-    `Pass ${code(`immersiveTheme="${theme.id}"`)} to ${code('ImmersiveLayout')} and color every section from the theme's ${code('--immersive-')} variables.`,
+    `Color the whole page from the theme's ${code('--immersive-')} variables.`,
     `Pair every fill with its own ${code('on-')} text variable, and text on the canvas with ${variable('text')}.`,
     'Build emphasis with tint steps, never with opacity.',
     'Keep one color family per block.',
@@ -200,7 +142,7 @@ function stockRules(theme) {
       : `Use ${variable('palette-100')} for blocks too: the canvas is not a palette step.`,
   ];
   const donts = [
-    'Do not use gradients — Immersive Themes have none.',
+    "Do not use a gradient outside Neon's Gradient Recipes — each stop is a step of this theme.",
     'Do not write new hex values or near-palette tints — every color is a token step.',
     'Do not let the shared secondary colors lead — keep them to small highlight, tag and illustration blocks.',
     `Do not use ${variable('action')} (${theme.tokens.get('action')}) as a block fill — it is reserved for the main action and its ${variable('on-action')} label.`,
@@ -225,37 +167,20 @@ function surfaces({ theme }) {
   ])].join('\n');
 }
 
-function brandPattern({ theme, picks, layout }) {
-  const { colourway, ground, blockColourway: id } = picks.brandPattern;
-  const label = theme.familyLabels[colourway];
-  const fill = patternFill(theme, picks.brandPattern);
-  const onCanvas = fill === theme.canvas;
-  const groundVariable = ground === 'canvas' ? 'canvas' : `${colourway}-${ground}`;
-  const textVariable = ground === 'canvas' ? 'text' : `on-${colourway}-${ground}`;
-  const drawn = blockColourway(id);
-  const name = (color) => color.split('.')[0];
-  const section = layout.brandPattern.section;
-  // Block draws on Navy, Light Grey or White only: on any other ground the Pattern sits in a panel of its own.
-  const placed = drawn.ground === fill
-    ? `The ${section} section carries the Brand Pattern on its ground: Block draws it in ${code(id)}, ${name(drawn.blocks)} blocks on the section's own ${name(drawn.ground)}.`
-    : `The ${section} section carries the Brand Pattern in a panel on its ground: Block draws it in ${code(id)}, ${name(drawn.blocks)} blocks on ${name(drawn.ground)} (${variable(colorVariable(theme, drawn.ground))}), and the panel takes the block and card radius.`;
+function brandPattern({ theme, picks }) {
+  const { blockColourway: id } = picks.brandPattern;
+  const { ground, blocks: drawn } = blockColourway(id);
+  const shown = (color) => `${color.split('.')[0]} (${variable(colorVariable(theme, color))})`;
   return [
     '## Brand Pattern',
     '',
-    `- **Section:** ${layout.brandPattern.section}`,
-    `- **Colourway:** ${label} (${code(colourway)})`,
-    `- **Ground:** ${variable(groundVariable)} fill with ${variable(textVariable)} text${onCanvas ? ', the canvas itself' : ''}`,
-    `- **Block Colourway:** ${code(id)}, ${name(drawn.blocks)} blocks on ${name(drawn.ground)}`,
+    `- **Block Colourway:** ${code(id)}, ${shown(drawn)} blocks on ${shown(ground)}`,
     '',
-    `${placed} It leads the section's screenful beside the text, never behind it and never as a strip. A photo fills one of its large Blocks, masked to that Block in grayscale; with no photo, that Block holds a marked photo slot. Block draws it as a static SVG at the slot's size: never hand-draw it, imitate it in CSS, crop, stretch or animate it.`,
+    'Optional unless the request asks for one. Draw it with the Block engine, never by hand or in CSS, and do not crop, stretch, cover or animate it. A photo inside it fills one whole Block. Its colors are fixed in the file, so a page that switches theme swaps the file. Where it goes and how large it is are the page design\'s.',
   ].join('\n');
 }
 
-function motion({ layout }) {
-  return ['## Motion', '', `**Level:** ${layout.motion}`, '', MOTION[layout.motion], '', `Under ${code('prefers-reduced-motion: reduce')}, use the still level. Nothing animates the Brand Pattern. The motion values are provisional pending design owner review.`].join('\n');
-}
-
-function promptGuide({ theme, facts, occasion }, prose) {
+function promptGuide({ theme, facts, occasion }) {
   const hex = (name) => `${variable(name)} (${code(theme.vars.get(name))})`;
   const reference = [
     `- text: ${hex('text')}`,
@@ -266,7 +191,7 @@ function promptGuide({ theme, facts, occasion }, prose) {
     `- primary action: ${hex('action')}, label ${hex('on-action')}`,
     ...occasion.secondaryHighlights.map((name) => `- highlight: ${stepRange(name, facts.secondary[name] ?? [])}, small blocks only`),
   ];
-  return ['## Agent Prompt Guide', '', '**Quick Color Reference**', ...reference, '', PROMPTS_LABEL, '', prose['example-prompts'].prompts.map((line, index) => `${index + 1}. ${line}`).join('\n\n')].join('\n');
+  return ['## Agent Prompt Guide', '', '**Quick Color Reference**', ...reference].join('\n');
 }
 
 function siblings({ theme, facts, texts }) {
@@ -279,7 +204,7 @@ function quickStart({ theme, name }) {
   return [
     '## Quick Start',
     '',
-    `Build on the Neon base. Add ${code('@neon/theme')}, ${code('@neon/immersive-themes')} and this brief's item, ${code(`@neon/theme-brief-${name}`)}, then pass ${code(`immersiveTheme="${theme.id}"`)} to ${code('ImmersiveLayout')}. It sets ${code('data-immersive-theme')} and maps the theme onto the Neon components; the attribute set by hand on another root gives the variables without that mapping. Every value comes from the installed CSS; never retype the values above.`,
+    `Build on the Neon base. Add ${code('@neon/theme')}, ${code('@neon/immersive-themes')} and this brief's item, ${code(`@neon/theme-brief-${name}`)}. ${code('ImmersiveLayout')} is optional: pass it ${code(`immersiveTheme="${theme.id}"`)}, or, on the page's own root, import ${code('@/theme/immersive.css')} and set ${code(`data-immersive-theme="${theme.id}"`)} on that root and on ${code('<html>')}, removed on unmount, and give ${code('Logo')} its ${code('tone')}. Every value comes from the installed CSS; never retype the values above.`,
     '',
     '### Tailwind v4',
     '',
@@ -292,48 +217,12 @@ function quickStart({ theme, name }) {
   ].join('\n');
 }
 
-function elevation() {
-  return '## Elevation\n\n- **None.** The tokens define no shadow. Separate surfaces with tint steps, not shadows or borders.';
-}
-
 // Its opening is fixed, so a paragraph after it is found even when the typeface has changed.
 export const BRAND_FLOOR_OPENING = "Imagery never carries another brand's";
-const brandFloor = (facts) => `${BRAND_FLOOR_OPENING} logo, copy or look, and the Finnomena logo and ${facts.scale.typeface} stay on every screen.`;
+const brandFloor = (facts) => `${BRAND_FLOOR_OPENING} logo, copy or look, and the Finnomena logo and ${facts.type.typeface} stay on every screen.`;
 
 function imagery({ facts }, prose) {
   return `## Imagery\n\n${prose.imagery.paragraph}\n\n${brandFloor(facts)}`;
-}
-
-// Each section's ground, in page order, as { section, ground, fill, text }: the fill and its text by variable
-// name. The Brand Pattern section takes the ground its picks file chooses.
-export function sectionGrounds({ theme, picks, layout }) {
-  const fills = {
-    canvas: 'canvas',
-    tint: `palette-${blockSteps(theme, 'palette')[0]}`,
-    accent: `accent-${blockSteps(theme, 'accent')[0]}`,
-    pattern: picks.brandPattern.ground === 'canvas' ? 'canvas' : `${picks.brandPattern.colourway}-${picks.brandPattern.ground}`,
-  };
-  return layout.sections.map((section, index) => {
-    const ground = layout.grounds[index];
-    const fill = fills[ground];
-    return { section, ground, fill: `--immersive-${fill}`, text: `--immersive-${fill === 'canvas' ? 'text' : `on-${fill}`}` };
-  });
-}
-
-// Its opening is fixed, so the prose after it is found even when the grounds have changed.
-export const GROUNDS_OPENING = 'Rows are in page order.';
-function layoutSection(brief, prose) {
-  const rows = sectionGrounds(brief).map(({ section, ground, fill, text }, index) => [String(index + 1), section, ground, code(fill), code(text)]);
-  const reach = brief.layout.pageWidth === 'contained' ? 'fills its section to the content column, with the block radius' : 'fills its section edge to edge, with the content column inside it';
-  return [
-    '## Layout',
-    '',
-    table(['#', 'Section', 'Ground', 'Fill', 'Text'], rows),
-    '',
-    `${GROUNDS_OPENING} A ${code('tint')}, ${code('accent')} or ${code('pattern')} ground ${reach}; on ${code('canvas')} the section's blocks carry the fills. A component whose fill is its section's ground steps one lighter in the same family, so the block and its radius show against the ground.`,
-    '',
-    prose.layout.paragraph,
-  ].join('\n');
 }
 
 // Prose of the right shape for a brief, every text set to `text`: for a section no entry has drafted.
@@ -345,20 +234,18 @@ export function placeholderProse({ occasion }, text = PLACEHOLDER) {
     'occasion-components': { components: occasion.components.map(({ name }) => ({ name, role: text, paragraph: text })) },
     'preset-dos-donts': { dos: occasion.dos.map(() => text), donts: occasion.donts.map(() => text) },
     imagery: { paragraph: text },
-    layout: { paragraph: text },
-    'example-prompts': { prompts: [text] },
   };
 }
 
 // Each section's renderer, by heading, in the order SECTIONS gives.
 const RENDERERS = {
-  'Tokens — Colors': colors, 'Tokens — Typography': typography, 'Tokens — Spacing & Shapes': spacing, Components: components,
-  "Do's and Don'ts": dosAndDonts, Surfaces: surfaces, Elevation: elevation, Imagery: imagery, 'Brand Pattern': brandPattern,
-  Layout: layoutSection, Motion: motion, 'Agent Prompt Guide': promptGuide, 'Sibling Themes': siblings, 'Quick Start': quickStart,
+  'Tokens — Colors': colors, 'Tokens — Typography': typography, Components: components, 'Occasion content': occasionContent,
+  "Do's and Don'ts": dosAndDonts, Surfaces: surfaces, Imagery: imagery, 'Brand Pattern': brandPattern,
+  'Agent Prompt Guide': promptGuide, 'Sibling Themes': siblings, 'Quick Start': quickStart,
 };
 
 // The sections with no prose in them.
-export const SCRIPTED_SECTIONS = SECTIONS.filter((heading) => !['Components', "Do's and Don'ts", 'Imagery', 'Layout', 'Agent Prompt Guide'].includes(heading));
+export const SCRIPTED_SECTIONS = SECTIONS.filter((heading) => !['Occasion content', "Do's and Don'ts", 'Imagery'].includes(heading));
 
 // The whole brief: the header, then each section in order.
 export const renderBrief = (brief, prose) => `${[header(brief, prose), ...SECTIONS.map((heading) => RENDERERS[heading](brief, prose))].join('\n\n')}\n`;
@@ -404,9 +291,8 @@ export function readProse(markdown, brief) {
   const mood = paragraphs(head).at(-1)?.split('\n') ?? [];
   if (mood.length < 3) problems.push('the header\'s mood paragraph must keep its three lines: theme half, occasion half, ratio sentence');
 
-  const components = section('Components').split(/^### /m).slice(1)
+  const components = section('Occasion content').split(/^### /m).slice(1)
     .map((block) => block.trim().split('\n'))
-    .filter(([name]) => !FIXED_COMPONENTS.includes(name.trim()))
     .map(([name, role, ...rest]) => {
       if (!role?.startsWith('**Role:** ')) problems.push(`component "${name.trim()}" has no "**Role:**" line`);
       return { name: name.trim(), role: role?.slice('**Role:** '.length) ?? '', paragraph: rest.join('\n').trim() };
@@ -428,12 +314,6 @@ export function readProse(markdown, brief) {
   const imageryParts = paragraphs(body(section('Imagery')));
   if (imageryParts.length < 2) problems.push('Imagery must keep its prose and the Brand Floor sentence as separate paragraphs');
   else if (imageryParts.slice(0, -1).some((part) => part.startsWith(BRAND_FLOOR_OPENING))) problems.push('Imagery has text after its Brand Floor sentence, which must come last');
-  // The section table and the grounds sentence are scripted; every other paragraph is prose.
-  const layout = paragraphs(body(section('Layout'))).filter((part) => !part.startsWith('|') && !part.startsWith(GROUNDS_OPENING)).join('\n\n');
-  const guide = section('Agent Prompt Guide').split(PROMPTS_LABEL);
-  if (guide.length < 2) problems.push(`Agent Prompt Guide has no ${PROMPTS_LABEL} label`);
-  const prompts = (guide[1] ?? '').trim().split(/\n\s*\n(?=\d+\. )/).filter(Boolean).map((item) => item.replace(/^\d+\. /, ''));
-
   if (problems.length) return { problems };
   return {
     prose: {
@@ -442,8 +322,6 @@ export function readProse(markdown, brief) {
       'occasion-components': { components },
       'preset-dos-donts': { dos, donts },
       imagery: { paragraph: imageryParts.slice(0, -1).join('\n\n') },
-      layout: { paragraph: layout },
-      'example-prompts': { prompts },
     },
   };
 }

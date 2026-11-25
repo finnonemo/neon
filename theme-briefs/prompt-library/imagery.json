@@ -3,30 +3,24 @@
   "inputs": [
     "imagery",
     "theme.kind",
-    "theme.roles",
-    "brandPattern.section",
-    "layout.heroPattern",
     "theme.mood"
   ],
   "after": [],
   "formula": [
     "what leads",
-    "framing",
-    "subject, and color only through role names such as the canvas or the accent",
-    "how illustration is used",
-    "icons",
-    "a closing density verdict"
+    "subject",
+    "the mood of the pictures, with color only through role names such as the canvas or the accent",
+    "what illustration is for"
   ],
   "targets": {
     "words": [
-      75,
-      120
+      30,
+      60
     ]
   },
   "rules": [
-    "no values: no var(--…) and no px",
     "one paragraph with no line breaks",
-    "say how images sit beside the Brand Pattern section without overlapping it, and place the hero's image where the supplied hero pattern puts it: a pattern with no image beside the name gets none there"
+    "subject and mood only: no placement, framing, cropping, size or number of images"
   ],
   "output": {
     "type": "object",
@@ -45,7 +39,7 @@
       "imagery.leads": "photos of hands at work"
     },
     "output": {
-      "paragraph": "Close photographs of hands at the wheel lead, cropped tight so the clay fills the frame."
+      "paragraph": "Photographs of hands at work lead: wet clay, rolled sleeves and the quiet concentration of people learning a craft together."
     }
   }
 }

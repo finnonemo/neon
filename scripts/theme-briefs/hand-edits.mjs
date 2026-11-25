@@ -10,7 +10,7 @@ import { join, relative } from 'node:path';
 import { briefProblems, RECORDS } from './checks.mjs';
 import { ACCOUNTS, draftBrief, entryTargets, hash, MARKERS, prepare, runClaude, writeResults } from './draft.mjs';
 import { MODEL } from './model.mjs';
-import { accentPlacements, entryChecks } from './prose-checks.mjs';
+import { entryChecks } from './prose-checks.mjs';
 import { PLACEHOLDER, readProse } from './render.mjs';
 import { ENTRIES } from './schemas.mjs';
 
@@ -62,7 +62,7 @@ export function redraftBrief({ root, name, entries: named, discard = [], out = j
 
   // Kept entries stand in for later entries' inputs as the brief now reads, hand edits included.
   const kept = library.order.filter((entry) => !targets.has(entry));
-  const seed = Object.fromEntries(kept.map((entry) => [entry, entry === 'mood-occasion' ? { ...prose[entry], accentPlacement: record.accentPlacement } : prose[entry]]));
+  const seed = Object.fromEntries(kept.map((entry) => [entry, prose[entry]]));
   const run = runClaude(claude, briefs, () => ({ ...draftBrief(name, brief, context, seed), library: library.entries, shared: library.shared, previous: record.entries }));
   if (!run.results) return run;
   const written = writeResults(run.results, { root, out, local, inputs, claudeCode: run.claudeCode, model, account });
@@ -70,36 +70,25 @@ export function redraftBrief({ root, name, entries: named, discard = [], out = j
   return { ...written, lines: [...written.lines, ...older.map((entry) => `${name}: kept ${entry}, drafted from an older entry or shared.json; name it to redraft it`)] };
 }
 
-// The accent placement an accepted mood paragraph carries: the run's, while the paragraph still names it,
-// else the one placement the paragraph names. Check 10 refuses anything else.
-function acceptedPlacement(paragraph, brief, recorded) {
-  const placements = accentPlacements(brief);
-  if (!placements.length) return null;
-  const named = placements.filter((placement) => paragraph.toLowerCase().includes((placement === 'Brand Pattern section' ? 'Brand Pattern' : placement).toLowerCase()));
-  return named.includes(recorded) || named.length !== 1 ? recorded : named[0];
-}
-
-// Every check on one accepted draft, as { problems, warnings, accentPlacement }: draft markers, then each
+// Every check on one accepted draft, as { problems, warnings }: draft markers, then each
 // entry's hard and soft checks on the prose as the draft reads, then the brief-level checks.
-function acceptProblems(text, brief, runRecord, { library, sources, tokens }) {
+function acceptProblems(text, brief, { library, sources, tokens }) {
   const left = [PLACEHOLDER, ...MARKERS].filter((mark) => text.includes(mark));
   if (left.length) return { problems: left.map((mark) => `still holds "${mark.replace(/:\*\*$/, '')}"; replace the ${mark === PLACEHOLDER ? 'placeholder' : 'marker'} with the section's prose`), warnings: [] };
   const { prose, problems: unread } = readProse(text, brief);
   if (unread) return { problems: unread, warnings: [] };
-  const accentPlacement = acceptedPlacement(prose['mood-occasion'].paragraph, brief, runRecord.accentPlacement);
   const problems = [];
   const warnings = [];
   for (const entry of library.order) {
     const data = library.entries[entry];
-    const answer = entry === 'mood-occasion' ? { ...prose[entry], accentPlacement } : prose[entry];
-    const { hard, soft } = entryChecks(entry, answer, { brief, data, sources, ...entryTargets(entry, data, brief) });
+    const { hard, soft } = entryChecks(entry, prose[entry], { brief, data, sources, ...entryTargets(entry, data, brief) });
     problems.push(...hard.map((message) => `${entry}: ${message}`));
     warnings.push(...soft.map((message) => `${entry}: ${message}`));
   }
-  for (const message of briefProblems(text, { theme: brief.theme, brief, tokens, sources, record: { accentPlacement } })) {
+  for (const message of briefProblems(text, { theme: brief.theme, brief, tokens, sources })) {
     if (!problems.some((line) => line.endsWith(`: ${message}`))) problems.push(message);
   }
-  return { problems, warnings, prose, accentPlacement };
+  return { problems, warnings, prose };
 }
 
 export function acceptBriefs({ root, names, out = join(root, 'registry/theme-briefs'), local = join(root, '.local/theme-briefs') }) {
@@ -119,7 +108,7 @@ export function acceptBriefs({ root, names, out = join(root, 'registry/theme-bri
       text = readFileSync(draftPath, 'utf8');
       try {
         runRecord = JSON.parse(readFileSync(runPath, 'utf8'));
-        checked = acceptProblems(text, brief, runRecord, { library, ...context });
+        checked = acceptProblems(text, brief, { library, ...context });
       } catch (error) {
         if (!(error instanceof SyntaxError)) throw error;
         checked = { problems: [`its run record ${relative(root, runPath)} is not valid JSON (${error.message})`] };
@@ -136,7 +125,7 @@ export function acceptBriefs({ root, names, out = join(root, 'registry/theme-bri
     mkdirSync(out, { recursive: true });
     mkdirSync(join(root, RECORDS), { recursive: true });
     writeFileSync(join(out, `${name}.md`), text);
-    writeFileSync(join(root, RECORDS, `${name}.json`), `${JSON.stringify({ ...runRecord, entries, accentPlacement: checked.accentPlacement }, null, 2)}\n`);
+    writeFileSync(join(root, RECORDS, `${name}.json`), `${JSON.stringify({ ...runRecord, entries }, null, 2)}\n`);
     lines.push(`${name}: accepted; written to ${relative(root, join(out, `${name}.md`))}; ${edited.length ? `hand-edited: ${edited.join(', ')}` : 'no section hand-edited'}`);
   }
   return { lines, failed };

@@ -4,29 +4,25 @@
     "occasion.dos",
     "occasion.donts",
     "occasion-components.names",
-    "layout.factRole",
-    "theme.roles",
-    "colorVars",
-    "theme.kind",
     "theme.mood"
   ],
   "after": [
     "occasion-components"
   ],
   "formula": [
-    "Do: an imperative verb, the element (a component name where one fits), and a var(--…) or step where one fits",
+    "Do: an imperative verb and the content it is about, naming a component where one fits",
     "Don't: start with 'Do not', the tempting mistake, then ' — ' and why"
   ],
   "targets": {
     "words": [
-      12,
+      10,
       28
     ]
   },
   "rules": [
     "exactly one bullet per supplied intent, in order",
     "one sentence each",
-    "a bullet that names the type role of a component's largest fact names the supplied fact role, and no other display role"
+    "content only: what the page says, never how it looks"
   ],
   "output": {
     "type": "object",
@@ -53,18 +49,18 @@
   "example": {
     "input": {
       "occasion.dos": [
-        "show the firing date on every booking card"
+        "show the firing date of every booking"
       ],
       "occasion.donts": [
-        "use glaze photos as section backgrounds"
+        "list glazes the studio has run out of"
       ]
     },
     "output": {
       "dos": [
-        "Print the firing date in title3 on every Kiln slot card, above its main action."
+        "Give the firing date of every Kiln slot card in full, with its weekday and month."
       ],
       "donts": [
-        "Do not run glaze photos behind section text — the texture breaks the contrast the theme relies on."
+        "Do not list glazes the studio has run out of — members choose a slot by them."
       ]
     }
   }
