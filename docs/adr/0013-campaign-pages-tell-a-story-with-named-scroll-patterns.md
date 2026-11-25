@@ -1,6 +1,6 @@
 # Campaign Pages tell a story with named scroll patterns
 
-> Status: Accepted, 2026-11-14.
+> Status: Accepted, 2026-11-14. Superseded in part by [ADR 0018](0018-the-agent-designs-campaign-pages-and-neon-themes-them.md): the budget and the closed list of patterns no longer bind a page; reduced motion and content that never waits for a script still do.
 
 The owner found that Campaign Pages lack imagination: there is no scrollytelling, and the motion clings to restraint. The restraint is Neon's own rule. `skills/neon-create/references/campaign-direction.md` §Motion allows at most two moments of motion per page and keeps movement tied to scroll under a tenth of the element's height, so a sticky section, a picture that changes with the story or a figure that counts up cannot be built within it. This ADR widens that budget for Campaign Pages only, by a small set of named scroll patterns the agent picks from rather than invents. It amends the Budget and Cost lines of that §Motion and the "motion on every section" habit; `skills/neon-audit/references/functional-patterns.md` §Motion, which holds for functional screens, is unchanged.
 

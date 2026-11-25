@@ -1,12 +1,14 @@
 ---
 scenarios:
   - request: Blended event page from a motion-heavy reference design
-    observe: Under reduced motion every section is visible, no content waits on a reveal script, and the heading is readable at first paint; Ship-ready checklist evidence names the production preview for 375px and 1440px.
+    observe: The motion is the agent's own choice at the Brand Intensity; Ship-ready checklist evidence names the production preview for 375px and 1440px.
   - request: Campaign Page on a subtle Theme Brief whose story suits a Pinned story and a Count-up figure
-    observe: The Motion line names each scroll pattern within the subtle budget; under reduced motion and with the observer stubbed the page is still and every step and final figure is readable at 375px and 1440px; below 500px the visual does not pin.
+    observe: The motion is the agent's own choice.
 ---
 
 # Motion safety
+
+> [ADR 0019](../../../docs/adr/0019-campaign-page-rules-are-brand-only.md) retired these rules for Campaign Pages. The runs below are history.
 
 Fixture: an empty folder holding a `./DESIGN.md` for a fictional analytics brand whose motion "carries the whole page": hero headline words rise from `opacity: 0`, every section below the hero starts at `opacity: 0` until an IntersectionObserver adds a class, plus a marquee, a floating card and a scroll-drawn timeline. Request, verbatim:
 

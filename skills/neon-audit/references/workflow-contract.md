@@ -26,7 +26,7 @@ For existing UI, omitted `composition` means `preserve`. Set `adapt` for explici
 | Existing non-React app | `neon-redesign` for styling; preserve framework |
 | Explicit non-React new app | Use the framework's normal scaffold, then the CSS styling path; the Neon starter is React-only |
 | Explicit rebuild of an existing React app | `neon-create`; rebuild path onto the Neon base, into a new directory |
-| New Campaign Page, no Reference Design | `neon-create`, Theme Brief path |
+| New Campaign Page, no Reference Design | `neon-create`: design freely, then theme ([campaign direction](../../neon-create/references/campaign-direction.md)); Theme Brief path only when the employee names or supplies one |
 | Campaign or landing page with a supplied reference design that is not a recognised [Theme Brief](../../neon-create/references/theme-brief.md#recognise-a-brief) | `neon-create` for a new page, `neon-redesign` for an existing one; both apply the [reference design](reference-design.md) procedure |
 | Request to add CDS to an app | `neon-create` on the Neon base, with one line saying Neon no longer themes CDS |
 | Target or integration choice remains unclear | `neon-audit`; inspect only missing evidence |

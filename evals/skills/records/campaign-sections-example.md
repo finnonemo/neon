@@ -1,10 +1,12 @@
 ---
 scenarios:
   - request: Build a Club Campaign Page for a members' tax talk with seat booking, with no Theme Brief and no images supplied
-    observe: Takes its own sections, order and facts from the request; where it opens the campaign sections example, does not carry over the example's hero markup, booking copy or ground sequence.
+    observe: Designs its own layout without opening the campaign sections example, a Theme Brief or the functional patterns, then themes it; switching Immersive Theme recolors the page and moves nothing.
 ---
 
 # Campaign sections example
+
+> The run below predates [ADR 0018](../../../docs/adr/0018-the-agent-designs-campaign-pages-and-neon-themes-them.md), which retired the layout rules it measures. Only the scenario above is current.
 
 What `neon-create` takes from [campaign sections](../../../examples/campaign-sections/README.md) after [campaign direction](../../../skills/neon-create/references/campaign-direction.md) links it. One request ran once on the package before the link as baseline (`bfac829`) and once with it as revised (`babdc5c`), 24 November 2026. `run-claude-case.mjs` stopped in both arms before any model call ("Not logged in"), so each arm was a fresh subagent given its package's `neon-create` in its own workspace.
 

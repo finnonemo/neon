@@ -230,7 +230,7 @@ State the limit plainly: in the fixture, button and input share `rounded-md` (`b
 
 ### 6. Give immersive pages the "defaults, not choices" calibration
 
-**File:** `skills/neon-create/references/campaign-content.md` (or `theme-brief.md`).
+**File:** the campaign content reference (or `theme-brief.md`).
 
 **Gap.** Functional screens have a habits table (`review-checks.md:38-47`). Immersive pages have none: "immersive pages follow their own composition" (`review-checks.md:49`). The one place the owner wants colour and expression is the one place with no description of what a generated page looks like by default.
 
