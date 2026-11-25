@@ -209,3 +209,44 @@ test('--json reports counts by rule and each warning with its name and fix', t =
   }
   assert.deepEqual(JSON.parse(lint('--json', join(root, 'missing')).lines[0]), { notRun: `${join(root, 'missing')} is not a directory` });
 });
+
+// Two designers drew Core's floating Segmented control in different colors, and the lint passed both.
+test('in a Neon app, warns on colors set on an item and on colors written as values', t => {
+  const root = repository(t, {
+    'src/theme/neon.css': '@theme inline { --color-card: #fff; --color-track: #eee; --color-muted-foreground: #666; }\n',
+    'src/App.tsx': 'export {}\n',
+  });
+  write(root, {
+    'src/App.tsx': [
+      'import { Button } from "@/components/ui/button"',
+      'import { SegmentedControlItem as Item } from "@/components/ui/segmented-control"',
+      'const a = <Item onClick={() => go()} className={cn(',
+      '  floating && "rounded-full data-[state=checked]:bg-track", "bg-card/50")}>x</Item>',
+      'const b = <Button className="mt-4 w-full text-right border-2 text-body outline-hidden">x</Button>',
+      'const c = <div className="bg-card"><a href="#facade">x</a></div>',
+      'const d = <Button className="bg-[#123456] bg-(--color-fg) bg-blue-500 bg-white">x</Button>',
+      '// #abcdef in a comment',
+    ].join('\n'),
+    'src/app.css': '.a { --chart-1: #AA46C3; --n: #234; color: var(--color-fg); box-shadow: 0 0 1px rgb(1 23 43 / .2); }\n#add { gap: 1px; }\n',
+    'src/theme/x.css': '.a { color: #aa46c3; }\n',
+    'src/components/ui/button.tsx': 'const x = "shadow-[0_1px_rgba(0,0,0,0.1)]"\n',
+  });
+  const { warnings, byRule } = JSON.parse(lint('--json', root).lines[0]);
+  const of = rule => warnings.filter(warning => warning.rule === rule).map(({ path, lines, match }) => `${path}:${lines} ${match}`);
+  assert.deepEqual(of('item-color'), [
+    'src/App.tsx:4 <Item> bg-track',
+    'src/App.tsx:4 <Item> bg-card',
+    'src/App.tsx:7 <Button> bg-[#123456]',
+    'src/App.tsx:7 <Button> bg-(--color-fg)',
+    'src/App.tsx:7 <Button> bg-blue-500',
+    'src/App.tsx:7 <Button> bg-white',
+  ]);
+  assert.deepEqual(of('raw-color'), ['src/App.tsx:7 #123456', 'src/app.css:1 #aa46c3, #234, rgb(1 23 43 / .2)']);
+  assert.equal(byRule['raw-color'], 2);
+});
+
+test('without the Neon theme file, item and value colors are not checked', t => {
+  const root = repository(t, { 'src/App.tsx': 'export {}\n' });
+  write(root, { 'src/App.tsx': 'import { Button } from "@/components/ui/button"\nconst a = <Button className="bg-white" style={{ color: "#123456" }} />\n' });
+  assert.deepEqual(lint(root).lines, ['Source lint: clean (1 changed file checked)']);
+});

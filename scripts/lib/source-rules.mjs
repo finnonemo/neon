@@ -73,7 +73,7 @@ function componentTags(source) {
       else if (char === '}') depth--;
       else if (char === '>' && depth === 0) break;
     }
-    tags.push({ name: match[1], text: source.slice(match.index, end + 1) });
+    tags.push({ name: match[1], text: source.slice(match.index, end + 1), index: match.index });
   }
   return tags;
 }
@@ -160,6 +160,58 @@ function withoutComments(source) {
 // Filler a screen should not ship (new-ui-workflow "Plausible samples").
 export function placeholderText(source) {
   return findAll(withoutComments(source), /\b(?:lorem|acme|(?:john|jane) doe)\b/gi);
+}
+
+// Names of the color utilities a Neon app's theme defines (`--color-card` gives `card`).
+export function themeColorNames(css) {
+  return new Set([...css.matchAll(/--color-([\w-]+)\s*:/g)].map(match => match[1]));
+}
+
+// The value of a tag's className, with its quotes or braces, and where it starts.
+function classNameValue(tag) {
+  const at = tag.match(/\bclassName=(?=["'{])/);
+  if (!at) return null;
+  const start = at.index + at[0].length;
+  if (tag[start] !== '{') return { start, text: tag.slice(start, tag.indexOf(tag[start], start + 1) + 1) };
+  let depth = 0;
+  for (let end = start; end < tag.length; end++) {
+    if (tag[end] === '{') depth++;
+    else if (tag[end] === '}' && --depth === 0) return { start, text: tag.slice(start, end + 1) };
+  }
+  return null;
+}
+
+const colorUtility = /(?<![\w-])(?:bg|text|border(?:-[xytrblse])?|ring(?:-offset)?|divide|outline|from|via|to|fill|stroke|placeholder|accent|caret|decoration|shadow)-(?:\[(?:color:)?(?:#|rgb|hsl|oklch|var\(--color-)[^\]\s]*\]|\(--color-[\w-]+\)|[a-z][\w-]*)/g;
+
+// Color utilities in the className of a component imported from `components/ui/`,
+// as `{ match: '<Button> bg-card', line }`: the item's props hold its colors.
+export function itemColorOverrides(source, colors) {
+  const text = withoutComments(source);
+  const items = new Set();
+  for (const [, list] of text.matchAll(/import\s*\{([^}]*)\}\s*from\s*["'][^"']*components\/ui\/[^"']*["']/g)) {
+    for (const part of list.split(',')) {
+      const local = part.trim().split(/\s+as\s+/).at(-1);
+      if (local && !local.startsWith('type ')) items.add(local);
+    }
+  }
+  const found = [];
+  for (const { name, text: tag, index } of componentTags(text)) {
+    if (!items.has(name)) continue;
+    const value = classNameValue(tag);
+    if (!value) continue;
+    for (const { 0: match, index: at } of value.text.matchAll(colorUtility)) {
+      const color = match.slice(match.match(/^(?:border-[xytrblse](?=-)|ring-offset|[a-z]+)/)[0].length + 1);
+      stockPalette.lastIndex = 0;
+      if (!/^[[(]/.test(color) && !colors.has(color) && !/^(?:white|black)$/.test(color) && !stockPalette.test(match)) continue;
+      found.push({ match: `<${name}> ${match}`, line: text.slice(0, index + value.start + at).split('\n').length });
+    }
+  }
+  return found;
+}
+
+// Colors written as values (`#01172b`, `rgb(…)`) instead of a theme role, outside links.
+export function rawColors(source) {
+  return findAll(withoutComments(source), /(?<!&)(?<!(?:href|to)=\{?["'])#(?:[\da-f]{8}|[\da-f]{6})(?![\w-])|(?<=:\s*)#[\da-f]{3,4}(?![\w-])|(?<![\w-])(?:rgb|hsl)a?\([\d.][^)]*\)|(?<![\w-])oklch\([\d.][^)]*\)/gi);
 }
 
 // Emoji drawn as pictures. `\p{Emoji}` alone also matches digits, `#` and

@@ -31,7 +31,7 @@ If the app already has a working Finnomena theme on the Neon base, start with th
 - New project: [scaffold and layout](references/scaffold.md). Never scaffold over a nonempty app.
 - Explicit rebuild of an existing React app: [rebuild](references/rebuild.md), into a new directory on the Neon base.
 - Components, styling or an added item in a new, Neon-base or shadcn app: [Neon base](references/neon-base.md).
-- About to choose a Neon item or one of its prop values (which component fits, its hierarchy, states or usage): [Core rules](../neon-audit/references/core-rules.md), for that item's Core doc only. Colors-only work reads none.
+- About to choose a Neon item or one of its prop values (which component fits, its hierarchy, states or usage), or to draw a look or component no item has: [Core rules](../neon-audit/references/core-rules.md), for that item's Core doc only. Colors-only work reads none.
 - A Theme Brief the employee names or asks for, or a file headed `… — Theme Brief`: [Theme Briefs](references/theme-brief.md).
 - Any supplied reference design or outside style file that is not a recognised Theme Brief: [reference design](../neon-audit/references/reference-design.md).
 - Building a new or rebuilt Campaign Page, theming it, or a note that it looks plain: [campaign direction](references/campaign-direction.md).

@@ -146,3 +146,19 @@ test('where the patterns differed from Core, they link Core', async () => {
   }
   assert.match(patterns, /Read \[Core rules\]\(core-rules\.md\) before opening one/);
 });
+
+test('a look or component no item has takes its Core doc\'s tokens, not a choice', async () => {
+  const draw = section(await read('skills/neon-audit/references/core-rules.md'), 'Draw what no item has');
+  assert.match(draw, /`## Axes` and `## Component variables and Theme tokens`/);
+  assert.match(draw, /Choose none of them/);
+  assert.match(draw, /mark it unconfirmed and report the token/);
+  assert.match(await read('skills/neon-create/references/neon-base.md'), /core-rules\.md#draw-what-no-item-has/);
+  assert.match(await read('skills/neon-create/SKILL.md'), /draw a look or component no item has/);
+  // The worked example holds: the doc has the sections and rows, and the role exists.
+  const doc = await read('core/components/segmented-control.md');
+  assert.match(doc, /^## Axes$/m);
+  assert.match(doc, /^## Component variables and Theme tokens$/m);
+  assert.match(doc, /^\| True · Enabled \| `Background\/background-primary`.*`Border\/border-strong`/m);
+  assert.equal(JSON.parse(await read('theme/css/core-roles.json')).bgLineStrong, 'Border/border-strong');
+  assert.match(await read('registry/theme/neon.css'), /--line-strong: var\(--color-bgLineStrong\)/);
+});
