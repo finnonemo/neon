@@ -147,7 +147,7 @@ Show a scannable pending list and selected request details. Use navy for the mai
 
 ## Illustrative example: immersive campaign
 
-A product landing page on the Exclusive or Private theme takes whatever layout the agent designs, then that theme's canvas, palette and accent steps and navy action; on Ultra the same layout turns navy with a white action and a navy label. Keep navigation, forms and status feedback legible and familiar. Do not carry an immersive composition into a dense approvals workspace by default.
+A product landing page on the Exclusive or Private theme takes whatever layout the agent designs, then that theme's canvas, palette and accent steps and navy action; on Ultra the same layout turns navy with a white action and a navy label. Do not carry an immersive composition into a dense approvals workspace by default.
 
 ## Illustrative example: responsive request form
 
