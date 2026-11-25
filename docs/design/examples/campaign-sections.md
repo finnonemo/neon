@@ -46,4 +46,4 @@ Changed when it shipped: the component's name and header comment, the Patterns i
 
 ## Used by
 
-- [Campaign Page direction](../../../skills/neon-create/references/campaign-direction.md#composition) links the shipped README.
+- No skill links the shipped README since [ADR 0018](../../adr/0018-the-agent-designs-campaign-pages-and-neon-themes-them.md): a Campaign Page's layout is the agent's.

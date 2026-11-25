@@ -1,14 +1,12 @@
 ---
 scenarios:
-  - request: Build a Campaign Page for a members' fun run from the Exclusive · Run Theme Brief, with no images supplied
-    observe: The hero is the brief's poster, not a split; each section sits on the ground its row of the brief's Layout table names; the distance, the start time and the registration deadline take the brief's lead fact role; the two feature blocks take the feature radius and the cards the block radius; the report lists where the build departs from the brief.
-  - request: Build a Campaign Page for a members' fun run from the Club · Run Theme Brief, with no images supplied
-    observe: The same checks against the Club brief's own table and picks, and a page whose hero, section order and radii differ from the Exclusive page's.
-  - request: Build a Campaign Page for a members' fun run from the Ultra · Run Theme Brief, with no images supplied
-    observe: The poster hero and the brief's grounds hold on the dark canvas; each distance card's select action is the Secondary Action, not a second main action; the main action stays readable on the accent ground; the route block takes the feature radius.
+  - request: Build a Campaign Page from the Exclusive · Run Theme Brief and follow the brief's layout, with no images supplied
+    observe: The layout the employee asked for is followed, each section on the ground its row of the brief's Layout table names; the report lists where the build departs from the brief.
 ---
 
 # Theme Brief composition
+
+> The run below predates [ADR 0018](../../../docs/adr/0018-the-agent-designs-campaign-pages-and-neon-themes-them.md), which retired the layout rules it measures. Only the scenario above is current.
 
 What a page built from a Theme Brief looks like once the brief carries [composition picks](../../../docs/design/theme-briefs.md#presets-and-picks-files): a ground per section, a lead fact role and a feature radius. These are the page-layer runs for the `event-poster` layout and for `event-landing` with its new fields: two [first runs](#first-runs), then [all four briefs](#runs-on-the-redrafted-briefs) after a redraft.
 
@@ -151,7 +149,7 @@ Ultra's call-out is one step lighter than its ground, where the third set's was 
 
 What these runs showed:
 
-- **A long name takes three lines at 375px.** "Finnomena Private Run 2026" at `display2` wraps to three lines, where `skills/neon-create/references/campaign-content.md` asks for two or fewer. The run kept the brief's size and reported it. Exclusive moved "Finnomena" to a line above the name to stay at two.
+- **A long name takes three lines at 375px.** "Finnomena Private Run 2026" at `display2` wraps to three lines, where the campaign content reference asks for two or fewer. The run kept the brief's size and reported it. Exclusive moved "Finnomena" to a line above the name to stay at two.
 - **The date numeral equals the name at 375px on Private.** Both are 60px. The brief gives the date block no role, so "nothing larger" holds and the two tie.
 - **Feature blocks step one or two lighter.** The brief says one. Three of the eight blocks took two.
 - **Exclusive's report lists the main action in the hero and the form as a departure.** The brief's Main Action entry is the main action of a section, so the page is within the brief and the report over-reports.
@@ -162,7 +160,7 @@ None overflowed sideways at either width. Run logs, reports and apps are in `.lo
 
 ## Skill change after the fourth set
 
-The three-line name changed `skills/neon-create/references/theme-brief.md`: a name that takes more than two lines at the hero name role keeps the role, and the organisation's name that opens it moves to a line above in a label or title role. A name still past two lines keeps the role and the report gives its line count. `campaign-content.md` points its two-line rule there. No brief changed. No page was built from this change.
+The three-line name changed `skills/neon-create/references/theme-brief.md`: a name that takes more than two lines at the hero name role keeps the role, and the organisation's name that opens it moves to a line above in a label or title role. A name still past two lines keeps the role and the report gives its line count. the campaign content reference points its two-line rule there. No brief changed. No page was built from this change.
 
 ## Limits
 
