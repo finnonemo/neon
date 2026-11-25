@@ -20,8 +20,9 @@ export function Logo({ variant = "full", tone }: LogoProps) {
   const scheme = useColorScheme()
   const isFull = variant === "full"
 
+  // A block box: around the block image, an inline link paints no outline.
   return (
-    <a href="https://www.finnomena.com" target="_blank" rel="noopener noreferrer">
+    <a href="https://www.finnomena.com" target="_blank" rel="noopener noreferrer" className="block w-fit focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring">
       <img src={assets[variant][tone ?? scheme]} alt="Finnomena" width={isFull ? 136 : 32} height={32} className="block" />
     </a>
   )
