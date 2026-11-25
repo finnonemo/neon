@@ -10,7 +10,7 @@ Where the page shows a real product, use its real components or supplied screens
 
 Three things from the start, so theming changes color and nothing else:
 
-- **Color through page variables.** Give the page its own named color variables by role (canvas, text, block, accent, action and so on) and use only those, in CSS, inline SVG, canvas and WebGL alike. Choose their values freely for now.
+- **Color through page variables.** Give the page its own color variables, named by role with one prefix of their own (`--page-canvas`, `--page-accent` and so on: the Neon base redefines bare names such as `--card` and `--accent` inside a theme), and use only those, in CSS, inline SVG, canvas and WebGL alike. Choose their values freely for now.
 - **Typeface and logo.** Set type in IBM Plex Sans Thai, whose Thai metrics move layout, and leave room for the Finnomena logo.
 - **Page root.** On the Neon base, `ImmersiveLayout` is optional: it draws a 64px logo header, a 64px toolbar band above the content, and a 1440px cap. When the design wants another frame, build your own root: import `@/theme/immersive.css`, set `data-immersive-theme` on that root and on `<html>` (removing it from `<html>` on unmount), and pass `Logo` the `tone` of the surface it sits on.
 
@@ -20,7 +20,7 @@ Look at the built page at 375px and 1440px, and at moving parts in several frame
 
 Point each page variable at the Immersive Theme's `--immersive-*` properties, per the contract's [color rules](../../INSTRUCTION.md#immersive-color). A theme may point a variable at another property than the rest do, as Ultra often needs. Change color only: leave layout, type, spacing, shape and motion as designed. When a color reads wrong, choose another step or ground for it before touching the layout. With a Reference-led reference, the page colors follow [Brand Intensity](../../INSTRUCTION.md#reference-designs-and-brand-intensity) instead.
 
-Done when no color literal is left in the page outside supplied images, engine-drawn artwork and Gradient Recipe stops, and switching the theme recolors the whole page without moving anything. The review build's theme toggle proves it: check all four themes. The launch build keeps one theme and has no toggle.
+Done when no color literal is left in the page outside supplied images, engine-drawn artwork and Gradient Recipe stops, and switching the theme recolors the whole page without moving anything. The review build's theme toggle proves it: check all four themes. The launch build keeps one theme and has no toggle, for example behind a build-time environment variable.
 
 ## What every page keeps
 
