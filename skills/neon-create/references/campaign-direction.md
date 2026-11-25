@@ -1,89 +1,43 @@
 # Campaign Page direction
 
-Read before composing a new or rebuilt Campaign Page on an Immersive Theme, with or without a Theme Brief. [Campaign content](campaign-content.md) decides what the page says; this decides how it looks and moves. The same tokens make a poster or a row of equal cards, so a plain page is a direction problem, not a token problem. An edit to an existing page keeps its direction, and so does a Brand Intensity move.
+Read before building a new or rebuilt Campaign Page. The page has two steps: you design it, then Neon themes it. Neon has no layout rules for a Campaign Page. [Campaign content](campaign-content.md) covers what the page may claim.
 
-With a Reference Design at Blended or Reference-led, its geometry and motion replace [Composition](#composition) and set the motion level; the direction lines, the motion budget and [Look at it](#look-at-it) still apply.
+## 1. Design
 
-## Direction lines
+Design the page with your full ability, as if no design system were asked for. Composition, section order, hero, grid, scale, type sizes and weights, spacing, shape, imagery, illustration and motion are yours. Use any design skill the host offers. Start from the request, its audience and its supplied assets, not from an earlier Neon page, the functional patterns, the starter layouts or a Theme Brief nobody named.
 
-Write these beside the design thesis in `./NEON-HANDOFF.md`, before the first component file, one line each. The thesis's `First-read` line names what a reader takes from the first screen within a second; for an event that is its name with the date and place.
+Three things from the start, so theming changes color and nothing else:
 
-- `Register: <3–5 adjectives>`: how the page feels, taken from the request, the occasion and the brief's mood. Each adjective must change a choice below; drop one that does not.
-- `Scale: <the largest element on each screenful and its type role; what stays small>`
-- `Grounds: <which sections run edge to edge, and on which step>`
-- `Motion: <each moment in the form under Motion, or none>`
-- `Brand Pattern: <the screenful it leads, its slot's size at 375px and 1440px, its Block Colourway, the Block a photo fills; the other sections it illustrates>`
-- `Assets: <what was supplied; what the page uses in its place>`
+- **Color through page variables.** Give the page its own named color variables by role (canvas, text, block, accent, action and so on) and use only those, in CSS, inline SVG, canvas and WebGL alike. Choose their values freely for now.
+- **Typeface and logo.** Set type in IBM Plex Sans Thai, whose Thai metrics move layout, and leave room for the Finnomena logo.
+- **Page root.** On the Neon base, `ImmersiveLayout` is optional: it draws a 64px logo header, a 64px toolbar band above the content, and a 1440px cap. When the design wants another frame, build your own root: import `@/theme/immersive.css`, set `data-immersive-theme` on that root and on `<html>` (removing it from `<html>` on unmount), and pass `Logo` the `tone` of the surface it sits on.
 
-## Assets first
+Look at the built page at 375px and 1440px and improve the design until you are satisfied with it, before theming.
 
-List what the employee supplied (photos, illustrations) before composing, and compose around it. The [Brand Pattern](#brand-pattern) is never on that list: the page draws it. With no image for a section, let type and color blocks carry it: a date in a display role, a numeral block, a drawn route. A section built around a large empty slot reads as a wireframe; the photo Block of the [Brand Pattern](#brand-pattern) is the one exception. A slot that must stay follows the [sample content](campaign-content.md#no-invented-proof) rule, at the size its content needs and no larger.
+## 2. Theme
 
-## Brand Pattern
+Point each page variable at the Immersive Theme's `--immersive-*` properties, per the contract's [color rules](../../INSTRUCTION.md#immersive-color). Change color only: leave layout, type, spacing, shape and motion as designed. When a color fails contrast or reads wrong, choose another step or ground for it before touching the layout. With a Reference-led reference, the page colors follow [Brand Intensity](../../INSTRUCTION.md#reference-designs-and-brand-intensity) instead.
 
-Every Campaign Page on an Immersive Theme carries a Brand Pattern drawn by the Block engine, with or without a Theme Brief. It is the page's illustration, not a border: a page without one, or with one too small to read as one, misses the brand. One leads the hero; others illustrate further sections.
+Done when no color literal is left in the page outside supplied images, engine-drawn artwork and Gradient Recipe stops, and switching the theme recolors the whole page without moving anything. The review build's theme toggle proves it: check all four themes.
 
-- **Drawn, never made.** Reach the engine through the `options`, `candidates` and `render` tools, or `scripts/finno.mjs`, as [neon-block's Tools](../../neon-block/SKILL.md#tools) has it, with `layout` set to `pattern`. Never hand-draw it, imitate it in CSS, crop, stretch or cover it, or animate it. Filling one of its Blocks with a photo, below, is the one change a page makes to it.
-- **Colourway.** A brief's Block Colourway stands. Without a brief, take the theme's from its briefs: Exclusive `grey__navy-100`, Club `white__yellow-100`, Private `grey__yellow-100`, Ultra `navy__grey-100`.
-- **Size.** It leads its screenful, the hero's unless a brief places it elsewhere. Draw it for the slot it fills: from 988px it takes at least half the hero's width and its full height; at 375px it spans the column at 4:5 or squarer. The slot is never wider than 2:1, and never a strip under or beside the text: a strip shrinks the Blocks to a row of small steps, which the guideline's "bold and simple" rules out. Render one file per slot shape at the slot's size in px (`width` and `height`) and swap them by breakpoint.
-- **On its ground.** It needs no panel. When the section's ground is the Block Colourway's background, it already sits on it. Otherwise draw it with `transparent`, so only its Blocks land on the ground, as long as they hold 3:1 against it; on a ground they would not, it keeps its background as a panel at the block radius.
-- **A photo in a Block.** As the guideline has it, a photo goes into the Pattern, never over or beside it: it fills one large Block, masked to that Block's rectangle in the SVG (an `<image>` under a `<clipPath>` of the Block's `<rect>`, `preserveAspectRatio="xMidYMid slice"`), in grayscale at full opacity, never cropping a face. The other Blocks keep their color. With no photo supplied, that Block keeps its fill and carries a marked photo slot: `[ภาพ: <what the photo shows>]` in the caption role in its `on-` text color. It is the one large slot a page keeps with no content, because the guideline's layout needs the photo. List it as a pre-launch to-do naming the photo that replaces it, as [sample content](campaign-content.md#no-invented-proof) is listed.
-- **More than once.** Beyond the hero, draw Patterns as illustrations for two or three other sections, each drawn for its own slot at its own size, in the theme's Block Colourway or one of its Blocks' colors on that section's ground: beside a fact, at the edge of a band, in the closing section. Each comes from `candidates` and stays whole; a section never takes two.
-- **Pick to read.** Of the twelve candidates, pick one whose few large Blocks leave clear space beside the text and hold one Block large enough for the photo; take `candidates` again for twelve more rather than settle on many small steps.
+## What every page keeps
 
-## Composition
+- **Brand Floor:** the Finnomena logo, IBM Plex Sans Thai, contrast of 4.5:1 for text (3:1 when large) and 3:1 for control boundaries, in each theme the page offers.
+- **Motion safety:** item 4 of the [shared checklist](../../neon-redesign/references/verification.md#shared-checklist). Nothing a reader needs waits on a script, and the page is still under `prefers-reduced-motion: reduce`. A loop over 5 seconds can be paused.
+- **Access:** keyboard reach, visible focus, real headings and controls, no page overflow at 375px, and no Thai mark cut off or colliding.
+- **Truth:** [no invented proof](campaign-content.md#no-invented-proof).
+- **Brand Pattern, when the design uses one:** it is optional unless the request asks for it. Draw it with the Block engine ([neon-block's Tools](../../neon-block/SKILL.md#tools), `layout` set to `pattern`), never by hand or in CSS, and don't crop, stretch, cover or animate it. A photo inside it fills one whole Block. Take the Block Colourway of the theme: Exclusive `grey__navy-100`, Club `white__yellow-100`, Private `grey__yellow-100`, Ultra `navy__grey-100`. Its colors are fixed in the file, so a theme switch swaps the file.
 
-Inside an Immersive Theme (text White or Navy, tints by step, one color family per block, gradients only from the [Gradient Recipes](../../INSTRUCTION.md#gradients)), contrast comes from scale, ground and position.
-
-- **One dominant element per screenful.** It sits at least two type roles above its neighbors. `display1` to `display3` are for the page's facts wherever they appear (the name, the date, a distance, a deadline), not only the hero headline. A number in a display role is the cheapest image a page has; it leads two sections at most, so it stays one device among others.
-- **Grounds change down the page.** At least one section beside the hero runs edge to edge on a saturated step, with the content column inside it. A page of canvas bands holding tinted cards reads as one texture.
-- **No section repeats the one before.** Each section takes its own composition: where its heading sits (above, beside, inside a block), what leads it (a display figure, a photo in a Block, a Pattern, a list, a quote, a drawn route) and its block recipe. Two sections in a row with the same heading over the same tinted block read as one template; write each section's lead in the `Scale` line and change one that repeats.
-- **Unequal blocks.** Size blocks by importance: a wide block beside a narrow one, a block that spans two rows. Keep a row of equal cards for true peers the reader compares, once per page at most.
-- **Break the stack where it points at something.** A block that overlaps the band above, a section title that stays put beside its scrolling rows, an asymmetric split. Use one or two, each leading the eye to the main action or a key fact.
-- **The accent marks the action path.** The accent family's strongest step goes on the grounds and rows that lead to the main action, and nowhere else. Secondary colors stay in small blocks, as the [contract](../../INSTRUCTION.md#composition) has it.
-- **Space gathers around what matters.** The widest gap on a screenful surrounds its dominant element. Running text keeps a column of about 60 to 75 characters while its band runs full width.
-- **Type roles as they ship.** No letter-spacing, no weight utility beside a role, and no tightened line height: check a wrapped Thai display heading in the browser, per the [type rules](../../INSTRUCTION.md#typography-geometry-and-assets).
-
-The [campaign sections](../../../examples/campaign-sections/README.md) example shows one order and shape of sections for an offer people book: proposition, benefits, questions, terms with the action. Only its composition and interaction are reviewed, so take its colors, type roles, Patterns and copy from this file, the theme and the request instead. It is one page's answer, not a default order: a brief's order, or one that suits the offer better, stands.
-
-With a Theme Brief, its section order, hero pattern, components, fills and its radius and padding picks stand. So do the grounds in its Layout table, its lead fact role and its feature block radius, when the brief has them: write the `Grounds` line from the table. These moves decide what it leaves open: which component dominates each screenful, how blocks are sized against each other, and, in a brief without those picks, which band runs edge to edge and which type role each fact takes. When a move needs a value the brief did not pick (a display role for a date, a larger radius on a numeral block), take a step from the same scale and list it in the Done report as a departure from the brief.
-
-Habits to name and replace: no Brand Pattern, or one drawn as a strip; hero, three equal cards, footer; every section on the same band and card recipe, or led by the same display figure in a tinted block; `title2` as the largest type below the hero; large labelled image slots; shapes that carry no content; motion on every section; a scroll pattern used where it tells nothing; two accents competing; an adjective where a fact belongs.
-
-## Motion
-
-A Campaign Page may tell its story with the four named scroll patterns of Neon's ADR 0013:
-
-| Pattern | What moves | What it tells | Limit | Level |
-|---|---|---|---|---|
-| **Pinned story** | A visual stays pinned (`position: sticky`) while 3–5 text steps scroll beside it; at each step it crossfades to that step's state | Order: the steps of a journey, a product, a day | One per page; 3–5 steps; crossfade 150–250ms; the visual does not translate | `subtle`, `lively` |
-| **Scrubbed reveal** | One image or block scales from 0.92 to 1 and fades in as its section crosses the viewport, tied to scroll progress | Cause or emphasis: the thing the section is about arrives | Translation 32px or less; one per section, two per page | `lively` |
-| **Count-up figure** | A figure in a display role counts up to its final value once, as it enters view | Size: a distance, a sum, a number of people | 600–1200ms, ease-out, once | `subtle`, `lively` |
-| **Progress rail** | A thin bar beside or above a long section grows on `scaleX` or `scaleY` with scroll progress through it | Progress: how far along a route, a schedule or a list the reader is | One per page; carries no label the reader must read | `subtle`, `lively` |
-
-- **Budget.** Up to three moments on a `lively` page and two on a `subtle` page, at most one of them a Pinned story; `still` has none. One use of a pattern is one moment (a Pinned story with five steps is one), and a fade or slide as content enters view is one too. Hover, focus and press changes never count. Never go above the brief's level.
-- **Form.** Write each moment as the pattern, what moves, what that tells the reader (order, size, cause or progress), how it feels, its limit, and what happens under reduced motion. For example: `Motion: Pinned story, the route map stays while the four points scroll beside it and it crossfades to each, to show the route's order; 200ms ease-out; below md and under reduced motion each point shows its own map above its text.` A moment that tells the reader nothing is cut.
-- **Timing.** Every movement keeps its level's range: `subtle` 150–250ms with slides of 16px or less, `lively` 200–400ms with 32px or less. The Count-up figure's 600–1200ms is exempt, because it changes digits in place and moves nothing.
-- **Pinned story.** Below the `md` breakpoint (500px) the visual does not pin: each step shows its own state of the visual above its text. Step changes come from an `IntersectionObserver` on the steps.
-- **Scrubbed reveal.** Its start state (scaled down, faded) applies only under an attribute a script sets once it has run, so the content is visible without the script.
-- **Count-up figure.** Mark its element `data-count-up`, so a check reading the page's timings leaves it out. The final value is in the HTML. Count from at least half of it, never from zero. Set `font-variant-numeric: tabular-nums` and a width fixed to the final value, so nothing shifts; screen readers get the final value only (`aria-hidden` on the counting text, the value in visually hidden text).
-- **Cost.** Animate `transform` and `opacity` only (the Count-up figure changes text). Movement tied to scroll stays within the level's limit and never runs behind text. Run it from CSS scroll-driven animation (`animation-timeline: view()` or `scroll()`) under `@supports`, otherwise an `IntersectionObserver`, or a passive scroll listener throttled to animation frames.
-- **Reduced motion.** Under `prefers-reduced-motion: reduce` the page is still: a Pinned story stacks its steps as on narrow screens, a Scrubbed reveal shows its end state, a Count-up figure shows its final value and a Progress rail is hidden.
-- **Stillness.** The first screen makes its point as a still: no autoplay video or loop carries the proposition, and nothing animates a Brand Pattern. Content starts visible, per item 4 of the [shared checklist](../../neon-redesign/references/verification.md#shared-checklist).
+Where it goes and how large it is are yours.
 
 ## Look at it
 
-On a Campaign Page, add these to the [Look and fix](../../neon-redesign/references/verification.md#look-and-fix) questions, on the 375px and 1440px screenshots viewed at reduced scale:
+Add these to [Look and fix](../../neon-redesign/references/verification.md#look-and-fix), on screenshots at both widths:
 
-- Within a second, is the `First-read` what you see, with the next action beside it?
-- Does the Brand Pattern lead its screenful at both widths, in a few large Blocks with clear space beside them, uncropped and unstretched?
-- On each screenful, does one element dominate, or do equal blocks share the weight?
-- Do the grounds change, and is a display role used below the hero for a fact?
-- Does the accent mark only the action path?
-- Does each motion moment use the pattern its line names, within the budget and the level's timing, and is the page still under `prefers-reduced-motion: reduce`?
-- Does the page show a habit from the list above? Name it in the finding.
-- Does each `Register` adjective show somewhere you can point to?
+- Does the page look designed for this request, by your own judgment?
+- After theming, did anything but color move?
+- Does it still read in every theme it offers?
 
-## When it misses
+Fix the first in the design, the other two in the color mapping.
 
-When one section is weak, show two or three static takes of that section and keep the rest. When the whole page reads as generic, the direction lines were generic: rewrite them and rebuild from them, rather than patching section by section. An employee's note about feel ("ดูเรียบไป", "more energy") changes a direction line first and CSS second; say which line changed.
+A note about feel ("ดูเรียบไป", "more energy") is a design note: redesign what it names, then theme again. A note about color changes only the mapping or the theme.

@@ -23,17 +23,19 @@ A functional Finnomena screen should read like a wayfinding panel: ink on white,
 - **Space first, lines second, boxes last.** Group with spacing; add a divider when spacing alone is ambiguous; add a container when the group is a thing the user acts on.
 - **One next step.** Each screen or panel has one primary action, visible where its answer appears.
 
-Immersive pages share the last three ideas and take their color from an Immersive Theme or a Reference Design instead of the first.
+These ideas are for functional screens. On an immersive page the agent building it designs the layout freely, and Neon supplies the color, from an Immersive Theme or a Reference Design, and the [Brand Floor](#reference-designs-and-brand-intensity).
 
 ### Fixed, and yours to design
+
+This table is for functional screens. On a Campaign Page only the Immersive Theme's colors, the Brand Floor and scope are fixed; everything else is yours, per [campaign direction](neon-create/references/campaign-direction.md).
 
 | Fixed | Yours to design |
 | --- | --- |
 | Tokens, type roles and the base's components with their props | Which composition serves the task: grouping, order, density, what is first-read |
-| The color roles and, on campaign pages, the Brand Floor | Where content color goes: illustration, imagery, a chart, an Immersive Theme's blocks |
+| The color roles | Where content color goes: illustration, imagery, a chart |
 | The app's shell: its navigation, panes and the layout components that supply them | Which of the shell's layouts the screen takes and what goes in each pane |
 | Scope the request set: tier, composition, preserved behavior | Inside a pane, a layout, state or interaction no pattern here lists, built from the fixed column |
-| Evidence rules for what a report may claim | Copy, empty states, the reading sequence of a campaign page |
+| Evidence rules for what a report may claim | Copy, empty states |
 
 The shell is not edited, rebuilt or put together again from its parts for one screen: one of its layouts renders the screen. When none fits the task, take the nearest one, build what it lacks inside its panes, and say in the report which layout that is and what did not fit.
 
@@ -63,7 +65,9 @@ On functional screens, which action is primary, secondary or tertiary, and how m
 
 A whole page reads the same way in every app: content answers the page's question, the inspector holds its action, and content is a stack of sections that each preview a collection. The page types and their region order are in [page anatomy](neon-audit/references/page-anatomy.md).
 
-**Immersive screens:** color the page from one Immersive Theme unless its reference design is Reference-led. The [themes](../theme/immersive-themes.json) are Club (white canvas), Exclusive (yellow), Private (light grey) and Ultra (navy), from the Finnomena Guidelines v1 membership levels, and are provisional pending design owner review. On the Neon base, pass the theme as `ImmersiveLayout`'s `immersiveTheme` (the `@neon/immersive-themes` registry item): it sets the attribute, takes buttons and other controls, focus ring, logo and `color-scheme` from the theme and lets the page scroll with the window, so `position: sticky` pins to the viewport. Elsewhere, copy the [generated theme CSS](../theme/css/immersive-themes.css) into the app and set `data-immersive-theme` on the page root. Color sections only with its `--immersive-*` properties: canvas and text; the theme's own `palette-100/75/50/25` steps; the `accent-*` steps (Ultra adds `support-*`); the guideline's secondary `green-*`, `blue-*`, `purple-*`, `red-*` and `orange-*` steps, shared by every theme for highlights, tags and illustration blocks, each with its `on-*` text color; and `action`/`on-action` for the main action. Keep secondaries to small blocks so the theme's own colors lead, and away from data where green or red would read as status. On Exclusive, Private and Ultra `palette-100` is the canvas, so stepped blocks there start at 75. Changing that one prop or attribute switches theme, so an open direction can be shown as the themes and a review build can offer a theme toggle. Within a theme follow the guideline: text only in White or Navy, tints by step rather than opacity, one color family per background block, and gradients only from the [Gradient Recipes](#gradients) (Neon's ADR 0014). Use a focused reading sequence, clear proposition, relevant imagery and an identifiable next action. A themed page gets its contrast from scale, ground and position, not from more colors: a new one follows [campaign direction](neon-create/references/campaign-direction.md). Keep status colors semantic when communicating system feedback. `ImmersiveLayout` is a starter option, not a mandatory landing-page recipe. A themed Campaign Page starts from a Theme Brief when the employee brings no Reference Design.
+### Immersive color
+
+**Immersive screens:** the agent designs the page first, with no layout rule from Neon, and theming then changes its color only: see [campaign direction](neon-create/references/campaign-direction.md). Color the page from one Immersive Theme unless its reference design is Reference-led. The [themes](../theme/immersive-themes.json) are Club (white canvas), Exclusive (yellow), Private (light grey) and Ultra (navy), from the Finnomena Guidelines v1 membership levels, and are provisional pending design owner review. On the Neon base, pass the theme as `ImmersiveLayout`'s `immersiveTheme` (the `@neon/immersive-themes` registry item): it sets the attribute, takes buttons and other controls, focus ring, logo and `color-scheme` from the theme and lets the page scroll with the window, so `position: sticky` pins to the viewport. Elsewhere, copy the [generated theme CSS](../theme/css/immersive-themes.css) into the app and set `data-immersive-theme` on the page root. Color sections only with its `--immersive-*` properties: canvas and text; the theme's own `palette-100/75/50/25` steps; the `accent-*` steps (Ultra adds `support-*`); the guideline's secondary `green-*`, `blue-*`, `purple-*`, `red-*` and `orange-*` steps, shared by every theme for highlights, tags and illustration blocks, each with its `on-*` text color; and `action`/`on-action` for the main action. Let the theme's own colors lead, and keep secondaries away from data where green or red would read as status. On Exclusive, Private and Ultra `palette-100` is the canvas, so stepped blocks there start at 75. Changing that one prop or attribute switches theme, so an open direction can be shown as the themes and a review build can offer a theme toggle. Within a theme follow the guideline: text only in White or Navy, tints by step rather than opacity, one color family per background block, and gradients only from the [Gradient Recipes](#gradients) (Neon's ADR 0014). Keep status colors semantic when communicating system feedback. `ImmersiveLayout` is a starter option; a page with its own root sets the attribute itself. A Theme Brief is used only when the employee names or supplies one.
 
 **Reference-led immersive pages** keep the thinner [Brand Floor](#reference-designs-and-brand-intensity) instead of a theme: they may keep just IBM Plex Sans Thai and a few Finnomena colors, navy/white need not dominate any section, and [palette-based gradients](#gradients) are allowed when they support the story. Choose accessible action colors for each surface; navy, yellow and indigo are not mandatory hero or CTA colors. A white action suits dark or saturated surfaces: give it a dark label, and on a light surface a visible boundary of at least 3:1. Scope such action colors to the page; the shared primary mapping stays navy for functional screens. A user-supplied reference design contributes only what its Brand Intensity allows; it never supersedes the Brand Floor.
 
@@ -93,7 +97,7 @@ A reference design is an outside style description (for example from Refero Styl
 
 ## Task-based choices
 
-These are decision aids, not mandatory screen templates or approved visual exemplars. Reuse the app's current components before introducing a new layout abstraction.
+These are decision aids for functional screens, not mandatory screen templates or approved visual exemplars. Reuse the app's current components before introducing a new layout abstraction.
 
 | User task | Useful composition | Selection criterion |
 | --- | --- | --- |
@@ -101,13 +105,13 @@ These are decision aids, not mandatory screen templates or approved visual exemp
 | Scan short summaries and open one record | List with selected detail | Add a side panel only if simultaneous context helps the decision; otherwise a detail view with a return path is enough |
 | Enter related information | Labeled form groups with nearby help/errors | Group by meaning; use multiple steps only when the task has a real sequence, not to decorate a short form |
 | Filter a collection | Toolbar near results and a no-match state | Preserve query and selection semantics; let controls wrap/stack without hiding filtering on small screens |
-| Understand a product or campaign | Immersive reading sequence with meaningful imagery and a next action | Expressive surfaces should clarify the story; the action must contrast with its local background |
+| Understand a product or campaign | The agent's own design, then an Immersive Theme | No layout rule; the action must contrast with its local background |
 
 For existing screens, apply these decisions only within authorized composition changes. Colors-only and an ambiguous “make it Finnomena” request preserve structure. In `composition: 'adapt'`, improve hierarchy, grouping or responsive presentation without changing routes, handlers, services or data meaning.
 
 ## Typography, geometry and assets
 
-Use IBM Plex Sans Thai via the app's font loader, with both Thai and Latin verified. Use Neon's type roles (`text-title1`, `text-body`, `text-label1` and the rest on the Neon base) and shipped spacing/radius tokens. Structural widths and responsive geometry may use documented layout dimensions; do not prohibit every numeric CSS value. Preserve geometry during colors-only work.
+Use IBM Plex Sans Thai via the app's font loader, with both Thai and Latin verified. On functional screens use Neon's type roles (`text-title1`, `text-body`, `text-label1` and the rest on the Neon base) and shipped spacing/radius tokens. A Campaign Page keeps the typeface and sets its own sizes, weights, spacing and radii. Structural widths and responsive geometry may use documented layout dimensions; do not prohibit every numeric CSS value. Preserve geometry during colors-only work.
 
 On the Neon base and in the CSS adapter, each type role takes the size and line height of one Core text style; its numbers are in `<Neon root>/core/text-styles.json`. From `title1` down the line heights follow Core's Thai rule, 1.4 × the size rounded up to a multiple of 4, which Core worked out for Finnomena Trek. In IBM Plex Sans Thai that clears most wrapped Thai and not the worst stack: measured in Chromium, a deep vowel directly above a stacked tone mark overlaps by up to 2px from `title1` to `body`, and one wrapped sample touched by 1px at `headline` and `body`. So do not tighten a role's line height. `display1` to `display3` take Core's Display styles, whose line heights are tighter (1.1 to 1.2 × the size): wrapped Thai collides there wherever a vowel below one line meets a mark above the next, so look at a wrapped Thai display heading in the browser and loosen only one that collides. Family and weight stay Neon's: IBM Plex Sans Thai at the role's own weight.
 
@@ -141,7 +145,7 @@ Show a scannable pending list and selected request details. Use navy for the mai
 
 ## Illustrative example: immersive campaign
 
-A product landing page on the Exclusive or Private theme gets a substantial yellow or blue-grey canvas, stepped tint blocks from its palette and accent, colorful Finnomena illustrations and the theme's navy action; on Ultra the page is navy with a white action and a navy label. Keep navigation, forms and status feedback legible and familiar. This expressive composition is appropriate for an immersive story; do not carry its decorative panels into a dense approvals workspace by default.
+A product landing page on the Exclusive or Private theme takes whatever layout the agent designs, then that theme's canvas, palette and accent steps and navy action; on Ultra the same layout turns navy with a white action and a navy label. Keep navigation, forms and status feedback legible and familiar. Do not carry an immersive composition into a dense approvals workspace by default.
 
 ## Illustrative example: responsive request form
 

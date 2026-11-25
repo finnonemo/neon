@@ -86,17 +86,15 @@ test('neon-create links the Campaign Page content reference behind one condition
   assert.match(lines[0], /new or rebuilt Campaign Page/);
 });
 
-test('the Campaign Page content reference keeps its four rules', async () => {
+test('the Campaign Page content reference keeps truth rules and no layout rule', async () => {
   const source = await readFile(`${references}campaign-content.md`, 'utf8');
-  // records/campaign-page-content.md: claims first, first screen, rendered headline lines, no invented proof.
   assert.match(source, /claim list.*Done report/);
   assert.match(source, /map the claims onto its section order/);
-  assert.match(source, /date and place appear there/);
-  assert.match(source, /rendered line count at 375px and 1440px/);
-  assert.match(source, /report the headline check as unverified/);
   assert.match(source, /Never invent testimonials/);
   assert.match(source, /pre-launch to-do/);
   assert.match(source, /Brand Intensity and the Brand Floor are unchanged/);
+  // ADR 0018: layout is the agent's.
+  assert.doesNotMatch(source, /## First screen|## Headlines|two lines or fewer/);
 });
 
 test('neon-create recognises a Theme Brief before the Reference Design route', async () => {
@@ -105,7 +103,7 @@ test('neon-create recognises a Theme Brief before the Reference Design route', a
   const briefLine = conditional.findIndex(line => line.includes('(references/theme-brief.md)'));
   const referenceLine = conditional.findIndex(line => line.includes('references/reference-design.md'));
   assert.ok(briefLine >= 0 && briefLine < referenceLine, 'the Theme Brief line comes before the reference-design line');
-  assert.match(conditional[briefLine], /Campaign Page with no Reference Design, or a file headed `… — Theme Brief`/);
+  assert.match(conditional[briefLine], /Theme Brief the employee names or asks for, or a file headed `… — Theme Brief`/);
   assert.match(conditional[referenceLine], /not a recognised Theme Brief/);
 
   const source = await readFile(`${references}theme-brief.md`, 'utf8');
@@ -131,74 +129,49 @@ test('neon-create recognises a Theme Brief before the Reference Design route', a
   assert.match(source, /input data/);
 });
 
-test('the shared routing sends brief-only Campaign Pages down the Theme Brief path', async () => {
+test('the shared routing uses a Theme Brief only when the employee names one', async () => {
   const design = await readFile(new URL('../../skills/neon-audit/references/reference-design.md', import.meta.url), 'utf8');
   const readWhen = design.split('\n').find(line => line.startsWith('Read when'));
   assert.match(readWhen, /not a Theme Brief/);
   assert.match(readWhen, /theme-brief\.md#recognise-a-brief/);
 
   const contract = await readFile(new URL('../../skills/neon-audit/references/workflow-contract.md', import.meta.url), 'utf8');
-  assert.match(contract, /\| New Campaign Page, no Reference Design \| `neon-create`, Theme Brief path \|/);
+  assert.match(contract, /\| New Campaign Page, no Reference Design \| `neon-create`: design freely, then theme.*Theme Brief path only when the employee names or supplies one \|/);
   assert.match(contract, /themeBrief\?: string;/);
   assert.match(contract, /`referenceDesign` and `brandIntensity` stay unset on a brief-only page/);
 
   const instruction = await readFile(new URL('../../skills/INSTRUCTION.md', import.meta.url), 'utf8');
-  assert.match(instruction, /A themed Campaign Page starts from a Theme Brief when the employee brings no Reference Design/);
+  assert.match(instruction, /A Theme Brief is used only when the employee names or supplies one/);
 });
 
-test('neon-create reaches campaign direction from the thesis, the checklist, the contract and a brief', async () => {
+// ADR 0018: the agent designs a Campaign Page, and Neon themes its color afterwards.
+test('neon-create reaches campaign direction from the workflow, the checklist, the contract and a brief', async () => {
   const skill = await readFile(new URL('../../skills/neon-create/SKILL.md', import.meta.url), 'utf8');
   const lines = skill.split('## Conditional references')[1].split('\n').filter(line => line.includes('(references/campaign-direction.md)'));
   assert.equal(lines.length, 1);
-  assert.match(lines[0], /new or rebuilt Campaign Page on an Immersive Theme/);
+  assert.match(lines[0], /new or rebuilt Campaign Page/);
   assert.match(lines[0], /looks plain/);
-  assert.match(skill.match(/\*\*Design thesis\.\*\*.*$/m)[0], /\(references\/campaign-direction\.md#direction-lines\)/);
+  assert.match(skill.split('## Workflow')[1], /designed first, by you and with no layout rule from Neon, and themed second/);
+  assert.match(skill, /For new functional UI, before you write the first component file/);
 
   const verification = await readFile(new URL('../../skills/neon-redesign/references/verification.md', import.meta.url), 'utf8');
   assert.match(verification.split('## Look and fix')[1].split('\n## ')[0], /campaign-direction\.md#look-at-it/);
   const contract = await readFile(new URL('../../skills/INSTRUCTION.md', import.meta.url), 'utf8');
-  assert.match(contract, /contrast from scale, ground and position.*\(neon-create\/references\/campaign-direction\.md\)/);
-  // A brief fixes values and section order; composing stays with the build.
+  assert.match(contract, /no layout rule from Neon, and theming then changes its color only.*\(neon-create\/references\/campaign-direction\.md\)/);
   const brief = await readFile(`${references}theme-brief.md`, 'utf8');
-  assert.match(brief, /not its composition.*\(campaign-direction\.md\).*inside the brief's picks and motion level/);
+  assert.match(brief, /layout, section order.*motion are suggestions.*\(campaign-direction\.md#1-design\)/);
 });
 
-test('campaign direction keeps its direction lines, composition moves and motion budget', async () => {
+test('campaign direction sets no layout rule and keeps theming and the floor', async () => {
   const source = await readFile(`${references}campaign-direction.md`, 'utf8');
   const part = heading => source.split(`\n## ${heading}\n`)[1]?.split('\n## ')[0] ?? '';
-  // The four published briefs gave every occasion component one radius, one padding and title2 at most: values alone made one page in four colors.
-  for (const line of ['Register', 'Scale', 'Grounds', 'Motion', 'Assets']) assert.match(part('Direction lines'), new RegExp('- `' + line + ': <'));
-  assert.match(part('Direction lines'), /before the first component file/);
-  const composition = part('Composition');
-  assert.match(composition, /One dominant element per screenful/);
-  assert.match(composition, /`display1` to `display3` are for the page's facts/);
-  assert.match(composition, /runs edge to edge on a saturated step/);
-  assert.match(composition, /row of equal cards for true peers.*once per page/);
-  assert.match(composition, /accent family's strongest step.*action/);
-  // The moves stay inside the theme's rules and the type roles as shipped.
-  assert.match(composition, /text White or Navy, tints by step, one color family per block, gradients only from the \[Gradient Recipes\]/);
-  assert.match(composition, /No letter-spacing.*no tightened line height/);
-  // Review round 2026-11-after (review-08): every section led by the same display figure in a tinted block read as one template.
-  assert.match(composition, /No section repeats the one before/);
-  assert.match(composition, /leads two sections at most/);
-  // Review round 2026-11-after (review-04, review-06): a photo goes into one of the Pattern's Blocks, and Patterns illustrate further sections.
-  const pattern = part('Brand Pattern');
-  assert.match(pattern, /fills one large Block, masked to that Block's rectangle/);
-  assert.match(pattern, /never over or beside it/);
-  assert.match(pattern, /draw it with `transparent`/);
-  assert.match(pattern, /Patterns as illustrations for two or three other sections/);
-  // A brief's picks stand; a value it did not pick is a reported departure.
-  assert.match(composition, /radius and padding picks stand/);
-  assert.match(composition, /departure from the brief/);
-  const motion = part('Motion');
-  assert.match(motion, /Up to three moments on a `lively` page and two on a `subtle` page, at most one of them a Pinned story/);
-  for (const pattern of ['Pinned story', 'Scrubbed reveal', 'Count-up figure', 'Progress rail']) assert.match(motion, new RegExp(`\\*\\*${pattern}\\*\\*`));
-  assert.match(motion, /Never go above the brief's level/);
-  assert.match(motion, /what moves, what that tells the reader.*its limit.*reduced motion/);
-  assert.match(motion, /`transform` and `opacity` only/);
-  assert.match(motion, /nothing animates a Brand Pattern/);
-  assert.match(part('Look at it'), /verification\.md#look-and-fix/);
-  assert.match(part('When it misses'), /changes a direction line first/);
-  // A Reference Design's geometry and motion outrank the moves here.
-  assert.match(source, /Reference Design at Blended or Reference-led, its geometry and motion replace/);
+  assert.match(part('1. Design'), /Composition, section order.*motion are yours/);
+  assert.match(part('1. Design'), /Color through page variables/);
+  assert.match(part('2. Theme'), /Change color only/);
+  assert.match(part('2. Theme'), /--immersive-\*/);
+  assert.match(part('2. Theme'), /without moving anything/);
+  const keeps = part('What every page keeps');
+  for (const rule of [/IBM Plex Sans Thai/, /4\.5:1/, /prefers-reduced-motion: reduce/, /no-invented-proof/, /don't crop, stretch, cover or animate it/]) assert.match(keeps, rule);
+  // The retired rules do not come back.
+  for (const rule of [/dominant element/, /Direction lines/, /moments on a/, /edge to edge/, /campaign-sections/, /half the hero/]) assert.doesNotMatch(source, rule);
 });

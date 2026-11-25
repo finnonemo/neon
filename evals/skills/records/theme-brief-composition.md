@@ -1,14 +1,12 @@
 ---
 scenarios:
-  - request: Build a Campaign Page for a members' fun run from the Exclusive · Run Theme Brief, with no images supplied
-    observe: The hero is the brief's poster, not a split; each section sits on the ground its row of the brief's Layout table names; the distance, the start time and the registration deadline take the brief's lead fact role; the two feature blocks take the feature radius and the cards the block radius; the report lists where the build departs from the brief.
-  - request: Build a Campaign Page for a members' fun run from the Club · Run Theme Brief, with no images supplied
-    observe: The same checks against the Club brief's own table and picks, and a page whose hero, section order and radii differ from the Exclusive page's.
-  - request: Build a Campaign Page for a members' fun run from the Ultra · Run Theme Brief, with no images supplied
-    observe: The poster hero and the brief's grounds hold on the dark canvas; each distance card's select action is the Secondary Action, not a second main action; the main action stays readable on the accent ground; the route block takes the feature radius.
+  - request: Build a Campaign Page from the Exclusive · Run Theme Brief and follow the brief's layout, with no images supplied
+    observe: The layout the employee asked for is followed, each section on the ground its row of the brief's Layout table names; the report lists where the build departs from the brief.
 ---
 
 # Theme Brief composition
+
+> The run below predates [ADR 0018](../../../docs/adr/0018-the-agent-designs-campaign-pages-and-neon-themes-them.md), which retired the layout rules it measures. Only the scenario above is current.
 
 What a page built from a Theme Brief looks like once the brief carries [composition picks](../../../docs/design/theme-briefs.md#presets-and-picks-files): a ground per section, a lead fact role and a feature radius. These are the page-layer runs for the `event-poster` layout and for `event-landing` with its new fields: two [first runs](#first-runs), then [all four briefs](#runs-on-the-redrafted-briefs) after a redraft.
 

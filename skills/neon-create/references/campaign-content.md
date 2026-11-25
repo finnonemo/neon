@@ -4,19 +4,11 @@ Read before writing sections for a new or rebuilt Campaign Page (campaign, landi
 
 ## Claims before sections
 
-List what the page must convince a reader of as short claims, each with the proof the brief supplies: a fact, date, agenda item, link or supplied asset. Choose sections only after the list exists; each section carries at least one claim, and a claim with no supplied proof is stated plainly or dropped, never propped up with invented proof.
+List what the page must convince a reader of as short claims, each with the proof the brief supplies: a fact, date, agenda item, link or supplied asset. A claim with no supplied proof is stated plainly or dropped, never propped up with invented proof.
 
-With a [Reference Design](../../neon-audit/references/reference-design.md), map the claims onto its section order. Drop or merge reference sections that carry no claim rather than filling them. Without one, as at Finnomena-led, order sections by what the reader needs first.
+With a [Reference Design](../../neon-audit/references/reference-design.md), map the claims onto its section order. Drop or merge reference sections that carry no claim rather than filling them. Otherwise how claims become sections, and in what order, is the [design](campaign-direction.md#1-design)'s.
 
 Put the claim list, with each claim's proof and section, in the Done report.
-
-## First screen
-
-At 375px and 1440px the first screen states what the page is and the next action, with that action visible without scrolling. For an event, the date and place appear there in large type, not only in a later details section.
-
-## Headlines by rendered lines
-
-Check each headline by its rendered line count at 375px and 1440px: two lines or fewer at both widths. An event name set in a Theme Brief's hero name role is shortened as [the brief's reference](theme-brief.md) says, never set smaller. Do not estimate from character counts; Thai has no spaces between words, so wrapping depends on the font, width and line-breaking. Count lines in a browser, with IBM Plex Sans Thai confirmed as the computed font. For example, take `getClientRects()` of each text node in the heading and count rects that overlap vertically as one line, so an inline glyph or span at another size does not add a line. If no browser can run, report the headline check as unverified; a character count is not evidence.
 
 ## No invented proof
 

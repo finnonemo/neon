@@ -3,7 +3,7 @@ scenarios:
   - request: Blended event page from a motion-heavy reference design
     observe: Under reduced motion every section is visible, no content waits on a reveal script, and the heading is readable at first paint; Ship-ready checklist evidence names the production preview for 375px and 1440px.
   - request: Campaign Page on a subtle Theme Brief whose story suits a Pinned story and a Count-up figure
-    observe: The Motion line names each scroll pattern within the subtle budget; under reduced motion and with the observer stubbed the page is still and every step and final figure is readable at 375px and 1440px; below 500px the visual does not pin.
+    observe: The motion is the agent's own choice; under reduced motion and with the observer stubbed the page is still and every step and final figure is readable at 375px and 1440px.
 ---
 
 # Motion safety

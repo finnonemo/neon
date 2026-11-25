@@ -125,7 +125,7 @@ One of four on-brand color sets for a Campaign Page, taken from the Finnomena Gu
 _Avoid_: tier (a styling decision), palette, color mode
 
 **Theme Brief**:
-A style description in the Refero Styles format that Finnomena writes for one Immersive Theme, whose typeface and colors the theme fixes. It is where a Campaign Page starts when the employee brings no Reference Design.
+A style description in the Refero Styles format that Finnomena writes for one Immersive Theme, whose typeface and colors the theme fixes. A Campaign Page uses one when the employee names or supplies it, and takes its theme, not its layout, as fixed.
 _Avoid_: design file (names the file, not the concept), Reference Design, template
 
 **Preset**:
@@ -133,7 +133,7 @@ A maintainer's reusable choice for one part of a Theme Brief: its occasion, its 
 _Avoid_: Tailwind preset, Reference Design (which an employee brings), template
 
 **Brand Pattern**:
-Finnomena artwork made by Block's generator from a locked seed, which every Campaign Page carries as its illustration, in a section that a Theme Brief or the employee names.
+Finnomena artwork made by Block's generator from a locked seed, which a Campaign Page may carry as its illustration.
 _Avoid_: texture, background, Page (Block's full composition)
 
 **Brand Pattern colourway**:
@@ -141,7 +141,7 @@ The one Immersive Theme color family (its palette, accent or support) whose step
 _Avoid_: pattern palette, pattern color, secondary color
 
 **Scroll pattern**:
-One of four named kinds of motion a Campaign Page may use to tell its story, each with its limit and the motion level it needs (ADR 0013): **Pinned story** (a pinned visual crossfades through 3–5 steps), **Scrubbed reveal** (one image or block scales and fades in with scroll), **Count-up figure** (a display figure counts up to its value once) and **Progress rail** (a thin bar grows with progress through a long section). One use of a pattern is one moment of the page's motion budget.
+One of four named kinds of motion a Theme Brief suggests for telling a Campaign Page's story (ADR 0013; no longer a limit on the page since ADR 0018): **Pinned story** (a pinned visual crossfades through 3–5 steps), **Scrubbed reveal** (one image or block scales and fades in with scroll), **Count-up figure** (a display figure counts up to its value once) and **Progress rail** (a thin bar grows with progress through a long section).
 _Avoid_: scroll animation, parallax, scrollytelling effect
 
 **Block Colourway**:
