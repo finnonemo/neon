@@ -1,7 +1,7 @@
 {
   "core": {
     "repository": "pawisssh/design-system",
-    "commit": "2b368c115a282a4fe0b0a3bde2283c184c96c205"
+    "commit": "280da155cb67ce5d64e79658a5f1e49cae544f42"
   },
   "look": {
     "iOS": false,
@@ -28,8 +28,8 @@
     "components/breadcrumbs.md": "cea7173a45926386c47f7130e0bfa12c9714d357424be6f5515c8d1bae742d74",
     "components/button-dock.json": "cedff5bee591f4abe710c24988923fb5f72c723b068a67964f75c2cbba3d7452",
     "components/button-dock.md": "819be02204d5514c517557b9ee3c467259e8c127603d1c0213c2a8c1d43a0462",
-    "components/button.json": "75cd4fd9cd64f569215af258e8d0d0f70e51e2066cf23c54d88193309b495cb5",
-    "components/button.md": "d2c7642174cc65939a7c450f01023f3d082d80a1073e3adb83106e87ea33103f",
+    "components/button.json": "3d23b92e88b60b54e4a0ee09f3bbcde075d337ae02ce188a85a9ef9d84325c28",
+    "components/button.md": "7af2aba3b8a48e03ee2b9a1e4b4d345de85c982bdd51b2b581f7fecaec1c25ac",
     "components/checkbox.json": "b16b571a367943d577410d36b3538ea4d11f7720c226a5686f426801536c6a83",
     "components/checkbox.md": "223586227d6c836d8569e1243af285a1286151dc017033a9072aa4ee76b6fab8",
     "components/contextual-banner.json": "3fbbbe0a95af3115bb513ea762df53412d2d7e05da79e5190fdaaf4134660be0",
@@ -128,5 +128,5 @@
     "theme.json": "694edcb7a9cd98d9b466a49fbb5bae37676d28081c433880dfc3cc5a71609a65"
   },
   "palette": "6450fd8e24da15c4c10ee29ea14d2cd9ce1422a67c256bb9ec75e7e428e2437f",
-  "seal": "703acd291a6255a71577d1df5051b3e402b4b443aafb5d81a4d507b63e6e6a57"
+  "seal": "e7feeb70969c84eef15db3791939646963cf4d68da57032f22e8805c838ed349"
 }
