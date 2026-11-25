@@ -9,7 +9,7 @@ Why: CDS was a stand-in for a look Finnomena did not yet own. Core now has appro
 ## Decisions
 
 - **Core snapshot.** Employees cannot read Core's repository, so Neon carries a compiled copy pinned to one Core commit. A Neon script compiles it from Core's approved component docs, their `spec.json` files, `theme.json` and the hierarchy rules, and drops what the web does not use: Figma node ids and keys, the `iOS=True` look, Revision history and Dynamic Type. The repository check refuses a hand edit to it. Core's screenflow skill-set is not reused, because it carries Figma placement and no sizing.
-- **Web look.** A Neon item takes its Counterpart's `iOS=False` look at the Large text size, in light and dark. Liquid Glass and Dynamic Type stay native.
+- **Web look.** A Neon item takes its Counterpart's `iOS=False` look at the Large text size, in light and dark. Liquid Glass and Dynamic Type stay native. A request for an iOS screen takes the `iOS=False` look too (the owner, 2026-11-25): the web has no real Liquid Glass.
 - **Tokens.** Core's `theme.json` is the one source of Neon's token export; the CSS adapter and the shadcn slot mapping are remapped from it. The frozen CDS theme files keep their values.
 - **Type.** Neon keeps IBM Plex Sans Thai and takes the sizes, tracking and line heights of Core's text styles, with each Neon type role mapped to one. Core's typeface, Finnomena Trek, has no web font files in either repository; moving to it is a later decision.
 - **Provisional ends where Core approves.** A mapping that traces to an approved Core doc or a Core Theme token is no longer provisional. Immersive Themes and gradient recipes are not in Core and stay provisional.

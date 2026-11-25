@@ -52,6 +52,11 @@ test('the Core rules reference reads the snapshot through its index, one compone
   assert.match(rules, /`### Hierarchy`/);
   // The web look is the only one Neon draws (ADR 0009).
   assert.match(rules, /`iOS=False`/);
+  // A request for an iOS screen does not change the look.
+  assert.match(rules, /A request for an iOS or iPhone screen takes it too/);
+  const composition = section(await read('skills/INSTRUCTION.md'), 'Composition');
+  assert.match(composition, /iOS, iPhone or Android screen[^\n]*`iOS=False` look/);
+  assert.match(composition, /do not imitate it/);
   // A Core doc never widens scope.
   assert.match(rules, /does not license restructuring/);
   // The sections the reference tells a run to read exist in the snapshot.

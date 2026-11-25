@@ -63,6 +63,8 @@ Start from the employee's main task and the information needed to complete it. U
 
 On functional screens, which action is primary, secondary or tertiary, and how many primaries a screen or panel holds, are Core's [hierarchy rules](../core/hierarchy.md). Prefer list rows to cards for scanning, settings and record rows. Shadows mark only layers that float above the page. These rules shape new UI and `composition: 'adapt'`; preserve and colors-only work keep existing structure. Detail: [functional patterns](neon-audit/references/functional-patterns.md).
 
+A request for an iOS, iPhone or Android screen is built at phone width with the same Neon items and color roles as web, Core's `iOS=False` look. The web has no real Liquid Glass, so do not imitate it or another iOS-only look, and do not restyle an item to seem native; say in the report that the screen uses the Android and web look.
+
 A whole page reads the same way in every app: content answers the page's question, the inspector holds its action, and content is a stack of sections that each preview a collection. The page types and their region order are in [page anatomy](neon-audit/references/page-anatomy.md).
 
 ### Immersive color

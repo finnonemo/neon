@@ -27,7 +27,7 @@ Which action is primary, secondary or tertiary is in [Core's hierarchy rules](..
 
 A doc speaks of Core's own components, so read it as follows:
 
-- **Look:** Neon draws the web look, `iOS=False`. Skip what a doc says of iPhone, iPad, Android or a foldable.
+- **Look:** Neon draws one look, `iOS=False`, Core's look for Android and web. A request for an iOS or iPhone screen takes it too, at phone width: [Composition](../../INSTRUCTION.md#composition). Skip what a doc says of iPhone, iPad, Android or a foldable.
 - **Names:** a doc uses Core's value names (`Hierarchy=Primary`, `Type=Danger`). The installed item file's header says which prop value is which, and [Neon base](../../neon-create/references/neon-base.md#styling) lists Button's.
 - **Components with no Neon item:** a doc may send a job to a Core component the registry has no item for, such as Button dock or Empty state. Its doc is in `core/components/` by the same name; follow its rule with Neon items and plain elements, never an invented import, and report the gap.
 - **Bookkeeping:** sample frames, page names, issue numbers, dates and draft notes are Core's records, not rules.
