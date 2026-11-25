@@ -114,20 +114,29 @@ export function validate(value, schema, path = '', problems = []) {
   if (schema.enum) {
     if (!schema.enum.includes(value)) problems.push(`"${path}" must be one of ${schema.enum.join(', ')}`);
   } else if (schema.type === 'object') {
-    if (typeOf(value) !== 'object') return [...problems, `${path ? `"${path}"` : 'the file'} must be an object`];
+    if (typeOf(value) !== 'object') {
+      problems.push(`${path ? `"${path}"` : 'the file'} must be an object`);
+      return problems;
+    }
     for (const key of Object.keys(value)) if (!(key in schema.properties)) problems.push(`unknown key "${join(path, key)}"`);
     for (const [key, inner] of Object.entries(schema.properties)) {
       if (key in value) validate(value[key], inner, join(path, key), problems);
       else if (!schema.optional.includes(key)) problems.push(`missing key "${join(path, key)}"`);
     }
   } else if (schema.type === 'array') {
-    if (!Array.isArray(value)) return [...problems, `"${path}" must be an array`];
+    if (!Array.isArray(value)) {
+      problems.push(`"${path}" must be an array`);
+      return problems;
+    }
     if (value.length < schema.min || value.length > schema.max) {
       problems.push(`"${path}" must have ${schema.max === Infinity ? `at least ${schema.min}` : schema.min === schema.max ? schema.min : `${schema.min}–${schema.max}`} items, has ${value.length}`);
     }
     value.forEach((item, index) => validate(item, schema.items, join(path, index), problems));
   } else if (schema.type === 'record') {
-    if (typeOf(value) !== 'object') return [...problems, `"${path}" must be an object`];
+    if (typeOf(value) !== 'object') {
+      problems.push(`"${path}" must be an object`);
+      return problems;
+    }
     for (const [key, inner] of Object.entries(value)) validate(inner, schema.values, join(path, key), problems);
   } else if (schema.type === 'json-schema') {
     if (typeOf(value) !== 'object') problems.push(`"${path}" must be an object`);

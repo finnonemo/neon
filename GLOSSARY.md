@@ -125,28 +125,24 @@ One of four on-brand color sets for a Campaign Page, taken from the Finnomena Gu
 _Avoid_: tier (a styling decision), palette, color mode
 
 **Theme Brief**:
-A style description in the Refero Styles format that Finnomena writes for one Immersive Theme, whose typeface and colors the theme fixes. A Campaign Page uses one when the employee names or supplies it, and takes its theme, not its layout, as fixed.
+A style description in the Refero Styles format that Finnomena writes for one Immersive Theme, whose typeface and colors the theme fixes. It gives an occasion's content, mood and imagery and no layout or motion. A Campaign Page uses one when the employee names or supplies it.
 _Avoid_: design file (names the file, not the concept), Reference Design, template
 
 **Preset**:
-A maintainer's reusable choice for one part of a Theme Brief: its occasion, its layout or its imagery. A Theme Brief combines one of each with an Immersive Theme.
+A maintainer's reusable choice for one part of a Theme Brief: its occasion or its imagery. A Theme Brief combines one of each with an Immersive Theme.
 _Avoid_: Tailwind preset, Reference Design (which an employee brings), template
 
 **Brand Pattern**:
 Finnomena artwork made by Block's generator from a locked seed, which a Campaign Page may carry as its illustration.
 _Avoid_: texture, background, Page (Block's full composition)
 
-**Brand Pattern colourway**:
-The one Immersive Theme color family (its palette, accent or support) whose step fills the section a Theme Brief's Brand Pattern sits in.
-_Avoid_: pattern palette, pattern color, secondary color
-
 **Scroll pattern**:
-One of four named kinds of motion a Theme Brief suggests for telling a Campaign Page's story (ADR 0013; no longer a limit on the page since ADR 0018): **Pinned story** (a pinned visual crossfades through 3–5 steps), **Scrubbed reveal** (one image or block scales and fades in with scroll), **Count-up figure** (a display figure counts up to its value once) and **Progress rail** (a thin bar grows with progress through a long section).
+One of four named kinds of motion for telling a Campaign Page's story (ADR 0013; no longer a limit on the page since ADR 0018): **Pinned story** (a pinned visual crossfades through 3–5 steps), **Scrubbed reveal** (one image or block scales and fades in with scroll), **Count-up figure** (a display figure counts up to its value once) and **Progress rail** (a thin bar grows with progress through a long section).
 _Avoid_: scroll animation, parallax, scrollytelling effect
 
 **Block Colourway**:
 One of the pairs of a ground color and a block color that Block's generator draws a Brand Pattern in. A Theme Brief names one from Block's primary group, whose two colors are its Immersive Theme's own.
-_Avoid_: pattern colors, Brand Pattern colourway (the section's fill)
+_Avoid_: pattern colors
 
 **Brand Artwork**:
 A finished Finnomena picture drawn by the Block engine from an employee's request: a Pattern alone, or one Page with a headline and the logo, for an ad, a post or a cover. Unlike a Brand Pattern it is a file of its own, not part of an app's screen.
