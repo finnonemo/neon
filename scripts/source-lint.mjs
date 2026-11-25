@@ -15,6 +15,8 @@
 //
 // Rules: stock Tailwind palette utilities in a CDS app or once the change uses
 // Neon color variables, selectors reaching into CDS components (CDS apps only),
+// in an app with Neon's `src/theme/neon.css` colors set on a Neon item and colors
+// written as values outside the theme, the items and the shell (one warning a file),
 // lorem/Acme/John Doe placeholders, emoji used as UI, and transitions on all
 // properties.
 import { spawnSync } from 'node:child_process';
@@ -25,14 +27,19 @@ import {
   cdsHostedClasses,
   cdsHostSelectors,
   emojiText,
+  itemColorOverrides,
   placeholderText,
+  rawColors,
   stockPaletteUtilities,
+  themeColorNames,
   transitionAll,
   unscopedSelectors,
 } from './lib/source-rules.mjs';
 
 const uiSource = /\.(css|scss|sass|less|html?|[cm]?[jt]sx?|vue|svelte|astro)$/;
 const notUi = /(^|\/)(node_modules|dist|build|\.git)\/|\.(test|spec)\.[^/]+$/;
+// Files that hold colors by design: the theme, Neon's items and the fixed shell.
+const neonOwned = /(^|\/)(theme|layout|components\/ui)\//;
 const stylesheet = /\.(css|scss|sass|less)$/;
 // A Neon adapter color variable (`--color-fgMuted`, `--color-bgLinePrimary`).
 const neonColor = /--color-(?:fg|bg|accent)(?:[A-Z]\w*)?\b/;
@@ -40,6 +47,8 @@ const neonColor = /--color-(?:fg|bg|accent)(?:[A-Z]\w*)?\b/;
 const messages = {
   'stock-palette': 'stock Tailwind color in a Neon restyle; map it by role or say why it stays (lighter than fgMuted, pale shade with no token, chart or category color)',
   'cds-selector': 'selector reaches into CDS component markup; start it with an app class and style CDS through props',
+  'item-color': 'color set on a Neon item; use its props, or for a look the item lacks take its Core doc\'s tokens and cite the rows (core-rules.md, Draw what no item has)',
+  'raw-color': 'color written as a value; use a theme role, or say why none fits (an illustration, a chart or shadow color with no token)',
   placeholder: 'placeholder content; use plausible, fictitious names in the app\'s language',
   emoji: 'emoji used as UI; use a CDS icon or text',
   'transition-all': 'transition on all properties; name the properties that change',
@@ -92,6 +101,9 @@ export function lintChanged(dir, paths = []) {
   const restyled = cds || files.some(({ source }) => neonColor.test(source));
   const hosts = cds ? cdsHostedClasses(jsxFilesUnder(dir).map(path => ({ path, source: read(join(dir, path)) ?? '' }))) : new Map();
 
+  const theme = read(join(dir, 'src/theme/neon.css'));
+  const colors = theme === null ? null : themeColorNames(theme);
+
   const warnings = [];
   const add = (path, rule, found) => {
     const grouped = new Map();
@@ -104,6 +116,13 @@ export function lintChanged(dir, paths = []) {
       const unscoped = unscopedSelectors(source).map(selector => ({ match: selector, line: lineOf(source, selector) }));
       const onHosts = cdsHostSelectors(source, hosts).map(({ selector, on }) => ({ match: `${selector} (on ${on.join(', ')})`, line: lineOf(source, selector) }));
       add(path, 'cds-selector', [...unscoped, ...onHosts]);
+    }
+    if (colors && !neonOwned.test(path)) {
+      add(path, 'item-color', itemColorOverrides(source, colors));
+      const raw = rawColors(source);
+      const values = [...new Set(raw.map(({ match }) => match.toLowerCase()))];
+      const match = values.slice(0, 5).join(', ') + (values.length > 5 ? ` and ${values.length - 5} more` : '');
+      add(path, 'raw-color', raw.map(({ line }) => ({ match, line })));
     }
     add(path, 'placeholder', placeholderText(source));
     add(path, 'emoji', emojiText(source));
