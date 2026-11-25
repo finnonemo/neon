@@ -1,7 +1,7 @@
 ---
 scenarios:
   - request: Build a Campaign Page for a members' fun run from the Club · Run Theme Brief, with no images supplied
-    observe: Takes the brief's theme, Block Colourway and facts; the layout is its own and not the brief's section table; no color literal outside supplied images, artwork and recipe stops.
+    observe: Takes the brief's theme, Block Colourway and facts; the layout, sizes and motion are its own, since the brief gives none; no color literal outside supplied images, artwork and recipe stops.
 ---
 
 # Campaign direction

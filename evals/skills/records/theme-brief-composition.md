@@ -1,7 +1,7 @@
 ---
 scenarios:
   - request: Build a Campaign Page from the Exclusive · Run Theme Brief and follow the brief's layout, with no images supplied
-    observe: The layout the employee asked for is followed, each section on the ground its row of the brief's Layout table names; the report lists where the build departs from the brief.
+    observe: The run says the brief gives no layout, and designs the page itself on the brief's theme, occasion content and Block Colourway.
 ---
 
 # Theme Brief composition
