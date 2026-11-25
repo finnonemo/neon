@@ -79,24 +79,6 @@ test('the contract themes a Neon-base Campaign Page through ImmersiveLayout', as
   assert.match(contract, /build on the Neon base with Neon registry items; Neon no longer themes CDS \(Neon 2\.0\.0 removed it\), so an app on CDS is offered a Rebuild on the Neon base/);
 });
 
-test('neon-create links the Campaign Page content reference behind one condition', async () => {
-  const skill = await readFile(new URL('../../skills/neon-create/SKILL.md', import.meta.url), 'utf8');
-  const lines = skill.split('\n').filter(line => line.includes('references/campaign-content.md'));
-  assert.equal(lines.length, 1);
-  assert.match(lines[0], /new or rebuilt Campaign Page/);
-});
-
-test('the Campaign Page content reference keeps truth rules and no layout rule', async () => {
-  const source = await readFile(`${references}campaign-content.md`, 'utf8');
-  assert.match(source, /claim list.*Done report/);
-  assert.match(source, /map the claims onto its section order/);
-  assert.match(source, /Never invent testimonials/);
-  assert.match(source, /pre-launch to-do/);
-  assert.match(source, /Brand Intensity and the Brand Floor are unchanged/);
-  // ADR 0018: layout is the agent's.
-  assert.doesNotMatch(source, /## First screen|## Headlines|two lines or fewer/);
-});
-
 test('neon-create recognises a Theme Brief before the Reference Design route', async () => {
   const skill = await readFile(new URL('../../skills/neon-create/SKILL.md', import.meta.url), 'utf8');
   const conditional = skill.split('## Conditional references')[1].split('\n## ')[0].split('\n');
@@ -162,16 +144,18 @@ test('neon-create reaches campaign direction from the workflow, the checklist, t
   assert.match(brief, /layout, section order.*motion are suggestions.*\(campaign-direction\.md#1-design\)/);
 });
 
-test('campaign direction sets no layout rule and keeps theming and the floor', async () => {
+// ADR 0019: only the brand is ruled on.
+test('campaign direction sets no layout rule and keeps theming and the brand', async () => {
   const source = await readFile(`${references}campaign-direction.md`, 'utf8');
   const part = heading => source.split(`\n## ${heading}\n`)[1]?.split('\n## ')[0] ?? '';
-  assert.match(part('1. Design'), /Composition, section order.*motion are yours/);
+  assert.match(part('1. Design'), /Composition, section order.*motion and sound are yours/);
+  assert.match(source, /sets the brand, not the ambition/);
   assert.match(part('1. Design'), /Color through page variables/);
   assert.match(part('2. Theme'), /Change color only/);
   assert.match(part('2. Theme'), /--immersive-\*/);
   assert.match(part('2. Theme'), /without moving anything/);
   const keeps = part('What every page keeps');
-  for (const rule of [/IBM Plex Sans Thai/, /4\.5:1/, /prefers-reduced-motion: reduce/, /no-invented-proof/, /don't crop, stretch, cover or animate it/]) assert.match(keeps, rule);
+  for (const rule of [/Finnomena logo/, /IBM Plex Sans Thai/, /don't crop, stretch, cover or animate it/]) assert.match(keeps, rule);
   // The retired rules do not come back.
-  for (const rule of [/dominant element/, /Direction lines/, /moments on a/, /edge to edge/, /campaign-sections/, /half the hero/]) assert.doesNotMatch(source, rule);
+  for (const rule of [/dominant element/, /Direction lines/, /moments on a/, /edge to edge/, /campaign-sections/, /half the hero/, /4\.5:1|prefers-reduced-motion|[Ii]nvented proof|keyboard/]) assert.doesNotMatch(source, rule);
 });

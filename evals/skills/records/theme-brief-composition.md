@@ -149,7 +149,7 @@ Ultra's call-out is one step lighter than its ground, where the third set's was 
 
 What these runs showed:
 
-- **A long name takes three lines at 375px.** "Finnomena Private Run 2026" at `display2` wraps to three lines, where `skills/neon-create/references/campaign-content.md` asks for two or fewer. The run kept the brief's size and reported it. Exclusive moved "Finnomena" to a line above the name to stay at two.
+- **A long name takes three lines at 375px.** "Finnomena Private Run 2026" at `display2` wraps to three lines, where the campaign content reference asks for two or fewer. The run kept the brief's size and reported it. Exclusive moved "Finnomena" to a line above the name to stay at two.
 - **The date numeral equals the name at 375px on Private.** Both are 60px. The brief gives the date block no role, so "nothing larger" holds and the two tie.
 - **Feature blocks step one or two lighter.** The brief says one. Three of the eight blocks took two.
 - **Exclusive's report lists the main action in the hero and the form as a departure.** The brief's Main Action entry is the main action of a section, so the page is within the brief and the report over-reports.
@@ -160,7 +160,7 @@ None overflowed sideways at either width. Run logs, reports and apps are in `.lo
 
 ## Skill change after the fourth set
 
-The three-line name changed `skills/neon-create/references/theme-brief.md`: a name that takes more than two lines at the hero name role keeps the role, and the organisation's name that opens it moves to a line above in a label or title role. A name still past two lines keeps the role and the report gives its line count. `campaign-content.md` points its two-line rule there. No brief changed. No page was built from this change.
+The three-line name changed `skills/neon-create/references/theme-brief.md`: a name that takes more than two lines at the hero name role keeps the role, and the organisation's name that opens it moves to a line above in a label or title role. A name still past two lines keeps the role and the report gives its line count. the campaign content reference points its two-line rule there. No brief changed. No page was built from this change.
 
 ## Limits
 

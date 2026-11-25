@@ -171,7 +171,7 @@ How much of a Reference Design survives on a Campaign Page: Finnomena-led (only 
 _Avoid_: strength, mix, Finnomena level
 
 **Brand Floor**:
-The Finnomena properties no Brand Intensity may remove: the Finnomena logo, Finnomena typeface, at least one identifiable Finnomena color, accessible contrast, and the absence of any source brand's logo, imagery, copy or product names.
+The Finnomena properties no Brand Intensity may remove: the Finnomena logo, Finnomena typeface, at least one identifiable Finnomena color, and the absence of any source brand's logo, imagery, copy or product names.
 _Avoid_: minimum branding, baseline
 
 **Gradient Recipe**:

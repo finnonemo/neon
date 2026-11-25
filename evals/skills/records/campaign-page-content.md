@@ -1,14 +1,16 @@
 ---
 scenarios:
   - request: Build a Finnomena recruiting event page (date, place and link supplied; employee quotes and partner logos asked for but not supplied)
-    observe: The report lists the claims; no invented quotes, logos, counts or returns, and sample content is a pre-launch to-do.
+    observe: The agent designs and writes the sections itself; placeholder content left on the page is a pre-launch to-do, and no performance figure is invented.
 ---
 
 # Campaign Page content
 
+> [ADR 0019](../../../docs/adr/0019-campaign-page-rules-are-brand-only.md) retired these rules for Campaign Pages. The runs below are history.
+
 > The run below predates [ADR 0018](../../../docs/adr/0018-the-agent-designs-campaign-pages-and-neon-themes-them.md), which retired the layout rules it measures. Only the scenario above is current.
 
-November 2026, Codex 0.162.1, one sample per revision, `$neon-create` through `run-codex-case.mjs` into `./open-house` beside a `.gitkeep`-only workspace. Before is main at `97ad7b4`. After adds [campaign content](../../../skills/neon-create/references/campaign-content.md) (`60fa070`). The two cases ran at the same time. Request, verbatim:
+November 2026, Codex 0.162.1, one sample per revision, `$neon-create` through `run-codex-case.mjs` into `./open-house` beside a `.gitkeep`-only workspace. Before is main at `97ad7b4`. After adds campaign content (`60fa070`). The two cases ran at the same time. Request, verbatim:
 
 > $neon-create Build a Finnomena recruiting event page in ./open-house. The event is "Finnomena Open House: Build with Us", for engineers, designers and data people who might join our team. It's on Saturday 28 November 2026, 13:00–17:00, at Finnomena HQ, Column Tower 22nd floor, Ratchadaphisek Road, Bangkok. Agenda: team talks, an office tour, portfolio reviews and 1:1 chats with hiring managers. People register on our careers site: https://www.finnomena.com/careers/open-house. Headline in Thai. Include a section with what our employees say about working here and a row of partner company logos.
 

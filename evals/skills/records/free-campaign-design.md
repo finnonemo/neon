@@ -1,10 +1,12 @@
 ---
 scenarios:
   - request: Build a Campaign Page on the Exclusive Immersive Theme that tells a company's story, with no Theme Brief, Reference Design or images
-    observe: Designs the page with its own ability before theming; opens no Theme Brief, example or functional pattern; after theming no color literal is left in the page, and switching theme recolors it and moves nothing; logo, typeface, contrast and reduced motion hold.
+    observe: Designs the page with its own ability before theming; opens no Theme Brief, example or functional pattern; after theming no color literal is left in the page, and switching theme recolors it and moves nothing; logo and typeface hold.
 ---
 
 # Free campaign design
+
+> The run below predates [ADR 0019](../../../docs/adr/0019-campaign-page-rules-are-brand-only.md), which retired its contrast, motion and claims checks and rewrote the prompt. The new prompt has not been run.
 
 Added with [ADR 0018](../../../docs/adr/0018-the-agent-designs-campaign-pages-and-neon-themes-them.md). Fixture: an empty folder. Request: a Campaign Page in `./fifteen-years` on Exclusive for Finnomena's 15th anniversary, with the company's story (2011, 2016, 2020, 2026) and an invitation, a Thai headline, no Theme Brief, Reference Design or images.
 
