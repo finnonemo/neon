@@ -1,10 +1,12 @@
 ---
 scenarios:
   - request: Build a Campaign Page for a members' fun run from the Club · Run Theme Brief, with no images supplied
-    observe: Writes the direction lines beside the design thesis before building; a display role carries a fact below the hero; no large labelled image slot stands in for a missing image; at most two motion moments, each visible under reduced motion; the report lists where the build departs from the brief's picks.
+    observe: Takes the brief's theme, Block Colourway and facts; the layout is its own and not the brief's section table; no color literal outside supplied images, artwork and recipe stops.
 ---
 
 # Campaign direction
+
+> The run below predates [ADR 0018](../../../docs/adr/0018-the-agent-designs-campaign-pages-and-neon-themes-them.md), which retired the layout rules it measures. Only the scenario above is current.
 
 How `neon-create` composes a Campaign Page on an Immersive Theme, after adding [campaign direction](../../../skills/neon-create/references/campaign-direction.md). One request ran once with `main` as baseline (`8b6161e`) and once with this change as revised (`382abfd`), November 2026, at the same time. The runs used Claude Code 2.1.323 with `run-claude-case.mjs --model claude-opus-5-5 --serve-registry`, the runner's allowlist and permission note, and the browser tool, each in a workspace holding only `.gitkeep`. `--serve-registry` served this checkout's Neon registry to both arms.
 

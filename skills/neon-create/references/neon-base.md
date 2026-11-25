@@ -33,6 +33,8 @@ Use these Neon items in place of stock shadcn ones:
 
 ## Styling
 
+On a Campaign Page only the typeface and color parts hold, color through `--immersive-*` once themed, and the page's layout is [yours](campaign-direction.md): the type-role, geometry and component-choice rules below are for functional screens.
+
 - **Type:** use Neon type roles as utilities: `text-display1`–`text-display3`, `text-title1`–`text-title4`, `text-headline`, `text-body`, `text-label1`, `text-label2`, `text-caption` and `text-legal`. Each role carries its own size, line height and weight. Add no `font-medium` or `font-bold` beside a role, and no stock size such as `text-sm`.
 - **Color:** use Neon role utilities only:
   - surfaces and text: `bg-background`, `text-foreground`, `text-muted-foreground`, `bg-card`;

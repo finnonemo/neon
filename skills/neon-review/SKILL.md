@@ -7,7 +7,7 @@ description: Use when reviewing Finnomena or neon UI for task usability, brandin
 
 ## Purpose
 
-Find actionable UI problems supported by evidence. Prioritize blocked user tasks and inaccessible essential controls before minor visual inconsistencies.
+Find actionable UI problems supported by evidence. Prioritize blocked user tasks and inaccessible essential controls before minor visual inconsistencies. A [Campaign Page](references/review-checks.md#campaign-pages) is reviewed for brand and visible breakage only, unless the request asks for more.
 
 ## When to use
 

@@ -2,6 +2,10 @@
 
 Select checks for the employee's request; this is not a requirement to review every dimension on every task.
 
+## Campaign Pages
+
+On a Campaign Page judge only the [brand](../../neon-create/references/campaign-direction.md#what-every-page-keeps): logo, typeface, color and any Brand Pattern, plus what is visibly broken, such as content cut off, a page that does not load or a control that does nothing. Under a declared reference design, color follows its Brand Intensity. Layout, type sizes, spacing, motion and copy are the design's. Of the checks by base keep only that the files in `src/components/ui/` are Neon items and no source imports CDS. Skip the functional sections, the responsive sampling rules and the accessibility checks. Check accessibility, contrast or motion only when the request asks for it, and then report it as usual.
+
 ## Evidence limits
 
 | Evidence | Supported conclusions | Still requires other evidence |
@@ -24,7 +28,7 @@ Apply the checks of the app's [base](../../neon-audit/references/project-inspect
 
 ## Brand consistency
 
-Use the current design reference, not remembered values. Inspect the semantic role, not just a matching hex string: error/positive states and chart categories are not interchangeable decorative colors. Respect explicit colors-only scope and existing intentional structural dimensions. When a campaign page declares a reference design and Brand Intensity, judge it against that level and the Brand Floor in the design contract; reference colors at Reference-led are intended, not off-brand. On an immersive page, a white or other non-navy action with passing contrast, or a palette without navy or yellow, is not a finding. The base an app is on, or a raw pixel value, is not itself a review finding.
+Use the current design reference, not remembered values. Inspect the semantic role, not just a matching hex string: error/positive states and chart categories are not interchangeable decorative colors. Respect explicit colors-only scope and existing intentional structural dimensions. When a campaign page declares a reference design and Brand Intensity, judge it against that level and the Brand Floor in the design contract; reference colors at Reference-led are intended, not off-brand. On an immersive page, a white or other non-navy action, or a palette without navy or yellow, is not a finding. The base an app is on, or a raw pixel value, is not itself a review finding.
 
 For the overall look of a functional screen, judge against the contract's [design intent](../../INSTRUCTION.md#design-intent). A finding names the idea it rests on and the visible evidence: "color is content: four tiles each carry their own tint and none marks a status". A composition that no pattern lists is not a finding when it keeps the contract's fixed column and serves the main task; say so under Coverage if the screen is unusual. Where the build's report states a design choice and its reason, judge the reason.
 
@@ -72,6 +76,8 @@ On a Back Office or Product Feature screen, these layout misses are findings, in
 | A third or fourth column for a deeper level of the selected record | Composition: the deeper level replaces the detail pane with a back control, or opens in a `Sheet`, per [panes](../../neon-audit/references/functional-patterns.md#panes) |
 
 ## Accessibility and interactions
+
+On a [Campaign Page](#campaign-pages), only when the request asks for it.
 
 Where runtime evidence permits, check visible keyboard focus, logical order, accessible names for icon-only controls, label/error association, dialog focus/escape/return behavior (on the Neon base, with the Radix behaviors in [checks by base](#checks-by-base)), and access to the main task without a pointer. Measure foreground/background contrast with a suitable tool and actual colors before quoting a ratio. These checks do not constitute a comprehensive accessibility certification.
 
