@@ -68,7 +68,7 @@ The owner took the recommended pick on each of three choices on 2026-11-14.
 - `scripts/theme-briefs/render.mjs`:
   - The `subtle` and `lively` vocabulary names the patterns its level allows.
   - The four briefs are redrawn.
-- `scripts/probe-page.mjs`'s `motionLevel` reads a transition over 250ms as `lively`. It learns the Count-up figure's exemption, so a `subtle` page with one is not misread. (Both went with preset drafting; see [ADR 0007](0007-theme-brief-presets-borrow-only-structure-from-named-public-pages.md).)
+- `scripts/probe-page.mjs`'s `motionLevel` reads a transition over 250ms as `lively`. It learns the Count-up figure's exemption, so a `subtle` page with one is not misread. (`motionLevel` and the briefs' motion vocabulary were removed with the layout Presets, 2026-11-26; see [ADR 0007](0007-theme-brief-presets-borrow-only-structure-from-named-public-pages.md).)
 - `evals/skills/records/motion-safety.md` gains a Campaign Page case that uses a Pinned story and a Count-up figure. It is checked at 375px and 1440px, with and without reduced motion.
 - The review set of 6–8 briefs (half functional, half immersive) runs before and after the skill change, and the owner's ✓/✗ is the evidence.
 - The four pattern names enter `GLOSSARY.md`.
