@@ -6,7 +6,7 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { bans, briefSlug, COLOURWAYS, ENTRIES, entryOrder, entryProblems, entrySchema, picksProblems, picksSchema, presetProblems, presetSchema, sharedProblems, sharedSchema, themeTextProblems, themeTextSchema, validate } from './schemas.mjs';
 
-export const PRESET_KINDS = ['occasion', 'layout', 'imagery'];
+export const PRESET_KINDS = ['occasion', 'imagery'];
 
 function readJson(root, path, problems) {
   try {
@@ -41,16 +41,10 @@ function themeFacts(root, problems) {
     blocks[id ?? '*'] = new Map(vars.map(([, name, hex]) => [name, hex.toLowerCase()]));
     tokens.set(id ?? '*', new Map(vars.map(([, name, , token]) => [name, token?.replace('.', ' ')])));
   }
-  // The first declaration of each variable in theme.css; rem values are given in px.
+  // The first declaration of each variable in theme.css.
   const declared = new Map();
   for (const [, name, value] of themeCss.matchAll(/--([\w-]+):\s*([^;]+);/g)) if (!declared.has(name)) declared.set(name, value.trim());
-  const px = (value) => value?.endsWith('rem') ? `${parseFloat(value) * 16}px` : value;
-  const scale = (prefix) => [...declared].filter(([name]) => name.startsWith(`${prefix}-`)).map(([name, value]) => ({ name, value }));
-  const wide = themeCss.match(/@media \(min-width: (\d+px)\)\s*\{\s*:root\s*\{[^}]*--layout-endMargin:\s*([^;]+);/);
   const typeface = declared.get('fontFamily-body')?.match(/^'([^']+)'/)?.[1];
-  const steps = (prefix) => new Set(scale(prefix).map(({ name }) => name));
-  // The theme.css variables prose may name; colors come from the Immersive Themes, never --color-*.
-  const neonVars = new Set([...declared.keys()].filter((name) => /^(space|borderRadius|fontSize|fontWeight|lineHeight|fontFamily|layout)-/.test(name)));
   const themes = {};
   for (const [id, theme] of Object.entries(data.themes ?? {})) {
     const families = COLOURWAYS.filter((family) => theme[family]);
@@ -64,7 +58,6 @@ function themeFacts(root, problems) {
       canvasIsPalette: theme.palette?.['100']?.bg === theme.canvas,
       ratio: theme.ratio ?? {},
       families,
-      roles: ['action', ...families],
       steps: Object.fromEntries(families.map((family) => [family, theme[family]])),
       familyLabels: Object.fromEntries(families.map((family) => [family, String(Object.values(theme[family])[0]?.bg).split('.')[0]])),
       vars: new Map([...(blocks['*'] ?? []), ...(blocks[id] ?? [])]),
@@ -75,21 +68,7 @@ function themeFacts(root, problems) {
   return {
     themes,
     secondary: Object.fromEntries(Object.entries(data.secondary ?? {}).map(([family, familySteps]) => [family, Object.keys(familySteps)])),
-    space: steps('space'),
-    borderRadius: steps('borderRadius'),
-    neonVars,
-    scale: {
-      typeface,
-      type: scale('fontSize').map(({ name, value }) => {
-        const role = name.slice('fontSize-'.length);
-        return { role, size: px(value), line: px(declared.get(`lineHeight-${role}`)), weight: declared.get(`fontWeight-${role}`) };
-      }),
-      space: scale('space'),
-      borderRadius: scale('borderRadius'),
-      contentMaxWidth: declared.get('layout-contentMaxWidth'),
-      endMargin: declared.get('layout-endMargin'),
-      wideEndMargin: wide && { from: wide[1], value: wide[2].trim() },
-    },
+    type: { typeface, weights: [...new Set([...declared].filter(([name]) => name.startsWith('fontWeight-')).map(([, value]) => value))].sort() },
   };
 }
 
@@ -101,7 +80,7 @@ export function loadInputs(root) {
     for (const path of jsonFiles(root, `theme-briefs/presets/${kind}`)) {
       const data = readJson(root, path, problems);
       if (data === undefined) continue;
-      check(path, data, presetSchema(kind, base(path), facts), problems, presetProblems(kind, data));
+      check(path, data, presetSchema(kind, base(path)), problems, presetProblems(kind, data));
       presets[kind][base(path)] = { path, data };
     }
   }

@@ -4,9 +4,9 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { contrast, matchToken, paletteTokens } from '../lib/colors.mjs';
 import { loadInputs, PRESET_KINDS } from './inputs.mjs';
-import { accentPlacements, accentProblems, pairingProblems, proseText, valueProblems } from './prose-checks.mjs';
+import { proseText, valueProblems } from './prose-checks.mjs';
 import { assembleBrief, freshBrief, readProse, splitSections } from './render.mjs';
-import { blockColourway, BLOCK_COLOURWAYS, colorVariable, isThirdParty, patternFill, sourceHost } from './schemas.mjs';
+import { blockColourway, BLOCK_COLOURWAYS, colorVariable, isThirdParty, sourceHost } from './schemas.mjs';
 
 // Where authoring records live: draft mode writes them and CI reads them.
 export const RECORDS = 'theme-briefs/records';
@@ -28,40 +28,14 @@ function chosenPresets(data, presets) {
 
 const thirdPartyKinds = (chosen) => Object.keys(chosen).filter((kind) => isThirdParty(sourceHost(chosen[kind])));
 
-// Compatibility: the picks file's presets and colourway fit its theme. Skips what the schema already refused.
+// Compatibility: the picks file's presets and Block Colourway fit its theme. Skips what the schema already refused.
 function compatibility({ path, data }, presets, facts) {
   const theme = facts.themes[data?.theme];
   if (!theme || typeof data.presets !== 'object' || data.presets === null) return [];
   const { chosen, missing } = chosenPresets(data, presets);
   const problems = [...missing];
-  for (const component of Array.isArray(chosen.occasion?.components) ? chosen.occasion.components : []) {
-    for (const role of Array.isArray(component?.roles) ? component.roles : []) {
-      if (!theme.roles.includes(role)) problems.push(`occasion "${data.presets.occasion}" component "${component.name}" uses role "${role}", which ${theme.label} lacks (roles: ${theme.roles.join(', ')})`);
-    }
-  }
-  const accented = (Array.isArray(chosen.occasion?.components) ? chosen.occasion.components : []).some((component) => Array.isArray(component?.roles) && component.roles.includes('accent'));
-  if (Array.isArray(chosen.layout?.grounds) && chosen.layout.grounds.includes('accent') && chosen.occasion && !accented) {
-    problems.push(`layout "${data.presets.layout}" gives a section an accent ground, but no component of occasion "${data.presets.occasion}" takes the accent role`);
-  }
-  const { colourway, ground } = data.brandPattern ?? {};
-  if (typeof colourway === 'string' && Number.isInteger(ground)) {
-    const steps = theme.steps[colourway];
-    if (!steps) problems.push(`colourway "${colourway}" is not one of ${theme.label}'s families (${theme.families.join(', ')})`);
-    else if (!steps[ground]) problems.push(`ground ${ground} is not a step of ${colourway} (${Object.keys(steps).join(', ')})`);
-    else if (steps[ground].bg === theme.canvas && !(colourway === 'palette' && ground === 100)) {
-      problems.push(`${colourway} ${ground} is ${theme.label}'s bare canvas; a Brand Pattern sits on the canvas only as palette 100, or as ground "canvas"`);
-    }
-  }
-  if (ground === 'canvas' && BLOCK_COLOURWAYS.includes(data.brandPattern?.blockColourway)
-    && blockColourway(data.brandPattern.blockColourway).ground !== theme.canvas) {
-    problems.push(`ground "canvas" sets the Brand Pattern on ${theme.label}'s bare canvas, so Block must draw on ${String(theme.canvas).split('.')[0]}; "${data.brandPattern.blockColourway}" does not`);
-  }
   const drawn = data.brandPattern?.blockColourway;
   if (BLOCK_COLOURWAYS.includes(drawn)) {
-    // In a panel, blocks in the section's own color cut the panel's edge away wherever they meet it.
-    const fill = patternFill(theme, data.brandPattern);
-    const { ground: panel, blocks } = blockColourway(drawn);
-    if (fill && panel !== fill && blocks === fill) problems.push(`Block Colourway "${drawn}" draws ${blocks.split('.')[0]} blocks in a panel on a ${blocks.split('.')[0]} section, where the panel loses its edge; pick one whose blocks are another color`);
     for (const [part, color] of Object.entries(blockColourway(drawn))) {
       if (!colorVariable(theme, color)) problems.push(`Block Colourway "${drawn}" draws its ${part} in ${color.split('.')[0]}, which is not one of ${theme.label}'s colors at full strength`);
     }
@@ -115,7 +89,7 @@ function colorProblems(text, theme, tokens) {
   return problems;
 }
 
-// Check 9: no two picks files of one theme share all three presets; a colourway alone is no new design.
+// Check 9: no two picks files of one theme share both presets; a Block Colourway alone is no new design.
 // Each twin is reported on the later file, naming the earlier.
 function distinctness(picks) {
   const seen = new Map();
@@ -125,11 +99,10 @@ function distinctness(picks) {
     const key = JSON.stringify([data.theme, ...PRESET_KINDS.map((kind) => data.presets[kind])]);
     const earlier = seen.get(key);
     if (!earlier) {
-      seen.set(key, { path, data });
+      seen.set(key, path);
       continue;
     }
-    const colourwayOnly = earlier.data.brandPattern?.colourway !== data.brandPattern?.colourway;
-    problems.push(`${path}: has the same occasion, layout and imagery presets as ${earlier.path}; briefs on one theme differ in at least one preset${colourwayOnly ? ', not only in colourway' : ''}`);
+    problems.push(`${path}: has the same occasion and imagery presets as ${earlier}; briefs on one theme differ in at least one preset`);
   }
   return problems;
 }
@@ -176,19 +149,14 @@ function scriptedDrift(markdown, brief) {
   });
 }
 
-// Checks 3, 4, 5, 6, 7 and 10 on one brief's Markdown, each message once. `brief` is undefined when the brief
-// cannot be rendered, and `record` when it has no authoring record.
-export function briefProblems(text, { theme, brief, tokens, sources, record }) {
+// Checks 3, 4, 5 and 7 on one brief's Markdown, each message once. `brief` is undefined when the brief
+// cannot be rendered.
+export function briefProblems(text, { theme, brief, tokens, sources }) {
   const problems = new Set(colorProblems(text, theme, tokens));
   if (brief) {
     for (const message of scriptedDrift(text, brief)) problems.add(message);
     const { prose } = readProse(text, brief);
-    if (prose) {
-      for (const message of valueProblems(proseText(prose), brief)) problems.add(message);
-      // Check 6, hard only: a fill with no text named is a draft-time warning, never a CI failure.
-      for (const message of pairingProblems(proseText(prose), brief.theme).hard) problems.add(message);
-      if (record) for (const message of accentProblems(record.accentPlacement, prose['mood-occasion'].paragraph, accentPlacements(brief))) problems.add(message);
-    }
+    if (prose) for (const message of valueProblems(proseText(prose), brief)) problems.add(message);
   }
   // No source name: no site or domain name from any preset source; the first name found per source is enough.
   const leaked = sources.find((source) => new RegExp(`(?<![\\w-])${escape(source)}(?![\\w-])`, 'i').test(text));
@@ -237,13 +205,12 @@ export function checkThemeBriefs({ root, out = join(root, 'registry/theme-briefs
     if (theme) published.add(theme.id);
     const { brief, reason } = picks ? renderable(name, inputs, problems) : {};
     if (reason) problems.push(`${where}: ${reason}; its scripted sections cannot be checked`);
-    let record;
     try {
-      record = existsSync(recordPath) ? JSON.parse(readFileSync(recordPath, 'utf8')) : undefined;
+      if (existsSync(recordPath)) JSON.parse(readFileSync(recordPath, 'utf8'));
     } catch (error) {
       problems.push(`${at(recordPath)}: not valid JSON (${error.message})`);
     }
-    for (const message of briefProblems(text, { theme, brief, tokens, sources, record })) problems.push(`${where}: ${message}`);
+    for (const message of briefProblems(text, { theme, brief, tokens, sources })) problems.push(`${where}: ${message}`);
   }
   if (coverage) problems.push(...coverageProblems(inputs, published, at(out)));
   const counts = [

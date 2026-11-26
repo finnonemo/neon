@@ -1,23 +1,13 @@
 {
-  "fills": "the occasion components after the fixed ones in Components",
+  "fills": "the occasion components in Occasion content",
   "inputs": [
     "occasion.components",
-    "layout.blockRadius",
-    "layout.featureRadius",
-    "layout.factRole",
-    "layout.cardPadding",
-    "layout.density",
-    "typeRoles",
-    "colorVars",
-    "offActionFills",
-    "theme.kind",
     "theme.mood"
   ],
   "after": [],
   "formula": [
     "for each supplied component, in order: its name unchanged, a role as a short noun phrase, then one paragraph",
-    "paragraph slot order: fill, border, radius, padding, type, contents, state, then an optional closing 'only' or 'never' line",
-    "type opens on the component's leadFact in the supplied fact role, when it has one, then the rest in title, body and label roles"
+    "the paragraph lists the facts the component carries, from its contentNotes, and what each one tells the reader"
   ],
   "targets": {
     "roleWords": [
@@ -25,22 +15,16 @@
       8
     ],
     "paragraphWords": [
-      30,
-      55
+      15,
+      45
     ],
     "paragraphSentences": [
-      2,
-      4
+      1,
+      3
     ]
   },
   "rules": [
-    "a fill var(--immersive-X) always with its text var(--immersive-on-X)",
-    "only a component whose roles include action names var(--immersive-action), for the page's main action; an action in any other component is the Secondary Action: var(--immersive-palette-75) fill with its label in var(--immersive-on-palette-75), or on an accent or support fill, or a block with that fill, no fill and its label in the fill's on- text variable; never an outline",
-    "on a fill in offActionFills the main action does not take var(--immersive-action): it is filled with that fill's on- text variable, its label in the fill's own variable",
-    "radius and padding as var(--borderRadius-…) and var(--space-…) from the supplied picks: a component with feature true takes the feature radius, every other the block radius",
-    "type as role names from typeRoles, such as title2 or body",
-    "a component with a leadFact sets that one fact in the supplied fact role and nothing else above title1; a component without one stops at title1",
-    "a block inside a feature component takes a lighter step of the same family, never a second family",
+    "add no fact the contentNotes do not ask for",
     "exactly one entry per supplied component, in order, keeping its name"
   ],
   "output": {
@@ -81,23 +65,16 @@
         {
           "name": "Kiln slot card",
           "role": "book a firing slot",
-          "contentNotes": "slot time, glaze rules, one action",
-          "roles": [
-            "palette",
-            "action"
-          ],
-          "leadFact": "the slot time"
+          "contentNotes": "slot time, glaze rules, one action"
         }
-      ],
-      "layout.blockRadius": "borderRadius-400",
-      "layout.factRole": "display3"
+      ]
     },
     "output": {
       "components": [
         {
           "name": "Kiln slot card",
           "role": "One bookable firing slot",
-          "paragraph": "var(--immersive-palette-50) fill with var(--immersive-on-palette-50) text, no border, var(--borderRadius-400) corners and var(--space-3) padding. The slot time leads in display3 and fills the top of the card; the glaze rules follow in body, then one main action. Full slots show a plain label and never a disabled button."
+          "paragraph": "The slot time, the glazes that slot accepts and one action to book it. A full slot says so in words."
         }
       ]
     }

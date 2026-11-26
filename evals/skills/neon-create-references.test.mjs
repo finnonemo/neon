@@ -141,7 +141,7 @@ test('neon-create reaches campaign direction from the workflow, the checklist, t
   const contract = await readFile(new URL('../../skills/INSTRUCTION.md', import.meta.url), 'utf8');
   assert.match(contract, /no layout rule from Neon, and theming then changes its color only.*\(neon-create\/references\/campaign-direction\.md\)/);
   const brief = await readFile(`${references}theme-brief.md`, 'utf8');
-  assert.match(brief, /layout, section order.*motion are suggestions.*\(campaign-direction\.md#1-design\)/);
+  assert.match(brief, /gives no layout, type size, spacing, shape or motion.*\[Design\]\(campaign-direction\.md#1-design\) the page yourself/s);
 });
 
 // ADR 0019: only the brand is ruled on.

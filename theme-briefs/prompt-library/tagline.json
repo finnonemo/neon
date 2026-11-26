@@ -24,7 +24,6 @@
     ]
   },
   "rules": [
-    "no values: no var(--…) and no px",
     "sentence case",
     "one line"
   ],

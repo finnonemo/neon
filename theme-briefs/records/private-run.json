@@ -40,7 +40,8 @@
         }
       ],
       "kept": 2,
-      "output": "6817c5d12a5b15f3ca7d031e491e622768be84055d1524901103c0353f4ed079"
+      "output": "6817c5d12a5b15f3ca7d031e491e622768be84055d1524901103c0353f4ed079",
+      "handEdited": true
     },
     "occasion-components": {
       "entry": "6de5f25bc0506087ad8b3bcca6bbb53c06729aad766edaaf92ff1df45c1a8efa",
@@ -61,7 +62,8 @@
         }
       ],
       "kept": 3,
-      "output": "98bcacdc90014eaadbd0ca7f2e5ecfd58b5660ec2ad6adfdb2df28a439c5777d"
+      "output": "98bcacdc90014eaadbd0ca7f2e5ecfd58b5660ec2ad6adfdb2df28a439c5777d",
+      "handEdited": true
     },
     "preset-dos-donts": {
       "entry": "382754d83d3750ee2a88981be8f71810f7a0ee084b0fc382a246d25d8fae6fc1",
@@ -78,7 +80,8 @@
         }
       ],
       "kept": 2,
-      "output": "f579cc6ff23e4819e7f0d65cabfe557f10c8fc94a3b81d615ff8863fd26688ac"
+      "output": "f579cc6ff23e4819e7f0d65cabfe557f10c8fc94a3b81d615ff8863fd26688ac",
+      "handEdited": true
     },
     "imagery": {
       "entry": "437ec358242f1bcbaa6baa1d96e81e59d4d4adbee7fd4604a760a3da0e4b971e",
@@ -93,34 +96,6 @@
       "kept": 1,
       "output": "eef2934d5d91cd08baedfc02f3aa4a97748daeb4c46b7d589d20fb822814d839",
       "handEdited": true
-    },
-    "layout": {
-      "entry": "5de4f77e3adcfa21d9909089b1148e5639d3485007df7e7e417c8b3d4378b16a",
-      "shared": "935d2a8c01c5a85ebc05a23cc765299676c01eddbf0fac2e6901efb45ef6a880",
-      "inputs": "3b4d8899a695f79c7267f578d3d4936fa19219b8bd6cc7e1f72810bc627c26fb",
-      "attempts": [
-        {
-          "hard": 0,
-          "soft": 0
-        }
-      ],
-      "kept": 1,
-      "output": "2b74a5f0d745c28ba7276d330f7b56a4788d7bd9ae732fb1cbca544bda799541",
-      "handEdited": true
-    },
-    "example-prompts": {
-      "entry": "0589dc0146632bac6575ff5e3eb6fef367eec1b26a45b8f20078741df4d62230",
-      "shared": "935d2a8c01c5a85ebc05a23cc765299676c01eddbf0fac2e6901efb45ef6a880",
-      "inputs": "5bb0868a2cb451a95f54732655a6a41978f5192b795266ac8ba490f5678635c8",
-      "attempts": [
-        {
-          "hard": 0,
-          "soft": 0
-        }
-      ],
-      "kept": 1,
-      "output": "f415a0792b0bedb4c6f6ad42a1d0734b50f1e7171491d8e35b949cdf765f437e"
     }
-  },
-  "accentPlacement": "Registration call-out"
+  }
 }

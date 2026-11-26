@@ -1,6 +1,6 @@
 # Theme Briefs
 
-A Theme Brief is a Finnomena-made direction for a Campaign Page on one Immersive Theme and occasion: layout, components, imagery and motion. It ships as a `theme-brief-<theme>-<slug>` Neon registry item and lives in the app at `./docs/theme-briefs/<theme>-<slug>.md`. Use one only when the employee names, asks for or supplies it; otherwise the page is [designed](campaign-direction.md) without one. It is not a Reference Design: Brand Intensity does not apply, and the whole Brand Contract does.
+A Theme Brief is a Finnomena-made direction for a Campaign Page on one Immersive Theme and occasion: its colors, and the occasion's content, mood and imagery. It gives no layout, type size, spacing, shape or motion. It ships as a `theme-brief-<theme>-<slug>` Neon registry item and lives in the app at `./docs/theme-briefs/<theme>-<slug>.md`. Use one only when the employee names, asks for or supplies it; otherwise the page is [designed](campaign-direction.md) without one. It is not a Reference Design: Brand Intensity does not apply, and the whole Brand Contract does.
 
 ## List briefs
 
@@ -18,8 +18,8 @@ Run `node "<Neon root>/scripts/theme-brief.mjs" match <file>` on every style fil
 
 - Briefs target the Neon base. In an app on CDS by the [Base](../../neon-audit/references/project-inspection.md#base) rule, which Neon no longer themes, or one without React, say so and offer a new Neon-base app or a theme-only page.
 - Record the item name as `themeBrief` in `NeonContext`, and leave `referenceDesign` and `brandIntensity` unset. Offer no Brand Intensity dial.
-- The page's Immersive Theme is the brief's: pass it as `ImmersiveLayout`'s `immersiveTheme`.
-- Of the brief, its Immersive Theme, its Block Colourway and its occasion's facts and mood hold. Its layout, section order, components, spacing, shapes, type roles, imagery, Brand Pattern placement and motion are suggestions: [design](campaign-direction.md#1-design) the page yourself, and take one where it serves the design. When the employee asks for the brief's layout, follow it.
+- The page's Immersive Theme is the brief's: pass it as `immersiveTheme` when the page uses `ImmersiveLayout`, which is optional.
+- Of the brief, its Immersive Theme, its Block Colourway and its occasion's content and mood hold. Its imagery is a suggestion. [Design](campaign-direction.md#1-design) the page yourself.
 - An action is a Neon `Button` variant, when it is a Neon `Button`: `default` for the Main Action, `secondary` or `ghost` for the Secondary Action.
 - A [Brand Pattern](campaign-direction.md#what-every-page-keeps), when the design uses one, takes the brief's Block Colourway, even when another would also read.
 - Colors and typeface come from the installed Neon theme and Immersive Themes CSS, never from hex values or font names in the Markdown.

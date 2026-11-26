@@ -360,7 +360,7 @@ const BRIEF_ITEM = {
   title: 'Club · Run',
   description: 'Race day on an open canvas, with every member invited to the start line',
   categories: ['theme-brief', 'club'],
-  meta: { immersiveTheme: 'club', briefName: 'Run', presets: { occasion: 'run', layout: 'event-landing', imagery: 'people-in-action' }, status: 'provisional' },
+  meta: { immersiveTheme: 'club', briefName: 'Run', presets: { occasion: 'run', imagery: 'people-in-action' }, status: 'provisional' },
   registryDependencies: ['@neon/theme', '@neon/immersive-themes'],
   files: [{ path: 'theme-briefs/club-run.md', type: 'registry:file', target: '~/docs/theme-briefs/club-run.md' }],
 };
@@ -368,7 +368,7 @@ const BRIEF_MARKDOWN = '# Finnomena Club · Run — Theme Brief\n> Race day on a
 const briefInputs = (markdown = BRIEF_MARKDOWN) => new Map([['club-run', {
   label: 'Club',
   markdown,
-  picks: { theme: 'club', briefName: 'Run', presets: { occasion: 'run', layout: 'event-landing', imagery: 'people-in-action' }, brandPattern: { colourway: 'accent', ground: 50 } },
+  picks: { theme: 'club', briefName: 'Run', presets: { occasion: 'run', imagery: 'people-in-action' }, brandPattern: { blockColourway: 'white__yellow-100' } },
 }]]);
 
 test('a Theme Brief item carries its title, tagline, categories, meta, dependencies and docs target', () => {
@@ -378,7 +378,7 @@ test('a Theme Brief item carries its title, tagline, categories, meta, dependenc
   refused({ title: 'Club Run' }, 'theme-brief-club-run: title must be "Club · Run"');
   refused({ description: 'Race day' }, "theme-brief-club-run: description must be the brief's tagline");
   refused({ categories: ['theme-brief'] }, 'theme-brief-club-run: categories must be ["theme-brief","club"]');
-  refused({ meta: { ...BRIEF_ITEM.meta, presets: { ...BRIEF_ITEM.meta.presets, layout: 'editorial' } } }, 'theme-brief-club-run: meta must be {"immersiveTheme":"club","briefName":"Run","presets":{"occasion":"run","layout":"event-landing","imagery":"people-in-action"},"status":"provisional"}');
+  refused({ meta: { ...BRIEF_ITEM.meta, presets: { ...BRIEF_ITEM.meta.presets, imagery: 'editorial' } } }, 'theme-brief-club-run: meta must be {"immersiveTheme":"club","briefName":"Run","presets":{"occasion":"run","imagery":"people-in-action"},"status":"provisional"}');
   refused({ registryDependencies: ['@neon/theme'] }, 'theme-brief-club-run: registryDependencies must include @neon/immersive-themes');
   refused({ files: [{ ...BRIEF_ITEM.files[0], target: 'src/docs/club-run.md' }] }, 'theme-brief-club-run: its one file must be theme-briefs/club-run.md, a registry:file targeting ~/docs/theme-briefs/club-run.md');
   refused({ files: [...BRIEF_ITEM.files, BRIEF_ITEM.files[0]] }, 'theme-brief-club-run: its one file must be theme-briefs/club-run.md, a registry:file targeting ~/docs/theme-briefs/club-run.md');

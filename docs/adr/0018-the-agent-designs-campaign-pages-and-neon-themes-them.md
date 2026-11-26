@@ -14,7 +14,7 @@ The owner asked on 2026-11-25: "ปรับ skill neon immersive layout ไม�
 
 ## Consequences
 
-- The four published briefs still carry layout and motion sections, which the skill reads as suggestions. Redrawing them is separate work.
+- The four published briefs were rewritten (2026-11-26) to give the theme, the occasion's content, mood and imagery and the Block Colourway, with no layout, type size, spacing, shape or motion. The layout Presets, their checks and their drafting from a page ([ADR 0007](0007-theme-brief-presets-borrow-only-structure-from-named-public-pages.md)) are removed. An app's copy of an older brief reports `Differs`.
 - `campaign-sections` stays as a reviewed example, and no skill links it.
 - `ImmersiveLayout` is unchanged and optional.
 - Pages will vary more between agents, and no review can judge a page by a composition rule.

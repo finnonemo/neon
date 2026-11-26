@@ -4,56 +4,43 @@
     "occasion.moodIntent",
     "theme.mood",
     "brief.name",
-    "theme.kind",
-    "accentPlacements",
-    "brandPattern.colourway",
-    "brandPattern.section"
+    "theme.kind"
   ],
   "after": [],
   "formula": [
     "continue from the theme half (theme.mood) without repeating it",
-    "say where the accent goes for this occasion: name exactly one of accentPlacements in the paragraph, and set accentPlacement to it",
-    "say the geometry the page leans on, such as rounded blocks and generous gaps, in words, not values",
+    "say how the occasion feels",
     "close on one concrete image of the occasion"
   ],
   "targets": {
     "paragraphWords": [
-      110,
-      132
+      65,
+      95
     ]
   },
   "rules": [
-    "no values: no var(--…) and no px",
     "one paragraph with no line breaks",
-    "when accentPlacements lists the Brand Pattern section, that section carries the accent too; never claim the accent appears only once"
+    "describe the occasion, never the page"
   ],
   "output": {
     "type": "object",
     "properties": {
       "paragraph": {
         "type": "string"
-      },
-      "accentPlacement": {
-        "type": "string"
       }
     },
     "required": [
-      "paragraph",
-      "accentPlacement"
+      "paragraph"
     ],
     "additionalProperties": false
   },
   "example": {
     "input": {
       "occasion.moodIntent": "an open studio night; hands-on, unhurried",
-      "brief.name": "Studio",
-      "accentPlacements": [
-        "Sign-up block"
-      ]
+      "brief.name": "Studio"
     },
     "output": {
-      "paragraph": "For the studio night the accent is kept for the Sign-up block alone, so the eye finds it after the work on the wheels. Soft, generous blocks and wide gaps let each station breathe. The page closes on a shelf of drying bowls waiting for the kiln.",
-      "accentPlacement": "Sign-up block"
+      "paragraph": "The studio night is hands-on and unhurried, with wet clay, warm lamps and first-time potters laughing at lopsided bowls. A shelf of their work waits for the kiln by the door."
     }
   }
 }
