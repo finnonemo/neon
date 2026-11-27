@@ -38,6 +38,104 @@ for (const [layout, mode] of ['app', 'content'].flatMap((layout) => ['light', 'd
   });
 }
 
+// The fund-detail example (docs/design/examples/fund-detail.md), pattern P14, in both modes; the
+// 375 and 1440 screenshots, full page, are its review captures. The chart is a slider a keyboard
+// reads: moving it rewrites the figure above it, and leaving it restores the latest NAV.
+for (const mode of ['light', 'dark']) {
+  test(`fund-detail example passes axe in ${mode}, and its chart reads by keyboard`, async ({ page }) => {
+    for (const width of [375, 1440]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(`/?example=fund-detail${mode === 'dark' ? '&mode=dark' : ''}`);
+      await page.evaluate(() => document.fonts.ready);
+      await settled(page);
+      const { violations } = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
+      expect(violations.map((v) => `${width}px ${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);
+      // The content pane scrolls inside the shell, so a tall viewport captures the whole page.
+      await page.setViewportSize({ width, height: 2000 });
+      await page.screenshot({ path: test.info().outputPath(`fund-detail-${mode}-${width}.png`) });
+      await page.setViewportSize({ width, height: 900 });
+      const figure = page.locator('section[aria-label] .text-title1');
+      const latest = await figure.textContent();
+      await page.getByRole('slider').focus();
+      await page.keyboard.press('Home');
+      await expect(figure).not.toHaveText(latest);
+      await expect(page.getByText(/^NAV ณ /)).toBeVisible();
+      await page.screenshot({ path: test.info().outputPath(`fund-detail-${mode}-${width}-reading.png`) });
+      await page.getByRole('slider').blur();
+      await expect(figure).toHaveText(latest);
+      // Nothing in the content pane is wider than the pane.
+      const overflow = await page.evaluate(() => [...document.querySelectorAll('[data-slot], section, dl')].some((el) => el.scrollWidth > el.clientWidth + 1 && getComputedStyle(el).overflowX !== 'auto'));
+      expect(overflow).toBe(false);
+    }
+  });
+}
+
+// The order-form example (docs/design/examples/order-form.md), pattern P15: the primary stays
+// enabled, and pressing it with too much money shows the error on the field and the way to add
+// money beside it. Captures: empty, then the error, at 375 and 1440 in both modes.
+for (const mode of ['light', 'dark']) {
+  test(`order-form example passes axe in ${mode}, and shows too little money on the field`, async ({ page }) => {
+    for (const width of [375, 1440]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(`/?example=order-form${mode === 'dark' ? '&mode=dark' : ''}`);
+      await page.evaluate(() => document.fonts.ready);
+      await settled(page);
+      const axe = async () => (await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze()).violations.map((v) => `${width}px ${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`);
+      expect(await axe()).toEqual([]);
+      await page.screenshot({ path: test.info().outputPath(`order-form-${mode}-${width}.png`) });
+      await page.getByLabel('จำนวนเงิน (บาท)').fill('20000');
+      const buy = page.getByRole('button', { name: 'ซื้อกองทุน' }).first();
+      await expect(buy).toBeEnabled();
+      await buy.click();
+      await expect(page.getByText('ยอดเงินในบัญชีไม่พอ')).toBeVisible();
+      await expect(page.getByRole('button', { name: 'โอนเงินเข้าบัญชี' })).toBeVisible();
+      await expect(page.getByLabel('จำนวนเงิน (บาท)')).toBeFocused();
+      expect(await axe()).toEqual([]);
+      await page.screenshot({ path: test.info().outputPath(`order-form-${mode}-${width}-error.png`) });
+    }
+  });
+}
+
+// The money-move example (docs/design/examples/money-move.md), pattern P16: a top-up runs in one
+// sheet (a tap on a row advances, back returns, a warning before the details), and a withdrawal
+// with nothing to withdraw says why and offers the fix. One capture per step.
+for (const mode of ['light', 'dark']) {
+  test(`money-move example passes axe in ${mode} at every step`, async ({ page }) => {
+    for (const width of [375, 1440]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(`/?example=money-move${mode === 'dark' ? '&mode=dark' : ''}`);
+      await page.evaluate(() => document.fonts.ready);
+      await settled(page);
+      const step = async (name) => {
+        await settled(page);
+        const { violations } = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
+        expect(violations.map((v) => `${width}px ${name} ${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);
+        await page.screenshot({ path: test.info().outputPath(`money-move-${mode}-${width}-${name}.png`) });
+      };
+      await page.getByRole('button', { name: 'เติมเงิน' }).click();
+      await expect(page.getByRole('heading', { name: 'เติมเงินเข้าพอร์ตไหน' })).toBeVisible();
+      await step('1-port');
+      await page.getByRole('button', { name: /พอร์ตหลัก/ }).click();
+      await expect(page.getByRole('heading', { name: 'เติมเงินด้วยวิธีไหน' })).toBeVisible();
+      await step('2-way');
+      await page.getByRole('button', { name: 'ย้อนกลับ' }).click();
+      await expect(page.getByRole('heading', { name: 'เติมเงินเข้าพอร์ตไหน' })).toBeVisible();
+      await page.getByRole('button', { name: /พอร์ตหลัก/ }).click();
+      await page.getByRole('button', { name: /พร้อมเพย์ QR/ }).click();
+      await expect(page.getByRole('heading', { name: 'ตรวจสอบก่อนโอน' })).toBeVisible();
+      await step('3-warning');
+      await page.getByRole('button', { name: 'เข้าใจแล้ว' }).click();
+      await expect(page.getByRole('heading', { name: 'เติมเงินเข้าพอร์ตหลัก' })).toBeVisible();
+      await step('4-pay');
+      await page.keyboard.press('Escape');
+      await page.getByRole('button', { name: 'ถอนเงิน' }).click();
+      await expect(page.getByRole('heading', { name: 'ยังไม่มีเงินให้ถอน' })).toBeVisible();
+      await step('empty');
+      await page.keyboard.press('Escape');
+    }
+  });
+}
+
 // The campaign-sections example (docs/design/examples/campaign-sections.md): the rules a Campaign
 // Page can be measured on, and its booking flow. The screenshots are its review captures.
 for (const width of [375, 768, 1024, 1440]) {
