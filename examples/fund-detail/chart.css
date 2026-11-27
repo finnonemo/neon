@@ -1,0 +1,10 @@
+/* The chart's colors, resolved by hand from Core's Line chart doc through the palette:
+   Neon's theme has no chart role yet (docs/design/pattern-register.md). Not an approved
+   color mapping; replace with theme roles once the Role table carries them. */
+.chart { --chart-positive: #009646; --chart-negative: #d60808; --chart-neutral: #737f8a; --chart-gridline: #01172b1f; --chart-axis: #01172b40; --chart-series: var(--chart-neutral); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .chart { --chart-positive: #00c45b; --chart-negative: #f30909; --chart-neutral: #808080; --chart-gridline: #ffffff26; --chart-axis: #ffffff40; }
+}
+:root[data-theme='dark'] .chart, .dark .chart { --chart-positive: #00c45b; --chart-negative: #f30909; --chart-neutral: #808080; --chart-gridline: #ffffff26; --chart-axis: #ffffff40; }
+.chart[data-tone=positive] { --chart-series: var(--chart-positive); }
+.chart[data-tone=negative] { --chart-series: var(--chart-negative); }

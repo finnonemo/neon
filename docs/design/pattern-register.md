@@ -1,6 +1,6 @@
 # Pattern register
 
-Compositions taken from the maintainer's private reference screens ([ADR 0017](../adr/0017-reference-screens-stay-private-and-lend-only-composition.md)). For maintainers; not packaged. Only composition and behaviour are recorded here: values and components come from Core. Every pattern is `illustrative` until the owner approves it by property, through [the example library](example-library.md). Functional patterns (P1 to P12, P14 to P16) wait for ADR 0015's gate before they reach a skill or `examples/`; P13 does not.
+Compositions taken from the maintainer's private reference screens ([ADR 0017](../adr/0017-reference-screens-stay-private-and-lend-only-composition.md)). For maintainers; not packaged. Only composition and behaviour are recorded here: values and components come from Core. Every pattern is `illustrative` until the owner approves it by property, through [the example library](example-library.md). An approved pattern may reach a skill or `examples/` ([ADR 0020](../adr/0020-approved-functional-patterns-reach-skills-and-examples-before-the-gate.md)); the shell and the registry still wait for ADR 0015's gate.
 
 | Code | Pattern | Task | Regions, in order | Status |
 | --- | --- | --- | --- | --- |

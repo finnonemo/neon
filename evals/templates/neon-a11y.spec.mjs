@@ -38,6 +38,38 @@ for (const [layout, mode] of ['app', 'content'].flatMap((layout) => ['light', 'd
   });
 }
 
+// The fund-detail example (docs/design/examples/fund-detail.md), pattern P14, in both modes; the
+// 375 and 1440 screenshots, full page, are its review captures. The chart is a slider a keyboard
+// reads: moving it rewrites the figure above it, and leaving it restores the latest NAV.
+for (const mode of ['light', 'dark']) {
+  test(`fund-detail example passes axe in ${mode}, and its chart reads by keyboard`, async ({ page }) => {
+    for (const width of [375, 1440]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(`/?example=fund-detail${mode === 'dark' ? '&mode=dark' : ''}`);
+      await page.evaluate(() => document.fonts.ready);
+      await settled(page);
+      const { violations } = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
+      expect(violations.map((v) => `${width}px ${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);
+      // The content pane scrolls inside the shell, so a tall viewport captures the whole page.
+      await page.setViewportSize({ width, height: 2000 });
+      await page.screenshot({ path: test.info().outputPath(`fund-detail-${mode}-${width}.png`) });
+      await page.setViewportSize({ width, height: 900 });
+      const figure = page.locator('section[aria-label] .text-title1');
+      const latest = await figure.textContent();
+      await page.getByRole('slider').focus();
+      await page.keyboard.press('Home');
+      await expect(figure).not.toHaveText(latest);
+      await expect(page.getByText(/^NAV ณ /)).toBeVisible();
+      await page.screenshot({ path: test.info().outputPath(`fund-detail-${mode}-${width}-reading.png`) });
+      await page.getByRole('slider').blur();
+      await expect(figure).toHaveText(latest);
+      // Nothing in the content pane is wider than the pane.
+      const overflow = await page.evaluate(() => [...document.querySelectorAll('[data-slot], section, dl')].some((el) => el.scrollWidth > el.clientWidth + 1 && getComputedStyle(el).overflowX !== 'auto'));
+      expect(overflow).toBe(false);
+    }
+  });
+}
+
 // The campaign-sections example (docs/design/examples/campaign-sections.md): the rules a Campaign
 // Page can be measured on, and its booking flow. The screenshots are its review captures.
 for (const width of [375, 768, 1024, 1440]) {

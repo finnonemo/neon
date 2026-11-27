@@ -12,7 +12,7 @@ The owner collected 45 distinct screens of one third-party product family (Uber)
 - **An allowed set, not a closed list.** An approved pattern needs no further approval to be used. A screen outside the set is still designed from `skills/INSTRUCTION.md`.
 - **Where an image and Core or Neon differ, Core or Neon wins.** The register records each refused part and what is used instead. To have an image win, change the rule at its source first.
 - **A review finding rests on a rule, never on an image.** A pattern can show that a composition is accepted, or be offered as a fix. Differing from a pattern is not a finding.
-- **The hold of ADR 0015 is unchanged.** Until the web gate passes, functional patterns are maintainers' material: drafts stay in `.local/`, and nothing goes to the skills, the shell, the registry or `examples/`. Patterns for Campaign Pages are outside the hold and may ship once approved.
+- **The hold of ADR 0015 is unchanged**, except as [ADR 0020](0020-approved-functional-patterns-reach-skills-and-examples-before-the-gate.md) amends it: drafts stay in `.local/`, and nothing goes to the shell or the registry; an approved functional pattern may reach the skills and `examples/`. Patterns for Campaign Pages are outside the hold and may ship once approved.
 - **The images don't score the gate.** Core's ADR 0021 scores fidelity to a Brief and to Core's rules. These images answer no Brief, so scoring against them would measure likeness to another product.
 - **The owner approves, by property**, at 375 and 1440, as [the example library](../design/example-library.md) asks.
 

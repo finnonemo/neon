@@ -21,6 +21,7 @@ import { Extras } from "./app/Extras"
 import { Expansion } from "./app/Expansion"
 import { PaneGrids } from "./app/PaneGrids"
 import { CampaignSections } from "./app/campaign-sections/CampaignSections"
+import { FundDetail } from "./app/fund-detail/FundDetail"
 
 const params = new URLSearchParams(location.search)
 const layout = params.get("layout") ?? "app"
@@ -93,6 +94,7 @@ export function App() {
     paneLabels: { content: "Content", inspector: "Details", viewDetails: "ดูรายละเอียด", backToContent: "กลับไปที่รายการ" },
   }
   return params.get("example") === "campaign-sections" ? <CampaignSections />
+    : params.get("example") === "fund-detail" ? <FundDetail navigation={navigation} />
     : layout === "approval" ? <Approval />
     : layout === "extras" ? <Extras />
     : layout === "expansion" ? <Expansion />
