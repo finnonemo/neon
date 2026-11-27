@@ -1,11 +1,11 @@
 # Order form
 
 ```yaml
-status: illustrative
-source_revision: null  # set to the commit the owner reviews
-reviewer: null
-reviewed_on: null
-approved_properties: []
+status: partially-reviewed
+source_revision: 8d20398
+reviewer: Pawish Gawinseth
+reviewed_on: 2026-11-28
+approved_properties: [composition, interaction-behavior]
 viewports: [375, 1440]
 ```
 
@@ -40,4 +40,8 @@ npm test --prefix evals/templates -- --target neon neon-a11y.spec.mjs --grep ord
 
 ## Review
 
-Not yet reviewed. Until the owner approves it by property, no skill links it ([ADR 0020](../../adr/0020-approved-functional-patterns-reach-skills-and-examples-before-the-gate.md)).
+Composition and interaction approved on 2026-11-28 ("Approve P15 and P16"), from the captures above at 375 and 1440, light and dark. Not approved: typography, color mapping, copy and sample facts, and what the captures did not show (widths between, a screen reader, 200% text). With the approval it may reach the skills ([ADR 0020](../../adr/0020-approved-functional-patterns-reach-skills-and-examples-before-the-gate.md)).
+
+## Used by
+
+- [Order form](../../../skills/neon-audit/references/functional-patterns.md#order-form) in functional patterns links the shipped README.

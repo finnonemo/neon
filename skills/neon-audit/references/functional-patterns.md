@@ -9,6 +9,14 @@ The rules hold in any framework and name no component library. Where Core holds 
 - Which action is primary, secondary or tertiary, how many primaries a screen, panel, sheet or dialog holds, and the destructive flow are Core's [hierarchy rules](../../../core/hierarchy.md): rules 1–6, and the owner's call H2 for the destructive flow. Row actions are secondary or tertiary, even when they are the most frequent action.
 - At narrow breakpoints, a form, confirmation or other focused flow puts its actions in a dock fixed to the bottom of the viewport. Their order, when they stack or sit side by side and how many the dock holds are Core's [Button dock](../../../core/components/button-dock.md#usage), Usage and Hierarchy. When the shell shows a bottom tab bar, the dock sits above it, or the flow hides the tab bar while it is open; the two never overlap. Leave room at the end of the content so the dock does not cover the last field.
 
+## Order form
+
+A form that buys or sells an amount runs in this order: the side (buy or sell) first, then the account the money comes from or goes to with what is available, then the amount (with a unit switch where selling can be in baht or units, its minimum as the field's description, and quick amounts as secondary buttons that fill it). The summary and the total sit with the one primary, which is named by the side: in the Inspector on wide, and as the total over the primary in the dock on narrow. The primary stays enabled; pressing it with a problem puts the error on the field and focus in it, and too little money shows the way to add money beside the error while the summary stays filled in. The reviewed [order form](../../../examples/order-form/README.md) example shows it.
+
+## Money move
+
+Moving money (topping up, withdrawing, switching) runs as steps in one sheet, one choice per step. A single choice advances on a tap, with no Continue button; from the second step a back control sits before the title. Put the recommended option first and mark it, put the figure that decides the choice (how fast, what it costs) on every row, and explain the choice at the top of the step when it needs explaining. Before the step where a mistake costs money, show a warning with the way to avoid it and one acknowledgement. When there is nothing to move, the sheet says why and offers the fix as its primary. The reviewed [money move](../../../examples/money-move/README.md) example shows it.
+
 ## Lists before cards
 
 - Use list rows for settings, search results and record or price rows; use cards for browsing a collection where each item has its own media or story. Tables stay the choice for comparing many records across the same attributes.
