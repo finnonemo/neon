@@ -20,4 +20,4 @@ The rows of the summary follow the product: a stock order adds a price type and 
 
 ## Verified
 
-See its record, [docs/design/examples/order-form.md](../../docs/design/examples/order-form.md).
+Axe finds no WCAG 2.2 AA violation at 375 and 1440, in light and dark, empty and in the error state. Pressing the primary with more than is available puts the error on the field, shows the way to add money and moves focus to the field; the primary stays enabled. Composition and interaction approved by the owner on 2026-11-28; typography and color mapping are not.

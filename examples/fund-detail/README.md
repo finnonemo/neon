@@ -23,4 +23,4 @@ The chart's colors are resolved by hand in [chart.css](chart.css): Neon's theme 
 
 ## Verified
 
-See its record, [docs/design/examples/fund-detail.md](../../docs/design/examples/fund-detail.md).
+Axe finds no WCAG 2.2 AA violation at 375 and 1440, in light and dark. From the keyboard, Home on the chart rewrites the figure and its label to the range's first day, and leaving the chart restores the latest NAV. Nothing in the content pane is wider than the pane. Composition and interaction approved by the owner on 2026-11-28; typography and color mapping are not.

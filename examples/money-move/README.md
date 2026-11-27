@@ -20,4 +20,4 @@ The steps follow the task: a withdrawal picks an amount (see the order form) and
 
 ## Verified
 
-See its record, [docs/design/examples/money-move.md](../../docs/design/examples/money-move.md).
+Axe finds no WCAG 2.2 AA violation at 375 and 1440, in light and dark, at every step. A tap on a row advances, back returns to the step before, the warning comes before the details, and Escape closes the sheet. Composition and interaction approved by the owner on 2026-11-28; typography and color mapping are not.
