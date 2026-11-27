@@ -28,3 +28,6 @@ block/fonts/FinnomenaTrek-*
 
 # Third-party reference screens, kept on the maintainer's machine only (ADR 0017).
 resources/
+
+# Reference screens of other products: the maintainer's only (ADR 0017)
+resources/

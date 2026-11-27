@@ -1,6 +1,6 @@
 # Pattern register
 
-Compositions taken from the maintainer's private reference screens ([ADR 0017](../adr/0017-reference-screens-stay-private-and-lend-only-composition.md)). For maintainers; not packaged. Only composition and behaviour are recorded here: values and components come from Core. Every pattern is `illustrative` until the owner approves it by property, through [the example library](example-library.md). Functional patterns (P1 to P12) wait for ADR 0015's gate before they reach a skill or `examples/`; P13 does not.
+Compositions taken from the maintainer's private reference screens ([ADR 0017](../adr/0017-reference-screens-stay-private-and-lend-only-composition.md)). For maintainers; not packaged. Only composition and behaviour are recorded here: values and components come from Core. Every pattern is `illustrative` until the owner approves it by property, through [the example library](example-library.md). Functional patterns (P1 to P12, P14 to P16) wait for ADR 0015's gate before they reach a skill or `examples/`; P13 does not.
 
 | Code | Pattern | Task | Regions, in order | Status |
 | --- | --- | --- | --- | --- |
@@ -17,6 +17,9 @@ Compositions taken from the maintainer's private reference screens ([ADR 0017](.
 | P11 | Dialog | Decide or edit without leaving | Fixed heading; scrolling content; fixed actions | approved 2026-11-24: composition, interaction |
 | P12 | Browsing | Choose among many things worth seeing | Search and categories; filters; sections with a way to the full set; tiles | approved 2026-11-24: composition, interaction |
 | P13 | Campaign Page sections | Understand an offer | Proposition with image and action; short benefits; questions and answers; terms | approved 2026-11-24: composition, interaction |
+| P14 | Item page with a live chart | See how one fund or asset is doing, then act | Back, name and follow; the figure with its change; the chart, whose hover rewrites the figure above it; range chips under the chart; about; facts as label over value; similar items as a shelf; disclaimer. Actions in the Inspector; on narrow a two-button dock while the chart is in view | illustrative |
+| P15 | Order form | Buy or sell an amount | Side switch; order type; source account and what is available; amount with a unit switch and the converted amount; options; summary rows, then the total; one primary named by the side; legal line. Too little money: the field's error, a line under it with ways to add money, the summary still filled in | illustrative |
+| P16 | Money move as a stepped dialog | Move money or units without leaving the page | One dialog: pick the item (search, then rows that advance on a tap); pick the route with the recommended one first and its deciding figure on each row, an explanation at the top; a warning with one acknowledgement before an irreversible step; the result with copy and notes. Empty start: why, and the fix as the primary | illustrative |
 
 ## Approvals
 
@@ -62,11 +65,26 @@ The second drafts' source revision is `f01aa7f3b623` (SHA-256 of `src/v2/*`, the
 
 P13's references are a service's introduction inside an app, not a Campaign Page. It stands as a Campaign Page example on the owner's approval, and not as evidence of what these references lend.
 
+## Third set: finance screens
+
+A second product family's reference screens were collected on 2026-11-27 and sit with the maintainer, beside their notes, as ADR 0017 asks. They cover what the first set lacked: investment charts, holdings, an order form and money moves. P14 to P16 are new; the rest of what they show fits patterns already approved:
+
+- P8: an allocation shown as one stacked bar whose list of holdings is its legend, each row ending in its own action or its status; a balance page without an Inspector puts its action row (one primary, then secondaries) right under the figure.
+- P5 and P12: ordering chips (most traded, rising, falling) before the list, with a filter button first that opens the rarer parameter and applies on its button; on narrow a row becomes name and one figure on the left, value over change on the right, and loses its row actions; the full set loads more as it scrolls.
+- Page anatomy's Overview and Activity rows: the Inspector holds one primary and action rows, moves to a dock on narrow, and stays empty on an activity page so sibling pages keep their width.
+- P9: each setting states its current value, and an edit opens a dialog whose Save waits for a change; a required option shows locked on.
+- P10: skeletons in the final geometry, including a faded chart; an empty table under filters points at the filters, a truly empty one says why and offers one action.
+
+Where these screens differ from Core, Core wins; the refused parts are in the table below. Not checked: holdings with real values (the account was empty), widths under 500, a signed-out visit.
+
 ## Refused parts
 
 | In the references | Used instead | Rule |
 | --- | --- | --- |
 | Drawer from the side over a scrim | Inspector, or the overlay Core gives the content | [Core sheet](../../core/components/sheet.md) |
+| Button dock shown with the tab bar | The dock alone; the tab bar hides | [ADR 0015](../adr/0015-neon-holds-at-bug-fixes-until-the-web-gate.md), Button dock and tab bar |
+| A strip of moving prices fixed to the screen's foot | Nothing: a functional screen keeps still | [Design intent](../../skills/INSTRUCTION.md#design-intent) |
+| Buy and sell buttons filled in the gain and loss colors | Core Button | [Core button](../../core/components/button.md) |
 | Tabs as the frame of Settings | List and detail | [Page anatomy](../../skills/neon-audit/references/page-anatomy.md) |
 | Action in an empty state whose filters are the way out | No action | [Page anatomy](../../skills/neon-audit/references/page-anatomy.md) |
 | Permanent deletion in the ordinary primary color | Danger | [Core hierarchy](../../core/hierarchy.md), rule 5 |
