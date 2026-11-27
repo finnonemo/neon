@@ -22,6 +22,8 @@ import { Expansion } from "./app/Expansion"
 import { PaneGrids } from "./app/PaneGrids"
 import { CampaignSections } from "./app/campaign-sections/CampaignSections"
 import { FundDetail } from "./app/fund-detail/FundDetail"
+import { OrderForm } from "./app/order-form/OrderForm"
+import { MoneyMove } from "./app/money-move/MoneyMove"
 
 const params = new URLSearchParams(location.search)
 const layout = params.get("layout") ?? "app"
@@ -95,6 +97,8 @@ export function App() {
   }
   return params.get("example") === "campaign-sections" ? <CampaignSections />
     : params.get("example") === "fund-detail" ? <FundDetail navigation={navigation} />
+    : params.get("example") === "order-form" ? <OrderForm />
+    : params.get("example") === "money-move" ? <MoneyMove />
     : layout === "approval" ? <Approval />
     : layout === "extras" ? <Extras />
     : layout === "expansion" ? <Expansion />

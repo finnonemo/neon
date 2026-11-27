@@ -45,6 +45,8 @@ A content pane is a stack of sections, not a grid of boxes.
 
 - A page that answers "how much" opens with the figure. It is the first thing in content and the largest text on the screen: the largest type role below the display roles, which stay on Campaign Pages. Its change sits directly beneath it, signed, per the [sample figures](../../neon-create/references/new-ui-workflow.md#sample-data-and-figures) rules. Weight separates a row's name from its values; size does not.
 - A chart comes straight after the figure it explains, runs the full width of the content pane and keeps one height at every breakpoint. Its range control sits beneath it, inside the gutter.
+- The figure is the chart's read-out. Pointing at the chart, or moving along it by arrow keys, shows that day's value in the figure and its change from the range's first day, with the day in the figure's label; leaving the chart restores the latest. No floating tooltip and no value axis. The chart is a focusable slider whose value text names the day and the value.
+- The reviewed [fund detail](../../../examples/fund-detail/README.md) example shows an Item page in full: identity, figure, chart, range, then about, facts and similar items, with the Inspector's one primary.
 - Supporting figures are labelled text in one band or a small grid of label over value, not a row of tinted tiles. When a list already carries the totals, add no band, per [one question, first screen](../../neon-create/references/new-ui-workflow.md#one-question-first-screen).
 
 ## Filters and narrow breakpoints
